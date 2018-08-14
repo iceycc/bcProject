@@ -1,0 +1,30 @@
+.app{
+    width:100%;
+    margin: 0 auto;
+}
+.chattuimg{
+    margin-top: 2rem;
+    text-align: center;
+}
+.fenxiangcontent{
+    text-align: center;
+    padding:0 .4rem;
+    font-size: 0.4rem;
+    color: #333;
+    margin-top: 1rem;
+}
+
+.begain{
+    font-size: 0.4rem;
+    color: #fff;
+    background-color: #0096FE;
+    border-radius: 0.3rem;
+    line-height: 1rem;
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 1rem;
+    border: 0px;
+    outline: none;
+    display: block;
+}

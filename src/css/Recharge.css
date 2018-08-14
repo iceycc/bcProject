@@ -1,0 +1,75 @@
+.app .rechargetitle{
+    padding-left: 0.5rem;
+    height: 0.8rem;
+    background: #F6F6F9;
+    line-height: 0.8rem;
+    color: #444444;
+    font-size: 0.4rem;
+}
+.app .minshengbank{
+    padding-left: 0.5rem;
+    height: 1.8rem;
+    line-height: 60px;
+    font-size: 0.5rem;
+}
+.money{
+    padding-left: 0.5rem;
+    height: 1.7rem;
+    color: #9199A1;
+    font-size: 0.4rem;
+}
+.app .inputAmount{
+    padding-left: 0.5rem;
+    height: 1.2rem;
+    line-height: 1rem;
+    font-size: 0.4rem;
+    border-top: 0.4rem solid #EEEEF0;
+    border-bottom: 1px solid #EEEEF0;
+}
+.inputAmount input{
+    width: 50%;
+    border: none;
+    box-sizing: border-box;
+    font-size: 0.4rem;
+    color: #333;
+    /* line-height: 0.5rem; */
+    outline: none;
+}
+.Amount{
+    display: inline-block;
+    height: 100%;
+    width: 1.8rem;
+}
+.tijiao{
+    margin-top: 50px;
+    font-size: 0.5rem;
+    color: #fff;
+    background-color: #508CEE;
+    /* border-radius: 0.1rem; */
+    line-height: 1.2rem;
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 0.8rem;
+    border: 0px;
+    outline: none;
+    display: block;
+}
+.bang{
+    margin-left: 0.5rem;
+    background-image: url(../assets/img/agree@3x.png);
+    font-size: 0.4rem;
+    color: #808080;
+    background-repeat: no-repeat;
+    background-size: 0.3rem 0.3rem;
+    padding: 0 0.5rem;
+    background-position: 0 0.2rem;
+}
+.minshengbankLogo{
+    line-height: 100%;
+    display: inline-block;
+    height: 60%;
+    width: 50px;
+    float: left;
+    padding-top: 0.4rem;
+}
