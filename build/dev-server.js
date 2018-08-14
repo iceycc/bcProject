@@ -21,6 +21,36 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+// mock data start
+// 加载数据
+const apiData = require('../src/mock/data.json')
+
+// 得到路由器
+const apiRouter = express.Router()
+// 注册路由
+apiRouter.get('/goods', function (req, res) {
+  res.send({
+    code: 0,  // 0代表正确数据
+    data: apiData.goods
+  })
+})
+apiRouter.get('/ratings', function (req, res) {
+  res.send({
+    code: 0,
+    data: apiData.ratings
+  })
+})
+apiRouter.get('/seller', function (req, res) {
+  res.send({
+    code: 0,
+    data: apiData.seller
+  })
+})
+// 启用路由器
+app.use('/api', apiRouter)
+// mock data end
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -29,8 +59,7 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 })
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: false,
-  heartbeat: 2000
+  log: () => {}
 })
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {
