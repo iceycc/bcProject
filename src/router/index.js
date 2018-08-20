@@ -3,108 +3,108 @@
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import login from'../components/login.vue'
-import Productlist from'../components/Productlist.vue'
-import Rechargesuccess from'../components/Rechargesuccess.vue'
-import Rechargefailure from'../components/Rechargefailure.vue'
-import Resetpassword from'../components/Resetpassword.vue'
-import Riskassessment from'../components/Riskassessment.vue'
-import Riskproblom from'../components/Riskproblom.vue'
-import surebuy from'../components/surebuy.vue'
-import Verificationsuccess from'../components/Verificationsuccess.vue'
-import Recharge from'../components/Recharge.vue'
-import Productlist2 from'../components/Productlist2.vue'
-import opening3 from'../components/opening3.vue'
-import opening2 from'../components/opening2.vue'
-import opening from'../components/opening.vue'
-import Investmentdetails from'../components/Investmentdetails.vue'
-import Incomeprogress from'../components/Incomeprogress.vue'
-import fengxianresult from'../components/fengxianresult.vue'
-import Buysuccess from'../components/Buysuccess.vue'
-import Buying from'../components/Buying.vue'
-import Productreservation from'../components/Productreservation.vue'
+import PageComponents from '../pages/index'
+import {PageName} from '../Constant'
 Vue.use(VueRouter)
 
-export default new VueRouter({
-  routes: [
+function addRouter(name, meta) {
+    routes.push({
+        path: '/' + name.replace(/-/g, '/'),
+        name: name,
+        component: PageComponents[name],
+        meta: Object.assign(
+                {
+                    keepAlive: false,
+                    needLogin: false
+                }
+                , meta)
+    });
+}
+
+
+
+let routes = [
     {
-      path:'/',
-      component:Productreservation
-    },
-    {
-      path:'/login',
-      component:login
-    },
-    {
-      path:'/opening',
-      component:opening
-    },
-    {
-      path:'/opening2',
-      component:opening2
-    },
-    {
-      path:'/opening3',
-      component:opening3
-    },
-    {
-      path:'/Investmentdetails',
-      component:Investmentdetails
-    },
-    {
-      path:'/Incomeprogress',
-      component:Incomeprogress
-    },
-    {
-      path:'/fengxianresult',
-      component:fengxianresult
-    },
-    {
-      path:'/Buysuccess',
-      component:Buysuccess
-    },
-    {
-      path:'/Buying',
-      component:Buying
-    },
-    {
-      path:'/Recharge',
-      component:Recharge
-    },
-    {
-      path:'/Productlist2',
-      component:Productlist2
-    },
-    {
-      path:'/Verificationsuccess',
-      component:Verificationsuccess
-    },
-    {
-      path:'/surebuy',
-      component:surebuy
-    },  {
-      path:'/Riskproblom',
-      component:Riskproblom
-    },
-    {
-      path:'/Riskassessment',
-      component:Riskassessment
-    },
-    {
-      path:'/Resetpassword',
-      component:Resetpassword
-    },
-    {
-      path:'/Rechargefailure',
-      component:Rechargefailure
-    },
-    {
-      path:'/Rechargesuccess',
-      component:Rechargesuccess
-    },
-    {
-      path:'/Productlist',
-      component:Productlist
+        path: '/',
+        redirect: {
+            path: PageName.Productlist
+        }
     }
-  ]
-})
+]
+
+/**
+ * buy
+ */
+
+addRouter(PageName.Buyfailed, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.Buysuccess, {keepAlive: false, title: '购买成功'});
+addRouter(PageName.surebuy, {keepAlive: false, title: '问答详情'});
+addRouter(PageName.Buying, {keepAlive: false, title: '问答详情'});
+
+/**
+ * login
+ */
+addRouter(PageName.login, {keepAlive: false, title: '登陆'});
+/**
+ * open
+ */
+addRouter(PageName.opening, {keepAlive: false, title: '开户'});
+addRouter(PageName.opening2, {keepAlive: false, title: '开户'});
+addRouter(PageName.opening3, {keepAlive: false, title: '开户'});
+
+/**
+ * orderNext
+ */
+addRouter(PageName.Productreservation, {keepAlive: false, title: '理财产品'});
+
+/**
+ * product
+ */
+addRouter(PageName.Productlist, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.Productlist2, {keepAlive: false, title: '理财产品'});
+
+/**
+ * rechange
+ */
+addRouter(PageName.Recharge, {keepAlive: false, title: '充值'});
+addRouter(PageName.Rechargefailure, {keepAlive: false, title: '充值失败'});
+addRouter(PageName.Rechargesuccess, {keepAlive: false, title: '充值成功'});
+
+/**
+ * riskEvaluation 风险评估
+ */
+addRouter(PageName.Verificationsuccess, {keepAlive: false, title: '风险测评'}); //
+addRouter(PageName.Riskassessment, {keepAlive: false, title: '风险测评'}); // ？？
+addRouter(PageName.Riskproblom, {keepAlive: false, title: '风险测评'}); // 问题
+addRouter(PageName.fengxianresult, {keepAlive: false, title: '风险测评'}); // 结果
+
+/**
+ * safe
+ */
+addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码'});
+
+/**
+ * financingDetail
+ */
+addRouter(PageName.Investmentdetails, {keepAlive: false, title: '银行理财'});
+addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
+
+// .
+let router =  new VueRouter({
+    routes
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.meta && to.meta.title) {
+        document.title = to.meta.title;
+    }
+    next()
+});
+
+
+router.afterEach((to, from) => {
+
+
+});
+
+export default router
