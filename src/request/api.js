@@ -66,6 +66,7 @@ export const API = {
      *  buying
      */
     buy:{
+        // 购买
         apiBuy(params, success, error){
             let options = {
                 url:'/openapi/biz/apiBuy',
@@ -73,6 +74,38 @@ export const API = {
             }
             return http.post(options, config, success, error)
 
+        },
+
+    },
+    /**
+     * 充值相关
+     */
+    reChange:{
+        // 39查询用户是否已签约充值协议
+        apiRechargeProtoQuery(params, success, error){
+            let options = {
+                url:'/openapi/biz/apiRechargeProtoQuery',
+                params
+            }
+            return http.post(options, config, success, error)
+        },
+        // 协议页 todo 1
+            // finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
+        // 40.	获取充值协议码
+        apiRechargeProtoCode(params, success, error){
+            let options = {
+                url:'/openapi/biz/apiRechargeProtoCode',
+                params
+            }
+            return http.post(options, config, success, error)
+        },
+        // 充值 /openapi/biz/apiRecharge
+        apiRecharge(params, success, error){
+            let options = {
+                url:'/openapi/biz/apiRecharge',
+                params
+            }
+            return http.post(options, config, success, error)
         },
 
     },
