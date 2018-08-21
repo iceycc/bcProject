@@ -13,9 +13,9 @@ export const API = {
     /**
      * 注册相关 open
      */
-    open:{
+    open: {
         // 用户注册信息回显接口 ?? todo
-        doApiRegisterBackShow(params,token, success, error){
+        doApiRegisterBackShow(params, token, success, error) {
             let options = {
                 url: '/openapi/comm/apiRegisterBackShow',
                 params,
@@ -43,16 +43,29 @@ export const API = {
             return http.post(options, config, success, error)
         },
         // 设置密码
-        setPassWord(params,success,error){
+        setPassWord(params, success, error) {
             let options = {
-                url:'/openapi/comm/apiRegisterSetPsw',
+                url: '/openapi/comm/apiRegisterSetPsw',
                 params
             }
             return http.post(options, config, success, error)
         }
 
     },
+    /**
+     * login 登陆相关
+     */
+    login(params, success, error) {
+        let options = {
+            url:'/openapi/comm/apiLoginBank',
+            params
+        }
+        return http.post(options, config, success, error)
+    },
+    /**
+     * buying
+     */
+    buy:{
 
-
-    //
+    }
 }

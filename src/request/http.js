@@ -2,7 +2,7 @@ import axios from './axios'
 import Bus from '../common/js/bus'
 import {BusName} from "../Constant";
 import {util} from "../common/utils/util";
-import {LsName} from '../Constant'
+import {LsName,DeviceId} from '../Constant'
 
 export default {
     // POST
@@ -20,13 +20,13 @@ export default {
             biz_data: {
                 head: {
                     CHANNEL: "Umeng",
-                    VERSION: "2.2.9",
+                    VERSION: "",
                     IMSI: "460026325010440",
-                    SESSION_ID: "cde294d8973f4852815ba24f294e273d",
+                    SESSION_ID: "",
                     SYSTEM_TYPE: "h5",
                     TYPE: "GENERALIZE_INFO",
                     TOKEN: token1, //15011352818 15711310733
-                    DEVICE_ID: "866637030888319"
+                    DEVICE_ID: DeviceId
                 },
                 param: params,
             },
@@ -42,6 +42,7 @@ export default {
             // todo 做业务状态校验
             if(result.head.CODE == 0){
                 success && success(result.data);
+                console.log('成功msg >>>', result.head.MSG);
                 return Promise.resolve(result.data)
             }else {
                 console.log('错误msg >>>', result.head.MSG);

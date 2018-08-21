@@ -1,9 +1,6 @@
 <template>
     <div id="app" class="app">
-        <header class="header">
-            <a class="return" href=""></a>
-            <p>购买</p>
-        </header>
+        <app-bar title="购买"></app-bar>
         <div class="buytitle">
             <div class="buytitleleft">
                 <div class="buytitleleftimg">
@@ -23,7 +20,7 @@
 
         <div class="buysuccessdetails">
             <div class="buysuccessdetailleft">可用金额 <strong>3元</strong></div>
-            <div class="buysuccessdetailright">充值</div>
+            <div class="buysuccessdetailright" @click="goReChang">充值</div>
         </div>
         <div class="buydetails">
             <p style="margin-top: 0.3rem">购买金额</p>
@@ -36,8 +33,20 @@
     </div>
 </template>
 <script>
+    import {PageName} from "../../Constant";
+    export default {
+        data(){
+            return {
 
-    export default {}
+            }
+        },
+
+        methods:{
+            goReChang(){
+                this.$router.push(PageName.Recharge)
+            }
+        }
+    }
 </script>
 
 <style lang="scss" scoped>

@@ -43,7 +43,7 @@
                     ORG_ID: '70',
                     CARD_NO: '6214830182284272', // 银行卡号 6214830182284272  6217730711297810
                     HAS_BAND: '0', // 是否绑定过
-                    PHONE_NUM: '15621185521', // 15711310733
+                    PHONE_NUM: '15621185521', // 15711310733   15011352818
                     PRE_PHONE_NUM: '15621185521', //
                     PHONE_CODE: '', // 手机验证码
                     LAST_STEP_NUM: '0', // 步数
@@ -100,7 +100,6 @@
                 })
             },
             getMsgCodeHandle() {
-
                 let data = {
                     PHONE_NUM: this.data.PRE_PHONE_NUM,
                     BIZ_TYPE: '1',

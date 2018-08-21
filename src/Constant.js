@@ -85,10 +85,13 @@ export const PageName = {
 
 
 export const BusName ={
-    showToast:'showToast'
+    showToast:'showToast',
+    showLoading:'showLoading'
 }
 
 
 export const LsName ={
-    token:'TEEs_dW13SDaQ'
+    token:'TEEs_dW13SDaQ',
 }
+
+export const DeviceId = '99000662737202'
