@@ -63,9 +63,17 @@ export const API = {
         return http.post(options, config, success, error)
     },
     /**
-     * buying
+     *  buying
      */
     buy:{
+        apiBuy(params, success, error){
+            let options = {
+                url:'/openapi/biz/apiBuy',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
 
     },
     /**

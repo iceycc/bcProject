@@ -63,7 +63,6 @@
 <script>
     import {API} from "../../request/api";
     import {DeviceId} from "../../Constant";
-
     let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
     export default {
         data() {
@@ -86,7 +85,7 @@
             this.REQ_SERIAL = this.$route.params.REQ_SERIAL || this.$route.params.seq
         },
         mounted() {
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + this.deviceId + "&width=414"
+            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + this.deviceId + "&width="
             this.getKey('loginPass')
         },
         methods: {

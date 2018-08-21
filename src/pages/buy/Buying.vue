@@ -4,46 +4,70 @@
         <div class="buytitle">
             <div class="buytitleleft">
                 <div class="buytitleleftimg">
-                    <img src="images/img/licaiicon@2x.png" style="width:100%" alt="">
+                    <img src="../../images/img/licaiicon@2x.png" style="width:100%" alt="">
                 </div>
                 <div class="buytitleleftcontent">
-                    <p>民生xxx产品</p>
+                    <p>{{proDetail.PRD_NAME}}</p>
                     <p style="color:#666">理财产品</p>
                 </div>
 
             </div>
             <div class="buytitleright">
-                <p>起购金额500元</p>
-                <p>最小递增100元</p>
+                <p>{{proDetail.TXT_MIN_AMOUNT}}</p>
+                <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
             </div>
         </div>
 
         <div class="buysuccessdetails">
-            <div class="buysuccessdetailleft">可用金额 <strong>3元</strong></div>
+            <div class="buysuccessdetailleft">可用金额 <strong>{{proDetail.REMAIN_AMT}}元</strong></div>
             <div class="buysuccessdetailright" @click="goReChang">充值</div>
         </div>
         <div class="buydetails">
             <p style="margin-top: 0.3rem">购买金额</p>
             <span class="buydetailsmoney">￥</span>
-            <input type="text" placeholder="500元起购">
+            <input type="text" placeholder="500元起购" v-model="moneyNum">
         </div>
         <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 1,000,000.00元</p>
-        <button class="tijiao">购买</button>
+        <button class="tijiao" @click="goBuy">购买</button>
         <p class="bang">我已阅读并同意注册<strong style=" color:#0096FE;">《用户授权服务协议》《晋商银行直销银行电子账户服务协议》</strong></p>
     </div>
 </template>
 <script>
-    import {PageName} from "../../Constant";
+    import {PageName,BusName} from "../../Constant";
+    import Bus from '../../common/js/bus'
+
     export default {
         data(){
             return {
-
+                proDetail:{},
+                moneyNum:null
             }
         },
-
+        created(){
+            this.proDetail = this.$route.query // 数据
+        },
         methods:{
             goReChang(){
                 this.$router.push(PageName.Recharge)
+            },
+            goBuy(){
+                if(this.moneyNum ==''){
+                    Bus.$emit(BusName.showToast,'请填写购买金额')
+                    return
+                }
+                if(typeof (this.moneyNum - 0) != 'number' || isNaN(this.moneyNum - 0)){
+                    Bus.$emit(BusName.showToast,'请填写正确的金额')
+                    return
+                }
+                this.$router.push({
+                    name:PageName.surebuy,
+                    query:{
+                        money:this.moneyNum,
+                        PRD_NAME:this.proDetail.PRD_NAME,
+                        id:this.proDetail.id
+                    }
+                })
+
             }
         }
     }
@@ -57,8 +81,7 @@
 
     .buytitle {
         width: 92%;
-        padding: 0 0.4rem;
-        height: 1.7rem;
+        padding: 0.4rem 0.4rem;
         border-top: 10px solid #F6F6F9;
         border-bottom: 0.5rem solid #F6F6F9;
     }
@@ -66,7 +89,6 @@
     .buytitleleft {
         display: inline-block;
         width: 50%;
-        height: 100%;
         background-attachment: #fff;
     }
 
@@ -77,22 +99,18 @@
     }
 
     .buytitleleftcontent {
-        font-size: 0.4rem;
         padding-top: -0.5rem;
         display: inline-block;
         padding-left: 0.4rem;
-        font-size: 0.35rem
+        font-size: 0.35rem;
+        vertical-align: middle;
     }
+
+
 
     .buytitleright {
         float: right;
         width: 50%;
-        height: 100%;
-        background-attachment: #fff;
-    }
-
-    .buytitleright {
-        padding-top: 0.4rem;
         text-align: right;
         font-size: 0.35rem;
         color: #666;

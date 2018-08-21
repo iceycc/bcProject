@@ -1,10 +1,7 @@
 <template>
     <div id="app">
         <div class="wrap">
-            <header class="header">
-                <a class="return" href=""></a>
-                <p>优选计划360号</p>
-            </header>
+            <app-bar :title="productDetail.PRD_NAME"></app-bar>
             <div class="banner">
                 <div class="bannercontent">
                     <div class="bannertop">
@@ -148,11 +145,13 @@
 
             }
         },
+        mounted(){
+        },
         methods:{
             getData(id){
 
                 let data = {
-                    ID:id
+                    ID:id + ''
                 }
                 API.product.apiGetChannelPrdInfo(data,(res)=>{
                     console.log(res);
@@ -160,11 +159,19 @@
                 })
             },
             goNext(){
+                // 判断是否开户 是否 登陆
                 // todo 后面判断是购买还是预约
+                let data = { // 跳转购买需要的参数,后期转vuex
+                    PRD_NAME:this.productDetail.PRD_NAME,
+                    TXT_MIN_AMOUNT:this.productDetail.TXT_MIN_AMOUNT,
+                    REMAIN_AMT:this.productDetail.REMAIN_AMT,
+                    INCRE_AMOUNT:this.productDetail.INCRE_AMOUNT
+                }
                 this.$router.push({
                     name:PageName.Buying,
                     query:{
-                        id:this.proID
+                        id:this.proID,
+                            ...data
                     }
                 })
             }
