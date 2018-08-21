@@ -5,24 +5,54 @@
                         <p>风险评测</p>
                     </header>
             <div class="chattuimg">
-                      <img src="images/img/Verificationsuccess@2x.png" style="width:30%" alt="">
+                      <img src="../../images/img/Verificationsuccess@2x.png" style="width:30%" alt="">
                   </div>
                   <div class="fenxiancontent">
                       <div class="fenxiantitle">
                           <p>您的风险测评结果为</p>
-                         <h1>45分 保守型 </h1>
+                         <h1>{{RISK_TOLERANCE_SCORE}}分 {{RISK_TOLERANCE_DESC}} </h1>
                       </div>          
-                      <p>风险承受较低，能容忍一定幅度的本金损失，止损意识强。资产配置以低风险品种为主。</p>
+                      <p>{{RISK_LEV_EXPLAIN}}</p>
                     </div>
                     <div style="text-align:center">
-                         <span class="begain" style="display: inline-block;">重新测评</span>
-                         <span class="begain" style="display: inline-block;">完成</span>
+                         <mt-button @click="reCheck" class="begain" style="display: inline-block;">重新测评</mt-button>
+                         <mt-button @click="goNext" class="begain" style="display: inline-block;">完成</mt-button>
                     </div>
                 
           </div>
 </template>
 <script>
+import {PageName} from "../../Constant";
+
 export default {
+    data(){
+        return{
+            RISK_TOLERANCE_LEVEL:'',
+            RISK_TOLERANCE_DESC:'',
+            RISK_LEV_EXPLAIN:'',
+            RISK_TOLERANCE_SCORE:''
+        }
+    },
+    created(){
+        let data = this.$route.query
+        this.RISK_TOLERANCE_LEVEL = data. RISK_TOLERANCE_LEVEL
+        this.RISK_TOLERANCE_DESC = data. RISK_TOLERANCE_DESC
+        this.RISK_LEV_EXPLAIN = data. RISK_LEV_EXPLAIN
+        this.RISK_TOLERANCE_SCORE = data. RISK_TOLERANCE_SCORE
+    },
+    methods:{
+        reCheck(){
+            this.$router.push({
+                name:PageName.Riskproblom
+            })
+        },
+        goNext(){
+            // todo 跳转到购买
+            this.$router.push({
+                name:PageName.Buying
+            })
+        }
+    }
     
 }
 </script>

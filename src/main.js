@@ -2,7 +2,8 @@ import Vue from 'vue'
 import router from './router'
 import {
     Button,
-    Cell
+    Cell,
+    Radio
 } from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
@@ -10,6 +11,7 @@ import App from './App'
 
 Vue.component(Button.name, Button)
 Vue.component(Cell.name, Cell)
+Vue.component(Radio.name, Radio)
 
 // import MintUI from 'mint-ui'
 // import 'mint-ui/lib/style.css'

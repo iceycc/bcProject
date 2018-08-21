@@ -1,84 +1,173 @@
 <template>
-        <div id="app">
-                <div class="app">
-                        <header class="header">
-                                <a class="return" href=""></a>
-                                <p>风险测评</p>
-                            </header>
-                  <p class="probloms">1/13</p>
-                  <div class="problomtitle">
-                      <p>1.您的主要收入来源是：</p>
-                  </div>
-                  <div class="problomselect">
-                        <p>A 无固定收入
-                            <div style="width:0.4rem;height:0.4rem;float:right">
-                                <input type="radio">
-                            </div>                           
-                             </p>
-                        <p>B 出租，出售房地产等非金融性质财产收入  
-                            <div style="width:0.4rem;height:0.4rem;float:right">
-                                <input type="radio">
-                            </div></p>
-                        <p>C 利息，股息，转让证券等金融性质资产收入  
-                            <div style="width:0.4rem;height:0.4rem;float:right">
-                                <input type="radio">
-                            </div></p>
-                        <p>D 生产经营所得  
-                            <div style="width:0.4rem;height:0.4rem;float:right">
-                                <input type="radio">
-                            </div></p>
-                        <p>E 工资，劳务报酬  
-                            <div style="width:0.4rem;height:0.4rem;float:right">
-                                <input type="radio">
-                            </div></p>
-                    </div>
-                 </div>
-                 <div style="text-align:center">
-                        <span class="begain">上一题</span>
-                        <span class="begain">提交</span>
-                   </div>
+    <div id="app">
+        <div class="app">
+            <header class="header">
+                <a class="return" href=""></a>
+                <p>风险测评</p>
+            </header>
+            <p class="probloms"> {{nowShow + 1}} / {{proNubmer}}</p>
+            <section v-for="item,index in optionsArr" :key="index">
+                <!--<transition name="fade">-->
+                    <section v-if="index === nowShow">
+                        <mt-radio
+                                class="radio"
+                                :title="item.questionNum +'、'+ item.questionContent"
+                                v-model="values[item.questionNum]"
+                                :options="item.options | optionsFilter">
+                        </mt-radio>
+                        <div style="text-align:center">
+                            <span class="begain" v-if="index!=0">上一题</span>
+                            <span class="begain" @click="goNext(item.questionNum)">提交</span>
+                        </div>
+                    </section>
+                <!--</transition>-->
+            </section>
         </div>
-   
+
+    </div>
+
 </template>
 <script>
-export default {
-    
-}
+    import {API} from "../../request/api";
+    import Bus from '../../common/js/bus'
+    import {BusName, PageName} from "../../Constant";
+    import util from '../../common/utils/util'
+
+    export default {
+        data() {
+            return {
+                nowShow: 0,
+                proNubmer: 0,
+                values: {},
+                dataList: [],
+                options: [
+                    {
+                        label: 'disabled option',
+                        value: 'valueF',
+                    },
+                    {
+                        label: 'optionA',
+                        value: 'valueA'
+                    },
+                    {
+                        label: 'optionB',
+                        value: 'valueB'
+                    }
+                ],
+                optionsArr: []
+            }
+        },
+        filters: {
+            optionsFilter(val) {
+                return val.map(function (item, index) {
+                    return {
+                        label: item.option,
+                        value: item.optionNum
+                    }
+                })
+            }
+        },
+        created() {
+            this.getProblom()
+        },
+        methods: {
+            getProblom() {
+                API.risk.apiGetRiskTestQuest({}, (res) => {
+                    console.log(res);
+                    this.optionsArr = res.QUEST_LIST
+                    this.proNubmer = res.QUEST_LIST.length
+                })
+            },
+            goNext(num) {
+                if (!this.values[num]) {
+                    Bus.$emit(BusName.showToast, '其选择')
+                    return
+                }
+                if (this.nowShow === this.proNubmer - 1) {
+                    console.log('提交')
+                    let ANSWER_LIST = []
+                    for (var i in this.values) {
+                        ANSWER_LIST.push({
+                            questionNum: i,
+                            optionNum: this.values[i]
+                        })
+                    }
+                    let data = {
+                        ANSWER_LIST
+                    }
+                    API.risk.apiRiskTestAnswer(data, (res) => {
+                        console.log(res);
+                        this.$router.push({
+                            name: PageName.fengxianresult,
+                            query: res
+                        })
+                        // util.storage.local()
+                    })
+                    return
+                }
+                    this.nowShow += 1
+
+            }
+        }
+    }
 </script>
 
-<style  lang="scss" scoped>
-.app{
-    width:94%;
-    padding: 0 3%;
-}
-.app .probloms{
-    text-align: center;
-    color: #666666 ;
-}
-.app .problomtitle{
-    font-size: 0.4rem;
-    line-height: 1rem;
-    height:1rem;
-    width:100%;
-    border-bottom:1PX #E5E5E5 solid; 
-    color: #333;
-}
-.app .problomselect{
-    font-size: 0.4rem;
-    color:#666666;
-    padding: 0.2rem 0;
-}
-.app .problomselect p{
-    padding: 0.2rem 0;
-}
-.begain{
-    font-size: 0.4rem;
-    color: #fff;
-    background-color: #0096FE;
-    border-radius: 0.2rem;
-    line-height: 1rem;
-    width: 35%;
-    text-align: center;
-    margin-top: 1.3rem;
-}
+<style lang="scss" scoped>
+    .app {
+        width: 94%;
+        padding: 0 3%;
+    }
+
+    .app .probloms {
+        text-align: center;
+        color: #666666;
+    }
+
+    .app .problomtitle {
+        font-size: 0.4rem;
+        line-height: 1rem;
+        height: 1rem;
+        width: 100%;
+        border-bottom: 1PX #E5E5E5 solid;
+        color: #333;
+    }
+
+    .app .problomselect {
+        font-size: 0.4rem;
+        color: #666666;
+        padding: 0.2rem 0;
+    }
+
+    .app .problomselect p {
+        padding: 0.2rem 0;
+    }
+
+    .begain {
+        font-size: 0.4rem;
+        color: #fff;
+        background-color: #0096FE;
+        border-radius: 0.2rem;
+        line-height: 1rem;
+        width: 35%;
+        text-align: center;
+        margin-top: 1.3rem;
+    }
+
+    .radio {
+        .mint-radio {
+
+        }
+        .mint-radio-core {
+            color: red !important;
+        }
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+    {
+        opacity: 0;
+    }
 </style>

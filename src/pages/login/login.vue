@@ -39,7 +39,8 @@
 <script>
     import util from '../../common/utils/util'
     import {API} from '../../request/api'
-    import {LsName,DeviceId} from "../../Constant";
+    import {LsName,DeviceId,BusName,PageName} from "../../Constant";
+    import Bus from '../../common/js/bus'
     let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
     export default {
         data(){
@@ -77,7 +78,21 @@
                 }
                 API.login(data,(res)=>{
                     console.log(res);
+                    let type = res.HAS_GRADE
+                    if(type==1){
+                        Bus.$emit(BusName.showToast,'您还为做评估')
+                        this.$router.push({
+                            name:PageName.Verificationsuccess
+                        })
+                    }
+                    else if(type ==2){
+                        Bus.$emit(BusName.showToast,'您已做评估')
+                        // this.$router.push({
+                        //     name:PageName.Verificationsuccess
+                        // })
+                    }else {
 
+                    }
                     // this.getKey('loginPass')
 
                 })

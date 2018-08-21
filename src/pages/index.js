@@ -11,7 +11,6 @@ Pages[Constants.PageName.Riskproblom] = resolve => require(['./riskEvaluation/Ri
 Pages[Constants.PageName.surebuy] = resolve => require(['./buy/surebuy.vue'], resolve);
 Pages[Constants.PageName.Verificationsuccess] = resolve => require(['./riskEvaluation/Verificationsuccess.vue'], resolve);
 Pages[Constants.PageName.Recharge] = resolve => require(['./rechange/Recharge.vue'], resolve);
-Pages[Constants.PageName.Productlist2] = resolve => require(['./product/Productlist2.vue'], resolve);
 Pages[Constants.PageName.opening3] = resolve => require(['./open/opening3.vue'], resolve);
 Pages[Constants.PageName.opening2] = resolve => require(['./open/opening2.vue'], resolve);
 Pages[Constants.PageName.opening] = resolve => require(['./open/opening.vue'], resolve);
@@ -20,7 +19,7 @@ Pages[Constants.PageName.Incomeprogress] = resolve => require(['./financingDetai
 Pages[Constants.PageName.Buysuccess] = resolve => require(['./buy/Buysuccess.vue'], resolve);
 Pages[Constants.PageName.Buyfailed] = resolve => require(['./buy/Buyfailed.vue'], resolve);
 Pages[Constants.PageName.Buying] = resolve => require(['./buy/Buying.vue'], resolve);
-Pages[Constants.PageName.Productreservation] = resolve => require(['./orderNext/Productreservation.vue'], resolve);
+Pages[Constants.PageName.Productreservation] = resolve => require(['./product/Productreservation.vue'], resolve);
 Pages[Constants.PageName.fengxianresult] = resolve => require(['./riskEvaluation/fengxianresult.vue'], resolve);
 
 export default Pages

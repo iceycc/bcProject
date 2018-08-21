@@ -67,5 +67,51 @@ export const API = {
      */
     buy:{
 
+    },
+    /**
+     * risk 风险评估相关
+     */
+    risk:{
+        apiGetRiskTestQuest(params, success, error){
+            let options = {
+                url:'/openapi/comm/apiGetRiskTestQuest',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        apiRiskTestAnswer(params, success, error){
+            let options = {
+                url:'/openapi/comm/apiRiskTestAnswer',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+
+    },
+    /**
+     * Product 产品列表相关
+     */
+    product:{
+        // 列表
+        apiGetChannelPrdList(params, success, error){
+            let options = {
+                url:'/openapi/comm/apiGetChannelPrdList',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        //
+        apiGetChannelPrdInfo(params, success, error){
+            let options = {
+                url:'/openapi/comm/apiGetChannelPrdInfo',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+
     }
 }

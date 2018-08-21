@@ -10,12 +10,12 @@
                     <div class="bannertop">
                         <div class="bannertopleft">
                             <p style="font-size: 0.4rem">预期年化收益率</p>
-                            <p><strong style="font-size: 1rem">4.5430 </strong><span style="font-size: .5rem;">%</span>
+                            <p><strong style="font-size: 1rem">{{productDetail.RATE}} </strong><span style="font-size: .5rem;">%</span>
                             </p>
                         </div>
                         <div class="bannertopright">
                             <p style="font-size: 0.4rem">理财期限</p>
-                            <p><strong style="font-size: 1rem">30 </strong><span style="font-size: .5rem;">天</span></p>
+                            <p><strong style="font-size: 1rem">{{productDetail.PERIOD}} </strong><span style="font-size: .5rem;">天</span></p>
                         </div>
                     </div>
                     <div class="bannerbottom">
@@ -31,26 +31,26 @@
                 <p>交易规则</p>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">审核方式</span>
-                    <span class="bannercontenttitlecontent">首次购买无需面签</span>
+                    <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
                 </div>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">起购金额</span>
-                    <span class="bannercontenttitlecontent">10,000.00元</span>
+                    <span class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT}}</span>
                 </div>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">递增金额</span>
-                    <span class="bannercontenttitlecontent">100.00元</span>
+                    <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
                 </div>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">剩余额度</span>
-                    <span class="bannercontenttitlecontent">即将售罄</span>
+                    <span class="bannercontenttitlecontent">{{productDetail.REMAIN_AMT}} 元</span>
                 </div>
             </div>
             <div class="wrapicon">
-                <div class="circle"><span>2017-01-07</span><strong>募集开始</strong></div>
-                <div class="circle"><span>2017-01-07</span><strong>募集结束</strong></div>
-                <div class="circle"><span>2017-01-07</span><strong>起息日</strong></div>
-                <div class="circle"><span>2017-01-07</span><strong>到期</strong></div>
+                <div class="circle"><span>{{productDetail.COLLECT_START_DATE}}</span><strong>募集开始</strong></div>
+                <div class="circle"><span>{{productDetail.COLLECT_END_DATE}}</span><strong>募集结束</strong></div>
+                <div class="circle"><span>{{productDetail.VALUE_DATE}}</span><strong>起息日</strong></div>
+                <div class="circle"><span>{{productDetail.FIN_END_DATE}}</span><strong>到期</strong></div>
             </div>
             <div class="contentmain contenttop">
                 <div class="contentmaintop">
@@ -106,13 +106,70 @@
                 <p>账户资金安全由存管银行保障</p>
             </div>
         </div>
-        <div class="buttonbottom">
-            预约下期
+        <div class="buttonbottom"
+            @click="goNext"
+        >
+            {{btnType}}
         </div>
     </div>
 </template>
 <script>
-    export default {}
+    import {API} from "../../request/api";
+    import {PageName} from "../../Constant";
+
+    export default {
+        data(){
+            return{
+                productDetail:{},
+                btnType:'安全购买',
+                proID:''
+            }
+        },
+        created(){
+            this.proID = this.$route.query.id
+            this.getData(this.proID)
+
+        },
+        filters:{
+            IS_INTERVIEW_filter(val){
+                let msg = ''
+                if(val == 0) {
+                    return msg ='首次购买无需面签'
+                }
+
+                if(val == 1) {
+                    return msg ='首次购买无需面签'
+                }
+
+                if(val == 2) {
+                    return msg ='首次购买无需面签'
+                }
+                return msg ='首次购买无需面签'
+
+            }
+        },
+        methods:{
+            getData(id){
+
+                let data = {
+                    ID:id
+                }
+                API.product.apiGetChannelPrdInfo(data,(res)=>{
+                    console.log(res);
+                    this.productDetail = res
+                })
+            },
+            goNext(){
+                // todo 后面判断是购买还是预约
+                this.$router.push({
+                    name:PageName.Buying,
+                    query:{
+                        id:this.proID
+                    }
+                })
+            }
+        }
+    }
 </script>
 <style lang="scss" scoped>
     html, body {
