@@ -104,7 +104,7 @@
             </div>
         </div>
         <div class="buttonbottom"
-            @click="goNext"
+            @click="goNext(type)"
         >
             {{btnType}}
         </div>
@@ -119,7 +119,8 @@
             return{
                 productDetail:{},
                 btnType:'安全购买',
-                proID:''
+                proID:'',
+                type:'1'
             }
         },
         created(){
@@ -149,18 +150,18 @@
         },
         methods:{
             getData(id){
-
                 let data = {
                     ID:id + ''
                 }
                 API.product.apiGetChannelPrdInfo(data,(res)=>{
-                    console.log(res);
                     this.productDetail = res
+                    this.type = res.IS_ENABLED
+                    this.btnType = this.type ==1 ? '安全购买':'预约下期'
+
                 })
             },
-            goNext(){
-                // 判断是否开户 是否 登陆
-                // todo 后面判断是购买还是预约
+            goNext(type){
+                // todo 判断登陆
                 let data = { // 跳转购买需要的参数,后期转vuex
                     PRD_NAME:this.productDetail.PRD_NAME,
                     TXT_MIN_AMOUNT:this.productDetail.TXT_MIN_AMOUNT,
@@ -168,13 +169,20 @@
                     INCRE_AMOUNT:this.productDetail.INCRE_AMOUNT,
                     ORG_NAME:this.productDetail.ORG_NAME
                 }
-                this.$router.push({
-                    name:PageName.Buying,
-                    query:{
-                        id:this.proID,
+                if(type==1){
+                    // 去安全购买
+                    this.$router.push({
+                        name:PageName.Buying,
+                        query:{
+                            id:this.proID,
                             ...data
-                    }
-                })
+                        }
+                    })
+                }else {
+                    // todo 预约下期
+
+                }
+
             }
         }
     }

@@ -40,20 +40,6 @@
                 proNubmer: 0,
                 values: {},
                 dataList: [],
-                options: [
-                    {
-                        label: 'disabled option',
-                        value: 'valueF',
-                    },
-                    {
-                        label: 'optionA',
-                        value: 'valueA'
-                    },
-                    {
-                        label: 'optionB',
-                        value: 'valueB'
-                    }
-                ],
                 optionsArr: []
             }
         },
@@ -73,7 +59,6 @@
         methods: {
             getProblom() {
                 API.risk.apiGetRiskTestQuest({}, (res) => {
-                    console.log(res);
                     this.optionsArr = res.QUEST_LIST
                     this.proNubmer = res.QUEST_LIST.length
                 })
@@ -96,7 +81,6 @@
                         ANSWER_LIST
                     }
                     API.risk.apiRiskTestAnswer(data, (res) => {
-                        console.log(res);
                         this.$router.push({
                             name: PageName.fengxianresult,
                             query: res

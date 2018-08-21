@@ -37,8 +37,8 @@ export default {
         config.url = url
         // HTTP请求
         return axios.request(config).then(result => {
-            // console.log('拦截 result >>>', result);
             result = result.biz_data
+            console.log('res >>>', result.data);
             // todo 做业务状态校验
             if(result.head.CODE == 0){
                 success && success(result.data);

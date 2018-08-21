@@ -79,7 +79,7 @@
         },
         components: {},
         created() {
-            // this.etInfos()
+            // this.getInfos()
             // this.picToBase64(this.picZheng,(data)=> {
             //     this.data.CARD_FRONT_FILE = data
             // })
@@ -129,7 +129,6 @@
                 this.preSrc1 = newsrc
                 util.imgScale(newsrc,e.target.files[0],1).then((data) => {
                     this.test1 = data
-                    // console.log(data);
                     this.data.CARD_FRONT_FILE = data.split(',')[1] + ''
                     console.log(this.data.CARD_FRONT_FILE);
 

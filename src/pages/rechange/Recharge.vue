@@ -106,7 +106,6 @@
                     APPLY_AMOUNT: this.APPLY_AMOUN
                 }
                 API.reChange.apiRecharge(data, res => {
-                    console.log(res);
                     this.$router.push({
                         name:PageName.Rechargesuccess,
                         query:{

@@ -71,13 +71,11 @@
                 util.storage.local.set(LsName.token,this.tel)
                 let pass = $('#loginPass').$getCiphertext()
                 let lengths = $('#loginPass').$getPasswordLength();
-                console.log(pass)
                 let data = {
                     PHONE_NUM:this.tel,
                     BANK_LOGIN_PW:pass
                 }
                 API.login(data,(res)=>{
-                    console.log(res);
                     let type = res.HAS_GRADE
                     if(type==1){
                         Bus.$emit(BusName.showToast,'您还为做评估')

@@ -51,7 +51,6 @@
         methods: {
             getListData(){
                API.product.apiGetChannelPrdList({},(res)=>{
-                   console.log(res);
                    let num = res.length
                    this.dataList = res
 

@@ -94,15 +94,7 @@
                 this.getKey('payPass')
             },
             goOpen(){
-                let data = {
-                    REQ_SERIAL,
-                    BANK_LOGIN_PW:this.s_loginPass,
-                    BANK_PAY_PW:this.s_payPass
-                }
-                return
-                API.open.setPassWord(data,(res)=>{
-                    console.log(res);
-                })
+
             },
 
             getKey(id) {
@@ -120,9 +112,8 @@
                     BANK_LOGIN_PW: this.loginpass,
                     BANK_PAY_PW: this.paypass
                 }
-                console.log(data);
                 API.open.setPassWord(data, (res) => {
-                    console.log(res);
+                    // todo
                 })
             }
 

@@ -61,8 +61,6 @@
                 API.open.doApiRegisterBackShow({},num,res=>{
                     console.log('步数 >>>',res.LAST_STEP_NUM);
                     let seq = res.BESHARP_REGISTER_VALI_USER_SEQ
-                    console.log(seq);
-                    // return
                     if(res.LAST_STEP_NUM == 0){
                         // Bus.$emit(BusName.showToast,"欢迎注册")
                         return
@@ -105,8 +103,6 @@
                     BIZ_TYPE: '1',
                 }
                 API.open.getMsgCode(data, res => {
-                    console.log('注册手机验证码res >>>', res);
-                    console.log(res);
                     this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 }, err => {
                     console.log(err);
@@ -120,7 +116,6 @@
                 console.log('data >>>',this.data);
                 API.open.doRegeist(this.data,
                         res => {
-                            console.log('注册res >>>',res);
                             // todo 判断
                             // return
                             this.$router.push({

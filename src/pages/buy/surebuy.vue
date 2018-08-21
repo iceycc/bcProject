@@ -80,7 +80,6 @@
                 }
                 console.log(data)
                 API.buy.apiBuy(data, (res) => {
-                    console.log(res);
                     this.$router.push({
                         name:PageName.Buysuccess,
                         query:{
