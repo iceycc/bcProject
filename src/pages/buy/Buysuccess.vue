@@ -1,9 +1,6 @@
 <template>
     <div id="app" class="app">
-        <header class="header">
-            <a class="return" href=""></a>
-            <p>购买</p>
-        </header>
+        <app-bar title="购买"></app-bar>
         <div class="buysuccessimg">
             <img src="images/img/Verificationsuccess@2x.png" alt="">
             <p>购买成功</p>
@@ -11,23 +8,23 @@
         <div class="buysuccessdetail">
             <div class="buysuccessdetails">
                 <div class="buysuccessdetailleft">理财产品名称</div>
-                <div class="buysuccessdetailright">民生xxx基金</div>
+                <div class="buysuccessdetailright">{{datas.PRD_NAME}}</div>
             </div>
             <div class="buysuccessdetails">
                 <div class="buysuccessdetailleft">交易银行</div>
-                <div class="buysuccessdetailright">民生直销银行</div>
+                <div class="buysuccessdetailright">{{datas.ORG_NAME}}</div>
             </div>
             <div class="buysuccessdetails">
                 <div class="buysuccessdetailleft">购买金额</div>
-                <div class="buysuccessdetailright">1,000.00元</div>
+                <div class="buysuccessdetailright">{{datas.money}}元</div>
             </div>
             <div class="buysuccessdetails">
                 <div class="buysuccessdetailleft">购买日期</div>
-                <div class="buysuccessdetailright">2017年11月10日</div>
+                <div class="buysuccessdetailright">{{datas.OPERA_DATE}}</div>
             </div>
             <div class="buysuccessdetails">
                 <div class="buysuccessdetailleft">交易流水号</div>
-                <div class="buysuccessdetailright">6222232852685628582653</div>
+                <div class="buysuccessdetailright">{{datas.BESHARP_BUY_SEQ}}</div>
             </div>
 
         </div>
@@ -35,7 +32,16 @@
     </div>
 </template>
 <script>
-    export default {}
+    export default {
+        data(){
+            return{
+               datas:[]
+            }
+        },
+        created(){
+            this.datas = this.$route.query
+        }
+    }
 </script>
 
 <style lang="scss" scoped>

@@ -55,11 +55,11 @@
                 </div>
                 <div class="contentmainbank" style="margin-top:0.5rem;">
                     <div style="display: inline-block;width:25%">
-                        <img src="../../images/img/huaxiabank.png" style="width:90%" alt="">
+                        <img :src="productDetail.LOGO_URL" style="width:90%" alt="">
                     </div>
                     <div style="float:right;width:65%">
-                        <p style="font-size:0.5rem;">华夏直销银行</p>
-                        <p style="font-size:0.4rem; color:#999999 ">隶属于 华夏银行 </p>
+                        <p style="font-size:0.5rem;">{{productDetail.ORG_NAME}}</p>
+                        <p style="font-size:0.4rem; color:#999999 ">隶属于 {{productDetail.ORG_NAME}} </p>
                         <p style="font-size:0.4rem;color:#999999">比财评级依据产品属性和银行运营情况综合评定</p>
                     </div>
                 </div>
@@ -68,8 +68,8 @@
                 <div>
                     <p style="width: 100%;height: 1rem; padding-bottom: 0.6rem;border-bottom: 1px solid #DCDCDC;">
                         产品描述</p>
-                    <p style="font-size: 0.4rem;Margin-top:1rem;color:#666">
-                        本协议是广发基金与广发银行股份有限公司实名认证的用户就您于本公司电子交易直销前置式自助前台系统进行先关操作的有关事项所订立的有效合同。投资者通过点击确认或其他方式接收本协议，即表示投资者与广发基金已达成协议并同意接受本协议的全部约定内容以及与本协议项下的各项规则等等。</p>
+                    <div style="font-size: 0.4rem;padding-top:1rem;color:#666" v-html="productDetail.DEPICT">
+                        本协议是广发基金与广发银行股份有限公司实名认证的用户就您于本公司电子交易直销前置式自助前台系统进行先关操作的有关事项所订立的有效合同。投资者通过点击确认或其他方式接收本协议，即表示投资者与广发基金已达成协议并同意接受本协议的全部约定内容以及与本协议项下的各项规则等等。</div>
                 </div>
             </div>
             <div class="contentbottom2 contenttop">
@@ -165,7 +165,8 @@
                     PRD_NAME:this.productDetail.PRD_NAME,
                     TXT_MIN_AMOUNT:this.productDetail.TXT_MIN_AMOUNT,
                     REMAIN_AMT:this.productDetail.REMAIN_AMT,
-                    INCRE_AMOUNT:this.productDetail.INCRE_AMOUNT
+                    INCRE_AMOUNT:this.productDetail.INCRE_AMOUNT,
+                    ORG_NAME:this.productDetail.ORG_NAME
                 }
                 this.$router.push({
                     name:PageName.Buying,

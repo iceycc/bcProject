@@ -46,7 +46,7 @@
     import {API} from "../../request/api";
 
     let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
-    import {DeviceId} from "../../Constant";
+    import {DeviceId, PageName} from "../../Constant";
 
     export default {
         data() {
@@ -81,6 +81,16 @@
                 console.log(data)
                 API.buy.apiBuy(data, (res) => {
                     console.log(res);
+                    this.$router.push({
+                        name:PageName.Buysuccess,
+                        query:{
+                            money:this.datas.money,
+                            PRD_NAME:this.datas.PRD_NAME,
+                            ORG_NAME:this.datas.ORG_NAME,
+                            OPERA_DATE:res.OPERA_DATE,
+                            BESHARP_BUY_SEQ:res.BESHARP_BUY_SEQ
+                        }
+                    })
                 })
             }
         }

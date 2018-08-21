@@ -19,7 +19,7 @@
         </div>
 
         <div class="buysuccessdetails">
-            <div class="buysuccessdetailleft">可用金额 <strong>{{proDetail.REMAIN_AMT}}元</strong></div>
+            <div class="buysuccessdetailleft">可用金额 <strong>{{payNum}}元</strong></div>
             <div class="buysuccessdetailright" @click="goReChang">充值</div>
         </div>
         <div class="buydetails">
@@ -35,18 +35,28 @@
 <script>
     import {PageName,BusName} from "../../Constant";
     import Bus from '../../common/js/bus'
+    import {API} from "../../request/api";
 
     export default {
         data(){
             return {
                 proDetail:{},
-                moneyNum:null
+                moneyNum:null,
+                payNum:null,
+
             }
         },
         created(){
+            this.getInfo()
             this.proDetail = this.$route.query // 数据
         },
         methods:{
+            getInfo(){
+                API.buy.apiQueryAccRest({},res=>{
+                    console.log(res);
+                    this.payNum = res.TOTAL_ASSET
+                })
+            },
             goReChang(){
                 this.$router.push(PageName.Recharge)
             },
@@ -64,7 +74,8 @@
                     query:{
                         money:this.moneyNum,
                         PRD_NAME:this.proDetail.PRD_NAME,
-                        id:this.proDetail.id
+                        id:this.proDetail.id,
+                        ORG_NAME:this.proDetail.ORG_NAME
                     }
                 })
 

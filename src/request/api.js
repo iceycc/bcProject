@@ -75,6 +75,15 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
+        // /openapi/comm/apiQueryAccRest
+        apiQueryAccRest(params, success, error){
+            let options = {
+                url:'/openapi/comm/apiQueryAccRest',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
 
     },
     /**
