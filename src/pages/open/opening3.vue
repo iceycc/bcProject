@@ -106,7 +106,7 @@
             },
             subumit() {
                 this.loginpass = $('#loginPass').$getCiphertext()
-                // this.paypass = $('#payPass').$getCiphertext()
+                this.paypass = $('#payPass').$getCiphertext()
                 let data = {
                     REQ_SERIAL: this.REQ_SERIAL,
                     BANK_LOGIN_PW: this.loginpass,

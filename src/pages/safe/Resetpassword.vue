@@ -1,113 +1,187 @@
 <template>
-      <div id="app" class="app">
-                <header class="header">
-                        <a class="return" href=""></a>
-                        <p>重置密码</p>
-                    </header>
-            <div class="opening_box">
-                    <p>
-                        <span>姓名</span>
-                        <input type="text" name="text1" placeholder=" 请输入您的真实姓名">
-                         <!-- <span  class="limit">银行限额</span>  -->
-                   </p>
-                    <p>
-                        <span>身份证证号</span>
-                        <input type="password" name="text1" placeholder="请输入18位身份证号">
-                   </p>
-                    <p>
-                        <span>手机号</span>
-                        <input type="text" name="text1" placeholder="请输入手机号">
-                    </p>
-                      <p>
-                        <span>新登录密码</span>
-                        <input type="password" class="newpassword" name="text1" style="width:72%" placeholder="登录密码需包含8-20位数字，大小字母组成">
-                    </p>
-                      <p>
-                          <span>确认登录密码</span>
-                        <input type="password" name="text1" placeholder="">
-                    </p>
-                    <p>
-                        <span>验证码</span>
-                        <input type="password" style="width: 48%;" name="text1" placeholder="请输入您的短信验证码">
-                        <span class="getpassword">获取验证码</span>
-                    </p>
-               </div>
-               <div class="tijiao Tips">请使用该预留手机号的储蓄卡进行开户</div>
-               <button class="tijiao">重置密码</button>
-               </div>  
+    <div id="app" class="app">
+        <app-bar title="重置密码"></app-bar>
+        <div class="opening_box">
+            <section>
+                <span>姓名</span>
+                <input v-model="data.USER_REAL_NAME" type="text" name="text1" placeholder=" 请输入您的真实姓名">
+                <!-- <span  class="limit">银行限额</span>  -->
+            </section>
+            <section>
+                <span>身份证证号</span>
+                <input v-model="data.USER_CARD_ID" type="number" name="text1" placeholder="请输入18位身份证号">
+            </section>
+            <section>
+                <span>手机号</span>
+                <input v-model="data.PHONE_NUM" type="text" name="text1" placeholder="请输入手机号">
+            </section>
+            <section>
+                <span>新登录密码</span>
+                <div id="loginPass"
+                     @click="getKey('loginPass')"
+                     style="display: inline-block;color: #9e9e9e"
+                     modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
+                     maxlength="20" name="Password">
+                    请输入密码
+                </div>
+                <!--<input v-model="data.BANK_LOGIN_PW" type="password" class="newpassword" name="text1" style="width:72%"-->
+                       <!--placeholder="登录密码需包含8-20位数字，大小字母组成">-->
+            </section>
+            <section>
+                <span>确认登录密码</span>
+                <div id="reLoginPass"
+                     @click="getKey('reLoginPass')"
+                     style="display: inline-block;color: #9e9e9e"
+                     modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
+                     maxlength="20" name="Password">
+                    请输入密码
+                </div>
+            </section>
+            <section>
+                <span>验证码</span>
+                <input v-model="data.PHONE_CODE" type="password" style="width: 48%;" name="text1" placeholder="请输入您的短信验证码">
+                <span class="getpassword" @click="getCode">获取验证码</span>
+            </section>
+        </div>
+        <div class="tijiao Tips">请使用该预留手机号的储蓄卡进行开户</div>
+        <mt-button class="tijiao" @click="doRePass">重置密码</mt-button>
+    </div>
 </template>
 <script>
-export default {
-    
-}
+    import util from '../../common/utils/util'
+    import {API} from '../../request/api'
+    import {LsName,DeviceId,BusName,PageName} from "../../Constant";
+    import Bus from '../../common/js/bus'
+    let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
+    export default {
+        data() {
+            return {
+                data: {
+                    USER_REAL_NAME: '', // 姓名
+                    USER_CARD_ID: '', // idCard
+                    PHONE_NUM: '', //tel
+                    BANK_LOGIN_PW: '', // newpass
+                    BANK_LOGIN_PW2: '' ,//
+                    MESSAGE_TOKEN:'',
+                    PHONE_CODE:''
+
+                },
+                toUrl:"",
+            }
+        },
+        created() {
+
+        },
+        mounted(){
+            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
+            console.log(this.toUrl);
+        },
+        methods: {
+            getCode(){
+                let data ={
+                    PHONE_NUM:this.data.PHONE_NUM + '',
+                    BIZ_TYPE:'9'
+                }
+                API.open.getMsgCode(data,res=>{
+                    this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
+                })
+            },
+            doRePass() {
+                this.data.BANK_LOGIN_PW = $('#loginPass').$getCiphertext()
+                this.data.BANK_LOGIN_PW2 = $('#loginPass').$getCiphertext()
+
+
+                let data = {
+                        ...this.data
+                }
+                API.safe.apiUserResetLoginPass(data,res=>{
+                    Bus.$emit(BusName.showToast,'修改密码成功')
+                })
+            },
+            getKey(id) {
+                $(`#${id}`).attr('v-password-widget', this.toUrl)
+                $(`#${id}`).PasswordWidget()
+            },
+
+
+        }
+
+    }
 </script>
 
-<style  lang="scss" scoped>
-.warp{
-    width:100%;
-    position: relative;
-}
-.opening_box p{
-    margin-left: 0.5rem;
-    background-repeat: no-repeat;
-    background-color: #fff;
-    line-height: 1.3rem;
-    width: 90%;
-    background-size:0.7rem 0.7rem;
-      background-position:.2rem .2rem;
-      border-bottom:1px #E5E5E5 solid;
-}
-.opening_box p span{
-    font-family: PingFangSC-Regular;
-    color: #444444;
-    font-size: 0.3rem;
-    display: inline-block;
-    width: 2rem;
-}
-.opening_box p .limit{
-    background-image:url(../../images/img/problom2@2x.png);
-    background-size:12px 12px;
-	background-position:0 2.5px;
-    background-repeat:no-repeat;
-    padding-left:20px;
-    color:#0096FE;
-    font-family:PingFangSC-Regular;
-}
-.opening_box p .getpassword{
-     display: inline-block;
-     text-align: center;
-     line-height: 1.3rem;
-     color:#2B74FE;
-	 border-radius:0.3rem;
-     float:right;
-}
-.opening_box input{
-	width: 50%;
-	border: none;
-	box-sizing: border-box;
-	font-size: 14px;
-	color: #333;
-	line-height: 1.3rem;
-	outline: none;
-}
-.tijiao{
-	font-size: 0.4rem;
-    color: #fff;
-    background-color: #0096FE;
-    border-radius: 0.2rem;
-    line-height: 1.2rem;
-    width: 80%;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 0.5rem;
-    border: 0px;
-    outline: none;
-    display: block;
-}
-.Tips{
-    margin-top:1rem;
-    background-color:#FF5B05;
-    width:80%;
-}
+<style lang="scss" scoped>
+    .warp {
+        width: 100%;
+        position: relative;
+    }
+
+    .opening_box section {
+        margin-left: 0.5rem;
+        background-repeat: no-repeat;
+        background-color: #fff;
+        line-height: 1.3rem;
+        width: 90%;
+        background-size: 0.7rem 0.7rem;
+        background-position: .2rem .2rem;
+        border-bottom: 1px #E5E5E5 solid;
+    }
+
+    .opening_box section span {
+        font-family: PingFangSC-Regular;
+        color: #444444;
+        font-size: 0.3rem;
+        display: inline-block;
+        width: 2rem;
+    }
+
+    .opening_box section .limit {
+        background-image: url(../../images/img/problom2@2x.png);
+        background-size: 12px 12px;
+        background-position: 0 2.5px;
+        background-repeat: no-repeat;
+        padding-left: 20px;
+        color: #0096FE;
+        font-family: PingFangSC-Regular;
+    }
+
+    .opening_box section .getpassword {
+        display: inline-block;
+        text-align: center;
+        line-height: 1.3rem;
+        color: #2B74FE;
+        border-radius: 0.3rem;
+        float: right;
+    }
+
+    .opening_box input {
+        width: 50%;
+        border: none;
+        box-sizing: border-box;
+        font-size: 14px;
+        color: #333;
+        line-height: 1.3rem;
+        outline: none;
+    }
+
+    .tijiao {
+        font-size: 0.4rem;
+        color: #fff;
+        background-color: #0096FE;
+        border-radius: 0.2rem;
+        line-height: 1.2rem;
+        width: 80%;
+        margin: 0 auto;
+        text-align: center;
+        margin-top: 0.5rem;
+        border: 0px;
+        outline: none;
+        display: block;
+    }
+
+    .Tips {
+        margin-top: 1rem;
+        background-color: #FF5B05;
+        width: 80%;
+    }
 
 </style>
