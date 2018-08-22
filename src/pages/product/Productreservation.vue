@@ -112,7 +112,7 @@
 </template>
 <script>
     import {API} from "../../request/api";
-    import {PageName} from "../../Constant";
+    import {PageName,imgSrc} from "../../Constant";
 
     export default {
         data(){

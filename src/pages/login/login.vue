@@ -1,7 +1,9 @@
 <template>
     <div id="app" class="hello">
         <app-bar title="安全登录"></app-bar>
-        <p class="titlecontent">欢迎登录晋商银行直销账户</p>
+        <p class="titlecontent">
+            <img src="../../images/img/icon_dunpai@2x.png" alt="">
+            欢迎登录晋商银行直销账户</p>
         <div class="login_box">
             <p><input type="text" name="text1" placeholder="开户手机号" v-model="tel"></p>
             <!--<p><input type="password" name="text1" placeholder="登录密码" v-model="pass"></p>-->
@@ -50,8 +52,7 @@
         },
         created(){
             console.log(imgSrc);
-            // 15011352818
-            // lydong09
+
         },
         mounted(){
             this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
@@ -150,8 +151,13 @@
     }
 
     .titlecontent {
-        margin-left: 0.5rem;
+        padding-top: .2rem;
+        text-align: center;
         font-size: 0.5rem;
+        img{
+            width: .6rem;
+            vertical-align: top;
+        }
     }
 
     .login_box {

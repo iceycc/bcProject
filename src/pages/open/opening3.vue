@@ -4,7 +4,7 @@
         <div class="wrapicon">
             <div class="circle"><span>开户信息验证</span></div>
             <div class="circle"><span>绑定银行卡</span></div>
-            <div class="circle"><span>设置密码</span></div>
+            <div class="circle red"><span>设置密码</span></div>
         </div>
         <form action="">
             <div class="opening_box">
@@ -18,22 +18,22 @@
                 </p>
             </div>
             <div class="tijiao Tips">登录密码需包含8-20位数字，大小字母组成</div>
-            <button class="tijiao" @click="goOpen">开户</button>
+            <button class="tijiao" @click="showBox">开户</button>
         </form>
-        <!--<pass-word :REQ_SERIAL="REQ_SERIAL"></pass-word>-->
-        <div v-show="ifShow" class="bgbox">
+        <div v-if="ifShow" class="bgbox">
             <div class="passbox">
-                <p class="title">由晋商银行提供技术保障</p>
+                <p class="title">
+                    <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                    由晋商银行提供技术保障</p>
                 <div class="field_row_wrap">
                     <p class="field_row_key">
                         登陆密码
                     </p>
                     <div class="field_row_value">
-                        <div id="loginPass"
-                             modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                             maxlength="20" name="Password">
-                            请输入密码
-                        </div>
+                        <pass-input
+                                inputID="loginPass"
+                                :doGetData="ifGet"
+                        ></pass-input>
                     </div>
                     <p class="info">密码由大写，小写英文字母以及数字组成</p>
                     <p class="info">密码位数大于等于8位，小于等于20位</p>
@@ -44,17 +44,17 @@
                         交易密码
                     </p>
                     <div class="field_row_value">
-                        <div id="payPass"
-                             modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                             maxlength="20" name="Password">
-                            请输入密码
-                        </div>
+                        <pass-input
+                                inputID="payPass"
+                                :doGetData="ifGet"
+                        ></pass-input>
                     </div>
+
                     <p class="info">密码由数字组成，必须为6位</p>
                 </div>
                 <div class="btn">
-                    <button @click="cancel">取消</button>
-                    <button @click="subumit">提交</button>
+                    <mt-button @click="cancel" type="primary">取消</mt-button>
+                    <mt-button @click="subumit" type="primary">提交</mt-button>
                 </div>
             </div>
         </div>
@@ -62,59 +62,97 @@
 </template>
 <script>
     import {API} from "../../request/api";
-    import {DeviceId} from "../../Constant";
-    let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
+    import Bus from '../../common/js/bus'
+    import PassInput from '../../components/commons/PassInput'
+    import {BusName} from "../../Constant";
     export default {
         data() {
             return {
+                reGet:true,
                 s_loginPass: '',
                 s_payPass:'',
                 REQ_SERIAL:'',
                 ifShow:false,
-                toUrl: '',
                 orgId: 70,
-                deviceId: DeviceId,
                 loginpass: '',
+                loginpassLen:0,
                 paypass: '',
+                paypassLen: 0,
+                ifGet:false
 
             }
         },
         components:{
+            PassInput
         },
         created(){
-            this.REQ_SERIAL = this.$route.params.REQ_SERIAL || this.$route.params.seq
+            this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
+            Bus.$on('payPass',data=>{ //
+                console.log(data);
+                this.paypass = data.pass
+                this.paypassLen = data.len
+            })
+            Bus.$on('loginPass',data=>{ //
+                console.log(data);
+                this.loginpass = data.pass
+                this.loginpassLen = data.len
+
+            })
         },
-        mounted() {
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + this.deviceId + "&width="
-            this.getKey('loginPass')
+        destroyed(){
+            Bus.$off('payPass')
+            Bus.$off('loginPass')
         },
+
         methods: {
             showBox(){
-                this.ifShow = true
-                this.getKey('payPass')
+                this.Londing.open()
+                setTimeout(()=>{
+                    this.Londing.close()
+                    this.ifShow = true
+                },500)
             },
-            goOpen(){
 
-            },
-
-            getKey(id) {
-                $(`#${id}`).attr('v-password-widget', this.toUrl)
-                $(`#${id}`).PasswordWidget()
-            },
             cancel(){
                 this.ifShow = false
             },
             subumit() {
-                this.loginpass = $('#loginPass').$getCiphertext()
-                this.paypass = $('#payPass').$getCiphertext()
-                let data = {
-                    REQ_SERIAL: this.REQ_SERIAL,
-                    BANK_LOGIN_PW: this.loginpass,
-                    BANK_PAY_PW: this.paypass
-                }
-                API.open.setPassWord(data, (res) => {
-                    // todo
+                this.Londing.open()
+                new Promise((resolve, reject) => {
+                    this.ifGet = !this.ifGet
+
+                    setTimeout(() =>{
+                        if(this.REQ_SERIAL){
+                            Bus.$emit(BusName.showToast,'开户未成功')
+                            reject()
+                        }
+                        if(this.loginpass == '' || this.paypass == ''){
+                            Bus.$emit(BusName.showToast,'密码不能为空')
+                            reject()
+                        }
+                        if(this.loginpassLen < 8 || this.paypassLen <8){
+                            Bus.$emit(BusName.showToast,'密码长度不能低于8位')
+                            reject()
+                        }
+                        let data = {
+                            REQ_SERIAL: this.REQ_SERIAL,
+                            BANK_LOGIN_PW: this.loginpass,
+                            BANK_PAY_PW: this.paypass
+                        }
+                        resolve(data)
+                    },1000)
+                }).then((data)=>{
+                    this.Londing.close()
+                    console.log(data);return
+                    API.open.setPassWord(data, (res) => {
+                        // todo
+                    })
+                },()=>{
+                    this.Londing.close()
                 })
+
+
+
             }
 
         }
@@ -125,7 +163,7 @@
 <style lang="scss" scoped>
 
     .bgbox{
-        z-index: 999;
+        z-index: 2;
         width: 100%;
         height: 100%;
         background: #9e9e9e;
@@ -148,6 +186,12 @@
             text-align: center;
             font-size: 0.4rem;
             color: #666;
+            height: .6rem;
+            line-height: .6rem;
+            img{
+                vertical-align: top;
+                width: .5rem;
+            }
         }
         .field_row_wrap{
             margin-bottom: 0.2rem;
@@ -167,10 +211,9 @@
         .btn{
             display: flex;
             button{
+                margin: 0 .3rem;
                 text-align: center;
                 flex: 1;
-                font-size: 0.4rem;
-                color: #11cdcd;
             }
         }
     }
@@ -288,6 +331,10 @@
         display: flex;
         width: 80%;
         justify-content: space-between;
+        .red{
+            border: 1px solid red;
+            background: radial-gradient(red 50%, red 50%);
+        }
     }
 
     .wrapicon:before {

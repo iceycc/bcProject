@@ -61,7 +61,7 @@
         width: 100%;
         height: 1.3rem;
         background: rgba(0, 0, 0, 0.9);
-        z-index: 100;
+        z-index: 9999;
         text-align: center;
         font-size: 0.4rem;
         line-height: 1.3rem;

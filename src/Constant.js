@@ -33,7 +33,8 @@ export const PageName = {
 export const BusName ={
     showToast:'showToast',
     showLoading:'showLoading',
-    Indicator:'Indicator'
+    Indicator:'Indicator',
+
 }
 
 

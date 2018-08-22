@@ -51,6 +51,7 @@
 
     let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
     import {DeviceId, PageName} from "../../Constant";
+    import PassInput from '../../components/commons/PassInput'
 
     export default {
         data() {
@@ -65,7 +66,8 @@
             }
         },
         components: {
-            AppBar
+            AppBar,
+            PassInput
         },
         created() {
             this.reChangeHandele()

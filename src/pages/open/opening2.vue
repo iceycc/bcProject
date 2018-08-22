@@ -3,7 +3,7 @@
         <app-bar title="信息填写"></app-bar>
         <div class="wrapicon">
             <div class="circle"><span>开户信息验证</span></div>
-            <div class="circle"><span>绑定银行卡</span></div>
+            <div class="circle red"><span>绑定银行卡</span></div>
             <div class="circle"><span>设置密码</span></div>
         </div>
         <div class="opening_box">
@@ -18,12 +18,12 @@
             </p>
             <p>
                 <span>手机号码</span>
-                <input type="text" name="tel" @blur="checkTel" placeholder="请输入您的银行预留手机号" v-model="data.PRE_PHONE_NUM">
+                <input type="text" name="tel" placeholder="请输入您的银行预留手机号" v-model="data.PRE_PHONE_NUM">
             </p>
             <p>
                 <span>验证码</span>
                 <input type="password" name="msgcode" placeholder="请输入您的短信验证码" v-model="data.PHONE_CODE">
-                <span class="getpassword" @click="getMsgCodeHandle">获取验证码</span>
+                <button class="getpassword" @click="getMsgCodeHandle" :disabled="disable">{{codeText}}</button>
             </p>
         </div>
         <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
@@ -35,25 +35,38 @@
     import {PageName,BusName,LsName} from "../../Constant";
     import {util} from "../../common/utils/util";
     import Bus from '../../common/js/bus'
-
+    let time = 60
     export default {
         data() {
             return {
                 data: {
                     ORG_ID: '70',
-                    CARD_NO: '6214830182284272', // 银行卡号 6214830182284272  6217730711297810
+                    CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
                     HAS_BAND: '0', // 是否绑定过
                     PHONE_NUM: '15621185521', // 15711310733   15011352818
-                    PRE_PHONE_NUM: '15621185521', //
+                    PRE_PHONE_NUM: '15621185521', // 预留
                     PHONE_CODE: '', // 手机验证码
                     LAST_STEP_NUM: '0', // 步数
                     MESSAGE_TOKEN:''
                 },
+                codeText:"获取验证码",
+                disable:false
 
             }
         },
         created(){
+            // 15011352818
+            // lydong09
 
+            // 110102198806020036
+
+            // 6226221234123488  长度不变，，622622 后边随便输入
+
+
+            // 110102198806020298
+            // 6226221234123445 银行
+            //
+            // mmm999
         },
         methods: {
             checkTel(){
@@ -68,9 +81,9 @@
                     }
                     if(res.LAST_STEP_NUM == 1){
                         // Bus.$emit(BusName.showToast,"第二步")
-                        this.$router.push({
-                            name:PageName.opening2
-                        })
+                        // this.$router.push({
+                        //     name:PageName.opening2
+                        // })
                         return
                     }
                     if(res.LAST_STEP_NUM == 2){
@@ -115,6 +128,9 @@
                 let preData = this.$route.params.data
                 this.data = Object.assign(this.data, preData)
                 console.log('data >>>',this.data);
+                Object.assign(this.data,{
+                    PHONE_NUM:this.data.PRE_PHONE_NUM
+                })
                 API.open.doRegeist(this.data,
                         res => {
                             // todo 判断
@@ -124,7 +140,7 @@
                             }
                             this.$router.push({
                                 name: PageName.opening3,
-                                params:{
+                                query:{ // todo方便测试
                                     REQ_SERIAL:res.REQ_SERIAL
                                 }
                             })
@@ -229,6 +245,10 @@
         display: flex;
         width: 80%;
         justify-content: space-between;
+        .red{
+            border: 1px solid red;
+            background: radial-gradient(red 50%, red 50%);
+        }
     }
 
     .wrapicon:before {

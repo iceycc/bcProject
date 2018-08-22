@@ -2,7 +2,7 @@
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
         <div class="wrapicon">
-            <div class="circle"><span>开户信息验证</span></div>
+            <div class="circle red"><span>开户信息验证</span></div>
             <div class="circle"><span>绑定银行卡</span></div>
             <div class="circle"><span>设置密码</span></div>
         </div>
@@ -130,18 +130,18 @@
             uploadChangeZheng(e) {
                 var newsrc = this.getObjectURL(e.target.files[0]);
                 console.log(newsrc);
-                
+
                 this.preSrc1 = newsrc
                 this.imgStyle1 = 'width:100%'
                 util.imgScale(newsrc,e.target.files[0],4).then((data) => {
                     this.test1 = data
                     console.log(encodeURI(this.test1))
-                    this.data.CARD_FRONT_FILE = data.split(',')[1]
-                    
+                    this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g,'%2B')
+
                     // console.log(this.data.CARD_FRONT_FILE);
                     // 扫描身份证 正面
                     let params ={
-                        idcardFrontPhoto:this.data.CARD_FRONT_FILE.replace(/\+/g,'%2B'),
+                        idcardFrontPhoto:this.data.CARD_FRONT_FILE,
                         memberId:this.data.memberId,
                         phoneNum:this.data.phoneNum
                     }
@@ -161,10 +161,10 @@
                 this.imgStyle2 = 'width:100%'
 
                 util.imgScale(newsrc,e.target.files[0],3).then((data) => {
-                    this.data.CARD_BACK_FILE = data.split(',')[1]
+                    this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g,'%2B')
 
                     let params ={
-                        idcardBackPhoto:this.data.CARD_BACK_FILE.replace(/\+/g,'%2B'),
+                        idcardBackPhoto:this.data.CARD_BACK_FILE,
                         memberId:this.data.memberId,
                         phoneNum:this.data.phoneNum
                     }
@@ -338,6 +338,10 @@
         display: flex;
         width: 80%;
         justify-content: space-between;
+        .red{
+            border: 1px solid red;
+            background: radial-gradient(red 50%, red 50%);
+        }
     }
 
     .wrapicon:before {
