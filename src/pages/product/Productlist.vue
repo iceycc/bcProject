@@ -6,7 +6,7 @@
         </header>
         <div class="banner"></div>
         <div class="productlist" v-if="!show">
-            <ul>
+            <ul class="ul-li">
                 <li class="productdetail clearfix"
                     v-for="item,index in dataList" :key="index"
                     @click="goDetail(item.ID)"
@@ -83,7 +83,7 @@
     .wrap {
         width: 100%;
     }
-
+   
     .header {
         background-color: #fff;
         height: 1.3rem;
@@ -103,6 +103,8 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         height: 1.5rem;
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
     }
     .return {
         display: block;
@@ -120,14 +122,28 @@
         height: 5.5rem;
         background: #eaeaea;
     }
-
-    .productdetail {
-        float: left;
-        display: inline-block;
+    .ul-li{
+        // padding-right: 11px;
+        // padding-right: 11px;
+        overflow: hidden;
+        width: 100%;
+        text-align:left;
+        // background-color: red;
+    }
+    .ul-li li{
+        // margin-left: 10px;
         width: 33%;
-        height: 3rem;
+        text-align: center;
+    }
+    .productdetail {
+        // float: left;
+        display: inline-block;
+
+        // width: 2.5rem;
+        // height: 3rem;
         border-right: 1px solid #F6F6F9;
         border-bottom: 1px solid #F6F6F9;
+
         p {
             text-align: center;
             padding-top: .2rem;
