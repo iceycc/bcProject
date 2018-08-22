@@ -4,17 +4,20 @@
             <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
         <router-view v-if="!$route.meta.keepAlive"></router-view>
+        <!--自己的提示-->
         <transition name="fade">
             <div class="toast" v-if="showToast">
                 <p>{{msg}}</p>
             </div>
         </transition>
+
     </div>
 </template>
 
 <script>
     import Bus from './common/js/bus'
     import {BusName} from './Constant'
+
 
     export default {
         data() {
@@ -23,6 +26,10 @@
                 showToast: false
             }
         },
+        destroyed(){
+            Bus.$off(BusName.showToast)
+            Bus.$off(BusName.Indicator);
+        },
         created() {
             Bus.$on(BusName.showToast, (val) => {
                 this.showToast = true
@@ -30,6 +37,15 @@
                 setTimeout(() => {
                     this.showToast = false
                 }, 1000)
+            })
+            Bus.$on(BusName.Indicator, (val ='Loading...') => {
+                this.Londing.open({
+                    text: val ,
+                    spinnerType: 'triple-bounce'
+                });
+                setTimeout(function () {
+                    this.Londing.close()
+                })
             })
 
         }
