@@ -5,32 +5,36 @@
             <p>优选计划360号</p>
         </header>
         <div class="banner"></div>
-        <div class="productlist" v-if="show">
+        <div class="productlist" v-if="!show">
             <ul>
                 <li class="productdetail clearfix"
                     v-for="item,index in dataList" :key="index"
                     @click="goDetail(item.ID)"
                 >
-                    <p>{{item.PRD_NAME}}</p>
+                    <p class="name2">{{item.PRD_NAME}}</p>
                     <div class="ratereturn">
-                        <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
+                        <p style="color: #FFB400;font-size: 0.8rem;" >{{item.RATE}}%</p>
                         <p style="color: #B4BECC;font-size: 0.3rem;">预期年化收益率</p>
                     </div>
                 </li>
             </ul>
         </div>
-        <ul class="productlist2" v-if="!show">
-            <li class="productdetail">
-                <div class="rateleft">
-                    <p style="color: #FFB400;font-size: 0.8rem;">5.80%</p>
-                    <p style="color: #B4BECC;font-size: 0.4rem;">预期年化收益率</p>
-                </div>
-                <div class="rateright">
-                    <p style="color: #333333 ;font-size: 0.5rem;">稳增计划A66号</p>
-                    <p style="color: #B4BECC;font-size: 0.4rem;">理财期限125天</p>
-                </div>
-            </li>
-        </ul>
+        <div class="productdetail2"  v-if="show">
+            <ul>
+                <li class="clearfix"  v-for="item,index in dataList" :key="index"
+                    @click="goDetail(item.ID)">
+                    <div class="ratereturn " style="text-align: center">
+                            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
+                            <p style="color: #B4BECC;font-size: 0.4rem;">预期年化收益率</p>
+                    </div>
+                    <div class="ratereturn ratereturnright">
+                            <img class="logoy" v-if="item.IS_ENABLED == 2" src="../../images/img/yuyue.png" alt="">
+                            <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.2rem">{{item.PRD_NAME}}</p>
+                            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem">理财期限{{item.PERIOD}}天</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 <script>
@@ -41,7 +45,7 @@
     export default {
         data() {
             return {
-                show: true,
+                show: '',
                 dataList:[]
             }
         },
@@ -52,12 +56,18 @@
             getListData(){
                API.product.apiGetChannelPrdList({},(res)=>{
                    let num = res.length
+                   if(num >6){
+                       this.show = true
+                   }else{
+                       this.show = false
+                   }
                    this.dataList = res
-
+                    console.log(this.dataList)
                    //
                })
             },
             goDetail(id){
+                console.log(id)
                 this.$router.push({
                     name:PageName.Productreservation,
                     query:{
@@ -86,7 +96,14 @@
         text-align: center;
         font-size: 0.5rem;
     }
-
+    .name2{
+         overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        height: 1.5rem;
+    }
     .return {
         display: block;
         position: absolute;
@@ -121,26 +138,55 @@
         }
     }
 
-    .productlist2 {
+ .wrap{
+    width:100%;
+    box-sizing: border-box;
+}
 
-        width: 100%;
-        ul{
-            width: 100%;
-            display: flex;
-        }
-        .rateleft {
-           flex: 1;
-        }
-        .rateright {
-            flex: 1;
-        }
-    }
+.productdetail2{
+    position: relative;
+    height:2.5rem;
 
-    .clearfix:after {
-        content: ".";
-        display: block;
-        height: 0;
-        clear: both;
-        visibility: hidden;
+    li{
+         border-bottom: 0.3rem solid #F6F6F9;
+         overflow: hidden;
+         padding-bottom: 0.4rem;
     }
+    .ratereturn{
+    float: left;
+    width:35%;
+    margin-top: .25rem;    
+    border-right: 1px solid #F6F6F9;
+    position: relative;
+    }
+    .name{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    
+    .logoy{
+        position:absolute;
+        right: -1rem;
+        bottom: -1.1rem;
+        width: 2rem;
+    
+    }
+    // .clearfix:after{
+    // content:".";
+    // display:block;
+    // height:0;
+    // visibility:hidden;
+    // }
+    .ratereturnright{
+    padding-left: .6rem;
+    margin-top: .7rem;
+    border:none;
+    width:55%;
+    }  
+    .yuyue{
+    position: absolute;
+    top:0rem;
+    } 
+}
 </style>
