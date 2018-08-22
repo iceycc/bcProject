@@ -32,6 +32,7 @@ export default {
             },
             channel_id: "3"
         }
+
         config.method = method;
         config.data = 'param_key=' + JSON.stringify(datas)
         config.url = url
