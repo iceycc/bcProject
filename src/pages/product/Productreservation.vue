@@ -18,7 +18,7 @@
                     <div class="bannerbottom">
                         <ul>
                             <li class="bannerbottomfirst clearfix">低风险</li>
-                            <li class="bannerbottomtwo clearfix">一万元起购</li>
+                            <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
                             <li class="bannerbottomthree clearfix">累计购买笔数1230</li>
                         </ul>
                     </div>
@@ -154,7 +154,9 @@
                     ID:id + ''
                 }
                 API.product.apiGetChannelPrdInfo(data,(res)=>{
-                    this.productDetail = res
+                
+                    this.productDetail = res;
+                    console.log(this.productDetail)
                     this.type = res.IS_ENABLED
                     this.btnType = this.type ==1 ? '安全购买':'预约下期'
 
