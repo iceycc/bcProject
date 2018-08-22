@@ -184,5 +184,20 @@ export const API = {
 
         },
 
+    },
+    /**
+     *  安全相关
+     */
+    safe:{
+        // 重制密码
+        apiUserResetLoginPass(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiUserResetLoginPass',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+
     }
 }

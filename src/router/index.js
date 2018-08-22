@@ -5,6 +5,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PageComponents from '../pages/index'
 import {PageName} from '../Constant'
+
 Vue.use(VueRouter)
 
 function addRouter(name, meta) {
@@ -20,7 +21,6 @@ function addRouter(name, meta) {
                 , meta)
     });
 }
-
 
 
 let routes = [
@@ -90,7 +90,7 @@ addRouter(PageName.Investmentdetails, {keepAlive: false, title: '银行理财'})
 addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
 
 // .
-let router =  new VueRouter({
+let router = new VueRouter({
     routes
 });
 

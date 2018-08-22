@@ -49,6 +49,7 @@
                     LAST_STEP_NUM: '0', // 步数
                     MESSAGE_TOKEN:''
                 },
+
             }
         },
         created(){
@@ -87,7 +88,7 @@
                         Bus.$emit(BusName.showToast,"您已经开户成功")
 
                         this.$router.push({
-                            name:PageName.opening3
+                            name:PageName.login
                         })
                         return
                     }
@@ -117,7 +118,10 @@
                 API.open.doRegeist(this.data,
                         res => {
                             // todo 判断
-                            // return
+                            Bus.$emit(BusName.showToast,res.MSG)
+                            if(res.CODE != 0){ // 不是0的话返回
+                                return
+                            }
                             this.$router.push({
                                 name: PageName.opening3,
                                 params:{

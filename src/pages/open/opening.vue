@@ -7,35 +7,35 @@
             <div class="circle"><span>设置密码</span></div>
         </div>
         <div class="opening_box">
-            <p>
+            <section>
                 <span>姓名</span>
                 <input type="text" name="text1" placeholder=" 请输入您的姓名" v-model="data.USER_NAME">
-            </p>
-            <p>
+            </section>
+            <section>
                 <span> 身份证号</span>
                 <input type="number" name="text1" placeholder="请输入18位身份证号" v-model="data.USER_CARD_ID">
-            </p>
-            <p>
+            </section>
+            <section>
                 <span>职业</span>
                 <input type="text" name="text1" placeholder="请选择职业" v-model="data.USER_DUTY">
-            </p>
-            <p>
+            </section>
+            <section>
                 <span>学历</span>
                 <input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">
-            </p>
+            </section>
             <div class="photo">
                 <div class="cameraphoto">
                     <div style="text-align: center;">身份证人像页照</div>
                     <div class="cameraphotoimg">
-                        <img :src="preSrc1" :style="imgStyle1" alt="">
-                        <input type="file" class="pic1"  @change="uploadChangeZheng($event)">
+                        <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
+                        <input type="file" class="inputBox" @change="uploadChangeZheng($event)">
                     </div>
                 </div>
                 <div class="cameraphoto">
                     <div style="text-align: center;">身份证国徽页照</div>
                     <div class="cameraphotoimg">
-                        <img :src="preSrc2" :style="imgStyle2" alt="">
-                        <input type="file" class="pic2" @change="uploadChangeFan($event)">
+                        <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
+                        <input type="file" class="inputBox" @change="uploadChangeFan($event)">
                     </div>
                 </div>
             </div>
@@ -44,8 +44,6 @@
             <div class="IDphotoPositive"></div>
             <div class="IDphotoback"></div>
         </div>
-        <img :src="test1" alt="">
-        <img :src="test2" alt="">
         <button class="tijiao" @click="doNext">下一步</button>
         <p class="bang">我已阅读并同意注册<strong style=" color:#0096FE;">《用户授权服务协议》《晋商银行直销银行电子账户服务协议》</strong></p>
     </div>
@@ -65,17 +63,20 @@
                 test1:'',
                 test2:'',
                 data: {// 姓名 身份证 职业 学历 身份证正反面
-                    USER_NAME: '王冰洋',
-                    USER_CARD_ID: '372330199206150014',// 身份证号码  612601198509174013
+                    USER_NAME: '',
+                    USER_CARD_ID: '',// 身份证号码  612601198509174013
                     USER_DUTY: '0', // 职业
                     USER_EDUCATION: '0', // 学历
                     CARD_FRONT_FILE: '',
                     CARD_BACK_FILE: '',
+                    memberId:null,
+                    phoneNum:null
                 },
                 preSrc1:require('../../images/img/cameracopy@2x.png'),
                 preSrc2:require('../../images/img/cameracopy@2x.png'),
                 picZheng: require('../../images/id-zheng.jpg'),
                 picFan: require('../../images/id-fan.jpg'),
+
 
             }
         },
@@ -140,21 +141,38 @@
                     // console.log(this.data.CARD_FRONT_FILE);
                     // 扫描身份证 正面
                     let params ={
-                        idcardFrontPhoto:this.formatString(this.data.CARD_FRONT_FILE)
+                        idcardFrontPhoto:this.data.CARD_FRONT_FILE.replace(/\+/g,'%2B'),
+                        memberId:this.data.memberId,
+                        phoneNum:this.data.phoneNum
                     }
                     API.open.apiIdCardFrontPhoneOcr(params,res=>{
+                        this.data.memberId = res.memberId
+                        this.data.phoneNum = res.phoneNum
+
+                        this.data.USER_NAME = res.idName
+                        this.data.USER_CARD_ID = res.idNumber
                     })
 
                 })
             },
-           
-            uploadChangeFan(e) {
+            uploadChangeFan(e) { //反
                 var newsrc = this.getObjectURL(e.target.files[0]);
                 this.preSrc2 = newsrc
                 this.imgStyle2 = 'width:100%'
 
                 util.imgScale(newsrc,e.target.files[0],3).then((data) => {
                     this.data.CARD_BACK_FILE = data.split(',')[1]
+
+                    let params ={
+                        idcardBackPhoto:this.data.CARD_BACK_FILE.replace(/\+/g,'%2B'),
+                        memberId:this.data.memberId,
+                        phoneNum:this.data.phoneNum
+                    }
+                    API.open.apiIdCardBackPhoneOcr(params,res=>{
+                        this.data.memberId = res.memberId
+                        this.data.phoneNum = res.phoneNum
+
+                    })
                 })
             },
             doNext() {
@@ -196,7 +214,7 @@
         position: relative;
     }
 
-    .opening_box p {
+    .opening_box section {
         margin-left: 0.6rem;
         background-repeat: no-repeat;
         background-color: #fff;
@@ -207,7 +225,7 @@
         border-bottom: 1px #E5E5E5 solid;
     }
 
-    .opening_box p span {
+    .opening_box section span {
         font-family: PingFangSC-Regular;
         color: #444444;
         font-size: .4rem;
@@ -215,12 +233,12 @@
         width: 2rem;
     }
 
-    .opening_box p .limit {
+    .opening_box section .limit {
         color: #0096FE;
         font-family: PingFangSC-Regular;
     }
 
-    .opening_box p .getpassword {
+    .opening_box section .getpassword {
         display: inline-block;
         text-align: center;
         line-height: 1.5rem;
@@ -241,14 +259,16 @@
         background-size: 0.7rem 0.7rem;
         background-position: .2rem .2rem;
         border-bottom: 1px #E5E5E5 solid;
+        display: flex;
     }
 
     .cameraphoto {
-        display: inline-block;
+        flex: 1;
         padding-left: 6%;
     }
 
     .cameraphotoimg {
+        position: relative;
         text-align: center;
         line-height: 130px;
         margin-bottom: 10px;
@@ -257,7 +277,7 @@
         border: 1px dotted #eaeaea;
     }
 
-    .opening_box input {
+    .opening_box  section input {
         width: 50%;
         border: none;
         box-sizing: border-box;
@@ -337,4 +357,19 @@
         top: 0.5rem;
         font-size: .4rem;
     }
+    .inputBox{
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        vertical-align: middle;
+
+
+    }
+    .vatal{
+    }
+
 </style>

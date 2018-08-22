@@ -1,9 +1,6 @@
 <template>
     <div id="app" class="hello">
-        <header class="header">
-            <a class="return" href=""></a>
-            <p>安全登录</p>
-        </header>
+        <app-bar title="安全登录"></app-bar>
         <p class="titlecontent">欢迎登录晋商银行直销账户</p>
         <div class="login_box">
             <p><input type="text" name="text1" placeholder="开户手机号" v-model="tel"></p>
@@ -25,8 +22,8 @@
                 </div>
             </div>
 
-            <span class="forget">忘记密码？</span>
-            <mt-button class="tijiao" @click="doLogin">登录</mt-button>
+            <span class="forget" @click="goRePass">忘记密码？</span>
+            <mt-button class="tijiao" type="primary" @click="doLogin">登录</mt-button>
             <div class="lijizhuce">
                 <span>还未开户，立即注册</span>
             </div>
@@ -56,7 +53,6 @@
         },
         mounted(){
             this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
-            console.log(this.toUrl);
         },
         methods:{
             getPass(){
@@ -66,6 +62,11 @@
                 $(`#${id}`).attr('v-password-widget', this.toUrl)
 
                 $(`#${id}`).PasswordWidget()
+            },
+            goRePass(){
+                this.$router.push({
+                    name:PageName.Resetpassword
+                })
             },
             doLogin(){
                 util.storage.local.set(LsName.token,this.tel)
@@ -180,16 +181,11 @@
 
     .tijiao {
         font-size: 0.4rem;
-        color: #fff;
-        background-color: #1badff;
         border-radius: 0.2rem;
         line-height: 1rem;
         width: 70%;
-        margin: 0 auto;
+        margin: 2rem auto 0;
         text-align: center;
-        margin-top: 2rem;
-        border: 0px;
-        outline: none;
         display: block;
     }
 
