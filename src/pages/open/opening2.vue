@@ -20,10 +20,10 @@
                 <span>手机号码</span>
                 <input type="text" name="tel" placeholder="请输入您的银行预留手机号" v-model="data.PRE_PHONE_NUM">
             </p>
-            <p>
+            <p style="display: flex">
                 <span>验证码</span>
-                <input type="password" name="msgcode" placeholder="请输入您的短信验证码" v-model="data.PHONE_CODE">
-                <button class="getpassword" @click="getMsgCodeHandle" :disabled="disable">{{codeText}}</button>
+                <input type="password" placeholder="请输入您的短信验证码" v-model="data.PHONE_CODE">
+                <mt-button style="font-size: .4rem;width: 3rem;height: 1.3rem" @click="getMsgCodeHandle" :disabled="disable">{{codeText}}</mt-button>
             </p>
         </div>
         <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
@@ -50,7 +50,7 @@
                     MESSAGE_TOKEN:''
                 },
                 codeText:"获取验证码",
-                disable:false
+                disable:false,
 
             }
         },
@@ -112,6 +112,19 @@
                 })
             },
             getMsgCodeHandle() {
+                let sTime = time
+                this.disable = true
+                let timer = setInterval(()=>{
+                    if(sTime ==0){
+                        this.codeText = '重新发送'
+                        this.disable = false
+                        clearInterval(timer)
+                        return
+                    }
+                    sTime --
+                    this.codeText = `${sTime}s`
+                },1000)
+
                 let data = {
                     PHONE_NUM: this.data.PRE_PHONE_NUM,
                     BIZ_TYPE: '1',

@@ -83,9 +83,7 @@
         destroyed() {
             Bus.$off('payPass')
         },
-        mounted() {
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + this.deviceId + "&width="
-        },
+
         methods: {
             buyHandle() {
                 this.Londing.open()
@@ -216,7 +214,7 @@
         z-index: 2;
         width: 100%;
         height: 100%;
-        background: #9e9e9e;
+        background: rgba(1,1,1,.7);
         position: fixed;
         padding-top: 0.7rem;
         top: 0;

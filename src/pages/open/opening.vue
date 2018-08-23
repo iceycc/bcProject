@@ -17,11 +17,20 @@
             </section>
             <section>
                 <span>职业</span>
-                <input type="text" name="text1" placeholder="请选择职业" v-model="data.USER_DUTY">
+                <select name="" v-model="data.USER_DUTY">
+                    <option value="0">a</option>
+                    <option value="1">b</option>
+                    <option value="2">v</option>
+                </select>
             </section>
             <section>
                 <span>学历</span>
-                <input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">
+                <select name="" id="" v-model="data.USER_EDUCATION">
+                    <option value="0">a</option>
+                    <option value="1">b</option>
+                    <option value="2">v</option>
+                </select>
+                <!--<input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">-->
             </section>
             <div class="photo">
                 <div class="cameraphoto">
@@ -176,10 +185,23 @@
                 })
             },
             doNext() {
+                // 姓名 身份证 职业 学历 身份证正反面
+                //         USER_CARD_ID: '',// 身份证号码  612601198509174013
+                //         USER_DUTY: '0', // 职业
+                //         USER_EDUCATION: '0', // 学历
+                //         CARD_FRONT_FILE: '',
+                //         CARD_BACK_FILE: '',
+                //         memberId:null,
+                //         phoneNum:null
+                let data =this.data
+                if(data){
+                    
+                }
+                
                 this.$router.push({
                     name: PageName.opening2,
                     params: {
-                        data: this.data
+                        data
                     }
                 })
             },
@@ -277,14 +299,18 @@
         border: 1px dotted #eaeaea;
     }
 
-    .opening_box  section input {
-        width: 50%;
-        border: none;
-        box-sizing: border-box;
-        font-size: 14px; /*px*/
-        color: #333;
-        line-height: 40px;
-        outline: none;
+    .opening_box  section  {
+        input,select{
+            width: 60%;
+            border: none;
+            box-sizing: border-box;
+            font-size: 14px; /*px*/
+            color: #333;
+            outline: none;
+            background: #fff;
+            height: 1rem;
+        }
+
     }
 
     .tijiao {
@@ -373,7 +399,7 @@
 
 
     }
-    .vatal{
-    }
+    .xueli{
 
+    }
 </style>
