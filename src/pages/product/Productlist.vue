@@ -1,9 +1,6 @@
 <template>
     <div class="wrap">
-        <header class="header">
-            <a class="return" href=""></a>
-            <p>优选计划360号</p>
-        </header>
+        <app-bar title="产品列表"></app-bar>
         <div class="banner"></div>
         <div class="productlist" v-if="!show">
             <ul class="ul-li">
@@ -45,7 +42,7 @@
     export default {
         data() {
             return {
-                show: '',
+                show: false,
                 dataList:[]
             }
         },
@@ -56,14 +53,12 @@
             getListData(){
                API.product.apiGetChannelPrdList({},(res)=>{
                    let num = res.length
-                   if(num >6){
+                   if(num < 9){
                        this.show = true
                    }else{
                        this.show = false
                    }
-                   this.dataList = res
-                    console.log(this.dataList)
-                   //
+                   this.dataList = res.splice(0,9)
                })
             },
             goDetail(id){
@@ -120,7 +115,7 @@
     .banner {
         width: 100%;
         height: 5.5rem;
-        background: #eaeaea;
+        background: #dedede;
     }
     .ul-li{
         // padding-right: 11px;
@@ -185,7 +180,7 @@
         position:absolute;
         right: -1rem;
         bottom: -1.1rem;
-        width: 2rem;
+        width: 3rem;
     
     }
     // .clearfix:after{

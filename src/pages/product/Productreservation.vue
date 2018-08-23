@@ -188,8 +188,19 @@
                         }
                     })
                 }else {
-                    // todo 预约下期
+                    //
+                    let data = {
 
+                    }
+                    // API.product.order(data,res=>{
+                    //
+                    // })
+                    this.$router.push({
+                        name:PageName.OrderNextSuccess,
+                        query:{
+                            PRD_NAME:this.productDetail.PRD_NAME,
+                        }
+                    })
                 }
 
             }

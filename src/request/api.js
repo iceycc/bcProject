@@ -192,6 +192,15 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
+        // 预约
+        order(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiGetChannelPrdInfo',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
 
     },
     /**

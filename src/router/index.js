@@ -60,9 +60,10 @@ addRouter(PageName.opening3, {keepAlive: false, title: '开户',needLogin:false}
 /**
  * product
  */
-addRouter(PageName.Productlist, {keepAlive: false, title: '理财产品',needLogin:false});
-addRouter(PageName.Productlist2, {keepAlive: false, title: '理财产品',needLogin:false});
-addRouter(PageName.Productreservation, {keepAlive: false, title: '理财产品',needLogin:false});
+addRouter(PageName.Productlist, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.Productlist2, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.Productreservation, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.OrderNextSuccess, {keepAlive: false, title: '理财产品'});
 
 /**
  * rechange

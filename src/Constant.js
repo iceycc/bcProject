@@ -39,6 +39,7 @@ export const PageName = {
     Buying: 'Buying',
     Productreservation: 'Productreservation',
     Buyfailed: 'Buyfailed',
+    OrderNextSuccess: 'OrderNextSuccess',
 }
 
 

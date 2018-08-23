@@ -9,13 +9,9 @@
             <!--<p><input type="password" name="text1" placeholder="登录密码" v-model="pass"></p>-->
             <!--密码控件-->
             <div class="field_row_wrap" style="padding: 0 .5rem;">
-                <div class="field_row_key"
-                style="font-size: 0.5rem;padding-top: .1rem">
-                    登陆密码
-                </div>
                 <div class="field_row_value" style="width: 100%;height: 2rem;border-bottom: 1px #E5E5E5 solid;">
                     <div id="loginPass"
-                         style="height: 2rem;line-height: 2rem;color: #ccc"
+                         style="height: 2rem;line-height: 2rem;color: #dedede"
                          modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
                          maxlength="20" name="Password"
                          @click="getPass">
@@ -27,11 +23,13 @@
             <span class="forget" @click="goRePass">忘记密码？</span>
             <mt-button class="tijiao" type="primary" @click="doLogin">登录</mt-button>
             <div class="lijizhuce">
-                <span>还未开户，立即注册</span>
+                <span @click="goOpen">还未开户，立即注册</span>
             </div>
         </div>
         <div class="bottomcontent">
-            <p>晋商银行已与比财实现安全直连</p>
+            <p>
+                <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                晋商银行已与比财实现安全直连</p>
         </div>
     </div>
 </template>
@@ -70,6 +68,9 @@
                 this.$router.push({
                     name:PageName.Resetpassword
                 })
+            },
+            goOpen(){
+                this.$router.push({name:PageName.opening})
             },
             doLogin(){
                 if(this.tel==''){
@@ -118,6 +119,7 @@
 </script>
 <style lang="scss" scoped>
     .hello {
+        box-sizing: border-box;
         width: 100%;
         position: relative;
     }
@@ -147,13 +149,19 @@
     }
 
     .bottomcontent {
-        margin-top: 7rem;
+        position: fixed;
+        width: 100%;
         text-align: center;
+        bottom: 0.1rem;
+        font-size: 0;
+        img{
+            vertical-align: top;
+            width: .5rem;
+        }
     }
 
     .bottomcontent p {
         margin-top: 10px;
-        background-image: url(../../images/img/icon_dunpai@2x.png);
         font-size: 0.4rem;
         color: #808080;
         background-repeat: no-repeat;

@@ -19,6 +19,7 @@ Pages[Constants.PageName.Incomeprogress] = resolve => require(['./financingDetai
 Pages[Constants.PageName.Buysuccess] = resolve => require(['./buy/Buysuccess.vue'], resolve);
 Pages[Constants.PageName.Buyfailed] = resolve => require(['./buy/Buyfailed.vue'], resolve);
 Pages[Constants.PageName.Buying] = resolve => require(['./buy/Buying.vue'], resolve);
+Pages[Constants.PageName.OrderNextSuccess] = resolve => require(['./product/OrderNextSuccess.vue'], resolve);
 Pages[Constants.PageName.Productreservation] = resolve => require(['./product/Productreservation.vue'], resolve);
 Pages[Constants.PageName.fengxianresult] = resolve => require(['./riskEvaluation/fengxianresult.vue'], resolve);
 
