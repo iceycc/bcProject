@@ -10,7 +10,6 @@
                     <p>{{proDetail.PRD_NAME}}</p>
                     <p style="color:#666">理财产品</p>
                 </div>
-
             </div>
             <div class="buytitleright">
                 <p>{{proDetail.TXT_MIN_AMOUNT}}</p>

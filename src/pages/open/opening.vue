@@ -2,7 +2,7 @@
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
         <div class="wrapicon">
-            <div class="circle"><span>开户信息验证</span></div>
+            <div class="circle red"><span>开户信息验证</span></div>
             <div class="circle"><span>绑定银行卡</span></div>
             <div class="circle"><span>设置密码</span></div>
         </div>
@@ -17,11 +17,20 @@
             </section>
             <section>
                 <span>职业</span>
-                <input type="text" name="text1" placeholder="请选择职业" v-model="data.USER_DUTY">
+                <select name="" v-model="data.USER_DUTY">
+                    <option value="0">a</option>
+                    <option value="1">b</option>
+                    <option value="2">v</option>
+                </select>
             </section>
             <section>
                 <span>学历</span>
-                <input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">
+                <select name="" id="" v-model="data.USER_EDUCATION">
+                    <option value="0">a</option>
+                    <option value="1">b</option>
+                    <option value="2">v</option>
+                </select>
+                <!--<input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">-->
             </section>
             <div class="photo">
                 <div class="cameraphoto">
@@ -130,18 +139,18 @@
             uploadChangeZheng(e) {
                 var newsrc = this.getObjectURL(e.target.files[0]);
                 console.log(newsrc);
-                
+
                 this.preSrc1 = newsrc
                 this.imgStyle1 = 'width:100%'
                 util.imgScale(newsrc,e.target.files[0],4).then((data) => {
                     this.test1 = data
                     console.log(encodeURI(this.test1))
-                    this.data.CARD_FRONT_FILE = data.split(',')[1]
-                    
+                    this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g,'%2B')
+
                     // console.log(this.data.CARD_FRONT_FILE);
                     // 扫描身份证 正面
                     let params ={
-                        idcardFrontPhoto:this.data.CARD_FRONT_FILE.replace(/\+/g,'%2B'),
+                        idcardFrontPhoto:this.data.CARD_FRONT_FILE,
                         memberId:this.data.memberId,
                         phoneNum:this.data.phoneNum
                     }
@@ -161,10 +170,10 @@
                 this.imgStyle2 = 'width:100%'
 
                 util.imgScale(newsrc,e.target.files[0],3).then((data) => {
-                    this.data.CARD_BACK_FILE = data.split(',')[1]
+                    this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g,'%2B')
 
                     let params ={
-                        idcardBackPhoto:this.data.CARD_BACK_FILE.replace(/\+/g,'%2B'),
+                        idcardBackPhoto:this.data.CARD_BACK_FILE,
                         memberId:this.data.memberId,
                         phoneNum:this.data.phoneNum
                     }
@@ -176,10 +185,23 @@
                 })
             },
             doNext() {
+                // 姓名 身份证 职业 学历 身份证正反面
+                //         USER_CARD_ID: '',// 身份证号码  612601198509174013
+                //         USER_DUTY: '0', // 职业
+                //         USER_EDUCATION: '0', // 学历
+                //         CARD_FRONT_FILE: '',
+                //         CARD_BACK_FILE: '',
+                //         memberId:null,
+                //         phoneNum:null
+                let data =this.data
+                if(data){
+                    
+                }
+                
                 this.$router.push({
                     name: PageName.opening2,
                     params: {
-                        data: this.data
+                        data
                     }
                 })
             },
@@ -277,14 +299,18 @@
         border: 1px dotted #eaeaea;
     }
 
-    .opening_box  section input {
-        width: 50%;
-        border: none;
-        box-sizing: border-box;
-        font-size: 14px; /*px*/
-        color: #333;
-        line-height: 40px;
-        outline: none;
+    .opening_box  section  {
+        input,select{
+            width: 60%;
+            border: none;
+            box-sizing: border-box;
+            font-size: 14px; /*px*/
+            color: #333;
+            outline: none;
+            background: #fff;
+            height: 1rem;
+        }
+
     }
 
     .tijiao {
@@ -338,6 +364,10 @@
         display: flex;
         width: 80%;
         justify-content: space-between;
+        .red{
+            border: 1px solid red;
+            background: radial-gradient(red 50%, red 50%);
+        }
     }
 
     .wrapicon:before {
@@ -369,7 +399,7 @@
 
 
     }
-    .vatal{
-    }
+    .xueli{
 
+    }
 </style>

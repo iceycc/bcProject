@@ -11,10 +11,10 @@ import 'mint-ui/lib/style.css'
 
 import App from './App'
 Vue.prototype.Londing = Indicator
+Vue.prototype.Meg = MessageBox
 Vue.component(Button.name, Button)
 Vue.component(Cell.name, Cell)
 Vue.component(Radio.name, Radio)
-Vue.component(MessageBox.name, MessageBox)
 // Vue.component(Indicator.name, Indicator)
 
 // import MintUI from 'mint-ui'
