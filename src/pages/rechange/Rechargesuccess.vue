@@ -11,7 +11,7 @@
         </section>
         <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
         <!--<div class="begain">下载比财app</div>-->
-        <mt-button class="begain">完成</mt-button>
+        <mt-button class="begain" @click="goNext">完成</mt-button>
     </div>
 </template>
 <script>
@@ -27,6 +27,9 @@
             this.data = this.$route.query
         },
         methods:{
+            goNext(){
+                this.$router.go(-2)
+            }
 
         }
     }

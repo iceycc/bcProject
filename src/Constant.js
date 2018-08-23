@@ -1,10 +1,22 @@
 // 静态值定义： 【应用配置】
 
 
+
+
+let Configs = {
+    DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
+    PRO_HOST:'http://47.94.4.11:8090/finsuit' ,//
+    APP_DOWN_URL:'http://www.baidu.com',
+}
+export const HOST = process.env.NODE_ENV == 'development'
+? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
+
+export const AppUrl = { // app下载地址
+    Android:'',
+    Ios:''
+}
+
 export const imgSrc = process.env.Img_SRC
-
-
-
 export const PageName = {
     login: 'login',
     Productlist: 'Productlist',
@@ -39,7 +51,7 @@ export const BusName ={
 
 
 export const LsName ={
-    token:'TEEs_dW13SDaQ',
+    token:'token',
 }
 
 export const DeviceId = '99000662737202'

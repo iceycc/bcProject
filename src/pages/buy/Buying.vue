@@ -59,7 +59,8 @@
                 this.$router.push(PageName.Recharge)
             },
             goBuy(){
-                if(this.moneyNum ==''){
+                console.log(this.moneyNum);
+                if(!this.moneyNum){
                     Bus.$emit(BusName.showToast,'请填写购买金额')
                     return
                 }
@@ -67,6 +68,12 @@
                     Bus.$emit(BusName.showToast,'请填写正确的金额')
                     return
                 }
+                this.Londing.open({
+                    spinnerType: 'triple-bounce'
+                })
+                setTimeout(()=>{
+                    this.Londing.close()
+                },500)
                 this.$router.push({
                     name:PageName.surebuy,
                     query:{

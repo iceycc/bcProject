@@ -28,18 +28,26 @@
             </div>
 
         </div>
-        <div class="xiazai">下载比财app查看资产</div>
+        <div class="xiazai" @click="goApp">下载比财app查看资产</div>
     </div>
 </template>
 <script>
+    import util from "../../common/utils/util";
+
     export default {
-        data(){
-            return{
-               datas:[]
+        data() {
+            return {
+                datas: [],
+                downUrl:'http://www.baidu.com'
             }
         },
-        created(){
+        created() {
             this.datas = this.$route.query
+        },
+        methods: {
+            goApp(){
+                util.goApp()
+            }
         }
     }
 </script>
@@ -56,14 +64,12 @@
         display: inline-block;
         width: 50%;
         height: 100%;
-        background-attachment: #fff;
     }
 
     .buytitleright {
         float: right;
         width: 50%;
         height: 100%;
-        background-attachment: #fff;
     }
 
     .header {

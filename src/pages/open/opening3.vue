@@ -64,7 +64,7 @@
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
     import PassInput from '../../components/commons/PassInput'
-    import {BusName} from "../../Constant";
+    import {BusName, LsName} from "../../Constant";
     export default {
         data() {
             return {
@@ -87,6 +87,7 @@
         },
         created(){
             this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
+            // this.REQ_SERIAL = 'BCS2018206470823115514961'
             Bus.$on('payPass',data=>{ //
                 console.log(data);
                 this.paypass = data.pass
@@ -117,38 +118,41 @@
                 this.ifShow = false
             },
             subumit() {
-                this.Londing.open()
+                console.log()
+                this.ifGet = !this.ifGet
                 new Promise((resolve, reject) => {
-                    this.ifGet = !this.ifGet
-
                     setTimeout(() =>{
-                        if(this.REQ_SERIAL){
-                            Bus.$emit(BusName.showToast,'开户未成功')
-                            reject()
+                        console.log(this.loginpass);
+                        console.log(this.paypass);
+                        console.log(this.paypassLen);
+                        console.log(this.loginpassLen);
+                        if(this.REQ_SERIAL==''){
+                            reject('开户未成功')
                         }
                         if(this.loginpass == '' || this.paypass == ''){
-                            Bus.$emit(BusName.showToast,'密码不能为空')
-                            reject()
+                            reject('密码不能为空')
                         }
-                        if(this.loginpassLen < 8 || this.paypassLen <8){
-                            Bus.$emit(BusName.showToast,'密码长度不能低于8位')
-                            reject()
+                        if(this.loginpassLen < 8 || this.paypassLen <6){
+                            reject('密码长度不符合')
                         }
                         let data = {
-                            REQ_SERIAL: this.REQ_SERIAL,
+                            REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
                             BANK_LOGIN_PW: this.loginpass,
                             BANK_PAY_PW: this.paypass
                         }
                         resolve(data)
-                    },1000)
+                    },700)
                 }).then((data)=>{
                     this.Londing.close()
-                    console.log(data);return
+                    console.log(data);
                     API.open.setPassWord(data, (res) => {
                         // todo
+                        Bus.$emit(BusName.showToast,'注册成功')
+                        util.storage.session.remove(LsName.token)
+
                     })
-                },()=>{
-                    this.Londing.close()
+                },(err)=>{
+                    Bus.$emit(BusName.showToast,err)
                 })
 
 

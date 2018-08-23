@@ -4,7 +4,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PageComponents from '../pages/index'
-import {PageName} from '../Constant'
+import {BusName, LsName, PageName} from '../Constant'
+import util from "../common/utils/util";
+import Bus from '../common/js/bus'
+import {Indicator} from 'mint-ui'
 
 Vue.use(VueRouter)
 
@@ -16,7 +19,7 @@ function addRouter(name, meta) {
         meta: Object.assign(
                 {
                     keepAlive: false,
-                    needLogin: false
+                    needLogin: true
                 }
                 , meta)
     });
@@ -38,30 +41,28 @@ let routes = [
 
 addRouter(PageName.Buyfailed, {keepAlive: false, title: '理财产品'});
 addRouter(PageName.Buysuccess, {keepAlive: false, title: '购买成功'});
-addRouter(PageName.surebuy, {keepAlive: false, title: '问答详情'});
-addRouter(PageName.Buying, {keepAlive: false, title: '问答详情'});
+addRouter(PageName.surebuy, {keepAlive: false, title: '购买'});
+addRouter(PageName.Buying, {keepAlive: false, title: '购买'});
 
 /**
  * login
  */
-addRouter(PageName.login, {keepAlive: false, title: '登陆'});
+addRouter(PageName.login, {keepAlive: false, title: '登陆',needLogin:false});
 /**
  * open
  */
-addRouter(PageName.opening, {keepAlive: false, title: '开户'});
-addRouter(PageName.opening2, {keepAlive: false, title: '开户'});
-addRouter(PageName.opening3, {keepAlive: false, title: '开户'});
+addRouter(PageName.opening, {keepAlive: false, title: '开户',needLogin:false});
+addRouter(PageName.opening2, {keepAlive: false, title: '开户',needLogin:false});
+addRouter(PageName.opening3, {keepAlive: false, title: '开户',needLogin:false});
 
-/**
- * orderNext
- */
-addRouter(PageName.Productreservation, {keepAlive: false, title: '理财产品'});
+
 
 /**
  * product
  */
-addRouter(PageName.Productlist, {keepAlive: false, title: '理财产品'});
-addRouter(PageName.Productlist2, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.Productlist, {keepAlive: false, title: '理财产品',needLogin:false});
+addRouter(PageName.Productlist2, {keepAlive: false, title: '理财产品',needLogin:false});
+addRouter(PageName.Productreservation, {keepAlive: false, title: '理财产品',needLogin:false});
 
 /**
  * rechange
@@ -98,12 +99,32 @@ router.beforeEach((to, from, next) => {
     if (to.meta && to.meta.title) {
         document.title = to.meta.title;
     }
+    // Indicator.open()
+
+    if(to.meta.needLogin){
+        let sign = util.storage.session.get(LsName.token)
+        if(sign){
+            next()
+        }else {
+            Bus.$emit(BusName.showToast,'正在去往登陆页')
+            next({
+                name:PageName.login,
+                query:{
+                    target: to.name
+                }
+            })
+            next()
+        }
+    }
+
+
     next()
 });
 
 
 router.afterEach((to, from) => {
 
+    Indicator.close()
 
 });
 

@@ -72,13 +72,23 @@
                 })
             },
             doLogin(){
-                util.storage.local.set(LsName.token,this.tel)
+                if(this.tel==''){
+                    Bus.$emit(BusName.showToast,'请填写手机号')
+                    return
+                }
+                console.log(this.tel);
+
                 let pass = $('#loginPass').$getCiphertext()
                 let lengths = $('#loginPass').$getPasswordLength();
+                if(lengths < 8){
+                    Bus.$emit(BusName.showToast,'密码不能小于8位')
+                    return
+                }
                 let data = {
                     PHONE_NUM:this.tel,
                     BANK_LOGIN_PW:pass
                 }
+                util.storage.session.remove(LsName.token,this.tel)
                 API.login(data,(res)=>{
                     let type = res.HAS_GRADE
                     if(type==1){
@@ -89,14 +99,16 @@
                     }
                     else if(type ==2){
                         Bus.$emit(BusName.showToast,'您已做评估')
-                        // this.$router.push({
-                        //     name:PageName.Verificationsuccess
-                        // })
+                        this.$router.push({
+                            name:PageName.Productlist
+                        })
                     }else {
 
                     }
                     // this.getKey('loginPass')
 
+                },err=>{
+                    util.storage.session.remove(LsName.token,this.tel)
                 })
 
 

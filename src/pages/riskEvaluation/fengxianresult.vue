@@ -49,7 +49,7 @@ export default {
         goNext(){
             // todo 跳转到购买
             this.$router.push({
-                name:PageName.Buying
+                name:PageName.Productlist
             })
         }
     }

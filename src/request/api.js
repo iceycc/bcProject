@@ -24,6 +24,14 @@ export const API = {
             }
             return http.post(options, config, success, error)
         },
+        //   回显2
+        apiGetUserLastCompleteStep(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiGetUserLastCompleteStep',
+                params,
+            }
+            return http.post(options, config, success, error)
+        },
         // 注册
         doRegeist(params, success, error) {
             let options = {
@@ -79,7 +87,8 @@ export const API = {
     login(params, success, error) {
         let options = {
             url: '/openapi/comm/apiLoginBank',
-            params
+            params,
+            login:true
         }
         return http.post(options, config, success, error)
     },
@@ -198,6 +207,8 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
+        // 获取充值协议
+        // /finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
 
     }
 }

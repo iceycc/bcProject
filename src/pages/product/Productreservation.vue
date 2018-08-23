@@ -170,7 +170,8 @@
             },
             goNext(type){
                 // todo 判断登陆
-                let data = { // 跳转购买需要的参数,后期转vuex
+                //
+                let data = { // 跳转购买需要的参数
                     PRD_NAME:this.productDetail.PRD_NAME,
                     TXT_MIN_AMOUNT:this.productDetail.TXT_MIN_AMOUNT,
                     REMAIN_AMT:this.productDetail.REMAIN_AMT,

@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import router from './router'
 import {
     Button,
     Cell,
@@ -24,6 +23,8 @@ Vue.component(Radio.name, Radio)
 import AppBar from './components/header/AppBar'
 
 Vue.component('app-bar', AppBar)
+
+import router from './router'
 
 new Vue({
     el: '#app',

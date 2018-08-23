@@ -1,22 +1,27 @@
 <template>
          <div class="app">
-            <header class="header">
-                    <a class="return" href=""></a>
-                    <p>充值</p>
-            </header>
+            <app-bar title="充值"></app-bar>
             <div class="chattuimg">
                 <img src="../../images/img/buyfail@2x.png" style="width:25%" alt="">
             </div>
             <div class="fenxiangcontent">
                 <h2>很抱歉，充值失败!</h2>
-                  <p style="margin-top:0.6rem; color:#F22C17;font-size: PingFangSC-Regular">系统繁忙，请稍后再试</p>
+                  <p style="margin-top:0.6rem; color:#F22C17;">系统繁忙，请稍后再试</p>
               </div>
-            <div class="begain">重新充值</div>
+            <span @click="reCharge" class="begain">重新充值</span>
         </div>
 </template>
 <script>
+import {PageName} from "../../Constant";
+
 export default {
-    
+    methods:{
+        reCharge(){
+            this.$router.push({
+                name:PageName.Recharge
+            })
+        }
+    }
 }
 </script>
 

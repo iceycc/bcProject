@@ -44,7 +44,7 @@
                     CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
                     HAS_BAND: '0', // 是否绑定过
                     PHONE_NUM: '15621185521', // 15711310733   15011352818
-                    PRE_PHONE_NUM: '15621185521', // 预留
+                    PRE_PHONE_NUM: '15621185521', // 预留 这个是页面取的
                     PHONE_CODE: '', // 手机验证码
                     LAST_STEP_NUM: '0', // 步数
                     MESSAGE_TOKEN:''
@@ -71,7 +71,7 @@
         methods: {
             checkTel(){
                 let num = this.data.PHONE_NUM
-                util.storage.local.set(LsName.token,this.data.PHONE_NUM)
+                util.storage.session.set(LsName.token,this.data.PHONE_NUM)
                 API.open.doApiRegisterBackShow({},num,res=>{
                     console.log('步数 >>>',res.LAST_STEP_NUM);
                     let seq = res.BESHARP_REGISTER_VALI_USER_SEQ
@@ -88,7 +88,6 @@
                     }
                     if(res.LAST_STEP_NUM == 2){
                         Bus.$emit(BusName.showToast,"您已经实名成功")
-
                         setTimeout( ()=> {
                             this.$router.push({
                                 name:PageName.opening3,
@@ -137,7 +136,47 @@
             },
 
             goNext() {
-                util.storage.local.set(LsName.token,this.data.PHONE_NUM)
+                //  ORG_ID: '70',
+                // CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
+                //         HAS_BAND: '0', // 是否绑定过
+                //         PHONE_NUM: '15621185521', // 15711310733   15011352818
+                //         PRE_PHONE_NUM: '15621185521', // 预留
+                //         PHONE_CODE: '', // 手机验证码
+                //         LAST_STEP_NUM: '0', // 步数
+                //         MESSAGE_TOKEN:''
+                if(this.data.CARD_NO == ''){
+                    Bus.$emit(BusName.showToast,'请选择银行')
+                    return
+                }
+                if(this.data.CARD_NO == ''){
+                    Bus.$emit(BusName.showToast,'请选择银行')
+                    return
+                }
+                if(this.data.CARD_NO == ''){
+                    Bus.$emit(BusName.showToast,'请选择银行')
+                    return
+                }
+                if(this.data.CARD_NO == ''){
+                    Bus.$emit(BusName.showToast,'请选择银行')
+                    return
+                }
+                if(this.data.CARD_NO == ''){
+                    Bus.$emit(BusName.showToast,'请选择银行')
+                    return
+                }
+                if(this.data.PRE_PHONE_NUM == ''){
+                    Bus.$emit(BusName.showToast,'手机号不能为空')
+                    return
+                }
+                if(this.data.PHONE_CODE == ''){
+                    Bus.$emit(BusName.showToast,'短信验证码不能为空')
+                    return
+                }
+                if(this.data.MESSAGE_TOKEN == ''){
+                    Bus.$emit(BusName.showToast,'短信验证码异常')
+                    return
+                }
+                util.storage.session.set(LsName.token,this.data.PRE_PHONE_NUM)
                 let preData = this.$route.params.data
                 this.data = Object.assign(this.data, preData)
                 console.log('data >>>',this.data);

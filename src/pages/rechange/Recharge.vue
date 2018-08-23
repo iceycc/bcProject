@@ -20,10 +20,13 @@
         <div class="inputAmount"><span class="Amount">金额</span> <input v-model="APPLY_AMOUN" type="text"
                                                                        placeholder="请输入金额"></div>
         <button class="tijiao" @click="doNext">确认充值</button>
-        <p class="bang">我已阅读并同意注册<span style=" color:#0096FE;">《充值协议》</span></p>
+        <p class="bang">我已阅读并同意注册<span @click="showPage" style=" color:#0096FE;">《充值协议》</span></p>
         <section v-show="page" class="page">
-            <div v-html="html"></div>
-            <mt-button @click="getCode">确认</mt-button>
+            <iframe :src="agreeMentSrc" class="docs"></iframe>
+            <div class="btn">
+                <mt-button type="primary" @click="cancel">取消</mt-button>
+                <mt-button type="primary"@click="getCode">确认</mt-button>
+            </div>
         </section>
         <section v-if="show" class="bgbox">
             <section class="passbox">
@@ -54,9 +57,10 @@
 <script>
     import {API} from "../../request/api";
     import AppBar from '../../components/header/AppBar'
-
+    import {HOST} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
+    import {PageName} from "../../Constant";
     export default {
         data() {
             return {
@@ -66,7 +70,9 @@
                 PIN: '',
                 APPLY_AMOUN: '',
                 toUrl: '',
-                ifGet:false
+                ifGet:false,
+                write:false, // 是否签约充值协议
+                agreeMentSrc:HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html'
 
             }
         },
@@ -91,7 +97,10 @@
                 API.reChange.apiRechargeProtoQuery(data, (res) => {
                     console.log(res);
                     if (res.SIGN_STATE == 'N') {
-                        this.page = true
+                        this.write = true
+
+                    }else{
+
                     }
                 })
             },
@@ -103,22 +112,30 @@
                     this.page = false
                 })
             },
+            showPage(){
+                this.page = true
+            },
+            cancel(){
+                this.page =false
+            },
             doNext(){
+                //
                 this.Londing.open()
                 setTimeout(()=>{
                     this.Londing.close()
                     this.show = true
-                },500)
+                },1000)
             },
             doReCange() {
                 let pass = $('#payPass').$getCiphertext()
-
+                this.show = false
                 let data = {
                     PHONE_CODE: '111111',
                     PIN: this.PIN,
                     BANK_PAY_PW: pass,
                     APPLY_AMOUNT: this.APPLY_AMOUN
                 }
+
                 API.reChange.apiRecharge(data, res => {
                     this.$router.push({
                         name:PageName.Rechargesuccess,
@@ -126,6 +143,10 @@
                             money:this.APPLY_AMOUN,
                                 ...res
                         }
+                    })
+                },err=>{
+                    this.$router.push({
+                        name:PageName.Rechargefailure,
                     })
                 })
             }
@@ -224,8 +245,24 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: #ccc;
-        z-index: 999;
+        background: #fff;
+        z-index: 100;
+        padding: .7rem 0;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+        .docs{
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+        .btn{
+            padding: 0 1rem;
+            height: 3rem;
+            button{
+                width: 3.5rem;
+                margin-right: .4rem;
+            }
+        }
     }
     .bgbox{
         z-index: 2;

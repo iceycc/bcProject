@@ -9,6 +9,8 @@
 <script>
     import Bus from '../../common/js/bus'
     let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
+    import {DeviceId} from "../../Constant";
+
     export default {
         name: "PassInput",
         props:['inputID','doGetData','pass'],
@@ -19,7 +21,7 @@
             }
         },
         created(){
-            Bus.$on()
+            console.log(this.inputID + '>> 创建了')
         },
         watch:{
             doGetData(newVal,oldVal){
@@ -29,7 +31,7 @@
             }
         },
         mounted() {
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + this.deviceId + "&width="
+            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
             this.getPass()
         },
         methods:{

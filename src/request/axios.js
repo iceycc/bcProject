@@ -11,6 +11,9 @@ axios.interceptors.request.use(
             return config;
         },
         error => {
+            setTimeout(()=>{
+                Indicator.close();
+            },1000)
             return Promise.reject(error);
         }
 );
@@ -23,6 +26,9 @@ axios.interceptors.response.use(
             return response.data;
         },
         error => {
+            setTimeout(()=>{
+                Indicator.close();
+            },1000)
             return Promise.reject(error)
         }
 )

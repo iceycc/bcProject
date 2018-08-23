@@ -46,6 +46,7 @@
                 </div>
             </section>
         </section>
+
     </div>
 </template>
 <script>
@@ -97,9 +98,12 @@
                 let data = {
                     PRD_ID: this.datas.id + '',
                     APPLY_AMOUNT: this.datas.money + '',
-                    BANK_PAY_PW: pass
+                    BANK_PAY_PW: this.pass
                 }
-                console.log(data)
+                this.Londing.open({
+                    spinnerType: 'triple-bounce'
+                })
+                this.show = false
                 API.buy.apiBuy(data, (res) => {
                     this.$router.push({
                         name: PageName.Buysuccess,
@@ -111,6 +115,9 @@
                             BESHARP_BUY_SEQ: res.BESHARP_BUY_SEQ
                         }
                     })
+                    this.Londing.close()
+                },err=>{
+                    this.Londing.close()
                 })
             }
         }

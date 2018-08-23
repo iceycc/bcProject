@@ -12,10 +12,10 @@ export default {
         });
     },
     // REQUEST
-    request: function (method, {url, params,token=''}, config, success, error) {
+    request: function (method, {url, params,token='',login=false}, config, success, error) {
         method = method || 'post';
         params = Object.assign(params,{ORG_ID:'70'})
-        let token1 = util.storage.local.get(LsName.token) || token
+        let token1 = util.storage.session.get(LsName.token) || token
         let datas = {
             biz_data: {
                 head: {
@@ -40,6 +40,9 @@ export default {
         return axios.request(config).then(result => {
             result = result.biz_data
             console.log('res >>>', result.data);
+            if(login && result.head.TOKEN){
+                util.storage.session.set(LsName.token,result.head.TOKEN)
+            }
             // todo 做业务状态校验
             if(result.head.CODE == 0){
                 success && success(result.data);
