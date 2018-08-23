@@ -17,9 +17,14 @@
                     </div>
                     <div class="bannerbottom">
                         <ul>
-                            <li class="bannerbottomfirst clearfix">低风险</li>
+                            
+                            <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险</li>
+                            <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>
+                            <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>
+                            <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>
+                            <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>
                             <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
-                            <li class="bannerbottomthree clearfix">累计购买笔数1230</li>
+                            <li class="bannerbottomthree clearfix">累计购买笔数{{productDetail.BUY_COUNT}}</li>
                         </ul>
                     </div>
                 </div>
@@ -55,7 +60,7 @@
                 </div>
                 <div class="contentmainbank" style="margin-top:0.5rem;">
                     <div style="display: inline-block;width:25%">
-                        <img :src="productDetail.LOGO_URL" style="width:90%" alt="">
+                        <img :src="imgurl + productDetail.LOGO_URL" style="width:90%" alt="">
                     </div>
                     <div style="float:right;width:65%">
                         <p style="font-size:0.5rem;">{{productDetail.ORG_NAME}}</p>
@@ -112,7 +117,7 @@
 </template>
 <script>
     import {API} from "../../request/api";
-    import {PageName} from "../../Constant";
+    import {PageName,imgSrc} from "../../Constant";
 
     export default {
         data(){
@@ -120,13 +125,14 @@
                 productDetail:{},
                 btnType:'安全购买',
                 proID:'',
-                type:'1'
+                type:'1',
+                imgurl:imgSrc
             }
         },
         created(){
             this.proID = this.$route.query.id
             this.getData(this.proID)
-
+            console.log(this.imgurl)
         },
         filters:{
             IS_INTERVIEW_filter(val){
