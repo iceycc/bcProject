@@ -1,9 +1,9 @@
 <template>
-    <div id="app">
+    <div id="app" style="height: 100%">
         <keep-alive>
-            <router-view v-if="$route.meta.keepAlive"></router-view>
+            <router-view v-if="$route.meta.keepAlive && isRouterAlive"></router-view>
         </keep-alive>
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
+        <router-view v-if="!$route.meta.keepAlive && isRouterAlive"></router-view>
         <!--自己的提示-->
         <transition name="fade">
             <div class="toast" v-if="showToast">
@@ -17,26 +17,46 @@
 <script>
     import Bus from './common/js/bus'
     import {BusName} from './Constant'
+    import {API} from "./request/api";
 
 
     export default {
+        provide(){
+            return {
+                reload:this.reload
+            }
+        },
         data() {
             return {
                 msg: '',
-                showToast: false
+                showToast: false,
+                isRouterAlive:true
             }
         },
         destroyed(){
             Bus.$off(BusName.showToast)
             Bus.$off(BusName.Indicator);
         },
+        methods:{
+            reload() {
+                console.log('执行reload')
+                this.isRouterAlive = false
+                this.$nextTick(function () {
+                    this.isRouterAlive = true
+                })
+            },
+        },
         created() {
+            API.watch.watchApi({
+                REMARK_DATA:'异业合作-落地页',
+                FUNCTION_ID:'ptp0A000'
+            })
             Bus.$on(BusName.showToast, (val) => {
                 this.showToast = true
                 this.msg = val
                 setTimeout(() => {
                     this.showToast = false
-                }, 1000)
+                }, 2000)
             })
             Bus.$on(BusName.Indicator, (val ='Loading...') => {
                 this.Londing.open({
@@ -72,5 +92,7 @@
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
     }
+
+
 
 </style>

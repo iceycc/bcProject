@@ -1,6 +1,6 @@
 import config from './config'
 import http from './http'
-
+import watchHttp from './watchHttp'
 
 export const API = {
     test(param, success, error) {
@@ -74,6 +74,15 @@ export const API = {
         apiIdCardBackPhoneOcr(params, success, error) {
             let options = {
                 url: '/openapi/comm/apiIdCardBackPhoneOcr',
+                params
+            }
+
+            return http.post(options, config, success, error)
+        },
+        // 查询 /openapi/comm/apiGetBankCardList
+        apiGetBankCardList(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiGetBankCardList',
                 params
             }
 
@@ -192,10 +201,10 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
-        // 预约
-        order(params, success, error) {
+        // 预约/
+        apiSaveSubscribeInfo(params, success, error) {
             let options = {
-                url: '/openapi/comm/apiGetChannelPrdInfo',
+                url: '/openapi/comm/apiSaveSubscribeInfo',
                 params
             }
             return http.post(options, config, success, error)
@@ -219,5 +228,53 @@ export const API = {
         // 获取充值协议
         // /finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
 
+
+        // apiBandCard
+        apiBandCard(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiBandCard',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 协议
+        apiAgreement(params, success, error) {
+            let options = {
+                url: '/openapi/biz/apiAgreement',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+    },
+    /**
+     * list相关
+     */
+    list:{
+        // /openapi/comm/apiGetBankCardList
+        apiGetBankCardList(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiGetBankCardList',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+    },
+    /**
+     * watch
+     */
+    watch:{
+        watchApi(params, success, error) {
+            let options = {
+                url: '/finsuitPhone/deal',
+                params
+            }
+            return watchHttp.post(options, success, error)
+
+        },
     }
 }
+
+

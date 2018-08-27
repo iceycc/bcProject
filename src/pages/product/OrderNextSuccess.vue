@@ -14,6 +14,8 @@
 <script>
     import {PageName} from "../../Constant";
     import util from '../../common/utils/util'
+    import {API} from "../../request/api";
+
     export default {
         data(){
             return{
@@ -25,6 +27,10 @@
         },
         methods:{
             goApp(){
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A009', // 点位
+                    REMARK_DATA: '异异业合作-预约成功-下载比财', // 中文备注
+                })
                 util.goApp()
             }
         }

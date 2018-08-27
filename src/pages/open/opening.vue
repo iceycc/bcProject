@@ -1,11 +1,29 @@
 <template>
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
-        <div class="wrapicon">
-            <div class="circle red"><span>开户信息验证</span></div>
-            <div class="circle"><span>绑定银行卡</span></div>
-            <div class="circle"><span>设置密码</span></div>
-        </div>
+        <section class="wrapicon">
+            <section class="circle">
+                <span class="line1">
+                    <img :src='stepImg' alt="">
+                </span>
+                <span>开户信息验证</span>
+            </section>
+            <section class="circle">
+                 <span class="line2 hui">
+                    <img :src='stepImg2' alt="">
+                </span>
+                <span>绑定银行卡</span>
+            </section>
+
+            <section class="circle">
+                 <span class="line3 hui">
+                    <img :src='stepImg3' alt="">
+                </span>
+                <span>设置密码</span>
+            </section>
+        </section>
+
+
         <div class="opening_box">
             <section>
                 <span>姓名</span>
@@ -17,16 +35,16 @@
             </section>
             <section>
                 <span>职业</span>
-                <select name="" v-model="data.USER_DUTY">
-                    <option :value="item.value" v-for="item,index in job" :key="index">{{item.name}}</option>
-                </select>
+                <js-select class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
             </section>
             <section>
                 <span>学历</span>
-                <select name="" id="" v-model="data.USER_EDUCATION">
-                    <option :value="item.value" v-for="item,index in education" :key="index">{{item.name}}</option>
+                <js-select class="selectStyle" :text="educationText" :options="education"
+                           @getValue="getEduction"></js-select>
+                <!--<select name="" id="" v-model="data.USER_EDUCATION">-->
+                <!--<option :value="item.value" v-for="item,index in education" :key="index">{{item.name}}</option>-->
 
-                </select>
+                <!--</select>-->
                 <!--<input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">-->
             </section>
             <div class="photo">
@@ -55,17 +73,20 @@
     </div>
 </template>
 <script>
-    let Base64 = require('js-base64').Base64;
     import {util} from "../../common/utils/util";
     import {PageName, BusName} from "../../Constant";
     import {API} from "../../request/api";
     import Bus from "../../common/js/bus"
+    import JsSelect from '../../components/commons/JsSelect'
 
     export default {
         data() {
             return {
                 imgStyle1: 'width:50%',
                 imgStyle2: 'width:50%',
+                stepImg: require('../../images/img/account_icon_green2@2x.png'),
+                stepImg2: require('../../images/img/step2@2x.png'),
+                stepImg3: require('../../images/img/step3.png'),
                 test1: '',
                 test2: '',
                 data: {// 姓名 身份证 职业 学历 身份证正反面
@@ -84,38 +105,44 @@
                 picFan: require('../../images/id-fan.jpg'),
                 job: [
                     {name: '国家机关、社会组织、企事业单位负责人', value: '0'},
-                    {name: '科、教、工、贸等专业技术人员', value: '0'},
-                    {name: '批发、零售业服务人员', value: '0'},
-                    {name: '交通运输、仓储、邮政业服务人员', value: '0'},
-                    {name: '信息传输、软件和信息技术服务人员', value: '0'},
-                    {name: '电力、燃气及水供应服务人员', value: '0'},
-                    {name: '文化、体育和娱乐服务人员', value: '0'},
-                    {name: '旅游、餐饮、住宿服务人员', value: '0'},
-                    {name: '金融服务人员', value: '0'},
-                    {name: '房地产、物业、建筑、装修服务人员', value: '0'},
-                    {name: '居民生活服务人员', value: '0'},
-                    {name: '农林牧渔业生产及辅助人员', value: '0'},
-                    {name: '学生', value: '0'},
-                    {name: '退休人员', value: '0'},
-                    {name: '不便分类劳动者', value: '0'},
+                    {name: '科、教、工、贸等专业技术人员', value: '1'},
+                    {name: '批发、零售业服务人员', value: '2'},
+                    {name: '交通运输、仓储、邮政业服务人员', value: '3'},
+                    {name: '信息传输、软件和信息技术服务人员', value: '4'},
+                    {name: '水利、环境和公共设施管理服务人员', value: '5'},
+                    {name: '电力、燃气及水供应服务人员', value: '6'},
+                    {name: '文化、体育和娱乐服务人员', value: '7'},
+                    {name: '旅游、餐饮、住宿服务人员', value: '8'},
+                    {name: '金融服务人员', value: '9'},
+                    {name: '房地产、物业、建筑、装修服务人员', value: '10'},
+                    {name: '居民生活服务人员', value: '11'},
+                    {name: '军人、警察、安全、消防人员', value: '12'},
+                    {name: '农林牧渔业生产及辅助人员', value: '13'},
+                    {name: '学生', value: '14'},
+                    {name: '退休人员', value: '15'},
+                    {name: '不便分类劳动者', value: '16'},
                 ],
                 education: [
                     {name: '研究生', value: '0'},
-                    {name: '大学本科究生', value: '0'},
-                    {name: '大学专科或专科学校', value: '0'},
-                    {name: '中等专业学校或中等技术学校', value: '0'},
-                    {name: '技术学校', value: '0'},
-                    {name: '高中', value: '0'},
-                    {name: '初中', value: '0'},
-                    {name: '小学', value: '0'},
-                    {name: '文盲或半文盲', value: '0'},
-                    {name: '未知', value: '0'},
-                ]
+                    {name: '大学本科究生', value: '20'},
+                    {name: '大学专科或专科学校', value: '30'},
+                    {name: '中等专业学校或中等技术学校', value: '40'},
+                    {name: '技术学校', value: '50'},
+                    {name: '高中', value: '60'},
+                    {name: '初中', value: '70'},
+                    {name: '小学', value: '80'},
+                    {name: '文盲或半文盲', value: '90'},
+                    {name: '未知', value: '99'},
+                ],
+                educationText: '请选择学历',
+                work: '请选择职业'
             }
         },
-        components: {},
+        components: {
+            JsSelect
+        },
         created() {
-            // this.getInfos()
+
             // this.picToBase64(this.picZheng,(data)=> {
             //     this.data.CARD_FRONT_FILE = data
             // })
@@ -125,41 +152,16 @@
 
         },
         methods: {
-            getInfos() {
-                API.open.doApiRegisterBackShow({}, res => {
-                    console.log('步数 >>>', res.LAST_STEP_NUM);
-                    if (res.LAST_STEP_NUM == 0) {
-                        // Bus.$emit(BusName.showToast,"欢迎注册")
-                        return
-                    }
-                    if (res.LAST_STEP_NUM == 1) {
-                        // Bus.$emit(BusName.showToast,"第二步")
-                        this.$router.push({
-                            name: PageName.opening2
-                        })
-                        return
-                    }
-                    if (res.LAST_STEP_NUM == 2) {
-                        // Bus.$emit(BusName.showToast,"第三步")
-
-                        this.$router.push({
-                            name: PageName.opening3
-                        })
-                        return
-                    }
-                    if (res.LAST_STEP_NUM == 3) {
-                        Bus.$emit(BusName.showToast, "您已经开户成功")
-
-                        this.$router.push({
-                            name: PageName.opening3
-                        })
-                    }
-                    Bus.$emit(BusName.showToast, "状态异常")
-
-                }, err => {
-                    console.log(err);
-                })
+            getEduction(val) {
+                this.educationText = val.name
+                this.data.USER_EDUCATION = val.value
             },
+            getWork(val) {
+                this.work = val.name
+                this.data.USER_DUTY = val.value
+
+            },
+
             uploadChangeZheng(e) {
                 var newsrc = this.getObjectURL(e.target.files[0]);
                 console.log(newsrc);
@@ -210,6 +212,10 @@
                 })
             },
             doNext() {
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A003', // 点位
+                    REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
+                })
                 let data = this.data
                 // 校验
                 if (data.USER_NAME == '') {
@@ -238,8 +244,11 @@
                 }
 
                 this.checkID(() => {
-                    this.$router.push({
-                        name: PageName.opening2
+                    this.$router.replace({
+                        name: PageName.opening2,
+                        params:{
+                            data:this.data
+                        }
                     })
                 })
             },
@@ -252,14 +261,15 @@
 
                 API.open.apiGetUserLastCompleteStep(getStepDatas, res => {
                     let step = res.LAST_STEP_NUM
+                    let REQ_SERIAL = res.REQ_SERIAL
                     console.log('步数 >>>', step);
                     if (step == 0) {
                         // Bus.$emit(BusName.showToast,"欢迎注册")
-
+                        fn && fn()
                     }
                     if (step == 1) {
                         // Bus.$emit(BusName.showToast,"第二步")
-
+                        fn && fn()
                     }
                     if (step == 2) {
                         Bus.$emit(BusName.showToast, "您已经实名成功")
@@ -272,12 +282,14 @@
                     }
                     if (step == 3) {
                         Bus.$emit(BusName.showToast, "您已经开户成功")
-
                         this.$router.push({
-                            name: PageName.login
+                            name: PageName.login,
+                            query:{
+                                REQ_SERIAL:REQ_SERIAL
+                            }
                         })
                     }
-                    fn && fn()
+
                 }, err => {
                     console.log(err);
                 })
@@ -304,6 +316,69 @@
 <style lang="scss" scoped>
     body {
         font-size: .3rem;
+    }
+
+    .wrapicon {
+        text-align: center;
+        display: flex;
+        position: relative;
+        margin-bottom: .3rem;
+        .circle {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .line1,.line2,.line3 {
+            position: relative;
+            img {
+                width: .5rem;
+            }
+            &:after {
+                display: block;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-100%);
+                content: '';
+                width: 45%;
+                background: #92d048;
+                height: .1rem;
+                overflow: hidden;
+
+            }
+        }
+        .hui{
+            &:after,&.line2:before{
+                background: #dee1e3 !important;
+            }
+
+        }
+        .line2 {
+            &:after {
+                left: 0;
+                right: auto;
+            }
+            &:before {
+                display: block;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-100%);
+                content: '';
+                width: 45%;
+                background: #92d048;
+                height: .1rem;
+                overflow: hidden;
+            }
+        }
+        .line3 {
+            &:after {
+                left: 0;
+                right: auto;
+            }
+        }
+
     }
 
     .warp {
@@ -421,48 +496,6 @@
         background-position: 0.2rem 0.05rem;
     }
 
-    .circle {
-        position: relative;
-        z-index: 2;
-        width: 0.3rem;
-        height: 0.3rem;
-        border-radius: 50%;
-        border: 1px solid #7ED321;
-        box-sizing: border-box;
-        background: radial-gradient(#7ED321 50%, #7ED321 50%);
-        white-space: nowrap;
-    }
-
-    .wrapicon {
-        position: relative;
-        margin: 1rem auto 0.8rem;
-        display: flex;
-        width: 80%;
-        justify-content: space-between;
-        .red {
-            border: 1px solid red;
-            background: radial-gradient(red 50%, red 50%);
-        }
-    }
-
-    .wrapicon:before {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        content: '';
-        display: block;
-        width: 100%;
-        height: 1px;
-        background: #7ED321;
-    }
-
-    .circle span {
-        position: absolute;
-        left: -0.5rem;
-        top: 0.5rem;
-        font-size: .4rem;
-    }
-
     .inputBox {
         position: absolute;
         left: 0;
@@ -475,7 +508,7 @@
 
     }
 
-    .xueli {
-
+    .selectStyle {
+        font-size: .4rem;
     }
 </style>

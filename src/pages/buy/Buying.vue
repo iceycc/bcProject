@@ -28,7 +28,10 @@
         </div>
         <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 1,000,000.00元</p>
         <button class="tijiao" @click="goBuy">购买</button>
-        <p class="bang">我已阅读并同意注册<strong style=" color:#0096FE;">《用户授权服务协议》《晋商银行直销银行电子账户服务协议》</strong></p>
+        <p class="bang">我已阅读并同意注册
+            <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
+            <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('B')">《晋商银行直销银行"安鑫富"投融资协议》</a>
+        </p>
     </div>
 </template>
 <script>
@@ -56,7 +59,25 @@
                 })
             },
             goReChang(){
-                this.$router.push(PageName.Recharge)
+                this.$router.push({
+                    name:PageName.Recharge,
+                    query:{
+                        PRD_NAME:this.proDetail.PRD_NAME, // 产品名称
+                        id:this.proDetail.id,
+                        ORG_NAME:this.proDetail.ORG_NAME, // 直销银行名称
+                        logo:this.proDetail.logo, // 直销银行名称
+                    }
+                })
+            },
+            getAgreement(type) {
+                this.$router.push({
+                    name:PageName.DocsPage,
+                    query:{
+                        type,
+                        id:this.proDetail.id
+                    }
+                })
+
             },
             goBuy(){
                 console.log(this.moneyNum);
@@ -80,7 +101,7 @@
                         money:this.moneyNum,
                         PRD_NAME:this.proDetail.PRD_NAME,
                         id:this.proDetail.id,
-                        ORG_NAME:this.proDetail.ORG_NAME
+                        ORG_NAME:this.proDetail.ORG_NAME,
                     }
                 })
 
@@ -105,7 +126,7 @@
     .buytitleleft {
         display: inline-block;
         width: 50%;
-        background-attachment: #fff;
+
     }
 
     .buytitleleftimg {

@@ -19,43 +19,44 @@
         </div>
         <div class="jiaoyibank">
             <div class="jiaoyibankname">交易银行</div>
-            <div class="jiaoyibankzhixiaoname">民生直销银行</div>
+            <div class="jiaoyibankzhixiaoname">{{datas.ORG_NAME}}</div>
         </div>
         <mt-button @click="buyHandle" class="tijiao">确认购买</mt-button>
-        <p class="bang">我已阅读并同意注册<strong style=" color:#0096FE;">《用户授权服务协议》《晋商银行直销银行电子账户服务协议》</strong></p>
+        <p class="bang">我已阅读并同意注册
+            <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
+            <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('B')">《晋商银行直销银行"安鑫富"投融资协议》</a>
+        </p>
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
                     <img src="../../images/img/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
-                  <section class="field_row_wrap">
-                      <p class="field_row_key">
-                          交易密码
-                      </p>
-                      <div class="field_row_value">
-                          <pass-input
-                                  inputID="payPass"
-                                  :doGetData="ifGet"
-                          ></pass-input>
-                      </div>
-                      <p class="info">密码由数字组成，必须为6位</p>
-                  </section>
+                <section class="field_row_wrap">
+                    <p class="field_row_key">
+                        交易密码
+                    </p>
+                    <div class="field_row_value">
+                        <pass-input
+                                inputID="payPass"
+                        ></pass-input>
+                    </div>
+                    <p class="info">密码由数字组成，必须为6位</p>
+                </section>
                 <div class="btn">
                     <mt-button @click="show =!show" type="primary">取消</mt-button>
                     <mt-button @click="doPay" type="primary">提交</mt-button>
                 </div>
             </section>
         </section>
-
     </div>
 </template>
 <script>
     import {API} from "../../request/api";
 
-    let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
     import {DeviceId, PageName} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
+    import {util} from "../../common/utils/util";
 
     export default {
         data() {
@@ -65,9 +66,9 @@
                 datas: {},
                 deviceId: DeviceId,
                 toUrl: '',
-                ifGet: false,
                 pass: "",
-                len: 0
+                len: 0,
+                banck: '',
             }
         },
         components: {
@@ -75,23 +76,27 @@
         },
         created() {
             this.datas = this.$route.query
-            Bus.$on('payPass', (data) => {
-                console.log(data);
-                this.pass = data.pass
-                this.len = data.len
-            })
         },
         destroyed() {
-            Bus.$off('payPass')
         },
 
         methods: {
+            getAgreement(type) {
+                this.$router.push({
+                    name:PageName.DocsPage,
+                    query:{
+                        type,
+                        id:this.datas.id
+                    }
+                })
+
+            },
             buyHandle() {
                 this.Londing.open()
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.show = true
                     this.Londing.close()
-                },500)
+                }, 500)
             },
             doPay() {
 
@@ -103,6 +108,10 @@
                 this.Londing.open({
                     spinnerType: 'triple-bounce'
                 })
+                this.pass = $('#payPass').$getCiphertext()
+                this.len = $('#payPass').$getPasswordLength()
+                let msg
+                if (msg = util.Check.payPassLen(this.len)) return Bus.$emit(BusName.showToast, msg);
                 this.show = false
                 API.buy.apiBuy(data, (res) => {
                     this.$router.push({
@@ -116,7 +125,8 @@
                         }
                     })
                     this.Londing.close()
-                },err=>{
+                }, err => {
+
                     this.Londing.close()
                 })
             }
@@ -174,7 +184,6 @@
     .jiaoyibank .jiaoyibankzhixiaoname {
         margin-right: 0.4rem;
         float: right;
-        color: 444
     }
 
     .tijiao {
@@ -183,93 +192,92 @@
         background-color: #518BEE;
         border-radius: 0.2rem;
         line-height: 1.2rem;
-        width: 63%;
-        margin: 0 auto;
+        height: 1.2rem;
+        width: 80%;
+        margin: 0.5rem auto 0;
         text-align: center;
-        margin-top: 0.5rem;
         outline: none;
         display: block;
     }
 
     .bang {
         margin-top: 0.5rem;
-        padding-right: 0.3rem;
-        background-image: url(../../images/img/agree@3x.png);
-        font-size: 0.35rem;
+        background: url(../../images/img/agree@3x.png) no-repeat 0.2rem 0.05rem;
+        font-size: 0.25rem;
         color: #808080;
-        background-repeat: no-repeat;
         background-size: 0.4rem 0.4rem;
         padding: 0 0.8rem;
-        background-position: 0.2rem 0.05rem;
     }
 
-    .passBox{
+    .passBox {
         position: fixed;
         width: 100%;
         height: 100%;
         left: 0;
-        top:0;
-        background: rgba(1,1,1,0.3);
-        .inputbox{
+        top: 0;
+        background: rgba(1, 1, 1, 0.3);
+        .inputbox {
             width: 80%;
             margin: 1rem auto;
             background: #fff;
         }
     }
 
-    .bgbox{
+    .bgbox {
         z-index: 2;
         width: 100%;
         height: 100%;
-        background: rgba(1,1,1,.7);
+        background: rgba(1, 1, 1, .7);
         position: fixed;
         padding-top: 0.7rem;
         top: 0;
         left: 0;
-        .passbox{
+        .passbox {
             background: #fff;
             width: 80%;
             margin: 0 auto;
             padding: 0.4rem;
             box-sizing: border-box;
         }
-        .field_row_key{
+        .field_row_key {
             font-size: 0.4rem;
         }
-        .title{
+        .title {
             margin-bottom: 0.5rem;
             text-align: center;
             font-size: 0.4rem;
             color: #666;
             height: .6rem;
             line-height: .6rem;
-            img{
+            img {
                 vertical-align: top;
                 width: .5rem;
             }
         }
-        .field_row_wrap{
+        .field_row_wrap {
             margin-bottom: 0.2rem;
         }
-        .field_row_value{
+        .field_row_value {
             border-radius: 4px;
             border: 1px solid #9e9e9e;
             height: 0.9rem;
             line-height: 0.9rem;
             margin: 0.2rem 0;
         }
-        .info{
+        .info {
             font-size: 0.3rem;
             line-height: 0.6rem;
             color: #aeaeae;
         }
-        .btn{
+        .btn {
             display: flex;
-            button{
+            button {
                 margin: 0 .3rem;
                 text-align: center;
                 flex: 1;
             }
         }
     }
+
+
 </style>

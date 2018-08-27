@@ -17,25 +17,33 @@
             </section>
             <section>
                 <span>新登录密码</span>
-                <div id="loginPass"
-                     @click="getKey('loginPass')"
-                     style="display: inline-block;color: #9e9e9e"
-                     modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                     maxlength="20" name="Password">
-                    请输入密码
-                </div>
+                <!--<div id="loginPass"-->
+                     <!--@click="getKey('loginPass')"-->
+                     <!--style="display: inline-block;color: #9e9e9e"-->
+                     <!--modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"-->
+                     <!--maxlength="20" name="Password">-->
+                    <!--请输入密码-->
+                <!--</div>-->
+                <pass-input
+                        style="display:inline-block;color: #dedede"
+                        inputID="loginPass"
+                ></pass-input>
                 <!--<input v-model="data.BANK_LOGIN_PW" type="password" class="newpassword" name="text1" style="width:72%"-->
                        <!--placeholder="登录密码需包含8-20位数字，大小字母组成">-->
             </section>
             <section>
                 <span>确认登录密码</span>
-                <div id="reLoginPass"
-                     @click="getKey('reLoginPass')"
-                     style="display: inline-block;color: #9e9e9e"
-                     modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                     maxlength="20" name="Password">
-                    请输入密码
-                </div>
+                <!--<div id="reLoginPass"-->
+                     <!--@click="getKey('reLoginPass')"-->
+                     <!--style="display: inline-block;color: #9e9e9e"-->
+                     <!--modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"-->
+                     <!--maxlength="20" name="Password">-->
+                    <!--请输入密码-->
+                <!--</div>-->
+                <pass-input
+                        style="display:inline-block;color: #dedede"
+                        inputID="reLoginPass"
+                ></pass-input>
             </section>
             <section>
                 <span>验证码</span>
@@ -43,7 +51,7 @@
                 <span class="getpassword" @click="getCode">获取验证码</span>
             </section>
         </div>
-        <div class="tijiao Tips">请使用该预留手机号的储蓄卡进行开户</div>
+        <div class="tijiao Tips" v-if="errMsg">{{errMsg}}</div>
         <mt-button class="tijiao" @click="doRePass">重置密码</mt-button>
     </div>
 </template>
@@ -52,7 +60,8 @@
     import {API} from '../../request/api'
     import {LsName,DeviceId,BusName,PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
-    let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
+    import PassInput from '../../components/commons/PassInput'
+
     export default {
         data() {
             return {
@@ -63,18 +72,26 @@
                     BANK_LOGIN_PW: '', // newpass
                     BANK_LOGIN_PW2: '' ,//
                     MESSAGE_TOKEN:'',
-                    PHONE_CODE:''
+                    PHONE_CODE:'',
 
                 },
                 toUrl:"",
+                errMsg:''
             }
         },
-        created() {
-
+        components:{
+            PassInput
         },
-        mounted(){
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
-            console.log(this.toUrl);
+        created() {
+            let beforeInfo;
+            if(beforeInfo = util.storage.session.get('rePasswordInfo')) {
+                this.data = {
+                    USER_REAL_NAME: beforeInfo.USER_REAL_NAME, // 姓名
+                    USER_CARD_ID: beforeInfo.USER_CARD_ID, // idCard
+                    PHONE_NUM: beforeInfo.PHONE_NUM, //tel
+                }
+                this.errMsg = beforeInfo.msg
+            }
         },
         methods: {
             getCode(){
@@ -87,23 +104,42 @@
                 })
             },
             doRePass() {
-                this.data.BANK_LOGIN_PW = $('#loginPass').$getCiphertext()
-                this.data.BANK_LOGIN_PW2 = $('#loginPass').$getCiphertext()
+                let msg;
+                if(msg=util.Check.name(this.data.USER_REAL_NAME)) return this.errMsg = msg;
+                if(msg=util.Check.idNumber(this.data.USER_CARD_ID)) return this.errMsg = msg;
+                if(msg=util.Check.tel(this.data.PHONE_NUM)) return this.errMsg = msg;
 
+                this.data.BANK_LOGIN_PW = $('#loginPass').$getCiphertext()
+                this.data.BANK_LOGIN_PW_LEN = $('#loginPass').$getPasswordLength()
+                this.data.BANK_LOGIN_PW2 = $('#reLoginPass').$getCiphertext()
+                this.data.BANK_LOGIN_PW2_LEN = $('#reLoginPass').$getPasswordLength()
+                if(msg=util.Check.trim(this.data.BANK_LOGIN_PW,',密码')) return this.errMsg = msg;
+                if(msg=util.Check.loginPassLen(this.data.BANK_LOGIN_PW_LEN)) return this.errMsg = msg;
+                if(msg=util.Check.trim(this.data.BANK_LOGIN_PW2,',密码')) return this.errMsg = msg;
+                if(msg=util.Check.loginPassLen(this.data.BANK_LOGIN_PW2_LEN)) return this.errMsg = msg;
+
+                if(msg=util.Check.trim(this.data.PHONE_CODE,'验证码')) return this.errMsg = msg;
 
                 let data = {
                         ...this.data
                 }
                 API.safe.apiUserResetLoginPass(data,res=>{
                     Bus.$emit(BusName.showToast,'修改密码成功')
+                    util.storage.session.remove(LsName.token)
+                    this.$router.replace({
+                        name:PageName.login
+                    })
+                    util.storage.session.remove('rePasswordInfo')
+                },err=>{
+                    util.storage.session.set('rePasswordInfo',{
+                        USER_REAL_NAME: this.data.USER_REAL_NAME, // 姓名
+                        USER_CARD_ID: this.data.USER_CARD_ID, // idCard
+                        PHONE_NUM: this.data.PHONE_NUM, //tel
+                        msg:err
+                    })
+                    window.location.reload()
                 })
             },
-            getKey(id) {
-                $(`#${id}`).attr('v-password-widget', this.toUrl)
-                $(`#${id}`).PasswordWidget()
-            },
-
-
         }
 
     }

@@ -5,6 +5,7 @@
 
 let Configs = {
     DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
+    // DEV_HOST:'http://192.168.100.109:8080/finsuit', // 测试
     PRO_HOST:'http://47.94.4.11:8090/finsuit' ,//
     APP_DOWN_URL:'http://www.baidu.com',
 }
@@ -40,6 +41,7 @@ export const PageName = {
     Productreservation: 'Productreservation',
     Buyfailed: 'Buyfailed',
     OrderNextSuccess: 'OrderNextSuccess',
+    DocsPage: 'DocsPage',
 }
 
 

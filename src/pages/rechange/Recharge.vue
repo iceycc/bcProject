@@ -3,15 +3,15 @@
         <app-bar title="充值"></app-bar>
         <div class="rechargetitle">充值到民生直销银行</div>
         <div class="minshengbank">
-            <span class="minshengbankLogo"><img src="../../images/img/Payingbankicon@2x.png" style="width:75%"
+            <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
-            民生直销银行
+            {{ORG_NAME}}
         </div>
         <div class="rechargetitle">银行卡</div>
         <div class="minshengbank" style="border-bottom:1px solid #EEEEF0">
-            <span class="minshengbankLogo" style=" padding-top: 10px;"><img src="../../images/img/beijingbank@2x.png"
+            <span class="minshengbankLogo" style=" padding-top: 10px;"><img :src="imgSrc + CARD_BANK_URL"
                                                                             style="width:75%" alt=""></span>
-            北京银行
+            {{CARD_BANK_NAME}}
         </div>
         <div class=" money">
             <p>每笔限额：10000.00元</p>
@@ -40,7 +40,6 @@
                     <div class="field_row_value">
                         <pass-input
                                 inputID="payPass"
-                                :doGetData="ifGet"
                         ></pass-input>
                     </div>
                     <p class="info">密码由数字组成，必须为6位</p>
@@ -60,7 +59,9 @@
     import {HOST} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
-    import {PageName} from "../../Constant";
+    import {PageName,imgSrc,BusName} from "../../Constant";
+    import {util} from "../../common/utils/util";
+
     export default {
         data() {
             return {
@@ -72,8 +73,12 @@
                 toUrl: '',
                 ifGet:false,
                 write:false, // 是否签约充值协议
-                agreeMentSrc:HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html'
-
+                agreeMentSrc:HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
+                ORG_NAME:'',
+                imgSrc:imgSrc,
+                logo:'',
+                CARD_BANK_NAME:'',
+                CARD_BANK_URL:''
             }
         },
         components: {
@@ -81,17 +86,20 @@
             PassInput
         },
         created() {
-            Bus.$on('payPass', (data) => {
-                console.log(data);
-                this.pass = data.pass
-                this.len = data.len
-            })
+            this.getInfos()
+            this.ORG_NAME = this.$route.query.ORG_NAME
+            this.logo = this.$route.query.logo
+
             this.reChangeHandele()
         },
-        destroyed() {
-            Bus.$off('payPass')
-        },
+
         methods: {
+            getInfos(){
+                API.safe.apiBandCard({},res =>{
+                    this.CARD_BANK_NAME = res.CARD_BANK_NAME;
+                    this.CARD_BANK_URL = res.CARD_BANK_URL
+                })
+            },
             reChangeHandele() { // 39查询用户是否已签约充值协议
                 let data = {}
                 API.reChange.apiRechargeProtoQuery(data, (res) => {
@@ -127,12 +135,17 @@
                 },1000)
             },
             doReCange() {
-                let pass = $('#payPass').$getCiphertext()
+                this.pass = $('#payPass').$getCiphertext()
+                this.len = $('#payPass').$getPasswordLength()
+                let msg;
+                if(msg=util.Check.payPassLen(this.len)) return Bus.$emit(BusName.showToast,msg);
+
+
                 this.show = false
                 let data = {
-                    PHONE_CODE: '111111',
+                    PHONE_CODE: '123456', // todo
                     PIN: this.PIN,
-                    BANK_PAY_PW: pass,
+                    BANK_PAY_PW: this.pass,
                     APPLY_AMOUNT: this.APPLY_AMOUN
                 }
 

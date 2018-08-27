@@ -1,20 +1,39 @@
 <template>
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
-        <div class="wrapicon">
-            <div class="circle"><span>开户信息验证</span></div>
-            <div class="circle red"><span>绑定银行卡</span></div>
-            <div class="circle"><span>设置密码</span></div>
-        </div>
+        <section class="wrapicon">
+            <section class="circle">
+                <span class="line1">
+                    <img :src='stepImg' alt="">
+                </span>
+                <p>开户信息验证</p>
+            </section>
+            <section class="circle">
+                 <span class="line2">
+                    <img :src='stepImg' alt="">
+                </span>
+                <p>绑定银行卡</p>
+            </section>
+
+            <section class="circle">
+                 <span class="line3 hui">
+                    <img :src='stepImg3' alt="">
+                </span>
+                <p>设置密码</p>
+            </section>
+        </section>
+
         <div class="opening_box">
             <p>
                 <span>选择银行</span>
-                <input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">
+                <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
                 <!-- <span  class="limit">银行限额</span>  -->
+                <Bank-select style="display: inline-block" :text="bankText" :options="bankList" @getValue="getBank" title="银行列表"></Bank-select>
+
             </p>
             <p>
                 <span> 绑定卡卡号</span>
-                <input type="number" name="backname" placeholder="请输入绑定的银行卡号" v-model="data.CARD_NO">
+                <input type="number" @change="checkBankNo(data.CARD_NO)" @input="checkBankName(data.CARD_NO)" name="backname" placeholder="请输入绑定的银行卡号" v-model="data.CARD_NO">
             </p>
             <p>
                 <span>手机号码</span>
@@ -35,13 +54,16 @@
     import {PageName,BusName,LsName} from "../../Constant";
     import {util} from "../../common/utils/util";
     import Bus from '../../common/js/bus'
+    import BankSelect from '../../components/commons/BankSelect'
+    import {imgSrc} from "../../Constant";
+
     let time = 60
     export default {
         data() {
             return {
                 data: {
                     ORG_ID: '70',
-                    CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
+                    CARD_NO: '6226221234123411', // 银行卡号 6214830182284272  6217730711297810
                     HAS_BAND: '0', // 是否绑定过
                     PHONE_NUM: '15621185521', // 15711310733   15011352818
                     PRE_PHONE_NUM: '15621185521', // 预留 这个是页面取的
@@ -51,63 +73,68 @@
                 },
                 codeText:"获取验证码",
                 disable:false,
+                bankList:[],
+                bank:'-1',
+                bankText:'请选择银行',
+                stepImg: require('../../images/img/account_icon_green2@2x.png'),
+                stepImg2: require('../../images/img/step2@2x.png'),
+                stepImg3: require('../../images/img/step3.png'),
+                AllBankListObj:{}
 
             }
         },
+        components:{
+            BankSelect
+        },
         created(){
-            // 15011352818
-            // lydong09
-
-            // 110102198806020036
-
-            // 6226221234123488  长度不变，，622622 后边随便输入
-
-
-            // 110102198806020298
-            // 6226221234123445 银行
-            //
-            // mmm999
+            this.getBankList()
         },
         methods: {
-            checkTel(){
-                let num = this.data.PHONE_NUM
-                util.storage.session.set(LsName.token,this.data.PHONE_NUM)
-                API.open.doApiRegisterBackShow({},num,res=>{
-                    console.log('步数 >>>',res.LAST_STEP_NUM);
-                    let seq = res.BESHARP_REGISTER_VALI_USER_SEQ
-                    if(res.LAST_STEP_NUM == 0){
-                        // Bus.$emit(BusName.showToast,"欢迎注册")
-                        return
+            checkBankName(val){
+                val = val.replace(/\s+/g, "")
+                let bankName
+                for(var i=3;i<10;i++){
+                    if(bankName=this.machBankName((val + '').slice(0,i))){
+                        break
                     }
-                    if(res.LAST_STEP_NUM == 1){
-                        // Bus.$emit(BusName.showToast,"第二步")
-                        // this.$router.push({
-                        //     name:PageName.opening2
-                        // })
-                        return
-                    }
-                    if(res.LAST_STEP_NUM == 2){
-                        Bus.$emit(BusName.showToast,"您已经实名成功")
-                        setTimeout( ()=> {
-                            this.$router.push({
-                                name:PageName.opening3,
-                                params:{seq}
-                            })
-                        },600)
-                        return
-                    }
-                    if(res.LAST_STEP_NUM == 3){
-                        Bus.$emit(BusName.showToast,"您已经开户成功")
+                }
+                this.bankText = bankName
+            },
+            checkBankNo(val){
+                let reg = /^([1-9]{1})(\d{14}|\d{18})$/
+                if(val == ''){
+                    Bus.$emit(BusName.showToast,'银行卡号不能为空')
+                    return
+                }
+                if(!reg.test(val)){
+                    Bus.$emit(BusName.showToast,'银行卡号格式不正确')
+                    return
+                }
 
-                        this.$router.push({
-                            name:PageName.login
-                        })
-                        return
-                    }
-                    Bus.$emit(BusName.showToast,"状态异常")
-
-                },err=>{
-                    console.log(err);
+            },
+            machBankName(pin){
+                return this.AllBankListObj[pin]
+            },
+            getBank(val){
+                console.log(val);
+                this.bankText = val.name
+            },
+            getBankList(){
+                API.list.apiGetBankCardList({},res=>{
+                    let obj = {}
+                    res.BAND_CARD_LIST.forEach(item=>{
+                        obj[item.BANK_CARD_BIN] = item.BANK_NAME
+                    })
+                    // console.log('bankObj>>>',obj);
+                    this.AllBankListObj = obj
+                    this.bankList = res.SUPPORT_BANK_LIST.map((item)=>{
+                        return {
+                            name:item.BANK_NAME,
+                            value:0,
+                            src:imgSrc + item.BANK_LOGO_URL,
+                            Index:item.INITIAL
+                        }
+                    })
                 })
             },
             getMsgCodeHandle() {
@@ -136,6 +163,10 @@
             },
 
             goNext() {
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A004', // 点位
+                    REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+                })
                 //  ORG_ID: '70',
                 // CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
                 //         HAS_BAND: '0', // 是否绑定过
@@ -176,7 +207,7 @@
                     Bus.$emit(BusName.showToast,'短信验证码异常')
                     return
                 }
-                util.storage.session.set(LsName.token,this.data.PRE_PHONE_NUM)
+                // util.storage.session.set(LsName.token,this.data.PRE_PHONE_NUM)
                 let preData = this.$route.params.data
                 this.data = Object.assign(this.data, preData)
                 console.log('data >>>',this.data);
@@ -199,6 +230,7 @@
                         },
                         err => {
                             console.log(err);
+                            this.disable = false
                         })
             }
         }
@@ -279,45 +311,68 @@
         display: block;
     }
 
-    .circle {
-        position: relative;
-        z-index: 2;
-        width: 0.3rem;
-        height: 0.3rem;
-        border-radius: 50%;
-        border: 1px solid #7ED321;
-        box-sizing: border-box;
-        background: radial-gradient(#7ED321 50%, #7ED321 50%);
-        white-space: nowrap;
-    }
-
     .wrapicon {
-        position: relative;
-        margin: 1rem auto 0.8rem;
+        text-align: center;
         display: flex;
-        width: 80%;
-        justify-content: space-between;
-        .red{
-            border: 1px solid red;
-            background: radial-gradient(red 50%, red 50%);
+        position: relative;
+        margin-bottom: .3rem;
+        .circle {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
+
+        .line1,.line2,.line3 {
+            position: relative;
+            img {
+                width: .5rem;
+            }
+            &:after {
+                display: block;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-100%);
+                content: '';
+                width: 45%;
+                background: #92d048;
+                height: .1rem;
+                overflow: hidden;
+
+            }
+        }
+        .hui{
+            &:after,&.line2:before{
+                background: #dee1e3 !important;
+            }
+
+        }
+        .line2 {
+            &:after {
+                left: 0;
+                right: auto;
+            }
+            &:before {
+                display: block;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-100%);
+                content: '';
+                width: 45%;
+                background: #92d048;
+                height: .1rem;
+                overflow: hidden;
+            }
+        }
+        .line3 {
+            &:after {
+                left: 0;
+                right: auto;
+            }
+        }
+
     }
 
-    .wrapicon:before {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        content: '';
-        display: block;
-        width: 100%;
-        height: 1px;
-        background: #7ED321;
-    }
 
-    .circle span {
-        position: absolute;
-        left: -0.5rem;
-        top: 0.5rem;
-        font-size: .4rem;
-    }
 </style>

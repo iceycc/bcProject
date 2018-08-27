@@ -10,13 +10,14 @@
                 <!--<transition name="fade">-->
                     <section v-if="index === nowShow">
                         <mt-radio
+                                align="right"
                                 class="radio"
                                 :title="item.questionNum +'、'+ item.questionContent"
                                 v-model="values[item.questionNum]"
                                 :options="item.options | optionsFilter">
                         </mt-radio>
                         <div style="text-align:center">
-                            <span class="begain" v-if="index!=0">上一题</span>
+                            <span class="begain" v-if="index!=0" @click="goRre">上一题</span>
                             <span class="begain" @click="goNext(item.questionNum)">提交</span>
                         </div>
                     </section>
@@ -32,6 +33,8 @@
     import Bus from '../../common/js/bus'
     import {BusName, PageName} from "../../Constant";
     import util from '../../common/utils/util'
+    const ProblomIndex = ['A','B','C','D','E','F','G','H','I','J','K']
+
 
     export default {
         data() {
@@ -47,7 +50,7 @@
             optionsFilter(val) {
                 return val.map(function (item, index) {
                     return {
-                        label: item.option,
+                        label: `${ProblomIndex[index]}、${item.option}`,
                         value: item.optionNum
                     }
                 })
@@ -62,6 +65,9 @@
                     this.optionsArr = res.QUEST_LIST
                     this.proNubmer = res.QUEST_LIST.length
                 })
+            },
+            goRre(){
+                this.nowShow--
             },
             goNext(num) {
                 if (!this.values[num]) {
@@ -97,6 +103,7 @@
 </script>
 
 <style lang="scss" scoped>
+
     .app {
         width: 94%;
         padding: 0 3%;

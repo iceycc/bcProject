@@ -1,13 +1,138 @@
 <template>
-    $END$
+    <div>
+        <span @click="show =true" :class="{'infoText':true,'activeTitle':titleSelect}">{{text}}</span>
+        <div class="jsSelect" v-if="show">
+            <section class="select-box">
+                <i class="close" @click="show=false">X</i>
+                <p class="title">{{title}}</p>
+                <ul class="select">
+                    <li
+                            @click="select(index,item)"
+                            :class="{'option':true,'active':index==selectValue}"
+                            v-for="item,index in options"
+                            :key="index">
+                        <!--<img :src="item.src" alt="" class="banklogo">-->
+                        <span class="text">{{item.name}}</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
-        name: "JsSelect"
+        name: "JsSelect",
+        props: {
+            options: {
+                type: Array,
+                default: [{name: '请选择', value: '-1',src:''}]
+            },
+            value: null,
+            text:{
+                type:null,
+                default:'请选择'
+            }
+        },
+        watch: {},
+        computed: {},
+
+        data() {
+            return {
+                titleSelect:false,
+                show:false,
+                selectValue: -1,
+                title:'请选择'
+            }
+        },
+        methods:{
+            select(index,name){
+                this.titleSelect = true
+                this.show = false
+                this.$emit('getValue', name)
+                this.selectValue = index
+            }
+        }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    .jsSelect {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(1, 1, 1, 0.3);
+        padding: 1rem 0.6rem;
+        box-sizing: border-box;
+        z-index: 999;
+        color:#333
+    }
+    .infoText{
+        color:#dedede;
+        position: relative;
+        &:after{
+            position:absolute;
+            display: inline-block;
+            content: '';
+            background: url('../../images/img/GroupCopy14@2x.png') no-repeat center;
+            background-size: contain;
+            width: .4rem;
+            height: .4rem;
+            top: 50%;
+            right: -30px;
+            transform:translateY(-50%);
+        }
+    }
+    .activeTitle{
+        color: #333;
+    }
+    .select-box {
+        position:relative;
+        border-radius: 10px;
+        background: #fff;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        max-height: 90%;
+        padding:.3rem 0 .6rem;
+        .title {
+            text-align: center;
+            font-size: .5rem;
+        }
+        .select {
+            padding: 0 .5rem;
+
+        }
+        .option {
+            border-bottom: 1px solid #dedede;
+            font-size: 0;
+            .text{
+                font-size: .4rem;
+                vertical-align: middle;
+                margin-left: .2rem;
+            }
+            .banklogo{
+                width: .6rem;
+                vertical-align: middle;
+            }
+        }
+        .active {
+            color: #11cdcd;
+        }
+
+        .close{
+            font-style: normal;
+            position: absolute;
+            top: -0.1rem;
+            right: .3rem;
+            font-weight: bold;
+            color: #ccc;
+            font-size: .6rem;
+
+        }
+
+    }
+
 
 </style>

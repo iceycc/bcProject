@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Indicator } from 'mint-ui';
 
-// http request 拦截器
+// http request 拦截器  第一层拦截
 
 axios.interceptors.request.use(
         config => {

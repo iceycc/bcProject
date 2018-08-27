@@ -25,7 +25,7 @@ import AppBar from './components/header/AppBar'
 Vue.component('app-bar', AppBar)
 
 import router from './router'
-
+import './assets/css/my-mint.css';
 new Vue({
     el: '#app',
     components: {App},

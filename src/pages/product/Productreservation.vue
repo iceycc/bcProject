@@ -131,6 +131,11 @@
         },
         created(){
             this.proID = this.$route.query.id
+            API.watch.watchApi({
+                FUNCTION_ID: 'ptb0A001', // 点位
+                REMARK_DATA: '异业合作-落地页产品列表', // 中文备
+                FROM_ID:this.proID
+            })
             this.getData(this.proID)
             console.log(this.imgurl)
         },
@@ -162,7 +167,6 @@
                 API.product.apiGetChannelPrdInfo(data,(res)=>{
                 
                     this.productDetail = res;
-                    console.log(this.productDetail)
                     this.type = res.IS_ENABLED
                     this.btnType = this.type ==1 ? '安全购买':'预约下期'
 
@@ -176,31 +180,38 @@
                     TXT_MIN_AMOUNT:this.productDetail.TXT_MIN_AMOUNT,
                     REMAIN_AMT:this.productDetail.REMAIN_AMT,
                     INCRE_AMOUNT:this.productDetail.INCRE_AMOUNT,
-                    ORG_NAME:this.productDetail.ORG_NAME
+                    ORG_NAME:this.productDetail.ORG_NAME,
                 }
                 if(type==1){
                     // 去安全购买
+                    API.watch.watchApi({
+                        FUNCTION_ID:'ptb0A002',
+                        REMARK_DATA: '异业合作-产品详情页-购买', // 中文备注
+                        FROM_ID: this.proID, // 产品ID、机构ID
+                    })
                     this.$router.push({
                         name:PageName.Buying,
                         query:{
                             id:this.proID,
+                            logo:this.productDetail.LOGO_URL,
                             ...data
                         }
                     })
                 }else {
                     //
                     let data = {
-
+                        PRD_TYPE:'2',
+                        PRD_NUMBER:this.productDetail.ID + ''
                     }
-                    // API.product.order(data,res=>{
-                    //
-                    // })
-                    this.$router.push({
-                        name:PageName.OrderNextSuccess,
-                        query:{
-                            PRD_NAME:this.productDetail.PRD_NAME,
-                        }
+                    API.product.apiSaveSubscribeInfo(data,res=>{
+                        this.$router.push({
+                            name:PageName.OrderNextSuccess,
+                            query:{
+                                PRD_NAME:this.productDetail.PRD_NAME,
+                            }
+                        })
                     })
+
                 }
 
             }
@@ -366,14 +377,14 @@
     }
 
     .contentmain {
-        border-top: 0.4rem solid #DCDCDC;
+        border-top: 0.3rem solid #efefef;
     }
 
     .contentmain .contentmaintop {
         font-size: 0.6rem;
         width: 100%;
         height: 1rem;
-        border-bottom: 1px solid #DCDCDC
+        border-bottom: 1px solid #efefef
     }
 
     .contentmain .contentmaintop .contentmainbank {
@@ -389,7 +400,7 @@
         float: left;
         height: 1px;
         width: 33%;
-        background: #DCDCDC;
+        background: #efefef;
     }
 
     .contentbottom2 .contentbottom2main {

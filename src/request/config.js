@@ -8,11 +8,11 @@ import Qs from 'qs';
  *
  * 2. https://www.npmjs.com/package/qs
  */
-const BaseUrl = process.env.API_HOST
+import {HOST} from "../Constant";
 // const BaseUrl = 'http://192.168.10.154:8080/finsuit'
 export default {
     method: 'post',
-    baseURL:BaseUrl,
+    baseURL:HOST,
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     // `transformRequest`允许在请求数据发送到服务器之前对其进行更改
     // 这只适用于请求方法'PUT'，'POST'和'PATCH'

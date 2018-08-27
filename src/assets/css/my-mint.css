@@ -1,3 +1,10 @@
 .mint-radio-label {
-    width: 400px !important;
+    width: 90% !important;
+    line-height: 2 !important;
+}
+.mint-radiolist-title{
+    font-size: .4rem;
+}
+.mint-radio{
+    margin-top: .1rem;
 }

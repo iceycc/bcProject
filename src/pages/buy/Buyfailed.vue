@@ -8,16 +8,21 @@
             <h2>很抱歉，购买失败!</h2>
             <p style="margin-top:0.6rem; color:#F22C17;">系统繁忙，请稍后再试</p>
         </div>
-        <span @click="reCharge" class="begain">下载比财app查看资产</span>
+        <span @click="goApp" class="begain">下载比财app查看资产</span>
     </div>
 </template>
 <script>
     import {PageName} from "../../Constant";
+    import {API} from "../../request/api";
 
     export default {
         methods:{
-            reCharge(){
-                this.$router.go(-1)
+            goApp(){
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A0011', // 点位
+                    REMARK_DATA: '异异业合作-购买失败-下载比财', // 中文备注
+                })
+                util.goApp()
             }
         }
     }

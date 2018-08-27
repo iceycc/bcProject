@@ -6,6 +6,7 @@ Pages[Constants.PageName.Productlist] = resolve => require(['./product/Productli
 Pages[Constants.PageName.Rechargesuccess] = resolve => require(['./rechange/Rechargesuccess.vue'], resolve);
 Pages[Constants.PageName.Rechargefailure] = resolve => require(['./rechange/Rechargefailure.vue'], resolve);
 Pages[Constants.PageName.Resetpassword] = resolve => require(['./safe/Resetpassword.vue'], resolve);
+Pages[Constants.PageName.DocsPage] = resolve => require(['./safe/DocsPage.vue'], resolve);
 Pages[Constants.PageName.Riskassessment] = resolve => require(['./riskEvaluation/Riskassessment.vue'], resolve);
 Pages[Constants.PageName.Riskproblom] = resolve => require(['./riskEvaluation/Riskproblom.vue'], resolve);
 Pages[Constants.PageName.surebuy] = resolve => require(['./buy/surebuy.vue'], resolve);

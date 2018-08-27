@@ -51,7 +51,7 @@ addRouter(PageName.login, {keepAlive: false, title: '登陆',needLogin:false});
 /**
  * open
  */
-addRouter(PageName.opening, {keepAlive: false, title: '开户',needLogin:false});
+addRouter(PageName.opening, {keepAlive: true, title: '开户',needLogin:false});
 addRouter(PageName.opening2, {keepAlive: false, title: '开户',needLogin:false});
 addRouter(PageName.opening3, {keepAlive: false, title: '开户',needLogin:false});
 
@@ -60,10 +60,10 @@ addRouter(PageName.opening3, {keepAlive: false, title: '开户',needLogin:false}
 /**
  * product
  */
-addRouter(PageName.Productlist, {keepAlive: false, title: '理财产品'});
-addRouter(PageName.Productlist2, {keepAlive: false, title: '理财产品'});
-addRouter(PageName.Productreservation, {keepAlive: false, title: '理财产品'});
-addRouter(PageName.OrderNextSuccess, {keepAlive: false, title: '理财产品'});
+addRouter(PageName.Productlist, {keepAlive: false, title: '产品列表',needLogin:false});
+addRouter(PageName.Productlist2, {keepAlive: false, title: '产品列表',needLogin:false});
+addRouter(PageName.Productreservation, {keepAlive: false, title: '产品详情',needLogin:false});
+addRouter(PageName.OrderNextSuccess, {keepAlive: false, title: '预约成功'});
 
 /**
  * rechange
@@ -83,7 +83,8 @@ addRouter(PageName.fengxianresult, {keepAlive: false, title: '风险测评'}); /
 /**
  * safe
  */
-addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码'});
+addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码',needLogin:false});
+addRouter(PageName.DocsPage, {keepAlive: false, title: '协议',needLogin:true});
 
 /**
  * financingDetail
@@ -111,7 +112,7 @@ router.beforeEach((to, from, next) => {
             next({
                 name:PageName.login,
                 query:{
-                    target: to.name
+                    target: to.fullPath
                 }
             })
             next()

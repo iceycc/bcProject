@@ -1,55 +1,64 @@
 <template>
-            <div :id="inputID"
-                 style="color: #ccc"
-                 modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                 maxlength="20" name="Password">
-                请输入密码
-            </div>
+    <div :id="inputID"
+         v-if="show"
+         style="color: #ccc"
+         modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
+         maxlength="20" name="Password">
+        请输入密码
+    </div>
 </template>
 <script>
     import Bus from '../../common/js/bus'
-    let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
+    import {HOST} from "../../Constant";
     import {DeviceId} from "../../Constant";
 
+    let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
     export default {
         name: "PassInput",
-        props:['inputID','doGetData','pass'],
-        data(){
+        props: ['inputID', 'doGetData', 'pass', 'refur'],
+        data() {
             return {
-                toUrl:"",
-                passValue:''
+                toUrl: "",
+                passValue: '',
+                show: true
             }
         },
-        created(){
+        created() {
             console.log(this.inputID + '>> 创建了')
         },
-        watch:{
-            doGetData(newVal,oldVal){
-                if(newVal != oldVal){
+        watch: {
+            doGetData(newVal, oldVal) {
+                if (newVal != oldVal) {
                     this.postPass()
                 }
+            },
+            refur(newVal, oldVal) {
+                this.show = false
+                this.$nextTick(() => {
+                    console.log('refur');
+                    this.show = true
+                })
             }
         },
         mounted() {
             this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
             this.getPass()
         },
-        methods:{
+        methods: {
             getKey(id) {
                 $(`#${id}`).attr('v-password-widget', this.toUrl)
                 $(`#${id}`).PasswordWidget()
             },
-            getPass(){
+            getPass() {
                 this.getKey(this.inputID)
             },
-            postPass(){
+            postPass() {
                 let pass = $(`#${this.inputID}`).$getCiphertext() || ''
-                let len  = $(`#${this.inputID}`).$getPasswordLength() || 0
-
+                let len = $(`#${this.inputID}`).$getPasswordLength() || 0
                 let data = {
-                    pass,len
+                    pass, len
                 }
-                Bus.$emit(this.inputID,data)
+                Bus.$emit(this.inputID, data)
             }
 
         }

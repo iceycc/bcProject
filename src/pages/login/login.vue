@@ -10,13 +10,10 @@
             <!--密码控件-->
             <div class="field_row_wrap" style="padding: 0 .5rem;">
                 <div class="field_row_value" style="width: 100%;height: 2rem;border-bottom: 1px #E5E5E5 solid;">
-                    <div id="loginPass"
-                         style="height: 2rem;line-height: 2rem;color: #dedede"
-                         modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                         maxlength="20" name="Password"
-                         @click="getPass">
-                        请输入密码
-                    </div>
+                    <pass-input
+                            style="height: 2rem;line-height: 2rem;color: #dedede"
+                            inputID="loginPass"
+                    ></pass-input>
                 </div>
             </div>
 
@@ -36,62 +33,72 @@
 <script>
     import util from '../../common/utils/util'
     import {API} from '../../request/api'
-    import {LsName,DeviceId,BusName,PageName,imgSrc} from "../../Constant";
+    import {LsName,BusName,PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
-    let base_url = 'http://47.94.4.11:8090/finsuit/openapi/jsBankPsw/getJpPsw'
+    import {HOST} from "../../Constant";
+    import PassInput from '../../components/commons/PassInput'
+
+
 
     export default {
         data(){
             return {
                 tel:'',
                 pass:'',
+                passLay:'',
                 toUrl:"",
+                loginPass:'loginPass',
+                num:1,
+                ifGet:false,
+                refur:false
             }
         },
-        created(){
-            console.log(imgSrc);
-
+        components:{
+            PassInput
         },
-        mounted(){
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
+        inject:['reload'],
+        created(){
+            let preInfo;
+            if(preInfo = util.storage.session.get('loginInfo')){
+                this.tel = preInfo.PHONE_NUM
+                Bus.$emit(BusName.showToast,preInfo.msg)
+                util.storage.session.remove('loginInfo')
+            }
         },
         methods:{
-            getPass(){
-                this.getKey('loginPass')
-            },
-            getKey(id) {
-                $(`#${id}`).attr('v-password-widget', this.toUrl)
 
-                $(`#${id}`).PasswordWidget()
-            },
             goRePass(){
                 this.$router.push({
                     name:PageName.Resetpassword
                 })
             },
             goOpen(){
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A008', // 点位
+                    REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
+                })
                 this.$router.push({name:PageName.opening})
             },
             doLogin(){
-                if(this.tel==''){
-                    Bus.$emit(BusName.showToast,'请填写手机号')
-                    return
-                }
-                console.log(this.tel);
-
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A007', // 点位
+                    REMARK_DATA: '异业合作-登录', // 中文备注
+                })
+                let msg;
+                if(msg=util.Check.tel(this.tel)) return Bus.$emit(BusName.showToast,msg);
                 let pass = $('#loginPass').$getCiphertext()
-                let lengths = $('#loginPass').$getPasswordLength();
-                if(lengths < 8){
-                    Bus.$emit(BusName.showToast,'密码不能小于8位')
-                    return
-                }
+                let lengths =$('#loginPass').$getCiphertext()
+                if(msg=util.Check.loginPassLen(lengths)) return Bus.$emit(BusName.showToast,msg);
+
                 let data = {
                     PHONE_NUM:this.tel,
                     BANK_LOGIN_PW:pass
                 }
                 util.storage.session.remove(LsName.token,this.tel)
                 API.login(data,(res)=>{
+                    util.storage.session.remove('loginInfo')
                     let type = res.HAS_GRADE
+                    let target = this.$route.query.target
                     if(type==1){
                         Bus.$emit(BusName.showToast,'您还为做评估')
                         this.$router.push({
@@ -99,17 +106,28 @@
                         })
                     }
                     else if(type ==2){
-                        Bus.$emit(BusName.showToast,'您已做评估')
                         this.$router.push({
-                            name:PageName.Productlist
+                            path:target? target: '/'+ PageName.Productlist
                         })
                     }else {
 
                     }
-                    // this.getKey('loginPass')
 
                 },err=>{
-                    util.storage.session.remove(LsName.token,this.tel)
+                    util.storage.session.remove(LsName.token)
+                    util.storage.session.set('loginInfo',{
+                        PHONE_NUM:this.PHONE_NUM,
+                        msg:err
+                    })
+                    // this.reload()
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },1500)
+                    // this.refur =!this.refur
+                    // this.show = false;
+                    // this.$nextTick(()=>{
+                    //     this.show = true
+                    // })
                 })
 
 

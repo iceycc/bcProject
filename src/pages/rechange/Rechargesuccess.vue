@@ -6,8 +6,8 @@
             <h2>充值成功</h2>
         </div>
         <section style="padding-left:1rem">
-            <p>充值金额：{{data.BESHARP_RECHARGE_SEQ}}</p>
-            <p>交易流水号：{{data.money}} 元</p>
+            <p>充值金额：{{data.money}} 元</p>
+            <p>交易流水号：{{data.BESHARP_RECHARGE_SEQ}}</p>
         </section>
         <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
         <!--<div class="begain">下载比财app</div>-->
