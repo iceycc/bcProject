@@ -1,8 +1,8 @@
-import axios from './axios'
+import axios from './_axios'
 import Bus from '../common/js/bus'
 import {BusName, PageName} from "../Constant";
 import {util} from "../common/utils/util";
-import {LsName,DeviceId} from '../Constant'
+import {LsName} from '../Constant'
 import Router from '../router/index'
 
 export default {
@@ -26,6 +26,7 @@ export default {
         method = method || 'post';
         params = Object.assign(params,{ORG_ID:'70'})
         let token1 = util.storage.session.get(LsName.token) || token
+        let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
         let datas = {
             biz_data: {
                 head: {
@@ -81,11 +82,18 @@ export default {
             }
             else {
                 console.log('错误msg >>>', result.head.MSG);
+                if(result.head.MSG == '未登陆银行'){
+                    Router.push({
+                        name:PageName.login,
+                        query:{
+                            target:Router.currentRoute.fullPath
+                        }
+                    })
+                }
                 Bus.$emit(BusName.showToast,result.head.MSG)
                 return Promise.reject(result.head.MSG)
             }
         }).catch(errors => {
-            /*Indicator.close();*/
             error && error(errors.toString());
             return Promise.reject(errors.toString())
         })

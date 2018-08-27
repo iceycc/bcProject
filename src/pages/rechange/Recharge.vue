@@ -17,12 +17,12 @@
             <p>每笔限额：10000.00元</p>
             <p>每日限额：200000.00元</p>
         </div>
-        <div class="inputAmount"><span class="Amount">金额</span> <input v-model="APPLY_AMOUN" type="text"
+        <div class="inputAmount"><span class="Amount">金额</span> <input v-model="APPLY_AMOUN" type="number"
                                                                        placeholder="请输入金额"></div>
         <button class="tijiao" @click="doNext">确认充值</button>
         <p class="bang">我已阅读并同意注册<span @click="showPage" style=" color:#0096FE;">《充值协议》</span></p>
         <section v-show="page" class="page">
-            <iframe :src="agreeMentSrc" class="docs"></iframe>
+            <div class="docs"><iframe :src="agreeMentSrc" class="indocs"></iframe></div>
             <div class="btn">
                 <mt-button type="primary" @click="cancel">取消</mt-button>
                 <mt-button type="primary"@click="getCode">确认</mt-button>
@@ -128,6 +128,8 @@
             },
             doNext(){
                 //
+                let msg
+                if(msg=util.Check.trim(this.APPLY_AMOUN,'充值金额')) return Bus.$emit(BusName.showToast,msg);
                 this.Londing.open()
                 setTimeout(()=>{
                     this.Londing.close()
@@ -260,17 +262,22 @@
         height: 100%;
         background: #fff;
         z-index: 100;
-        padding: .7rem 0;
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
         .docs{
+            border: none;
+            width: 100%;
+            height: 90%;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 .2rem;
+        }
+        .indocs{
             border: none;
             width: 100%;
             height: 100%;
         }
         .btn{
             padding: 0 1rem;
-            height: 3rem;
+            text-align: center;
             button{
                 width: 3.5rem;
                 margin-right: .4rem;

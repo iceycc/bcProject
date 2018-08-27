@@ -2,7 +2,7 @@
     <div id="app" class="app">
         <app-bar title="购买"></app-bar>
         <div class="buysuccessimg">
-            <img src="images/img/Verificationsuccess@2x.png" alt="">
+            <img src="../../images/img/Verificationsuccess@2x.png" alt="">
             <p>购买成功</p>
         </div>
         <div class="buysuccessdetail">
@@ -34,6 +34,8 @@
 <script>
     import util from "../../common/utils/util";
     import {API} from "../../request/api";
+    import Bus from '../../common/js/bus'
+    import {BusName} from "../../Constant";
 
     export default {
         data() {
@@ -51,7 +53,9 @@
                     FUNCTION_ID: 'ptb0A0010', // 点位
                     REMARK_DATA: '异异业合作-购买成功-下载比财', // 中文备注
                 })
-                util.goApp()
+                util.downLoad(()=>{
+                    Bus.$emit(BusName,'请在浏览器中下载')
+                })
             }
         }
     }
@@ -89,20 +93,15 @@
         font-size: 0.5rem;
     }
 
-    .return {
-        display: block;
-        position: absolute;
-        left: 0.4rem;
-        top: 0.2rem;
-        background-image: url(../../images/img/back@2x.png);
-        background-size: cover;
-        width: 0.3rem;
-        height: 0.9rem;
-    }
+
 
     .buysuccessimg {
         text-align: center;
-        margin-top: 1rem;
+        margin-top: .6rem;
+        img{
+            width: 2.5rem;
+            height: 2.5rem;
+        }
     }
 
     .buysuccessimg p {
@@ -111,6 +110,7 @@
         font-size: 0.5rem;
         color: #2B74FE;
         border-bottom: 1px solid #EEEEF0;
+
     }
 
     .buysuccessdetail {

@@ -9,8 +9,8 @@
 </template>
 <script>
     import Bus from '../../common/js/bus'
-    import {HOST} from "../../Constant";
-    import {DeviceId} from "../../Constant";
+    import {HOST, LsName} from "../../Constant";
+    import util from '../../common/utils/util'
 
     let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
     export default {
@@ -20,11 +20,13 @@
             return {
                 toUrl: "",
                 passValue: '',
-                show: true
+                show: true,
+                DeviceId:''
             }
         },
         created() {
             console.log(this.inputID + '>> 创建了')
+            this.DeviceId = util.storage.session.get(LsName.DEVICE_ID)
         },
         watch: {
             doGetData(newVal, oldVal) {
@@ -41,7 +43,7 @@
             }
         },
         mounted() {
-            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
+            this.toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + this.DeviceId + "&width="
             this.getPass()
         },
         methods: {

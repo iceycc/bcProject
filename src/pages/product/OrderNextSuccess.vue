@@ -14,7 +14,9 @@
 <script>
     import {PageName} from "../../Constant";
     import util from '../../common/utils/util'
-    import {API} from "../../request/api";
+    import {API} from "../../request/api"
+    import Bus from '../../common/js/bus'
+    import {BusName} from "../../Constant";
 
     export default {
         data(){
@@ -31,7 +33,9 @@
                     FUNCTION_ID: 'ptb0A009', // 点位
                     REMARK_DATA: '异异业合作-预约成功-下载比财', // 中文备注
                 })
-                util.goApp()
+                util.downLoad(()=>{
+                    Bus.$emit(BusName,'请在浏览器中下载')
+                })
             }
         }
     }

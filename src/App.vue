@@ -16,8 +16,9 @@
 
 <script>
     import Bus from './common/js/bus'
-    import {BusName} from './Constant'
+    import {BusName, LsName} from './Constant'
     import {API} from "./request/api";
+    import util from "./common/utils/util";
 
 
     export default {

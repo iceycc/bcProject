@@ -55,6 +55,6 @@ export const BusName ={
 
 export const LsName ={
     token:'token',
+    DEVICE_ID:'DEVICE_ID'
 }
 
-export const DeviceId = '99000662737202'

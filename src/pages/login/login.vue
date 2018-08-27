@@ -58,6 +58,7 @@
         },
         inject:['reload'],
         created(){
+            // location.reload()
             let preInfo;
             if(preInfo = util.storage.session.get('loginInfo')){
                 this.tel = preInfo.PHONE_NUM
@@ -80,10 +81,7 @@
                 this.$router.push({name:PageName.opening})
             },
             doLogin(){
-                API.watch.watchApi({
-                    FUNCTION_ID: 'ptb0A007', // 点位
-                    REMARK_DATA: '异业合作-登录', // 中文备注
-                })
+
                 let msg;
                 if(msg=util.Check.tel(this.tel)) return Bus.$emit(BusName.showToast,msg);
                 let pass = $('#loginPass').$getCiphertext()
@@ -96,6 +94,10 @@
                 }
                 util.storage.session.remove(LsName.token,this.tel)
                 API.login(data,(res)=>{
+                    API.watch.watchApi({
+                        FUNCTION_ID: 'ptb0A007', // 点位
+                        REMARK_DATA: '异业合作-登录', // 中文备注
+                    })
                     util.storage.session.remove('loginInfo')
                     let type = res.HAS_GRADE
                     let target = this.$route.query.target
@@ -114,9 +116,13 @@
                     }
 
                 },err=>{
+                    API.watch.watchApi({
+                        FUNCTION_ID: 'ptb0A007', // 点位
+                        REMARK_DATA: '异业合作-登录', // 中文备注
+                    })
                     util.storage.session.remove(LsName.token)
                     util.storage.session.set('loginInfo',{
-                        PHONE_NUM:this.PHONE_NUM,
+                        PHONE_NUM:this.tel,
                         msg:err
                     })
                     // this.reload()
@@ -139,6 +145,7 @@
     .hello {
         box-sizing: border-box;
         width: 100%;
+        height: 100%;
         position: relative;
     }
 
@@ -155,22 +162,13 @@
         font-size: 0.5rem;
     }
 
-    .return {
-        display: block;
-        position: absolute;
-        left: 0.4rem;
-        top: 0.2rem;
-        background-image: url(../../images/img/back@2x.png);
-        background-size: cover;
-        width: 0.3rem;
-        height: 0.9rem;
-    }
+
 
     .bottomcontent {
-        position: fixed;
+        position: absolute;
         width: 100%;
         text-align: center;
-        bottom: 0.1rem;
+        bottom: 0.2rem;
         font-size: 0;
         img{
             vertical-align: top;

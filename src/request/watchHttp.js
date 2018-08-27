@@ -1,6 +1,6 @@
-import axios from './axios'
+import axios from 'axios'
 import {util} from "../common/utils/util";
-import {LsName, DeviceId} from '../Constant'
+import {LsName} from '../Constant'
 import {HOST} from "../Constant";
 let config = {
     baseURL:HOST
@@ -18,6 +18,7 @@ export default {
     request: function (method, {url,params}, success, error) {
         method = method || 'post';
         let token = util.storage.session.get(LsName.token) || ''
+        let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
 
         let datas = {
             head: {

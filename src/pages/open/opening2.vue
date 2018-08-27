@@ -162,11 +162,8 @@
                 })
             },
 
-            goNext() {
-                API.watch.watchApi({
-                    FUNCTION_ID: 'ptb0A004', // 点位
-                    REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-                })
+            goNext(){
+
                 //  ORG_ID: '70',
                 // CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
                 //         HAS_BAND: '0', // 是否绑定过
@@ -214,11 +211,12 @@
                 Object.assign(this.data,{
                     PHONE_NUM:this.data.PRE_PHONE_NUM
                 })
-                this.Londing.open()
                 API.open.doRegeist(this.data,
                         res => {
-                            this.Londing.close()
-
+                            API.watch.watchApi({
+                                FUNCTION_ID: 'ptb0A004', // 点位
+                                REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+                            })
                             // todo 判断
                             Bus.$emit(BusName.showToast,res.MSG)
                             if(res.CODE != 0){ // 不是0的话返回
@@ -232,7 +230,10 @@
                             })
                         },
                         err => {
-                            this.Londing.close()
+                            API.watch.watchApi({
+                                FUNCTION_ID: 'ptb0A004', // 点位
+                                REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+                            })
                             console.log(err);
                             this.disable = false
                         })

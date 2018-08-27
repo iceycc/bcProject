@@ -58,7 +58,7 @@
 <script>
     import util from '../../common/utils/util'
     import {API} from '../../request/api'
-    import {LsName,DeviceId,BusName,PageName} from "../../Constant";
+    import {LsName,BusName,PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
     import PassInput from '../../components/commons/PassInput'
 

@@ -12,9 +12,9 @@
     </div>
 </template>
 <script>
-    import {PageName} from "../../Constant";
     import {API} from "../../request/api";
-
+    import Bus from '../../common/js/bus'
+    import {BusName,PageName} from "../../Constant";
     export default {
         methods:{
             goApp(){
@@ -22,7 +22,9 @@
                     FUNCTION_ID: 'ptb0A0011', // 点位
                     REMARK_DATA: '异异业合作-购买失败-下载比财', // 中文备注
                 })
-                util.goApp()
+                util.downLoad(()=>{
+                    Bus.$emit(BusName,'请在浏览器中下载')
+                })
             }
         }
     }

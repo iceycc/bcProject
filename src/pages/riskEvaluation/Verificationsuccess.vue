@@ -1,9 +1,6 @@
 <template>
     <div id="app" class="app">
-        <header class="header">
-            <a class="return" href=""></a>
-            <p>风险测评</p>
-        </header>
+        <app-bar title="风险测评"></app-bar>
         <div class="chattuimg">
             <img src="../../images/img/illustration@2x.png" style="width:70%" alt="">
         </div>
@@ -15,10 +12,13 @@
 </template>
 <script>
     import {PageName} from "../../Constant";
-
+    import AppBar from '../../components/header/AppBar'
     export default {
         created(){
 
+        },
+        components:{
+            AppBar
         },
         methods: {
             goNext() {
@@ -78,14 +78,5 @@
         font-size: 0.5rem;
     }
 
-    .return {
-        display: block;
-        position: absolute;
-        left: 0.4rem;
-        top: 0.2rem;
-        background-image: url(../../images/img/back@2x.png);
-        background-size: cover;
-        width: 0.3rem;
-        height: 0.9rem;
-    }
+
 </style>

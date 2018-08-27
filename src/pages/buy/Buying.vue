@@ -24,7 +24,7 @@
         <div class="buydetails">
             <p style="margin-top: 0.3rem">购买金额</p>
             <span class="buydetailsmoney">￥</span>
-            <input type="text" placeholder="500元起购" v-model="moneyNum">
+            <input type="number" placeholder="500元起购" v-model="moneyNum">
         </div>
         <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 1,000,000.00元</p>
         <button class="tijiao" @click="goBuy">购买</button>
@@ -130,6 +130,7 @@
     }
 
     .buytitleleftimg {
+        vertical-align: middle;
         padding-top: 0.3rem;
         width: 1rem;
         display: inline-block;

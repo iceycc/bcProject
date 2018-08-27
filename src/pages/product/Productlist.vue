@@ -1,7 +1,9 @@
 <template>
     <div class="wrap">
         <app-bar title="产品列表"></app-bar>
-        <div class="banner"></div>
+        <div class="banner">
+            <img src="../../images/img/banner.png" alt="">
+        </div>
         <div class="productlist" v-if="!show">
             <ul class="ul-li">
                 <li class="productdetail clearfix"
@@ -101,21 +103,16 @@
         padding-left: 0.2rem;
         padding-right: 0.2rem;
     }
-    .return {
-        display: block;
-        position: absolute;
-        left: 0.4rem;
-        top: 0.2rem;
-        background-image: url(../../images/img/back@2x.png);
-        background-size: cover;
-        width: 0.3rem;
-        height: 0.9rem;
-    }
+
 
     .banner {
         width: 100%;
         height: 5.5rem;
         background: #dedede;
+        img{
+            width: 100%;
+            height: 100%;
+        }
     }
     .ul-li{
         // padding-right: 11px;

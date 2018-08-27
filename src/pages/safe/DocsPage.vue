@@ -58,7 +58,7 @@
         height: 100%;
         background: #fff;
         z-index: 100;
-        padding: .7rem 0;
+        padding-top: .7rem;
         box-sizing: border-box;
         .docs {
             border: none;
@@ -69,9 +69,8 @@
 
         }
         .btn {
-            padding-top:.5rem ;
+            padding-top:.2rem ;
             text-align: center;
-            height: 3rem;
             button {
                 width: 3.5rem;
                 margin-right: .4rem;

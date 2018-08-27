@@ -1,6 +1,8 @@
 <template>
     <div class="header">
-            <a class="return" href="javascript:;" @click="goBack"></a>
+            <a class="goBack" href="javascript:;" @click="goBack">
+                <img src="../../images/img/back@2x.png" alt="">
+            </a>
             <p>{{title}}</p>
     </div>
 </template>
@@ -34,14 +36,15 @@
         text-align: center;
         font-size: 0.5rem;
     }
-    .return {
+    .goBack {
         display: block;
         position: absolute;
         left: 0.4rem;
         top: 0.2rem;
-        background-image: url(../../images/img/back@2x.png);
-        background-size: cover;
-        width: 0.3rem;
+        width: 1rem;
         height: 0.9rem;
+        img{
+            width: 0.3rem;
+        }
     }
 </style>

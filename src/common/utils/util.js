@@ -127,7 +127,7 @@ let Trim = {
  */
 
 const Check = {
-    trim(str, type) {
+    trim(str, type ='') {
         let msg;
         if (Trim.all(str) == '') {
             msg = `${type}不能为空`
@@ -180,6 +180,7 @@ const Check = {
         }
         return msg
     },
+
 
     payPassLen(len) {
         let msg;
@@ -711,6 +712,27 @@ export const util = {
 
     getResultErrMsg(result) {
         return (result && (result.message || (result.target && result.target.message))) || "获取数据失败";
+    },
+    downLoad(callback1, callback2) {
+        /*
+         *	callback1  安卓微信中打开指示图层指示用户在浏览器中下载
+         *	callback2  判断浏览器失败跳转到推荐给好友页面
+         */
+        let u = navigator.userAgent;
+        let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isAndroid) {
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                callback1();
+            } else {
+                window.location.href = "http://finsafe.geong.com:8989/down?ID=1";
+            }
+        } else if (isiOS) {
+            window.location.href = "https://itunes.apple.com/cn/app/%E6%AF%94%E8%B4%A2/id1149189800?mt=8";
+        } else {
+            callback2();
+        }
     },
     goApp() {
         //判断浏览器

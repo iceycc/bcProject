@@ -78,17 +78,11 @@
         methods: {
             showBankList(){
                 if(JSON.stringify(this.IndexObj) == '{}') {
-                    this.Londing.open()
-                    setTimeout(()=>{
-                        this.Londing.close()
                         this.show =true
-                        console.log(this.IndexObj);
                         this.IndexObj = this.filterOptions(this.options)
-                    },400)
                 }else {
                     this.show =true
                 }
-
             },
             filterOptions(arr) {
                 let obj = {}

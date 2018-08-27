@@ -53,7 +53,7 @@
 <script>
     import {API} from "../../request/api";
 
-    import {DeviceId, PageName} from "../../Constant";
+    import {PageName} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
     import {util} from "../../common/utils/util";
@@ -64,7 +64,6 @@
                 show: false,
                 money: null,
                 datas: {},
-                deviceId: DeviceId,
                 toUrl: '',
                 pass: "",
                 len: 0,
@@ -203,7 +202,7 @@
     .bang {
         margin-top: 0.5rem;
         background: url(../../images/img/agree@3x.png) no-repeat 0.2rem 0.05rem;
-        font-size: 0.25rem;
+        font-size: 0.3rem;
         color: #808080;
         background-size: 0.4rem 0.4rem;
         padding: 0 0.8rem;

@@ -257,16 +257,7 @@
         font-size: 0.5rem;
     }
 
-    .return {
-        display: block;
-        position: absolute;
-        left: 0.4rem;
-        top: 0.2rem;
-        background-image: url(../../images/img/back@2x.png);
-        background-size: cover;
-        width: 0.3rem;
-        height: 0.9rem;
-    }
+
 
     .opening_box p {
         margin-left: 0.533333rem;

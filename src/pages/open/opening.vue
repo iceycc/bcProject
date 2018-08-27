@@ -31,7 +31,7 @@
             </section>
             <section>
                 <span> 身份证号</span>
-                <input type="number" name="text1" placeholder="请输入18位身份证号" v-model="data.USER_CARD_ID">
+                <input type="text" name="text1" placeholder="请输入15-18位身份证号" v-model="data.USER_CARD_ID">
             </section>
             <section>
                 <span>职业</span>
@@ -217,15 +217,12 @@
                     REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
                 })
                 let data = this.data
+                let msg
                 // 校验
-                if (data.USER_NAME == '') {
-                    Bus.$emit(BusName.showToast, '姓名不能为空')
-                    return
-                }
-                if (data.USER_CARD_ID == '') {
-                    Bus.$emit(BusName.showToast, '身份证号码不能为空')
-                    return
-                }
+
+                if(msg = util.Check.name(data.USER_NAME)) return Bus.$emit(BusName.showToast, msg)
+                if(msg = util.Check.idNumber(data.USER_CARD_ID)) return Bus.$emit(BusName.showToast, msg)
+
                 if (data.USER_DUTY == '') {
                     Bus.$emit(BusName.showToast, '请选择职业')
                     return

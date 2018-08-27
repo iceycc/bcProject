@@ -98,11 +98,13 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    if(!util.storage.session.get(LsName.DEVICE_ID)){
+        let DEVICE_ID = to.query.DEVICE_ID || '321234'
+        util.storage.session.set(LsName.DEVICE_ID,DEVICE_ID)
+    }
     if (to.meta && to.meta.title) {
         document.title = to.meta.title;
     }
-    // Indicator.open()
-
     if(to.meta.needLogin){
         let sign = util.storage.session.get(LsName.token)
         if(sign){
