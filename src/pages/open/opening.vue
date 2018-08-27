@@ -244,7 +244,7 @@
                 }
 
                 this.checkID(() => {
-                    this.$router.replace({
+                    this.$router.push({
                         name: PageName.opening2,
                         params:{
                             data:this.data

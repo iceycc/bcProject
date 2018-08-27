@@ -106,10 +106,10 @@
                     Bus.$emit(BusName.showToast,'银行卡号不能为空')
                     return
                 }
-                if(!reg.test(val)){
-                    Bus.$emit(BusName.showToast,'银行卡号格式不正确')
-                    return
-                }
+                // if(!reg.test(val)){
+                //     Bus.$emit(BusName.showToast,'银行卡号格式不正确')
+                //     return
+                // }
 
             },
             machBankName(pin){
@@ -214,8 +214,11 @@
                 Object.assign(this.data,{
                     PHONE_NUM:this.data.PRE_PHONE_NUM
                 })
+                this.Londing.open()
                 API.open.doRegeist(this.data,
                         res => {
+                            this.Londing.close()
+
                             // todo 判断
                             Bus.$emit(BusName.showToast,res.MSG)
                             if(res.CODE != 0){ // 不是0的话返回
@@ -229,6 +232,7 @@
                             })
                         },
                         err => {
+                            this.Londing.close()
                             console.log(err);
                             this.disable = false
                         })
