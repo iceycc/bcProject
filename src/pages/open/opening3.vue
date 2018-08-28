@@ -143,14 +143,22 @@
                 setTimeout(() => {
                     this.Londing.close()
                 }, 500)
+                if(!this.REQ_SERIAL){
+                    Bus.$emit(BusName.showToast,'实名认证异常，请重新注册')
+                    setTimeout(()=>{
+                        this.$router.push({
+                            name:PageName.opening
+                        },500)
+                    })
+                    return
+                }
                 this.paypass = $('#payPass').$getCiphertext()
-                this.paypassLen = $('#payPass').$getPasswordLength()
+                this.paypassLen = $('#payPass').$getPasswordLength() -0 || 0
                 this.loginpass = $('#loginPass').$getCiphertext()
-                this.loginpassLen = $('#loginPass').$getPasswordLength()
+                this.loginpassLen = $('#loginPass').$getPasswordLength() -0 || 0
                 let msg;
                 if(msg=util.Check.loginPassLen(this.loginpassLen)) return Bus.$emit(BusName.showToast,msg);
                 if(msg=util.Check.payPassLen(this.paypassLen)) return Bus.$emit(BusName.showToast,msg);
-
 
                 let data = {
                     REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961

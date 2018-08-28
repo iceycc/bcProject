@@ -108,6 +108,7 @@
                         })
                     }
                     else if(type ==2){
+                        // 2的话
                         this.$router.push({
                             path:target? target: '/'+ PageName.Productlist
                         })

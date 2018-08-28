@@ -48,10 +48,7 @@
             },
         },
         created() {
-            API.watch.watchApi({
-                REMARK_DATA:'异业合作-落地页',
-                FUNCTION_ID:'ptp0A000'
-            })
+
             Bus.$on(BusName.showToast, (val) => {
                 this.showToast = true
                 this.msg = val

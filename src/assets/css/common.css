@@ -1,0 +1,11 @@
+body,html{
+    background: #fff;
+}
+
+input,select,option,textarea{
+    display: inline-block;
+    outline: none;
+    width: 100%;
+    border: none;
+    box-sizing: border-box;
+}

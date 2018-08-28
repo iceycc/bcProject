@@ -273,7 +273,13 @@
                         setTimeout(() => {
                             this.$router.push({
                                 name: PageName.opening3,
-                                params: {step}
+                                params:{
+                                    step
+                                },
+                                query:{
+                                    REQ_SERIAL:REQ_SERIAL
+                                }
+
                             })
                         }, 600)
                     }
@@ -281,9 +287,6 @@
                         Bus.$emit(BusName.showToast, "您已经开户成功")
                         this.$router.push({
                             name: PageName.login,
-                            query:{
-                                REQ_SERIAL:REQ_SERIAL
-                            }
                         })
                     }
 

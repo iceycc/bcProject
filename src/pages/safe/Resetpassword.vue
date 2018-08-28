@@ -48,10 +48,10 @@
             <section>
                 <span>验证码</span>
                 <input v-model="data.PHONE_CODE" type="password" style="width: 48%;" name="text1" placeholder="请输入您的短信验证码">
-                <span class="getpassword" @click="getCode">获取验证码</span>
+                <span class="getpassword" @click="getCode">{{codeText}}</span>
             </section>
         </div>
-        <div class="tijiao Tips" v-if="errMsg">{{errMsg}}</div>
+        <div class="tijiao Tips" v-if="errMsg" :disabled="disable">{{errMsg}}</div>
         <mt-button class="tijiao" @click="doRePass">重置密码</mt-button>
     </div>
 </template>
@@ -61,7 +61,7 @@
     import {LsName,BusName,PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
     import PassInput from '../../components/commons/PassInput'
-
+    let time = 60
     export default {
         data() {
             return {
@@ -76,7 +76,9 @@
 
                 },
                 toUrl:"",
-                errMsg:''
+                errMsg:'',
+                codeText:'获取验证码',
+                disable:false
             }
         },
         components:{
@@ -95,6 +97,21 @@
         },
         methods: {
             getCode(){
+                let msg
+                if(msg = util.Check.tel(this.data.PHONE_NUM)) return Bus.$emit(BusName.showToast,msg)
+                let sTime = time
+                this.disable = true
+                let timer = setInterval(()=>{
+                    if(sTime ==0){
+                        this.codeText = '重新发送'
+                        this.disable = false
+                        clearInterval(timer)
+                        return
+                    }
+                    sTime --
+                    this.codeText = `${sTime}s`
+                },1000)
+
                 let data ={
                     PHONE_NUM:this.data.PHONE_NUM + '',
                     BIZ_TYPE:'9'

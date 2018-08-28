@@ -263,6 +263,13 @@ export const API = {
         },
     },
     /**
+     * 查询类
+     */
+    query:{
+
+
+    },
+    /**
      * watch
      */
     watch:{

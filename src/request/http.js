@@ -15,10 +15,7 @@ export default {
                 Bus.$emit(BusName.showToast,'服务器异常')
                 error && error('服务器异常')
             }
-            if(err.match(/[NETWORK ERR]/g)){
-                Bus.$emit(BusName.showToast,'网络异常')
-                error && error('网络异常')
-            }
+
         });
     },
     // REQUEST

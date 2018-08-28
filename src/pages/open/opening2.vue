@@ -138,6 +138,8 @@
                 })
             },
             getMsgCodeHandle() {
+                let msg
+                if(msg = util.Check.tel(this.data.PRE_PHONE_NUM)) return Bus.$emit(BusName.showToast,msg)
                 let sTime = time
                 this.disable = true
                 let timer = setInterval(()=>{

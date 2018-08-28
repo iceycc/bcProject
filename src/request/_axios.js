@@ -1,5 +1,7 @@
 import axios from 'axios'
-import { Indicator } from 'mint-ui';
+import {Indicator} from 'mint-ui';
+import Bus from "../common/js/bus";
+import {BusName} from "../Constant";
 
 // http request 拦截器  第一层拦截
 
@@ -11,9 +13,9 @@ axios.interceptors.request.use(
             return config;
         },
         error => {
-            setTimeout(()=>{
+            setTimeout(() => {
                 Indicator.close();
-            },1000)
+            }, 1000)
             return Promise.reject(error);
         }
 );
@@ -26,9 +28,10 @@ axios.interceptors.response.use(
             return response.data;
         },
         error => {
-            setTimeout(()=>{
+            setTimeout(() => {
                 Indicator.close();
-            },1000)
+            }, 1000)
+            // console.log('All error >>' + response)
             return Promise.reject(error)
         }
 )

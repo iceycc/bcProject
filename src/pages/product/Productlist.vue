@@ -49,6 +49,10 @@
             }
         },
         created() {
+            API.watch.watchApi({
+                REMARK_DATA:'异业合作-落地页',
+                FUNCTION_ID:'ptp0A000'
+            })
             this.getListData()
         },
         methods: {

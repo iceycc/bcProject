@@ -2,7 +2,6 @@
     <div class="page">
         <div v-html="docs" class="docs"></div>
         <div class="btn">
-            <mt-button type="primary" @click="cancel">取消</mt-button>
             <mt-button type="primary" @click="getCode">确认</mt-button>
         </div>
     </div>

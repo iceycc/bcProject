@@ -168,12 +168,12 @@ const Check = {
     },
     idNumber(val) {
         let msg;
-        let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+        let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X)$)/
         if (Trim.all(val) == '') {
             msg = '身份证号码不能为空'
         }
         else if (!reg.test(val)) {
-            msg = '请填写15到18位身份证号码'
+            msg = '身份证号码格式错误，X为大写'
         }
         else {
 

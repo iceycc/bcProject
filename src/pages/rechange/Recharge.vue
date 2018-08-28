@@ -14,18 +14,32 @@
             {{CARD_BANK_NAME}}
         </div>
         <div class=" money">
-            <p>每笔限额：10000.00元</p>
-            <p>每日限额：200000.00元</p>
+            <p>每笔限额：{{SINGLE_QUOTA}}元</p>
+            <p>每日限额：{{DAY_QUOTA}}元</p>
         </div>
-        <div class="inputAmount"><span class="Amount">金额</span> <input v-model="APPLY_AMOUN" type="number"
-                                                                       placeholder="请输入金额"></div>
+        <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
+            <span class="Amount">金额</span>
+            <input @change="checkMoney"
+                    v-model="APPLY_AMOUN" type="number" placeholder="请输入金额">
+        </section>
+        <section class="inputAmount" v-if="!write">
+            <span class="Amount">
+                验证码
+            </span>
+            <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+            <button
+                    :disabled="disable"
+                    @click="getMsg"
+                    class="button">{{codeText}}</button>
+        </section>
         <button class="tijiao" @click="doNext">确认充值</button>
-        <p class="bang">我已阅读并同意注册<span @click="showPage" style=" color:#0096FE;">《充值协议》</span></p>
+        <p :class="{'bang':true,'no':agree == false}" v-if="!write"
+           @click="doAgree">我已阅读并同意注册<span @click.stop="showPage" style=" color:#0096FE;">《充值协议》</span></p>
         <section v-show="page" class="page">
             <div class="docs"><iframe :src="agreeMentSrc" class="indocs"></iframe></div>
             <div class="btn">
                 <mt-button type="primary" @click="cancel">取消</mt-button>
-                <mt-button type="primary"@click="getCode">确认</mt-button>
+                <mt-button type="primary"@click="doAgreeHandle">确认</mt-button>
             </div>
         </section>
         <section v-if="show" class="bgbox">
@@ -61,7 +75,7 @@
     import Bus from '../../common/js/bus'
     import {PageName,imgSrc,BusName} from "../../Constant";
     import {util} from "../../common/utils/util";
-
+    let time = 60
     export default {
         data() {
             return {
@@ -72,13 +86,19 @@
                 APPLY_AMOUN: '',
                 toUrl: '',
                 ifGet:false,
-                write:false, // 是否签约充值协议
+                write:true, // 是否签约充值协议
                 agreeMentSrc:HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
                 ORG_NAME:'',
                 imgSrc:imgSrc,
                 logo:'',
                 CARD_BANK_NAME:'',
-                CARD_BANK_URL:''
+                CARD_BANK_URL:'',
+                DAY_QUOTA:'',
+                SINGLE_QUOTA:'',
+                msgCode:'',
+                codeText:'获取验证码',
+                disable:false,
+                agree:true
             }
         },
         components: {
@@ -98,6 +118,8 @@
                 API.safe.apiBandCard({},res =>{
                     this.CARD_BANK_NAME = res.CARD_BANK_NAME;
                     this.CARD_BANK_URL = res.CARD_BANK_URL
+                    this.SINGLE_QUOTA = res.SINGLE_QUOTA
+                    this.DAY_QUOTA = res.DAY_QUOTA
                 })
             },
             reChangeHandele() { // 39查询用户是否已签约充值协议
@@ -105,36 +127,93 @@
                 API.reChange.apiRechargeProtoQuery(data, (res) => {
                     console.log(res);
                     if (res.SIGN_STATE == 'N') {
-                        this.write = true
-
+                        // 没写
+                        this.write = false
+                        this.page = false
                     }else{
-
+                        // 填写了
+                        this.write = true
                     }
                 })
             },
 
             getCode() { // 获取充值协议码
+
                 API.reChange.apiRechargeProtoCode({}, res => {
                     console.log(res);
                     this.PIN = res.PIN
-                    this.page = false
+                    // this.page = false
                 })
+            },
+            getMsg(){
+                let msg
+                if(msg=util.Check.trim(this.APPLY_AMOUN,'充值金额')) return Bus.$emit(BusName.showToast,msg);
+                //
+                if(this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+                    Bus.$emit(BusName.showToast,'单笔限额超出限制')
+                    return
+                }
+                if(!this.agree){
+                    Bus.$emit(BusName.showToast,'请先同意充值协议')
+                    return
+                }
+                let times = time
+                this.disable = true
+                let timer = setInterval(()=>{
+                    if(times ==0 ){
+                        this.codeText = '重新发送'
+                        this.disable = false
+                        clearInterval(timer)
+                        return
+                    }
+                    times --
+                    this.codeText = `${times}s`
+                },1000)
+                this.getCode()
             },
             showPage(){
                 this.page = true
             },
+            doAgreeHandle(){
+                this.agree = true
+                this.page =false
+            },
             cancel(){
                 this.page =false
             },
+            checkMoney(){
+                if(this.APPLY_AMOUN -0 > this.SINGLE_QUOTA-0) {
+                    Bus.$emit(BusName.showToast,'单笔限额超出限制')
+                }
+            },
             doNext(){
-                //
+
                 let msg
                 if(msg=util.Check.trim(this.APPLY_AMOUN,'充值金额')) return Bus.$emit(BusName.showToast,msg);
+                //
+                if(this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+                    Bus.$emit(BusName.showToast,'单笔限额超出限制')
+                    return
+                }
+                if(!this.agree){
+                    Bus.$emit(BusName.showToast,'您还未签约充值协议')
+                    return
+                }
+                if(!this.agree){
+                    if(msg=util.Check.trim(this.msgCode,'手机验证码没填写')) return Bus.$emit(BusName.showToast,msg);
+                }
+                if(!this.agree){
+                    Bus.$emit(BusName.showToast,'请确认阅读充值协议')
+                    return
+                }
                 this.Londing.open()
                 setTimeout(()=>{
                     this.Londing.close()
                     this.show = true
                 },1000)
+            },
+            doAgree(){
+                this.agree = !this.agree
             },
             doReCange() {
                 this.pass = $('#payPass').$getCiphertext()
@@ -145,7 +224,7 @@
 
                 this.show = false
                 let data = {
-                    PHONE_CODE: '123456', // todo
+                    PHONE_CODE: this.msgCode, // todo
                     PIN: this.PIN,
                     BANK_PAY_PW: this.pass,
                     APPLY_AMOUNT: this.APPLY_AMOUN
@@ -188,6 +267,7 @@
 
     .money {
         padding-left: 0.5rem;
+        margin-top: .2rem;
         height: 1.7rem;
         color: #9199A1;
         font-size: 0.4rem;
@@ -198,8 +278,15 @@
         height: 1.2rem;
         line-height: 1rem;
         font-size: 0.4rem;
-        border-top: 0.4rem solid #EEEEF0;
         border-bottom: 1px solid #EEEEF0;
+        .button{
+            vertical-align: middle;
+            width: 2.5rem;
+            display: inline-block;
+            padding:.1rem;
+            border: 1px solid #508CEE;
+            color:#508CEE
+        }
     }
 
     .inputAmount input {
@@ -210,7 +297,9 @@
         color: #333;
         /* line-height: 0.5rem; */
         outline: none;
+
     }
+
 
     .Amount {
         display: inline-block;
@@ -236,15 +325,17 @@
 
     .bang {
         margin-left: 0.5rem;
-        background-image: url(../../images/img/agree@3x.png);
+        background: url(../../images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background-size: 0.4rem 0.4rem;
         font-size: 0.4rem;
         color: #808080;
-        background-repeat: no-repeat;
-        background-size: 0.3rem 0.3rem;
         padding: 0 0.5rem;
-        background-position: 0 0.2rem;
-    }
 
+    }
+    .no{
+        background: url(../../images/img/onagree@3x.png) no-repeat 0 0.05rem;
+        background-size: 0.4rem 0.4rem;
+    }
     .minshengbankLogo {
         line-height: 100%;
         display: inline-block;

@@ -22,6 +22,7 @@ export default {
     // }],
     // // `transformResponse`允许在 then / catch之前对响应数据进行更改
     // transformResponse: [function (data) {
+    //     console.log('data>>' + data);
     //     return data;
     // }],
     // // `paramsSerializer`是一个可选的函数，负责序列化`params`
