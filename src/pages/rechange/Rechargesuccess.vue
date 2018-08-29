@@ -16,7 +16,9 @@
 </template>
 <script>
     import util from "../../common/utils/util";
-    import {PageName, LsName} from "../../Constant";
+    import {LsName} from "../../Constant";
+    import {Mixin} from '../../common/utils/mixin'
+
     export default {
         data(){
             return{
@@ -25,11 +27,8 @@
                 data:''
             }
         },
+        mixins: [Mixin],
         created(){
-            if (util.storage.session.get(LsName.reload)) {
-                location.reload()
-                util.storage.session.remove(LsName.reload)
-            }
             this.data = this.$route.query
         },
         methods:{

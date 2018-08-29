@@ -6,27 +6,28 @@
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，充值失败!</h2>
-            <p style="margin-top:0.6rem; color:#F22C17;">系统繁忙，请稍后再试</p>
+            <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
         </div>
         <span @click="reCharge" class="begain">重新充值</span>
     </div>
 </template>
 <script>
     import util from "../../common/utils/util";
-    import {PageName, LsName} from "../../Constant";
-
+    import {LsName} from "../../Constant";
+    import {Mixin} from '../../common/utils/mixin'
     export default {
+        mixins: [Mixin],
         created() {
-            if (util.storage.session.get(LsName.reload)) {
-                location.reload()
-                util.storage.session.remove(LsName.reload)
+            this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
+        },
+        data(){
+            return {
+                errMsg:''
             }
         },
         methods: {
             reCharge() {
-                this.$router.push({
-                    name: PageName.Recharge
-                })
+                this.$router.go(-1)
             }
         }
     }

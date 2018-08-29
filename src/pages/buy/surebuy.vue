@@ -57,6 +57,7 @@
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
     import {util} from "../../common/utils/util";
+    import {Mixin} from '../../common/utils/mixin'
 
     export default {
         data() {
@@ -70,13 +71,13 @@
                 banck: '',
             }
         },
+        mixins: [Mixin],
+
         components: {
             PassInput
         },
         created() {
             this.datas = this.$route.query
-        },
-        destroyed() {
         },
 
         methods: {
@@ -127,18 +128,20 @@
                         }
                         API.query.apiQueryBizStatus(data,result=>{
                             console.log(result.RES_CODE);
+                            util.storage.session.set(LsName.reload,true)
                             if( '1' ==result.RES_CODE){
                                 clearInterval(timer)
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
-                                setTimeout(()=>{
-                                    this.Londing.close()
-                                    window.location.reload()
-                                },1000)
+                                this.$router.push({
+                                    name: PageName.Buyfailed,
+                                    query: {
+                                        err:result.RES_MSG
+                                    }
+                                })
                             }
                             else if('0' ==result.RES_CODE){ // 成功
                                 clearInterval(timer)
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
-                                util.storage.session.set(LsName.reload,true)
                                 this.Londing.close()
                                 this.$router.push({
                                     name: PageName.Buysuccess,
@@ -154,7 +157,7 @@
                             }else {
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
                                 this.$router.push({
-                                    name: PageName.Buysuccess,
+                                    name: PageName.Buyfailed,
                                     query: {
                                         err:result.RES_MSG
                                     }
@@ -165,12 +168,13 @@
                     },2000)
                 }, err => {
                     this.Londing.close()
-                    // this.$router.push({
-                    //     name: PageName.Buysuccess,
-                    //     query: {
-                    //         err:err.RES_MSG
-                    //     }
-                    // })
+                    util.storage.session.set(LsName.reload,true)
+                    this.$router.push({
+                        name: PageName.Buyfailed,
+                        query: {
+                            err:err.RES_MSG
+                        }
+                    })
                 })
             }
         }

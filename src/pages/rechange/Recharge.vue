@@ -75,6 +75,8 @@
     import Bus from '../../common/js/bus'
     import {PageName,imgSrc,BusName} from "../../Constant";
     import {util} from "../../common/utils/util";
+    import {Mixin} from '../../common/utils/mixin'
+
     let time = 60
     export default {
         data() {
@@ -105,6 +107,7 @@
             AppBar,
             PassInput
         },
+        mixins: [Mixin],
         created() {
             this.getInfos()
             this.ORG_NAME = this.$route.query.ORG_NAME
@@ -248,18 +251,25 @@
                         }
                         API.query.apiQueryBizStatus(data,result=>{
                             console.log(result.RES_CODE);
+                            util.storage.session.set(LsName.reload,true)
+
                             if( '1' ==result.RES_CODE){
                                 clearInterval(timer)
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
-                                setTimeout(()=>{
-                                    this.Londing.close()
-                                    window.location.reload()
-                                },1000)
+                                this.$router.push({ // todo是否要跳转
+                                    name:PageName.Rechargefailure,
+                                    query:{
+                                        err:result.RES_MSG
+                                    }
+                                })
+                                // setTimeout(()=>{
+                                //     this.Londing.close()
+                                //     window.location.reload()
+                                // },1000)
                             }
                             else if('0' ==result.RES_CODE){
                                 clearInterval(timer)
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
-                                util.storage.session.set(LsName.reload,true)
                                 this.Londing.close()
                                 this.$router.push({
                                     name:PageName.Rechargesuccess,
@@ -271,13 +281,24 @@
                                 return
                             }else {
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
+                                this.$router.push({
+                                    name:PageName.Rechargefailure,
+                                    query:{
+                                        err:result.RES_MSG
+                                    }
+                                })
                                 return
                             }
                         })
                     },2000)
                 },err=>{
+                    util.storage.session.set(LsName.reload,true)
+
                     this.$router.push({
                         name:PageName.Rechargefailure,
+                        query:{
+                            err:err.RES_MSG
+                        }
                     })
                 })
             }

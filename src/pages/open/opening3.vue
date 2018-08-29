@@ -91,6 +91,8 @@
     import PassInput from '../../components/commons/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
     import {util} from "../../common/utils/util";
+    import {Mixin} from '../../common/utils/mixin'
+
 
     export default {
         data() {
@@ -120,11 +122,8 @@
         components: {
             PassInput
         },
+        mixins: [Mixin],
         created() {
-            if (util.storage.session.get(LsName.reload)) {
-                location.reload()
-                util.storage.session.remove(LsName.reload)
-            }
             this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
             let beforeInfo;
             if (beforeInfo = util.storage.session.get('setPasswordInfo')) {

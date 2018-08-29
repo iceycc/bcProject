@@ -6,7 +6,7 @@
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，购买失败!</h2>
-            <p style="margin-top:0.6rem; color:#F22C17;">系统繁忙，请稍后再试</p>
+            <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
         </div>
         <span @click="goApp" class="begain">下载比财app查看资产</span>
     </div>
@@ -14,14 +14,18 @@
 <script>
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
-    import {BusName,PageName,LsName} from "../../Constant";
+    import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
+    import {Mixin} from '../../common/utils/mixin'
 
     export default {
         created(){
-            if(util.storage.session.get(LsName.reload)){
-                location.reload()
-                util.storage.session.remove(LsName.reload)
+            this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
+        },
+        mixins: [Mixin],
+        data(){
+            return {
+                errMsg:''
             }
         },
         methods:{

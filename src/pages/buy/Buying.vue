@@ -40,8 +40,7 @@
     import Bus from '../../common/js/bus'
     import {API} from "../../request/api";
     import util from "../../common/utils/util";
-
-
+    import {Mixin} from '../../common/utils/mixin'
     export default {
         data(){
             return {
@@ -52,11 +51,9 @@
 
             }
         },
+        // mixins: [Mixin],
         created(){
-            if(util.storage.session.get(LsName.reload)){
-                location.reload()
-                util.storage.session.remove(LsName.reload)
-            }
+
             this.getInfo()
             this.proDetail = this.$route.query // 数据
         },

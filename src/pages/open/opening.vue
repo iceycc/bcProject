@@ -51,11 +51,15 @@
             </section>
             <section>
                 <span>职业</span>
-                <js-select class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
+                <js-select
+                        title="职业列表"
+                        class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
             </section>
             <section>
                 <span>学历</span>
-                <js-select class="selectStyle" :text="educationText" :options="education"
+                <js-select
+                        title="学历列表"
+                        class="selectStyle" :text="educationText" :options="education"
                            @getValue="getEduction"></js-select>
                 <!--<select name="" id="" v-model="data.USER_EDUCATION">-->
                 <!--<option :value="item.value" v-for="item,index in education" :key="index">{{item.name}}</option>-->

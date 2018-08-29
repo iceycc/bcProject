@@ -36,6 +36,8 @@
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
     import {BusName,LsName} from "../../Constant";
+    import {Mixin} from '../../common/utils/mixin'
+
 
     export default {
         data() {
@@ -44,11 +46,9 @@
                 downUrl:'http://www.baidu.com'
             }
         },
+        mixins: [Mixin],
         created() {
-            if(util.storage.session.get(LsName.reload)){
-                location.reload()
-                util.storage.session.remove(LsName.reload)
-            }
+
             this.datas = this.$route.query
         },
         methods: {

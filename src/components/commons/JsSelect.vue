@@ -32,6 +32,10 @@
             text:{
                 type:null,
                 default:'请选择'
+            },
+            title:{
+                type:null,
+                default:'请选择'
             }
         },
         watch: {},
@@ -42,7 +46,6 @@
                 titleSelect:false,
                 show:false,
                 selectValue: -1,
-                title:'请选择'
             }
         },
         methods:{
@@ -119,7 +122,8 @@
             }
         }
         .active {
-            color: #11cdcd;
+            background:#5db0f9;
+            color: #fff;
         }
 
         .close{

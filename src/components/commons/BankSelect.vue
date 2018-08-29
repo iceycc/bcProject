@@ -219,7 +219,7 @@
             }
         }
         .active {
-            color: #11cdcd;
+            color: #5db0f9;
         }
         .close {
             font-style: normal;

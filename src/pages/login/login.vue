@@ -45,6 +45,7 @@
     import Bus from '../../common/js/bus'
     import {HOST} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
+    import {Mixin} from '../../common/utils/mixin'
 
 
     export default {
@@ -65,16 +66,12 @@
                 telPaceholder: '开户手机号',
             }
         },
+        mixins: [Mixin],
         components: {
             PassInput
         },
         inject: ['reload'],
         created() {
-            if (util.storage.session.get(LsName.reload)) {
-                location.reload()
-                util.storage.session.remove(LsName.reload)
-            }
-            // location.reload()
             let preInfo;
             if (preInfo = util.storage.session.get('loginInfo')) {
                 this.tel = preInfo.PHONE_NUM
