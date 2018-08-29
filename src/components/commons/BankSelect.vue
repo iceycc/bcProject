@@ -1,6 +1,13 @@
 <template>
     <div>
-        <span @click="showBankList" :class="{'infoText':true,'activeTitle':titleSelect}">{{text}}</span>
+        <section style="display: inline-block;width: 100%" @click="showBankList" :class="{'infoText':true,'activeTitle':titleSelect}">
+                {{text}}
+            <span class="down">
+                <img src="../../images/img/GroupCopy14@2x.png" alt="">
+                <img src="../../images/img/problom2@2x.png" alt="">
+               <span class="xiane">银行限额</span>
+            </span>
+        </section>
         <div class="jsSelect" v-show="show">
             <section class="select-box">
                 <i class="close" @click="show=false">X</i>
@@ -116,6 +123,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
     .jsSelect {
         position: fixed;
         top: 0;
@@ -130,10 +138,32 @@
     }
 
     .infoText {
+        position: relative;
         color: #dedede;
         font-size: .4rem;
-    }
+        padding-right: px2rem(100);
+        vertical-align: top;
+        .xiane{
+            display: inline-block;
+            padding-top: px2rem(3);
+            font-size: px2rem(13);
+            vertical-align: middle;
+        }
+        .down{
+            position: absolute;
+            right: 0;
+            top: 50%;
+            color: #0096FE;
+            transform: translateY(-50%);
+            img{
+                vertical-align: middle;
+                width: px2rem(18);
+                margin-right: px2rem(1);
+            }
 
+
+        }
+    }
     .activeTitle {
         color: #333;
     }

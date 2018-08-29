@@ -53,7 +53,7 @@
 <script>
     import {API} from "../../request/api";
 
-    import {PageName} from "../../Constant";
+    import {PageName,BusName,LsName} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
     import {util} from "../../common/utils/util";
@@ -98,35 +98,79 @@
                 }, 500)
             },
             doPay() {
-
+                this.pass = $('#payPass').$getCiphertext()
+                this.len = $('#payPass').$getPasswordLength()
                 let data = {
                     PRD_ID: this.datas.id + '',
                     APPLY_AMOUNT: this.datas.money + '',
-                    BANK_PAY_PW: this.pass
+                    BANK_PAY_PW: this.pass + ''
                 }
-                this.Londing.open({
-                    spinnerType: 'triple-bounce'
-                })
-                this.pass = $('#payPass').$getCiphertext()
-                this.len = $('#payPass').$getPasswordLength()
+
                 let msg
                 if (msg = util.Check.payPassLen(this.len)) return Bus.$emit(BusName.showToast, msg);
                 this.show = false
                 API.buy.apiBuy(data, (res) => {
-                    this.$router.push({
-                        name: PageName.Buysuccess,
-                        query: {
-                            money: this.datas.money,
-                            PRD_NAME: this.datas.PRD_NAME,
-                            ORG_NAME: this.datas.ORG_NAME,
-                            OPERA_DATE: res.OPERA_DATE,
-                            BESHARP_BUY_SEQ: res.BESHARP_BUY_SEQ
-                        }
+                    let data = {
+                        BIZ_TYPE:'6',
+                        BESHARP_SEQ:res.BESHARP_BUY_SEQ
+                    }
+                    this.Londing.open({
+                        text:'正在购买中'
                     })
-                    this.Londing.close()
+                    let i = 1
+                    let timer = setInterval(()=>{
+                        i++
+                        if(i==5) {
+                            clearInterval(timer)
+                            this.Londing.close()
+                            return
+                        }
+                        API.query.apiQueryBizStatus(data,result=>{
+                            console.log(result.RES_CODE);
+                            if( '1' ==result.RES_CODE){
+                                clearInterval(timer)
+                                Bus.$emit(BusName.showToast,result.RES_MSG);
+                                setTimeout(()=>{
+                                    this.Londing.close()
+                                    window.location.reload()
+                                },1000)
+                            }
+                            else if('0' ==result.RES_CODE){ // 成功
+                                clearInterval(timer)
+                                Bus.$emit(BusName.showToast,result.RES_MSG);
+                                util.storage.session.set(LsName.reload,true)
+                                this.Londing.close()
+                                this.$router.push({
+                                    name: PageName.Buysuccess,
+                                    query: {
+                                        money: this.datas.money,
+                                        PRD_NAME: this.datas.PRD_NAME,
+                                        ORG_NAME: this.datas.ORG_NAME,
+                                        OPERA_DATE: res.OPERA_DATE,
+                                        BESHARP_BUY_SEQ: res.BESHARP_BUY_SEQ
+                                    }
+                                })
+                                return
+                            }else {
+                                Bus.$emit(BusName.showToast,result.RES_MSG);
+                                this.$router.push({
+                                    name: PageName.Buysuccess,
+                                    query: {
+                                        err:result.RES_MSG
+                                    }
+                                })
+                                return
+                            }
+                        })
+                    },2000)
                 }, err => {
-
                     this.Londing.close()
+                    // this.$router.push({
+                    //     name: PageName.Buysuccess,
+                    //     query: {
+                    //         err:err.RES_MSG
+                    //     }
+                    // })
                 })
             }
         }

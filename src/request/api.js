@@ -266,7 +266,15 @@ export const API = {
      * 查询类
      */
     query:{
+        // openapi/comm/apiQueryBizStatus
+        apiQueryBizStatus(params, success, error) {
+            let options = {
+                url: '/openapi/comm/apiQueryBizStatus',
+                params
+            }
+            return http.post(options, config, success, error)
 
+        },
 
     },
     /**

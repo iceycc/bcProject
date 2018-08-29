@@ -127,7 +127,7 @@ let Trim = {
  */
 
 const Check = {
-    trim(str, type ='') {
+    trim(str, type = '') {
         let msg;
         if (Trim.all(str) == '') {
             msg = `${type}不能为空`
@@ -184,14 +184,14 @@ const Check = {
 
     payPassLen(len) {
         let msg;
-        if(len !=6){
+        if (len != 6) {
             msg = '交易密码有误，请重新输入'
         }
         return msg
     },
-    loginPassLen(len){
+    loginPassLen(len) {
         let msg;
-        if(len <8 || len > 20){
+        if (len < 8 || len > 20) {
             msg = '登录密码有误，请重新输入'
         }
         return msg
@@ -792,6 +792,37 @@ export const util = {
         window.setTimeout(function () {
             document.body.removeChild(ifr);
         }, 2000);
+    },
+    reDo(fn) {
+        for (i = 1; i <= 3; i++) {
+            setTimeout(() => {
+                fn && fn()
+            }, 1000)
+        }
+    },
+    /**
+     * 判断终端
+     * @returns {{isAndroid: (*|boolean), isIOS: (*|boolean), isMobile: (*|boolean), isApp: boolean, isWeixin: (*|boolean), isQQ: (*|boolean), isPC: boolean, isWeibo: (*|boolean)}}
+     */
+    isEquipment() {
+        let UA = navigator.userAgent,
+                isAndroid = /android|adr|linux/gi.test(UA),
+                isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
+                isBlackBerry = /BlackBerry/i.test(UA),
+                isWindowPhone = /IEMobile/i.test(UA),
+                isApp = UA.indexOf('besharp') > -1, // 自己的app
+                isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
+
+        return {
+            isAndroid: isAndroid,
+            isIOS: isIOS,
+            isMobile: isMobile,
+            isApp:isApp,
+            isWeixin: /MicroMessenger/gi.test(UA),
+            isQQ: /QQ/gi.test(UA),
+            isPC: !isMobile,
+            isWeibo: /WeiBo/gi.test(UA)
+        }
     }
 
 

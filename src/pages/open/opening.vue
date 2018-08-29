@@ -6,32 +6,48 @@
                 <span class="line1">
                     <img :src='stepImg' alt="">
                 </span>
-                <span>开户信息验证</span>
+                <span class="step-text">开户信息验证</span>
             </section>
             <section class="circle">
                  <span class="line2 hui">
                     <img :src='stepImg2' alt="">
                 </span>
-                <span>绑定银行卡</span>
+                <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
             </section>
 
             <section class="circle">
                  <span class="line3 hui">
                     <img :src='stepImg3' alt="">
                 </span>
-                <span>设置密码</span>
+                <span class="step-text" style="color:#D3D3D3">设置密码</span>
             </section>
         </section>
 
 
         <div class="opening_box">
+            <section class="photo">
+                <div class="cameraphoto">
+                    <div class="words">身份证人像页照</div>
+                    <div class="cameraphotoimg">
+                        <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
+                        <input type="file" class="inputBox" @change="uploadChangeZheng($event)">
+                    </div>
+                </div>
+                <div class="cameraphoto">
+                    <div class="words">身份证国徽页照</div>
+                    <div class="cameraphotoimg">
+                        <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
+                        <input type="file" class="inputBox" @change="uploadChangeFan($event)">
+                    </div>
+                </div>
+            </section>
             <section>
                 <span>姓名</span>
-                <input type="text" name="text1" placeholder=" 请输入您的姓名" v-model="data.USER_NAME">
+                <input class="inputBox2" type="text" name="text1" placeholder="请输入您的姓名" v-model="data.USER_NAME">
             </section>
             <section>
                 <span> 身份证号</span>
-                <input type="text" name="text1" placeholder="请输入15-18位身份证号" v-model="data.USER_CARD_ID">
+                <input class="inputBox2" type="text" name="text1" placeholder="请输入15-18位身份证号" v-model="data.USER_CARD_ID">
             </section>
             <section>
                 <span>职业</span>
@@ -47,34 +63,31 @@
                 <!--</select>-->
                 <!--<input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">-->
             </section>
-            <div class="photo">
-                <div class="cameraphoto">
-                    <div style="text-align: center;">身份证人像页照</div>
-                    <div class="cameraphotoimg">
-                        <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
-                        <input type="file" class="inputBox" @change="uploadChangeZheng($event)">
-                    </div>
-                </div>
-                <div class="cameraphoto">
-                    <div style="text-align: center;">身份证国徽页照</div>
-                    <div class="cameraphotoimg">
-                        <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
-                        <input type="file" class="inputBox" @change="uploadChangeFan($event)">
-                    </div>
-                </div>
-            </div>
+
         </div>
         <div class="IDphoto">
             <div class="IDphotoPositive"></div>
             <div class="IDphotoback"></div>
         </div>
+        <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
         <button class="tijiao" @click="doNext">下一步</button>
-        <p class="bang">我已阅读并同意注册<strong style=" color:#0096FE;">《用户授权服务协议》《晋商银行直销银行电子账户服务协议》</strong></p>
+        <p :class="{'bang':true,'no':agree == false}"
+           @click="doAgree">
+            <span>我已阅读并同意注册</span>
+            <a href="javscript:;" @click.stop="showPage" style=" color:#0096FE;">《晋商银行直销银行电子账户服务协议》</a>
+        </p>
+        <section v-show="page" class="page">
+            <div class="docs"><iframe :src="agreeMentSrc" class="indocs"></iframe></div>
+            <div class="btn">
+                <mt-button type="primary"@click="page = false">取消</mt-button>
+                <mt-button type="primary"@click="doAgreeHandle">确认</mt-button>
+            </div>
+        </section>
     </div>
 </template>
 <script>
     import {util} from "../../common/utils/util";
-    import {PageName, BusName} from "../../Constant";
+    import {PageName, BusName,HOST} from "../../Constant";
     import {API} from "../../request/api";
     import Bus from "../../common/js/bus"
     import JsSelect from '../../components/commons/JsSelect'
@@ -82,13 +95,14 @@
     export default {
         data() {
             return {
-                imgStyle1: 'width:50%',
-                imgStyle2: 'width:50%',
+                imgStyle1: 'width:30%;vertical-align: middle',
+                imgStyle2: 'width:30%;vertical-align: middle;',
                 stepImg: require('../../images/img/account_icon_green2@2x.png'),
                 stepImg2: require('../../images/img/step2@2x.png'),
                 stepImg3: require('../../images/img/step3.png'),
                 test1: '',
                 test2: '',
+                agreeMentSrc:HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
                 data: {// 姓名 身份证 职业 学历 身份证正反面
                     USER_NAME: '',
                     USER_CARD_ID: '',// 身份证号码  612601198509174013
@@ -135,7 +149,10 @@
                     {name: '未知', value: '99'},
                 ],
                 educationText: '请选择学历',
-                work: '请选择职业'
+                work: '请选择职业',
+                agree:true,
+                page:false,
+                errMsg:''
             }
         },
         components: {
@@ -167,7 +184,7 @@
                 console.log(newsrc);
 
                 this.preSrc1 = newsrc
-                this.imgStyle1 = 'width:100%'
+                this.imgStyle1 = 'width:100%;max-height:100%'
                 util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
                     this.test1 = data
                     console.log(encodeURI(this.test1))
@@ -195,7 +212,7 @@
             uploadChangeFan(e) { //反
                 var newsrc = this.getObjectURL(e.target.files[0]);
                 this.preSrc2 = newsrc
-                this.imgStyle2 = 'width:100%'
+                this.imgStyle2 = 'width:100%;max-height:100%'
 
                 util.imgScale(newsrc, e.target.files[0], 3).then((data) => {
                     this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
@@ -211,6 +228,9 @@
                     })
                 })
             },
+            doAgree(){
+                this.agree = !this.agree
+            },
             doNext() {
                 API.watch.watchApi({
                     FUNCTION_ID: 'ptb0A003', // 点位
@@ -219,7 +239,10 @@
                 let data = this.data
                 let msg
                 // 校验
-
+                if(!this.agree){
+                    Bus.$emit(BusName.showToast, '请同意相关协议')
+                    return
+                }
                 if(msg = util.Check.name(data.USER_NAME)) return Bus.$emit(BusName.showToast, msg)
                 if(msg = util.Check.idNumber(data.USER_CARD_ID)) return Bus.$emit(BusName.showToast, msg)
 
@@ -306,6 +329,14 @@
                     url = window.webkitURL.createObjectURL(file);
                 }
                 return url;
+            },
+            showPage(){
+                this.page = true
+            },
+            doAgreeHandle(){
+                this.page = false
+                this.argee = true
+
             }
 
         }
@@ -314,6 +345,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
     body {
         font-size: .3rem;
     }
@@ -323,6 +355,9 @@
         display: flex;
         position: relative;
         margin-bottom: .3rem;
+        .step-text{
+            padding-top: px2rem(7);
+        }
         .circle {
             flex: 1;
             display: flex;
@@ -389,12 +424,8 @@
     .opening_box section {
         display: flex;
         margin-left: 0.6rem;
-        background-repeat: no-repeat;
-        background-color: #fff;
         line-height: 1rem;
         width: 90%;
-        background-size: 0.7rem 0.7rem;
-        background-position: .2rem .2rem;
         border-bottom: 1px #E5E5E5 solid;
     }
 
@@ -407,6 +438,7 @@
             outline: none;
             background: #fff;
             height: 1rem;
+
         }
 
     }
@@ -416,7 +448,7 @@
         color: #444444;
         font-size: .4rem;
         display: inline-block;
-        width: 2rem;
+        width: px2rem(80);
     }
 
     .opening_box section .limit {
@@ -446,6 +478,9 @@
         background-position: .2rem .2rem;
         border-bottom: 1px #E5E5E5 solid;
         display: flex;
+        .words{
+            padding-left: px2rem(20);
+        }
     }
 
     .cameraphoto {
@@ -456,26 +491,32 @@
     .cameraphotoimg {
         position: relative;
         text-align: center;
-        line-height: 130px;
         margin-bottom: 10px;
-        width: 130px;
-        height: 100px;
+        width: px2rem(126);
+        height: px2rem(80);
         border: 1px dotted #eaeaea;
+        &:after{
+            display: inline-block;
+            content: '';
+            height: 100%;
+            width: 1px;
+            vertical-align: middle;
+        }
     }
 
     .tijiao {
-        font-size: 16px;
+        display: block;
+        font-size: px2rem(16);
         color: #fff;
         background-color: #508CEE;
-        border-radius: 0.1rem;
+        border-radius: px2rem(4);
         line-height: 1rem;
-        width: 70%;
-        margin: 0 auto;
+        width: px2rem(255);
+        height: px2rem(44);
+        margin: px2rem(75) auto px2rem(20);
         text-align: center;
-        margin-top: 2rem;
-        border: 0rem;
+        border: none;
         outline: none;
-        display: block;
     }
 
     .Tips {
@@ -485,17 +526,22 @@
     }
 
     .bang {
-        margin-top: 0.5rem;
-        padding-right: 0.3rem;
-        background-image: url(../../images/img/agree@3x.png);
+        margin-left: 0.5rem;
+        background: url(../../images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background-size: 0.4rem 0.4rem;
         font-size: 0.35rem;
         color: #808080;
-        background-repeat: no-repeat;
+        padding: 0 0.5rem;
+
+    }
+    .no{
+        background: url(../../images/img/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
-        padding: 0 0.8rem;
-        background-position: 0.2rem 0.05rem;
     }
 
+    .inputBox2 {
+        padding-left: px2rem(12);
+    }
     .inputBox {
         position: absolute;
         left: 0;
@@ -508,7 +554,53 @@
 
     }
 
+
     .selectStyle {
+        width: px2rem(220);
         font-size: .4rem;
+    }
+
+
+    .page {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        z-index: 100;
+        .docs{
+            border: none;
+            width: 100%;
+            height: 90%;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 .2rem;
+        }
+        .indocs{
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+        .btn{
+            padding: 0 1rem;
+            text-align: center;
+            button{
+                width: 3.5rem;
+                margin-right: .4rem;
+            }
+        }
+    }
+
+    .msg-err {
+        font-size: px2rem(12);
+        color: #fff;
+        background-color: #FF5B05;
+        border-radius: px2rem(5);
+        width: px2rem(204);
+        height: px2rem(29);
+        line-height: px2rem(29);
+        margin: px2rem(20) auto 0;
+        text-align: center;
     }
 </style>

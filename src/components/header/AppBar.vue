@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="header" v-if="show">
             <a class="goBack" href="javascript:;" @click="goBack">
                 <img src="../../images/img/back@2x.png" alt="">
             </a>
@@ -8,18 +8,31 @@
 </template>
 
 <script>
+    import {util} from "../../common/utils/util";
     export default {
         name: "AppBar",
+        data(){
+            return{
+                show:true
+            }
+        },
         props:{
             'title':{
                 type:null,
-                default:'比财'
+                default:'晋商银行'
+            }
+        },
+        created(){
+            let isE = util.isEquipment()
+            if(isE.isApp || isE.isWeixin){
+                this.show = false
             }
         },
         methods:{
             goBack(){
                 this.$router.go(-1)
             }
+
         }
     }
 </script>

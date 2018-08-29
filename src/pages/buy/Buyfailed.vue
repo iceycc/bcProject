@@ -14,8 +14,16 @@
 <script>
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
-    import {BusName,PageName} from "../../Constant";
+    import {BusName,PageName,LsName} from "../../Constant";
+    import util from "../../common/utils/util";
+
     export default {
+        created(){
+            if(util.storage.session.get(LsName.reload)){
+                location.reload()
+                util.storage.session.remove(LsName.reload)
+            }
+        },
         methods:{
             goApp(){
                 API.watch.watchApi({

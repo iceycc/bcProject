@@ -48,10 +48,10 @@
             <section>
                 <span>验证码</span>
                 <input v-model="data.PHONE_CODE" type="password" style="width: 48%;" name="text1" placeholder="请输入您的短信验证码">
-                <span class="getpassword" @click="getCode">{{codeText}}</span>
+                <button  :disabled="disable" class="getpassword" @click="getCode">{{codeText}}</button>
             </section>
         </div>
-        <div class="tijiao Tips" v-if="errMsg" :disabled="disable">{{errMsg}}</div>
+        <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
         <mt-button class="tijiao" @click="doRePass">重置密码</mt-button>
     </div>
 </template>
@@ -85,6 +85,10 @@
             PassInput
         },
         created() {
+            if(util.storage.session.get(LsName.reload)){
+                location.reload()
+                util.storage.session.remove(LsName.reload)
+            }
             let beforeInfo;
             if(beforeInfo = util.storage.session.get('rePasswordInfo')) {
                 this.data = {
@@ -143,10 +147,11 @@
                 API.safe.apiUserResetLoginPass(data,res=>{
                     Bus.$emit(BusName.showToast,'修改密码成功')
                     util.storage.session.remove(LsName.token)
+                    util.storage.session.set(LsName.reload,true)
+                    util.storage.session.remove('rePasswordInfo')
                     this.$router.replace({
                         name:PageName.login
                     })
-                    util.storage.session.remove('rePasswordInfo')
                 },err=>{
                     util.storage.session.set('rePasswordInfo',{
                         USER_REAL_NAME: this.data.USER_REAL_NAME, // 姓名
@@ -163,6 +168,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
     .warp {
         width: 100%;
         position: relative;
@@ -230,11 +236,17 @@
         outline: none;
         display: block;
     }
-
-    .Tips {
-        margin-top: 1rem;
+    .msg-err {
+        font-size: px2rem(12);
+        color: #fff;
         background-color: #FF5B05;
-        width: 80%;
+        border-radius: px2rem(5);
+        width: px2rem(204);
+        height: px2rem(29);
+        line-height: px2rem(29);
+        margin: px2rem(20) auto 0;
+        text-align: center;
     }
+
 
 </style>

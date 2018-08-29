@@ -36,9 +36,11 @@
     </div>
 </template>
 <script>
-    import {PageName,BusName} from "../../Constant";
+    import {PageName,BusName,LsName} from "../../Constant";
     import Bus from '../../common/js/bus'
     import {API} from "../../request/api";
+    import util from "../../common/utils/util";
+
 
     export default {
         data(){
@@ -51,6 +53,10 @@
             }
         },
         created(){
+            if(util.storage.session.get(LsName.reload)){
+                location.reload()
+                util.storage.session.remove(LsName.reload)
+            }
             this.getInfo()
             this.proDetail = this.$route.query // 数据
         },

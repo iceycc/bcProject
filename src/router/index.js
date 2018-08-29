@@ -92,7 +92,7 @@ addRouter(PageName.DocsPage, {keepAlive: false, title: '协议',needLogin:true})
 addRouter(PageName.Investmentdetails, {keepAlive: false, title: '银行理财'});
 addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
 
-// .
+//
 let router = new VueRouter({
     routes
 });

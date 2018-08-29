@@ -1,43 +1,50 @@
 <template>
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
+
         <section class="wrapicon">
             <section class="circle">
                 <span class="line1">
                     <img :src='stepImg' alt="">
                 </span>
-                <p>开户信息验证</p>
+                <p class="step-text">开户信息验证</p>
             </section>
             <section class="circle">
                  <span class="line2">
                     <img :src='stepImg' alt="">
                 </span>
-                <p>绑定银行卡</p>
+                <p class="step-text">绑定银行卡</p>
             </section>
 
             <section class="circle">
                  <span class="line3">
                     <img :src='stepImg' alt="">
                 </span>
-                <p>设置密码</p>
+                <p class="step-text">设置密码</p>
             </section>
         </section>
-        <form action="">
-            <div class="opening_box">
-                <p>
-                    <span>登录密码</span>
-                    <input type="password" placeholder="请输入登录密码" v-model="s_loginPass" autocomplete="false"
-                           @focus="showBox">
-                </p>
-                <p>
-                    <span>交易密码</span>
-                    <input type="password" placeholder="请输入交易密码" v-model="s_payPass" autocomplete="false"
-                           @focus="showBox">
-                </p>
-            </div>
-            <div class="tijiao Tips" v-if="errMsg">{{errMsg}}</div>
-            <button class="tijiao" @click="showBox">开户</button>
-        </form>
+        <div class="login_box">
+            <section class="input-box">
+                <transition name="fade">
+                    <p class="label" v-if="loginShow">登陆密码</p>
+                </transition>
+                <input class="input" type="password"
+                       @focus="showBox"
+                       name="text1" :placeholder="telPaceholder" v-model="s_loginPass">
+            </section>
+            <section class="input-box">
+                <transition name="fade">
+                    <p class="label" v-if="loginShow">交易密码</p>
+                </transition>
+                <input class="input" type="password"
+                       @focus="showBox"
+                       name="text1" :placeholder="telPaceholder" v-model="s_payPass">
+            </section>
+        </div>
+        <div class="tijiao Tips" v-if="errMsg">{{errMsg}}</div>
+        <button
+                :class="{'tijiao':true, 'agree':!disabled}"
+                @click="postData" :disabled="disabled">开户</button>
         <div v-if="ifShow" class="bgbox">
             <div class="passbox">
                 <p class="title">
@@ -88,6 +95,10 @@
     export default {
         data() {
             return {
+                loginShow: true,
+                telPaceholder: '登陆密码',
+                disabled:true,
+
                 reGet: true,
                 s_loginPass: '',
                 s_payPass: '',
@@ -102,7 +113,7 @@
                 stepImg: require('../../images/img/account_icon_green2@2x.png'),
                 stepImg2: require('../../images/img/step2@2x.png'),
                 stepImg3: require('../../images/img/step3.png'),
-                errMsg:''
+                errMsg: ''
 
             }
         },
@@ -110,9 +121,13 @@
             PassInput
         },
         created() {
+            if (util.storage.session.get(LsName.reload)) {
+                location.reload()
+                util.storage.session.remove(LsName.reload)
+            }
             this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
             let beforeInfo;
-            if(beforeInfo = util.storage.session.get('setPasswordInfo')){
+            if (beforeInfo = util.storage.session.get('setPasswordInfo')) {
                 this.errMsg = beforeInfo.msg
                 util.storage.session.remove('setPasswordInfo')
             }
@@ -123,6 +138,11 @@
         },
 
         methods: {
+
+
+            cancel() {
+                this.ifShow = false
+            },
             showBox() {
                 this.Londing.open()
                 setTimeout(() => {
@@ -130,9 +150,44 @@
                     this.ifShow = true
                 }, 500)
             },
-
-            cancel() {
-                this.ifShow = false
+            postData() {
+                if (!this.REQ_SERIAL) {
+                    Bus.$emit(BusName.showToast, '实名认证异常，请重新注册')
+                    setTimeout(() => {
+                        this.$router.push({
+                            name: PageName.opening
+                        }, 1000)
+                    })
+                    return
+                }
+                let data = {
+                    REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
+                    BANK_LOGIN_PW: this.loginpass,
+                    BANK_PAY_PW: this.paypass
+                }
+                API.open.setPassWord(data, res => {
+                    // todo
+                    Bus.$emit(BusName.showToast, '注册成功,即将跳转登陆页')
+                    util.storage.session.remove(LsName.token)
+                    util.storage.session.set(LsName.reload, true)
+                    this.Londing.open({
+                        text:'即将跳转登陆页'
+                    })
+                    setTimeout(()=>{
+                        this.Londing.close()
+                        this.$router.replace({
+                            name: PageName.login
+                        })
+                    },1500)
+                }, err => {
+                    this.ifShow = false
+                    util.storage.session.set('setPasswordInfo', {
+                        msg: err
+                    })
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 500)
+                })
             },
             subumit() {
                 API.watch.watchApi({
@@ -143,45 +198,20 @@
                 setTimeout(() => {
                     this.Londing.close()
                 }, 500)
-                if(!this.REQ_SERIAL){
-                    Bus.$emit(BusName.showToast,'实名认证异常，请重新注册')
-                    setTimeout(()=>{
-                        this.$router.push({
-                            name:PageName.opening
-                        },500)
-                    })
-                    return
-                }
+
                 this.paypass = $('#payPass').$getCiphertext()
-                this.paypassLen = $('#payPass').$getPasswordLength() -0 || 0
+                this.paypassLen = $('#payPass').$getPasswordLength() - 0 || 0
                 this.loginpass = $('#loginPass').$getCiphertext()
-                this.loginpassLen = $('#loginPass').$getPasswordLength() -0 || 0
+                this.loginpassLen = $('#loginPass').$getPasswordLength() - 0 || 0
+
                 let msg;
-                if(msg=util.Check.loginPassLen(this.loginpassLen)) return Bus.$emit(BusName.showToast,msg);
-                if(msg=util.Check.payPassLen(this.paypassLen)) return Bus.$emit(BusName.showToast,msg);
-
-                let data = {
-                    REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
-                    BANK_LOGIN_PW: this.loginpass,
-                    BANK_PAY_PW: this.paypass
-                }
-                API.open.setPassWord(data, res => {
-                    // todo
-                    Bus.$emit(BusName.showToast, '注册成功')
-                    util.storage.session.remove(LsName.token)
-                    this.$router.replace({
-                        name: PageName.login
-                    })
-                }, err => {
-                    this.ifShow = false
-                    util.storage.session.set('setPasswordInfo',{
-                        msg:err
-                    })
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 500)
-                })
-
+                if (msg = util.Check.loginPassLen(this.loginpassLen)) return Bus.$emit(BusName.showToast, msg);
+                if (msg = util.Check.payPassLen(this.paypassLen)) return Bus.$emit(BusName.showToast, msg);
+                this.s_loginPass = '********'
+                this.s_payPass = '******'
+                this.disabled = false
+                // this.ifShow = false
+                this.postData()
             }
 
         }
@@ -190,6 +220,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
 
     .bgbox {
         width: 100%;
@@ -252,21 +283,6 @@
         position: relative;
     }
 
-    .header {
-        background-color: #fff;
-        height: 1.3rem;
-        line-height: 1.3rem;
-        font-size: 0.4rem;
-        border-bottom: 1px solid #e6e6e6;
-    }
-
-    .header p {
-        text-align: center;
-        font-size: 0.5rem;
-    }
-
-
-
     .opening_box p {
         margin-left: 0.533333rem;
         background-repeat: no-repeat;
@@ -313,18 +329,18 @@
     }
 
     .tijiao {
-        font-size: 0.4rem;
+        background: #e4e4e4;
         color: #fff;
-        background-color: #0096FE;
-        border-radius: 0.2rem;
-        line-height: 1rem;
-        width: 85%;
-        margin: 0 auto;
+        font-size: px2rem(18);
+        border-radius: px2rem(5);
+        width: px2rem(255);
+        height: px2rem(44);
+        margin: px2rem(60) auto 0;
         text-align: center;
-        margin-top: 0.5rem;
-        /* border: 0px; */
-        outline: none;
         display: block;
+        &.agree{
+            background: #0072ff;
+        }
     }
 
     .Tips {
@@ -342,6 +358,9 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+        }
+        .step-text{
+            padding-top: px2rem(7);
         }
 
         .line1, .line2, .line3 {
@@ -394,5 +413,42 @@
             }
         }
 
+    }
+
+    .login_box {
+        position: relative;
+        .input-box {
+            margin-left: px2rem(20);
+            width: 90%;
+            background-size: 0.7rem 0.7rem;
+            border-bottom: 1px #E5E5E5 solid;
+        }
+        .label {
+            padding: 0;
+            margin-top: px2rem(30);
+            font-size: px2rem(17);
+            color: #858E9F;
+        }
+        .input {
+            @include placeholder(#dedede);
+            height: px2rem(24);
+            margin: px2rem(10) 0;
+            width: 50%;
+            border: none;
+            box-sizing: border-box;
+            font-size: px2rem(16);
+            color: #333;
+            /* line-height: 40px; */
+            outline: none;
+        }
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .6s;
+    }
+
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+    {
+        opacity: 0;
     }
 </style>

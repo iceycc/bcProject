@@ -34,7 +34,7 @@
         </section>
         <button class="tijiao" @click="doNext">确认充值</button>
         <p :class="{'bang':true,'no':agree == false}" v-if="!write"
-           @click="doAgree">我已阅读并同意注册<span @click.stop="showPage" style=" color:#0096FE;">《充值协议》</span></p>
+           @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值协议》</span></p>
         <section v-show="page" class="page">
             <div class="docs"><iframe :src="agreeMentSrc" class="indocs"></iframe></div>
             <div class="btn">
@@ -70,7 +70,7 @@
 <script>
     import {API} from "../../request/api";
     import AppBar from '../../components/header/AppBar'
-    import {HOST} from '../../Constant'
+    import {HOST, LsName} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
     import {PageName,imgSrc,BusName} from "../../Constant";
@@ -231,13 +231,50 @@
                 }
 
                 API.reChange.apiRecharge(data, res => {
-                    this.$router.push({
-                        name:PageName.Rechargesuccess,
-                        query:{
-                            money:this.APPLY_AMOUN,
-                                ...res
-                        }
+                    let data = {
+                        BIZ_TYPE:'3',
+                        BESHARP_SEQ:res.BESHARP_RECHARGE_SEQ
+                    }
+                    this.Londing.open({
+                        text:'正在充值中'
                     })
+                    let i = 1
+                    let timer = setInterval(()=>{
+                        i++
+                        if(i==5) {
+                            clearInterval(timer)
+                            this.Londing.close()
+                            return
+                        }
+                        API.query.apiQueryBizStatus(data,result=>{
+                            console.log(result.RES_CODE);
+                            if( '1' ==result.RES_CODE){
+                                clearInterval(timer)
+                                Bus.$emit(BusName.showToast,result.RES_MSG);
+                                setTimeout(()=>{
+                                    this.Londing.close()
+                                    window.location.reload()
+                                },1000)
+                            }
+                            else if('0' ==result.RES_CODE){
+                                clearInterval(timer)
+                                Bus.$emit(BusName.showToast,result.RES_MSG);
+                                util.storage.session.set(LsName.reload,true)
+                                this.Londing.close()
+                                this.$router.push({
+                                    name:PageName.Rechargesuccess,
+                                    query:{
+                                        money:this.APPLY_AMOUN,
+                                        ...res
+                                    }
+                                })
+                                return
+                            }else {
+                                Bus.$emit(BusName.showToast,result.RES_MSG);
+                                return
+                            }
+                        })
+                    },2000)
                 },err=>{
                     this.$router.push({
                         name:PageName.Rechargefailure,

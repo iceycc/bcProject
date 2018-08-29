@@ -15,6 +15,8 @@
     </div>
 </template>
 <script>
+    import util from "../../common/utils/util";
+    import {PageName, LsName} from "../../Constant";
     export default {
         data(){
             return{
@@ -24,6 +26,10 @@
             }
         },
         created(){
+            if (util.storage.session.get(LsName.reload)) {
+                location.reload()
+                util.storage.session.remove(LsName.reload)
+            }
             this.data = this.$route.query
         },
         methods:{

@@ -10,10 +10,13 @@ export default {
     post: function (option, config, success, error) {
         return this.request('POST', option, config, success, error).catch(err => {
             console.error(err);
+            // return re
             if(err.match(/[500]/g)){
                 console.log(500);
                 Bus.$emit(BusName.showToast,'服务器异常')
                 error && error('服务器异常')
+            }else {
+                Promise.reject(err.MSG)
             }
 
         });

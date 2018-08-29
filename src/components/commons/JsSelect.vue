@@ -70,6 +70,7 @@
         color:#333
     }
     .infoText{
+        width: 100%;
         color:#dedede;
         position: relative;
         &:after{

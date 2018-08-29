@@ -55,6 +55,7 @@ export const BusName ={
 
 export const LsName ={
     token:'token',
-    DEVICE_ID:'DEVICE_ID'
+    DEVICE_ID:'DEVICE_ID',
+    reload:'reload', // 用于强制刷新 密码控件暂时只能强制刷新重载 否则不行
 }
 
