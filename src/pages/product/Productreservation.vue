@@ -49,10 +49,10 @@
                 </div>
             </div>
             <div class="wrapicon">
-                <div class="circle"><span>{{productDetail.COLLECT_START_DATE}}</span><strong>募集开始</strong></div>
+                <div class="circle left"><span>{{productDetail.COLLECT_START_DATE}}</span><strong>募集开始</strong></div>
                 <div class="circle"><span>{{productDetail.COLLECT_END_DATE}}</span><strong>募集结束</strong></div>
                 <div class="circle"><span>{{productDetail.VALUE_DATE}}</span><strong>起息日</strong></div>
-                <div class="circle"><span>{{productDetail.FIN_END_DATE}}</span><strong>到期</strong></div>
+                <div class="circle right"><span>{{productDetail.FIN_END_DATE}}</span><strong>到期</strong></div>
             </div>
             <div class="contentmain contenttop">
                 <div class="contentmaintop">
@@ -219,6 +219,7 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
     html, body {
         width: 100%;
     }
@@ -260,10 +261,10 @@
     }
 
     .banner .bannercontent {
-        padding-top: 5%;
         width: 90%;
-        margin-left: 5%;
         height: 85%;
+        margin-left: 5%;
+        padding-top: 5%;
 
     }
 
@@ -340,6 +341,8 @@
         width: 100%;
         height: 2rem;
         border-bottom: 1px solid #DCDCDC;
+        color: #666;
+
 
     }
 
@@ -462,14 +465,24 @@
         box-sizing: border-box;
         background: radial-gradient(#fff 50%, #fff 50%);
         white-space: nowrap;
+        &.left{
+            margin-left: px2rem(5);
+
+        }
+        &.right{
+            margin-right: px2rem(5);
+
+        }
     }
 
     .wrapicon {
         position: relative;
         margin: 0.8rem auto 1rem;
         display: flex;
-        width: 80%;
+        width: px2rem(335);
         justify-content: space-between;
+        color: #666;
+
     }
 
     .wrapicon:before {
@@ -479,15 +492,25 @@
         content: '';
         display: block;
         width: 100%;
-        height: 0.07rem;
+        height: px2rem(2);
         background: #2B74FE;;
     }
 
+
     .circle span {
         position: absolute;
-        left: -0.8rem;
+        left: px2rem(-30);
         top: 0.5rem;
-        font-size: 0.3rem;
+        font-size: px2rem(13);
+    }
+    .left span {
+        left: px2rem(-15);
+
+    }
+
+    .right span {
+        left: px2rem(-45);
+
     }
 
     .circle strong {
@@ -495,6 +518,7 @@
         left: -0.3rem;
         top: -0.8rem;
         font-size: 0.4rem;
+
     }
 </style>
 
