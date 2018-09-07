@@ -13,32 +13,32 @@
             </section>
             <section>
                 <span>手机号</span>
-                <input v-model="data.PHONE_NUM" type="text" name="text1" placeholder="请输入手机号">
+                <input v-model="data.PHONE_NUM" type="text" name="text1" placeholder="请输入登陆手机号">
             </section>
             <section>
                 <span>新登录密码</span>
                 <!--<div id="loginPass"-->
-                     <!--@click="getKey('loginPass')"-->
-                     <!--style="display: inline-block;color: #9e9e9e"-->
-                     <!--modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"-->
-                     <!--maxlength="20" name="Password">-->
-                    <!--请输入密码-->
+                <!--@click="getKey('loginPass')"-->
+                <!--style="display: inline-block;color: #9e9e9e"-->
+                <!--modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"-->
+                <!--maxlength="20" name="Password">-->
+                <!--请输入密码-->
                 <!--</div>-->
                 <pass-input
                         style="display:inline-block;color: #dedede"
                         inputID="loginPass"
                 ></pass-input>
                 <!--<input v-model="data.BANK_LOGIN_PW" type="password" class="newpassword" name="text1" style="width:72%"-->
-                       <!--placeholder="登录密码需包含8-20位数字，大小字母组成">-->
+                <!--placeholder="登录密码需包含8-20位数字，大小字母组成">-->
             </section>
             <section>
                 <span>确认登录密码</span>
                 <!--<div id="reLoginPass"-->
-                     <!--@click="getKey('reLoginPass')"-->
-                     <!--style="display: inline-block;color: #9e9e9e"-->
-                     <!--modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"-->
-                     <!--maxlength="20" name="Password">-->
-                    <!--请输入密码-->
+                <!--@click="getKey('reLoginPass')"-->
+                <!--style="display: inline-block;color: #9e9e9e"-->
+                <!--modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"-->
+                <!--maxlength="20" name="Password">-->
+                <!--请输入密码-->
                 <!--</div>-->
                 <pass-input
                         style="display:inline-block;color: #dedede"
@@ -47,8 +47,9 @@
             </section>
             <section>
                 <span>验证码</span>
-                <input v-model="data.PHONE_CODE" type="password" style="width: 48%;" name="text1" placeholder="请输入您的短信验证码">
-                <button  :disabled="disable" class="getpassword" @click="getCode">{{codeText}}</button>
+                <input v-model="data.PHONE_CODE" type="password" style="width: 48%;" name="text1"
+                       placeholder="请输入您的短信验证码">
+                <button :disabled="disable" class="getpassword" @click="getCode">{{codeText}}</button>
             </section>
         </div>
         <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
@@ -58,9 +59,10 @@
 <script>
     import util from '../../common/utils/util'
     import {API} from '../../request/api'
-    import {LsName,BusName,PageName} from "../../Constant";
+    import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
     import PassInput from '../../components/commons/PassInput'
+
     let time = 60
     export default {
         data() {
@@ -70,94 +72,97 @@
                     USER_CARD_ID: '', // idCard
                     PHONE_NUM: '', //tel
                     BANK_LOGIN_PW: '', // newpass
-                    BANK_LOGIN_PW2: '' ,//
-                    MESSAGE_TOKEN:'',
-                    PHONE_CODE:'',
+                    BANK_LOGIN_PW2: '',//
+                    MESSAGE_TOKEN: '',
+                    PHONE_CODE: '',
 
                 },
-                toUrl:"",
-                errMsg:'',
-                codeText:'获取验证码',
-                disable:false
+                toUrl: "",
+                errMsg: '',
+                codeText: '获取验证码',
+                disable: false
             }
         },
-        components:{
+        components: {
             PassInput
         },
         created() {
-            if(util.storage.session.get(LsName.reload)){
+            if (util.storage.session.get(LsName.reload)) {
                 location.reload()
                 util.storage.session.remove(LsName.reload)
             }
             let beforeInfo;
-            if(beforeInfo = util.storage.session.get('rePasswordInfo')) {
+            if (beforeInfo = util.storage.session.get('rePasswordInfo')) {
                 this.data = {
                     USER_REAL_NAME: beforeInfo.USER_REAL_NAME, // 姓名
                     USER_CARD_ID: beforeInfo.USER_CARD_ID, // idCard
                     PHONE_NUM: beforeInfo.PHONE_NUM, //tel
                 }
                 this.errMsg = beforeInfo.msg
+                util.storage.session.remove('rePasswordInfo')
             }
         },
         methods: {
-            getCode(){
+            getCode() {
                 let msg
-                if(msg = util.Check.tel(this.data.PHONE_NUM)) return Bus.$emit(BusName.showToast,msg)
+                if (msg = util.Check.tel(this.data.PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
                 let sTime = time
                 this.disable = true
-                let timer = setInterval(()=>{
-                    if(sTime ==0){
+                let timer = setInterval(() => {
+                    if (sTime == 0) {
                         this.codeText = '重新发送'
                         this.disable = false
                         clearInterval(timer)
                         return
                     }
-                    sTime --
+                    sTime--
                     this.codeText = `${sTime}s`
-                },1000)
+                }, 1000)
 
-                let data ={
-                    PHONE_NUM:this.data.PHONE_NUM + '',
-                    BIZ_TYPE:'9'
+                let data = {
+                    PHONE_NUM: this.data.PHONE_NUM + '',
+                    BIZ_TYPE: '9'
                 }
-                API.open.getMsgCode(data,res=>{
+                API.open.getMsgCode(data, res => {
                     this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 })
             },
+
             doRePass() {
                 let msg;
-                if(msg=util.Check.name(this.data.USER_REAL_NAME)) return this.errMsg = msg;
-                if(msg=util.Check.idNumber(this.data.USER_CARD_ID)) return this.errMsg = msg;
-                if(msg=util.Check.tel(this.data.PHONE_NUM)) return this.errMsg = msg;
+                if (msg = util.Check.name(this.data.USER_REAL_NAME)) return this.errMsg = msg;
+                if (msg = util.Check.idNumber(this.data.USER_CARD_ID)) return this.errMsg = msg;
+                if (msg = util.Check.tel(this.data.PHONE_NUM)) return this.errMsg = msg;
 
                 this.data.BANK_LOGIN_PW = $('#loginPass').$getCiphertext()
                 this.data.BANK_LOGIN_PW_LEN = $('#loginPass').$getPasswordLength()
                 this.data.BANK_LOGIN_PW2 = $('#reLoginPass').$getCiphertext()
                 this.data.BANK_LOGIN_PW2_LEN = $('#reLoginPass').$getPasswordLength()
-                if(msg=util.Check.trim(this.data.BANK_LOGIN_PW,',密码')) return this.errMsg = msg;
-                if(msg=util.Check.loginPassLen(this.data.BANK_LOGIN_PW_LEN)) return this.errMsg = msg;
-                if(msg=util.Check.trim(this.data.BANK_LOGIN_PW2,',密码')) return this.errMsg = msg;
-                if(msg=util.Check.loginPassLen(this.data.BANK_LOGIN_PW2_LEN)) return this.errMsg = msg;
+                if (msg = util.Check.trim(this.data.BANK_LOGIN_PW, ',密码')) return this.errMsg = msg;
+                if (msg = util.Check.loginPassLen(this.data.BANK_LOGIN_PW_LEN)) return this.errMsg = msg;
+                if (msg = util.Check.trim(this.data.BANK_LOGIN_PW2, ',密码')) return this.errMsg = msg;
+                if (msg = util.Check.loginPassLen(this.data.BANK_LOGIN_PW2_LEN)) return this.errMsg = msg;
 
-                if(msg=util.Check.trim(this.data.PHONE_CODE,'验证码')) return this.errMsg = msg;
+                if (msg = util.Check.trim(this.data.PHONE_CODE, '验证码')) return this.errMsg = msg;
 
                 let data = {
-                        ...this.data
+                    ...this.data
                 }
-                API.safe.apiUserResetLoginPass(data,res=>{
-                    Bus.$emit(BusName.showToast,'修改密码成功')
+                let delMsg = true;
+                API.safe.apiUserResetLoginPass(data,delMsg, res => {
+                    Bus.$emit(BusName.showToast, '修改密码成功')
                     util.storage.session.remove(LsName.token)
-                    util.storage.session.set(LsName.reload,true)
+                    util.storage.session.set(LsName.reload, true)
                     util.storage.session.remove('rePasswordInfo')
                     this.$router.replace({
-                        name:PageName.login
+                        name: PageName.login
                     })
-                },err=>{
-                    util.storage.session.set('rePasswordInfo',{
+                }, err => {
+                    util.storage.session.set('rePasswordInfo', {
                         USER_REAL_NAME: this.data.USER_REAL_NAME, // 姓名
                         USER_CARD_ID: this.data.USER_CARD_ID, // idCard
                         PHONE_NUM: this.data.PHONE_NUM, //tel
-                        msg:err
+                        msg: err
                     })
                     window.location.reload()
                 })
@@ -169,6 +174,7 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
+
     .warp {
         width: 100%;
         position: relative;
@@ -218,8 +224,8 @@
         box-sizing: border-box;
         font-size: 14px;
         color: #333;
-        line-height: 1.3rem;
         outline: none;
+        height: px2rem(20);
     }
 
     .tijiao {
@@ -236,6 +242,7 @@
         outline: none;
         display: block;
     }
+
     .msg-err {
         font-size: px2rem(12);
         color: #fff;

@@ -1,46 +1,54 @@
 <template>
     <div>
-        <section style="display: inline-block;width: 100%" @click="showBankList" :class="{'infoText':true,'activeTitle':titleSelect}">
-                {{text}}
-            <span class="down">
-                <img src="../../images/img/GroupCopy14@2x.png" alt="">
+        <section style="text-align:center;display: inline-block;width: 100%"
+                 :class="{'infoText':true,'activeTitle':titleSelect}">
+            <span @click="showBankList">{{text}}</span>
+            <span class="down" @click="backShow=true">
+                <img @click.stop="showBankList" src="../../images/img/GroupCopy14@2x.png" alt="">
                 <img src="../../images/img/problom2@2x.png" alt="">
                <span class="xiane">银行限额</span>
             </span>
         </section>
         <div class="jsSelect" v-show="show">
             <section class="select-box">
-                <i class="close" @click="show=false">X</i>
+                <i class="close" @click="show=false"><img :src="closeImg" alt=""></i>
                 <p class="title">{{title}}</p>
-               <section class="scroll-view">
-                   <section :id="key" class="bank-class" v-for="bankIndex,key,index in IndexObj" :key="index">
-                       <p class="bank-index">{{key}}</p>
-                       <ul class="select">
-                           <li
-                                   @click="select(item.name,item)"
-                                   :class="{'option':true,'active':item.name==selectValue}"
-                                   v-for="item,index in bankIndex"
-                                   :key="index">
-                               <img :src="item.src" alt="" class="banklogo">
-                               <span class="text">{{item.name}}</span>
-                           </li>
-                       </ul>
-                   </section>
-               </section>
+                <section class="scroll-view">
+                    <section :id="key" class="bank-class" v-for="bankIndex,key,index in IndexObj" :key="index">
+                        <p class="bank-index">{{key}}</p>
+                        <ul class="select">
+                            <li
+                                    @click="select(item.name,item)"
+                                    :class="{'option':true,'active':item.name==selectValue}"
+                                    v-for="item,index in bankIndex"
+                                    :key="index">
+                                <img :src="item.src" alt="" class="banklogo">
+                                <span class="text">{{item.name}}</span>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
                 <section class="right-index">
-                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr" :key="index"> {{item}}</span>
+                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr"
+                          :key="index"> {{item}}</span>
                 </section>
             </section>
+        </div>
+        <div class="bank-xiane" v-if="backShow">
+            <img @click="backShow = false" class="close" src="../../images/img/icon_ask_close.svg" alt="">
+            <img src="../../images/img/bank@2x.png" alt="">
         </div>
     </div>
 </template>
 
 <script>
     // const Letter = [A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
-    import {BusName} from "../../Constant";
+    import {BusName, LsName} from "../../Constant";
     import Bus from '../../common/js/bus'
-    const Letter = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
-        'O','P','Q','R','S','T','U','S','T','U','V','W','X','Y','Z']
+
+
+    const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     export default {
         name: "BankSelect",
         props: {
@@ -61,34 +69,35 @@
             //     console.log(n);
             //     this.IndexObj = this.filterOptions(this.options)
             // }
-            text(n,o){
+            text(n, o) {
                 this.titleSelect = true
                 this.selectValue = n
             }
         },
-        computed: {
-        },
-        activated(){
+        computed: {},
+        activated() {
             // this.IndexObj = this.filterOptions(this.options)
 
         },
         data() {
             return {
+                closeImg:require('../../images/img/icon_ask_close.svg'),
                 titleSelect: false,
                 show: false,
                 selectValue: 1,
                 IndexObj: {},
-                indexArr:Letter
+                indexArr: Letter,
+                backShow:false
             }
         },
 
         methods: {
-            showBankList(){
-                if(JSON.stringify(this.IndexObj) == '{}') {
-                        this.show =true
-                        this.IndexObj = this.filterOptions(this.options)
-                }else {
-                    this.show =true
+            showBankList() {
+                if (JSON.stringify(this.IndexObj) == '{}') {
+                    this.show = true
+                    this.IndexObj = this.filterOptions(this.options)
+                } else {
+                    this.show = true
                 }
             },
             filterOptions(arr) {
@@ -109,13 +118,13 @@
                 this.$emit('getValue', name)
                 this.selectValue = index
             },
-            toBank(val){
+            toBank(val) {
                 console.log(val);
-                if(document.getElementById(val)){
+                if (document.getElementById(val)) {
                     document.getElementById(val).scrollIntoView()
 
-                }else {
-                    Bus.$emit(BusName.showToast,`没有${val}开头的银行`)
+                } else {
+                    Bus.$emit(BusName.showToast, `没有${val}开头的银行`)
                 }
             }
         }
@@ -124,6 +133,7 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
+
     .jsSelect {
         position: fixed;
         top: 0;
@@ -141,29 +151,29 @@
         position: relative;
         color: #dedede;
         font-size: .4rem;
-        padding-right: px2rem(100);
+        padding-right: px2rem(125);
         vertical-align: top;
-        .xiane{
+        .xiane {
             display: inline-block;
             padding-top: px2rem(3);
             font-size: px2rem(13);
             vertical-align: middle;
         }
-        .down{
+        .down {
             position: absolute;
             right: 0;
             top: 50%;
             color: #0096FE;
             transform: translateY(-50%);
-            img{
+            img {
                 vertical-align: middle;
                 width: px2rem(18);
                 margin-right: px2rem(1);
             }
 
-
         }
     }
+
     .activeTitle {
         color: #333;
     }
@@ -172,6 +182,9 @@
         padding: 0 .5rem;
         .bank-index {
             font-size: .4rem;
+            line-height: 0;
+            padding: px2rem(20) 0 px2rem(10);
+
         }
     }
 
@@ -181,16 +194,19 @@
         background: #fff;
         height: 90%;
         padding: .3rem 0 .6rem;
-        .right-index{
+        .right-index {
             position: absolute;
-            overflow:scroll;
+            overflow: scroll;
             -webkit-overflow-scrolling: touch;
-            max-height:80%;
+            max-height: 80%;
             width: 1rem;
             right: .4rem;
             top: 2rem;
             text-align: center;
-            .letter{
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            .letter {
                 color: #89afe6;
                 display: block;
                 font-size: .5rem;
@@ -200,10 +216,13 @@
             text-align: center;
             font-size: .5rem;
         }
-        .scroll-view{
+        .scroll-view {
             max-height: 90%;
             overflow-y: scroll;
             -webkit-overflow-scrolling: touch;
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
         .option {
             border-bottom: 1px solid #dedede;
@@ -229,10 +248,38 @@
             font-weight: bold;
             color: #ccc;
             font-size: .6rem;
+            width: px2rem(20);
+            height: px2rem(20);
+            img{
+                width: 100%;
+                height: 100%;
+            }
 
         }
 
     }
+    .bank-xiane{
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,.5);
+        width: px2rem(375);
+        padding-top: px2rem(20);
+        text-align: center;
+        height: px2rem(720);
+        overflow-y: scroll;
+        img{
+            width: px2rem(270);
+        }
+        .close{
+            position:absolute;
+            width: px2rem(30);
+            height: px2rem(30);
+            top: px2rem(3);
+            right: px2rem(3);
 
+
+        }
+    }
 
 </style>

@@ -29,6 +29,10 @@ Vue.component('app-bar', AppBar)
 // <!--<script src="http://47.94.4.11:8090/finsuit/static/finsuit/js/openapi/js/password-widget.min.js"></script>-->
 // <!--<script src="http://47.94.4.11:8090/finsuit/static/finsuit/js/openapi/js/jquery.base64.js"></script>
 // import {HOST} from "./Constant";
+import * as custom from './common/filters'
+Object.keys(custom).forEach(key=>{
+    Vue.filter(key, custom[key])
+})
 
 
 import router from './router'

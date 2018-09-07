@@ -31,8 +31,17 @@ axios.interceptors.response.use(
             setTimeout(() => {
                 Indicator.close();
             }, 1000)
-            // console.log('All error >>' + response)
-            return Promise.reject(error)
+            console.log('interceptors response errors>>',error);
+            if(error.toString().indexOf("timeout") != -1) {
+                return Promise.reject('网络请求超时')
+            }
+            else if(error.toString().indexOf("Network Error") != -1){
+                return Promise.reject('网络错误')
+            }
+            else {
+                return Promise.reject(error)
+            }
+
         }
 )
 

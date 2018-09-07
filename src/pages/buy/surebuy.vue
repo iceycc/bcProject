@@ -4,7 +4,7 @@
         <div class="buytitle" style="padding:0 0.4rem">
             <div>
                 <div class="buytitleleftimg">
-                    <img src="../../images/img/licaiicon@2x.png" style="width:100%" alt="">
+                    <img :src="imgSrc+datas.logo" style="width:100%" alt="">
                 </div>
                 <div class="buytitleleftcontent">
                     <p>{{datas.PRD_NAME}}</p>
@@ -53,7 +53,7 @@
 <script>
     import {API} from "../../request/api";
 
-    import {PageName,BusName,LsName} from "../../Constant";
+    import {PageName,BusName,LsName,imgSrc} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
     import {util} from "../../common/utils/util";
@@ -65,6 +65,7 @@
                 show: false,
                 money: null,
                 datas: {},
+                imgSrc:imgSrc,
                 toUrl: '',
                 pass: "",
                 len: 0,

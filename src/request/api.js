@@ -33,11 +33,11 @@ export const API = {
             return http.post(options, config, success, error)
         },
         // 注册
-        doRegeist(params, success, error) {
+        doRegeist(params,delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiValiUserAndBandCard',
                 params,
-
+                delMsg
             }
             return http.post(options, config, success, error)
         },
@@ -202,10 +202,10 @@ export const API = {
 
         },
         // 预约/
-        apiSaveSubscribeInfo(params, success, error) {
+        apiSaveSubscribeInfo(params,success, error) {
             let options = {
                 url: '/openapi/comm/apiSaveSubscribeInfo',
-                params
+                params,
             }
             return http.post(options, config, success, error)
 

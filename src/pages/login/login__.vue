@@ -18,11 +18,16 @@
                 <transition name="fade">
                     <p class="label" v-show="passShow">登陆密码</p>
                 </transition>
-                <pass-input
-                        :text="passText"
-                        class="input"
-                        inputID="login_loginPass"
-                ></pass-input>
+
+                <div class="input" id="pass-box">
+
+                </div>
+
+                <!--<pass-input-->
+                        <!--:text="passText"-->
+                        <!--class="input"-->
+                        <!--inputID="login_loginPass"-->
+                <!--&gt;</pass-input>-->
             </section>
 
             <span class="forget" @click="goRePass">忘记密码？</span>
@@ -51,6 +56,7 @@
     export default {
         data() {
             return {
+                show:false,
                 disabled: true,
                 tel: '',
                 pass: '',
@@ -79,8 +85,6 @@
                 Bus.$emit(BusName.showToast, preInfo.msg)
                 util.storage.session.remove('loginInfo')
             }
-
-
         },
         watch: {
             tel(n, o) {
@@ -107,10 +111,38 @@
             }
         },
         mounted() {
+            this.initPassPlugin('login_loginPass','pass-box')
             console.log('mounted');
             this.watchPassPlugin()
         },
         methods: {
+            initPassPlugin(inputID,parentDiv){
+                let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
+                let DeviceId = util.storage.session.get(LsName.DEVICE_ID)
+                let toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
+                let parent = document.querySelector(`#${parentDiv}`)
+                let child = document.querySelector(`#${inputID}`)
+                console.log(parent);
+                if(child){
+                    parent.removeChild(child);
+                }
+                let passHtmlDiv =`<div id="${inputID}"
+                     v-password-widget="${toUrl}"
+                     style="color: #ccc"
+                     modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
+                     maxlength="20" name="Password">登陆密码</div>`
+
+                parent.appendChild(passHtmlDiv);
+                $(`#${inputID}`).PasswordWidget()
+            },
+            getPassWord(inputID){
+                let pass = $(`#${inputID}`).$getCiphertext() || ''
+                let len = $(`#${inputID}`).$getPasswordLength() || 0
+                return{
+                    pass,
+                    len
+                }
+            },
             watchPassPlugin() {
                 let num = 1
                 // this.Londing.open({
@@ -166,14 +198,16 @@
                     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
                 })
                 this.$router.push({name: PageName.opening})
-                util.storage.session.set(LsName.reload, true)
             },
             doLogin() {
 
                 let msg;
                 if (msg = util.Check.tel(this.tel)) return Bus.$emit(BusName.showToast, msg);
-                let pass = $('#login_loginPass').$getCiphertext()
-                let lengths = $('#login_loginPass').$getCiphertext()
+                let passObj = this.getPassWord('login_loginPass')
+                console.log(passObj);
+                let pass = passObj.pass
+                let lengths = passObj.len
+
                 if (msg = util.Check.loginPassLen(lengths)) return Bus.$emit(BusName.showToast, msg);
 
                 let data = {
@@ -239,7 +273,7 @@
                     })
                     // this.reload()
                     setTimeout(() => {
-                        window.location.reload()
+                        // window.location.reload()
                     }, 1500)
                     // this.refur =!this.refur
                     // this.show = false;

@@ -24,7 +24,7 @@
         },
         created(){
             let isE = util.isEquipment()
-            if(isE.isApp || isE.isWeixin){
+            if(isE.isApp || isE.isWeixin || isE.isQQ || isE.isWeibo){
                 this.show = false
             }
         },

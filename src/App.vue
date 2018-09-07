@@ -16,7 +16,7 @@
 
 <script>
     import Bus from './common/js/bus'
-    import {BusName, LsName} from './Constant'
+    import {BusName} from './Constant'
     import {API} from "./request/api";
     import util from "./common/utils/util";
 
@@ -48,7 +48,8 @@
             },
         },
         created() {
-
+            console.log('设备userAgent>>' + navigator.userAgent);
+            // alert(navigator.userAgent);
             Bus.$on(BusName.showToast, (val) => {
                 this.showToast = true
                 this.msg = val

@@ -14,8 +14,8 @@
             {{CARD_BANK_NAME}}
         </div>
         <div class=" money">
-            <p>每笔限额：{{SINGLE_QUOTA}}元</p>
-            <p>每日限额：{{DAY_QUOTA}}元</p>
+            <p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p>
+            <p>每日限额：{{DAY_QUOTA | formatNum}}元</p>
         </div>
         <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
             <span class="Amount">金额</span>
@@ -383,6 +383,7 @@
 
     .bang {
         margin-left: 0.5rem;
+        margin-top: 0.5rem;
         background: url(../../images/img/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
         font-size: 0.4rem;

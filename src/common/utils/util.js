@@ -173,7 +173,7 @@ const Check = {
             msg = '身份证号码不能为空'
         }
         else if (!reg.test(val)) {
-            msg = '身份证号码格式错误，X为大写'
+            msg = '身份证号码格式错误'
         }
         else {
 
@@ -197,6 +197,8 @@ const Check = {
         return msg
     }
 }
+
+import EXIF from 'exif-js'
 
 export const util = {
     //本地存储
@@ -274,26 +276,35 @@ export const util = {
     imgScale(imgUrl, fileList, quality) {
         return new Promise(function (resolve, reject) {
             let img = new Image();
+
             let _this = this;
             let canvas = document.createElement('canvas');
-            let cxt = canvas.getContext('2d');
+            let ctx = canvas.getContext('2d');
             let base64 = null;
             img.src = imgUrl;
+
             img.onload = function () {
+                // let s = util.getPhotoOrientation(fileList)
+                // console.log(s);
                 if ((fileList.size / 1024 / 1024) > 0) { //质量大于1m
                     //缩放后图片的宽高
-                    console.log(1)
                     // 500 k  800 x 500
                     let rateW = img.naturalWidth / 400
                     let rateH = img.naturalHeight / 250
                     console.log(img.naturalWidth, img.naturalHeight)
-                    let width = img.naturalWidth / rateW;
-                    let height = img.naturalHeight / rateH;
+                    let width, height
+                    width = img.naturalWidth / rateW;
+                    height = img.naturalHeight / rateH;
                     console.log(width, height)
 
                     canvas.width = width;
                     canvas.height = height;
-                    cxt.drawImage(this, 0, 0, width, height);
+
+                    ctx.drawImage(this, 0, 0, width, height);
+                    // if (img.naturalWidth < img.naturalHeight) {
+                    //     console.log(1);
+                    //     ctx.rotate(Math.PI / 2)
+                    // }
                     base64 = canvas.toDataURL('image/jpeg', 0.8);
                     resolve(base64);
                 } else {
@@ -315,6 +326,15 @@ export const util = {
                 }
             }
         })
+    },
+    getPhotoOrientation(img) {
+        console.log('img', img);
+        var orient;
+        EXIF.getData(img, function () {
+            orient = EXIF.getAllTags(this)
+            ;
+        });
+        return orient;
     },
     canvasUpload(url, data, rawFile, type, uploadingFn, successFn, failerFn) {
         console.log("rawFile>>>>>>>>>", rawFile);
@@ -726,7 +746,8 @@ export const util = {
             if (ua.match(/MicroMessenger/i) == 'micromessenger') {
                 callback1();
             } else {
-                window.location.href = "http://finsafe.geong.com:8989/down?ID=1";
+                window.location.href = "http://app.qq.com/#id=detail&appid=1105662720";
+                // window.location.href = "http://finsafe.geong.com:8989/down?ID=1";
             }
         } else if (isiOS) {
             window.location.href = "https://itunes.apple.com/cn/app/%E6%AF%94%E8%B4%A2/id1149189800?mt=8";
@@ -794,7 +815,7 @@ export const util = {
         }, 2000);
     },
     reDo(fn) {
-        for (i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 3; i++) {
             setTimeout(() => {
                 fn && fn()
             }, 1000)
@@ -810,14 +831,13 @@ export const util = {
                 isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
                 isBlackBerry = /BlackBerry/i.test(UA),
                 isWindowPhone = /IEMobile/i.test(UA),
-                isApp = UA.indexOf('besharp') > -1, // 自己的app
+                isApp = /besharp/gi.test(UA), // UA.indexOf('besharp') > -1, // 自己的app
                 isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
-
         return {
             isAndroid: isAndroid,
             isIOS: isIOS,
             isMobile: isMobile,
-            isApp:isApp,
+            isApp: isApp,
             isWeixin: /MicroMessenger/gi.test(UA),
             isQQ: /QQ/gi.test(UA),
             isPC: !isMobile,

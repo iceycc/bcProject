@@ -16,9 +16,9 @@
                                 v-model="values[item.questionNum]"
                                 :options="item.options | optionsFilter">
                         </mt-radio>
-                        <div style="text-align:center">
-                            <span class="begain" v-if="index!=0" @click="goRre">上一题</span>
-                            <span class="begain" @click="goNext(item.questionNum)">提交</span>
+                        <div style="display: flex">
+                            <button class="begain" v-if="index!=0" @click="goRre">上一题</button>
+                            <button class="begain" @click="goNext(item.questionNum)">提交</button>
                         </div>
                     </section>
                 <!--</transition>-->
@@ -31,7 +31,7 @@
 <script>
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
-    import {BusName, PageName} from "../../Constant";
+    import {BusName, PageName,LsName} from "../../Constant";
     import util from '../../common/utils/util'
     const ProblomIndex = ['A','B','C','D','E','F','G','H','I','J','K']
 
@@ -87,6 +87,7 @@
                         ANSWER_LIST
                     }
                     API.risk.apiRiskTestAnswer(data, (res) => {
+                        util.storage.session.set(LsName.HAS_GRADE,2)
                         this.$router.push({
                             name: PageName.fengxianresult,
                             query: res
@@ -103,7 +104,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+    @import "../../assets/px2rem";
     .app {
         width: 94%;
         padding: 0 3%;
@@ -141,7 +142,9 @@
         line-height: 1rem;
         width: 35%;
         text-align: center;
-        margin-top: 1.3rem;
+        flex: 1;
+        margin:px2rem(50) px2rem(20) 0;
+
     }
 
     .radio {

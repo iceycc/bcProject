@@ -4,7 +4,7 @@
         <div class="buytitle">
             <div class="buytitleleft">
                 <div class="buytitleleftimg">
-                    <img src="../../images/img/licaiicon@2x.png" style="width:100%" alt="">
+                    <img :src="imgSrc+proDetail.logo" style="width:100%" alt="">
                 </div>
                 <div class="buytitleleftcontent">
                     <p>{{proDetail.PRD_NAME}}</p>
@@ -18,7 +18,7 @@
         </div>
 
         <div class="buysuccessdetails">
-            <div class="buysuccessdetailleft">可用金额 <strong>{{payNum}}元</strong></div>
+            <div class="buysuccessdetailleft">可用金额 <strong>{{payNum | formatNum}}元</strong></div>
             <div class="buysuccessdetailright" @click="goReChang">充值</div>
         </div>
         <div class="buydetails">
@@ -26,99 +26,104 @@
             <span class="buydetailsmoney">￥</span>
             <input type="number" :placeholder="proDetail.TXT_MIN_AMOUNT" v-model="moneyNum">
         </div>
-        <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 {{proDetail.REMAIN_AMT}}元</p>
+        <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 {{proDetail.REMAIN_AMT | formatNum}}元</p>
         <button class="tijiao" @click="goBuy">购买</button>
         <p @click="agree =!agree"
-                :class="{'bang':true,'no':agree == false}">我已阅读并同意注册
+           :class="{'bang':true,'no':agree == false}">我已阅读并同意注册
             <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
             <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('B')">《晋商银行直销银行"安鑫富"投融资协议》</a>
         </p>
     </div>
 </template>
 <script>
-    import {PageName,BusName,LsName} from "../../Constant";
+    import {PageName, BusName, imgSrc, LsName} from "../../Constant"
     import Bus from '../../common/js/bus'
-    import {API} from "../../request/api";
-    import util from "../../common/utils/util";
+    import {API} from "../../request/api"
     import {Mixin} from '../../common/utils/mixin'
+    import util from "../../common/utils/util";
+
+
     export default {
-        data(){
+        data() {
             return {
-                proDetail:{},
-                moneyNum:null,
-                payNum:null,
-                agree:true
+                proDetail: {},
+                moneyNum: null,
+                payNum: '',
+                agree: true,
+                imgSrc: imgSrc
 
             }
         },
-        // mixins: [Mixin],
-        created(){
+        mixins: [Mixin],
+        created() {
 
             this.getInfo()
             this.proDetail = this.$route.query // 数据
         },
-        methods:{
-            getInfo(){
-                API.buy.apiQueryAccRest({},res=>{
+
+        methods: {
+            getInfo() {
+                API.buy.apiQueryAccRest({}, res => {
                     this.payNum = res.TOTAL_ASSET
                 })
             },
-            goReChang(){
+            goReChang() {
                 this.$router.push({
-                    name:PageName.Recharge,
-                    query:{
-                        PRD_NAME:this.proDetail.PRD_NAME, // 产品名称
-                        id:this.proDetail.id,
-                        ORG_NAME:this.proDetail.ORG_NAME, // 直销银行名称
-                        logo:this.proDetail.logo, // 直销银行名称
+                    name: PageName.Recharge,
+                    query: {
+                        PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
+                        id: this.proDetail.id,
+                        ORG_NAME: this.proDetail.ORG_NAME, // 直销银行名称
+                        logo: this.proDetail.logo, // 直销银行名称
                     }
                 })
             },
             getAgreement(type) {
                 this.agree = true
                 this.$router.push({
-                    name:PageName.DocsPage,
-                    query:{
+                    name: PageName.DocsPage,
+                    query: {
                         type,
-                        id:this.proDetail.id
+                        id: this.proDetail.id
                     }
                 })
             },
-            goBuy(){
+            goBuy() {
                 console.log(this.moneyNum);
-                if(!this.agree){
-                    Bus.$emit(BusName.showToast,'请同意相关协议')
+                if (!this.agree) {
+                    Bus.$emit(BusName.showToast, '请同意相关协议')
                     return
                 }
-                if(!this.moneyNum){
-                    Bus.$emit(BusName.showToast,'请填写购买金额')
+                if (!this.moneyNum) {
+                    Bus.$emit(BusName.showToast, '请填写购买金额')
                     return
                 }
-                if(typeof (this.moneyNum - 0) != 'number' || isNaN(this.moneyNum - 0)){
-                    Bus.$emit(BusName.showToast,'请填写正确的金额')
+                if (typeof (this.moneyNum - 0) != 'number' || isNaN(this.moneyNum - 0)) {
+                    Bus.$emit(BusName.showToast, '请填写正确的金额')
                     return
                 }
-                if(this.moneyNum -0 > this.payNum){
-                    Bus.$emit(BusName.showToast,'余额不足，请先充值')
+                if (this.moneyNum - 0 > this.payNum) {
+                    Bus.$emit(BusName.showToast, '余额不足，请先充值')
                     return
                 }
-                if(this.moneyNum -0 > this.REMAIN_AMT){
-                    Bus.$emit(BusName.showToast,'可投额度不足')
+                if (this.moneyNum - 0 > this.REMAIN_AMT) {
+                    Bus.$emit(BusName.showToast, '可投额度不足')
                     return
                 }
                 this.Londing.open({
                     spinnerType: 'triple-bounce'
                 })
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.Londing.close()
-                },500)
+                }, 500)
                 this.$router.push({
-                    name:PageName.surebuy,
-                    query:{
-                        money:this.moneyNum,
-                        PRD_NAME:this.proDetail.PRD_NAME,
-                        id:this.proDetail.id,
-                        ORG_NAME:this.proDetail.ORG_NAME,
+                    name: PageName.surebuy,
+                    query: {
+                        money: this.moneyNum,
+                        PRD_NAME: this.proDetail.PRD_NAME,
+                        id: this.proDetail.id,
+                        ORG_NAME: this.proDetail.ORG_NAME,
+                        logo:this.proDetail.logo,
                     }
                 })
 
@@ -148,20 +153,19 @@
 
     .buytitleleftimg {
         vertical-align: middle;
-        padding-top: 0.3rem;
+        padding-top: 0.2rem;
         width: 1rem;
         display: inline-block;
+
     }
 
     .buytitleleftcontent {
+        vertical-align: middle;
         padding-top: -0.5rem;
         display: inline-block;
         padding-left: 0.4rem;
         font-size: 0.35rem;
-        vertical-align: middle;
     }
-
-
 
     .buytitleright {
         float: right;
@@ -237,9 +241,8 @@
         border-radius: 0.2rem;
         line-height: 1.2rem;
         width: 63%;
-        margin: 0 auto;
+        margin: 0.5rem auto 0.8rem;
         text-align: center;
-        margin-top: 0.5rem;
         outline: none;
         display: block;
     }
@@ -253,7 +256,8 @@
         padding: 0 0.5rem;
 
     }
-    .no{
+
+    .no {
         background: url(../../images/img/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.3rem 0.3rem;
     }

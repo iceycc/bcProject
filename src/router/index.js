@@ -47,13 +47,13 @@ addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
 /**
  * login
  */
-addRouter(PageName.login, {keepAlive: false, title: '登陆',needLogin:false});
+addRouter(PageName.login, {keepAlive: false, title: '安全登陆',needLogin:false});
 /**
  * open
  */
-addRouter(PageName.opening, {keepAlive: true, title: '开户',needLogin:false});
-addRouter(PageName.opening2, {keepAlive: false, title: '开户',needLogin:false});
-addRouter(PageName.opening3, {keepAlive: false, title: '开户',needLogin:false});
+addRouter(PageName.opening, {keepAlive: true, title: '信息填写',needLogin:false});
+addRouter(PageName.opening2, {keepAlive: false, title: '信息填写',needLogin:false});
+addRouter(PageName.opening3, {keepAlive: false, title: '信息填写',needLogin:false});
 
 
 
@@ -110,7 +110,13 @@ router.beforeEach((to, from, next) => {
         if(sign){
             next()
         }else {
-            Bus.$emit(BusName.showToast,'正在去往登陆页')
+            // Indicator.open({
+            //     text:'您还未登陆，请先登录'
+            // })
+            // setTimeout(()=>{
+            //     Indicator.close()
+            // },300)
+            Bus.$emit(BusName.showToast,'您还未登陆，请先登陆')
             next({
                 name:PageName.login,
                 query:{
@@ -128,7 +134,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to, from) => {
 
-    Indicator.close()
+    // Indicator.close()
 
 });
 

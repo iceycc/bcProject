@@ -3,7 +3,7 @@
         <span @click="show =true" :class="{'infoText':true,'activeTitle':titleSelect}">{{text}}</span>
         <div class="jsSelect" v-if="show">
             <section class="select-box">
-                <i class="close" @click="show=false">X</i>
+                <i class="close" @click="show=false"><img :src="closeImg" alt=""></i>
                 <p class="title">{{title}}</p>
                 <ul class="select">
                     <li
@@ -43,6 +43,7 @@
 
         data() {
             return {
+                closeImg:require('../../images/img/icon_ask_close.svg'),
                 titleSelect:false,
                 show:false,
                 selectValue: -1,
@@ -60,6 +61,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../assets/px2rem';
     .jsSelect {
         position: fixed;
         top: 0;
@@ -96,17 +98,18 @@
         position:relative;
         border-radius: 10px;
         background: #fff;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-        max-height: 90%;
+        height: px2rem(548);
+
         padding:.3rem 0 .6rem;
         .title {
             text-align: center;
             font-size: .5rem;
         }
         .select {
+            max-height: 90%;
             padding: 0 .5rem;
-
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
         }
         .option {
             border-bottom: 1px solid #dedede;
@@ -127,13 +130,15 @@
         }
 
         .close{
-            font-style: normal;
             position: absolute;
-            top: -0.1rem;
+            top: px2rem(-1);
             right: .3rem;
-            font-weight: bold;
-            color: #ccc;
-            font-size: .6rem;
+            width: px2rem(20);
+            height: px2rem(20);
+            img{
+                width: 100%;
+                height: 100%;
+            }
 
         }
 

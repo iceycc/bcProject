@@ -28,60 +28,68 @@
                 <transition name="fade">
                     <p class="label" v-if="loginShow">登陆密码</p>
                 </transition>
-                <input class="input" type="password"
-                       @focus="showBox"
-                       name="text1" :placeholder="telPaceholder" v-model="s_loginPass">
+                <!--name="text1" :placeholder="telPaceholder" v-model="s_loginPass"-->
+                <span class="input"
+                       @click="showBox"
+                      >{{telPaceholder}}</span>
             </section>
             <section class="input-box">
                 <transition name="fade">
                     <p class="label" v-if="loginShow">交易密码</p>
                 </transition>
-                <input class="input" type="password"
-                       @focus="showBox"
-                       name="text1" :placeholder="telPaceholder" v-model="s_payPass">
+                <!--name="text1" :placeholder="payPaceholder" v-model="s_payPass"-->
+                <span class="input"
+                       @click="showBox"
+                      >{{payPaceholder}}</span>
             </section>
         </div>
-        <div class="tijiao Tips" v-if="errMsg">{{errMsg}}</div>
+        <div class="Tips" v-if="errMsg">
+            <span>{{errMsg}}</span>
+        </div>
         <button
                 :class="{'tijiao':true, 'agree':!disabled}"
                 @click="postData" :disabled="disabled">开户</button>
         <div v-if="ifShow" class="bgbox">
             <div class="passbox">
-                <p class="title">
-                    <img src="../../images/img/icon_dunpai@2x.png" alt="">
-                    由晋商银行提供技术保障</p>
-                <div class="field_row_wrap">
-                    <p class="field_row_key">
-                        登陆密码
-                    </p>
-                    <div class="field_row_value">
-                        <pass-input
-                                inputID="loginPass"
-                                :doGetData="ifGet"
-                        ></pass-input>
-                    </div>
-                    <p class="info">密码由大写，小写英文字母以及数字组成</p>
-                    <p class="info">密码位数大于等于8位，小于等于20位</p>
-                </div>
-
-                <div class="field_row_wrap">
-                    <p class="field_row_key">
-                        交易密码
-                    </p>
-                    <div class="field_row_value">
-                        <pass-input
-                                inputID="payPass"
-                                :doGetData="ifGet"
-                        ></pass-input>
+                <div class="top">
+                    <p class="title">
+                        <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                        由晋商银行提供技术保障</p>
+                    <div class="field_row_wrap">
+                        <p class="field_row_key">
+                            登陆密码
+                        </p>
+                        <div class="field_row_value">
+                            <pass-input
+                                    inputID="loginPass"
+                                    :doGetData="ifGet"
+                            ></pass-input>
+                        </div>
+                        <p class="info">密码由大写，小写英文字母以及数字组成</p>
+                        <p class="info">密码位数大于等于8位，小于等于20位</p>
                     </div>
 
-                    <p class="info">密码由数字组成，必须为6位</p>
+                    <div class="field_row_wrap">
+                        <p class="field_row_key">
+                            交易密码
+                        </p>
+                        <div class="field_row_value">
+                            <pass-input
+                                    inputID="payPass"
+                                    :doGetData="ifGet"
+                            ></pass-input>
+                        </div>
+
+                        <p class="info">密码由数字组成，必须为6位</p>
+                    </div>
+
                 </div>
                 <div class="btn">
-                    <mt-button @click="cancel" type="primary">取消</mt-button>
-                    <mt-button @click="subumit" type="primary">提交</mt-button>
+                    <button @click="cancel">取消</button>
+                    <button @click="subumit">提交</button>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -97,10 +105,10 @@
     export default {
         data() {
             return {
-                loginShow: true,
+                loginShow: false,
                 telPaceholder: '登陆密码',
+                payPaceholder:'交易密码',
                 disabled:true,
-
                 reGet: true,
                 s_loginPass: '',
                 s_payPass: '',
@@ -166,6 +174,23 @@
                 }
                 API.open.setPassWord(data, res => {
                     // todo
+                    let ProDuctData = util.storage.session.get(LsName.ProDuctData)
+                    if(ProDuctData){ // 判断是从预约产品过来的 ， 直接预约
+                        API.product.apiSaveSubscribeInfo(ProDuctData, res => {
+                            console.log(res);
+                            util.storage.session.remove(LsName.ProDuctData)
+                            this.$router.push({
+                                name: PageName.OrderNextSuccess,
+                                query: {
+                                    PRD_NAME: ProDuctData.PRD_NAME,
+                                }
+                            })
+                        },err=>{
+                            util.storage.session.remove(LsName.ProDuctData)
+                            console.log(err);
+                        })
+                        return
+                    }
                     Bus.$emit(BusName.showToast, '注册成功,即将跳转登陆页')
                     util.storage.session.remove(LsName.token)
                     util.storage.session.set(LsName.reload, true)
@@ -220,7 +245,6 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
-
     .bgbox {
         width: 100%;
         height: 100%;
@@ -233,8 +257,10 @@
             background: #fff;
             width: 80%;
             margin: 0 auto;
-            padding: 0.4rem;
             box-sizing: border-box;
+        }
+        .top{
+            padding: 0.4rem;
         }
         .field_row_key {
             font-size: 0.4rem;
@@ -255,10 +281,11 @@
             margin-bottom: 0.2rem;
         }
         .field_row_value {
-            border-radius: 4px;
-            border: 1px solid #9e9e9e;
-            height: 0.9rem;
-            line-height: 0.9rem;
+            border-radius: px2rem(4);
+            border: 1px solid #DDD;
+            height: px2rem(34);
+            line-height: px2rem(34);
+            padding-left: px2rem(3);
             margin: 0.2rem 0;
         }
         .info {
@@ -267,8 +294,12 @@
             color: #aeaeae;
         }
         .btn {
+            border-top: 1px solid #efefef;
+            padding: px2rem(14) 0;
             display: flex;
             button {
+                color:#108EE9;
+                font-size: px2rem(17);
                 margin: 0 .3rem;
                 text-align: center;
                 flex: 1;
@@ -332,9 +363,10 @@
         color: #fff;
         font-size: px2rem(18);
         border-radius: px2rem(5);
-        width: px2rem(255);
+        width: px2rem(261);
         height: px2rem(44);
-        margin: px2rem(60) auto 0;
+        line-height: px2rem(44);
+        margin: px2rem(50) auto 0;
         text-align: center;
         display: block;
         &.agree{
@@ -343,9 +375,21 @@
     }
 
     .Tips {
-        margin-top: 0.533333rem;
-        background-color: #FF5B05;
-        width: 90%;
+        margin:px2rem(17) auto 0;
+        text-align: center;
+        span{
+            box-sizing: border-box;
+            display: inline-block;
+            background-color: #FF5B05;
+            color: #fff;
+            min-width: px2rem(261);
+            height: px2rem(29);
+            line-height: px2rem(29);
+            padding: 0 px2rem(6);
+            border-radius: px2rem(4);
+
+
+        }
     }
 
     .wrapicon {
@@ -353,6 +397,8 @@
         display: flex;
         position: relative;
         margin-bottom: .3rem;
+        margin-top: px2rem(4);
+
         .circle {
             flex: 1;
             display: flex;
@@ -421,6 +467,9 @@
             width: 90%;
             background-size: 0.7rem 0.7rem;
             border-bottom: 1px #E5E5E5 solid;
+            input{
+                @include placeholder(#333)
+            }
         }
         .label {
             padding: 0;
@@ -428,14 +477,15 @@
             font-size: px2rem(17);
             color: #858E9F;
         }
+
         .input {
-            @include placeholder(#dedede);
+            /*@include placeholder(#dedede);*/
             height: px2rem(24);
             margin: px2rem(10) 0;
             width: 50%;
             border: none;
             box-sizing: border-box;
-            font-size: px2rem(16);
+            font-size: px2rem(14);
             color: #333;
             /* line-height: 40px; */
             outline: none;

@@ -1,11 +1,12 @@
 // 静态值定义： 【应用配置】
 
 
-
+let url = 'http://192.168.100.96'
 
 let Configs = {
     DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
     // DEV_HOST:'http://192.168.100.109:8080/finsuit', // 测试
+    // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
     PRO_HOST:'https://adv.udomedia.com.cn/finsuit' ,//
     APP_DOWN_URL:'http://www.baidu.com',
 }
@@ -57,5 +58,8 @@ export const LsName ={
     token:'token',
     DEVICE_ID:'DEVICE_ID',
     reload:'reload', // 用于强制刷新 密码控件暂时只能强制刷新重载 否则不行
+    HAS_GRADE:'HAS_GRADE', // 是否评估 1 否  2 是
+    LoginTarget:'LoginTarget', // 其他页面跳转登陆页进行跳转的页面  主要跳转后情况
+    ProDuctData:'ProDuctData', // 其他页面跳转登陆页进行跳转的页面  主要跳转后情况
 }
 

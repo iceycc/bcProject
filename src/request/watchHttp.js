@@ -5,7 +5,7 @@ import {HOST} from "../Constant";
 let config = {
     baseURL:HOST
 }
-
+var instance = axios.create(config);
 export default {
     // POST
     post: function (option, success, error) {
@@ -59,8 +59,7 @@ export default {
         config.data = 'param_key=' + JSON.stringify(datas)
         config.url = url
         // HTTP请求
-        return axios.request(config).then(result => {
-            console.log('res >>>', result);
+        return instance.request(config).then(result => {
 
             return Promise.resolve(result)
             // 根据状态码 做业务状态校验 分流

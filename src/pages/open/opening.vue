@@ -30,14 +30,14 @@
                     <div class="words">身份证人像页照</div>
                     <div class="cameraphotoimg">
                         <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
-                        <input type="file" class="inputBox" @change="uploadChangeZheng($event)">
+                        <input type="file" capture="camera" accept="image/*" class="inputBox" @change="uploadChangeZheng($event)">
                     </div>
                 </div>
                 <div class="cameraphoto">
                     <div class="words">身份证国徽页照</div>
                     <div class="cameraphotoimg">
                         <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
-                        <input type="file" class="inputBox" @change="uploadChangeFan($event)">
+                        <input type="file"  capture="camera" accept="image/*" class="inputBox" @change="uploadChangeFan($event)">
                     </div>
                 </div>
             </section>
@@ -95,6 +95,8 @@
     import {API} from "../../request/api";
     import Bus from "../../common/js/bus"
     import JsSelect from '../../components/commons/JsSelect'
+    import EXIF from 'exif-js'
+
 
     export default {
         data() {
@@ -142,7 +144,7 @@
                 ],
                 education: [
                     {name: '研究生', value: '0'},
-                    {name: '大学本科究生', value: '20'},
+                    {name: '大学本科', value: '20'},
                     {name: '大学专科或专科学校', value: '30'},
                     {name: '中等专业学校或中等技术学校', value: '40'},
                     {name: '技术学校', value: '50'},
@@ -182,16 +184,16 @@
                 this.data.USER_DUTY = val.value
 
             },
+            // console.log('img >>', EXIF.getAllTags(imgUrl));
 
             uploadChangeZheng(e) {
                 var newsrc = this.getObjectURL(e.target.files[0]);
                 console.log(newsrc);
-
+                console.log('img >>', EXIF.getAllTags(e.target.files[0]));
                 this.preSrc1 = newsrc
                 this.imgStyle1 = 'width:100%;max-height:100%'
                 util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
                     this.test1 = data
-                    console.log(encodeURI(this.test1))
                     this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g, '%2B')
 
                     // console.log(this.data.CARD_FRONT_FILE);
@@ -202,6 +204,11 @@
                         phoneNum: this.data.phoneNum
                     }
                     API.open.apiIdCardFrontPhoneOcr(params, res => {
+                        if(res.status != 0) {
+                            this.data.CARD_FRONT_FILE = ''
+                            Bus.$emit(BusName.showToast, res.message)
+                            return
+                        }
                         this.data.memberId = res.memberId
                         this.data.phoneNum = res.phoneNum
 
@@ -227,6 +234,11 @@
                         phoneNum: this.data.phoneNum
                     }
                     API.open.apiIdCardBackPhoneOcr(params, res => {
+                        if(res.status != 0) {
+                            this.data.CARD_BACK_FILE = ''
+                            Bus.$emit(BusName.showToast, res.message)
+                            return
+                        }
                         this.data.memberId = res.memberId
                         this.data.phoneNum = res.phoneNum
                     })
@@ -240,6 +252,7 @@
                     FUNCTION_ID: 'ptb0A003', // 点位
                     REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
                 })
+                this.data.USER_CARD_ID = this.data.USER_CARD_ID.toString().toUpperCase()
                 let data = this.data
                 let msg
                 // 校验
@@ -267,11 +280,15 @@
                     return
                 }
 
-                this.checkID(() => {
+                this.checkID((REQ_SERIAL,step) => {
                     this.$router.push({
                         name: PageName.opening2,
+                        query:{
+                            REQ_SERIAL:REQ_SERIAL,
+                            LAST_STEP_NUM:step
+                        },
                         params:{
-                            data:this.data
+                            data:this.data,
                         }
                     })
                 })
@@ -289,11 +306,11 @@
                     console.log('步数 >>>', step);
                     if (step == 0) {
                         // Bus.$emit(BusName.showToast,"欢迎注册")
-                        fn && fn()
+                        fn && fn(REQ_SERIAL,step)
                     }
                     if (step == 1) {
                         // Bus.$emit(BusName.showToast,"第二步")
-                        fn && fn()
+                        fn && fn(REQ_SERIAL,step)
                     }
                     if (step == 2) {
                         Bus.$emit(BusName.showToast, "您已经实名成功")
@@ -359,6 +376,7 @@
         display: flex;
         position: relative;
         margin-bottom: .3rem;
+        margin-top: px2rem(4);
         .step-text{
             padding-top: px2rem(7);
         }
@@ -442,7 +460,6 @@
             outline: none;
             background: #fff;
             height: 1rem;
-
         }
 
     }
@@ -552,10 +569,9 @@
         top: 0;
         display: inline-block;
         width: 100%;
-        height: 100%;
+        height: px2rem(80) !important;
         opacity: 0;
         vertical-align: middle;
-
     }
 
 
