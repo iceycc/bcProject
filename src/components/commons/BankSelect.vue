@@ -3,7 +3,7 @@
         <section style="text-align:center;display: inline-block;width: 100%"
                  :class="{'infoText':true,'activeTitle':titleSelect}">
             <span @click="showBankList">{{text}}</span>
-            <span class="down" @click="backShow=true">
+            <span class="down" @click="bankShowHandle">
                 <img @click.stop="showBankList" src="../../images/img/GroupCopy14@2x.png" alt="">
                 <img src="../../images/img/problom2@2x.png" alt="">
                <span class="xiane">银行限额</span>
@@ -61,7 +61,11 @@
                 type: null,
                 default: '请选择'
             },
-            title: null
+            title: null,
+            canClick: {
+                type: null,
+                default: true
+            }
         },
         watch: {
             // options(n,o){
@@ -81,18 +85,22 @@
         },
         data() {
             return {
-                closeImg:require('../../images/img/icon_ask_close.svg'),
+                closeImg: require('../../images/img/icon_ask_close.svg'),
                 titleSelect: false,
                 show: false,
                 selectValue: 1,
                 IndexObj: {},
                 indexArr: Letter,
-                backShow:false
+                backShow: false
             }
         },
 
         methods: {
             showBankList() {
+                console.log(this.canClick);
+                if (!this.canClick) {
+                    return
+                }
                 if (JSON.stringify(this.IndexObj) == '{}') {
                     this.show = true
                     this.IndexObj = this.filterOptions(this.options)
@@ -126,6 +134,9 @@
                 } else {
                     Bus.$emit(BusName.showToast, `没有${val}开头的银行`)
                 }
+            },
+            bankShowHandle() {
+                this.backShow = true
             }
         }
     }
@@ -198,10 +209,10 @@
             position: absolute;
             overflow: scroll;
             -webkit-overflow-scrolling: touch;
-            max-height: 80%;
+            max-height: 91%;
             width: 1rem;
             right: .4rem;
-            top: 2rem;
+            top: px2rem(45);
             text-align: center;
             &::-webkit-scrollbar {
                 display: none;
@@ -209,7 +220,8 @@
             .letter {
                 color: #89afe6;
                 display: block;
-                font-size: .5rem;
+                font-size: px2rem(16);
+                line-height: 1.4;
             }
         }
         .title {
@@ -250,7 +262,7 @@
             font-size: .6rem;
             width: px2rem(20);
             height: px2rem(20);
-            img{
+            img {
                 width: 100%;
                 height: 100%;
             }
@@ -258,26 +270,26 @@
         }
 
     }
-    .bank-xiane{
+
+    .bank-xiane {
         position: fixed;
         top: 0;
         left: 0;
-        background: rgba(0,0,0,.5);
+        background: rgba(0, 0, 0, .5);
         width: px2rem(375);
         padding-top: px2rem(20);
         text-align: center;
         height: px2rem(720);
         overflow-y: scroll;
-        img{
+        img {
             width: px2rem(270);
         }
-        .close{
-            position:absolute;
+        .close {
+            position: absolute;
             width: px2rem(30);
             height: px2rem(30);
             top: px2rem(3);
             right: px2rem(3);
-
 
         }
     }

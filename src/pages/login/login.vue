@@ -156,6 +156,7 @@
                 }
             },
             goRePass() {
+                util.storage.session.set(LsName.reload, true)
                 this.$router.push({
                     name: PageName.Resetpassword
                 })
@@ -165,8 +166,8 @@
                     FUNCTION_ID: 'ptb0A008', // 点位
                     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
                 })
-                this.$router.push({name: PageName.opening})
                 util.storage.session.set(LsName.reload, true)
+                this.$router.push({name: PageName.opening})
             },
             doLogin() {
 

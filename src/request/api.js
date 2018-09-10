@@ -33,11 +33,13 @@ export const API = {
             return http.post(options, config, success, error)
         },
         // 注册
-        doRegeist(params,delMsg, success, error) {
+        // OTHER  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
+        doRegeist(params, delMsg, OTHER, success, error) {
             let options = {
                 url: '/openapi/comm/apiValiUserAndBandCard',
                 params,
-                delMsg
+                delMsg,
+                OTHER
             }
             return http.post(options, config, success, error)
         },
@@ -97,7 +99,7 @@ export const API = {
         let options = {
             url: '/openapi/comm/apiLoginBank',
             params,
-            login:true
+            login: true
         }
         return http.post(options, config, success, error)
     },
@@ -202,7 +204,7 @@ export const API = {
 
         },
         // 预约/
-        apiSaveSubscribeInfo(params,success, error) {
+        apiSaveSubscribeInfo(params, success, error) {
             let options = {
                 url: '/openapi/comm/apiSaveSubscribeInfo',
                 params,
@@ -215,12 +217,13 @@ export const API = {
     /**
      *  安全相关
      */
-    safe:{
+    safe: {
         // 重制密码
-        apiUserResetLoginPass(params, success, error) {
+        apiUserResetLoginPass(params, delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiUserResetLoginPass',
-                params
+                params,
+                delMsg
             }
             return http.post(options, config, success, error)
 
@@ -251,7 +254,7 @@ export const API = {
     /**
      * list相关
      */
-    list:{
+    list: {
         // /openapi/comm/apiGetBankCardList
         apiGetBankCardList(params, success, error) {
             let options = {
@@ -265,7 +268,7 @@ export const API = {
     /**
      * 查询类
      */
-    query:{
+    query: {
         // openapi/comm/apiQueryBizStatus
         apiQueryBizStatus(params, success, error) {
             let options = {
@@ -280,7 +283,7 @@ export const API = {
     /**
      * watch
      */
-    watch:{
+    watch: {
         watchApi(params, success, error) {
             let options = {
                 url: '/finsuitPhone/deal',

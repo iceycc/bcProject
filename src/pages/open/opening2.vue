@@ -30,6 +30,7 @@
                 <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
                 <!-- <span  class="limit">银行限额</span>  -->
                 <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
+                             :canClick="canClick"
                              title="银行列表"></Bank-select>
 
             </section>
@@ -40,7 +41,7 @@
             </section>
             <section class="input-box">
                 <p>手机号码</p>
-                <input type="text" name="tel" placeholder="手机号码" v-model="data.PRE_PHONE_NUM">
+                <input type="text" name="tel" placeholder="手机号码" v-model="tel">
             </section>
             <section class="input-box">
                 <p>验证码</p>
@@ -81,6 +82,8 @@
                     MESSAGE_TOKEN: '',
                     REQ_SERIAL: ''
                 },
+                tel:'',
+                canClick:true,
                 codeText: "获取验证码",
                 disable: false,
                 bankList: [],
@@ -94,7 +97,23 @@
             }
         },
         components: {
+
             BankSelect
+        },
+        watch:{
+            tel(n, o) {
+                if(n.length>11){ // >11截取
+                    console.log(n);
+                    this.tel = n.toString().substr(0,11)
+                }
+            }
+        },
+        filters:{
+            telFlter(n){
+                if(n.length>11){ // >11截取
+                    return n.toString().substr(0,11)
+                }
+            }
         },
         created() {
             this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
@@ -103,13 +122,19 @@
         },
         methods: {
             checkBankName(val) {
+                if(val.length <=6){
+                    this.canClick = true
+                    return
+                }
                 val = val.replace(/\s+/g, "")
+                console.log(this.canClick);
                 let bankName
                 for (var i = 3; i < 10; i++) {
                     if (bankName = this.machBankName((val + '').slice(0, i))) {
                         break
                     }
                 }
+                this.canClick = false
                 this.bankText = bankName
             },
             checkBankNo(val) {
@@ -150,6 +175,8 @@
                 })
             },
             getMsgCodeHandle() {
+                this.data.PRE_PHONE_NUM  = this.tel
+                console.log(this.data.PRE_PHONE_NUM);
                 let msg
                 if (msg = util.Check.tel(this.data.PRE_PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
                 let sTime = time
@@ -178,6 +205,8 @@
             },
 
             goNext() {
+                this.data.PRE_PHONE_NUM  = this.tel
+                console.log(this.data.PRE_PHONE_NUM);
                 //  ORG_ID: '70',
                 // CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
                 //         HAS_BAND: '0', // 是否绑定过
@@ -186,24 +215,9 @@
                 //         PHONE_CODE: '', // 手机验证码
                 //         LAST_STEP_NUM: '0', // 步数
                 //         MESSAGE_TOKEN:''
+
                 if (this.data.CARD_NO == '') {
-                    Bus.$emit(BusName.showToast, '请选择银行')
-                    return
-                }
-                if (this.data.CARD_NO == '') {
-                    Bus.$emit(BusName.showToast, '请选择银行')
-                    return
-                }
-                if (this.data.CARD_NO == '') {
-                    Bus.$emit(BusName.showToast, '请选择银行')
-                    return
-                }
-                if (this.data.CARD_NO == '') {
-                    Bus.$emit(BusName.showToast, '请选择银行')
-                    return
-                }
-                if (this.data.CARD_NO == '') {
-                    Bus.$emit(BusName.showToast, '请选择银行')
+                    Bus.$emit(BusName.showToast, '银行卡号不能为空')
                     return
                 }
                 if (this.data.PRE_PHONE_NUM == '') {
@@ -222,18 +236,22 @@
                 let preData = this.$route.params.data
                 this.data = Object.assign(this.data, preData)
                 console.log('data >>>', this.data);
-                Object.assign(this.data, {
-                    PHONE_NUM: this.data.PRE_PHONE_NUM
-                })
+                let REQ_SERIAL = util.storage.session.get(LsName.REQ_SERIAL)
+                let LAST_STEP_NUM = util.storage.session.get(LsName.LAST_STEP_NUM)
+                if(REQ_SERIAL && LAST_STEP_NUM){
+                   this.data.REQ_SERIAL = REQ_SERIAL
+                   this.data.LAST_STEP_NUM = LAST_STEP_NUM
+                }
+                this.data.PHONE_NUM = this.data.PRE_PHONE_NUM
                 let delMsg = true
-                API.open.doRegeist(this.data,delMsg,
+                let OTHER = true  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
+                API.open.doRegeist(this.data,delMsg,OTHER,
                         res => {
                             this.errMsg = res.MSG
                             API.watch.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })
-                            // todo 判断
                             Bus.$emit(BusName.showToast, res.MSG)
                             if (res.CODE != 0) { // 不是0的话返回
                                 return
@@ -241,7 +259,7 @@
                             this.$router.push({
                                 name: PageName.opening3,
                                 query: { // todo方便测试
-                                    REQ_SERIAL: res.REQ_SERIAL
+                                    REQ_SERIAL: res.REQ_SERIAL,
                                 }
                             })
                         },

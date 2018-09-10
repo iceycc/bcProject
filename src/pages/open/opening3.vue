@@ -113,6 +113,7 @@
                 s_loginPass: '',
                 s_payPass: '',
                 REQ_SERIAL: '',
+                LAST_STEP_NUM:'',
                 ifShow: false,
                 orgId: 70,
                 loginpass: '',
@@ -133,6 +134,7 @@
         mixins: [Mixin],
         created() {
             this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
+            this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
             let beforeInfo;
             if (beforeInfo = util.storage.session.get('setPasswordInfo')) {
                 this.errMsg = beforeInfo.msg
@@ -145,7 +147,6 @@
         },
 
         methods: {
-
 
             cancel() {
                 this.ifShow = false
@@ -170,7 +171,8 @@
                 let data = {
                     REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
                     BANK_LOGIN_PW: this.loginpass,
-                    BANK_PAY_PW: this.paypass
+                    BANK_PAY_PW: this.paypass,
+                    LAST_STEP_NUM:this.LAST_STEP_NUM
                 }
                 API.open.setPassWord(data, res => {
                     // todo

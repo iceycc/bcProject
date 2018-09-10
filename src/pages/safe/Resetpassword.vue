@@ -9,11 +9,11 @@
             </section>
             <section>
                 <span>身份证证号</span>
-                <input v-model="data.USER_CARD_ID" type="number" name="text1" placeholder="请输入18位身份证号">
+                <input v-model="data.USER_CARD_ID" type="text" name="text1" placeholder="请输入18位身份证号">
             </section>
             <section>
                 <span>手机号</span>
-                <input v-model="data.PHONE_NUM" type="text" name="text1" placeholder="请输入登陆手机号">
+                <input v-model="tel" type="number" name="text1" placeholder="请输入登陆手机号">
             </section>
             <section>
                 <span>新登录密码</span>
@@ -62,6 +62,7 @@
     import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
     import PassInput from '../../components/commons/PassInput'
+    import {Mixin} from '../../common/utils/mixin'
 
     let time = 60
     export default {
@@ -80,9 +81,20 @@
                 toUrl: "",
                 errMsg: '',
                 codeText: '获取验证码',
-                disable: false
+                disable: false,
+                tel:''
             }
         },
+        watch:{
+            tel(n, o) {
+                if(n.length>11){ // >11截取
+                    console.log(n);
+                    this.tel = n.toString().substr(0,11)
+                    return
+                }
+            }
+        },
+        mixins: [Mixin],
         components: {
             PassInput
         },
@@ -104,6 +116,7 @@
         },
         methods: {
             getCode() {
+                this.data.PHONE_NUM  = this.tel
                 let msg
                 if (msg = util.Check.tel(this.data.PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
                 let sTime = time
@@ -129,6 +142,7 @@
             },
 
             doRePass() {
+                this.data.PHONE_NUM  = this.tel
                 let msg;
                 if (msg = util.Check.name(this.data.USER_REAL_NAME)) return this.errMsg = msg;
                 if (msg = util.Check.idNumber(this.data.USER_CARD_ID)) return this.errMsg = msg;

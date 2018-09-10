@@ -49,7 +49,7 @@
                 </div>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">剩余额度</span>
-                    <span class="bannercontenttitlecontent">{{productDetail.REMAIN_AMT}} 元</span>
+                    <span class="bannercontenttitlecontent">{{productDetail.REMAIN_AMT | formatNum}} 元</span>
                 </div>
             </div>
             <div class="wrapicon">

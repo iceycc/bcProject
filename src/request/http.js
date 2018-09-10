@@ -15,8 +15,8 @@ export default {
         });
     },
     // REQUEST
-    request: function (method, {url, params, token = '', login = false, delMsg = false}, config, success, error) {
-        method = method || 'post';
+    request: function (method, {url, params, token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
+        method = method || 'post'
         params = Object.assign(params, {ORG_ID: '70'})
         let token1 = util.storage.session.get(LsName.token) || token
         let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
@@ -46,11 +46,15 @@ export default {
             result = result.biz_data
             console.log('res >>>', result.data);
             console.log('code >>>', result.head.CODE);
+            console.log(OTHER)
 
             if (result.head.TOKEN) { // 接口有返回token就更新token
                 util.storage.session.set(LsName.token, result.head.TOKEN)
             }
-
+            if(OTHER){ // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
+                util.storage.session.set(LsName.LAST_STEP_NUM,result.data.LAST_STEP_NUM)
+                util.storage.session.set(LsName.REQ_SERIAL,result.data.REQ_SERIAL)
+            }
             // 根据状态码 做业务状态校验 分流
             if (result.head.CODE == 0) {
                 let msg = result.head.MSG || '成功'
@@ -80,14 +84,7 @@ export default {
             }
             else {
                 console.log('错误msg >>>', result.head.MSG);
-                if (result.head.MSG == '未登陆银行') {
-                    Router.push({
-                        name: PageName.login,
-                        query: {
-                            target: Router.currentRoute.fullPath
-                        }
-                    })
-                }
+
                 if (!delMsg) {
                     Bus.$emit(BusName.showToast, result.head.MSG)
                 }

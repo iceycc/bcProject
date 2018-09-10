@@ -38,7 +38,15 @@
                 default:'请选择'
             }
         },
-        watch: {},
+        watch: {
+            show(newVal,oldVal){
+                if(newVal){
+                    this.ModalHelper('open').afterOpen()
+                }else {
+                    this.ModalHelper('open').beforeClose()
+                }
+            }
+        },
         computed: {},
 
         data() {
@@ -55,7 +63,23 @@
                 this.show = false
                 this.$emit('getValue', name)
                 this.selectValue = index
-            }
+            },
+            ModalHelper(bodyCls) {
+                var scrollTop;
+                return {
+                    afterOpen: function () {
+                        scrollTop = document.scrollingElement.scrollTop;
+                        document.body.classList.add(bodyCls);
+                        document.body.style.top = -scrollTop + 'px';
+                    },
+                    beforeClose: function () {
+                        document.body.classList.remove(bodyCls);
+                        // scrollTop lost after set position:fixed, restore it back.
+                        document.scrollingElement.scrollTop = scrollTop;
+                        document.body.style.top = 0;
+                    }
+                };
+            },
         }
     }
 </script>

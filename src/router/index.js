@@ -85,6 +85,7 @@ addRouter(PageName.fengxianresult, {keepAlive: false, title: '风险测评'}); /
  */
 addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码',needLogin:false});
 addRouter(PageName.DocsPage, {keepAlive: false, title: '协议',needLogin:true});
+addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权服务协议',needLogin:false});
 
 /**
  * financingDetail

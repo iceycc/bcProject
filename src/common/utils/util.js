@@ -289,22 +289,24 @@ export const util = {
                 if ((fileList.size / 1024 / 1024) > 0) { //质量大于1m
                     //缩放后图片的宽高
                     // 500 k  800 x 500
-                    let rateW = img.naturalWidth / 400
-                    let rateH = img.naturalHeight / 250
+                    let rateW = img.naturalWidth / 800
+                    let rateH = img.naturalHeight / 500
                     console.log(img.naturalWidth, img.naturalHeight)
                     let width, height
                     width = img.naturalWidth / rateW;
-                    height = img.naturalHeight / rateH;
+                    height = img.naturalHeight / rateW;
                     console.log(width, height)
-
                     canvas.width = width;
                     canvas.height = height;
-
+                    if (img.naturalWidth < img.naturalHeight) {
+                        console.log(1);
+                        canvas.height = width;
+                        canvas.width = height;
+                        ctx.rotate(-Math.PI/2);
+                        ctx.translate(-width,0);
+                    }
                     ctx.drawImage(this, 0, 0, width, height);
-                    // if (img.naturalWidth < img.naturalHeight) {
-                    //     console.log(1);
-                    //     ctx.rotate(Math.PI / 2)
-                    // }
+
                     base64 = canvas.toDataURL('image/jpeg', 0.8);
                     resolve(base64);
                 } else {
