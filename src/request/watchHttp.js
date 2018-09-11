@@ -19,7 +19,7 @@ export default {
         method = method || 'post';
         let token = util.storage.session.get(LsName.token) || ''
         let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
-
+        let CHANNEL_ID = util.storage.session.get(LsName.CHANNEL_ID) + ''
         let datas = {
             head: {
                 TYPE: "BATCH_RECORD_FUNCTION_LOG_INFO",
@@ -28,12 +28,12 @@ export default {
                 DEVICE_ID: DeviceId
             },
             param: {
-                CHANNEL_ID: "3",
+                CHANNEL_ID:CHANNEL_ID,
                 FUNCTION_LOG_LIST:
                         [{
                             FUNCTION_ID: '', // 点位
                             REMARK_DATA: '', // 中文备注
-
+                            CORP_CHANNEL_ID:CHANNEL_ID, // 渠道id
                             APP_PLACE: "99", // 日志位置
                             FROM_TYPE: '', // 日志分类
                             FROM_ID: '', // 产品ID、机构ID

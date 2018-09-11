@@ -59,7 +59,7 @@
             value: null,
             text: {
                 type: null,
-                default: '请选择'
+                default: '请选择银行'
             },
             title: null,
             canClick: {
@@ -270,7 +270,6 @@
         }
 
     }
-
     .bank-xiane {
         position: fixed;
         top: 0;
@@ -279,18 +278,17 @@
         width: px2rem(375);
         padding-top: px2rem(20);
         text-align: center;
-        height: px2rem(720);
+        height: 100%;
         overflow-y: scroll;
         img {
             width: px2rem(270);
         }
         .close {
             position: absolute;
-            width: px2rem(30);
-            height: px2rem(30);
-            top: px2rem(3);
-            right: px2rem(3);
-
+            width: px2rem(25);
+            height: px2rem(25);
+            top: px2rem(22);
+            right: px2rem(54);
         }
     }
 

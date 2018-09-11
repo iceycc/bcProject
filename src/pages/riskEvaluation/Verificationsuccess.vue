@@ -15,20 +15,15 @@
     import AppBar from '../../components/header/AppBar'
     import {API} from "../../request/api";
     export default {
-        created(){
-            API.watch.watchApi({
-                FUNCTION_ID: 'ptb0A006', // 点位
-                REMARK_DATA: '异业合作-风险评测', // 中文备注
-            })
-            this.$router.push({
-                name: PageName.Riskproblom
-            })
-        },
         components:{
             AppBar
         },
         methods: {
             goNext() {
+                API.watch.watchApi({
+                    FUNCTION_ID: 'ptb0A006', // 点位
+                    REMARK_DATA: '异业合作-风险评测', // 中文备注
+                })
                 this.$router.push({
                     name: PageName.Riskproblom
                 })
@@ -39,13 +34,15 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
+
     .app {
         width: 100%;
         margin: 0 auto;
     }
 
     .chattuimg {
-        margin-top: 2rem;
+        margin-top: px2rem(40);
         text-align: center;
     }
 

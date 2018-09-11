@@ -54,8 +54,8 @@
         methods: {
             goApp(){
                 API.watch.watchApi({
-                    FUNCTION_ID: 'ptb0A0010', // 点位
-                    REMARK_DATA: '异异业合作-购买成功-下载比财', // 中文备注
+                    FUNCTION_ID: 'ptb0A010', // 点位
+                    REMARK_DATA: '异业合作-购买成功-下载比财', // 中文备注
                 })
                 util.downLoad(()=>{
                     Bus.$emit(BusName,'请在浏览器中下载')

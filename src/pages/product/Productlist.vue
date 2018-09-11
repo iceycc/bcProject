@@ -8,7 +8,7 @@
             <ul class="ul-li">
                 <li class="productdetail clearfix"
                     v-for="item,index in dataList" :key="index"
-                    @click="goDetail(item.ID)"
+                    @click="goDetail(item.ID,item.PRD_NAME)"
                     style="padding-top: .2rem"
                 >
                     <p class="name2">{{item.PRD_NAME}}</p>
@@ -22,7 +22,7 @@
         <div class="productdetail2" v-if="show">
             <ul>
                 <li class="clearfix" v-for="item,index in dataList" :key="index"
-                    @click="goDetail(item.ID)">
+                    @click="goDetail(item.ID,item.PRD_NAME)">
                     <div class="ratereturn " style="text-align: center">
                         <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
                         <p style="color: #B4BECC;font-size: 0.4rem;">预期年化收益率</p>
@@ -40,7 +40,8 @@
 </template>
 <script>
     import {API} from "../../request/api";
-    import {PageName} from "../../Constant";
+    import {LsName, PageName} from "../../Constant";
+    import util from "../../common/utils/util";
 
 
     export default {
@@ -69,16 +70,19 @@
                     this.dataList = res.splice(0, 9)
                 })
             },
-            goDetail(id) {
+            goDetail(id,title) {
                 API.watch.watchApi({
                     FUNCTION_ID: 'ptb0A001', // 点位
                     REMARK_DATA: '异业合作-落地页产品列表', // 中文备
                     FROM_ID: id
                 })
+                // document.title = title
+                util.storage.session.set(LsName.ProTitle,title)
                 this.$router.push({
                     name: PageName.Productreservation,
                     query: {
-                        id
+                        id,
+                        title
                     }
                 })
             }

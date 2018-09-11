@@ -26,7 +26,7 @@
         <div class="login_box">
             <section class="input-box">
                 <transition name="fade">
-                    <p class="label" v-if="loginShow">登陆密码</p>
+                    <p class="label" v-if="loginShow">登录密码</p>
                 </transition>
                 <!--name="text1" :placeholder="telPaceholder" v-model="s_loginPass"-->
                 <span class="input"
@@ -57,7 +57,7 @@
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
-                            登陆密码
+                            登录密码
                         </p>
                         <div class="field_row_value">
                             <pass-input
@@ -106,7 +106,7 @@
         data() {
             return {
                 loginShow: false,
-                telPaceholder: '登陆密码',
+                telPaceholder: '登录密码',
                 payPaceholder:'交易密码',
                 disabled:true,
                 reGet: true,
@@ -193,11 +193,11 @@
                         })
                         return
                     }
-                    Bus.$emit(BusName.showToast, '注册成功,即将跳转登陆页')
+                    Bus.$emit(BusName.showToast, '注册成功,即将跳转登录页')
                     util.storage.session.remove(LsName.token)
                     util.storage.session.set(LsName.reload, true)
                     this.Londing.open({
-                        text:'即将跳转登陆页'
+                        text:'即将跳转登录页'
                     })
                     setTimeout(()=>{
                         this.Londing.close()

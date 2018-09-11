@@ -11,7 +11,6 @@ export default {
         return this.request('POST', option, config, success, error).catch(err => {
             console.log(err);
             return Promise.reject(err)
-
         });
     },
     // REQUEST
@@ -47,11 +46,12 @@ export default {
             console.log('res >>>', result.data);
             console.log('code >>>', result.head.CODE);
             console.log(OTHER)
-
+            util.storage.session.remove(LsName.LAST_STEP_NUM)
+            util.storage.session.remove(LsName.REQ_SERIAL)
             if (result.head.TOKEN) { // 接口有返回token就更新token
                 util.storage.session.set(LsName.token, result.head.TOKEN)
             }
-            if(OTHER){ // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
+            if(OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM){ // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
                 util.storage.session.set(LsName.LAST_STEP_NUM,result.data.LAST_STEP_NUM)
                 util.storage.session.set(LsName.REQ_SERIAL,result.data.REQ_SERIAL)
             }

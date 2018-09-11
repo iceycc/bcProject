@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="buytitleright">
-                <p>{{proDetail.TXT_MIN_AMOUNT}}</p>
+                <p>起购金额{{proDetail.TXT_MIN_AMOUNT}}</p>
                 <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
             </div>
         </div>
@@ -50,8 +50,8 @@
                 moneyNum: null,
                 payNum: '',
                 agree: true,
-                imgSrc: imgSrc
-
+                imgSrc: imgSrc,
+               INCRE_AMOUNT:''
             }
         },
         mixins: [Mixin],
@@ -88,8 +88,21 @@
                     }
                 })
             },
+            checkMoneyNum(num){
+                let a = this.proDetail.INCRE_AMOUNT
+                if(num < parseInt(this.proDetail.TXT_MIN_AMOUNT)){
+                    Bus.$emit(BusName.showToast, '购买金额不能小于起购金额')
+                    return true
+                }else if(num%a != 0){
+                    Bus.$emit(BusName.showToast, '请输入最小递增的整数倍')
+                    return true
+                }else {
+                    return false
+                }
+            },
             goBuy() {
                 console.log(this.moneyNum);
+
                 if (!this.agree) {
                     Bus.$emit(BusName.showToast, '请同意相关协议')
                     return
@@ -98,18 +111,24 @@
                     Bus.$emit(BusName.showToast, '请填写购买金额')
                     return
                 }
+                // todo
                 if (typeof (this.moneyNum - 0) != 'number' || isNaN(this.moneyNum - 0)) {
                     Bus.$emit(BusName.showToast, '请填写正确的金额')
                     return
                 }
+
                 if (this.moneyNum - 0 > this.payNum) {
                     Bus.$emit(BusName.showToast, '余额不足，请先充值')
+                    return
+                }
+                if(this.checkMoneyNum(this.moneyNum)){
                     return
                 }
                 if (this.moneyNum - 0 > this.REMAIN_AMT) {
                     Bus.$emit(BusName.showToast, '可投额度不足')
                     return
                 }
+
                 this.Londing.open({
                     spinnerType: 'triple-bounce'
                 })

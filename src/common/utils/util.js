@@ -752,7 +752,9 @@ export const util = {
                 // window.location.href = "http://finsafe.geong.com:8989/down?ID=1";
             }
         } else if (isiOS) {
-            window.location.href = "https://itunes.apple.com/cn/app/%E6%AF%94%E8%B4%A2/id1149189800?mt=8";
+            // window.location.href = "https://itunes.apple.com/cn/app/%E6%AF%94%E8%B4%A2/id1149189800?mt=8";
+            window.location.href = "https://itunes.apple.com/cn/app/id1149189800?mt=8";
+                                 // https://itunes.apple.com/cn/app/id1149189800?mt=8
         } else {
             callback2();
         }

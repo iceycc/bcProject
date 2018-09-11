@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <app-bar title="充值"></app-bar>
-        <div class="rechargetitle">充值到民生直销银行</div>
+        <div class="rechargetitle">充值到{{ORG_NAME}}直销银行</div>
         <div class="minshengbank">
             <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
@@ -153,7 +153,7 @@
                 if(msg=util.Check.trim(this.APPLY_AMOUN,'充值金额')) return Bus.$emit(BusName.showToast,msg);
                 //
                 if(this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
-                    Bus.$emit(BusName.showToast,'单笔限额超出限制')
+                    Bus.$emit(BusName.showToast,'充值金额大于银行每笔限额规定，请调整充值金额')
                     return
                 }
                 if(!this.agree){
@@ -186,7 +186,7 @@
             },
             checkMoney(){
                 if(this.APPLY_AMOUN -0 > this.SINGLE_QUOTA-0) {
-                    Bus.$emit(BusName.showToast,'单笔限额超出限制')
+                    Bus.$emit(BusName.showToast,'充值金额大于银行每笔限额规定，请调整充值金额')
                 }
             },
             doNext(){
@@ -195,7 +195,7 @@
                 if(msg=util.Check.trim(this.APPLY_AMOUN,'充值金额')) return Bus.$emit(BusName.showToast,msg);
                 //
                 if(this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
-                    Bus.$emit(BusName.showToast,'单笔限额超出限制')
+                    Bus.$emit(BusName.showToast,'充值金额大于银行每笔限额规定，请调整充值金额')
                     return
                 }
                 if(!this.agree){

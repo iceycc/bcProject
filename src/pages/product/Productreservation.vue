@@ -1,19 +1,19 @@
 <template>
     <div id="app">
         <div class="wrap">
-            <app-bar :title="productDetail.PRD_NAME"></app-bar>
+            <app-bar :title="title"></app-bar>
             <div class="banner">
                 <div class="bannercontent">
                     <div class="bannertop">
                         <div class="bannertopleft">
                             <p style="font-size: 0.4rem">预期年化收益率</p>
-                            <p><strong style="font-size: 1rem">{{productDetail.RATE}} </strong><span
+                            <p><strong style="font-size: 1rem"> {{productDetail.RATE}} </strong><span
                                     style="font-size: .5rem;">%</span>
                             </p>
                         </div>
                         <div class="bannertopright">
                             <p style="font-size: 0.4rem">理财期限</p>
-                            <p><strong style="font-size: 1rem">{{productDetail.PERIOD}} </strong><span
+                            <p><strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong><span
                                     style="font-size: .5rem;">天</span></p>
                         </div>
                     </div>
@@ -27,8 +27,8 @@
                             <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>
                             <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>
                             <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>
-                            <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
-                            <li class="bannerbottomthree clearfix">累计购买笔数{{productDetail.BUY_COUNT}}</li>
+                            <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}起购</li>
+                            <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.OPENAPI_BUY_COUNT}}</li>
                         </ul>
                     </div>
                 </div>
@@ -69,6 +69,12 @@
                     <div style="float:right;width:65%">
                         <p style="font-size:0.5rem;">{{productDetail.ORG_NAME}}</p>
                         <p style="font-size:0.4rem; color:#999999 ">隶属于 {{productDetail.ORG_NAME}} </p>
+                        <div style="font-size: 0;padding: 3px 0">
+                            <img class="start" v-for="i in productDetail.ORG_LEVEL"
+                                 src="../../images/img/account_icon_star1.png" alt="">
+                            <img class="start" v-for="i in (5 - productDetail.ORG_LEVEL)"
+                                 src="../../images/img/account_icon_star.png" alt="">
+                        </div>
                         <p style="font-size:0.4rem;color:#999999">比财评级依据产品属性和银行运营情况综合评定</p>
                     </div>
                 </div>
@@ -78,7 +84,6 @@
                     <p style="width: 100%;height: 1rem; padding-bottom: 0.6rem;border-bottom: 1px solid #DCDCDC;">
                         产品描述</p>
                     <div style="font-size: 0.4rem;padding-top:1rem;color:#666" v-html="productDetail.DEPICT">
-                        本协议是广发基金与广发银行股份有限公司实名认证的用户就您于本公司电子交易直销前置式自助前台系统进行先关操作的有关事项所订立的有效合同。投资者通过点击确认或其他方式接收本协议，即表示投资者与广发基金已达成协议并同意接受本协议的全部约定内容以及与本协议项下的各项规则等等。
                     </div>
                 </div>
             </div>
@@ -125,36 +130,46 @@
     import Bus from '../../common/js/bus'
     import {PageName, imgSrc, LsName, BusName} from "../../Constant";
     import util from '../../common/utils/util'
+    // import {Mixin} from '../../common/utils/mixin'
 
     export default {
+        // mixins: [Mixin],
         data() {
             return {
-                productDetail: {},
+                productDetail: {
+                    RATE: '',
+                    PERIOD: '',
+                    RISK_LEVEL: '',
+                    TXT_MIN_AMOUNT: '',
+                    OPENAPI_BUY_COUNT: '',
+                    IS_INTERVIEW: '',
+                    DEPICT: '',
+                    ORG_LEVEL: '',
+                    COLLECT_START_DATE: '',
+                    COLLECT_END_DATE: '',
+                    VALUE_DATE: '',
+                    FIN_END_DATE: ''
+                },
                 btnType: '安全购买',
                 proID: '',
                 type: '1',
                 imgurl: imgSrc,
-                preTitle: ''
+                xing: 5,
+                title: ''
             }
         },
-        beforeRouteEnter(to, from, next) {
-            // 在渲染该组件的对应路由被 confirm 前调用
-            // 不！能！获取组件实例 `this`
-            // 因为当守卫执行前，组件实例还没被创建
-            next()
-        },
-        watch: {
-            preTitle(n, o) {
-                document.title = n
-            }
+        activated(){
+
         },
         created() {
 
+            this.title = this.$route.query.title
             this.proID = this.$route.query.id
             this.getData(this.proID)
         },
         filters: {
             IS_INTERVIEW_filter(val) {
+                // if(!val) return val
                 let msg = ''
                 if (val == 0) {
                     return msg = '首次购买无需面签'
@@ -171,10 +186,13 @@
 
             }
         },
-        activated() {
+        beforeRouteEnter(to,from,next){
 
+            next()
         },
-        mounted() {
+        beforeRouteLeave(to,from,next){
+
+            next()
         },
         methods: {
             getData(id) {
@@ -185,13 +203,12 @@
                     this.productDetail = res;
                     this.type = res.IS_ENABLED
                     this.btnType = this.type == 1 ? '安全购买' : '预约下期'
-                    this.preTitle = res.PRD_NAME
                 })
             },
             goNext(type) {
                 util.storage.session.remove(LsName.ProDuctData)
                 console.log(type);
-                // todo 判断登陆
+                // todo 判断登录
                 //
                 let data = { // 跳转购买需要的参数
                     PRD_NAME: this.productDetail.PRD_NAME,
@@ -204,10 +221,15 @@
                     // 去安全购买
                     API.watch.watchApi({
                         FUNCTION_ID: 'ptb0A002',
-                        REMARK_DATA: '异业合作-产品详情页-购买', // 中文备注
+                        REMARK_DATA: '异业合作-产品详情页-购买-安全购买', // 中文备注
                         FROM_ID: this.proID, // 产品ID、机构ID
                     })
-                    let HAS_GRADE = util.storage.session.get(LsName.HAS_GRADE) ||0
+                    let sign = util.storage.session.get(LsName.token)
+                    console.log(type, sign);
+                    if (!sign) {
+                        util.storage.session.set(LsName.loginType, '安全购买')
+                    }
+                    let HAS_GRADE = util.storage.session.get(LsName.HAS_GRADE) || 0
                     if (HAS_GRADE == 1) { // 未评估
                         let target = this.$route.fullPath
                         util.storage.session.set(LsName.LoginTarget, target) // 因为需要评估，跳转评估页再返回,页面跳转太多，url不是很合适了吧
@@ -229,7 +251,12 @@
                     }
 
                 } else {
-                    // 预约得先登陆
+                    // 预约得先登录
+                    API.watch.watchApi({
+                        FUNCTION_ID: 'ptb0A002',
+                        REMARK_DATA: '异业合作-产品详情页-购买-预约下期', // 中文备注
+                        FROM_ID: this.proID, // 产品ID、机构ID
+                    })
                     let data = {
                         PRD_TYPE: '2',
                         PRD_NUMBER: this.productDetail.ID + ''
@@ -246,12 +273,13 @@
                                     PRD_NAME: this.productDetail.PRD_NAME,
                                 }
                             })
-                        },err=>{
+                        }, err => {
                             console.log(err);
                         })
-                    } else { // 未登陆
-                        Bus.$emit(BusName.showToast, '您还未登陆，请先登陆')
-                        util.storage.session.set(LsName.ProDuctData,Object.assign(data,{PRD_NAME: this.productDetail.PRD_NAME}))
+                    } else { // 未登录
+                        Bus.$emit(BusName.showToast, '您还未登录，请先登录')
+                        util.storage.session.set(LsName.ProDuctData, Object.assign(data, {PRD_NAME: this.productDetail.PRD_NAME}))
+                        util.storage.session.set(LsName.loginType, '预约下期')
                         let target = this.$route.fullPath
                         setTimeout(() => {
                             this.$router.push({
@@ -260,7 +288,7 @@
                                     target
                                 }
                             })
-                        })
+                        }, 500)
                     }
 
                 }
@@ -566,6 +594,11 @@
         top: -0.8rem;
         font-size: 0.4rem;
 
+    }
+
+    .start {
+        width: px2rem(12);
+        height: px2rem(12);
     }
 </style>
 

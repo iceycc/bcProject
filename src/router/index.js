@@ -47,22 +47,21 @@ addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
 /**
  * login
  */
-addRouter(PageName.login, {keepAlive: false, title: '安全登陆',needLogin:false});
+addRouter(PageName.login, {keepAlive: false, title: '安全登录', needLogin: false});
 /**
  * open
  */
-addRouter(PageName.opening, {keepAlive: true, title: '信息填写',needLogin:false});
-addRouter(PageName.opening2, {keepAlive: false, title: '信息填写',needLogin:false});
-addRouter(PageName.opening3, {keepAlive: false, title: '信息填写',needLogin:false});
-
+addRouter(PageName.opening, {keepAlive: true, title: '信息填写', needLogin: false});
+addRouter(PageName.opening2, {keepAlive: false, title: '信息填写', needLogin: false});
+addRouter(PageName.opening3, {keepAlive: false, title: '信息填写', needLogin: false});
 
 
 /**
  * product
  */
-addRouter(PageName.Productlist, {keepAlive: false, title: '产品列表',needLogin:false});
-addRouter(PageName.Productlist2, {keepAlive: false, title: '产品列表',needLogin:false});
-addRouter(PageName.Productreservation, {keepAlive: false, title: '产品详情',needLogin:false});
+addRouter(PageName.Productlist, {keepAlive: false, title: '产品列表', needLogin: false});
+addRouter(PageName.Productlist2, {keepAlive: false, title: '产品列表', needLogin: false});
+addRouter(PageName.Productreservation, {keepAlive: false, needLogin: false});
 addRouter(PageName.OrderNextSuccess, {keepAlive: false, title: '预约成功'});
 
 /**
@@ -83,9 +82,9 @@ addRouter(PageName.fengxianresult, {keepAlive: false, title: '风险测评'}); /
 /**
  * safe
  */
-addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码',needLogin:false});
-addRouter(PageName.DocsPage, {keepAlive: false, title: '协议',needLogin:true});
-addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权服务协议',needLogin:false});
+addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码', needLogin: false});
+addRouter(PageName.DocsPage, {keepAlive: false, title: '协议', needLogin: true});
+addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权服务协议', needLogin: false});
 
 /**
  * financingDetail
@@ -99,28 +98,76 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if(!util.storage.session.get(LsName.DEVICE_ID)){
+    if (!util.storage.session.get(LsName.DEVICE_ID)) {
         let DEVICE_ID = to.query.DEVICE_ID || '321234'
-        util.storage.session.set(LsName.DEVICE_ID,DEVICE_ID)
+        util.storage.session.set(LsName.DEVICE_ID, DEVICE_ID)
     }
-    if (to.meta && to.meta.title) {
-        document.title = to.meta.title;
+    if (!util.storage.session.get(LsName.CHANNEL_ID)) {
+        let CHANNEL_ID = to.query.CHANNEL_ID || '3'
+        util.storage.session.set(LsName.CHANNEL_ID, CHANNEL_ID)
     }
-    if(to.meta.needLogin){
+
+    if (to.meta.title) {
+        document.title = to.meta.title
+        // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
+        if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+            const hackIframe = document.createElement('iframe');
+            hackIframe.style.display = 'none';
+            hackIframe.src = '/static/html/fixIosTitle.html?r=' + Math.random();
+            document.body.appendChild(hackIframe);
+            setTimeout(_ => {
+                document.body.removeChild(hackIframe)
+            }, 300)
+        }
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+    }
+    // let Prot = util.storage.session.get(LsName.ProTitle) || '产品详情'
+    if (to.name == PageName.Productreservation) {
+        window.document.title = to.query.title;
+        if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+            const hackIframe = document.createElement('iframe');
+            hackIframe.style.display = 'none';
+            hackIframe.src = '/static/html/fixIosTitle.html?r=' + Math.random();
+            document.body.appendChild(hackIframe);
+            setTimeout(_ => {
+                document.body.removeChild(hackIframe)
+            }, 300)
+        }
+        var iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+            }, 0);
+        };
+        document.body.appendChild(iframe);
+    }
+    if (to.meta && to.meta.needLogin) {
         let sign = util.storage.session.get(LsName.token)
-        if(sign){
+        if (sign) {
             next()
-        }else {
+        } else {
             // Indicator.open({
-            //     text:'您还未登陆，请先登录'
+            //     text:'您还未登录，请先登录'
             // })
             // setTimeout(()=>{
             //     Indicator.close()
             // },300)
-            Bus.$emit(BusName.showToast,'您还未登陆，请先登陆')
+            Bus.$emit(BusName.showToast, '您还未登录，请先登录')
             next({
-                name:PageName.login,
-                query:{
+                name: PageName.login,
+                query: {
                     target: to.fullPath
                 }
             })

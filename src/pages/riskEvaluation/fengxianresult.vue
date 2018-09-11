@@ -5,7 +5,7 @@
             <p>风险评测</p>
         </header>
         <div class="chattuimg">
-            <img src="../../images/img/account_illustrations@2x.png" style="width:65%" alt="">
+            <img src="../../images/img/account_illustrations@2x.png" style="width:70%" alt="">
         </div>
         <div class="fenxiancontent">
             <div class="fenxiantitle">
@@ -58,7 +58,9 @@
                 util.storage.session.remove(LsName.LoginTarget)
                 // todo 跳转到购买
                 this.$router.push({
-                    path: this.target ? this.target : '/Productlist'
+                    // path: this.target ? this.target : '/Productlist'
+                    path: '/Productlist'
+                    // this.target ? this.target :
                 })
             }
         }
@@ -75,7 +77,7 @@
     }
 
     .chattuimg {
-        margin-top: 2rem;
+        margin-top: px2rem(40);
         text-align: center
     }
 
@@ -86,7 +88,7 @@
         padding: 0 1rem;
         .fenxiantitle {
             text-align: center;
-            .info{
+            .info {
                 font-size: px2rem(18);
             }
             .code {
@@ -97,7 +99,7 @@
         }
     }
 
-    .btn{
+    .btn {
         display: flex;
         padding: 0 px2rem(25);
         margin-top: px2rem(40);
@@ -115,7 +117,6 @@
             margin: 0 px2rem(10);
         }
     }
-
 
 
 </style>

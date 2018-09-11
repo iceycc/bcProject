@@ -16,7 +16,7 @@
             <!--密码控件-->
             <section class="input-box">
                 <transition name="fade">
-                    <p class="label" v-show="passShow">登陆密码</p>
+                    <p class="label" v-show="passShow">登录密码</p>
                 </transition>
 
                 <div class="input" id="pass-box">
@@ -68,7 +68,7 @@
                 refur: false,
                 telShow: false,
                 passShow: false,
-                passText: '登陆密码',
+                passText: '登录密码',
                 telPaceholder: '开户手机号',
                 passPluginText: ''
             }
@@ -130,7 +130,7 @@
                      v-password-widget="${toUrl}"
                      style="color: #ccc"
                      modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
-                     maxlength="20" name="Password">登陆密码</div>`
+                     maxlength="20" name="Password">登录密码</div>`
 
                 parent.appendChild(passHtmlDiv);
                 $(`#${inputID}`).PasswordWidget()

@@ -93,7 +93,7 @@ export const API = {
 
     },
     /**
-     * login 登陆相关
+     * login 登录相关
      */
     login(params, success, error) {
         let options = {

@@ -34,6 +34,7 @@
                 isRouterAlive:true
             }
         },
+
         destroyed(){
             Bus.$off(BusName.showToast)
             Bus.$off(BusName.Indicator);

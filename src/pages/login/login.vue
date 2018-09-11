@@ -16,7 +16,7 @@
             <!--密码控件-->
             <section class="input-box">
                 <transition name="fade">
-                    <p class="label" v-show="passShow">登陆密码</p>
+                    <p class="label" v-show="passShow">登录密码</p>
                 </transition>
                 <pass-input
                         :text="passText"
@@ -47,6 +47,7 @@
     import PassInput from '../../components/commons/PassInput'
     import {Mixin} from '../../common/utils/mixin'
 
+    let watchPassPluginPassTimer
 
     export default {
         data() {
@@ -62,7 +63,7 @@
                 refur: false,
                 telShow: false,
                 passShow: false,
-                passText: '登陆密码',
+                passText: '登录密码',
                 telPaceholder: '开户手机号',
                 passPluginText: ''
             }
@@ -73,6 +74,7 @@
         },
         inject: ['reload'],
         created() {
+            clearInterval(watchPassPluginPassTimer)
             let preInfo;
             if (preInfo = util.storage.session.get('loginInfo')) {
                 this.tel = preInfo.PHONE_NUM
@@ -84,34 +86,64 @@
         },
         watch: {
             tel(n, o) {
-                if(n.length>11){ // >11截取
-                    this.tel = this.tel.toString().substr(0,11)
+                console.log(n);
+                if (n.length > 11) { // >11截取
+                    this.tel = this.tel.toString().substr(0, 11)
                 }
-                if(n.length>1){ // >1时不必校验
+                if (n.length > 1) { // >1时不必校验
                     return
                 }
-                if (n == '') { // 删除到 '' 是触发
-                    this.disabled = true
+                if (!n) { // 删除到 '' 是触发
                     this.telShow = false
                     this.telPaceholder = '开户手机号'
                 } else {
                     this.telPaceholder = ''
                     this.telShow = true
-                    if (this.checkPassWordTextIsEmpty()) {
-                        this.disabled = true
-                    } else {
-                        this.disabled = false
-                    }
-
                 }
             }
         },
         mounted() {
             console.log('mounted');
-            this.watchPassPlugin()
+            this.watchPassPluginPass()
+        },
+        beforeRouteLeave(to,from,next){
+            clearInterval(watchPassPluginPassTimer)
+            next()
         },
         methods: {
-            watchPassPlugin() {
+            watchPassPluginPass() {
+                let num = 1
+                // this.Londing.open({
+                //     text: '正在加载密码控件'
+                // })
+                watchPassPluginPassTimer = setInterval(() => {
+                    let flag = this.checkPassWordTextIsEmpty()
+                    console.log(flag);
+
+                    if (flag > 0) {
+                        this.passShow = true
+
+                        if (this.tel.length > 0 && flag ==2) {
+                            this.disabled = false
+
+                        } else {
+                            this.disabled = true
+                        }
+                    } else {
+                        this.passShow = false
+                        this.disabled = true
+                    }
+                    // if(this.tel.length>0 && !flag){
+                    //     this.telShow = true
+                    //     this.disabled = false
+                    // }else {
+                    //     this.telShow = false
+                    //     this.disabled = true
+                    // }
+                    num++
+                }, 500)
+            },
+            watchPassPlugin() { //
                 let num = 1
                 // this.Londing.open({
                 //     text: '正在加载密码控件'
@@ -142,17 +174,24 @@
                         passKey.off('click', '#F2')
                     }
                     num++
-                }, 1000)
+                }, 5000)
             },
             checkPassWordTextIsEmpty() {
-
                 this.passPluginText = $('#login_loginPass').text() //
                 let reg = /密码/
-                console.log('pass>>', this.passPluginText);
+                let reg2 = /加载/
+                //this.passPluginText.match(reg)
+                // console.log('pass>>', this.passPluginText);
                 if (this.passPluginText.match(reg)) {
-                    return true;
+                    return 0
+                }
+                if (this.passPluginText.match(reg2)) {
+                    return 0
+                }
+                else if (this.passPluginText.length >= 8) {
+                    return 2;
                 } else {
-                    return false
+                    return 1
                 }
             },
             goRePass() {
@@ -170,7 +209,7 @@
                 this.$router.push({name: PageName.opening})
             },
             doLogin() {
-
+                clearInterval(watchPassPluginPassTimer)
                 let msg;
                 if (msg = util.Check.tel(this.tel)) return Bus.$emit(BusName.showToast, msg);
                 let pass = $('#login_loginPass').$getCiphertext()
@@ -181,16 +220,20 @@
                     PHONE_NUM: this.tel,
                     BANK_LOGIN_PW: pass
                 }
+                let SOURCE_URL = util.storage.session.get(LsName.loginType)
 
                 util.storage.session.remove(LsName.token, this.tel)
                 API.login(data, (res) => {
                     API.watch.watchApi({
                         FUNCTION_ID: 'ptb0A007', // 点位
                         REMARK_DATA: '异业合作-登录', // 中文备注
+                        SOURCE_URL: SOURCE_URL
                     })
+                    util.storage.session.remove(LsName.loginType)
+
                     // todo
                     let ProDuctData = util.storage.session.get(LsName.ProDuctData)
-                    if(ProDuctData){ // 判断是从预约产品过来的 ， 直接预约
+                    if (ProDuctData) { // 判断是从预约产品过来的 ， 直接预约
                         API.product.apiSaveSubscribeInfo(ProDuctData, res => {
                             console.log(res);
                             util.storage.session.remove(LsName.ProDuctData)
@@ -200,7 +243,7 @@
                                     PRD_NAME: ProDuctData.PRD_NAME,
                                 }
                             })
-                        },err=>{
+                        }, err => {
                             util.storage.session.remove(LsName.ProDuctData)
                             console.log(err);
                         })
@@ -211,9 +254,9 @@
                     util.storage.session.remove('loginInfo')
                     let type = res.HAS_GRADE
                     let target = this.$route.query.target
-                    util.storage.session.set(LsName.HAS_GRADE,type)
+                    util.storage.session.set(LsName.HAS_GRADE, type)
                     if (type == 1) {
-                        util.storage.session.set(LsName.LoginTarget,target) // 因为需要评估，跳转评估页再返回，url不是很合适了吧
+                        util.storage.session.set(LsName.LoginTarget, target) // 因为需要评估，跳转评估页再返回，url不是很合适了吧
                         Bus.$emit(BusName.showToast, '请先进行评估')
                         this.$router.push({
                             name: PageName.Verificationsuccess,

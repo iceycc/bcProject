@@ -58,11 +58,14 @@ export const BusName ={
 export const LsName ={
     token:'token',
     DEVICE_ID:'DEVICE_ID',
+    CHANNEL_ID:'CHANNEL_ID',
     reload:'reload', // 用于强制刷新 密码控件暂时只能强制刷新重载 否则不行
     HAS_GRADE:'HAS_GRADE', // 是否评估 1 否  2 是
-    LoginTarget:'LoginTarget', // 其他页面跳转登陆页进行跳转的页面  主要跳转后情况
-    ProDuctData:'ProDuctData', // 其他页面跳转登陆页进行跳转的页面  主要跳转后情况
+    LoginTarget:'LoginTarget', // 其他页面跳转登录页进行跳转的页面  主要跳转后情况
+    ProDuctData:'ProDuctData', // 其他页面跳转登录页进行跳转的页面  主要跳转后情况
     LAST_STEP_NUM:'LAST_STEP_NUM', // 开户步数
     REQ_SERIAL:'REQ_SERIAL', // 开户流水
+    loginType:'loginType', // loginType
+    ProTitle:'ProTitle', // ProTitle
 }
 

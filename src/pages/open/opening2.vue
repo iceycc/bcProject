@@ -30,7 +30,6 @@
                 <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
                 <!-- <span  class="limit">银行限额</span>  -->
                 <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
-                             :canClick="canClick"
                              title="银行列表"></Bank-select>
 
             </section>
@@ -41,12 +40,12 @@
             </section>
             <section class="input-box">
                 <p>手机号码</p>
-                <input type="text" name="tel" placeholder="手机号码" v-model="tel">
+                <input type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
             </section>
             <section class="input-box">
                 <p>验证码</p>
                 <section style="display: flex" >
-                    <input type="password" placeholder="验证码" v-model="data.PHONE_CODE">
+                    <input type="text" placeholder="验证码" v-model="data.PHONE_CODE">
                     <button class="msg-code" @click="getMsgCodeHandle" :disabled="disable">{{codeText}}</button>
                 </section>
             </section>
@@ -94,6 +93,7 @@
                 stepImg3: require('../../images/img/step3.png'),
                 AllBankListObj: {},
                 errMsg: '',
+                checkBankName1:false
             }
         },
         components: {
@@ -106,6 +106,10 @@
                     console.log(n);
                     this.tel = n.toString().substr(0,11)
                 }
+            },
+            bankText(n,o){
+
+                this.checkBankName(this.data.CARD_NO)
             }
         },
         filters:{
@@ -118,35 +122,56 @@
         created() {
             this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
             this.data.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM
+            this.tel = this.$route.query.PHONE_NUM ||''
             this.getBankList()
         },
         methods: {
             checkBankName(val) {
-                if(val.length <=6){
-                    this.canClick = true
-                    return
-                }
+                // if(this.bankText == '请选择银行'){
+                //     Bus.$emit(BusName.showToast, '请选择银行')
+                //     return
+                // }
+                this.checkBankName1 = false
+                // if(val.length <=6){
+                //     this.canClick = true
+                //     return
+                // }
                 val = val.replace(/\s+/g, "")
-                console.log(this.canClick);
+                // console.log(this.canClick);
                 let bankName
+                // if(bankName =='请选择银行'){
+                //     Bus.$emit(BusName.showToast, '请选择银行')
+                //     this.checkBankName1 = true
+                //     return
+                // }
                 for (var i = 3; i < 10; i++) {
                     if (bankName = this.machBankName((val + '').slice(0, i))) {
+
+                        if(bankName !=this.bankText){
+                            // Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
+                            this.checkBankName1 = true
+                            return
+                        }
                         break
                     }
                 }
-                this.canClick = false
-                this.bankText = bankName
+                // this.canClick = false
+                // this.bankText = bankName
             },
             checkBankNo(val) {
-                let reg = /^([1-9]{1})(\d{14}|\d{18})$/
+                val = val.toString()
+                let reg = /\d{15}|\d{19}/
+                console.log(!reg.test(val));
                 if (val == '') {
                     Bus.$emit(BusName.showToast, '银行卡号不能为空')
-                    return
+                    return true
                 }
-                // if(!reg.test(val)){
-                //     Bus.$emit(BusName.showToast,'银行卡号格式不正确')
-                //     return
-                // }
+                else if(val.length < 15 || val.length >19){
+                    Bus.$emit(BusName.showToast,'银行卡号格式不正确')
+                    return true
+                }else {
+                    return false
+                }
 
             },
             machBankName(pin) {
@@ -175,7 +200,7 @@
                 })
             },
             getMsgCodeHandle() {
-                this.data.PRE_PHONE_NUM  = this.tel
+                this.data.PRE_PHONE_NUM  = this.tel + ''
                 console.log(this.data.PRE_PHONE_NUM);
                 let msg
                 if (msg = util.Check.tel(this.data.PRE_PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
@@ -215,9 +240,19 @@
                 //         PHONE_CODE: '', // 手机验证码
                 //         LAST_STEP_NUM: '0', // 步数
                 //         MESSAGE_TOKEN:''
-
+                if(this.bankText == '请选择银行'){
+                    Bus.$emit(BusName.showToast, '请选择银行')
+                    return
+                }
                 if (this.data.CARD_NO == '') {
                     Bus.$emit(BusName.showToast, '银行卡号不能为空')
+                    return
+                }
+                if(this.checkBankName1){
+                    Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
+                    return
+                }
+                if(this.checkBankNo(this.data.CARD_NO)){
                     return
                 }
                 if (this.data.PRE_PHONE_NUM == '') {

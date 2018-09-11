@@ -19,7 +19,7 @@
         props:{
             'title':{
                 type:null,
-                default:'晋商银行'
+                default:'产品详情'
             }
         },
         created(){
