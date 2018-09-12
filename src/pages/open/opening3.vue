@@ -138,6 +138,10 @@
             let beforeInfo;
             if (beforeInfo = util.storage.session.get('setPasswordInfo')) {
                 this.errMsg = beforeInfo.msg
+                setTimeout(()=>{
+                    this.errMsg =''
+
+                },2000)
                 util.storage.session.remove('setPasswordInfo')
             }
 
@@ -220,10 +224,10 @@
                     FUNCTION_ID: 'ptb0A005', // 点位
                     REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
                 })
-                this.Londing.open()
-                setTimeout(() => {
-                    this.Londing.close()
-                }, 500)
+                // this.Londing.open()
+                // setTimeout(() => {
+                //     this.Londing.close()
+                // }, 500)
 
                 this.paypass = $('#payPass').$getCiphertext()
                 this.paypassLen = $('#payPass').$getPasswordLength() - 0 || 0

@@ -84,9 +84,16 @@ export default {
             }
             else {
                 console.log('错误msg >>>', result.head.MSG);
-
                 if (!delMsg) {
                     Bus.$emit(BusName.showToast, result.head.MSG)
+                }
+                if(result.head.MSG=='未登陆银行'){
+                    Router.push({
+                        name: PageName.login,
+                        query: {
+                            target: Router.currentRoute.fullPath
+                        }
+                    })
                 }
                 return Promise.reject(result.head.MSG)
             }

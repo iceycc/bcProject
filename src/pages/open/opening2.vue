@@ -44,7 +44,7 @@
             </section>
             <section class="input-box">
                 <p>验证码</p>
-                <section style="display: flex" >
+                <section style="display: flex">
                     <input type="text" placeholder="验证码" v-model="data.PHONE_CODE">
                     <button class="msg-code" @click="getMsgCodeHandle" :disabled="disable">{{codeText}}</button>
                 </section>
@@ -81,8 +81,8 @@
                     MESSAGE_TOKEN: '',
                     REQ_SERIAL: ''
                 },
-                tel:'',
-                canClick:true,
+                tel: '',
+                canClick: true,
                 codeText: "获取验证码",
                 disable: false,
                 bankList: [],
@@ -93,36 +93,36 @@
                 stepImg3: require('../../images/img/step3.png'),
                 AllBankListObj: {},
                 errMsg: '',
-                checkBankName1:false
+                checkBankName1: false
             }
         },
         components: {
 
             BankSelect
         },
-        watch:{
+        watch: {
             tel(n, o) {
-                if(n.length>11){ // >11截取
+                if (n.length > 11) { // >11截取
                     console.log(n);
-                    this.tel = n.toString().substr(0,11)
+                    this.tel = n.toString().substr(0, 11)
                 }
             },
-            bankText(n,o){
+            bankText(n, o) {
 
                 this.checkBankName(this.data.CARD_NO)
             }
         },
-        filters:{
-            telFlter(n){
-                if(n.length>11){ // >11截取
-                    return n.toString().substr(0,11)
+        filters: {
+            telFlter(n) {
+                if (n.length > 11) { // >11截取
+                    return n.toString().substr(0, 11)
                 }
             }
         },
         created() {
             this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
             this.data.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM
-            this.tel = this.$route.query.PHONE_NUM ||''
+            this.tel = this.$route.query.PHONE_NUM || ''
             this.getBankList()
         },
         methods: {
@@ -147,7 +147,7 @@
                 for (var i = 3; i < 10; i++) {
                     if (bankName = this.machBankName((val + '').slice(0, i))) {
 
-                        if(bankName !=this.bankText){
+                        if (bankName != this.bankText) {
                             // Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
                             this.checkBankName1 = true
                             return
@@ -166,10 +166,10 @@
                     Bus.$emit(BusName.showToast, '银行卡号不能为空')
                     return true
                 }
-                else if(val.length < 15 || val.length >19){
-                    Bus.$emit(BusName.showToast,'银行卡号格式不正确')
+                else if (val.length < 15 || val.length > 19) {
+                    Bus.$emit(BusName.showToast, '银行卡号格式不正确')
                     return true
-                }else {
+                } else {
                     return false
                 }
 
@@ -200,7 +200,7 @@
                 })
             },
             getMsgCodeHandle() {
-                this.data.PRE_PHONE_NUM  = this.tel + ''
+                this.data.PRE_PHONE_NUM = this.tel + ''
                 console.log(this.data.PRE_PHONE_NUM);
                 let msg
                 if (msg = util.Check.tel(this.data.PRE_PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
@@ -228,9 +228,55 @@
                     console.log(err);
                 })
             },
+            checkID(fn) {
+                // 回显
+                let getStepDatas = {
+                    ID_NUMBER: this.$route.params.data.USER_CARD_ID
+                }
 
+                API.open.apiGetUserLastCompleteStep(getStepDatas, res => {
+                    let step = res.LAST_STEP_NUM
+                    let REQ_SERIAL = res.REQ_SERIAL
+                    // let PHONE_NUM = res.PHONE_NUM ||'' // 改身份证是否有手机号回显
+                    console.log('步数 >>>', step);
+                    // if (step == 0) {
+                    //     // Bus.$emit(BusName.showToast,"欢迎注册")
+                    //     fn && fn(REQ_SERIAL, step,PHONUM_NUM)
+                    // }
+                    // if (step == 1) { //
+                    //     // PHONUM_NUM
+                    //     // Bus.$emit(BusName.showToast,"第二步")
+                    //     fn && fn(REQ_SERIAL, step,PHONUM_NUM)
+                    // }
+                    if (step == 2) { // 跳转设置密码页
+                        // Bus.$emit(BusName.showToast, "您已经实名成功")
+                        setTimeout(() => {
+                            this.$router.push({
+                                name: PageName.opening3,
+                                params: {
+                                    step
+                                },
+                                query: {
+                                    REQ_SERIAL: REQ_SERIAL
+                                }
+                            })
+                        }, 600)
+                    }
+                    if (step == 3) {
+                        // Bus.$emit(BusName.showToast, "您已经开户成功")
+                        setTimeout(() => {
+                            this.$router.push({
+                                name: PageName.login,
+                            })
+                        }, 1000)
+                    }
+
+                }, err => {
+                    console.log(err);
+                })
+            },
             goNext() {
-                this.data.PRE_PHONE_NUM  = this.tel
+                this.data.PRE_PHONE_NUM = this.tel
                 console.log(this.data.PRE_PHONE_NUM);
                 //  ORG_ID: '70',
                 // CARD_NO: '6226221234123488', // 银行卡号 6214830182284272  6217730711297810
@@ -240,7 +286,7 @@
                 //         PHONE_CODE: '', // 手机验证码
                 //         LAST_STEP_NUM: '0', // 步数
                 //         MESSAGE_TOKEN:''
-                if(this.bankText == '请选择银行'){
+                if (this.bankText == '请选择银行') {
                     Bus.$emit(BusName.showToast, '请选择银行')
                     return
                 }
@@ -248,11 +294,11 @@
                     Bus.$emit(BusName.showToast, '银行卡号不能为空')
                     return
                 }
-                if(this.checkBankName1){
+                if (this.checkBankName1) {
                     Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
                     return
                 }
-                if(this.checkBankNo(this.data.CARD_NO)){
+                if (this.checkBankNo(this.data.CARD_NO)) {
                     return
                 }
                 if (this.data.PRE_PHONE_NUM == '') {
@@ -273,21 +319,26 @@
                 console.log('data >>>', this.data);
                 let REQ_SERIAL = util.storage.session.get(LsName.REQ_SERIAL)
                 let LAST_STEP_NUM = util.storage.session.get(LsName.LAST_STEP_NUM)
-                if(REQ_SERIAL && LAST_STEP_NUM){
-                   this.data.REQ_SERIAL = REQ_SERIAL
-                   this.data.LAST_STEP_NUM = LAST_STEP_NUM
+                if (REQ_SERIAL && LAST_STEP_NUM) {
+                    this.data.REQ_SERIAL = REQ_SERIAL
+                    this.data.LAST_STEP_NUM = LAST_STEP_NUM
                 }
                 this.data.PHONE_NUM = this.data.PRE_PHONE_NUM
                 let delMsg = true
                 let OTHER = true  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
-                API.open.doRegeist(this.data,delMsg,OTHER,
+                API.open.doRegeist(this.data, delMsg, OTHER,
                         res => {
+                            clearInterval(timer)
+                            this.Londing.close()
                             this.errMsg = res.MSG
+                            setTimeout(()=>{
+                                this.errMsg = ''
+                            },2000)
                             API.watch.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })
-                            Bus.$emit(BusName.showToast, res.MSG)
+                            // Bus.$emit(BusName.showToast, res.MSG)
                             if (res.CODE != 0) { // 不是0的话返回
                                 return
                             }
@@ -304,9 +355,25 @@
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })
                             this.errMsg = err
+                            setTimeout(()=>{
+                                this.errMsg =''
+                            },2000)
                             console.log(err);
                             this.disable = false
                         })
+                let conut = 0
+                let timer = setInterval(() => {
+                    this.Londing.open()
+                    conut++
+                    console.log(conut);
+                    if (conut == 6) {
+                        this.Londing.close()
+
+                        clearInterval(timer)
+                        return
+                    }
+                    this.checkID()
+                }, 5000)
             }
         }
 
@@ -335,16 +402,16 @@
             width: 90%;
             background-size: 0.7rem 0.7rem;
             border-bottom: 1px #E5E5E5 solid;
-            p{
+            p {
                 font-size: px2rem(12);
                 font-family: PingFangSC-Regular;
                 color: #858E9F;
                 padding-bottom: 0;
                 padding-top: px2rem(15);
             }
-            input{
+            input {
                 font-size: px2rem(20);
-                color:#333
+                color: #333
 
             }
         }
@@ -453,7 +520,7 @@
     .msg-err {
         text-align: center;
         margin: px2rem(20) auto 0;
-        span{
+        span {
             display: inline-block;
             min-width: px2rem(200);
             font-size: px2rem(12);

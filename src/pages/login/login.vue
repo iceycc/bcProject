@@ -25,11 +25,12 @@
                 ></pass-input>
             </section>
 
-            <span class="forget" @click="goRePass">忘记密码？</span>
+            <button :disabled="rePass" :class="{forget:true,forget2:rePass}" @click="goRePass">忘记密码？</button>
             <button :disabled="disabled" :class="{'tijiao':true, 'agree':!disabled}" @click="doLogin">登录</button>
             <div class="lijizhuce">
                 <span @click="goOpen" class="noOpen">还未开户，立即注册</span>
             </div>
+            <p class="buy-info">温馨提示：各类理财产品额度有限，提前开户可提高抢购成功率。</p>
         </div>
         <div class="bottomcontent">
             <p>
@@ -45,13 +46,14 @@
     import Bus from '../../common/js/bus'
     import {HOST} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin,UtilMixin} from '../../common/utils/mixin'
+    import {Mixin, UtilMixin} from '../../common/utils/mixin'
 
     let watchPassPluginPassTimer
 
     export default {
         data() {
             return {
+                rePass: true,
                 disabled: true,
                 tel: '',
                 pass: '',
@@ -68,7 +70,7 @@
                 passPluginText: ''
             }
         },
-        mixins: [Mixin,UtilMixin],
+        mixins: [Mixin, UtilMixin],
         components: {
             PassInput
         },
@@ -103,6 +105,7 @@
         mounted() {
             console.log('mounted');
             this.watchPassPluginPass()
+            this.watchPassPlugin()
         },
         beforeRouteLeave(to, from, next) {
             clearInterval(watchPassPluginPassTimer)
@@ -116,8 +119,6 @@
                 // })
                 watchPassPluginPassTimer = setInterval(() => {
                     let flag = this.checkPassWordTextIsEmpty()
-                    console.log(flag);
-
                     if (flag > 0) {
                         this.passShow = true
 
@@ -131,48 +132,25 @@
                         this.passShow = false
                         this.disabled = true
                     }
-                    // if(this.tel.length>0 && !flag){
-                    //     this.telShow = true
-                    //     this.disabled = false
-                    // }else {
-                    //     this.telShow = false
-                    //     this.disabled = true
-                    // }
+
                     num++
                 }, 500)
             },
             watchPassPlugin() { //
                 let num = 1
-                // this.Londing.open({
-                //     text: '正在加载密码控件'
-                // })
                 let timer = setInterval(() => {
                     let passKey = $('#LowercaseDiv') // 插件基于jq
                     if (passKey[0]) {
-                        passKey.off('click', '.buttonUp')
-                        passKey.off('click', '#F2')
-                        // this.Londing.close()
-                        passKey.on('click', '.buttonUp', () => {
-                            this.checkPassWordTextIsEmpty()
-                            this.passShow = true
-                            if (this.tel != '') {
-                                this.disabled = false
-                            }
-                        })
-                        passKey.on('click', '#F2', () => { // 校验文本内容为密码时说明密码框为空
-                            if (this.checkPassWordTextIsEmpty()) {
-                                this.passShow = false
-                                this.disabled = true
-                            }
-                        })
+                        this.rePass = false
                         clearInterval(timer)
                         return
                     } else {
-                        passKey.off('click', '.buttonUp')
-                        passKey.off('click', '#F2')
+                        if (num == 10) {
+                            clearInterval(timer)
+                        }
                     }
                     num++
-                }, 5000)
+                }, 300)
             },
             checkPassWordTextIsEmpty() {
                 this.passPluginText = $('#login_loginPass').text() //
@@ -312,7 +290,7 @@
 
     .bottomcontent {
         /*position: absolute;*/
-        margin-top: px2rem(180);
+        margin-top: px2rem(100);
         width: 100%;
         text-align: center;
         font-size: 0;
@@ -322,7 +300,12 @@
             width: .5rem;
         }
     }
-
+    .buy-info{
+        margin-top: px2rem(50);
+        color: #F77024;
+        font-size: px2rem(11);
+        text-align: center;
+    }
     .bottomcontent p {
         margin-top: 10px;
         font-size: 0.4rem;
@@ -398,13 +381,16 @@
         right: 5%;
     }
 
+    .login_box .forget2 {
+        color: #333;
+    }
+
     .lijizhuce {
         margin-top: 0.2rem;
         text-align: center;
         color: #1badff;
         .noOpen {
             display: inline-block;
-            height: px2rem(40);
             width: px2rem(150);
         }
     }

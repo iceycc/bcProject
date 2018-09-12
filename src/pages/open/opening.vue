@@ -319,13 +319,13 @@
                     return
                 }
 
-                this.checkID((REQ_SERIAL, step,PHONUM_NUM) => {
+                this.checkID((REQ_SERIAL, step, PHONE_NUM = '') => {
                     this.$router.push({
                         name: PageName.opening2,
                         query: {
                             REQ_SERIAL: REQ_SERIAL,
                             LAST_STEP_NUM: step,
-                            PHONUM_NUM
+                            PHONE_NUM: PHONE_NUM
                         },
                         params: {
                             data: this.data,
@@ -343,17 +343,17 @@
                 API.open.apiGetUserLastCompleteStep(getStepDatas, res => {
                     let step = res.LAST_STEP_NUM
                     let REQ_SERIAL = res.REQ_SERIAL
-                    let PHONUM_NUM = res.PHONUM_NUM ||'' // 改身份证是否有手机号回显
+                    let PHONE_NUM = res.PHONE_NUM || '' // 改身份证是否有手机号回显
                     console.log('步数 >>>', step);
                     if (step == 0) {
                         // Bus.$emit(BusName.showToast,"欢迎注册")
-                        fn && fn(REQ_SERIAL, step,PHONUM_NUM)
+                        fn && fn(REQ_SERIAL, step)
                     }
                     if (step == 1) { //
                         // todo
                         // PHONUM_NUM
                         // Bus.$emit(BusName.showToast,"第二步")
-                        fn && fn(REQ_SERIAL, step,PHONUM_NUM)
+                        fn && fn(REQ_SERIAL, step, PHONE_NUM)
                     }
                     if (step == 2) { // 跳转设置密码页
                         Bus.$emit(BusName.showToast, "您已经实名成功")
@@ -644,7 +644,7 @@
             -webkit-overflow-scrolling: touch;
             padding: 0 .2rem;
         }
-        .docsself{
+        .docsself {
             box-sizing: border-box;
             border: none;
             width: 100%;
@@ -654,11 +654,11 @@
             padding: 0 .3rem;
             /*style="padding: 20px 20px 0;font-size: 12px" */
             h2,
-            h5{
+            h5 {
                 font-size: px2rem(11) !important;
                 color: #000 !important;
             }
-            p{
+            p {
                 font-size: px2rem(9) !important;
                 color: #000 !important;
                 line-height: px2rem(15);
