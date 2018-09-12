@@ -246,7 +246,6 @@
                     let target = this.$route.query.target
                     util.storage.session.set(LsName.HAS_GRADE,type)
                     if (type == 1) {
-                        util.storage.session.set(LsName.LoginTarget,target) // 因为需要评估，跳转评估页再返回，url不是很合适了吧
                         Bus.$emit(BusName.showToast, '请先进行评估')
                         this.$router.push({
                             name: PageName.Verificationsuccess,

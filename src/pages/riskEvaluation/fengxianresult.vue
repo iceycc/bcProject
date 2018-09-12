@@ -22,8 +22,11 @@
     </div>
 </template>
 <script>
-    import {LsName, PageName} from "../../Constant";
+    import {BusName, LsName, PageName} from "../../Constant";
     import util from "../../common/utils/util";
+    import Bus from '../../common/js/bus'
+    import {API} from "../../request/api";
+    import {UtilMixin} from '../../common/utils/mixin'
 
     export default {
         data() {
@@ -35,13 +38,13 @@
                 target: ''
             }
         },
+        mixins: [UtilMixin],
         created() {
             let data = this.$route.query
-            this.target = util.storage.session.get(LsName.LoginTarget)
-            let tarArr = ["/Riskproblom", "/fengxianresult", '/Verificationsuccess']
-            if (tarArr.includes(this.target)) {
-                this.target = '/Productlist'
-            }
+            // let tarArr = ["/Riskproblom", "/fengxianresult", '/Verificationsuccess']
+            // if (tarArr.includes(this.target)) {
+            //     this.target = '/Productlist'
+            // }
 
             this.RISK_TOLERANCE_LEVEL = data.RISK_TOLERANCE_LEVEL
             this.RISK_TOLERANCE_DESC = data.RISK_TOLERANCE_DESC
@@ -55,13 +58,14 @@
                 })
             },
             goNext() {
-                util.storage.session.remove(LsName.LoginTarget)
                 // todo 跳转到购买
-                this.$router.push({
-                    // path: this.target ? this.target : '/Productlist'
-                    path: '/Productlist'
-                    // this.target ? this.target :
-                })
+                try {
+                    this.toPreProduct()
+                }catch (e) {
+                    this.$router.push({
+                        path: '/Productlist'
+                    })
+                }
             }
         }
 

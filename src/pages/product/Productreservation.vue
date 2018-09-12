@@ -158,7 +158,7 @@
                 title: ''
             }
         },
-        activated(){
+        activated() {
 
         },
         created() {
@@ -186,11 +186,11 @@
 
             }
         },
-        beforeRouteEnter(to,from,next){
+        beforeRouteEnter(to, from, next) {
 
             next()
         },
-        beforeRouteLeave(to,from,next){
+        beforeRouteLeave(to, from, next) {
 
             next()
         },
@@ -207,7 +207,7 @@
             },
             goNext(type) {
                 util.storage.session.remove(LsName.ProDuctData)
-                console.log(type);
+                let target = this.$route.fullPath
                 // todo 判断登录
                 //
                 let data = { // 跳转购买需要的参数
@@ -217,41 +217,37 @@
                     INCRE_AMOUNT: this.productDetail.INCRE_AMOUNT,
                     ORG_NAME: this.productDetail.ORG_NAME,
                 }
-                if (type == 1) {
-                    // 去安全购买
+                if (type == 1) { // 去安全购买
                     API.watch.watchApi({
                         FUNCTION_ID: 'ptb0A002',
                         REMARK_DATA: '异业合作-产品详情页-购买-安全购买', // 中文备注
                         FROM_ID: this.proID, // 产品ID、机构ID
                     })
                     let sign = util.storage.session.get(LsName.token)
-                    console.log(type, sign);
-                    if (!sign) {
-                        util.storage.session.set(LsName.loginType, '安全购买')
+                    // 购买参数
+                    let goBuyData = {
+                        id: this.proID,
+                        logo: this.productDetail.LOGO_URL,
+                        ...data
                     }
+                    util.storage.session.set(LsName.goBuy,goBuyData ) // 跳转购买的参数
+                    util.storage.session.set(LsName.loginType, '安全购买') //
                     let HAS_GRADE = util.storage.session.get(LsName.HAS_GRADE) || 0
                     if (HAS_GRADE == 1) { // 未评估
-                        let target = this.$route.fullPath
-                        util.storage.session.set(LsName.LoginTarget, target) // 因为需要评估，跳转评估页再返回,页面跳转太多，url不是很合适了吧
                         Bus.$emit(BusName.showToast, '请先进行评估')
                         this.$router.push({
                             name: PageName.Verificationsuccess,
                         })
                     }
                     else {
-                        // 其他的话
+                        // 其他的话  正常
                         this.$router.push({
                             name: PageName.Buying,
-                            query: {
-                                id: this.proID,
-                                logo: this.productDetail.LOGO_URL,
-                                ...data
-                            }
+                            query: goBuyData
                         })
                     }
 
-                } else {
-                    // 预约得先登录
+                } else { // 预约 得先登录
                     API.watch.watchApi({
                         FUNCTION_ID: 'ptb0A002',
                         REMARK_DATA: '异业合作-产品详情页-购买-预约下期', // 中文备注
@@ -262,9 +258,7 @@
                         PRD_NUMBER: this.productDetail.ID + ''
                     }
                     let sign = util.storage.session.get(LsName.token)
-                    if (sign) {
-                        console.log(sign);
-
+                    if (sign) { // 正常
                         API.product.apiSaveSubscribeInfo(data, res => {
                             console.log(res);
                             this.$router.push({
@@ -278,9 +272,9 @@
                         })
                     } else { // 未登录
                         Bus.$emit(BusName.showToast, '您还未登录，请先登录')
+                        // 预约或者参数
                         util.storage.session.set(LsName.ProDuctData, Object.assign(data, {PRD_NAME: this.productDetail.PRD_NAME}))
                         util.storage.session.set(LsName.loginType, '预约下期')
-                        let target = this.$route.fullPath
                         setTimeout(() => {
                             this.$router.push({
                                 name: PageName.login,

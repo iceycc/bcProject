@@ -343,19 +343,19 @@
                 API.open.apiGetUserLastCompleteStep(getStepDatas, res => {
                     let step = res.LAST_STEP_NUM
                     let REQ_SERIAL = res.REQ_SERIAL
-                    let PHONUM_NUM = res.PHONUM_NUM ||''
+                    let PHONUM_NUM = res.PHONUM_NUM ||'' // 改身份证是否有手机号回显
                     console.log('步数 >>>', step);
                     if (step == 0) {
                         // Bus.$emit(BusName.showToast,"欢迎注册")
                         fn && fn(REQ_SERIAL, step,PHONUM_NUM)
                     }
-                    if (step == 1) {
+                    if (step == 1) { //
                         // todo
                         // PHONUM_NUM
                         // Bus.$emit(BusName.showToast,"第二步")
                         fn && fn(REQ_SERIAL, step,PHONUM_NUM)
                     }
-                    if (step == 2) {
+                    if (step == 2) { // 跳转设置密码页
                         Bus.$emit(BusName.showToast, "您已经实名成功")
                         setTimeout(() => {
                             this.$router.push({
@@ -366,7 +366,6 @@
                                 query: {
                                     REQ_SERIAL: REQ_SERIAL
                                 }
-
                             })
                         }, 600)
                     }

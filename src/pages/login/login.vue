@@ -45,7 +45,7 @@
     import Bus from '../../common/js/bus'
     import {HOST} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin} from '../../common/utils/mixin'
+    import {Mixin,UtilMixin} from '../../common/utils/mixin'
 
     let watchPassPluginPassTimer
 
@@ -68,7 +68,7 @@
                 passPluginText: ''
             }
         },
-        mixins: [Mixin],
+        mixins: [Mixin,UtilMixin],
         components: {
             PassInput
         },
@@ -81,8 +81,6 @@
                 Bus.$emit(BusName.showToast, preInfo.msg)
                 util.storage.session.remove('loginInfo')
             }
-
-
         },
         watch: {
             tel(n, o) {
@@ -106,7 +104,7 @@
             console.log('mounted');
             this.watchPassPluginPass()
         },
-        beforeRouteLeave(to,from,next){
+        beforeRouteLeave(to, from, next) {
             clearInterval(watchPassPluginPassTimer)
             next()
         },
@@ -123,7 +121,7 @@
                     if (flag > 0) {
                         this.passShow = true
 
-                        if (this.tel.length > 0 && flag ==2) {
+                        if (this.tel.length > 0 && flag == 2) {
                             this.disabled = false
 
                         } else {
@@ -208,6 +206,7 @@
                 util.storage.session.set(LsName.reload, true)
                 this.$router.push({name: PageName.opening})
             },
+
             doLogin() {
                 clearInterval(watchPassPluginPassTimer)
                 let msg;
@@ -229,44 +228,21 @@
                         REMARK_DATA: '异业合作-登录', // 中文备注
                         SOURCE_URL: SOURCE_URL
                     })
-                    util.storage.session.remove(LsName.loginType)
-
-                    // todo
-                    let ProDuctData = util.storage.session.get(LsName.ProDuctData)
-                    if (ProDuctData) { // 判断是从预约产品过来的 ， 直接预约
-                        API.product.apiSaveSubscribeInfo(ProDuctData, res => {
-                            console.log(res);
-                            util.storage.session.remove(LsName.ProDuctData)
-                            this.$router.push({
-                                name: PageName.OrderNextSuccess,
-                                query: {
-                                    PRD_NAME: ProDuctData.PRD_NAME,
-                                }
-                            })
-                        }, err => {
-                            util.storage.session.remove(LsName.ProDuctData)
-                            console.log(err);
-                        })
-                        return
-                    }
 
                     util.storage.session.set(LsName.reload, true)  // 每次在调用密码框时进行植入标签，下次碰到密码框页面时进行校验刷新
                     util.storage.session.remove('loginInfo')
                     let type = res.HAS_GRADE
-                    let target = this.$route.query.target
                     util.storage.session.set(LsName.HAS_GRADE, type)
                     if (type == 1) {
-                        util.storage.session.set(LsName.LoginTarget, target) // 因为需要评估，跳转评估页再返回，url不是很合适了吧
                         Bus.$emit(BusName.showToast, '请先进行评估')
                         this.$router.push({
                             name: PageName.Verificationsuccess,
                         })
                     }
-                    else if (type == 2) {
+                    else if (type == 2) { // 评估过
                         // 2的话
-                        this.$router.push({
-                            path: target ? target : '/' + PageName.Productlist
-                        })
+                        this.toPreProduct() // 评估过判断是否去哪里
+
                     } else {
 
                     }

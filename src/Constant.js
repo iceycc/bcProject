@@ -4,8 +4,8 @@
 let url = 'http://192.168.100.96'
 
 let Configs = {
-    DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
-    // DEV_HOST:'http://192.168.100.109:8080/finsuit', // 测试
+    // DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
+    DEV_HOST:'https://adv.udomedia.com.cn/finsuit', // 测试
     // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
     PRO_HOST:'https://adv.udomedia.com.cn/finsuit' ,//
     APP_DOWN_URL:'http://www.baidu.com',
@@ -67,5 +67,6 @@ export const LsName ={
     REQ_SERIAL:'REQ_SERIAL', // 开户流水
     loginType:'loginType', // loginType
     ProTitle:'ProTitle', // ProTitle
+    goBuy:'goBuy', // goBuy
 }
 
