@@ -363,7 +363,6 @@
                         })
                 let conut = 0
                 let timer = setInterval(() => {
-                    this.Londing.open()
                     conut++
                     console.log(conut);
                     if (conut == 6) {
@@ -371,6 +370,7 @@
                         clearInterval(timer)
                         return
                     }
+                    this.Londing.open()
                     this.checkID()
                 }, 5000)
             }
