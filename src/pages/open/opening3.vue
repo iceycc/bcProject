@@ -138,6 +138,9 @@
             let beforeInfo;
             if (beforeInfo = util.storage.session.get('setPasswordInfo')) {
                 this.errMsg = beforeInfo.msg
+                setTimeout(()=>{
+                    this.errMsg = ''
+                },2000)
                 util.storage.session.remove('setPasswordInfo')
             }
 

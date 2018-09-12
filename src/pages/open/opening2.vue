@@ -283,6 +283,9 @@
                 API.open.doRegeist(this.data,delMsg,OTHER,
                         res => {
                             this.errMsg = res.MSG
+                            setTimeout(()=>{
+                                this.errMsg = ''
+                            },2000)
                             API.watch.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
@@ -304,6 +307,9 @@
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })
                             this.errMsg = err
+                            setTimeout(()=>{
+                                this.errMsg = ''
+                            },2000)
                             console.log(err);
                             this.disable = false
                         })

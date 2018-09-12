@@ -142,8 +142,14 @@
                 //     Bus.$emit(BusName.showToast, '其选择')
                 //     return
                 // }
+
                 if (this.nowShow === this.proNubmer - 1) {
                     console.log('提交')
+                    console.log(this.optionsArr.length);
+                    if(!this.values[this.optionsArr.length]){
+                        // Bus.$emit(BusName.showToast, "请选择")
+                        return
+                    }
                     let ANSWER_LIST = []
                     for (var i in this.values) {
                         if (i == '-1') {

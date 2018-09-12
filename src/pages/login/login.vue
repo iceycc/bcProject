@@ -118,8 +118,6 @@
                 // })
                 watchPassPluginPassTimer = setInterval(() => {
                     let flag = this.checkPassWordTextIsEmpty()
-                    console.log(flag);
-
                     if (flag > 0) {
                         this.passShow = true
 
