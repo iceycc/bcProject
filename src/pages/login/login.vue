@@ -145,7 +145,8 @@
                         clearInterval(timer)
                         return
                     } else {
-                        if (num == 10) {
+                        if (num == 100) {
+                            this.rePass = false
                             clearInterval(timer)
                         }
                     }

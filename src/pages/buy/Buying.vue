@@ -91,10 +91,10 @@
             checkMoneyNum(num){
                 let a = this.proDetail.INCRE_AMOUNT
                 if(num < parseInt(this.proDetail.TXT_MIN_AMOUNT)){
-                    Bus.$emit(BusName.showToast, '购买金额不能小于起购金额')
+                    Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
                     return true
                 }else if(num%a != 0){
-                    Bus.$emit(BusName.showToast, '请输入最小递增的整数倍')
+                    Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
                     return true
                 }else {
                     return false
@@ -108,7 +108,7 @@
                     return
                 }
                 if (!this.moneyNum) {
-                    Bus.$emit(BusName.showToast, '请填写购买金额')
+                    Bus.$emit(BusName.showToast, '请输入购买金额')
                     return
                 }
                 // todo
@@ -118,7 +118,7 @@
                 }
 
                 if (this.moneyNum - 0 > this.payNum) {
-                    Bus.$emit(BusName.showToast, '余额不足，请先充值')
+                    Bus.$emit(BusName.showToast, '余额不足，请充值')
                     return
                 }
                 if(this.checkMoneyNum(this.moneyNum)){

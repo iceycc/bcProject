@@ -368,7 +368,6 @@
                     console.log(conut);
                     if (conut == 6) {
                         this.Londing.close()
-
                         clearInterval(timer)
                         return
                     }

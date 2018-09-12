@@ -1,3 +1,10 @@
+## 兼容问题总结
+* input number 不同设备展示不同 有的不会限制类型，汉字字母照常能输入
+* ios，部分安卓机型 的部分浏览器title不动态改变
+* ios事件监听会触发闪屏
+* input
+
+
 # prepare
 
 > A Vue.js project
