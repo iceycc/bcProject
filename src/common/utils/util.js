@@ -289,8 +289,8 @@ export const util = {
                 if ((fileList.size / 1024 / 1024) > 0) { //质量大于1m
                     //缩放后图片的宽高
                     // 500 k  800 x 500
-                    let rateW = img.naturalWidth / 800
-                    let rateH = img.naturalHeight / 500
+                    let rateW = img.naturalWidth / 400
+                    let rateH = img.naturalHeight / 250
                     console.log(img.naturalWidth, img.naturalHeight)
                     let width, height
                     width = img.naturalWidth / rateW;
@@ -836,7 +836,8 @@ export const util = {
                 isBlackBerry = /BlackBerry/i.test(UA),
                 isWindowPhone = /IEMobile/i.test(UA),
                 isApp = /besharp/gi.test(UA), // UA.indexOf('besharp') > -1, // 自己的app
-                isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
+                isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone,
+                isDingTalk = /DingTalk/gi.test(UA);
         return {
             isAndroid: isAndroid,
             isIOS: isIOS,
@@ -845,7 +846,8 @@ export const util = {
             isWeixin: /MicroMessenger/gi.test(UA),
             isQQ: /QQ/gi.test(UA),
             isPC: !isMobile,
-            isWeibo: /WeiBo/gi.test(UA)
+            isWeibo: /WeiBo/gi.test(UA),
+            isDingTalk:isDingTalk
         }
     }
 

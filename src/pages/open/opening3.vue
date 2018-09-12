@@ -30,8 +30,8 @@
                 </transition>
                 <!--name="text1" :placeholder="telPaceholder" v-model="s_loginPass"-->
                 <span class="input"
-                       @click="showBox"
-                      >{{telPaceholder}}</span>
+                      @click="showBox"
+                >{{telPaceholder}}</span>
             </section>
             <section class="input-box">
                 <transition name="fade">
@@ -39,8 +39,8 @@
                 </transition>
                 <!--name="text1" :placeholder="payPaceholder" v-model="s_payPass"-->
                 <span class="input"
-                       @click="showBox"
-                      >{{payPaceholder}}</span>
+                      @click="showBox"
+                >{{payPaceholder}}</span>
             </section>
         </div>
         <div class="Tips" v-if="errMsg">
@@ -48,7 +48,8 @@
         </div>
         <button
                 :class="{'tijiao':true, 'agree':!disabled}"
-                @click="postData" :disabled="disabled">开户</button>
+                @click="postData" :disabled="disabled">开户
+        </button>
         <div v-if="ifShow" class="bgbox">
             <div class="passbox">
                 <div class="top">
@@ -107,13 +108,13 @@
             return {
                 loginShow: false,
                 telPaceholder: '登录密码',
-                payPaceholder:'交易密码',
-                disabled:true,
+                payPaceholder: '交易密码',
+                disabled: true,
                 reGet: true,
                 s_loginPass: '',
                 s_payPass: '',
                 REQ_SERIAL: '',
-                LAST_STEP_NUM:'',
+                LAST_STEP_NUM: '',
                 ifShow: false,
                 orgId: 70,
                 loginpass: '',
@@ -138,9 +139,9 @@
             let beforeInfo;
             if (beforeInfo = util.storage.session.get('setPasswordInfo')) {
                 this.errMsg = beforeInfo.msg
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.errMsg = ''
-                },2000)
+                }, 2000)
                 util.storage.session.remove('setPasswordInfo')
             }
 
@@ -175,12 +176,12 @@
                     REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
                     BANK_LOGIN_PW: this.loginpass,
                     BANK_PAY_PW: this.paypass,
-                    LAST_STEP_NUM:this.LAST_STEP_NUM
+                    LAST_STEP_NUM: this.LAST_STEP_NUM
                 }
                 API.open.setPassWord(data, res => {
                     // todo
                     let ProDuctData = util.storage.session.get(LsName.ProDuctData)
-                    if(ProDuctData){ // 判断是从预约产品过来的 ， 直接预约
+                    if (ProDuctData) { // 判断是从预约产品过来的 ， 直接预约
                         API.product.apiSaveSubscribeInfo(ProDuctData, res => {
                             console.log(res);
                             util.storage.session.remove(LsName.ProDuctData)
@@ -190,7 +191,7 @@
                                     PRD_NAME: ProDuctData.PRD_NAME,
                                 }
                             })
-                        },err=>{
+                        }, err => {
                             util.storage.session.remove(LsName.ProDuctData)
                             console.log(err);
                         })
@@ -200,14 +201,14 @@
                     util.storage.session.remove(LsName.token)
                     util.storage.session.set(LsName.reload, true)
                     this.Londing.open({
-                        text:'即将跳转登录页'
+                        text: '即将跳转登录页'
                     })
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         this.Londing.close()
                         this.$router.replace({
                             name: PageName.login
                         })
-                    },1500)
+                    }, 1500)
                 }, err => {
                     this.ifShow = false
                     util.storage.session.set('setPasswordInfo', {
@@ -223,10 +224,10 @@
                     FUNCTION_ID: 'ptb0A005', // 点位
                     REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
                 })
-                this.Londing.open()
-                setTimeout(() => {
-                    this.Londing.close()
-                }, 500)
+                // this.Londing.open()
+                // setTimeout(() => {
+                //     this.Londing.close()
+                // }, 500)
 
                 this.paypass = $('#payPass').$getCiphertext()
                 this.paypassLen = $('#payPass').$getPasswordLength() - 0 || 0
@@ -250,6 +251,7 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
+
     .bgbox {
         width: 100%;
         height: 100%;
@@ -264,7 +266,7 @@
             margin: 0 auto;
             box-sizing: border-box;
         }
-        .top{
+        .top {
             padding: 0.4rem;
         }
         .field_row_key {
@@ -303,7 +305,7 @@
             padding: px2rem(14) 0;
             display: flex;
             button {
-                color:#108EE9;
+                color: #108EE9;
                 font-size: px2rem(17);
                 margin: 0 .3rem;
                 text-align: center;
@@ -374,15 +376,15 @@
         margin: px2rem(50) auto 0;
         text-align: center;
         display: block;
-        &.agree{
+        &.agree {
             background: #0072ff;
         }
     }
 
     .Tips {
-        margin:px2rem(17) auto 0;
+        margin: px2rem(17) auto 0;
         text-align: center;
-        span{
+        span {
             box-sizing: border-box;
             display: inline-block;
             background-color: #FF5B05;
@@ -392,7 +394,6 @@
             line-height: px2rem(29);
             padding: 0 px2rem(6);
             border-radius: px2rem(4);
-
 
         }
     }
@@ -409,7 +410,7 @@
             display: flex;
             flex-direction: column;
         }
-        .step-text{
+        .step-text {
             padding-top: px2rem(7);
         }
 
@@ -472,7 +473,7 @@
             width: 90%;
             background-size: 0.7rem 0.7rem;
             border-bottom: 1px #E5E5E5 solid;
-            input{
+            input {
                 @include placeholder(#333)
             }
         }
