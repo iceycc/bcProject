@@ -75,8 +75,8 @@
                     // }
                     // this.goNext()
 
-                    if(!n['-1'] && !o['-1'] ){
-                        if(this.startNo==0) {
+                    if (!n['-1'] && !o['-1']) {
+                        if (this.startNo == 0) {
                             console.log('cc');
                             this.startNo = 2
                             this.start = false
@@ -85,10 +85,10 @@
                         console.log('aa');
                         this.goNext()
                     }
-                    else if(n['-1']){
+                    else if (n['-1']) {
                         console.log('bb');
                         this.goNext()
-                    }else {
+                    } else {
 
                     }
                 },
@@ -147,7 +147,7 @@
                 if (this.nowShow === this.proNubmer - 1) {
                     console.log('提交')
                     console.log(this.optionsArr.length);
-                    if(!this.values[this.optionsArr.length]){
+                    if (!this.values[this.optionsArr.length]) {
                         // Bus.$emit(BusName.showToast, "请选择")
                         return
                     }
