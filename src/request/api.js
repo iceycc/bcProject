@@ -25,10 +25,11 @@ export const API = {
             return http.post(options, config, success, error)
         },
         //   回显2
-        apiGetUserLastCompleteStep(params, success, error) {
+        apiGetUserLastCompleteStep(params,delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiGetUserLastCompleteStep',
                 params,
+                delMsg
             }
             return http.post(options, config, success, error)
         },

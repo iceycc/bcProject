@@ -320,6 +320,7 @@
                 }
 
                 this.checkID((REQ_SERIAL, step, PHONE_NUM = '') => {
+                    console.log(1111)
                     this.$router.push({
                         name: PageName.opening2,
                         query: {
@@ -339,8 +340,9 @@
                 let getStepDatas = {
                     ID_NUMBER: this.data.USER_CARD_ID
                 }
+                let delMsg = true
 
-                API.open.apiGetUserLastCompleteStep(getStepDatas, res => {
+                API.open.apiGetUserLastCompleteStep(getStepDatas,delMsg, res => {
                     let step = res.LAST_STEP_NUM
                     let REQ_SERIAL = res.REQ_SERIAL
                     let PHONE_NUM = res.PHONE_NUM || '' // 改身份证是否有手机号回显

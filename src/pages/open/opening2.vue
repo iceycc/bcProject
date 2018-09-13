@@ -233,8 +233,8 @@
                 let getStepDatas = {
                     ID_NUMBER: this.$route.params.data.USER_CARD_ID
                 }
-
-                API.open.apiGetUserLastCompleteStep(getStepDatas, res => {
+                let delMsg = true
+                API.open.apiGetUserLastCompleteStep(getStepDatas,delMsg, res => {
                     let step = res.LAST_STEP_NUM
                     let REQ_SERIAL = res.REQ_SERIAL
                     // let PHONE_NUM = res.PHONE_NUM ||'' // 改身份证是否有手机号回显

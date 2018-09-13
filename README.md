@@ -3,6 +3,10 @@
 * ios，部分安卓机型 的部分浏览器title不动态改变
 * ios事件监听会触发闪屏
 * input
+* document.title=title在ios上并不能动态改变title（iphone上的微信端）,但是在电脑上和安卓手机上却没有问题
+## 
+* canvas 压缩旋转图片
+* 动态旋转
 
 
 # prepare
