@@ -8,7 +8,7 @@ let Configs = {
     DEV_HOST:'https://adv.udomedia.com.cn/finsuit', // 测试
     // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
     // PRO_HOST:'https://adv.udomedia.com.cn/finsuit' ,//
-    PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,//
+    PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,// 生产
     APP_DOWN_URL:'http://www.baidu.com',
 }
 export const HOST = process.env.NODE_ENV == 'development'
