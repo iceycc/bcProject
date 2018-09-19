@@ -18,11 +18,12 @@ export default {
         method = method || 'post'
         params = Object.assign(params, {ORG_ID: '70'})
         let token1 = util.storage.session.get(LsName.token) || token
-        let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
+        let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
         let datas = {
             biz_data: {
                 head: {
                     CHANNEL: "Umeng",
+                    CHANNEL_TYPE:'h5',
                     VERSION: "",
                     IMSI: "460026325010440",
                     SESSION_ID: "",
