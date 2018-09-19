@@ -23,7 +23,7 @@ export default {
             biz_data: {
                 head: {
                     CHANNEL: "Umeng",
-                    CHANNEL_TYPE:'h5',
+                    CHANNEL_TYPE:'H5',
                     VERSION: "",
                     IMSI: "460026325010440",
                     SESSION_ID: "",
