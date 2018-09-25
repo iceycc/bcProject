@@ -10,13 +10,7 @@
             <section v-for="item,index in optionsArr" :key="index" class="select-box">
                 <!--<transition name="fade">-->
                 <section v-show="index === nowShow" class="select-box2">
-                    <!--<mt-radio-->
-                    <!--align="right"-->
-                    <!--class="radio"-->
-                    <!--:title="item.questionNum +'、'+ item.questionContent"-->
-                    <!--v-model="values[item.questionNum]"-->
-                    <!--:options="item.options | optionsFilter">-->
-                    <!--</mt-radio>-->
+
                     <section>
 
                         <p class="que-title">{{item.questionNum +'、'+ item.questionContent}}</p>
