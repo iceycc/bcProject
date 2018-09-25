@@ -98,12 +98,13 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    // todo 外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
     if (!util.storage.session.get(LsName.DEVICE_ID)) {
         let DEVICE_ID = to.query.DEVICE_ID || '321234'
         util.storage.session.set(LsName.DEVICE_ID, DEVICE_ID)
     }
     if (!util.storage.session.get(LsName.CHANNEL_ID)) {
-        let CHANNEL_ID = to.query.CHANNEL_ID || '3'
+        let CHANNEL_ID = to.query.CHANNEL_ID || '311111655'
         util.storage.session.set(LsName.CHANNEL_ID, CHANNEL_ID)
     }
 

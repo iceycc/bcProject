@@ -19,6 +19,7 @@ export default {
         params = Object.assign(params, {ORG_ID: '70'})
         let token1 = util.storage.session.get(LsName.token) || token
         let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
+        let channel_id = util.storage.session.get(LsName.CHANNEL_ID) + ''
         let datas = {
             biz_data: {
                 head: {
@@ -34,7 +35,7 @@ export default {
                 },
                 param: params,
             },
-            channel_id: "3"
+            channel_id: channel_id
         }
 
 

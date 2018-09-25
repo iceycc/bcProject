@@ -340,7 +340,7 @@
                 let getStepDatas = {
                     ID_NUMBER: this.data.USER_CARD_ID
                 }
-                let delMsg = true
+                let delMsg = false
 
                 API.open.apiGetUserLastCompleteStep(getStepDatas, delMsg, res => {
                     let step = res.LAST_STEP_NUM
