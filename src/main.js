@@ -1,4 +1,6 @@
 import Vue from 'vue'
+// import libRender from './common/importLib'
+// libRender()
 import {
     Button,
     Cell,
@@ -33,6 +35,8 @@ Object.keys(custom).forEach(key=>{
 import router from './router'
 import './assets/css/my-mint.css';
 import './assets/css/common.css'
+
+
 new Vue({
     el: '#app',
     components: {App},
