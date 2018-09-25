@@ -78,6 +78,7 @@
     import {Mixin} from '../../common/utils/mixin'
 
     let time = 60
+    let timer;
     export default {
         data() {
             return {
@@ -88,7 +89,9 @@
                 APPLY_AMOUN: '',
                 toUrl: '',
                 ifGet:false,
-                write:true, // 是否签约充值协议
+                write:true, // 是否签约
+                agree:true, // 是否阅读
+                agree1:true, // 是否获取短信
                 agreeMentSrc:HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
                 ORG_NAME:'',
                 imgSrc:imgSrc,
@@ -100,7 +103,7 @@
                 msgCode:'',
                 codeText:'获取验证码',
                 disable:false,
-                agree:true
+
             }
         },
         components: {
@@ -133,9 +136,11 @@
                         // 没写
                         this.write = false
                         this.page = false
+                        this.agree1 = false
                     }else{
                         // 填写了
                         this.write = true
+                        this.agree1 = true
                     }
                 })
             },
@@ -145,7 +150,12 @@
                 API.reChange.apiRechargeProtoCode({}, res => {
                     console.log(res);
                     this.PIN = res.PIN
+                    this.agree1 = true
                     // this.page = false
+                },err =>{
+                    this.codeText = '重新发送'
+                    this.disable = false
+                    clearInterval(timer)
                 })
             },
             getMsg(){
@@ -162,7 +172,7 @@
                 }
                 let times = time
                 this.disable = true
-                let timer = setInterval(()=>{
+                timer = setInterval(()=>{
                     if(times ==0 ){
                         this.codeText = '重新发送'
                         this.disable = false
@@ -190,7 +200,7 @@
                 }
             },
             doNext(){
-
+                console.log(this.write);
                 let msg
                 if(msg=util.Check.trim(this.APPLY_AMOUN,'充值金额')) return Bus.$emit(BusName.showToast,msg);
                 //
@@ -202,11 +212,11 @@
                     Bus.$emit(BusName.showToast,'您还未签约充值协议')
                     return
                 }
-                if(!this.agree){
-                    if(msg=util.Check.trim(this.msgCode,'手机验证码没填写')) return Bus.$emit(BusName.showToast,msg);
+                if(!this.write){
+                    if(msg=util.Check.trim(this.msgCode,'手机验证码')) return Bus.$emit(BusName.showToast,msg);
                 }
-                if(!this.agree){
-                    Bus.$emit(BusName.showToast,'请确认阅读充值协议')
+                if(!this.agree1){
+                    Bus.$emit(BusName.showToast,'请获取手机验证码')
                     return
                 }
                 this.Londing.open()

@@ -18,11 +18,12 @@ export default {
         method = method || 'post'
         params = Object.assign(params, {ORG_ID: '70'})
         let token1 = util.storage.session.get(LsName.token) || token
-        let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
+        let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
         let datas = {
             biz_data: {
                 head: {
                     CHANNEL: "Umeng",
+                    CHANNEL_TYPE:'H5',
                     VERSION: "",
                     IMSI: "460026325010440",
                     SESSION_ID: "",
@@ -51,9 +52,11 @@ export default {
             if (result.head.TOKEN) { // 接口有返回token就更新token
                 util.storage.session.set(LsName.token, result.head.TOKEN)
             }
-            if(OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM){ // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
-                util.storage.session.set(LsName.LAST_STEP_NUM,result.data.LAST_STEP_NUM)
-                util.storage.session.set(LsName.REQ_SERIAL,result.data.REQ_SERIAL)
+            if(OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM){
+                // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
+                //
+                util.storage.session.set(LsName.LAST_STEP_NUM,result.data.LAST_STEP_NUM) // 序列号
+                util.storage.session.set(LsName.REQ_SERIAL,result.data.REQ_SERIAL) //
             }
             // 根据状态码 做业务状态校验 分流
             if (result.head.CODE == 0) {

@@ -25,7 +25,8 @@ export default {
                 TYPE: "BATCH_RECORD_FUNCTION_LOG_INFO",
                 TOKEN: token,
                 SESSION_ID: "",
-                DEVICE_ID: DeviceId
+                DEVICE_ID: DeviceId,
+                CHANNEL_TYPE:'H5'
             },
             param: {
                 CHANNEL_ID:CHANNEL_ID,

@@ -21,7 +21,8 @@
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
             setTimeout(()=>{
                 this.errMsg = ''
-            },2000)
+
+            })
         },
         data(){
             return {

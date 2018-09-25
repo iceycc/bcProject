@@ -143,54 +143,55 @@
                     this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 })
             },
-            showMsg(msg) {
-                this.errMsg = msg
-                setTimeout(() => {
-                    this.errMsg = ''
-                }, 2000)
-                return
-            },
 
+            showErrMsg(msg){
+                this.errMsg = msg;
+                setTimeout(()=>{
+                    this.errMsg = '';
+                },2000)
+            },
             doRePass() {
                 this.data.PHONE_NUM = this.tel
                 let msg;
                 if (msg = util.Check.name(this.data.USER_REAL_NAME)) {
-                    this.showMsg(msg)
+
+                   this.showErrMsg(msg)
                     return
-                };
+                }
                 if (msg = util.Check.idNumber(this.data.USER_CARD_ID)) {
-                    this.showMsg(msg)
+                    this.showErrMsg(msg)
                     return
-                };
+                }
                 if (msg = util.Check.tel(this.data.PHONE_NUM)) {
-                    this.showMsg(msg)
+                    this.showErrMsg(msg)
                     return
-                };
+                }
 
                 this.data.BANK_LOGIN_PW = $('#loginPass').$getCiphertext()
                 this.data.BANK_LOGIN_PW_LEN = $('#loginPass').$getPasswordLength()
                 this.data.BANK_LOGIN_PW2 = $('#reLoginPass').$getCiphertext()
                 this.data.BANK_LOGIN_PW2_LEN = $('#reLoginPass').$getPasswordLength()
                 if (msg = util.Check.trim(this.data.BANK_LOGIN_PW, ',密码')) {
-                    this.showMsg(msg)
+
+                    this.showErrMsg(msg)
                     return
-                };
+                }
                 if (msg = util.Check.loginPassLen(this.data.BANK_LOGIN_PW_LEN)) {
-                    this.showMsg(msg)
+                    this.showErrMsg(msg)
                     return
-                };
-                if (msg = util.Check.trim(this.data.BANK_LOGIN_PW2, ',密码')) {
-                    this.showMsg(msg)
+                }
+                if (msg = util.Check.trim(this.data.BANK_LOGIN_PW2, ',密码')){
+                    this.showErrMsg(msg)
                     return
-                };
-                if (msg = util.Check.loginPassLen(this.data.BANK_LOGIN_PW2_LEN)) {
-                    this.showMsg(msg)
+                }
+                if (msg = util.Check.loginPassLen(this.data.BANK_LOGIN_PW2_LEN)){
+                    this.showErrMsg(msg)
                     return
-                };
+                }
                 if (msg = util.Check.trim(this.data.PHONE_CODE, '验证码')) {
-                    this.showMsg(msg)
+                    this.showErrMsg(msg)
                     return
-                };
+                }
 
                 let data = {
                     ...this.data

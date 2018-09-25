@@ -28,6 +28,16 @@
       position: fixed;
       width: 100%;
     }
+    *{
+      -webkit-user-select:none;
+      -khtml-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;	/*但是安卓不行*/
+    }
+    input {
+      -webkit-user-select:auto; /*webkit浏览器*/
+    }
   </style>
 </head>
 <body>
