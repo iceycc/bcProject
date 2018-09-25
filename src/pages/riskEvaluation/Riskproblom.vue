@@ -5,6 +5,7 @@
                 <a class="return" href=""></a>
                 <p>风险测评</p>
             </header>
+            <!--<pre>{{values}}</pre>-->
             <p class="probloms"> {{nowShow + 1}} / {{proNubmer}}</p>
             <section v-for="item,index in optionsArr" :key="index" class="select-box">
                 <!--<transition name="fade">-->
@@ -23,12 +24,12 @@
                                  :class="{'radio-box':true,'select':answer.optionNum==values[item.questionNum]}"
                         >
                             <label
-                                    @click.stop="selecthandle(answer.optionNum)"
                                     :for="'qestion'+ item.questionNum +'-'+ answer.optionNum">{{answer.option |
                                 optionFilter(answer.optionNum)}}</label>
                             <input
+                                    @click="selecthandle(answer.optionNum)"
                                     :id="'qestion'+ item.questionNum +'-'+ answer.optionNum" type="radio"
-                                   :value="answer.optionNum" v-model="values[item.questionNum]"
+                                    :value="answer.optionNum" v-model="values[item.questionNum]"
                             >
                         </section>
                     </section>
@@ -73,56 +74,10 @@
                 select: -1
             }
         },
-        watch: {
-            // values: {
-            //     handler: function (n, o) {   //特别注意，不能用箭头函数，箭头函数，this指向全局
-            //         // console.log(this.nowShow);
-            //         // console.info('values n',n);
-            //         // console.info('values o',o);
-            //         // console.log(n['-1'] == o['-1']);
-            //         console.log(this.nowShow);
-            //         if (this.nowShow >= this.optionsArr.length - 1) {
-            //             console.log('提交')
-            //             return
-            //         }
-            //         // this.PreclickBel = true
-            //         // if (this.nowShow == 0) {
-            //         //     return
-            //         // }
-            //         // this.goNext()
-            //
-            //         if (!n['-1'] && !o['-1']) {
-            //             if (this.startNo == 0) {
-            //                 console.log('cc');
-            //                 this.startNo = 2
-            //                 this.start = false
-            //                 return
-            //             }
-            //             console.log('aa');
-            //             this.goNext()
-            //         }
-            //         else if (n['-1']) {
-            //             console.log('bb');
-            //             this.goNext()
-            //         } else {
-            //
-            //         }
-            //     },
-            //     deep: true    //深度监听
-            // },
-        },
         activated() {
             this.nowShow = _NUM
         },
         filters: {
-            // optionsFilter(val) {
-            //     return val.map(function (item, index) {
-            //         return {
-            //             label: `${ProblomIndex[index]}、${item.option}`,
-            //             value: item.optionNum
-            //         }
-            //     })
-            // },
             optionFilter(val, index) {
                 return `${ProblomIndex[index - 1]}、${val}`
             }
@@ -131,21 +86,24 @@
             this.getProblom()
 
         },
-        mounted() {
-            // $('.app').on('click', '.mint-radio-label', () => {
-            //     // this.values['-1'] = true
-            //     if (!this.PreclickBel) {
-            //         this.goNext()
-            //         this.PreclickBel = true
-            //     }
-            // })
-        },
+
         methods: {
+
+            // debounce(fn, delay) {
+            //     var last
+            //     return function(){
+            //         var ctx = this, args = arguments
+            //         clearTimeout(last)
+            //         last = setTimeout(function(){
+            //             fn.apply(ctx, args)
+            //         }, delay)
+            //     }
+            // },
             selecthandle(index) {
-                console.log(this.nowShow+1);
-                console.log(this.optionsArr.length);
+
                 this.select = index
-                if(this.nowShow+1 >= this.optionsArr.length) return
+                if (this.nowShow + 1 >= this.optionsArr.length) return
+                // this.debounce(this.goNext(),800)
                 this.goNext()
             },
             getProblom() {
@@ -189,6 +147,7 @@
                 return
             },
             goNext() {
+                console.log('goNext')
                 this.Londing.open()
                 setTimeout(() => {
                     this.nowShow += 1
@@ -248,15 +207,15 @@
     }
 
     .select-box2 {
-        .que-title{
+        .que-title {
             font-size: px2rem(16);
             padding-bottom: px2rem(10);
             border-bottom: 1px solid #dedede;
         }
         .select {
-            color: #d3645a;
+            color: #4295f7;
             input[type='radio'] {
-               background: #d3645a;
+                background: #4295f7;
             }
         }
         .radio-box {
@@ -264,8 +223,8 @@
             line-height: px2rem(15);
             margin: px2rem(20) 0;
             font-size: px2rem(14);
-            label{
-                color:#8e8e8e;
+            label {
+                color: #8e8e8e;
                 flex: 1;
                 line-height: 1.5;
 
