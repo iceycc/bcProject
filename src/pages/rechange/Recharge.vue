@@ -78,6 +78,7 @@
     import {Mixin} from '../../common/utils/mixin'
 
     let time = 60
+    let timer;
     export default {
         data() {
             return {
@@ -151,6 +152,10 @@
                     this.PIN = res.PIN
                     this.agree1 = true
                     // this.page = false
+                },err =>{
+                    this.codeText = '重新发送'
+                    this.disable = false
+                    clearInterval(timer)
                 })
             },
             getMsg(){
@@ -167,7 +172,7 @@
                 }
                 let times = time
                 this.disable = true
-                let timer = setInterval(()=>{
+                timer = setInterval(()=>{
                     if(times ==0 ){
                         this.codeText = '重新发送'
                         this.disable = false

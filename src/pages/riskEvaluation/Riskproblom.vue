@@ -5,7 +5,6 @@
                 <a class="return" href=""></a>
                 <p>风险测评</p>
             </header>
-            <pre>{{values}}</pre>
             <p class="probloms"> {{nowShow + 1}} / {{proNubmer}}</p>
             <section v-for="item,index in optionsArr" :key="index" class="select-box">
                 <!--<transition name="fade">-->
@@ -19,7 +18,7 @@
                     <!--</mt-radio>-->
                     <section>
 
-                        <p>{{item.questionNum +'、'+ item.questionContent}}</p>
+                        <p class="que-title">{{item.questionNum +'、'+ item.questionContent}}</p>
                         <section v-for="answer in item.options" :key="answer.optionNum"
                                  :class="{'radio-box':true,'select':answer.optionNum==values[item.questionNum]}"
                         >
@@ -206,10 +205,12 @@
 
     .app {
         width: 94%;
-        padding: 0 3%;
+        padding: 0 px2rem(15);
+        box-sizing: border-box;
     }
 
     .app .probloms {
+        padding: px2rem(5) 0 px2rem(10);
         text-align: center;
         color: #666666;
     }
@@ -247,18 +248,27 @@
     }
 
     .select-box2 {
+        .que-title{
+            font-size: px2rem(16);
+            padding-bottom: px2rem(10);
+            border-bottom: 1px solid #dedede;
+        }
         .select {
-            color: #007aff;
+            color: #d3645a;
             input[type='radio'] {
-               background: #007aff;
+               background: #d3645a;
             }
         }
         .radio-box {
             display: flex;
             line-height: px2rem(15);
             margin: px2rem(20) 0;
+            font-size: px2rem(14);
             label{
+                color:#8e8e8e;
                 flex: 1;
+                line-height: 1.5;
+
             }
             input[type='radio'] {
                 vertical-align: middle;
