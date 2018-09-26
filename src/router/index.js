@@ -92,6 +92,13 @@ addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权
 addRouter(PageName.Investmentdetails, {keepAlive: false, title: '银行理财'});
 addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
 
+/**
+ * bankDetail
+ */
+addRouter(PageName.BankDetail, {keepAlive: false, title: '我的银行',needLogin:false});
+
+
+
 //
 let router = new VueRouter({
     routes
@@ -104,7 +111,7 @@ router.beforeEach((to, from, next) => {
         util.storage.session.set(LsName.DEVICE_ID, DEVICE_ID)
     }
     if (!util.storage.session.get(LsName.CHANNEL_ID)) {
-        let CHANNEL_ID = to.query.CHANNEL_ID || '311111655'
+        let CHANNEL_ID = to.query.CHANNEL_ID || '3'
         util.storage.session.set(LsName.CHANNEL_ID, CHANNEL_ID)
     }
 

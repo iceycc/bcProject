@@ -25,4 +25,6 @@ Pages[Constants.PageName.OrderNextSuccess] = resolve => require(['./product/Orde
 Pages[Constants.PageName.Productreservation] = resolve => require(['./product/Productreservation.vue'], resolve);
 Pages[Constants.PageName.fengxianresult] = resolve => require(['./riskEvaluation/fengxianresult.vue'], resolve);
 
+Pages[Constants.PageName.BankDetail] = resolve => require(['./bankDetail/bankDetail.vue'], resolve);
+
 export default Pages

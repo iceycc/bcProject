@@ -3,23 +3,41 @@
 
 let url = 'http://192.168.100.96'
 
+/**
+ *
+ */
 let Configs = {
-    DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
+    DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
     // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
     // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
-    PRO_HOST:'https://adv.udomedia.com.cn/finsuit' ,//
+    PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
     // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,// 生产
-    APP_DOWN_URL:'http://www.baidu.com',
+    APP_DOWN_URL: 'http://www.baidu.com',
 }
 export const HOST = process.env.NODE_ENV == 'development'
         ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
 
+/**
+ *
+ */
 export const AppUrl = { // app下载地址
     Android: '',
     Ios: ''
 }
 
-export const imgSrc = process.env.Img_SRC
+/**
+ * logo图片地址
+ */
+let imgSrcHost = {
+    dev:"https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
+    pro:"https://finsuit.oss-cn-beijing.aliyuncs.com/"
+}
+
+export const imgSrc = process.env.NODE_ENV == 'development'?imgSrcHost.dev:imgSrcHost.pro
+
+/**
+ * page名称
+ */
 export const PageName = {
     login: 'login',
     Productlist: 'Productlist',
@@ -45,9 +63,15 @@ export const PageName = {
     OrderNextSuccess: 'OrderNextSuccess',
     DocsPage: 'DocsPage',
     UserLicenseAgreement: 'UserLicenseAgreement',
+    /*
+    wby二期新增
+     */
+    BankDetail:'BankDetail',
 }
 
-
+/**
+ * 传值的bus名称
+ */
 export const BusName = {
     showToast: 'showToast',
     showLoading: 'showLoading',
@@ -55,7 +79,9 @@ export const BusName = {
 
 }
 
-
+/**
+ * storage的名字
+ */
 export const LsName = {
     token: 'token',
     DEVICE_ID: 'DEVICE_ID',
