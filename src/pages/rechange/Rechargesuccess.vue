@@ -17,7 +17,7 @@
 <script>
     import util from "../../common/utils/util";
     import {LsName} from "../../Constant";
-    import {Mixin} from '../../common/utils/mixin'
+    // import {Mixin} from '../../common/utils/mixin'
 
     export default {
         data(){
@@ -27,7 +27,7 @@
                 data:''
             }
         },
-        mixins: [Mixin],
+        // mixins: [Mixin],
         created(){
             this.data = this.$route.query
         },

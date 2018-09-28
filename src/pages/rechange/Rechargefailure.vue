@@ -12,17 +12,11 @@
     </div>
 </template>
 <script>
-    import util from "../../common/utils/util";
-    import {LsName} from "../../Constant";
-    import {Mixin} from '../../common/utils/mixin'
+    // import {Mixin} from '../../common/utils/mixin'
     export default {
-        mixins: [Mixin],
+        // mixins: [Mixin],
         created() {
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
-            setTimeout(()=>{
-                this.errMsg = ''
-
-            })
         },
         data(){
             return {
