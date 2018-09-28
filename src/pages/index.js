@@ -24,5 +24,11 @@ Pages[Constants.PageName.Buying] = resolve => require(['./buy/Buying.vue'], reso
 Pages[Constants.PageName.OrderNextSuccess] = resolve => require(['./product/OrderNextSuccess.vue'], resolve);
 Pages[Constants.PageName.Productreservation] = resolve => require(['./product/Productreservation.vue'], resolve);
 Pages[Constants.PageName.fengxianresult] = resolve => require(['./riskEvaluation/fengxianresult.vue'], resolve);
+// 理财产品
+Pages[Constants.PageName.Financialproducts] = resolve => require(['./financingList/Financialproducts.vue'], resolve);
+// 交易明细
+Pages[Constants.PageName.Transactiondetails ] = resolve => require(['./financingList/Transactiondetails.vue'], resolve);
+
+
 
 export default Pages
