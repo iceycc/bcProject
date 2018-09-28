@@ -26,7 +26,10 @@ Pages[Constants.PageName.Productreservation] = resolve => require(['./product/Pr
 Pages[Constants.PageName.fengxianresult] = resolve => require(['./riskEvaluation/fengxianresult.vue'], resolve);
 
 Pages[Constants.PageName.BankDetail] = resolve => require(['./bankDetail/bankDetail.vue'], resolve);
-Pages[Constants.PageName.bankBalance] = resolve => require(['./bankDetail/bankBalance.vue'], resolve);
-Pages[Constants.PageName.changeBank] = resolve => require(['./bankDetail/changeBank.vue'], resolve);
+Pages[Constants.PageName.BankBalance] = resolve => require(['./bankDetail/BankBalance.vue'], resolve);
+Pages[Constants.PageName.MoreService] = resolve => require(['./bankDetail/MoreService.vue'], resolve);
+Pages[Constants.PageName.ChangeBank] = resolve => require(['./safe/ChangeBank.vue'], resolve);
+Pages[Constants.PageName.ResetPayPassWord] = resolve => require(['./safe/ResetPayPassWord.vue'], resolve);
+Pages[Constants.PageName.ResetPhone] = resolve => require(['./safe/ResetPhone.vue'], resolve);
 
 export default Pages

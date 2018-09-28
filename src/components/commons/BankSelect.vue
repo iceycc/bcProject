@@ -280,6 +280,7 @@
         text-align: center;
         height: 100%;
         overflow-y: scroll;
+        z-index: 3;
         img {
             width: px2rem(270);
         }

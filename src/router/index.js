@@ -85,6 +85,10 @@ addRouter(PageName.fengxianresult, {keepAlive: false, title: '风险测评'}); /
 addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码', needLogin: false});
 addRouter(PageName.DocsPage, {keepAlive: false, title: '协议', needLogin: true});
 addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权服务协议', needLogin: false});
+addRouter(PageName.ChangeBank, {keepAlive: false, title: '更换银行卡',needLogin:false});
+addRouter(PageName.ResetPayPassWord, {keepAlive: false, title: '更换支付密码',needLogin:false});
+addRouter(PageName.ResetPhone, {keepAlive: false, title: '更换手机号',needLogin:false});
+
 
 /**
  * financingDetail
@@ -96,8 +100,8 @@ addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
  * bankDetail
  */
 addRouter(PageName.BankDetail, {keepAlive: false, title: '我的银行',needLogin:false});
-addRouter(PageName.bankBalance, {keepAlive: false, title: '可用余额',needLogin:false});
-addRouter(PageName.changeBank, {keepAlive: false, title: '更换银行卡',needLogin:false});
+addRouter(PageName.BankBalance, {keepAlive: false, title: '可用余额',needLogin:false});
+addRouter(PageName.MoreService, {keepAlive: false, title: '更多服务',needLogin:false});
 
 
 

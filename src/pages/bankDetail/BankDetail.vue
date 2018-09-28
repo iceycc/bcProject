@@ -55,7 +55,7 @@
                 </li>
             </ul>
         </section>
-        <section class="more">
+        <section class="more" @click="goPage('MoreService')">
              <span class="more-left">
                         更多服务</span>
             <span class="more-right">
@@ -75,6 +75,14 @@
         name: "bankDetail",
         components: {
             IconFont
+        },
+        methods:{
+            goPage(pageName){
+                console.log(pageName)
+                this.$router.push({
+                    name:pageName
+                })
+            }
         }
     }
 </script>

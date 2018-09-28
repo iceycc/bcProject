@@ -68,8 +68,11 @@ export const PageName = {
     wby二期新增
      */
     BankDetail:'BankDetail',
-    bankBalance:'bankBalance',
-    changeBank:'changeBank',
+    BankBalance:'BankBalance',
+    ChangeBank:'ChangeBank',
+    ResetPayPassWord:'ResetPayPassWord',
+    ResetPhone:'ResetPhone',
+    MoreService:'MoreService',
 }
 
 /**
