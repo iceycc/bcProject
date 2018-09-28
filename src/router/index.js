@@ -97,6 +97,7 @@ addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
  */
 addRouter(PageName.BankDetail, {keepAlive: false, title: '我的银行',needLogin:false});
 addRouter(PageName.bankBalance, {keepAlive: false, title: '可用余额',needLogin:false});
+addRouter(PageName.changeBank, {keepAlive: false, title: '更换银行卡',needLogin:false});
 
 
 

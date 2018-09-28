@@ -69,6 +69,7 @@ export const PageName = {
      */
     BankDetail:'BankDetail',
     bankBalance:'bankBalance',
+    changeBank:'changeBank',
 }
 
 /**

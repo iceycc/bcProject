@@ -16,16 +16,14 @@
     import Bus from '../../common/js/bus'
     import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
-    import {Mixin} from '../../common/utils/mixin'
+    // import {Mixin} from '../../common/utils/mixin'
 
     export default {
         created(){
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
-            setTimeout(()=>{
                 this.errMsg = ''
-            },2000)
         },
-        mixins: [Mixin],
+        // mixins: [Mixin],
         data(){
             return {
                 errMsg:''

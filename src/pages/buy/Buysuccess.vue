@@ -36,7 +36,7 @@
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
     import {BusName,LsName} from "../../Constant";
-    import {Mixin} from '../../common/utils/mixin'
+    // import {Mixin} from '../../common/utils/mixin'
 
 
     export default {
@@ -46,7 +46,7 @@
                 downUrl:'http://www.baidu.com'
             }
         },
-        mixins: [Mixin],
+        // mixins: [Mixin],
         created() {
 
             this.datas = this.$route.query

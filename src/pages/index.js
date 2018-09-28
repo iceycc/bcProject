@@ -27,5 +27,6 @@ Pages[Constants.PageName.fengxianresult] = resolve => require(['./riskEvaluation
 
 Pages[Constants.PageName.BankDetail] = resolve => require(['./bankDetail/bankDetail.vue'], resolve);
 Pages[Constants.PageName.bankBalance] = resolve => require(['./bankDetail/bankBalance.vue'], resolve);
+Pages[Constants.PageName.changeBank] = resolve => require(['./bankDetail/changeBank.vue'], resolve);
 
 export default Pages
