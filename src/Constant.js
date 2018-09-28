@@ -30,7 +30,8 @@ export const AppUrl = { // app下载地址
  */
 let imgSrcHost = {
     dev:"https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
-    pro:"https://finsuit.oss-cn-beijing.aliyuncs.com/"
+    // pro:"https://finsuit.oss-cn-beijing.aliyuncs.com/",
+    pro:"https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
 }
 
 export const imgSrc = process.env.NODE_ENV == 'development'?imgSrcHost.dev:imgSrcHost.pro
@@ -67,6 +68,7 @@ export const PageName = {
     wby二期新增
      */
     BankDetail:'BankDetail',
+    bankBalance:'bankBalance',
 }
 
 /**
