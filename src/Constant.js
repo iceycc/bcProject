@@ -45,6 +45,11 @@ export const PageName = {
     OrderNextSuccess: 'OrderNextSuccess',
     DocsPage: 'DocsPage',
     UserLicenseAgreement: 'UserLicenseAgreement',
+    // 理财列表
+    Financialproducts: 'Financialproducts',
+    // 交易明细
+    Transactiondetails: 'Transactiondetails'
+
 }
 
 

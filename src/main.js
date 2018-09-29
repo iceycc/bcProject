@@ -23,6 +23,8 @@ Vue.component(Radio.name, Radio)
 // Vue.use(MintUI)
 
 import AppBar from './components/header/AppBar'
+import Calendar from 'vue2-datepick';
+Vue.use(Calendar);
 
 Vue.component('app-bar', AppBar)
 // import {HOST} from "./Constant";

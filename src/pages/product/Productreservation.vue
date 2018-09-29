@@ -6,13 +6,13 @@
                 <div class="bannercontent">
                     <div class="bannertop">
                         <div class="bannertopleft">
-                            <p style="font-size: 0.4rem">预期年化收益率</p>
+                            <p class="p-text" style="font-size: 0.4rem;">预期年化收益率</p>
                             <p><strong style="font-size: 1rem"> {{productDetail.RATE}} </strong><span
                                     style="font-size: .5rem;">%</span>
                             </p>
                         </div>
                         <div class="bannertopright">
-                            <p style="font-size: 0.4rem">理财期限</p>
+                            <p class="p-text" style="font-size: 0.4rem">理财期限</p>
                             <p><strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong><span
                                     style="font-size: .5rem;">天</span></p>
                         </div>
@@ -31,6 +31,24 @@
                             <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.OPENAPI_BUY_COUNT}}</li>
                         </ul>
                     </div>
+                </div>
+            </div>
+            <div class="calculation">
+                <div class="calculation-1">
+                    <label for="input-1">我要投资(元)</label>
+                    <input type="number" id="input-1" v-model="invest" ref="content" 
+                      @keyup="getInterest(invest,productDetail.RATE,productDetail.PERIOD)" @keydown="handleInput2"
+                    >
+
+            <!--  --> 
+
+                    <img src="../../images/img/p-invest@2x.png" @click="getFocus" >
+                </div>
+                <div class="calculation-2">
+                    <label>参考收益(元)</label>
+                    <span>{{this.interest}}</span>
+<!--                     <input type="type" id="input-2" v-model="interest" >
+ -->                    <p>参考收益根据当前产品公开市场披露信息进行推算</p>
                 </div>
             </div>
             <div class="contenttop">
@@ -81,47 +99,49 @@
             </div>
             <div class="contentbottom contenttop">
                 <div>
-                    <p style="width: 100%;height: 1rem; padding-bottom: 0.6rem;border-bottom: 1px solid #DCDCDC;">
+                    <p style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
                         产品描述</p>
-                    <div style="font-size: 0.4rem;padding-top:1rem;color:#666" v-html="productDetail.DEPICT">
+                    <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT">
                     </div>
                 </div>
             </div>
-            <div class="contentbottom2 contenttop">
-                <ul style="position: relative;">
-                    <li class="contentbottom2left"></li>
-                    <li class="contentbottom2main">比财数据科技</li>
-                    <li class="contentbottom2right"></li>
-                </ul>
-                <ul class="contentbottom2content contenttop" style="height:.5rem;">
-                    <li class="contentbottom2contentleft">
-                        <div>
-                            <img src="../../images/img/platform@2x.png" alt="">
-                        </div>
-                        <p>专业平台</p>
-                    </li>
-                    <li class="contentbottom2contentleft">
-                        <div>
-                            <img src="../../images/img/account_bottom_label2@2x.png" alt="">
-                        </div>
-                        <p>银行直签</p>
-                    </li>
-                    <li class="contentbottom2contentleft">
-                        <div>
-                            <img src="../../images/img/account_bottom_label3@2x.png" alt="">
-                        </div>
-                        <p>安全保障</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="baozhang">
-                <p>账户资金安全由存管银行保障</p>
+            <div class="p-color">
+                <div class="contentbottom2 contenttop">
+                    <ul style="position: relative;">
+                        <li class="contentbottom2left"></li>
+                        <li class="contentbottom2main">比财数据科技</li>
+                        <li class="contentbottom2right"></li>
+                    </ul>
+                    <ul class="contentbottom2content contenttop" style="height:.5rem;">
+                        <li class="contentbottom2contentleft">
+                            <div>
+                                <img src="../../images/img/platform@2x.png" alt="">
+                            </div>
+                            <p>专业平台</p>
+                        </li>
+                        <li class="contentbottom2contentleft">
+                            <div>
+                                <img src="../../images/img/account_bottom_label2@2x.png" alt="">
+                            </div>
+                            <p>银行直签</p>
+                        </li>
+                        <li class="contentbottom2contentleft">
+                            <div>
+                                <img src="../../images/img/account_bottom_label3@2x.png" alt="">
+                            </div>
+                            <p>安全保障</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="baozhang">
+                    <p>账户资金安全由存管银行保障</p>
+                </div>
             </div>
         </div>
         <div class="buttonbottom"
              @click="goNext(type)"
         >
-            {{btnType}}
+            <span class="p-icon"></span>{{btnType}}
         </div>
     </div>
 </template>
@@ -155,7 +175,9 @@
                 type: '1',
                 imgurl: imgSrc,
                 xing: 5,
-                title: ''
+                title: '',
+                invest:"",
+                interest:"0"?"0":"0"
             }
         },
         activated() {
@@ -194,13 +216,95 @@
 
             next()
         },
+        mounted(){
+
+
+        },
+       
         methods: {
+            // 保留小数点后两位的过滤器，尾数不四舍五入
+        numFilter(value) {
+          // 截取当前数据到小数点后三位
+
+            let transformVal = Number(value).toFixed(3)
+
+            let realVal = transformVal.substring(0, transformVal.length - 1)
+
+            // num.toFixed(3)获取的是字符串
+            return Number(realVal)
+          },
+
+        // 例如:小数是：10.521  处理之后结果应该是10.53
+        numFilter1(n){
+            var num =n ;  
+          
+            var bb = num+"";  
+            var dian = bb.indexOf('.');  
+            var result = "";  
+            if(dian == -1){  
+                result =  this.numFilter(num);   
+            }else{  
+                var cc = bb.substring(dian+1,bb.length);  
+                if(cc.length >=3){  
+                    result =  (this.numFilter(num)+0.01)*100000000000/100000000000;//js小数计算小数点后显示多位小数 
+                    result =this.numFilter(result);
+                }else{  
+                    result =  this.numFilter(num);  
+                }  
+            }  
+            return result;
+        },    
+
+
+        handleInput2(e) {
+            // 通过正则过滤小数点后两位
+            if(e.target.value==""){
+                this.interest="0"
+            }
+            e.target.value = (e.target.value.match(/^\d*(\.?\d{0,1})/g)[0]) || null
+    
+        },
+            getInterest(cash,profit,day){
+                let e=cash*profit/100*day/360;
+                console.log(e);
+                let a=cash*profit/100*day/360;
+                    a=a+"";
+                let b=a.indexOf(".");
+                if(b!=-1){
+                  let c= a.substring(b+1,a.length);
+                  if(c.length>3){
+                    this.interest=this.numFilter(e)+"~"+this.numFilter1(e);
+                  }else{
+                   this.interest=this.numFilter(e);
+                  }
+                }else{
+                   this.interest=e;
+                }
+            },
+            getFocus(){
+                this.invest="";
+                this.interest="0";
+                this.$refs.content.focus();
+            },
             getData(id) {
                 let data = {
                     ID: id + ''
                 }
                 API.product.apiGetChannelPrdInfo(data, (res) => {
                     this.productDetail = res;
+                    // 判断起购金额是否大于默认金额
+                    let str=this.productDetail.TXT_MIN_AMOUNT;
+                    let invest=str.substring(0,str.length-1);
+                    if(invest>3000){
+                        this.invest=invest;
+                        this.getInterest(invest,this.productDetail.RATE,this.productDetail.PERIOD);
+                    }else{
+                        this.invest="3000";
+                        this.getInterest('3000',this.productDetail.RATE,this.productDetail.PERIOD);
+                    } 
+
+
+
                     this.type = res.IS_ENABLED
                     this.btnType = this.type == 1 ? '安全购买' : '预约下期'
                 })
@@ -343,7 +447,7 @@
         padding-top: 0.6rem;
         width: 100%;
         height: 75%;
-        border-bottom: 1px solid #FFFFFF;
+        border-bottom: 1px solid rgba(255,255,255,.5);
     }
 
     .banner .bannercontent .bannertop .bannertopleft {
@@ -385,12 +489,12 @@
         background-position: 0.1rem;
         background-size: 0.5rem;
         width: 30%;
-        border-right: 1px solid #FFFFFF;
+        border-right: 1px solid rgba(255,255,255,.5);
     }
 
     .banner .bannercontent .bannerbottom .bannerbottomtwo {
         width: 30%;
-        border-right: 1px solid #FFFFFF;
+        border-right: 1px solid rgba(255,255,255,.5);
     }
 
     .banner .bannercontent .bannerbottom .bannerbottomthree {
@@ -404,6 +508,7 @@
 
     .contenttop p {
         font-size: 0.6rem;
+        margin-top: -.2rem;
 
     }
 
@@ -431,14 +536,16 @@
     }
 
     .contentmain {
-        border-top: 0.3rem solid #efefef;
+        border-top: 0.3rem solid #f9fbff;
+        border-bottom: 0.3rem solid #f9fbff;
+        overflow: hidden;
     }
 
     .contentmain .contentmaintop {
         font-size: 0.6rem;
         width: 100%;
         height: 1rem;
-        border-bottom: 1px solid #efefef
+        border-bottom: 1px solid #efefef; padding-bottom: .2rem;
     }
 
     .contentmain .contentmaintop .contentmainbank {
@@ -469,6 +576,7 @@
         padding-left: 1rem;
         padding-top: 0.1rem;
         font-size: 0.3rem;
+        color:#A0B2CF;
     }
 
     .contentbottom2 .contentbottom2right {
@@ -501,6 +609,8 @@
 
     .contentbottom2content .contentbottom2contentleft p {
         font-size: 0.4rem;
+        padding-top: px2rem(7);
+        color:#666666;
     }
 
     .baozhang {
@@ -513,7 +623,6 @@
     }
 
     .buttonbottom {
-        margin-top: 1rem;
         width: 100%;
         height: 1.5rem;
         text-align: center;
@@ -546,11 +655,12 @@
 
     .wrapicon {
         position: relative;
-        margin: 0.8rem auto 1rem;
+        margin: 0.8rem auto 1.2rem;
         display: flex;
         width: px2rem(335);
         justify-content: space-between;
         color: #666;
+
 
     }
 
@@ -594,5 +704,30 @@
         width: px2rem(12);
         height: px2rem(12);
     }
+    .p-text{ color:rgba(255,255,255,0.7);}
+    .calculation{ 
+        label{font-size: px2rem(14); color:#333; line-height: px2rem(50);}
+
+        background:#fff;
+        padding:0 px2rem(20) px2rem(12);
+        margin-bottom: px2rem(9);
+        border-bottom:  px2rem(9) solid #f9fbff;
+
+        input{ display:inline-block; width:50%; float: right; padding-top:px2rem(18); color:#FF9200; font-size: px2rem(14); text-align: right;}
+        
+        .calculation-1{
+            height:px2rem(50);border-bottom:px2rem(1) solid rgba(220,220,220,0.50);
+            padding-right: 19px;
+            position: relative;
+            img{ width:px2rem(14);height:px2rem(14); position:absolute; right:0; top: px2rem(20);}
+        }
+        .calculation-2{
+            span{ text-align: right;color:#FF9200; font-size: px2rem(14); float:right; line-height: px2rem(50);}
+            p{ color:#B3B3B3; font-size:px2rem(12); line-height:px2rem(17); }
+        }
+
+    }
+    .p-color{ background:#f9fbff; padding-bottom::px2rem(25); padding-top:px2rem(.5);}
+    .p-icon{ width:22px; height:22px; background:url("../../images/img/p-safe@2x.png") no-repeat 0 0; background-size: 100%; position:relative; top:px2rem(6); margin-right: px2rem(4)}
 </style>
 
