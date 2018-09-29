@@ -48,6 +48,7 @@ addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
  * login
  */
 addRouter(PageName.login, {keepAlive: false, title: '安全登录', needLogin: false});
+addRouter(PageName.SafeLogin, {keepAlive: false, title: '安全登录', needLogin: false});
 /**
  * open
  */

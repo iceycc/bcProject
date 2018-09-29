@@ -73,6 +73,7 @@ export const PageName = {
     ResetPayPassWord:'ResetPayPassWord',
     ResetPhone:'ResetPhone',
     MoreService:'MoreService',
+    SafeLogin:'SafeLogin',
 }
 
 /**

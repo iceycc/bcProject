@@ -2,6 +2,7 @@
 let Constants = require('../Constant')
 const Pages = {}
 Pages[Constants.PageName.login] = resolve => require(['./login/login.vue'], resolve);
+Pages[Constants.PageName.SafeLogin] = resolve => require(['./login/SafeLogin.vue'], resolve);
 Pages[Constants.PageName.Productlist] = resolve => require(['./product/Productlist.vue'], resolve);
 Pages[Constants.PageName.Rechargesuccess] = resolve => require(['./rechange/Rechargesuccess.vue'], resolve);
 Pages[Constants.PageName.Rechargefailure] = resolve => require(['./rechange/Rechargefailure.vue'], resolve);
