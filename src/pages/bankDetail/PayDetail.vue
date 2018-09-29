@@ -1,8 +1,7 @@
 <template>
     <div class="wrap">
-        <app-bar title="交易明细"></app-bar>
+        <app-bar title="交易明细1"></app-bar>
         <div class="t-tab">
-
             <!-- <div class="t-icon">
               <img src="../../images/img/icon_shaixuan@2x.png">
             </div> -->
@@ -12,102 +11,8 @@
                     :class="{active:index==nowIndex}">{{item}}
                 </li>
             </ul>
-            <div class="divTab" v-show="nowIndex===0">
-                <div class="t-content">
-                    <h4>本月</h4>
-                    <div>
-                        <ul>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-                <div class="t-content">
-                    <h4>2018年8月</h4>
-                    <div>
-                        <ul>
-                            <li>
-                                <h5>工银纯债半年定开</h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="divTab" v-show="nowIndex===1">
-                <div class="t-content">
-                    <h4>本月</h4>
-                    <div>
-                        <ul>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="divTab" v-show="nowIndex===2">
-                <div class="t-content">
-                    <h4>本月</h4>
-                    <div>
-                        <ul>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-                            <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
-                                <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
-                                    <em>¥66,354.30</em>
-                                </p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="divTab" v-show="nowIndex===3">
-                <div class="t-date">
+            <div class="divTab">
+                <div class="t-date" v-show="3==nowIndex">
                     <ul>
                         <li @click="setDate2">
                             {{startDate}}
@@ -120,23 +25,23 @@
                     </ul>
                     <div class="t-query" @click="query">查询</div>
                 </div>
-                <p class="t-text">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
+                <p class="t-text" v-show="3==nowIndex">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
 
                 <div class="t-content">
                     <h4>本月</h4>
                     <div>
                         <ul>
                             <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
+                                <h5><span>产品1</span> <span>买入</span></h5>
                                 <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
+                                    <span>2018-08-30</span>
                                     <em>¥66,354.30</em>
                                 </p>
                             </li>
                             <li>
-                                <h5>工银纯债半年定开 <span>买入</span></h5>
+                                <h5><span>产品1</span> <span>买入</span></h5>
                                 <p>
-                                    <span>申购</span><span>2018-08-30  15:20:23</span>
+                                    <span>2018-08-30</span>
                                     <em>¥66,354.30</em>
                                 </p>
                             </li>
@@ -174,7 +79,11 @@
         },
         methods: {
             toggleTabs(index) {
-                this.nowIndex = index;
+                this.nowIndex = index
+                this.Londing.open()
+                setTimeout(()=>{
+                    this.Londing.close()
+                },200)
             },
             setDate() {
 
@@ -228,7 +137,7 @@
                 else {
                     strMonth -= n;
                 }
-                //        strDay = daysInMonth[strMonth] >= strDay ? strDay : daysInMonth[strMonth];
+                // strDay = daysInMonth[strMonth] >= strDay ? strDay : daysInMonth[strMonth];
                 strDay = Math.min(strDay, daysInMonth[strMonth]);//三、前一个月日期不一定和今天同一号，例如3.31的前一个月日期是2.28；9.30前一个月日期是8.30
 
                 if (strMonth < 10)//给个位数的月、日补零
@@ -344,7 +253,6 @@
     }
 
     .icon:after {
-        display: block;
         content: "";
         width: px2rem(22);
         height: px2rem(22);
@@ -367,7 +275,6 @@
         ul.tabs {
             position: relative;
             // margin-right: px2rem(60);
-            background: #ccc;
             display: flex;
             height: px2rem(44);
             line-height: px2rem(44);
@@ -442,14 +349,19 @@
                             margin: 0 px2rem(15);
 
                             h5 {
+                                display: flex;
                                 font-size: px2rem(14);
                                 line-height: px2rem(20);
                                 color: #121B32;
                                 font-weight: normal;
                                 padding-bottom: px2rem(4);
+                                span:first-child{
+                                    flex: 1;
+                                }
 
                             }
                             p {
+                                padding-top: px2rem(3);
                                 span {
                                     font-size: px2rem(12);
                                     line-height: px2rem(17);
@@ -461,7 +373,7 @@
                                     font-size: px2rem(18);
                                     float: right;
                                     position: relative;
-                                    margin-top: px2rem(-12);
+                                    margin-top: px2rem(-4);
                                     line-height: px2rem(25);
                                     color: #333333;
                                 }

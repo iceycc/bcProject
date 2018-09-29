@@ -6,9 +6,10 @@
                 <section>
                     <span class="bk-text1">总资产</span>
                     <span class="bk-text2">（元）</span>
-                    <icon-font iconClass="icon-eye" iconStyle="eye"></icon-font>
+                    <icon-font iconClass="icon-eye" iconStyle="eye" @doClick="pass =!pass"></icon-font>
                 </section>
-                <p class="money">10,000.00</p>
+                <p class="money" v-show="pass">10,000.00</p>
+                <p class="money" v-show="!pass">****</p>
                 <section class="income">
                     <p>昨日到账收益 <span class="left-text">+100.30</span></p>
                     <p style="text-align: right">累计收益 <span class="right-text">+100.30</span></p>
@@ -19,9 +20,10 @@
             <section class="info-card">
                 <div class="ic-left">
                     <span class="bk-text1">可用余额</span><span class="bk-text2">（元）</span>
-                    <p class="money">10,000.00</p>
+                    <p class="money" v-show="pass">10,000.00</p>
+                    <p class="money" v-show="!pass">****</p>
                 </div>
-                <span class="ic-right">
+                <span class="ic-right" @click="goPage('PayDetail')">
                     明细
                     <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                 </span>
@@ -34,10 +36,11 @@
             </div>
             <div class="bank-test">
                 <p class="">广发银行信用卡</p>
-                <p class="card-no">XXXX XXXX XXXX XXXX XXXX</p>
+                <p class="card-no" v-show="pass">XXXX XXXX XXXX XXXX XXXX</p>
+                <p class="card-no" v-show="!pass">****</p>
             </div>
         </section>
-        <section class="financing-list">
+        <section v-if="pass"  class="financing-list">
             <section class="top">
                     <span class="top-left">
                         理财</span>
@@ -76,12 +79,20 @@
         components: {
             IconFont
         },
+        data(){
+            return {
+                pass:true
+            }
+        },
         methods:{
             goPage(pageName){
                 console.log(pageName)
                 this.$router.push({
                     name:pageName
                 })
+            },
+            show(){
+                console.log(1);
             }
         }
     }
@@ -96,9 +107,6 @@
         height: 100%;
         background: #f6f6f6;
     }
-
-
-
     .container {
         padding: 0 px2rem(15);
         background: #fff;
@@ -211,6 +219,8 @@
         .top{
             display: flex;
             font-size: px2rem(14);
+            height: px2rem(28);
+            line-height: px2rem(28);
             color: #000;
             .top-left{
                 position: relative;
@@ -223,10 +233,10 @@
                     top: 50%;
                     transform: translateY(-50%);
                     content: '';
-                    width: px2rem(8);
-                    height: px2rem(8);
-                    border-radius: px2rem(4);
-                    background: #4F96FF;
+                    width: px2rem(15);
+                    height: px2rem(15);
+                    background: url("../../images/img/property_icon_financing.png") no-repeat center;
+                    background-size: contain;
                 }
             }
             .top-right{
@@ -239,8 +249,10 @@
         .financing-li{
             display: flex;
             font-size: px2rem(14);
-            padding: px2rem(20) 0;
+            padding: px2rem(15) 0;
             border-bottom: 1px solid #ccc;
+            height: px2rem(28);
+            line-height: px2rem(28);
             color: #333;
             .li-left{
                 position: relative;

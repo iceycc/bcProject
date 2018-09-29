@@ -40,6 +40,7 @@ export const imgSrc = process.env.NODE_ENV == 'development'?imgSrcHost.dev:imgSr
  * page名称
  */
 export const PageName = {
+    testLogin: 'testLogin',
     login: 'login',
     Productlist: 'Productlist',
     Rechargesuccess: 'Rechargesuccess',
@@ -82,6 +83,7 @@ export const PageName = {
     Withdraw:'Withdraw', // 提现
     WithdrawSuccess:'WithdrawSuccess', // 提现成功
     WithdrawFaild:'WithdrawFaild', // 提现失败
+    PayDetail:'PayDetail', // 提现失败
 }
 
 /**

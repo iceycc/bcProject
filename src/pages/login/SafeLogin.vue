@@ -13,7 +13,7 @@
                         <p>隶属于廊坊银行</p>
                     </div>
                     <div class="m-btn">
-                        <span class="u-btn">安全登陆</span>
+                        <span class="u-btn" @click="goLogin">安全登陆</span>
                     </div>
 
                 </div>
@@ -39,7 +39,14 @@
 
 <script>
     export default {
-        name: "SafeLogin"
+        name: "SafeLogin",
+        methods:{
+            goLogin(){
+                this.$router.push({
+                    name:'login'
+                })
+            }
+        }
     }
 </script>
 

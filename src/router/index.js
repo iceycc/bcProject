@@ -35,6 +35,8 @@ let routes = [
     }
 ]
 
+addRouter(PageName.testLogin, {keepAlive: false, title: 'testLogin', needLogin: false});
+
 /**
  * buy
  */
@@ -110,6 +112,7 @@ addRouter(PageName.MoreService, {keepAlive: false, title: '更多服务',needLog
 addRouter(PageName.Withdraw, {keepAlive: false, title: '提现',needLogin:false});
 addRouter(PageName.WithdrawSuccess, {keepAlive: false, title: '提现成功',needLogin:false});
 addRouter(PageName.WithdrawFaild, {keepAlive: false, title: '提现失败',needLogin:false});
+addRouter(PageName.PayDetail, {keepAlive: false, title: '交易明细',needLogin:false});
 
 
 //

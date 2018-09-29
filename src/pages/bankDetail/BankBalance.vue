@@ -14,7 +14,7 @@
                 <span>提现</span>
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
             </section>
-            <section class="m-li" @click="goPage('Recharge')">
+            <section class="m-li" @click="goPage('Transactiondetails')">
                 <span>明细查询</span>
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
             </section>

@@ -1,5 +1,5 @@
 <template>
-        <i :class="['iconfont',iconClass,iconStyle]"></i>
+        <i :class="['iconfont',iconClass,iconStyle]" @click="clickHandle"></i>
     <!--
     // 收集的字体图标库
     icon-eye
@@ -15,7 +15,12 @@
                 default:''
             },
             iconStyle:null // 自定义图标样式
-        }
+        },
+       methods:{
+           clickHandle(){
+               this.$emit('doClick')
+           }
+       }
     }
 </script>
 

@@ -1,6 +1,7 @@
 
 let Constants = require('../Constant')
 const Pages = {}
+Pages[Constants.PageName.testLogin] = resolve => require(['./testLogin.vue'], resolve);
 Pages[Constants.PageName.login] = resolve => require(['./login/login.vue'], resolve);
 Pages[Constants.PageName.SafeLogin] = resolve => require(['./login/SafeLogin.vue'], resolve);
 Pages[Constants.PageName.Productlist] = resolve => require(['./product/Productlist.vue'], resolve);
@@ -41,5 +42,6 @@ Pages[Constants.PageName.ResetPhone] = resolve => require(['./safe/ResetPhone.vu
 Pages[Constants.PageName.Withdraw] = resolve => require(['./withdraw/Withdraw.vue'], resolve);
 Pages[Constants.PageName.WithdrawSuccess] = resolve => require(['./withdraw/WithdrawSuccess.vue'], resolve);
 Pages[Constants.PageName.WithdrawFaild] = resolve => require(['./withdraw/WithdrawFaild.vue'], resolve);
+Pages[Constants.PageName.PayDetail] = resolve => require(['./bankDetail/PayDetail.vue'], resolve);
 
 export default Pages
