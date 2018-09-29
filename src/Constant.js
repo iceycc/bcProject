@@ -74,6 +74,9 @@ export const PageName = {
     ResetPhone:'ResetPhone',
     MoreService:'MoreService',
     SafeLogin:'SafeLogin',
+    Withdraw:'Withdraw',
+    WithdrawSuccess:'WithdrawSuccess',
+    WithdrawFaild:'WithdrawFaild',
 }
 
 /**

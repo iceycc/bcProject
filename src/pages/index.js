@@ -32,5 +32,8 @@ Pages[Constants.PageName.MoreService] = resolve => require(['./bankDetail/MoreSe
 Pages[Constants.PageName.ChangeBank] = resolve => require(['./safe/ChangeBank.vue'], resolve);
 Pages[Constants.PageName.ResetPayPassWord] = resolve => require(['./safe/ResetPayPassWord.vue'], resolve);
 Pages[Constants.PageName.ResetPhone] = resolve => require(['./safe/ResetPhone.vue'], resolve);
+Pages[Constants.PageName.Withdraw] = resolve => require(['./withdraw/Withdraw.vue'], resolve);
+Pages[Constants.PageName.WithdrawSuccess] = resolve => require(['./withdraw/WithdrawSuccess.vue'], resolve);
+Pages[Constants.PageName.WithdrawFaild] = resolve => require(['./withdraw/WithdrawFaild.vue'], resolve);
 
 export default Pages

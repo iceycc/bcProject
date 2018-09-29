@@ -6,15 +6,15 @@
             <p class="u-content">￥567,000.<i>00</i></p>
         </section>
         <section class="m-list">
-            <section class="m-li">
+            <section class="m-li" @click="goPage('Recharge')">
                 <span>充值</span>
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
             </section>
-            <section class="m-li">
+            <section class="m-li" @click="goPage('Withdraw')">
                 <span>提现</span>
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
             </section>
-            <section class="m-li">
+            <section class="m-li" @click="goPage('Recharge')">
                 <span>明细查询</span>
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
             </section>
@@ -29,6 +29,14 @@
         name: "bankBalance",
         components: {
             IconFont
+        },
+        methods:{
+            goPage(page){
+                console.log(page);
+                this.$router.push({
+                    name:page
+                })
+            }
         }
     }
 </script>
@@ -48,13 +56,11 @@
         z-index: 10;
     }
     .m-top {
-        position: relative;
-        top: px2rem(-48);
         width: 100%;
-        height: px2rem(170);
-        background: url("../../images/img/OvalCopy.png") no-repeat center;
+        height: px2rem(120);
+        background: url("../../images/img/OvalCopy.png") no-repeat center center;
         padding-left: px2rem(25);
-        padding-top: px2rem(75);
+        padding-top: px2rem(25);
         box-sizing: border-box;
         .u-title {
             font-size: px2rem(14);

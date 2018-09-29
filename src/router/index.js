@@ -104,6 +104,12 @@ addRouter(PageName.BankDetail, {keepAlive: false, title: '我的银行',needLogi
 addRouter(PageName.BankBalance, {keepAlive: false, title: '可用余额',needLogin:false});
 addRouter(PageName.MoreService, {keepAlive: false, title: '更多服务',needLogin:false});
 
+/**
+ * Withdraw
+ */
+addRouter(PageName.Withdraw, {keepAlive: false, title: '提现',needLogin:false});
+addRouter(PageName.WithdrawSuccess, {keepAlive: false, title: '提现成功',needLogin:false});
+addRouter(PageName.WithdrawFaild, {keepAlive: false, title: '提现失败',needLogin:false});
 
 
 //

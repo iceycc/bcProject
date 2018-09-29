@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div style="background: #f6f6f9;height: 100%">
         <app-bar title="安全登录"></app-bar>
         <section class="m-bank-box">
-            <p>已登陆</p>
+            <p class="m-title">已登陆</p>
             <section class="m-bank-card">
                 <div class="m-top">
                     <div class="m-logo">
@@ -19,13 +19,16 @@
                 </div>
                 <ul class="m-bottom">
                     <li>
-                        总资产
+                        <P>总资产</P>
+                        <P>500.00</P>
                     </li>
                     <li>
-                        昨日收益
+                        <P>昨日收益</P>
+                        <P>0.30</P>
                     </li>
                     <li>
-                        累计收益
+                        <P>累计收益</P>
+                        <P>+100.30</P>
                     </li>
                 </ul>
             </section>
@@ -45,11 +48,20 @@
 
     .m-bank-box {
         width: 100%;
+        .m-title{
+            padding-left: px2rem(20);
+            font-size: px2rem(12);
+            height: px2rem(30);
+            line-height: px2rem(30);
+        }
         .m-top {
+            background: #fff;
             display: flex;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #f6f6f9;
             box-sizing: border-box;
             padding-left: px2rem(20);
+            padding-top: px2rem(20);
+            padding-bottom: px2rem(18);
             .m-logo{
                 box-sizing: border-box;
                 width: px2rem(52);
@@ -71,11 +83,24 @@
 
         }
         .m-bottom{
-            display: flex;
+            background: #fff;
+            padding-left: px2rem(20);
+            padding-bottom: px2rem(13);
+            font-size: px2rem(14);
             li{
-                width: px2rem(141);
+                display: inline-block;
+                width: px2rem(130);
+                box-sizing: border-box;
+                padding-top: px2rem(15);
                 &:last-child{
                     width: auto;
+                }
+                p:first-child{
+                    color: #666;
+                    line-height: 1.5;
+                }
+                p:last-child{
+                    color: #333;
                 }
             }
         }

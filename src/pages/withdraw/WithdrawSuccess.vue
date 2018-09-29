@@ -1,40 +1,38 @@
 <template>
     <div class="app">
-        <app-bar title="充值"></app-bar>
+        <app-bar title="提现"></app-bar>
         <div class="chattuimg">
             <img src="../../images/img/Verificationsuccess@2x.png" style="width:30%" alt="">
-            <h2>充值成功</h2>
+            <h2>提现成功</h2>
         </div>
         <section class="m-card">
-            <p><span>充值金额</span>{{data.money}}</p>
+            <p><span>提现金额</span>{{data.money}}</p>
             <p><span>交易流水号</span>{{data.BESHARP_RECHARGE_SEQ}}</p>
         </section>
-        <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
-        <!--<div class="begain">下载比财app</div>-->
         <button class="begain" @click="goNext">完成</button>
     </div>
 </template>
 <script>
-    import util from "../../common/utils/util";
-    import {LsName} from "../../Constant";
+
 
     export default {
-        data(){
-            return{
-                money:'',
-                num:'',
-                data:''
+        data() {
+            return {
+                money: '',
+                num: '',
+                data: {
+                    BESHARP_RECHARGE_SEQ: 10000000,
+                    money:'1,111'
+                }
             }
         },
-        // mixins: [Mixin],
-        created(){
-            this.data = this.$route.query
+        created() {
+
         },
-        methods:{
-            goNext(){
+        methods: {
+            goNext() {
                 this.$router.go(-2)
             }
-
         }
     }
 </script>

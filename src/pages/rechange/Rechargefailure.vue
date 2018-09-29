@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="充值"></app-bar>
         <div class="chattuimg">
-            <img src="../../images/img/buyfail@2x.png" style="width:25%" alt="">
+            <img src="../../images/img/buyfail@2x.png" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，充值失败!</h2>
@@ -12,11 +12,7 @@
     </div>
 </template>
 <script>
-    // import util from "../../common/utils/util";
-    // import {LsName} from "../../Constant";
-    // import {Mixin} from '../../common/utils/mixin'
     export default {
-        // mixins: [Mixin],
         created() {
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
         },
@@ -34,6 +30,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../../assets/px2rem";
     .app {
         width: 100%;
         margin: 0 auto;
@@ -42,6 +39,10 @@
     .chattuimg {
         margin-top: 2rem;
         text-align: center;
+        img{
+            width: px2rem(70);
+            height: px2rem(70);
+        }
     }
 
     .fenxiangcontent {
