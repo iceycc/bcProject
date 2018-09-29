@@ -48,6 +48,7 @@ addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
  * login
  */
 addRouter(PageName.login, {keepAlive: false, title: '安全登录', needLogin: false});
+addRouter(PageName.SafeLogin, {keepAlive: false, title: '安全登录', needLogin: false});
 /**
  * open
  */
@@ -85,12 +86,31 @@ addRouter(PageName.fengxianresult, {keepAlive: false, title: '风险测评'}); /
 addRouter(PageName.Resetpassword, {keepAlive: false, title: '重置密码', needLogin: false});
 addRouter(PageName.DocsPage, {keepAlive: false, title: '协议', needLogin: true});
 addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权服务协议', needLogin: false});
+addRouter(PageName.ChangeBank, {keepAlive: false, title: '更换银行卡',needLogin:false});
+addRouter(PageName.ResetPayPassWord, {keepAlive: false, title: '更换支付密码',needLogin:false});
+addRouter(PageName.ResetPhone, {keepAlive: false, title: '更换手机号',needLogin:false});
+
 
 /**
  * financingDetail
  */
 addRouter(PageName.Investmentdetails, {keepAlive: false, title: '银行理财'});
 addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
+
+/**
+ * bankDetail
+ */
+addRouter(PageName.BankDetail, {keepAlive: false, title: '我的银行',needLogin:false});
+addRouter(PageName.BankBalance, {keepAlive: false, title: '可用余额',needLogin:false});
+addRouter(PageName.MoreService, {keepAlive: false, title: '更多服务',needLogin:false});
+
+/**
+ * Withdraw
+ */
+addRouter(PageName.Withdraw, {keepAlive: false, title: '提现',needLogin:false});
+addRouter(PageName.WithdrawSuccess, {keepAlive: false, title: '提现成功',needLogin:false});
+addRouter(PageName.WithdrawFaild, {keepAlive: false, title: '提现失败',needLogin:false});
+
 
 //
 

@@ -146,12 +146,7 @@
             }
 
         },
-        destroyed() {
-
-        },
-
         methods: {
-
             cancel() {
                 this.ifShow = false
             },

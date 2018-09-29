@@ -17,47 +17,52 @@
     import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
 
+
     export default {
-        created(){
+        created() {
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
+            this.errMsg = ''
         },
-        data(){
+        // mixins: [Mixin],
+        data() {
             return {
-                errMsg:''
+                errMsg: ''
             }
         },
-        methods:{
-            goApp(){
+        methods: {
+            goApp() {
                 API.watch.watchApi({
                     FUNCTION_ID: 'ptb0A011', // 点位
                     REMARK_DATA: '异业合作-购买失败-下载比财', // 中文备注
                 })
-                util.downLoad(()=>{
-                    Bus.$emit(BusName,'请在浏览器中下载')
+                util.downLoad(() => {
+                    Bus.$emit(BusName, '请在浏览器中下载')
                 })
             }
         }
     }
 </script>
 
-<style  lang="scss" scoped>
-    .app{
-        width:100%;
+<style lang="scss" scoped>
+    .app {
+        width: 100%;
         margin: 0 auto;
     }
-    .chattuimg{
+
+    .chattuimg {
         margin-top: 2rem;
         text-align: center;
     }
-    .fenxiangcontent{
+
+    .fenxiangcontent {
         text-align: center;
-        padding:0 .4rem;
+        padding: 0 .4rem;
         font-size: 0.4rem;
         color: #333;
         margin-top: 1rem;
     }
 
-    .begain{
+    .begain {
         font-size: 0.4rem;
         color: #fff;
         background-color: #0096FE;

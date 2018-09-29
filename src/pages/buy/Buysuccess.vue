@@ -35,14 +35,13 @@
     import util from "../../common/utils/util";
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
-    import {BusName,LsName} from "../../Constant";
-
+    import {BusName, LsName} from "../../Constant";
 
     export default {
         data() {
             return {
                 datas: [],
-                downUrl:'http://www.baidu.com'
+                downUrl: 'http://www.baidu.com'
             }
         },
         created() {
@@ -50,13 +49,13 @@
             this.datas = this.$route.query
         },
         methods: {
-            goApp(){
+            goApp() {
                 API.watch.watchApi({
                     FUNCTION_ID: 'ptb0A010', // 点位
                     REMARK_DATA: '异业合作-购买成功-下载比财', // 中文备注
                 })
-                util.downLoad(()=>{
-                    Bus.$emit(BusName,'请在浏览器中下载')
+                util.downLoad(() => {
+                    Bus.$emit(BusName, '请在浏览器中下载')
                 })
             }
         }
@@ -95,12 +94,10 @@
         font-size: 0.5rem;
     }
 
-
-
     .buysuccessimg {
         text-align: center;
         margin-top: .6rem;
-        img{
+        img {
             width: 2.5rem;
             height: 2.5rem;
         }

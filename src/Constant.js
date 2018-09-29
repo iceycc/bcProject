@@ -3,23 +3,42 @@
 
 let url = 'http://192.168.100.96'
 
+/**
+ *
+ */
 let Configs = {
-    DEV_HOST:'http://47.94.4.11:8090/finsuit', // 开发环境
+    DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
     // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
     // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
-    PRO_HOST:'https://adv.udomedia.com.cn/finsuit' ,//
+    PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
     // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,// 生产
-    APP_DOWN_URL:'http://www.baidu.com',
+    APP_DOWN_URL: 'http://www.baidu.com',
 }
 export const HOST = process.env.NODE_ENV == 'development'
         ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
 
+/**
+ *
+ */
 export const AppUrl = { // app下载地址
     Android: '',
     Ios: ''
 }
 
-export const imgSrc = process.env.Img_SRC
+/**
+ * logo图片地址
+ */
+let imgSrcHost = {
+    dev:"https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
+    // pro:"https://finsuit.oss-cn-beijing.aliyuncs.com/",
+    pro:"https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
+}
+
+export const imgSrc = process.env.NODE_ENV == 'development'?imgSrcHost.dev:imgSrcHost.pro
+
+/**
+ * page名称
+ */
 export const PageName = {
     login: 'login',
     Productlist: 'Productlist',
@@ -48,11 +67,26 @@ export const PageName = {
     // 理财列表
     Financialproducts: 'Financialproducts',
     // 交易明细
-    Transactiondetails: 'Transactiondetails'
+    Transactiondetails: 'Transactiondetails',
 
+    /*
+    wby二期新增
+     */
+    BankDetail:'BankDetail', // 银行详情
+    BankBalance:'BankBalance', // 可用余额
+    ChangeBank:'ChangeBank', // 更改银行
+    ResetPayPassWord:'ResetPayPassWord', // 重制密码
+    ResetPhone:'ResetPhone', // 重制手机号
+    MoreService:'MoreService', // 更多服务
+    SafeLogin:'SafeLogin', // 安全登陆 银行列表
+    Withdraw:'Withdraw', // 提现
+    WithdrawSuccess:'WithdrawSuccess', // 提现成功
+    WithdrawFaild:'WithdrawFaild', // 提现失败
 }
 
-
+/**
+ * 传值的bus名称
+ */
 export const BusName = {
     showToast: 'showToast',
     showLoading: 'showLoading',
@@ -60,7 +94,9 @@ export const BusName = {
 
 }
 
-
+/**
+ * storage的名字
+ */
 export const LsName = {
     token: 'token',
     DEVICE_ID: 'DEVICE_ID',
