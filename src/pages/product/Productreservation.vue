@@ -36,7 +36,12 @@
             <div class="calculation">
                 <div class="calculation-1">
                     <label for="input-1">我要投资(元)</label>
-                    <input type="type" id="input-1" v-model="invest" ref="content" @keyup="getInterest(invest,productDetail.RATE,productDetail.PERIOD)">
+                    <input type="number" id="input-1" v-model="invest" ref="content" 
+                      @keyup="getInterest(invest,productDetail.RATE,productDetail.PERIOD)" @keydown="handleInput2"
+                    >
+
+            <!--  --> 
+
                     <img src="../../images/img/p-invest@2x.png" @click="getFocus" >
                 </div>
                 <div class="calculation-2">
@@ -171,8 +176,8 @@
                 imgurl: imgSrc,
                 xing: 5,
                 title: '',
-                invest:"1111",
-                interest:"222"
+                invest:"",
+                interest:"0"?"0":"0"
             }
         },
         activated() {
@@ -211,15 +216,75 @@
 
             next()
         },
+        mounted(){
+
+
+        },
        
         methods: {
-            getInterest(cash,profit,day){
-                console.log(cash+"-"+profit+"-"+day);
-                this.interest=cash*profit/100*day/360
+            // 保留小数点后两位的过滤器，尾数不四舍五入
+        numFilter(value) {
+          // 截取当前数据到小数点后三位
 
+            let transformVal = Number(value).toFixed(3)
+
+            let realVal = transformVal.substring(0, transformVal.length - 1)
+
+            // num.toFixed(3)获取的是字符串
+            return Number(realVal)
+          },
+
+        // 例如:小数是：10.521  处理之后结果应该是10.53
+        numFilter1(n){
+            var num =n ;  
+          
+            var bb = num+"";  
+            var dian = bb.indexOf('.');  
+            var result = "";  
+            if(dian == -1){  
+                result =  this.numFilter(num);   
+            }else{  
+                var cc = bb.substring(dian+1,bb.length);  
+                if(cc.length >=3){  
+                    result =  (this.numFilter(num)+0.01)*100000000000/100000000000;//js小数计算小数点后显示多位小数 
+                    result =this.numFilter(result);
+                }else{  
+                    result =  this.numFilter(num);  
+                }  
+            }  
+            return result;
+        },    
+
+
+        handleInput2(e) {
+            // 通过正则过滤小数点后两位
+            if(e.target.value==""){
+                this.interest="0"
+            }
+            e.target.value = (e.target.value.match(/^\d*(\.?\d{0,1})/g)[0]) || null
+    
+        },
+            getInterest(cash,profit,day){
+                let e=cash*profit/100*day/360;
+                console.log(e);
+                let a=cash*profit/100*day/360;
+                    a=a+"";
+                let b=a.indexOf(".");
+                if(b!=-1){
+                  let c= a.substring(b+1,a.length);
+                  if(c.length>3){
+                    this.interest=this.numFilter(e)+"~"+this.numFilter1(e);
+                  }else{
+                   this.interest=this.numFilter(e);
+                  }
+                }else{
+                   this.interest=e;
+                }
             },
             getFocus(){
-                this.$refs.content.focus()
+                this.invest="";
+                this.interest="0";
+                this.$refs.content.focus();
             },
             getData(id) {
                 let data = {
@@ -227,6 +292,19 @@
                 }
                 API.product.apiGetChannelPrdInfo(data, (res) => {
                     this.productDetail = res;
+                    // 判断起购金额是否大于默认金额
+                    let str=this.productDetail.TXT_MIN_AMOUNT;
+                    let invest=str.substring(0,str.length-1);
+                    if(invest>3000){
+                        this.invest=invest;
+                        this.getInterest(invest,this.productDetail.RATE,this.productDetail.PERIOD);
+                    }else{
+                        this.invest="3000";
+                        this.getInterest('3000',this.productDetail.RATE,this.productDetail.PERIOD);
+                    } 
+
+
+
                     this.type = res.IS_ENABLED
                     this.btnType = this.type == 1 ? '安全购买' : '预约下期'
                 })
@@ -498,6 +576,7 @@
         padding-left: 1rem;
         padding-top: 0.1rem;
         font-size: 0.3rem;
+        color:#A0B2CF;
     }
 
     .contentbottom2 .contentbottom2right {
@@ -530,6 +609,8 @@
 
     .contentbottom2content .contentbottom2contentleft p {
         font-size: 0.4rem;
+        padding-top: px2rem(7);
+        color:#666666;
     }
 
     .baozhang {
@@ -646,7 +727,7 @@
         }
 
     }
-    .p-color{ background:#f9fbff; padding-bottom: 1rem; padding-top:px2rem(.5);}
+    .p-color{ background:#f9fbff; padding-bottom::px2rem(25); padding-top:px2rem(.5);}
     .p-icon{ width:22px; height:22px; background:url("../../images/img/p-safe@2x.png") no-repeat 0 0; background-size: 100%; position:relative; top:px2rem(6); margin-right: px2rem(4)}
 </style>
 

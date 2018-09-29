@@ -1,6 +1,8 @@
 <template>
     <div class="wrap pro">
         <app-bar title="理财产品"></app-bar>
+                <div class="triangle"></div>
+
         <div class="f-box">
             <ul>
                 <li>
@@ -21,7 +23,7 @@
             </ul>
             <div class="divTab" v-show="nowIndex===0">
                <div class="divTab-1">
-                   <h4><strong>智雁存</strong> <router-link to="/">明细</router-link></h4>
+                   <h4><strong>智雁存</strong> <router-link to="/Transactiondetails">明细</router-link></h4>
                    <p>隶属于小雁银行</p>
                    <p>当前价值（元）<span>892.26</span></p>
                    <p>预期年化收益率<span>10,892.26</span></p>
@@ -29,7 +31,7 @@
                    <p>到期日期<span>2018-08-18</span></p>
                </div>
                 <div class="divTab-1">
-                   <h4><strong>智雁存</strong> <router-link to="/">明细</router-link></h4>
+                   <h4><strong>智雁存</strong> <router-link to="/Transactiondetails">明细</router-link></h4>
                    <p>隶属于小雁银行</p>
                    <p>当前价值（元）<span>892.26</span></p>
                    <p>预期年化收益率<span>10,892.26</span></p>
@@ -39,14 +41,14 @@
             </div>
             <div class="divTab" v-show="nowIndex===1">
                 <div class="divTab-1">
-                   <h4><strong>百合宝</strong> <router-link to="/">明细</router-link></h4>
+                   <h4><strong>百合宝</strong> <router-link to="/Transactiondetails">明细</router-link></h4>
                    <p>百合银行</p>
                    <p>投资金额（元）<span>10,000.00</span></p>
                    <p>投资收益（元）<span>505.94</span></p>
                    <p>到期日期<span>2018-08-30</span></p>
                </div>
                <div class="divTab-1">
-                   <h4><strong>百合宝</strong> <router-link to="/">明细</router-link></h4>
+                   <h4><strong>百合宝</strong> <router-link to="/Transactiondetails">明细</router-link></h4>
                    <p>百合银行</p>
                    <p>投资金额（元）<span>10,000.00</span></p>
                    <p>投资收益（元）<span>505.94</span></p>
@@ -58,6 +60,7 @@
     </div>
 </template>
 <script>
+
     import {API} from "../../request/api";
     import {LsName, PageName} from "../../Constant";
     import util from "../../common/utils/util";
@@ -71,12 +74,6 @@
                 
             }
         },
-        beforeCreate () {
-            document.getElementsByTagName("body")[0].className="bg_white";
-          },
-          beforeDestroy () {
-            document.getElementsByTagName("body")[0].className="";
-          },
         created() {
 
             
@@ -91,21 +88,31 @@
 </script>
 
 <style lang="scss">
-// .pro .header img{ display:none;}
- // .pro .header{ border-bottom:1px solid #518BEE;}
- .bg_white{background:#f4f4f8; height: 100%;}
+ .pro .header img{ display:none;}
 </style>
-
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
+    .pro .header:after{ position:absolute; content:"";
+        border-right: 2px solid #fff;
+        border-top: 2px solid #fff;
+        height:px2rem(11);
+        width: px2rem(11); left:px2rem(15); top: 0.6rem;
+        -webkit-transform: rotate(228deg);
+        border-left: px2rem(2) solid transparent;
+        border-bottom: px2rem(2) solid transparent;
+        z-index: 8;
+    }
     .wrap {
         width: 100%;
         box-sizing: border-box;
+        height: 100%;
+        background:#f4f4f8;
     }
      .header {
         background-color: #518BEE;
         color:#fff;
         border-bottom: 1px solid #518BEE;
+        position:relative;
     }
     .f-box{ 
         height:px2rem(158); background:#518BEE;
