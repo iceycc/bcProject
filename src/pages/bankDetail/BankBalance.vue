@@ -24,6 +24,8 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
+    import {API} from "../../request/api";
+    import {LsName, PageName} from "../../Constant";
 
     export default {
         name: "bankBalance",

@@ -73,6 +73,7 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
+    import {API} from "../../request/api";
 
     export default {
         name: "bankDetail",
@@ -92,8 +93,10 @@
                 })
             },
             show(){
-                console.log(1);
-            }
+                console.log('show');
+            },
+
+
         }
     }
 </script>

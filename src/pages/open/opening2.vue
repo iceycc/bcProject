@@ -225,6 +225,8 @@
                     Bus.$emit(BusName.showToast, '验证码发送成功')
                     this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 }, err => {
+                    this.codeText = '重新发送'
+                    this.disable = false
                     console.log(err);
                 })
             },

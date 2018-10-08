@@ -79,7 +79,7 @@ export const PageName = {
     ResetPayPassWord:'ResetPayPassWord', // 重制密码
     ResetPhone:'ResetPhone', // 重制手机号
     MoreService:'MoreService', // 更多服务
-    SafeLogin:'SafeLogin', // 安全登陆 银行列表
+    SafeLogin:'SafeLogin', // 安全登陆 ->银行列表
     Withdraw:'Withdraw', // 提现
     WithdrawSuccess:'WithdrawSuccess', // 提现成功
     WithdrawFaild:'WithdrawFaild', // 提现失败

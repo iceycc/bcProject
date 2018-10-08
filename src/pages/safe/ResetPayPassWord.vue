@@ -6,14 +6,14 @@
                 <span class="n-left">姓名</span>
                 <span class="n-right">阿克</span>
             </section>
-            <active-input valuePlaceholder="身份证号码"></active-input>
+            <active-input valuePlaceholder="身份证号码" v-model="IDCardNum"></active-input>
             <section class="m-line">
                 <span class="n-left">手机号</span>
-                <span class="n-right">15621189999</span>
+                <span class="n-right">{{tel}}</span>
             </section>
             <active-input valuePlaceholder="验证码">
                 <template slot="btn">
-                    <button class="slot ">获取验证码</button>
+                    <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
                 </template>
             </active-input>
             <section class="submit-box">
@@ -38,7 +38,7 @@
                         </p>
                         <div class="field_row_value">
                             <pass-input
-                                    inputID="loginPass"
+                                    inputID="reset_payPass"
                                     :doGetData="ifGet"
                             ></pass-input>
                         </div>
@@ -51,7 +51,7 @@
                         </p>
                         <div class="field_row_value">
                             <pass-input
-                                    inputID="payPass"
+                                    inputID="reset_repayPass"
                                     :doGetData="ifGet"
                             ></pass-input>
                         </div>
@@ -75,6 +75,8 @@
     import ErrMsg from '../../components/commons/ErrMsg'
     import {API} from "../../request/api";
     import PassInput from '../../components/commons/PassInput'
+    import Bus from '../../common/js/bus'
+    import {PageName, BusName, LsName} from "../../Constant";
 
     export default {
         name: "ResetPayPassWord",
@@ -86,8 +88,13 @@
         data() {
             return {
                 errMsg: '错误信息提示',
-                ifShow:false,
+                ifShow: false,
                 ifGet: false,
+                disable: false,
+                codeText: '获取验证码',
+                time: 5,
+                tel: '15621189997',
+                IDCardNum: ""
             }
         },
         created() {
@@ -100,9 +107,46 @@
             cancel() {
                 this.ifShow = false
             },
-            subumit(){
+            subumit() {
+                let reset_payPass = $('#reset_payPass').$getCiphertext(),
+                        reset_payPass_len = $('#reset_payPass').$getPasswordLength() - 0 || 0,
+                        reset_repayPass = $('#reset_repayPass').$getCiphertext(),
+                        reset_repayPass_len = $('#reset_repayPass').$getPasswordLength() - 0 || 0;
+                let data = {
+                    IDCardNum: this.IDCardNum,
+                    reset_payPass,
+                    reset_repayPass
+                }
+                console.log(data);
 
+            },
+            getMsgCode() {
+                let sTime = this.time
+                this.disable = true
+                let timer = setInterval(() => {
+                    if (sTime == 0) {
+                        this.codeText = '重新发送'
+                        this.disable = false
+                        clearInterval(timer)
+                        return
+                    }
+                    sTime--
+                    this.codeText = `${sTime}s`
+                }, 1000)
+                let data = {
+                    PHONE_NUM: this.tel + '',
+                    BIZ_TYPE: '1', // todo 类型
+                }
+                API.open.getMsgCode(data, res => {
+                    Bus.$emit(BusName.showToast, '验证码发送成功')
+                    this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
+                }, err => {
+                    this.codeText = '重新发送'
+                    this.disable = false
+                    console.log(err);
+                })
             }
+
         },
 
     }
@@ -128,10 +172,11 @@
             flex: 1;
         }
         .n-right {
-            color:#8e8e8e
+            color: #8e8e8e
         }
     }
-    .slot{
+
+    .slot {
         position: absolute;
         display: inline-block;
         z-index: 3;

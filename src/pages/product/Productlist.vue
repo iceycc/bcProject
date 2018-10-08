@@ -12,7 +12,7 @@
                     style="padding-top: .2rem"
                 >
                     <p class="name2">{{item.PRD_NAME}}</p>
-                    <p class="p-bank"><span><img src="../../images/img/beijingbank@2x.png"></span>稠州银行</p>
+                    <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
                     <div class="ratereturn">
                         <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
                         <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">预期年化收益率</p>
@@ -29,7 +29,7 @@
                         <p style="color: #B4BECC;font-size: 0.4rem;">预期年化收益率</p>
                     </div>
                     <div class="ratereturn ratereturnright">
-                        <p class="p-bank"><span><img src="../../images/img/beijingbank@2x.png"></span>稠州银行</p>
+                        <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
                         <img class="logoy" v-if="item.IS_ENABLED == 2" src="../../images/img/yuyue.png" alt="">
                         <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.1rem">
                             {{item.PRD_NAME}}</p>
@@ -42,7 +42,7 @@
 </template>
 <script>
     import {API} from "../../request/api";
-    import {LsName, PageName} from "../../Constant";
+    import {LsName, PageName,imgSrc} from "../../Constant";
     import util from "../../common/utils/util";
 
 
@@ -50,7 +50,8 @@
         data() {
             return {
                 show: false,
-                dataList: []
+                dataList: [],
+                imgSrc
             }
         },
         created() {

@@ -1,18 +1,18 @@
 <template>
     <div style="background: #f6f6f9;height: 100%">
         <app-bar title="安全登录"></app-bar>
-        <section class="m-bank-box">
-            <p class="m-title">已登陆</p>
+        <section class="m-bank-box" v-for="bank,index in BankList" :key="index">
+            <p class="m-title">{{bank.ifLogin? '登陆':'未登陆'}}</p>
             <section class="m-bank-card">
                 <div class="m-top">
                     <div class="m-logo">
                         <img src="../../images/img/beijingbank@2x.png" alt="">
                     </div>
                     <div class="m-name">
-                        <h3>廊坊直销银行</h3>
-                        <p>隶属于廊坊银行</p>
+                        <h3>{{bank.BankName}}</h3>
+                        <p>隶属于{{bank.BankName2}}</p>
                     </div>
-                    <div class="m-btn">
+                    <div class="m-btn" v-if="bank.ifLogin">
                         <span class="u-btn" @click="goLogin">安全登陆</span>
                     </div>
 
@@ -20,15 +20,15 @@
                 <ul class="m-bottom">
                     <li>
                         <P>总资产</P>
-                        <P>500.00</P>
+                        <P>{{bank.TotalNum | formatNum}}</P>
                     </li>
                     <li>
                         <P>昨日收益</P>
-                        <P>0.30</P>
+                        <P>{{bank.PreMoney}}</P>
                     </li>
                     <li>
                         <P>累计收益</P>
-                        <P>+100.30</P>
+                        <P>+{{bank.GetMoney}}</P>
                     </li>
                 </ul>
             </section>
@@ -40,6 +40,28 @@
 <script>
     export default {
         name: "SafeLogin",
+        data(){
+          return{
+              BankList:[
+                  {
+                      BankName:'廊坊直销银行',
+                      BankName2:'廊坊银行',
+                      TotalNum:'500',
+                      PreMoney:'0.30',
+                      GetMoney:'100.30',
+                      ifLogin:false
+                  },
+                  {
+                      BankName:'廊坊直销银行',
+                      BankName2:'廊坊银行',
+                      TotalNum:'500',
+                      PreMoney:'0.30',
+                      GetMoney:'100.30',
+                      ifLogin:true
+                  },
+              ]
+          }
+        },
         methods:{
             goLogin(){
                 this.$router.push({

@@ -5,7 +5,10 @@
         </transition>
         <section>
             <input class="input" type="number"
-                   name="text1" :placeholder="placeholderText" v-model="value">
+                   name="text1" :placeholder="placeholderText"
+                   :value="value"
+                   @input="$emit('input', $event.target.value)"
+            >
             <slot name="btn" class="slot">
             </slot>
         </section>
@@ -19,12 +22,12 @@
             valuePlaceholder: {
                 type: null,
                 default: '请填写'
-            }
+            },
+            value:null
         },
         data() {
             return {
                 valueShow: false,
-                value: '',
                 placeholderText: '',
                 defaultPlaceholderText: '',
                 ifActive:true
