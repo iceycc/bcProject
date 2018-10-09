@@ -1,6 +1,6 @@
 <template>
     <div :class="['Tips',classStyle]" v-if="errMsg">
-        <span>{{errMsg}}</span>
+        <p>{{errMsg}}</p>
     </div>
 </template>
 
@@ -29,13 +29,14 @@
         margin: px2rem(17) auto 0;
         text-align: center;
         font-size: px2rem(14);
-        span {
+        p {
             box-sizing: border-box;
-            display: inline-block;
             background-color: #FF5B05;
+            margin: 0 auto;
             color: #fff;
+            max-width: px2rem(300);
             min-width: px2rem(200);
-            height: px2rem(29);
+            min-height: px2rem(29);
             line-height: px2rem(29);
             padding: 0 px2rem(6);
             border-radius: px2rem(4);

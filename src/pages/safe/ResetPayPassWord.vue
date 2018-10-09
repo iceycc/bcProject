@@ -4,14 +4,14 @@
         <section class="m-form">
             <section class="m-line">
                 <span class="n-left">姓名</span>
-                <span class="n-right">阿克</span>
+                <span class="n-right">{{Infos.USER_NAME}}</span>
             </section>
             <active-input valuePlaceholder="身份证号码" v-model="IDCardNum"></active-input>
             <section class="m-line">
                 <span class="n-left">手机号</span>
                 <span class="n-right">{{tel}}</span>
             </section>
-            <active-input valuePlaceholder="验证码">
+            <active-input valuePlaceholder="验证码" v-model="PHONE_CODE">
                 <template slot="btn">
                     <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
                 </template>
@@ -77,6 +77,7 @@
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../common/js/bus'
     import {PageName, BusName, LsName} from "../../Constant";
+    import util from "../../common/utils/util";
 
     export default {
         name: "ResetPayPassWord",
@@ -92,12 +93,17 @@
                 ifGet: false,
                 disable: false,
                 codeText: '获取验证码',
-                time: 5,
-                tel: '15621189997',
-                IDCardNum: ""
+                time: 60,
+                tel: '',
+                IDCardNum: "",
+                Infos: {},
+                PHONE_CODE: '',
+                MESSAGE_TOKEN:''
             }
         },
         created() {
+            this.Infos = util.storage.session.get(LsName.Infos)
+            this.tel = this.Infos.PHONE_NUM
         },
         methods: {
 
@@ -108,15 +114,21 @@
                 this.ifShow = false
             },
             subumit() {
-                let reset_payPass = $('#reset_payPass').$getCiphertext(),
+                let BANK_PAY_PW = $('#reset_payPass').$getCiphertext(),
                         reset_payPass_len = $('#reset_payPass').$getPasswordLength() - 0 || 0,
-                        reset_repayPass = $('#reset_repayPass').$getCiphertext(),
+                        BANK_PAY_PW2 = $('#reset_repayPass').$getCiphertext(),
                         reset_repayPass_len = $('#reset_repayPass').$getPasswordLength() - 0 || 0;
                 let data = {
-                    IDCardNum: this.IDCardNum,
-                    reset_payPass,
-                    reset_repayPass
+                    PHONE_CODE: this.PHONE_CODE,
+                    USER_CARD_ID: this.IDCardNum,
+                    BANK_PAY_PW: BANK_PAY_PW,
+                    BANK_PAY_PW2: BANK_PAY_PW2,
+                    MESSAGE_TOKEN:this.MESSAGE_TOKEN,
+                    PHONE_NUM:this.tel
                 }
+                API.safe.apiUserResetPayPass(data, true,res=>{
+                    this.ifShow = false
+                })
                 console.log(data);
 
             },
@@ -135,11 +147,13 @@
                 }, 1000)
                 let data = {
                     PHONE_NUM: this.tel + '',
-                    BIZ_TYPE: '1', // todo 类型
+                    BIZ_TYPE: '9', // todo 类型
                 }
                 API.open.getMsgCode(data, res => {
                     Bus.$emit(BusName.showToast, '验证码发送成功')
-                    this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
+
+                    this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
+                    console.log(this.MESSAGE_TOKEN);
                 }, err => {
                     this.codeText = '重新发送'
                     this.disable = false

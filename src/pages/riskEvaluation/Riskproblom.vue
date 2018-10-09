@@ -1,10 +1,7 @@
 <template>
     <div id="app">
         <div class="app">
-            <header class="header">
-                <a class="return" href=""></a>
-                <p>风险测评</p>
-            </header>
+            <app-bar title="风险测评"></app-bar>
             <!--<pre>{{values}}</pre>-->
             <p class="probloms"> {{nowShow + 1}} / {{proNubmer}}</p>
             <section v-for="item,index in optionsArr" :key="index" class="select-box">

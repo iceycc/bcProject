@@ -15,7 +15,7 @@ export const Mixin = {
 
 export const UtilMixin = {
     methods:{
-        toPreProduct() { // 用于登陆和测评结束后判断 源头是购买还是预约
+        toPreProduct() { // 用于登陆和测评结束后判断 源头是购买还是预约  还是电子账户来源
             let SOURCE_URL = util.storage.session.get(LsName.loginType)
             let goBuyData = util.storage.session.get(LsName.goBuy)
             if (SOURCE_URL == '预约下期') { // 判断是从预约产品过来的 ， 直接预约
@@ -48,7 +48,13 @@ export const UtilMixin = {
                     name: PageName.Buying,
                     query: goBuyData
                 })
-            }else {
+            }else if(SOURCE_URL=='电子账户'){ // 电子账户页
+                util.storage.session.remove(LsName.ORG_ID)
+                this.$router.push({
+                    name: PageName.BankAccount,
+                })
+            }
+            else{
                 this.$router.push({
                     path: PageName.Productlist
                 })

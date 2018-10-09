@@ -1,9 +1,6 @@
 <template>
     <div id="app" class="app">
-        <header class="header">
-            <a class="return" href=""></a>
-            <p>风险评测</p>
-        </header>
+        <app-bar title="风险评测"></app-bar>
         <div class="chattuimg">
             <img src="../../images/img/account_illustrations@2x.png" style="width:70%" alt="">
         </div>
@@ -22,16 +19,12 @@
     </div>
 </template>
 <script>
-    import {BusName, LsName, PageName} from "../../Constant";
-    import util from "../../common/utils/util";
-    import Bus from '../../common/js/bus'
-    import {API} from "../../request/api";
+    import {PageName} from "../../Constant";
     import {UtilMixin} from '../../common/utils/mixin'
 
     export default {
         data() {
             return {
-                RISK_TOLERANCE_LEVEL: '',
                 RISK_TOLERANCE_DESC: '',
                 RISK_LEV_EXPLAIN: '',
                 RISK_TOLERANCE_SCORE: '',
@@ -41,15 +34,9 @@
         mixins: [UtilMixin],
         created() {
             let data = this.$route.query
-            // let tarArr = ["/Riskproblom", "/fengxianresult", '/Verificationsuccess']
-            // if (tarArr.includes(this.target)) {
-            //     this.target = '/Productlist'
-            // }
-
-            this.RISK_TOLERANCE_LEVEL = data.RISK_TOLERANCE_LEVEL
-            this.RISK_TOLERANCE_DESC = data.RISK_TOLERANCE_DESC
-            this.RISK_LEV_EXPLAIN = data.RISK_LEV_EXPLAIN
-            this.RISK_TOLERANCE_SCORE = data.RISK_TOLERANCE_SCORE
+            this.RISK_TOLERANCE_DESC = data.RISK_TOLERANCE_DESC // 描述
+            this.RISK_LEV_EXPLAIN = data.RISK_LEV_EXPLAIN //
+            this.RISK_TOLERANCE_SCORE = data.RISK_TOLERANCE_SCORE //  分数
         },
         methods: {
             reCheck() {
@@ -61,7 +48,7 @@
                 // todo 跳转到购买
                 try {
                     this.toPreProduct()
-                }catch (e) {
+                } catch (e) {
                     this.$router.push({
                         path: '/Productlist'
                     })

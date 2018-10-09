@@ -50,7 +50,7 @@ addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
  * login
  */
 addRouter(PageName.login, {keepAlive: false, title: '安全登录', needLogin: false});
-addRouter(PageName.SafeLogin, {keepAlive: false, title: '安全登录', needLogin: false});
+addRouter(PageName.BankAccount, {keepAlive: false, title: '电子账户', needLogin: false});
 /**
  * open
  */

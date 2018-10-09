@@ -31,7 +31,7 @@ var formatNum =  (str) =>{
     }
 }
 
- var timerFormat = function(val){
+ var timerFormat = (val)=>{
     let date = new Date(parseInt(val));
         let Y = date.getFullYear() + '-',
          M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-',
@@ -41,7 +41,16 @@ var formatNum =  (str) =>{
          s = date.getSeconds()< 10 ? '0'+date.getSeconds(): +date.getSeconds(); 
     return Y+M+D+h+m+s;
 }
+
+var BankNo_Filter = (val)=>{
+    if(!val){
+        return val
+    }else {
+        return val.replace(/(\d{4})(?=\d)/g,"$1"+" ")
+    }
+}
 export {
     formatNum,
-    timerFormat
+    timerFormat,
+    BankNo_Filter
 }
