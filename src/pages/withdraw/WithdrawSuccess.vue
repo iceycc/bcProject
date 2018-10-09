@@ -6,30 +6,25 @@
             <h2>提现成功</h2>
         </div>
         <section class="m-card">
-            <p><span>提现金额</span>{{data.money}}</p>
-            <p><span>交易流水号</span>{{data.BESHARP_RECHARGE_SEQ}}</p>
+            <p><span>提现金额</span>{{money}}</p>
+            <p><span>交易流水号</span>{{BESHARP_CASH_SEQ}}</p>
         </section>
         <button class="begain" @click="goNext">完成</button>
     </div>
 </template>
 <script>
-
-
     export default {
         data() {
             return {
                 money: '',
                 num: '',
-                data: {
-                    BESHARP_RECHARGE_SEQ: 10000000,
-                    money:'1,111'
-                }
+                BESHARP_CASH_SEQ:'',
             }
         },
         created() {
             let preData = this.$route.query
-            this.BESHARP_RECHARGE_SEQ = preData.BESHARP_RECHARGE_SEQ
-            this.money = preData.BESHARP_RECHARGE_SEQ
+            this.BESHARP_CASH_SEQ = preData.BESHARP_CASH_SEQ
+            this.money = preData.money
         },
         methods: {
             goNext() {
