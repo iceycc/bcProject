@@ -27,7 +27,9 @@
             }
         },
         created() {
-
+            let preData = this.$route.query
+            this.BESHARP_RECHARGE_SEQ = preData.BESHARP_RECHARGE_SEQ
+            this.money = preData.BESHARP_RECHARGE_SEQ
         },
         methods: {
             goNext() {

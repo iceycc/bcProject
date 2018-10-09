@@ -42,6 +42,7 @@ Pages[Constants.PageName.ResetPhone] = resolve => require(['./safe/ResetPhone.vu
 Pages[Constants.PageName.Withdraw] = resolve => require(['./withdraw/Withdraw.vue'], resolve);
 Pages[Constants.PageName.WithdrawSuccess] = resolve => require(['./withdraw/WithdrawSuccess.vue'], resolve);
 Pages[Constants.PageName.WithdrawFaild] = resolve => require(['./withdraw/WithdrawFaild.vue'], resolve);
+Pages[Constants.PageName.WaitForWithdraw] = resolve => require(['./withdraw/WaitForWithdraw.vue'], resolve);
 Pages[Constants.PageName.PayDetail] = resolve => require(['./bankDetail/PayDetail.vue'], resolve);
 
 export default Pages

@@ -62,7 +62,7 @@
                 </div>
                 <div class="btn">
                     <button @click="cancel">取消</button>
-                    <button @click="subumit">提交</button>
+                    <button @click="submit">提交</button>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
         },
         data() {
             return {
-                errMsg: '错误信息提示',
+                errMsg: '',
                 ifShow: false,
                 ifGet: false,
                 disable: false,
@@ -102,18 +102,47 @@
             }
         },
         created() {
+            let beforeInfo;
+            if (beforeInfo = util.storage.session.get('rePayPasswordInfo')) {
+                this.IDCardNum = beforeInfo.USER_CARD_ID
+                this.errMsg = beforeInfo.msg
+                setTimeout(() => {
+                    this.errMsg = ''
+                }, 2000)
+                util.storage.session.remove('rePayPasswordInfo')
+            }
+
             this.Infos = util.storage.session.get(LsName.Infos)
             this.tel = this.Infos.PHONE_NUM
         },
         methods: {
-
             goNext() {
-                this.ifShow = true
+                let msg;
+                if (msg = util.Check.idNumber(this.IDCardNum)) {
+                    this.showErrMsg(msg)
+                    return
+                }
+                if (!this.PHONE_CODE) {
+                    this.showErrMsg('请填写短信验证码')
+                    return
+                }
+
+                this.Londing.open()
+                setTimeout(()=>{
+                    this.ifShow = true
+                    this.Londing.close()
+                },300)
             },
             cancel() {
                 this.ifShow = false
             },
-            subumit() {
+            showErrMsg(msg){
+                this.errMsg = msg;
+                setTimeout(()=>{
+                    this.errMsg = '';
+                },2000)
+            },
+            submit() {
                 let BANK_PAY_PW = $('#reset_payPass').$getCiphertext(),
                         reset_payPass_len = $('#reset_payPass').$getPasswordLength() - 0 || 0,
                         BANK_PAY_PW2 = $('#reset_repayPass').$getCiphertext(),
@@ -127,7 +156,16 @@
                     PHONE_NUM:this.tel
                 }
                 API.safe.apiUserResetPayPass(data, true,res=>{
-                    this.ifShow = false
+                    Bus.$emit(BusName.showToast,'修改支付密码成功')
+                    this.$router.push({
+                        name:PageName.MoreService
+                    })
+                },err=>{
+                    util.storage.session.set('rePayPasswordInfo', {
+                        USER_CARD_ID: this.IDCardNum,
+                        msg: err
+                    })
+                    window.location.reload()
                 })
                 console.log(data);
 
@@ -194,8 +232,9 @@
         position: absolute;
         display: inline-block;
         z-index: 3;
-        bottom: px2rem(8);
         right: 0;
+        top:auto !important;
+        bottom: px2rem(8);
         border: 1px solid #2B74FE;
         color: #2B74FE;
         width: px2rem(80);

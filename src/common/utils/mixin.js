@@ -49,7 +49,7 @@ export const UtilMixin = {
                     query: goBuyData
                 })
             }else if(SOURCE_URL=='电子账户'){ // 电子账户页
-                util.storage.session.remove(LsName.ORG_ID)
+                util.storage.session.remove(LsName.loginType)
                 this.$router.push({
                     name: PageName.BankAccount,
                 })
@@ -60,5 +60,24 @@ export const UtilMixin = {
                 })
             }
         },
+        queryStatus({text='等待中...',data,fn}){
+            this.Londing.open({
+                text:text
+            })
+            let i = 1
+            let timer = setInterval(()=>{
+                i++
+                if(i==5) {
+                    clearInterval(timer)
+                    this.Londing.close()
+                    return
+                }
+                API.query.apiQueryBizStatus(data,result=>{
+                    console.log('RES_CODE>>',result.RES_CODE);
+                    fn && fn(result,timer)
+                })
+            },2000)
+        }
+
     }
 }

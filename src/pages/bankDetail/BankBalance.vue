@@ -3,7 +3,7 @@
         <app-bar title="可用余额" class="m-header"></app-bar>
         <section class="m-top">
             <p class="u-title">可用金额（元）</p>
-            <p class="u-content">￥567,000.<i>00</i></p>
+            <p class="u-content">￥{{ACC_REST |formatNum | preLcAssetFilter}}<i>{{ACC_REST | formatNum | lastLcAssetFilter}}</i></p>
         </section>
         <section class="m-list">
             <section class="m-li" @click="goPage('Recharge')">
@@ -26,17 +26,55 @@
     import IconFont from '../../components/commons/IconFont'
     import {API} from "../../request/api";
     import {LsName, PageName} from "../../Constant";
-
+    import {util} from "../../common/utils/util";
     export default {
         name: "bankBalance",
         components: {
             IconFont
         },
+        data(){
+            return {
+                ACC_REST:'0.00',
+            }
+        },
+        filters: {
+            preLcAssetFilter(val) {
+                if (!val) return ''
+                return val.slice(0, val.length - 2)
+            },
+            lastLcAssetFilter(val) {
+                if (!val) return ''
+                return val.slice(val.length - 2, val.length)
+            }
+        },
+        created(){
+            this.getBankDetail()
+        },
         methods:{
+            getBankDetail() {
+                API.account.apiQueryAccRest({}, (res) => {
+                    this.ACC_REST = res.ACC_REST
+                    let ReChargeData = {
+                        ORG_NAME:　res.ORG_NAME,
+                        LOGO_URL:res.LOGO_URL
+                    }
+                    util.storage.session.set(LsName.RechargeQuery,ReChargeData)
+                })
+            },
+            getUserInfos(){
+
+            },
             goPage(page){
+                let query = {}
+                if(page=='Withdraw'){
+                    query = {
+                        ACC_REST:this.ACC_REST
+                    }
+                }
                 console.log(page);
                 this.$router.push({
-                    name:page
+                    name:page,
+                    query
                 })
             }
         }

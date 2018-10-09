@@ -13,15 +13,15 @@
     export default {
         data() {
             return {
-                errMsg:'错误提示信息'
+                errMsg:''
             }
         },
         created() {
-
+            this.errMsg = this.$route.query.err
         },
         methods: {
             goNext() {
-                this.$router.go(-2)
+                this.$router.go(-1)
             }
         }
     }

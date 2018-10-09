@@ -51,7 +51,7 @@
                 payNum: '',
                 agree: true,
                 imgSrc: imgSrc,
-               INCRE_AMOUNT:''
+                INCRE_AMOUNT: ''
             }
         },
         mixins: [Mixin],
@@ -68,14 +68,15 @@
                 })
             },
             goReChang() {
+                util.storage.session.get(LsName.RechargeQuery, {
+                    PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
+                    id: this.proDetail.id,
+                    ORG_NAME: this.proDetail.ORG_NAME, // 直销银行名称
+                    logo: this.proDetail.logo, // 直销银行名称
+                })
                 this.$router.push({
                     name: PageName.Recharge,
-                    query: {
-                        PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
-                        id: this.proDetail.id,
-                        ORG_NAME: this.proDetail.ORG_NAME, // 直销银行名称
-                        logo: this.proDetail.logo, // 直销银行名称
-                    }
+
                 })
             },
             getAgreement(type) {
@@ -88,15 +89,15 @@
                     }
                 })
             },
-            checkMoneyNum(num){
+            checkMoneyNum(num) {
                 let a = this.proDetail.INCRE_AMOUNT
-                if(num < parseInt(this.proDetail.TXT_MIN_AMOUNT)){
+                if (num < parseInt(this.proDetail.TXT_MIN_AMOUNT)) {
                     Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
                     return true
-                }else if(num%a != 0){
+                } else if (num % a != 0) {
                     Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
                     return true
-                }else {
+                } else {
                     return false
                 }
             },
@@ -121,7 +122,7 @@
                     Bus.$emit(BusName.showToast, '余额不足，请充值')
                     return
                 }
-                if(this.checkMoneyNum(this.moneyNum)){
+                if (this.checkMoneyNum(this.moneyNum)) {
                     return
                 }
                 if (this.moneyNum - 0 > this.REMAIN_AMT) {
@@ -142,7 +143,7 @@
                         PRD_NAME: this.proDetail.PRD_NAME,
                         id: this.proDetail.id,
                         ORG_NAME: this.proDetail.ORG_NAME,
-                        logo:this.proDetail.logo,
+                        logo: this.proDetail.logo,
                     }
                 })
 
