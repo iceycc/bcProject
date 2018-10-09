@@ -377,6 +377,51 @@ export const API = {
             return watchHttp.post(options, success, error)
 
         },
+    },
+
+    /**
+     * 理财产品
+     */
+    financial: {
+        // 理财产品列表  总资产数据获取接口
+        apiMyAssetByType(params, success, error) {
+            let options = {
+                url: '/openapi/bank/apiMyAssetByType',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 理财产品持有中数据（分页）
+        getMyInvestHold(params, success, error) {
+            let options = {
+                url: '/openapi/invest/getMyInvestHold',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 理财产品已到期（分页）
+        getMyInvestOver(params, success, error) {
+            let options = {
+                url: '/openapi/invest/getMyInvestOver',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 交易明细
+        apiQryTradeHis(params, success, error) {
+            let options = {
+                url: '/openapi/bank/apiQryTradeHis',
+                params
+            }
+            return http.post(options, config, success, error)
+
+        },
+
+
+
     }
 }
 
