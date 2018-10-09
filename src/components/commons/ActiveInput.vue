@@ -8,6 +8,7 @@
                    name="text1" :placeholder="placeholderText"
                    :value="value"
                    @input="$emit('input', $event.target.value)"
+                   @change="changeFn($event.target.value)"
             >
             <slot name="btn" class="slot">
             </slot>
@@ -36,14 +37,18 @@
         created() {
             this.defaultPlaceholderText = this.valuePlaceholder// const
             this.placeholderText = this.valuePlaceholder
+
         },
-        activated() {
+        methods:{
+            changeFn(val){
+                this.$emit('changeHandle',val)
+            }
         },
         watch: {
             value(n, o) {
-                if (n.length > 1) { // >1时不必校验
-                    return
-                }
+                // if (n.length > 1) { // >1时不必校验
+                //     return
+                // }
                 if (!n) { // 删除到 '' 是触发
                     this.ifActive = true
                     this.valueShow = false

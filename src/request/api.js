@@ -233,11 +233,42 @@ export const API = {
         // /finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
 
 
-        // apiBandCard
+        // 查询登录用户某机构绑定卡信息 apiBandCard
         apiBandCard(params, success, error) {
             let options = {
                 url: '/openapi/comm/apiBandCard',
                 params
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 更换银行卡：openapi/comm/apiChangeBingCard
+        apiChangeBingCard(params,delMsg, success, error) {
+            let options = {
+                url: '/openapi/comm/apiChangeBingCard',
+                params,
+                delMsg
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 更换手机号
+        // openapi/comm/apiChangePhoneNum
+        apiChangePhoneNum(params,delMsg, success, error) {
+            let options = {
+                url: '/openapi/comm/apiChangePhoneNum',
+                params,
+                delMsg
+            }
+            return http.post(options, config, success, error)
+
+        },
+        // 更换支付密码：openapi/comm/apiUserResetPayPass
+        apiUserResetPayPass(params,delMsg, success, error) {
+            let options = {
+                url: '/openapi/comm/apiUserResetPayPass',
+                params,
+                delMsg
             }
             return http.post(options, config, success, error)
 
@@ -279,8 +310,48 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
-
     },
+    /**
+     * 账户相关
+     */
+    account:{
+        // 电子列表
+        apiBankList(params, success, error) {
+            let options = {
+                url: 'openapi/bank/apiBankList',
+                params,
+                TYPE:'API_BANK_LIST'
+            }
+            return http.post(options, config, success, error)
+        },
+
+        // 银行账户查询：/openapi/comm/apiQueryAccRest
+        apiQueryAccRest(params, success, error) { // 下面的代替了
+            let options = {
+                url: 'openapi/comm/apiQueryAccRest',
+                params,
+            }
+            return http.post(options, config, success, error)
+        },
+        // 我的投资情况(汇总)   /openapi/invest/getMyInvest
+        getMyInvest(params, success, error) {
+            let options = {
+                url: 'openapi/invest/getMyInvest',
+                params,
+            }
+            return http.post(options, config, success, error)
+        },
+        // 获取我的投资持有中数据(分页)
+        // openapi/invest/getMyInvestHold
+        getMyInvestHold(params, success, error) {
+            let options = {
+                url: 'openapi/invest/getMyInvestHold',
+                params,
+            }
+            return http.post(options, config, success, error)
+        },
+    },
+
     /**
      * watch
      */

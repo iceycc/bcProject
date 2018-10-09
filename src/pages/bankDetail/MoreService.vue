@@ -2,30 +2,30 @@
     <div style="background: #f6f6f9;height: 100%">
         <app-bar title="更多服务"></app-bar>
         <section class="m-main">
-            <section class="more" @click="goPage('Riskassessment')">
+            <section class="more" @click="goPage(toPageName.fenxian)">
              <span class="more-left">
                         风险测评</span>
                 <span class="more-right">
-                    谨慎性
+                    {{RISK_TOLERANCE_LEVEL | RISK_TOLERANCE_LEVEL_Filter}}
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
             </section>
-            <section class="more" @click="goPage('ChangeBank')">
+            <section class="more" @click="goPage(toPageName.ChangeBank)">
              <span class="more-left">
                         更换银行卡</span>
                 <span class="more-right">
-                    已绑定招商银行卡
+                    已绑定{{CARD_BANK_NAME}}
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
             </section>
-            <section class="more" @click="goPage('ResetPhone')">
+            <section class="more" @click="goPage(toPageName.ResetPhone)">
              <span class="more-left">
                         更换绑定手机号</span>
                 <span class="more-right">
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
             </section>
-            <section class="more" @click="goPage('ResetPayPassWord')">
+            <section class="more" @click="goPage(toPageName.ResetPayPassWord)">
              <span class="more-left">
                         更换支付密码</span>
                 <span class="more-right">
@@ -38,17 +38,89 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
+    import {API} from "../../request/api";
+    import {LsName, PageName, imgSrc} from "../../Constant";
+    import util from "../../common/utils/util";
 
     export default {
         name: "MoreService",
         components: {
             IconFont
         },
-        methods:{
-            goPage(pageName){
-                console.log(pageName)
+        data() {
+            return {
+                RISK_TOLERANCE_LEVEL: '',
+                CARD_BANK_NAME: '',
+                toPageName: {
+                    fenxian: PageName.fengxianresult,
+                    ChangeBank: PageName.ChangeBank,
+                    ResetPhone: PageName.ResetPhone,
+                    ResetPayPassWord: PageName.ResetPayPassWord,
+                },
+                PHONE_NUM:'',
+                fenxianQuery: {}
+            }
+        },
+        created() {
+            this.getInfos()
+        },
+        filters: {
+            RISK_TOLERANCE_LEVEL_Filter(val) {
+                switch (val) {
+                    case '1':
+                        return '保守型'
+                        break;
+
+                    case '2':
+                        return '谨慎型'
+                        break;
+
+                    case '3':
+                        return '稳健型'
+                        break;
+
+                    case '4':
+                        return '积极型'
+                        break;
+
+                    case '5':
+                        return '激进型'
+                        break;
+                }
+            }
+        },
+        methods: {
+            goPage(pageName) {
+                let data = {}
+                if (pageName == PageName.fengxianresult) {
+                    data = this.fenxianQuery
+                }
+                else {
+                    data = {}
+                }
                 this.$router.push({
-                    name:pageName
+                    name: pageName,
+                    query:data
+                })
+            },
+            getInfos() {
+                let data = {}
+                API.safe.apiBandCard(data, (res) => {
+                    util.storage.session.set(LsName.Infos,{
+                        PHONE_NUM:res.PHONE_NUM,
+                        USER_CARD_ID:res.USER_CARD_ID,
+                        USER_NAME:res.USER_NAME,
+                    })
+                    this.RISK_TOLERANCE_LEVEL = res.RISK_TOLERANCE_LEVEL
+                    this.CARD_BANK_NAME = res.CARD_BANK_NAME
+                    this.toPageName.fenxian = res.HAS_GRADE ==2
+                            ?PageName.fengxianresult:PageName.Riskassessment
+                    this.fenxianQuery = {
+                        RISK_LEV_EXPLAIN:res.RISK_LEV_EXPLAIN,
+                        RISK_TOLERANCE_DESC:res.RISK_TOLERANCE_DESC, //
+                        RISK_TOLERANCE_SCORE:res.RISK_TOLERANCE_SCORE, // 分数
+                    }
+
                 })
             }
         }

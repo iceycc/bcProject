@@ -30,7 +30,14 @@ var formatNum =  (str) =>{
         return str
     }
 }
-
+var BankNo_Filter = (val)=>{
+    if(!val){
+        return val
+    }else {
+        return val.replace(/(\d{4})(?=\d)/g,"$1"+" ")
+    }
+}
 export {
-    formatNum
+    formatNum,
+    BankNo_Filter
 }

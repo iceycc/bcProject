@@ -6,8 +6,8 @@
                 <span class="n-left">原手机号</span>
                 <span class="n-right">{{tel}}</span>
             </section>
-            <active-input valuePlaceholder="身份证号码" v-model="params.USER_CARD_ID"></active-input>
-            <active-input valuePlaceholder="验证码" v-model="params.MSG_CODE">
+            <active-input valuePlaceholder="新手机号" v-model="params.PHONE_NUM"></active-input>
+            <active-input valuePlaceholder="验证码" v-model="params.PHONE_CODE">
                 <template slot="btn">
                     <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
                 </template>
@@ -31,6 +31,8 @@
     import {API} from "../../request/api";
     import Bus from '../../common/js/bus'
     import {PageName, BusName, LsName} from "../../Constant";
+    import {util} from "../../common/utils/util";
+
     export default {
         name: "ResetPhone",
         components: {
@@ -41,21 +43,29 @@
             return {
                 errMsg: '错误信息提示',
                 params:{
-                    USER_CARD_ID:'',
-                    MSG_CODE:''
+                    PHONE_NUM:'',
+                    PHONE_CODE:'',
+                    MESSAGE_TOKEN:''
                 },
-                tel:'15621189997',
+                tel:'',
                 disable:false,
                 codeText:'获取验证码',
                 time:5
             }
         },
         created() {
+            this.tel = util.storage.session.get(LsName.Infos).PHONE_NUM
         },
         methods: {
             goNext() {
-
+                let data = {
+                    PHONE_NUM:this.params.PHONE_NUM,
+                    PHONE_CODE:this.params.PHONE_CODE,
+                    MESSAGE_TOKEN:this.params.MESSAGE_TOKEN,
+                }
+                API.safe.apiChangePhoneNum(data,{})
             },
+            // 15621118888
             getMsgCode(){
                 let sTime = this.time
                 this.disable = true
@@ -71,17 +81,18 @@
                 },1000)
                 let data = {
                     PHONE_NUM: this.tel + '',
-                    BIZ_TYPE: '1', // todo 类型
+                    BIZ_TYPE: '10', //
                 }
                 API.open.getMsgCode(data, res => {
                     Bus.$emit(BusName.showToast, '验证码发送成功')
-                    this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
+                    this.params.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 }, err => {
                     this.codeText = '重新发送'
                     this.disable = false
                     console.log(err);
                 })
-            }
+            },
+
         },
 
     }

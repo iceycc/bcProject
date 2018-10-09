@@ -8,11 +8,19 @@
                     <span class="bk-text2">（元）</span>
                     <icon-font iconClass="icon-eye" iconStyle="eye" @doClick="pass =!pass"></icon-font>
                 </section>
-                <p class="money" v-show="pass">10,000.00</p>
-                <p class="money" v-show="!pass">****</p>
+                <p class="money" v-if="pass">{{bankDetail.TOTAL_ASSET}}</p>
+                <p class="money" v-else>****</p>
                 <section class="income">
-                    <p>昨日到账收益 <span class="left-text">+100.30</span></p>
-                    <p style="text-align: right">累计收益 <span class="right-text">+100.30</span></p>
+                    <p>昨日到账收益
+                        <span class="left-text">
+                             <i>{{bankDetail.YSD_INCOME>=0?'+':''}}</i>
+                            {{bankDetail.YSD_INCOME}}</span>
+                    </p>
+                    <p style="text-align: right">累计收益
+                        <span class="right-text">
+                             <i>{{bankDetail.TOTAL_INCOME>=0?'+':''}}</i>
+                            {{bankDetail.TOTAL_INCOME}}</span>
+                    </p>
                 </section>
             </section>
         </section>
@@ -20,8 +28,8 @@
             <section class="info-card">
                 <div class="ic-left">
                     <span class="bk-text1">可用余额</span><span class="bk-text2">（元）</span>
-                    <p class="money" v-show="pass">10,000.00</p>
-                    <p class="money" v-show="!pass">****</p>
+                    <p class="money" v-if="pass">{{bankDetail.ACC_REST}}</p>
+                    <p class="money" v-else>****</p>
                 </div>
                 <span class="ic-right" @click="goPage('PayDetail')">
                     明细
@@ -30,30 +38,31 @@
 
             </section>
         </section>
-        <section class="bank-card container">
+        <section class="bank-card container" v-if="bankDetail.EC_ACCOUNT_NO">
             <div class="bank-logo">
-                <img src="../../images/img/beijingbank@2x.png" alt="">
+                <img :src="imgSrc + bankDetail.LOGO_URL" alt="">
             </div>
             <div class="bank-test">
-                <p class="">广发银行信用卡</p>
-                <p class="card-no" v-show="pass">XXXX XXXX XXXX XXXX XXXX</p>
-                <p class="card-no" v-show="!pass">****</p>
+                <p class="">{{bankDetail.ORG_NAME}}</p>
+                <p class="card-no" v-if="pass">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
+                <p class="card-no" v-else>**** **** **** ****</p>
             </div>
         </section>
-        <section v-if="pass"  class="financing-list">
-            <section class="top">
+        <section class="financing-list" v-if="pass">
+            <section class="top" @click="licaiShow=!licaiShow">
                     <span class="top-left">
                         理财</span>
-                <span class="top-right">
-                        ¥10.000.<i>30</i>
+                <span :class="{'top-right':true,select:licaiShow}">
+
+                        ¥{{bankDetail.lcAsset.API_FINA_ASSET | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
                     </span>
             </section>
-            <ul>
-                <li class="financing-li" v-for="i in 1">
+            <ul v-if="licaiShow">
+                <li class="financing-li" v-for="item in proList">
                     <span class="li-left">
-                        理财产品1</span>
+                        {{item.PRD_NAME}}</span>
                     <span>
-                        ¥10.000.<i>30</i>
+                        ¥{{item.INVEST_AMOUNT | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
                     </span>
                 </li>
             </ul>
@@ -74,42 +83,126 @@
 <script>
     import IconFont from '../../components/commons/IconFont'
     import {API} from "../../request/api";
+    import {LsName, PageName, imgSrc} from "../../Constant";
 
     export default {
         name: "bankDetail",
         components: {
             IconFont
         },
-        data(){
+        data() {
             return {
-                pass:true
+                imgSrc,
+                proList:[],
+                pass: true,
+                licaiShow: false,
+                bankDetail: {
+                    TOTAL_ASSET: '0.00', // 总资产(投资金额+可用余额)
+                    TOTAL_AMOUNT: '0.00', // 投资总金额(不包括可用余额)
+                    ACC_REST: '0.00', // 可用余额
+                    TOTAL_INCOME: '0.00',//	累计收益
+                    YSD_INCOME: '0.00', // 昨日收益
+                    EC_ACCOUNT_NO: '',
+                    lcAsset: ''
+                }
             }
         },
-        methods:{
-            goPage(pageName){
+        filters: {
+            preLcAssetFilter(val) {
+                if (!val) return ''
+                return val.slice(0, val.length - 2)
+            },
+            lastLcAssetFilter(val) {
+                if (!val) return ''
+                return val.slice(val.length - 2, val.length)
+            }
+        },
+        created() {
+            this.getBankDetail()
+            this.scroll()
+            this.getProList()
+        },
+        methods: {
+            goPage(pageName) {
                 console.log(pageName)
                 this.$router.push({
-                    name:pageName
+                    name: pageName
                 })
             },
-            show(){
+            show() {
                 console.log('show');
             },
+            getBankDetail() {
+                API.account.getMyInvest({}, (res) => {
+                    this.bankDetail = res
+                })
+            },
+            // getMyInvesthandle(){
+            //     API.account.getMyInvest({})
+            // }
+            getProList(){ // 获取产品列表
+                let data = {
+                    currentPage:'1',
+                    PRD_TYPE:'2'
+                }
+                API.account.getMyInvestHold(data,(res)=>{
+                    this.proList = res.PAGE.retList
+                })
+            },
+            scroll() {
+                let _this = this
+                //--------------上拉加载更多---------------
+                //获取滚动条当前的位置
+                function getScrollTop() {
+                    var scrollTop = 0;
+                    if (document.documentElement && document.documentElement.scrollTop) {
+                        scrollTop = document.documentElement.scrollTop;
+                    } else if (document.body) {
+                        scrollTop = document.body.scrollTop;
+                    }
+                    return scrollTop;
+                }
 
+                //获取当前可视范围的高度
+                function getClientHeight() {
+                    var clientHeight = 0;
+                    if (document.body.clientHeight && document.documentElement.clientHeight) {
+                        clientHeight = Math.min(document.body.clientHeight, document.documentElement.clientHeight);
+                    } else {
+                        clientHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight);
+                    }
+                    return clientHeight;
+                }
 
+                //获取文档完整的高度
+                function getScrollHeight() {
+                    return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                }
+
+                //滚动事件触发
+                window.onscroll = function () {
+                    if (getScrollTop() + getClientHeight() == getScrollHeight()) {
+
+                    }
+                }
+                //-----------------结束--------------------
+            }
         }
     }
 </script>
 
 <style scoped lang="scss">
     @import "../../assets/px2rem";
-    i{
+
+    i {
         font-style: normal;
     }
+
     .main {
         height: 100%;
         background: #f6f6f6;
     }
+
     .container {
         padding: 0 px2rem(15);
         background: #fff;
@@ -118,7 +211,7 @@
 
     .banner {
         height: px2rem(120);
-        background:url("../../images/img/background@2x.png") no-repeat;
+        background: url("../../images/img/background@2x.png") no-repeat;
         background-size: contain;
         box-sizing: border-box;
         padding: px2rem(0) px2rem(10);
@@ -219,18 +312,18 @@
         box-sizing: border-box;
         padding: px2rem(10) px2rem(10) px2rem(0) px2rem(20);
         background: #fff;
-        .top{
+        .top {
             display: flex;
             font-size: px2rem(14);
             height: px2rem(28);
             line-height: px2rem(28);
             color: #000;
-            .top-left{
+            .top-left {
                 position: relative;
                 flex: 1;
                 padding-left: px2rem(20);
                 box-sizing: border-box;
-                &:before{
+                &:before {
                     position: absolute;
                     left: px2rem(0);
                     top: 50%;
@@ -242,14 +335,21 @@
                     background-size: contain;
                 }
             }
-            .top-right{
+            .top-right {
                 font-size: px2rem(18);
-                color: #666;
+                color: #333;
+                &.select {
+                    color: #999;
+                }
             }
+            .small-number {
+                font-size: px2rem(14);
+            }
+
             margin-bottom: px2rem(10);
 
         }
-        .financing-li{
+        .financing-li {
             display: flex;
             font-size: px2rem(14);
             padding: px2rem(15) 0;
@@ -257,12 +357,12 @@
             height: px2rem(28);
             line-height: px2rem(28);
             color: #333;
-            .li-left{
+            .li-left {
                 position: relative;
                 flex: 1;
                 padding-left: px2rem(10);
                 box-sizing: border-box;
-                &:before{
+                &:before {
                     position: absolute;
                     left: px2rem(0);
                     top: 50%;
@@ -274,28 +374,33 @@
                     background: #4F96FF;
                 }
             }
-            &:last-child{
-                border-bottom:none;
+            &:last-child {
+                border-bottom: none;
             }
 
+        }
+        .small-number2 {
+            font-size: px2rem(10);
         }
         margin-bottom: px2rem(10);
 
     }
-    .more{
+
+    .more {
         background: #fff;
         font-size: px2rem(14);
         padding: px2rem(10) px2rem(10) px2rem(10) px2rem(20);
         box-sizing: border-box;
         display: flex;
-        .more-left{
+        .more-left {
             flex: 1;
         }
         margin-bottom: px2rem(10);
 
     }
-    .foot-text{
-       background: #f6f6f6;
+
+    .foot-text {
+        background: #f6f6f6;
         text-align: center;
         padding: px2rem(30) 0;
         color: #2B74FE;

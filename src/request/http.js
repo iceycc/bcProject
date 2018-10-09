@@ -14,9 +14,10 @@ export default {
         });
     },
     // REQUEST
-    request: function (method, {url, params, token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
+    request: function (method, {url, params,TYPE='GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
         method = method || 'post'
-        params = Object.assign(params, {ORG_ID: '70'})
+        let ORG_ID = util.storage.session.get(LsName.ORG_ID) || 70 // todo ORG_ID的动态获取
+        params = Object.assign(params, {ORG_ID:ORG_ID + ''})
         let token1 = util.storage.session.get(LsName.token) || token
         let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
         let channel_id = util.storage.session.get(LsName.CHANNEL_ID) + ''
@@ -29,7 +30,7 @@ export default {
                     IMSI: "460026325010440",
                     SESSION_ID: "",
                     SYSTEM_TYPE: "h5",
-                    TYPE: "GENERALIZE_INFO",
+                    TYPE,
                     TOKEN: token1, //15011352818 15711310733
                     DEVICE_ID: DeviceId
                 },

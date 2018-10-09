@@ -127,23 +127,9 @@
         },
         methods: {
             checkBankName(val) {
-                // if(this.bankText == '请选择银行'){
-                //     Bus.$emit(BusName.showToast, '请选择银行')
-                //     return
-                // }
                 this.checkBankName1 = false
-                // if(val.length <=6){
-                //     this.canClick = true
-                //     return
-                // }
                 val = val.replace(/\s+/g, "")
-                // console.log(this.canClick);
                 let bankName
-                // if(bankName =='请选择银行'){
-                //     Bus.$emit(BusName.showToast, '请选择银行')
-                //     this.checkBankName1 = true
-                //     return
-                // }
                 for (var i = 3; i < 10; i++) {
                     if (bankName = this.machBankName((val + '').slice(0, i))) {
 
@@ -155,8 +141,6 @@
                         break
                     }
                 }
-                // this.canClick = false
-                // this.bankText = bankName
             },
             checkBankNo(val) {
                 val = val.toString()
