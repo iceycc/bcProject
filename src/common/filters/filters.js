@@ -2,7 +2,6 @@
 
 var formatNum =  (str) =>{
     if(!str) return str
-// if(str == '' || !str) return
     var newStr = "";
     var count = 0;
     if (str.indexOf(".") == -1) {

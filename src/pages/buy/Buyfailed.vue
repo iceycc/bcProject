@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="购买"></app-bar>
         <div class="chattuimg">
-            <img src="../../images/img/buyfail@2x.png" style="width:25%" alt="">
+            <img src="../../assets/images/img/buyfail@2x.png" style="width:25%" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，购买失败!</h2>
@@ -12,8 +12,8 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
-    import Bus from '../../common/bus'
+    import {WatchApi} from "../../service/api";
+    import Bus from '../../plugin/bus'
     import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
 
@@ -31,7 +31,7 @@
         },
         methods: {
             goApp() {
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A011', // 点位
                     REMARK_DATA: '异业合作-购买失败-下载比财', // 中文备注
                 })

@@ -24,7 +24,7 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import {LsName, PageName} from "../../Constant";
     import {util} from "../../common/utils/util";
     export default {
@@ -98,7 +98,7 @@
     .m-top {
         width: 100%;
         height: px2rem(120);
-        background: url("../../images/img/OvalCopy.png") no-repeat center center;
+        background: url("../../assets/images/img/OvalCopy.png") no-repeat center center;
         padding-left: px2rem(25);
         padding-top: px2rem(25);
         box-sizing: border-box;

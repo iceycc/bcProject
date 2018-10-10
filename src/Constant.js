@@ -40,7 +40,6 @@ export const imgSrc = process.env.NODE_ENV == 'development'?imgSrcHost.dev:imgSr
  * page名称
  */
 export const PageName = {
-    testLogin: 'testLogin',
     login: 'login',
     Productlist: 'Productlist',
     Rechargesuccess: 'Rechargesuccess',

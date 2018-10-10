@@ -29,7 +29,7 @@
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
-                    <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                    <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
                 <section class="field_row_wrap">
                     <p class="field_row_key">
@@ -51,11 +51,11 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
 
     import {PageName,BusName,LsName,imgSrc} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import {util} from "../../common/utils/util";
     import {Mixin} from '../../common/mixin/mixin'
 
@@ -250,7 +250,7 @@
 
     .bang {
         margin-top: 0.5rem;
-        background: url(../../images/img/agree@3x.png) no-repeat 0.2rem 0.05rem;
+        background: url(../../assets/images/img/agree@3x.png) no-repeat 0.2rem 0.05rem;
         font-size: 0.3rem;
         color: #808080;
         background-size: 0.4rem 0.4rem;

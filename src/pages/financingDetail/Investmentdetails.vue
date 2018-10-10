@@ -111,7 +111,7 @@
     }
 
     .detailstitle {
-        background-image: url(../../images/img/MonetaryFund@2x.png);
+        background-image: url(../../assets/images/img/MonetaryFund@2x.png);
         background-repeat: no-repeat;
         background-size: 0.6rem 0.6rem;
         padding: 0 0.8rem;

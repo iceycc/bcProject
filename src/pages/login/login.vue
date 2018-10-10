@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="hello">
         <app-bar title="安全登录"></app-bar>
-        <img class="logo" src="../../images/img/logoaaa_03.png" alt="">
+        <img class="logo" src="../../assets/images/img/logoaaa_03.png" alt="">
         <p class="titlecontent">
             欢迎登录晋商银行直销账户</p>
         <div class="login_box">
@@ -34,16 +34,16 @@
         </div>
         <div class="bottomcontent">
             <p>
-                <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                 晋商银行已与比财实现安全直连</p>
         </div>
     </div>
 </template>
 <script>
     import util from '../../common/utils/util'
-    import {API} from '../../plugin/request/api'
+    import {API,WatchApi} from '../../service/api'
     import {LsName, BusName, PageName} from "../../Constant";
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
     import {Mixin, UtilMixin} from '../../common/mixin/mixin'
 
@@ -177,7 +177,7 @@
                 })
             },
             goOpen() {
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A008', // 点位
                     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
                 })
@@ -201,7 +201,7 @@
 
                 util.storage.session.remove(LsName.token, this.tel)
                 API.login(data, (res) => {
-                    API.watch.watchApi({
+                    WatchApi.watch.watchApi({
                         FUNCTION_ID: 'ptb0A007', // 点位
                         REMARK_DATA: '异业合作-登录', // 中文备注
                         SOURCE_URL: SOURCE_URL
@@ -226,7 +226,7 @@
                     }
 
                 }, err => {
-                    API.watch.watchApi({
+                    WatchApi.watch.watchApi({
                         FUNCTION_ID: 'ptb0A007', // 点位
                         REMARK_DATA: '异业合作-登录', // 中文备注
                     })

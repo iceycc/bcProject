@@ -51,7 +51,7 @@
 
         data() {
             return {
-                closeImg:require('../../images/img/icon_ask_close.svg'),
+                closeImg:require('../../assets/images/img/icon_ask_close.svg'),
                 titleSelect:false,
                 show:false,
                 selectValue: -1,
@@ -106,7 +106,7 @@
             position:absolute;
             display: inline-block;
             content: '';
-            background: url('../../images/img/GroupCopy14@2x.png') no-repeat center;
+            background: url('../../assets/images/img/GroupCopy14@2x.png') no-repeat center;
             background-size: contain;
             width: .4rem;
             height: .4rem;

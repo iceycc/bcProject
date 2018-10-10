@@ -3,7 +3,7 @@
         <app-bar title="提现"></app-bar>
         <div class="rechargetitle">提现到{{CARD_BANK_NAME}}直销银行</div>
         <div class="minshengbank">
-            <span class="minshengbankLogo"><img src="../../images/img/beijingbank@2x.png" style="width:75%"
+            <span class="minshengbankLogo"><img src="../../assets/images/img/beijingbank@2x.png" style="width:75%"
                                                 alt=""></span>
             {{CARD_BANK_NAME}}
         </div>
@@ -17,7 +17,7 @@
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
-                    <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                    <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
                 <section class="field_row_wrap">
                     <p class="field_row_key">
@@ -40,11 +40,11 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import AppBar from '../../components/header/AppBar'
     import {HOST, LsName} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
     import {util} from "../../common/utils/util";
     import {Mixin, UtilMixin} from '../../common/mixin/mixin'

@@ -82,7 +82,7 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import { PageName, imgSrc} from "../../Constant";
 
     export default {
@@ -220,7 +220,7 @@
 
     .banner {
         height: px2rem(120);
-        background: url("../../images/img/background@2x.png") no-repeat;
+        background: url("../../assets/images/img/background@2x.png") no-repeat;
         background-size: contain;
         box-sizing: border-box;
         padding: px2rem(0) px2rem(10);
@@ -340,7 +340,7 @@
                     content: '';
                     width: px2rem(15);
                     height: px2rem(15);
-                    background: url("../../images/img/property_icon_financing.png") no-repeat center;
+                    background: url("../../assets/images/img/property_icon_financing.png") no-repeat center;
                     background-size: contain;
                 }
             }

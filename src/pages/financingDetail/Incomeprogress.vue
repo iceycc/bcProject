@@ -139,14 +139,14 @@
     }
 
     .contenttitle .shouyi {
-        background-image: url(../../images/img/icon_shouyi@2x.png);
+        background-image: url(../../assets/images/img/icon_shouyi@2x.png);
         background-repeat: no-repeat;
         background-size: 0.6rem 0.6rem;
         background-position: 1rem 0.4rem;
     }
 
     .contenttitle .jilu {
-        background-image: url(../../images/img/icon_jiaoyi@2x.png);
+        background-image: url(../../assets/images/img/icon_jiaoyi@2x.png);
         background-repeat: no-repeat;
         background-size: 0.6rem 0.6rem;
         background-position: 1rem 0.4rem;

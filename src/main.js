@@ -28,7 +28,7 @@ Vue.use(Calendar);
 
 Vue.component('app-bar', AppBar)
 // import {HOST} from "./Constant";
-import * as custom from './common/filters'
+import * as custom from './common/filters/filters'
 Object.keys(custom).forEach(key=>{
     Vue.filter(key, custom[key])
 })

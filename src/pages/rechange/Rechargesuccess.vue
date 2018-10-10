@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="充值"></app-bar>
         <div class="chattuimg">
-            <img src="../../images/img/Verificationsuccess@2x.png" style="width:30%" alt="">
+            <img src="../../assets/images/img/Verificationsuccess@2x.png" style="width:30%" alt="">
             <h2>充值成功</h2>
         </div>
         <section class="m-card">

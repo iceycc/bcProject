@@ -59,10 +59,10 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
+    import {API,WatchApi} from "../../service/api";
     import {PageName, BusName, LsName} from "../../Constant";
     import {util} from "../../common/utils/util";
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import BankSelect from '../../components/commons/BankSelect'
     import {imgSrc} from "../../Constant";
 
@@ -88,9 +88,9 @@
                 bankList: [],
                 bank: '-1',
                 bankText: '请选择银行',
-                stepImg: require('../../images/img/account_icon_green2@2x.png'),
-                stepImg2: require('../../images/img/step2@2x.png'),
-                stepImg3: require('../../images/img/step3.png'),
+                stepImg: require('../../assets/images/img/account_icon_green2@2x.png'),
+                stepImg2: require('../../assets/images/img/step2@2x.png'),
+                stepImg3: require('../../assets/images/img/step3.png'),
                 AllBankListObj: {},
                 errMsg: '',
                 checkBankName1: false
@@ -320,7 +320,7 @@
                             setTimeout(() => {
                                 this.errMsg = ''
                             }, 2000)
-                            API.watch.watchApi({
+                            WatchApi.watch.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })
@@ -336,7 +336,7 @@
                             })
                         },
                         err => {
-                            API.watch.watchApi({
+                            WatchApi.watch.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })

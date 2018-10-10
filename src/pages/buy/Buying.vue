@@ -37,8 +37,8 @@
 </template>
 <script>
     import {PageName, BusName, imgSrc, LsName} from "../../Constant"
-    import Bus from '../../common/bus'
-    import {API} from "../../plugin/request/api"
+    import Bus from '../../plugin/bus'
+    import {API} from "../../service/api"
     import {Mixin} from '../../common/mixin/mixin'
     import util from "../../common/utils/util";
 
@@ -269,7 +269,7 @@
 
     .bang {
         margin-left: 0.5rem;
-        background: url(../../images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/img/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.3rem 0.3rem;
         font-size: 0.35rem;
         color: #808080;
@@ -278,7 +278,7 @@
     }
 
     .no {
-        background: url(../../images/img/onagree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/img/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.3rem 0.3rem;
     }
 </style>

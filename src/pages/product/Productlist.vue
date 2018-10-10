@@ -2,7 +2,7 @@
     <div class="wrap">
         <app-bar title="产品列表"></app-bar>
         <div class="banner">
-            <img src="../../images/img/banner.png" alt="">
+            <img src="../../assets/images/img/banner.png" alt="">
         </div>
         <div class="productlist" v-if="!show">
             <ul class="ul-li">
@@ -30,7 +30,7 @@
                     </div>
                     <div class="ratereturn ratereturnright">
                         <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
-                        <img class="logoy" v-if="item.IS_ENABLED == 2" src="../../images/img/yuyue.png" alt="">
+                        <img class="logoy" v-if="item.IS_ENABLED == 2" src="../../assets/images/img/yuyue.png" alt="">
                         <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.1rem">
                             {{item.PRD_NAME}}</p>
                         <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem">理财期限{{item.PERIOD}}天</p>
@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
+    import {API,WatchApi} from "../../service/api";
     import {LsName, PageName,imgSrc} from "../../Constant";
     import util from "../../common/utils/util";
 
@@ -55,7 +55,7 @@
             }
         },
         created() {
-            API.watch.watchApi({
+            WatchApi.watch.watchApi({
                 REMARK_DATA: '异业合作-落地页',
                 FUNCTION_ID: 'ptp0A000'
             })
@@ -74,7 +74,7 @@
                 })
             },
             goDetail(id,title) {
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A001', // 点位
                     REMARK_DATA: '异业合作-落地页产品列表', // 中文备
                     FROM_ID: id

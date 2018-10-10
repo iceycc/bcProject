@@ -72,8 +72,8 @@
 </template>
 
 <script>
-    import {API} from "../../plugin/request/api";
-    import Bus from '../../common/bus'
+    import {API} from "../../service/api";
+    import Bus from '../../plugin/bus'
     import {PageName, BusName, LsName,imgSrc} from "../../Constant";
     import util from "../../common/utils/util";
 

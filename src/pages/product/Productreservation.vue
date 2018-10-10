@@ -42,7 +42,7 @@
 
                     <!--  -->
 
-                    <img src="../../images/img/p-invest@2x.png" @click="getFocus">
+                    <img src="../../assets/images/img/p-invest@2x.png" @click="getFocus">
                 </div>
                 <div class="calculation-2">
                     <label>参考收益(元)</label>
@@ -101,8 +101,8 @@
                         <p style="font-size:0.5rem;">{{productDetail.ORG_NAME}}</p>
                         <p style="font-size:0.4rem; color:#999999 ">隶属于 {{productDetail.ORG_NAME}} </p>
                         <div style="font-size: 0;padding: 3px 0">
-                            <img class="start" v-for="i in productDetail.ORG_LEVEL" src="../../images/img/account_icon_star1.png" alt="">
-                            <img class="start" v-for="i in (5 - productDetail.ORG_LEVEL)" src="../../images/img/account_icon_star.png" alt="">
+                            <img class="start" v-for="i in productDetail.ORG_LEVEL" src="../../assets/images/img/account_icon_star1.png" alt="">
+                            <img class="start" v-for="i in (5 - productDetail.ORG_LEVEL)" src="../../assets/images/img/account_icon_star.png" alt="">
                         </div>
                         <p style="font-size:0.4rem;color:#999999">比财评级依据产品属性和银行运营情况综合评定</p>
                     </div>
@@ -126,19 +126,19 @@
                     <ul class="contentbottom2content contenttop" style="height:.5rem;">
                         <li class="contentbottom2contentleft">
                             <div>
-                                <img src="../../images/img/platform@2x.png" alt="">
+                                <img src="../../assets/images/img/platform@2x.png" alt="">
                             </div>
                             <p>专业平台</p>
                         </li>
                         <li class="contentbottom2contentleft">
                             <div>
-                                <img src="../../images/img/account_bottom_label2@2x.png" alt="">
+                                <img src="../../assets/images/img/account_bottom_label2@2x.png" alt="">
                             </div>
                             <p>银行直签</p>
                         </li>
                         <li class="contentbottom2contentleft">
                             <div>
-                                <img src="../../images/img/account_bottom_label3@2x.png" alt="">
+                                <img src="../../assets/images/img/account_bottom_label3@2x.png" alt="">
                             </div>
                             <p>安全保障</p>
                         </li>
@@ -155,8 +155,8 @@
     </div>
 </template>
 <script>
-import { API } from "../../plugin/request/api";
-import Bus from "../../common/bus";
+import { API,WatchApi } from "../../service/api";
+import Bus from "../../plugin/bus";
 import { PageName, imgSrc, LsName, BusName } from "../../Constant";
 import util from "../../common/utils/util";
 
@@ -347,7 +347,7 @@ export default {
       };
       if (type == 1) {
         // 去安全购买
-        API.watch.watchApi({
+          WatchApi.watch.watchApi({
           FUNCTION_ID: "ptb0A002",
           REMARK_DATA: "异业合作-产品详情页-购买-安全购买", // 中文备注
           FROM_ID: this.proID // 产品ID、机构ID
@@ -377,7 +377,7 @@ export default {
         }
       } else {
         // 预约 得先登录
-        API.watch.watchApi({
+          WatchApi.watch.watchApi({
           FUNCTION_ID: "ptb0A002",
           REMARK_DATA: "异业合作-产品详情页-购买-预约下期", // 中文备注
           FROM_ID: this.proID // 产品ID、机构ID
@@ -515,7 +515,7 @@ export default {
     }
 
     .banner .bannercontent .bannerbottom .bannerbottomfirst {
-        background-image: url(../../images/img/icon@2x.png);
+        background-image: url(../../assets/images/img/icon@2x.png);
         background-repeat: no-repeat;
         background-position: 0.1rem;
         background-size: 0.5rem;
@@ -597,7 +597,7 @@ export default {
 
     .contentbottom2 .contentbottom2main {
         margin-top: -0.3rem;
-        background-image: url(../../images/img/logo@2x.png);
+        background-image: url(../../assets/images/img/logo@2x.png);
         background-repeat: no-repeat;
         background-position: 0.3rem 0.05rem;
         background-size: 0.5rem 0.5rem;
@@ -647,7 +647,7 @@ export default {
     .baozhang {
         text-align: center;
         font-size: 0.4rem;
-        background-image: url(../../images/img/icon_dunpai@2x.png);
+        background-image: url(../../assets/images/img/icon_dunpai@2x.png);
         background-repeat: no-repeat;
         background-size: 0.5rem 0.5rem;
         background-position: 20%;
@@ -759,6 +759,6 @@ export default {
 
     }
     .p-color{ background:#f9fbff; padding-bottom:px2rem(25); padding-top:px2rem(.5);}
-    .p-icon{ width:22px; height:22px; background:url("../../images/img/p-safe@2x.png") no-repeat 0 0; background-size: 100%; position:relative; top:px2rem(6); margin-right: px2rem(4)}
+    .p-icon{ width:22px; height:22px; background:url("../../assets/images/img/p-safe@2x.png") no-repeat 0 0; background-size: 100%; position:relative; top:px2rem(6); margin-right: px2rem(4)}
 </style>
 

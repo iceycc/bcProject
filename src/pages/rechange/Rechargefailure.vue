@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="充值"></app-bar>
         <div class="chattuimg">
-            <img src="../../images/img/buyfail@2x.png" alt="">
+            <img src="../../assets/images/img/buyfail@2x.png" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，充值失败!</h2>

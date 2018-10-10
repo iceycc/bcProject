@@ -72,10 +72,10 @@
     </div>
 </template>
 <script>
-import { API } from "../../plugin/request/api";
+import { API } from "../../service/api";
 import { LsName, PageName, BusName } from "../../Constant";
 import util from "../../common/utils/util";
-import Bus from "../../common/bus";
+import Bus from "../../plugin/bus";
 import { Loadmore } from "mint-ui";
 
 export default {

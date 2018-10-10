@@ -15,9 +15,9 @@
 </template>
 
 <script>
-    import Bus from './common/bus'
+    import Bus from './plugin/bus'
     import {BusName} from './Constant'
-    import {API} from "./plugin/request/api";
+    import {API} from "./service/api";
     import util from "./common/utils/util";
 
 

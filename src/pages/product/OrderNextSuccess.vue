@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="预约成功"></app-bar>
         <div class="chattuimg">
-            <img src="../../images/img/Verificationsuccess@2x.png" style="width:25%" alt="">
+            <img src="../../assets/images/img/Verificationsuccess@2x.png" style="width:25%" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>预约成功</h2>
@@ -13,8 +13,8 @@
 </template>
 <script>
     import util from '../../common/utils/util'
-    import {API} from "../../plugin/request/api"
-    import Bus from '../../common/bus'
+    import {WatchApi} from "../../service/api"
+    import Bus from '../../plugin/bus'
     import {BusName} from "../../Constant";
 
     export default {
@@ -28,7 +28,7 @@
         },
         methods:{
             goApp(){
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A009', // 点位
                     REMARK_DATA: '异异业合作-预约成功-下载比财', // 中文备注
                 })

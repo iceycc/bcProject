@@ -54,7 +54,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                        <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -95,8 +95,8 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
-    import Bus from '../../common/bus'
+    import {API,WatchApi} from "../../service/api";
+    import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
     import {util} from "../../common/utils/util";
@@ -122,9 +122,9 @@
                 paypass: '',
                 paypassLen: 0,
                 ifGet: false,
-                stepImg: require('../../images/img/account_icon_green2@2x.png'),
-                stepImg2: require('../../images/img/step2@2x.png'),
-                stepImg3: require('../../images/img/step3.png'),
+                stepImg: require('../../assets/images/img/account_icon_green2@2x.png'),
+                stepImg2: require('../../assets/images/img/step2@2x.png'),
+                stepImg3: require('../../assets/images/img/step3.png'),
                 errMsg: ''
 
             }
@@ -215,7 +215,7 @@
                 })
             },
             subumit() {
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A005', // 点位
                     REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
                 })

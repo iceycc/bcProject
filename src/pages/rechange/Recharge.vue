@@ -48,7 +48,7 @@
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
-                    <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                    <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
                 <section class="field_row_wrap">
                     <p class="field_row_key">
@@ -71,11 +71,11 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import AppBar from '../../components/header/AppBar'
     import {HOST, LsName} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
     import {util} from "../../common/utils/util";
     import {Mixin, UtilMixin} from '../../common/mixin/mixin'
@@ -384,7 +384,7 @@
     .bang {
         margin-left: 0.5rem;
         margin-top: 0.5rem;
-        background: url(../../images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/img/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
         font-size: 0.4rem;
         color: #808080;
@@ -393,7 +393,7 @@
     }
 
     .no {
-        background: url(../../images/img/onagree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/img/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
     }
 

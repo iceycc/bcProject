@@ -28,8 +28,8 @@
 <script>
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import {API} from "../../plugin/request/api";
-    import Bus from '../../common/bus'
+    import {API} from "../../service/api";
+    import Bus from '../../plugin/bus'
     import {PageName, BusName, LsName} from "../../Constant";
     import {util} from "../../common/utils/util";
 
@@ -50,7 +50,7 @@
                 tel:'',
                 disable:false,
                 codeText:'获取验证码',
-                time:5
+                time:60
             }
         },
         created() {
@@ -116,6 +116,7 @@
                     Bus.$emit(BusName.showToast, '验证码发送成功')
                     this.params.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 }, err => {
+                    clearInterval(timer)
                     this.codeText = '重新发送'
                     this.disable = false
                     console.log(err);

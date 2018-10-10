@@ -126,8 +126,8 @@
 <script>
     import {util} from "../../common/utils/util";
     import {PageName, BusName, HOST} from "../../Constant";
-    import {API} from "../../plugin/request/api";
-    import Bus from "../../common/bus"
+    import {API,WatchApi} from "../../service/api";
+    import Bus from "../../plugin/bus"
     import JsSelect from '../../components/commons/JsSelect'
     import EXIF from 'exif-js'
 
@@ -138,9 +138,9 @@
                 showType: 0,
                 imgStyle1: 'width:30%;vertical-align: middle',
                 imgStyle2: 'width:30%;vertical-align: middle;',
-                stepImg: require('../../images/img/account_icon_green2@2x.png'),
-                stepImg2: require('../../images/img/step2@2x.png'),
-                stepImg3: require('../../images/img/step3.png'),
+                stepImg: require('../../assets/images/img/account_icon_green2@2x.png'),
+                stepImg2: require('../../assets/images/img/step2@2x.png'),
+                stepImg3: require('../../assets/images/img/step3.png'),
                 test1: '',
                 test2: '',
                 agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
@@ -154,10 +154,10 @@
                     memberId: null,
                     phoneNum: null
                 },
-                preSrc1: require('../../images/img/cameracopy@2x.png'),
-                preSrc2: require('../../images/img/cameracopy@2x.png'),
-                picZheng: require('../../images/id-zheng.jpg'),
-                picFan: require('../../images/id-fan.jpg'),
+                preSrc1: require('../../assets/images/img/cameracopy@2x.png'),
+                preSrc2: require('../../assets/images/img/cameracopy@2x.png'),
+                picZheng: require('../../assets/images/id-zheng.jpg'),
+                picFan: require('../../assets/images/id-fan.jpg'),
                 job: [
                     {name: '国家机关、社会组织、企事业单位负责人', value: '0'},
                     {name: '科、教、工、贸等专业技术人员', value: '1'},
@@ -287,7 +287,7 @@
                 this.agree = !this.agree
             },
             doNext() {
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A003', // 点位
                     REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
                 })
@@ -607,7 +607,7 @@
 
     .bang {
         margin-left: 0.5rem;
-        background: url(../../images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/img/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
         font-size: 0.35rem;
         color: #808080;
@@ -616,7 +616,7 @@
     }
 
     .no {
-        background: url(../../images/img/onagree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/img/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
     }
 

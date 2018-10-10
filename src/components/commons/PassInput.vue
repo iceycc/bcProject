@@ -8,7 +8,7 @@
     </div>
 </template>
 <script>
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import {HOST, LsName} from "../../Constant";
     import util from '../../common/utils/util'
 

@@ -6,8 +6,7 @@ import VueRouter from 'vue-router'
 import PageComponents from '../pages/index'
 import {BusName, LsName, PageName} from '../Constant'
 import util from "../common/utils/util";
-import Bus from '../common/bus/index'
-import {Indicator} from 'mint-ui'
+import Bus from '../plugin/bus/index'
 
 Vue.use(VueRouter)
 
@@ -35,7 +34,6 @@ let routes = [
     }
 ]
 
-addRouter(PageName.testLogin, {keepAlive: false, title: 'testLogin', needLogin: false});
 
 /**
  * buy

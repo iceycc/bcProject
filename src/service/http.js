@@ -1,8 +1,8 @@
-import axios from './_axios'
-import Bus from '../../common/bus'
-import {BusName, PageName,LsName} from "../../Constant";
-import {util} from "../../common/utils/util";
-import Router from '../../router/index'
+import axios from '../plugin/request/_axios'
+import Bus from '../plugin/bus/index'
+import {BusName, PageName,LsName} from "../Constant";
+import {util} from "../common/utils/util";
+import Router from '../router/index'
 
 export default {
     // POST

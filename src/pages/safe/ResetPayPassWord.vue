@@ -30,7 +30,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                        <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -73,9 +73,9 @@
 <script>
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import PassInput from '../../components/commons/PassInput'
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import {PageName, BusName, LsName} from "../../Constant";
     import util from "../../common/utils/util";
 
@@ -193,6 +193,7 @@
                     this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                     console.log(this.MESSAGE_TOKEN);
                 }, err => {
+                    clearInterval(timer)
                     this.codeText = '重新发送'
                     this.disable = false
                     console.log(err);

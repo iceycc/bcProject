@@ -25,7 +25,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../images/img/icon_dunpai@2x.png" alt="">
+                        <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -55,9 +55,9 @@
     import BankSelect from '../../components/commons/BankSelect'
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import {imgSrc, BusName, LsName,PageName} from "../../Constant";
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import util from "../../common/utils/util";
     import PassInput from '../../components/commons/PassInput'
     import {Mixin} from '../../common/mixin/mixin'

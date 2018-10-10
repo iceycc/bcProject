@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="提现失败"></app-bar>
         <div class="chattuimg">
-            <img src="../../images/img/buyfail@2x.png" alt="">
+            <img src="../../assets/images/img/buyfail@2x.png" alt="">
             <h2>很抱歉，提现失败!</h2>
             <p class="err-msg">{{errMsg}}</p>
         </div>

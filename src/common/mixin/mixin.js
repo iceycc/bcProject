@@ -1,7 +1,7 @@
 
 import util from "../utils/util";
 import {LsName,PageName} from "../../Constant";
-import {API} from "../../plugin/request/api";
+import {API} from "../../service/api";
 
 export const Mixin = {
     beforeCreate(){

@@ -58,9 +58,9 @@
 </template>
 <script>
     import util from '../../common/utils/util'
-    import {API} from '../../plugin/request/api'
+    import {API} from '../../service/api'
     import {LsName, BusName, PageName} from "../../Constant";
-    import Bus from '../../common/bus'
+    import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
     import {Mixin} from '../../common/mixin/mixin'
 
@@ -247,7 +247,7 @@
     }
 
     .opening_box section .limit {
-        background-image: url(../../images/img/problom2@2x.png);
+        background-image: url(../../assets/images/img/problom2@2x.png);
         background-size: 12px 12px;
         background-position: 0 2.5px;
         background-repeat: no-repeat;

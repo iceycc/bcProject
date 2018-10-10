@@ -2,7 +2,7 @@
     <div id="app" class="app">
         <app-bar title="购买"></app-bar>
         <div class="buysuccessimg">
-            <img src="../../images/img/Verificationsuccess@2x.png" alt="">
+            <img src="../../assets/images/img/Verificationsuccess@2x.png" alt="">
             <p>购买成功</p>
         </div>
         <div class="buysuccessdetail">
@@ -33,8 +33,8 @@
 </template>
 <script>
     import util from "../../common/utils/util";
-    import {API} from "../../plugin/request/api";
-    import Bus from '../../common/bus'
+    import {WatchApi} from "../../service/api";
+    import Bus from '../../plugin/bus'
     import {BusName, LsName} from "../../Constant";
 
     export default {
@@ -50,7 +50,7 @@
         },
         methods: {
             goApp() {
-                API.watch.watchApi({
+                WatchApi.watch.watchApi({
                     FUNCTION_ID: 'ptb0A010', // 点位
                     REMARK_DATA: '异业合作-购买成功-下载比财', // 中文备注
                 })

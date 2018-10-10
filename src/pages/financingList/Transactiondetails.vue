@@ -46,9 +46,9 @@
     </div>
 </template>
 <script>
-    import {API} from "../../plugin/request/api";
+    import {API} from "../../service/api";
     import {BusName} from "../../Constant";
-    import Bus from "../../common/bus";
+    import Bus from "../../plugin/bus";
     import {Loadmore} from "mint-ui";
 
     export default {
@@ -97,21 +97,21 @@
             loadPageList: function () {
                 this.searchCondition.pageNo = "1";
                 this.allLoaded = false;
+                let index = this.nowIndex
+                if(this.nowIndex == 3) {
+                    index = 0
+                }
                 this.endDate = this.getLastMonthYestdy(0);
-                this.startDate = this.getLastMonthYestdy(this.nowIndex + 1);
+                this.startDate = this.getLastMonthYestdy(index + 1);
                 this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
 
             },
             more: function () {
-                this.endDate = this.getLastMonthYestdy(0);
-                this.startDate = this.getLastMonthYestdy(this.nowIndex + 1);
                 // 分页查询
                 this.searchCondition.pageNo =
                         "" + (parseInt(this.searchCondition.pageNo) + 1);
                 let data = {
                     currentPage: this.searchCondition.pageNo,
-                    // START_DATE: "2018-01-01",
-                    // END_DATE:"2018-02-25"
                     START_DATE: this.startDate,
                     END_DATE: this.endDate
                 };
@@ -128,8 +128,6 @@
             apiQryTradeHis(start, end) {
                 let data = {
                     currentPage: "1",
-                    // START_DATE: "2018-01-01",
-                    // END_DATE:"2018-02-25"
                     START_DATE: start,
                     END_DATE: end
                 };
@@ -154,8 +152,6 @@
                 this.nowIndex = index;
                 this.pageList = []
                 this.loadPageList();
-                this.endDate = this.getLastMonthYestdy(0);
-                this.startDate = this.getLastMonthYestdy(1);
             },
             setDate() {
                 this.$picker.show({
@@ -348,7 +344,7 @@
         display: block;
         margin-top: px2rem(10);
         z-index: 2;
-        background: url("../../images/img/icon_shaixuan@2x.png") no-repeat;
+        background: url("../../assets/images/img/icon_shaixuan@2x.png") no-repeat;
         background-size: 100%;
     }
 
@@ -389,7 +385,7 @@
                 height: px2rem(22);
                 display: block;
                 z-index: 2;
-                background: url("../../images/img/icon_shaixuan@2x.png") no-repeat;
+                background: url("../../assets/images/img/icon_shaixuan@2x.png") no-repeat;
                 background-size: 100%;
                 top: 0;
                 left: 0;
@@ -403,7 +399,7 @@
                 height: px2rem(22);
                 display: block;
                 z-index: 2;
-                background: url("../../images/img/icon_shaixuan-1@2x.png") no-repeat;
+                background: url("../../assets/images/img/icon_shaixuan-1@2x.png") no-repeat;
                 background-size: 100%;
                 top: 0;
                 left: 0;
