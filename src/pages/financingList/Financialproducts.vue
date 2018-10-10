@@ -251,7 +251,6 @@ export default {
   -webkit-transform: rotate(228deg);
   border-left: px2rem(2) solid transparent;
   border-bottom: px2rem(2) solid transparent;
-  z-index: 8;
 }
 .wrap {
   width: 100%;

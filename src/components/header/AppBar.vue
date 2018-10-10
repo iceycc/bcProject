@@ -56,6 +56,7 @@
         top: 0.2rem;
         width: 1rem;
         height: 0.9rem;
+        z-index: 2;
         img{
             width: 0.3rem;
         }
