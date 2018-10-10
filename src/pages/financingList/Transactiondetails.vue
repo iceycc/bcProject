@@ -150,10 +150,9 @@
     </div>
 </template>
 <script>
-import { API } from "../../request/api";
-import { LsName, PageName, BusName } from "../../Constant";
-import util from "../../common/utils/util";
-import Bus from "../../common/js/bus";
+import { API } from "@/request/api";
+import { BusName } from "@/Constant";
+import Bus from "@/common/js/bus";
 import { Loadmore } from "mint-ui";
 
 export default {
