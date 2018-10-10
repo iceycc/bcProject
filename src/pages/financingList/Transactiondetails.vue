@@ -374,10 +374,11 @@ export default {
           if (this.pageList2.length < this.searchCondition2.pageSize) {
             this.allLoaded = true;
           }
-          if (this.pageList1.length <= 0) {
+          if (this.pageList2.length <= 0) {
             Bus.$emit(BusName.showToast, "暂无数据");
           }
         } else if (this.nowIndex == 3) {
+            
           this.pageList3 = res.PAGE.retList;
           if (this.pageList3.length < this.searchCondition3.pageSize) {
             this.allLoaded = true;
