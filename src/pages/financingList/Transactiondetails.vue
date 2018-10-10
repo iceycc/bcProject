@@ -165,8 +165,7 @@ export default {
         pageSize: "10"
       },
 
-      pageList: [
-      ],
+      pageList: [],
       allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
       scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 
@@ -197,19 +196,7 @@ export default {
       tabsParam: ["1个月", "2个月", "3个月", " "], //（这个也可以用对象key，value来实现）
       nowIndex: 0, //默认第一个tab为激活状态
       startDate: "",
-      endDate: "",
-      tradeData: [
-        {
-          TRANS_AMT: "交易金额",
-          TRANS_TIME: "交易时间",
-          TRANS_TYPE_NAME: "交易类型名称"
-        },
-        {
-          TRANS_AMT: "交易金额",
-          TRANS_TIME: "交易时间",
-          TRANS_TYPE_NAME: "交易类型名称"
-        }
-      ]
+      endDate: ""
     };
   },
   created() {},
@@ -386,10 +373,11 @@ export default {
           if (this.pageList2.length < this.searchCondition2.pageSize) {
             this.allLoaded = true;
           }
-          if (this.pageList1.length <= 0) {
+          if (this.pageList2.length <= 0) {
             Bus.$emit(BusName.showToast, "暂无数据");
           }
         } else if (this.nowIndex == 3) {
+            
           this.pageList3 = res.PAGE.retList;
           if (this.pageList3.length < this.searchCondition3.pageSize) {
             this.allLoaded = true;
