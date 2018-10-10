@@ -27,18 +27,18 @@
                 <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
                     <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                                 :auto-fill="false" ref="loadmore">
-                    <div>
-                        <ul>
-                            <li v-for="item,index in listdata" :key="index">
-                                <h5><span>{{item.TYPE ==11?'充值':'提现'}}</span></h5>
-                                <p class="p-bottom">
-                                    <span>{{item.OPERA_TIME}}</span>
-                                    <em>¥{{item.TRANS_AMT}}</em>
-                                </p>
-                            </li>
+                        <div>
+                            <ul>
+                                <li v-for="item,index in listdata" :key="index">
+                                    <h5><span>{{item.TYPE ==11?'充值':'提现'}}</span></h5>
+                                    <p class="p-bottom">
+                                        <span>{{item.OPERA_TIME}}</span>
+                                        <em>¥{{item.TRANS_AMT}}</em>
+                                    </p>
+                                </li>
 
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
                     </v-loadmore>
                 </div>
             </div>
@@ -47,10 +47,9 @@
     </div>
 </template>
 <script>
-    import {API} from "../../request/api";
-    import {LsName, PageName, BusName} from "../../Constant";
-    import util from "../../common/utils/util";
-    import Bus from '../../common/js/bus';
+    import {API} from "@/request/api";
+    import { BusName} from "@/Constant";
+    import Bus from '@/common/js/bus';
     import {Loadmore} from "mint-ui";
 
     export default {
@@ -60,10 +59,10 @@
                 nowIndex: 3,//默认第一个tab为激活状态
                 startDate: '',
                 endDate: '',
-                listdata:[],
+                listdata: [],
                 allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-                scrollMode:'auto',
-                currentPage:1
+                scrollMode: 'auto',
+                currentPage: 1
             }
         },
         components: {
@@ -75,10 +74,16 @@
             this.startDate = this.getLastMonthYestdy(1);
         },
         mounted() {
-           this.getDataList()
+            this.getDataList()
         },
         methods: {
-            loadTop(){
+            initHandle() {
+                this.allLoaded = false;
+                this.listdata = []
+                this.currentPage = 1
+                this.getDataList()
+            },
+            loadTop() {
                 console.log('下拉加载');
                 //组件提供的下拉触发方法
                 //下拉加载
@@ -92,39 +97,42 @@
                 this.more();// 上拉触发的分页查询
                 this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
             },
-            more(){
+            more() {
                 console.log(1);
+                if (this.allLoaded) {
+                    return
+                }
                 this.currentPage++
                 this.getDataList(this.currentPage)
             },
-            getDataList(page =1){
+            getDataList(page = 1) {
                 let params = {
-                    currentPage:page + '',
-                    QRY_TYPE:'0',
-                    START_DATE:this.startDate,
-                    END_DATE:this.endDate
+                    currentPage: page + '',
+                    QRY_TYPE: '0',
+                    START_DATE: this.startDate,
+                    END_DATE: this.endDate
                 }
-                API.account.apiQryRechCashHis(params,res=>{
-                    if(res.PAGE.retList.length==0){
+                API.account.apiQryRechCashHis(params, res => {
+                    if (res.PAGE.retList.length == 0) {
                         this.allLoaded = true
                         return
                     }
-                    else if(page >1){
+                    else if (page > 1) {
                         this.listdata = this.listdata.concat(res.PAGE.retList)
                     }
-                    else{
+                    else {
                         this.listdata = res.PAGE.retList
                     }
                     // this.allLoaded = false;
                 })
             },
             toggleTabs(index) {
-
                 this.nowIndex = index
-                if(index==3) return
+                if (index == 3) return
                 this.endDate = this.getLastMonthYestdy(0);
-                this.startDate = this.getLastMonthYestdy(index+1);
-                this.getDataList()
+                this.startDate = this.getLastMonthYestdy(index + 1);
+                this.initHandle()
+
             },
             setDate() {
                 this.$picker.show({
@@ -278,7 +286,7 @@
                 return datastr;
             },
             query() {
-                if(!this.checkTime(this.startDate, this.endDate)) return
+                if (!this.checkTime(this.startDate, this.endDate)) return
                 this.getDataList()
             }
         }
