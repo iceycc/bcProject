@@ -114,5 +114,6 @@ export const LsName = {
     goBuy: 'goBuy', // goBuy
     ORG_ID:'ORG_ID',
     Infos:'Infos',
+    PRD_TYPE:'PRD_TYPE',
 }
 

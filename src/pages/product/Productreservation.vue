@@ -60,7 +60,7 @@
                 </div>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">起购金额</span>
-                    <span class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT}}</span>
+                    <span class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT }}</span>
                 </div>
                 <div class="bannercontent">
                     <span class="bannercontenttitle">递增金额</span>
@@ -159,6 +159,7 @@ import { API } from "../../request/api";
 import Bus from "../../common/js/bus";
 import { PageName, imgSrc, LsName, BusName } from "../../Constant";
 import util from "../../common/utils/util";
+
 // import {Mixin} from '../../common/utils/mixin'
 
 export default {
@@ -271,12 +272,12 @@ export default {
         let c = a.substring(b + 1, a.length);
         if (c.length > 3) {
           this.interest =
-            "￥" + this.numFilter(e) + "~" + "￥" + this.numFilter1(e);
+            "￥" +  util.formatNum( ""+(this.numFilter(e)) )  + "~" + "￥" + util.formatNum( ""+(this.numFilter1(e)) );
         } else {
-          this.interest = "￥" + this.numFilter(e);
+          this.interest = "￥" + util.formatNum( ""+(this.numFilter(e)));
         }
       } else {
-        this.interest = "￥" + e;
+        this.interest = "￥" +util.formatNum( ""+ e);
       }
     },
     getFocus() {
@@ -293,20 +294,39 @@ export default {
         // 判断起购金额是否大于默认金额
         let str = this.productDetail.TXT_MIN_AMOUNT;
         let invest = str.substring(0, str.length - 1);
-        if (invest > 3000) {
-          this.invest = invest;
-          this.getInterest(
-            invest,
-            this.productDetail.RATE,
-            this.productDetail.PERIOD
-          );
-        } else {
-          this.invest = "3000";
-          this.getInterest(
-            "3000",
-            this.productDetail.RATE,
-            this.productDetail.PERIOD
-          );
+        util.storage.session.set(LsName.PRD_TYPE, this.productDetail.PRD_TYPE);
+        if(this.productDetail.PRD_TYPE==2){
+             if (invest > 3000) {
+                this.invest = invest;
+                this.getInterest(
+                    invest,
+                    this.productDetail.RATE,
+                    this.productDetail.PERIOD
+                );
+                } else {
+                this.invest = "3000";
+                this.getInterest(
+                    "3000",
+                    this.productDetail.RATE,
+                    this.productDetail.PERIOD
+                );
+            }     
+        }else{
+            if (invest > 1000) {
+                this.invest = invest;
+                this.getInterest(
+                    invest,
+                    this.productDetail.RATE,
+                    this.productDetail.PERIOD
+                );
+                } else {
+                this.invest = "1000";
+                this.getInterest(
+                    "1000",
+                    this.productDetail.RATE,
+                    this.productDetail.PERIOD
+                );
+            }
         }
 
         this.type = res.IS_ENABLED;
