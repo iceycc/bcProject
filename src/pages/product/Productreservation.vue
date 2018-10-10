@@ -264,7 +264,6 @@ export default {
     },
     getInterest(cash, profit, day) {
       let e = cash * profit / 100 * day / 360;
-      console.log(e);
       let a = cash * profit / 100 * day / 360;
       a = a + "";
       let b = a.indexOf(".");
@@ -393,7 +392,6 @@ export default {
           API.product.apiSaveSubscribeInfo(
             data,
             res => {
-              console.log(res);
               this.$router.push({
                 name: PageName.OrderNextSuccess,
                 query: {
