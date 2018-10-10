@@ -82,8 +82,8 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
-    import {API} from "../../request/api";
-    import {LsName, PageName, imgSrc} from "../../Constant";
+    import {API} from "../../plugin/request/api";
+    import { PageName, imgSrc} from "../../Constant";
 
     export default {
         name: "bankDetail",

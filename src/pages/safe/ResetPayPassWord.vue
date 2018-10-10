@@ -73,9 +73,9 @@
 <script>
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import {API} from "../../request/api";
+    import {API} from "../../plugin/request/api";
     import PassInput from '../../components/commons/PassInput'
-    import Bus from '../../common/js/bus'
+    import Bus from '../../common/bus'
     import {PageName, BusName, LsName} from "../../Constant";
     import util from "../../common/utils/util";
 

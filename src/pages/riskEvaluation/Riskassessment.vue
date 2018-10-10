@@ -12,7 +12,7 @@
 </template>
 <script>
     import {PageName} from "../../Constant";
-    import {API} from "../../request/api";
+    import {API} from "../../plugin/request/api";
 
     export default {
         methods: {

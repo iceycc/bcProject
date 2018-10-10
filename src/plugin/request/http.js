@@ -1,9 +1,8 @@
 import axios from './_axios'
-import Bus from '../common/js/bus'
-import {BusName, PageName} from "../Constant";
-import {util} from "../common/utils/util";
-import {LsName} from '../Constant'
-import Router from '../router/index'
+import Bus from '../../common/bus'
+import {BusName, PageName,LsName} from "../../Constant";
+import {util} from "../../common/utils/util";
+import Router from '../../router/index'
 
 export default {
     // POST

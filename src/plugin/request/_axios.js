@@ -1,10 +1,6 @@
 import axios from 'axios'
 import {Indicator} from 'mint-ui';
-import Bus from "../common/js/bus";
-import {BusName} from "../Constant";
-
 // http request 拦截器  第一层拦截
-
 axios.interceptors.request.use(
         config => {
             Indicator.open({

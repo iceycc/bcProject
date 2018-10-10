@@ -20,7 +20,7 @@
 </template>
 <script>
     import {PageName} from "../../Constant";
-    import {UtilMixin} from '../../common/utils/mixin'
+    import {UtilMixin} from '../../common/mixin/mixin'
 
     export default {
         data() {

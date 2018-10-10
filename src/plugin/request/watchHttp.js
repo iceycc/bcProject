@@ -1,7 +1,6 @@
 import axios from 'axios'
-import {util} from "../common/utils/util";
-import {LsName} from '../Constant'
-import {HOST} from "../Constant";
+import {util} from "../../common/utils/util";
+import {LsName,HOST} from '../../Constant'
 let config = {
     baseURL:HOST
 }

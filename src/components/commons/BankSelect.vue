@@ -44,7 +44,7 @@
 <script>
     // const Letter = [A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
     import {BusName, LsName} from "../../Constant";
-    import Bus from '../../common/js/bus'
+    import Bus from '../../common/bus'
 
 
     const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',

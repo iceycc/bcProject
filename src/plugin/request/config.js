@@ -8,7 +8,7 @@ import Qs from 'qs';
  *
  * 2. https://www.npmjs.com/package/qs
  */
-import {HOST} from "../Constant";
+import {HOST} from "../../Constant";
 // const BaseUrl = 'http://192.168.10.154:8080/finsuit'
 export default {
     method: 'post',

@@ -126,8 +126,8 @@
 <script>
     import {util} from "../../common/utils/util";
     import {PageName, BusName, HOST} from "../../Constant";
-    import {API} from "../../request/api";
-    import Bus from "../../common/js/bus"
+    import {API} from "../../plugin/request/api";
+    import Bus from "../../common/bus"
     import JsSelect from '../../components/commons/JsSelect'
     import EXIF from 'exif-js'
 

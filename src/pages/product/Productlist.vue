@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-    import {API} from "../../request/api";
+    import {API} from "../../plugin/request/api";
     import {LsName, PageName,imgSrc} from "../../Constant";
     import util from "../../common/utils/util";
 

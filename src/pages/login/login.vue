@@ -41,12 +41,11 @@
 </template>
 <script>
     import util from '../../common/utils/util'
-    import {API} from '../../request/api'
+    import {API} from '../../plugin/request/api'
     import {LsName, BusName, PageName} from "../../Constant";
-    import Bus from '../../common/js/bus'
-    import {HOST} from "../../Constant";
+    import Bus from '../../common/bus'
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin, UtilMixin} from '../../common/utils/mixin'
+    import {Mixin, UtilMixin} from '../../common/mixin/mixin'
 
     let watchPassPluginPassTimer
 

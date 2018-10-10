@@ -95,12 +95,12 @@
     </div>
 </template>
 <script>
-    import {API} from "../../request/api";
-    import Bus from '../../common/js/bus'
+    import {API} from "../../plugin/request/api";
+    import Bus from '../../common/bus'
     import PassInput from '../../components/commons/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
     import {util} from "../../common/utils/util";
-    import {Mixin} from '../../common/utils/mixin'
+    import {Mixin} from '../../common/mixin/mixin'
 
 
     export default {

@@ -55,12 +55,12 @@
     import BankSelect from '../../components/commons/BankSelect'
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import {API} from "../../request/api";
+    import {API} from "../../plugin/request/api";
     import {imgSrc, BusName, LsName,PageName} from "../../Constant";
-    import Bus from '../../common/js/bus'
+    import Bus from '../../common/bus'
     import util from "../../common/utils/util";
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin} from '../../common/utils/mixin'
+    import {Mixin} from '../../common/mixin/mixin'
 
     export default {
         name: "changeBank",

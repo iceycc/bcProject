@@ -59,10 +59,10 @@
     </div>
 </template>
 <script>
-    import {API} from "../../request/api";
+    import {API} from "../../plugin/request/api";
     import {PageName, BusName, LsName} from "../../Constant";
     import {util} from "../../common/utils/util";
-    import Bus from '../../common/js/bus'
+    import Bus from '../../common/bus'
     import BankSelect from '../../components/commons/BankSelect'
     import {imgSrc} from "../../Constant";
 

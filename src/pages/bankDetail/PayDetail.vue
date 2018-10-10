@@ -47,9 +47,9 @@
     </div>
 </template>
 <script>
-    import {API} from "@/request/api";
-    import { BusName} from "@/Constant";
-    import Bus from '@/common/js/bus';
+    import {API} from "../../plugin/request/api";
+    import { BusName} from "../../Constant";
+    import Bus from '../../common/bus';
     import {Loadmore} from "mint-ui";
 
     export default {

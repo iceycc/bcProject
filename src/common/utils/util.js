@@ -1,8 +1,6 @@
 // import Crypto from "crypto-js";
 
 import {AppUrl} from "../../Constant";
-import Bus from '../js/bus'
-import {BusName} from "../../Constant";
 
 /*========本地存储===========*/
 const STORE_PREFIX = '_MX_'

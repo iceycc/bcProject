@@ -15,8 +15,6 @@
     </div>
 </template>
 <script>
-    import util from "../../common/utils/util";
-    import {LsName} from "../../Constant";
 
 
     export default {

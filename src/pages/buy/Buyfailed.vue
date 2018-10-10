@@ -12,8 +12,8 @@
     </div>
 </template>
 <script>
-    import {API} from "../../request/api";
-    import Bus from '../../common/js/bus'
+    import {API} from "../../plugin/request/api";
+    import Bus from '../../common/bus'
     import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
 

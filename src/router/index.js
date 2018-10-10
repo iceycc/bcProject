@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 import PageComponents from '../pages/index'
 import {BusName, LsName, PageName} from '../Constant'
 import util from "../common/utils/util";
-import Bus from '../common/js/bus'
+import Bus from '../common/bus/index'
 import {Indicator} from 'mint-ui'
 
 Vue.use(VueRouter)
