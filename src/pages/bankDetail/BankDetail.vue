@@ -31,7 +31,7 @@
                     <p class="money" v-if="pass">{{bankDetail.ACC_REST}}</p>
                     <p class="money" v-else>****</p>
                 </div>
-                <span class="ic-right" @click="goPage('PayDetail')">
+                <span class="ic-right" @click="goPage(toPageName.BankBalance)">
                     明细
                     <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                 </span>
@@ -57,7 +57,7 @@
                         ¥{{bankDetail.lcAsset.API_FINA_ASSET | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
                     </span>
             </section>
-            <ul v-if="licaiShow">
+            <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
                 <li class="financing-li" v-for="item in proList">
                     <span class="li-left">
                         {{item.PRD_NAME}}</span>
@@ -67,7 +67,7 @@
                 </li>
             </ul>
         </section>
-        <section class="more" @click="goPage('MoreService')">
+        <section class="more" @click="goPage(toPageName.MoreService)">
              <span class="more-left">
                         更多服务</span>
             <span class="more-right">
@@ -75,7 +75,7 @@
                     </span>
         </section>
         <p class="foot-text">
-            如有疑问请拔打银行客服电话95105588
+            如有疑问请拔打银行客服电话{{bankDetail.ORG_HOTLINE}}
         </p>
     </div>
 </template>
@@ -96,6 +96,11 @@
                 proList:[],
                 pass: true,
                 licaiShow: false,
+                toPageName: {
+                    BankBalance: PageName.BankBalance,
+                    MoreService: PageName.MoreService,
+                    Financialproducts: PageName.Financialproducts,
+                },
                 bankDetail: {
                     TOTAL_ASSET: '0.00', // 总资产(投资金额+可用余额)
                     TOTAL_AMOUNT: '0.00', // 投资总金额(不包括可用余额)
@@ -103,7 +108,8 @@
                     TOTAL_INCOME: '0.00',//	累计收益
                     YSD_INCOME: '0.00', // 昨日收益
                     EC_ACCOUNT_NO: '',
-                    lcAsset: ''
+                    lcAsset: '',
+                    ORG_HOTLINE:''
                 }
             }
         },
@@ -125,6 +131,7 @@
         methods: {
             goPage(pageName) {
                 console.log(pageName)
+
                 this.$router.push({
                     name: pageName
                 })
@@ -135,6 +142,8 @@
             getBankDetail() {
                 API.account.getMyInvest({}, (res) => {
                     this.bankDetail = res
+                })
+                API.account.apiQueryAccRest({}, (res) => {
                 })
             },
             // getMyInvesthandle(){

@@ -25,7 +25,7 @@ export const API = {
             return http.post(options, config, success, error)
         },
         //   回显2
-        apiGetUserLastCompleteStep(params,delMsg, success, error) {
+        apiGetUserLastCompleteStep(params, delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiGetUserLastCompleteStep',
                 params,
@@ -161,6 +161,19 @@ export const API = {
 
     },
     /**
+     * 提现相关
+     */
+    withdraw: {
+        // 提现openapi/biz/apiCash
+        apiCash(params, success, error) {
+            let options = {
+                url: '/openapi/biz/apiCash',
+                params
+            }
+            return http.post(options, config, success, error)
+        },
+    },
+    /**
      * risk 风险评估相关
      */
     risk: {
@@ -243,7 +256,7 @@ export const API = {
 
         },
         // 更换银行卡：openapi/comm/apiChangeBingCard
-        apiChangeBingCard(params,delMsg, success, error) {
+        apiChangeBingCard(params, delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiChangeBingCard',
                 params,
@@ -254,7 +267,7 @@ export const API = {
         },
         // 更换手机号
         // openapi/comm/apiChangePhoneNum
-        apiChangePhoneNum(params,delMsg, success, error) {
+        apiChangePhoneNum(params, delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiChangePhoneNum',
                 params,
@@ -264,7 +277,7 @@ export const API = {
 
         },
         // 更换支付密码：openapi/comm/apiUserResetPayPass
-        apiUserResetPayPass(params,delMsg, success, error) {
+        apiUserResetPayPass(params, delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiUserResetPayPass',
                 params,
@@ -301,7 +314,7 @@ export const API = {
      * 查询类
      */
     query: {
-        // openapi/comm/apiQueryBizStatus
+        // openapi/comm/apiQueryBizStatus 轮询查询状态
         apiQueryBizStatus(params, success, error) {
             let options = {
                 url: '/openapi/comm/apiQueryBizStatus',
@@ -314,13 +327,13 @@ export const API = {
     /**
      * 账户相关
      */
-    account:{
+    account: {
         // 电子列表
         apiBankList(params, success, error) {
             let options = {
                 url: 'openapi/bank/apiBankList',
                 params,
-                TYPE:'API_BANK_LIST'
+                TYPE: 'API_BANK_LIST'
             }
             return http.post(options, config, success, error)
         },
@@ -350,10 +363,20 @@ export const API = {
             }
             return http.post(options, config, success, error)
         },
+        // 账户明细 openapi/bank/apiQryRechCashHis
+        // /openapi/invest/apiQryRechCashHis
+        apiQryRechCashHis(params, success, error) {
+            let options = {
+                url: 'openapi/bank/apiQryRechCashHis',
+                params,
+            }
+            return http.post(options, config, success, error)
+        },
+
     },
 
     /**
-     * watch
+     * watch 用于埋点
      */
     watch: {
         watchApi(params, success, error) {
@@ -406,7 +429,6 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
-
 
 
     }

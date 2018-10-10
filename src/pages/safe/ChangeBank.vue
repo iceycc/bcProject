@@ -56,7 +56,7 @@
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
     import {API} from "../../request/api";
-    import {imgSrc, BusName,LsName} from "../../Constant";
+    import {imgSrc, BusName, LsName,PageName} from "../../Constant";
     import Bus from '../../common/js/bus'
     import util from "../../common/utils/util";
     import PassInput from '../../components/commons/PassInput'
@@ -77,11 +77,10 @@
                 AllBankListObj: {},
                 errMsg: '',
                 bankNo: '',
-                bankNameToNo:true,
-                params:{},
-
+                bankNameToNo: false,
+                params: {},
                 ifGet: false,
-                ifShow:false
+                ifShow: false
 
             }
         },
@@ -99,8 +98,8 @@
             this.getBankList()
             this.params = util.storage.session.get(LsName.Infos)
         },
-        watch:{
-            bankNo(n,o){
+        watch: {
+            bankNo(n, o) {
                 this.checkBankName(this.bankNo)
             },
             bankText(n, o) {
@@ -111,35 +110,32 @@
             getBank(val) {
                 this.bankText = val.name
             },
-            checkBankName(val) {
-                console.log('checkBankName',val);
-                // console.log('checkBankName',this.AllBankListObj);
+            checkBankName(val, fn) {
                 this.bankNameToNo = false
                 val = val.replace(/\s+/g, "")
                 let bankName
                 for (var i = 3; i < 10; i++) {
                     if (bankName = this.machBankName((val + '').slice(0, i))) {
-                        console.log(bankName);
-                        console.log(this.bankText);
                         if (bankName != this.bankText) {
-                            // Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
-                            this.bankNameToNo = true
                             return
                         }
+                        this.bankNameToNo = true
                         break
                     }
                 }
             },
             checkBankNo(val) {
-                console.log(val);
                 val = val.toString()
-                let reg = /\d{15}|\d{19}/
+                if (this.bankText == '请选择银行') {
+                    this.showErrMsg('请选择银行')
+                    return true
+                }
                 if (val == '') {
-                    Bus.$emit(BusName.showToast, '银行卡号不能为空')
+                    this.showErrMsg('银行卡号不能为空')
                     return true
                 }
                 else if (val.length < 15 || val.length > 19) {
-                    Bus.$emit(BusName.showToast, '银行卡号格式不正确')
+                    this.showErrMsg('银行卡号格式不正确')
                     return true
                 }
                 else {
@@ -171,22 +167,34 @@
                     })
                 })
             },
-            subumit(){
+            showErrMsg(msg) {
+                this.errMsg = msg;
+                setTimeout(() => {
+                    this.errMsg = '';
+                }, 2000)
+            },
+            subumit() {
                 let LoginPass = $('#change_bank_pay_pass').$getCiphertext()
                 let LoginPassLen = $('#change_bank_pay_pass').$getPasswordLength() - 0 || 0
                 let msg;
-                if (msg = util.Check.payPassLen(LoginPassLen)) return Bus.$emit(BusName.showToast, msg);
+                if (msg = util.Check.payPassLen(LoginPassLen)) {
+                    this.showErrMsg(msg)
+                    return
+                }
                 let data = {
-                    CARD_NO:this.bankNo,
-                    BANK_PAY_PW:LoginPass,
+                    CARD_NO: this.bankNo,
+                    BANK_PAY_PW: LoginPass,
                     ...this.params,
                 }
                 let delMsg = true
 
-                API.safe.apiChangeBingCard(data,delMsg,res=>{
-                    this.ifShow=false
-                },err=>{
-                    console.log('err>>>>>>>>1111',err);
+                API.safe.apiChangeBingCard(data, delMsg, res => {
+                    Bus.$emit(BusName.showToast,'更换银行卡成功')
+                    this.$router.push({
+                        name:PageName.MoreService
+                    })
+                }, err => {
+                    console.log('err>>>>>>>>1111', err);
                     this.errMsg = err
                     this.ifShow = false
                     util.storage.session.set('ChangeBankInfo', {
@@ -198,12 +206,12 @@
                 })
             },
             goNext() {
-                console.log('goNext>>',this.bankNameToNo);
-                if(this.checkBankNo(this.bankNo)) return
-                if(this.bankNameToNo){
-                    Bus.$emit(BusName.showToast, '银行卡和银行名称不匹配')
-                }else {
-                    this.ifShow=true
+                if (this.checkBankNo(this.bankNo)) return
+                console.log('goNext>>', this.bankNameToNo);
+                if (!this.bankNameToNo) {
+                    this.showErrMsg('银行卡和银行名称不匹配')
+                } else {
+                    this.ifShow = true
                 }
 
             }
@@ -269,6 +277,7 @@
         color: #8e8e8e;
         padding-top: px2rem(20);
     }
+
     .bgbox {
         width: 100%;
         height: 100%;

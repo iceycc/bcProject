@@ -154,7 +154,6 @@
                 this.data.PHONE_NUM = this.tel
                 let msg;
                 if (msg = util.Check.name(this.data.USER_REAL_NAME)) {
-
                    this.showErrMsg(msg)
                     return
                 }

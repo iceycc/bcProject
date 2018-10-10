@@ -1,19 +1,19 @@
 <template>
     <div class="app">
-        <app-bar title="充值"></app-bar>
-        <div class="rechargetitle">提现到{{ORG_NAME}}直销银行</div>
+        <app-bar title="提现"></app-bar>
+        <div class="rechargetitle">提现到{{CARD_BANK_NAME}}直销银行</div>
         <div class="minshengbank">
             <span class="minshengbankLogo"><img src="../../images/img/beijingbank@2x.png" style="width:75%"
                                                 alt=""></span>
-            {{ORG_NAME}}
+            {{CARD_BANK_NAME}}
         </div>
         <section class="inputAmount">
             <span class="Amount">金额</span>
             <input @change="checkMoney"
                    v-model="APPLY_AMOUN" type="number" placeholder="请输入金额">
         </section>
-        <p class="info">本卡当前余额55,899.00元 <span style="color:#389CFF ">全部提现</span></p>
-        <button class="tijiao" @click="doNext">确认充值</button>
+        <p class="info">本卡当前余额{{ACC_REST}}元 <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
+        <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
@@ -25,14 +25,14 @@
                     </p>
                     <div class="field_row_value">
                         <pass-input
-                                inputID="payPass"
+                                inputID="withdrawPayPass"
                         ></pass-input>
                     </div>
                     <p class="info">密码由数字组成，必须为6位</p>
                 </section>
                 <div class="btn">
                     <mt-button @click="show =!show" type="primary">取消</mt-button>
-                    <mt-button @click="doReCange" type="primary">提交</mt-button>
+                    <mt-button @click="doWithdraw" type="primary">提交</mt-button>
                 </div>
             </section>
         </section>
@@ -47,7 +47,7 @@
     import Bus from '../../common/js/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
     import {util} from "../../common/utils/util";
-    import {Mixin} from '../../common/utils/mixin'
+    import {Mixin, UtilMixin} from '../../common/utils/mixin'
 
     let time = 60
     let timer;
@@ -59,28 +59,120 @@
                 page: false,
                 APPLY_AMOUN: '',
                 toUrl: '',
-                ORG_NAME: '北京银行',
+                CARD_BANK_NAME: '',
                 imgSrc: imgSrc,
+                ACC_REST: '',
+                pass: '',
+                len: null,
+                canClick: false
 
+            }
+        },
+        watch: {
+            APPLY_AMOUN(n, o) {
+                if (n && n - 0 > 0) {
+                    this.canClick = true
+                } else {
+                    this.canClick = false
+                }
             }
         },
         components: {
             AppBar,
             PassInput
         },
-        mixins: [Mixin],
+        mixins: [Mixin, UtilMixin],
         created() {
-
+            this.getUserInfos()
+            this.ACC_REST = this.$route.query.ACC_REST
         },
-
         methods: {
             checkMoney() {
 
             },
-            doReCange() {
+            getUserInfos() {
+                API.safe.apiBandCard({}, (res) => {
+                    this.CARD_BANK_NAME = res.CARD_BANK_NAME
+                })
+            },
+            doWithdraw() {
+                this.pass = $('#withdrawPayPass').$getCiphertext()
+                this.len = $('#withdrawPayPass').$getPasswordLength()
+                let msg;
+                if (msg = util.Check.payPassLen(this.len)) return Bus.$emit(BusName.showToast, msg);
+                let data = {
+                    PHONE_CODE: "",
+                    EITHDRAW_ALL: "0",
+                    APPLY_AMOUNT: this.APPLY_AMOUN,
+                    BANK_PAY_PW: this.pass
+                }
+                this.show = false
+                API.withdraw.apiCash(data, res => {
+                    let params = {
+                        BIZ_TYPE: '4', // 提现
+                        BESHARP_SEQ: res.BESHARP_CASH_SEQ
+                    }
+                    this.queryStatus(
+                            {
+                                text: '提现中',
+                                data: params,
+                                fn: (result,timer) => {
+                                    util.storage.session.set(LsName.reload, true)
+                                    if ('1' == result.RES_CODE) {
+                                        clearInterval(timer)
+                                        Bus.$emit(BusName.showToast, result.RES_MSG);
+                                        this.$router.push({ // todo是否要跳转
+                                            name: PageName.WithdrawFaild,
+                                            query: {
+                                                err: result.RES_MSG
+                                            }
+                                        })
+                                    }
+                                    else if ('0' == result.RES_CODE) {
+                                        clearInterval(timer)
+                                        Bus.$emit(BusName.showToast, result.RES_MSG);
+                                        this.Londing.close()
+                                        this.$router.push({
+                                            name: PageName.WithdrawSuccess,
+                                            query: {
+                                                money: this.APPLY_AMOUN,
+                                                ...res
+                                            }
+                                        })
+                                        return
+                                    } else {
+                                        Bus.$emit(BusName.showToast, result.RES_MSG);
+                                        this.$router.push({
+                                            name: PageName.WaitForWithdraw,
+                                            query: {
+                                                err: result.RES_MSG
+                                            }
+                                        })
+                                        return
+                                    }
+                                }
+                            }
+                    )
+                }, err => {
+
+                })
             },
             doNext() {
-                this.show = true
+                let msg
+                if (msg = util.Check.trim(this.APPLY_AMOUN, '提现金额')) {
+                    Bus.$emit(BusName.showToast, msg)
+                    return
+                }
+                //
+                if (this.APPLY_AMOUN - 0 > this.ACC_REST - 0) {
+                    Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
+                    return
+                }
+                this.Londing.open()
+                setTimeout(() => {
+                    this.Londing.close()
+                    this.show = true
+                }, 1000)
             },
 
         }
@@ -89,6 +181,7 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
+
     .rechargetitle {
         padding-left: px2rem(20);
         height: px2rem(30);
@@ -143,7 +236,7 @@
         margin-top: 50px;
         font-size: 0.5rem;
         color: #fff;
-        background-color: #508CEE;
+        background-color: #e4e4e4;
         /* border-radius: 0.1rem; */
         line-height: 1.2rem;
         width: 80%;
@@ -153,6 +246,9 @@
         border: 0px;
         outline: none;
         display: block;
+        &.active {
+            background-color: #508CEE;
+        }
     }
 
     .minshengbankLogo {
@@ -163,14 +259,16 @@
         float: left;
         padding-top: 0.4rem;
     }
-    .info{
+
+    .info {
         padding-left: px2rem(20);
         padding-top: px2rem(20);
         font-size: px2rem(14);
-        color:#9199A1;
+        color: #9199A1;
     }
+
     .bgbox {
-        z-index: 2;
+        z-index: 0;
         width: 100%;
         height: 100%;
         background: rgba(1, 1, 1, .7);
@@ -214,8 +312,8 @@
             font-size: 0.3rem;
             line-height: 0.6rem;
             color: #aeaeae;
-            span{
-                color:#389CFF
+            span {
+                color: #389CFF
             }
         }
         .btn {

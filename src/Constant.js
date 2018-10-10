@@ -83,6 +83,7 @@ export const PageName = {
     Withdraw:'Withdraw', // 提现
     WithdrawSuccess:'WithdrawSuccess', // 提现成功
     WithdrawFaild:'WithdrawFaild', // 提现失败
+    WaitForWithdraw:'WaitForWithdraw', // 提现zhong
     PayDetail:'PayDetail', // 提现失败
 }
 
@@ -114,6 +115,7 @@ export const LsName = {
     goBuy: 'goBuy', // goBuy
     ORG_ID:'ORG_ID',
     Infos:'Infos',
+    RechargeQuery:'RechargeQuery',
     PRD_TYPE:'PRD_TYPE',
 }
 

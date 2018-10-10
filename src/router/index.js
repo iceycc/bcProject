@@ -30,7 +30,7 @@ let routes = [
     {
         path: '/',
         redirect: {
-            path: PageName.Productlist
+            path: PageName.BankAccount
         }
     }
 ]
@@ -113,6 +113,7 @@ addRouter(PageName.Withdraw, {keepAlive: false, title: '提现',needLogin:false}
 addRouter(PageName.WithdrawSuccess, {keepAlive: false, title: '提现成功',needLogin:false});
 addRouter(PageName.WithdrawFaild, {keepAlive: false, title: '提现失败',needLogin:false});
 addRouter(PageName.PayDetail, {keepAlive: false, title: '交易明细',needLogin:false});
+addRouter(PageName.WaitForWithdraw, {keepAlive: false, title: '提现',needLogin:false});
 
 
 //

@@ -14,7 +14,7 @@
             </active-input>
             <section class="submit-box">
                 <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
-                <button class="submit-btn" @click="goNext">下一步</button>
+                <button class="submit-btn" @click="goNext">提交</button>
             </section>
             <section class="foot-text">
                 <p>温馨提示：</p>
@@ -41,7 +41,7 @@
         },
         data() {
             return {
-                errMsg: '错误信息提示',
+                errMsg: '',
                 params:{
                     PHONE_NUM:'',
                     PHONE_CODE:'',
@@ -58,12 +58,41 @@
         },
         methods: {
             goNext() {
+                let msg;
+                if (msg = util.Check.tel(this.params.PHONE_NUM)) {
+                    this.showErrMsg(msg)
+                    return
+                }
+                if (!this.params.MESSAGE_TOKEN) {
+                    this.showErrMsg('请获取短信验证码')
+                    return
+                }
+                if (!this.params.PHONE_CODE) {
+                    this.showErrMsg('请填写短信验证码')
+                    return
+                }
                 let data = {
                     PHONE_NUM:this.params.PHONE_NUM,
                     PHONE_CODE:this.params.PHONE_CODE,
                     MESSAGE_TOKEN:this.params.MESSAGE_TOKEN,
                 }
-                API.safe.apiChangePhoneNum(data,{})
+                API.safe.apiChangePhoneNum(data,true,res=>{
+                    Bus.$emit(BusName.showToast,'更换手机号成功，请重新登陆')
+                    // 是否应该
+                    util.storage.session.remove(LsName.token)
+                    util.storage.session.remove(LsName.Infos)
+                    this.$router.push({
+                        name:PageName.Login
+                    })
+                },err=>{
+                    this.showErrMsg(err)
+                })
+            },
+            showErrMsg(msg){
+                this.errMsg = msg;
+                setTimeout(()=>{
+                    this.errMsg = '';
+                },2000)
             },
             // 15621118888
             getMsgCode(){
