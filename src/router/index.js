@@ -121,8 +121,8 @@ addRouter(PageName.WaitForWithdraw, {keepAlive: false, title: '提现',needLogin
 /**
  * financingList
  */
-addRouter(PageName.Financialproducts, {keepAlive: false, title: '理财产品', needLogin: false});
-addRouter(PageName.Transactiondetails, {keepAlive: false, title: '交易明细', needLogin: false});
+addRouter(PageName.Financialproducts, {keepAlive: false, title: '理财产品', needLogin: true});
+addRouter(PageName.Transactiondetails, {keepAlive: false, title: '交易明细', needLogin: true});
 
 
 
