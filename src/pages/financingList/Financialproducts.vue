@@ -20,70 +20,52 @@
                 <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)" :class="{active:index==nowIndex}">{{item}}</li>
             </ul>
             <div class="divTab" v-show="nowIndex===0">
-                <!-- <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
+                <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
                     <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-                    <ul class="list" v-for="(val, key) in pageList">
-                        <li>
-                            <div>{{val}}</div>
-                        </li>
-                    </ul>
+                        <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
+                            <h4>
+                                <strong>{{item.PRD_NAME}}</strong>
+                                <!-- <router-link to="/Transactiondetails">明细</router-link> -->
+                            </h4>
+                            <p>{{item.ORG_NAME}}</p>
+                            <p>当前价值（元）
+                                <span>{{item.INVEST_AMOUNT | formatNum}}</span>
+                            </p>
+                            <p>预期年化收益率
+                                <span>{{item.RATE}}%</span>
+                            </p>
+                            <p>预期参考收益（元）
+                                <span>{{item.YQ_INCOME_AMOUNT | formatNum}}</span>
+                            </p>
+                            <p>到期日期
+                                <span>{{item.OVER_DATE}}</span>
+                            </p>
+                        </div>
                     </v-loadmore>
-                </div> -->
-
-            <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-                    <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-                <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
-                    <h4>
-                        <strong>{{item.PRD_NAME}}</strong>
-                        <router-link to="/Transactiondetails">明细</router-link>
-                    </h4>
-                    <p>{{item.ORG_NAME}}</p>
-                    <p>当前价值（元）
-                        <span>{{item.INVEST_AMOUNT | formatNum}}</span>
-                    </p>
-                    <p>预期年化收益率
-                        <span>{{item.RATE}}%</span>
-                    </p>
-                    <p>预期参考收益（元）
-                        <span>{{item.YQ_INCOME_AMOUNT  | formatNum}}</span>
-                    </p>
-                    <p>到期日期
-                        <span>{{item.OVER_DATE}}</span>
-                    </p>
                 </div>
-                </v-loadmore>
-            </div>
             </div>
             <div class="divTab" v-show="nowIndex===1">
                 <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
                     <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore1">
-                <div class="divTab-1"  v-for="(item,index) in pageList1" :key="index">
-                    <h4>
-                        <strong>{{item.PRD_NAME}}</strong>
-                        <router-link to="/Transactiondetails">明细</router-link>
-                    </h4>
-                    <p>{{item.ORG_NAME}}</p>
-                    <p>投资金额（元）
-                        <span>{{item.INVEST_AMOUNT | formatNum}}</span>
-                    </p>
-                    <p>投资收益（元）
-                        <span>{{item.INVEST_AMOUNT | formatNum}}</span>
-                    </p>
-                    <p>到期日期
-                        <span>{{item.OVER_DATE}}</span>
-                    </p>
-                </div>
-                </v-loadmore>
-                </div>
-                  <!-- <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-                    <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1">
-                    <ul class="list" v-for="(val, key) in pageList1">
-                        <li>
-                            <div>{{val}}</div>
-                        </li>
-                    </ul>
+                        <div class="divTab-1" v-for="(item,index) in pageList1" :key="index">
+                            <h4>
+                                <strong>{{item.PRD_NAME}}</strong>
+                                <!-- <router-link to="/Transactiondetails">明细</router-link> -->
+                            </h4>
+                            <p>{{item.ORG_NAME}}</p>
+                            <p>投资金额（元）
+                                <span>{{item.INVEST_AMOUNT | formatNum}}</span>
+                            </p>
+                            <p>投资收益（元）
+                                <span>{{item.TOTAL_INCOME | formatNum}}</span>
+                            </p>
+                            <p>到期日期
+                                <span>{{item.OVER_DATE}}</span>
+                            </p>
+                        </div>
                     </v-loadmore>
-                </div> -->
+                </div>
+
             </div>
         </div>
 
@@ -91,286 +73,161 @@
 </template>
 <script>
 import { API } from "../../request/api";
-import { LsName, PageName } from "../../Constant";
+import { LsName, PageName, BusName } from "../../Constant";
 import util from "../../common/utils/util";
-import {Loadmore} from 'mint-ui'; 
-
+import Bus from "../../common/js/bus";
+import { Loadmore } from "mint-ui";
 
 export default {
   data() {
     return {
-
-      searchCondition:{  //分页属性
-          pageNo:"1",
-          pageSize:"10"
-        },
-    
-      pageList:[{
-              PRD_NAME:"产品名称",
-              ORG_NAME:"机构名称",
-              INVEST_AMOUNT:"3333元",
-              RATE:"预期年化",
-              YQ_INCOME_AMOUNT:"预期收益",
-              OVER_DATE:"结束日期"
-          }],
-      allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-      scrollMode:"auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
-
-      searchCondition1:{  //分页属性
-          pageNo:"1",
-          pageSize:"10"
+      searchCondition: {
+        //分页属性
+        pageNo: "1",
+        pageSize: "10"
       },
-      pageList1:[{
-              PRD_NAME:"产品名称",
-              ORG_NAME:"机构名称",
-              INVEST_AMOUNT:"3333元",
-              TOTAL_INCOME:"累计投资收益",
-              OVER_DATE:"结束日期"
-          }],
 
+      pageList: [],
+      allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+      scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+
+      searchCondition1: {
+        //分页属性
+        pageNo: "1",
+        pageSize: "10"
+      },
+      pageList1: [],
       tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
       nowIndex: 0, //默认第一个tab为激活状态
-      financialData:{},
-      investHold:[
-          {
-              PRD_NAME:"产品名称",
-              ORG_NAME:"机构名称",
-              INVEST_AMOUNT:"3333元",
-              RATE:"预期年化",
-              YQ_INCOME_AMOUNT:"预期收益",
-              OVER_DATE:"结束日期"
-          },
-          {
-              PRD_NAME:"产品名称1",
-              ORG_NAME:"机构名称1",
-              INVEST_AMOUNT:"3333元1",
-              RATE:"预期年化1",
-              YQ_INCOME_AMOUNT:"预期收益1",
-              OVER_DATE:"结束日期1"
-          }
-      ],
-      investOver:[
-          {
-              PRD_NAME:"产品名称",
-              ORG_NAME:"机构名称",
-              INVEST_AMOUNT:"3333元",
-              TOTAL_INCOME:"累计投资收益",
-              OVER_DATE:"结束日期"
-          },
-          {
-              PRD_NAME:"产品名称1",
-              ORG_NAME:"机构名称1",
-              INVEST_AMOUNT:"3333元1",
-              TOTAL_INCOME:"累计投资收益1",
-              OVER_DATE:"结束日期1"
-          }
-      ]
-
+      financialData: {}
     };
   },
-  components: {  
-      'v-loadmore':Loadmore
+  components: {
+    "v-loadmore": Loadmore
   },
   created() {
-         this.getData();//理财产品列表
-    //   this.getMyInvestHold(); //理财产品持有中数据
-    //   this.getMyInvestOver(); //理财产品已到期
+    this.getData(); //理财产品列表
   },
-  mounted(){
-      this.loadPageList();  //初次访问查询列表
-    },
+  mounted() {
+    this.loadPageList(); //初次访问查询列表
+  },
   methods: {
     toggleTabs(index) {
       this.nowIndex = index;
-
       this.loadPageList();
-    //   if(index==1){
-    //     //   调用
-    //       let data = {
-    //         currentPage:"1",
-    //         PRD_TYPE: "2",
-    //         PRD_TYPE: ""
-    //     };
-    //     API.financial.getMyInvestOver(data, res => {
-    //         //  this.investOver = res.PAGE.retList;
-
-    //     });
-    //   }else{
-    //       let data = {
-    //             currentPage:"1",
-    //             PRD_TYPE: "2",
-    //             PRD_TYPE: ""
-    //         };
-    //         API.financial.getMyInvestHold(data, res => {
-    //             //  this.investHold = res.PAGE.retList;
-
-    //         });
-    //   }
     },
-     getData() {
+    getData() {
       let data = {
         PRD_TYPE: ""
       };
       API.financial.apiMyAssetByType(data, res => {
         this.financialData = res.lcAsset;
-       
       });
     },
-     getMyInvestHold() {
-      let data = {
-        currentPage:"1",
-        PRD_TYPE: "2",
-        PRD_TYPE: ""
-      };
-      API.financial.getMyInvestHold(data, res => {
-        //  this.investHold = res.PAGE.retList;
-
-      });
-    },
-     getMyInvestOver() {
-      let data = {
-        currentPage:"1",
-        PRD_TYPE: "2",
-        PRD_TYPE: ""
-      };
-      API.financial.getMyInvestOver(data, res => {
-        //  this.investOver = res.PAGE.retList;
-
-      });
-    },
-    loadTop:function() { //组件提供的下拉触发方法
-        //下拉加载
-        this.loadPageList();
-        if(this.nowIndex==1){
-             this.$refs.loadmore1.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
-        }else{
-            this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
-        }
-       
-
-      },
-      loadBottom:function() {
-        // 上拉加载
-        this.more();// 上拉触发的分页查询
-         if(this.nowIndex==1){
-            this.$refs.loadmore1.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
-         }else{
-            this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
-         }
-       
-       
-      },
-      loadPageList:function (){
-        // 初始化
-          this.searchCondition.pageNo = "1";
-          this.searchCondition1.pageNo ="1";
-          this.allLoaded=false;
-          // 查询数据
-
-        //   alert(this.nowIndex);
-        if(this.nowIndex==1){
-            //已到期数据
-           let data = {
-                currentPage:this.searchCondition1.pageNo,
-                PRD_TYPE: "2"
-            };
-            API.financial.getMyInvestOver(data, res => {
-              
-                //  this.investHold = res.PAGE.retList;
-                //  this.pageList = data.result.pageList;
-                 this.pageList1 =res.PAGE.retList;
-
-                 if(this.pageList1.length<this.searchCondition1.pageSize){
-                        this.allLoaded = true;
-                 }
-                 this.$nextTick(function () {
-                    // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-                    // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-                    // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-                    this.scrollMode = "touch";
-                });
-
-            });
-
-            
-        }else{
-            //持有数据
-           let data = {
-                currentPage:this.searchCondition.pageNo,
-                PRD_TYPE: "2"
-            };
-            API.financial.getMyInvestHold(data, res => {
-              
-                //  this.investHold = res.PAGE.retList;
-                //  this.pageList = data.result.pageList;
-                 this.pageList =res.PAGE.retList;
-                  if(this.pageList.length<this.searchCondition.pageSize){
-                        this.allLoaded = true;
-                 }
-                 this.$nextTick(function () {
-                    // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-                    // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-                    // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-                    this.scrollMode = "touch";
-                });
-
-            });
-        }
-
-      },
-      more:function (){
-
-        if(this.nowIndex==1){
-            // 已到期分页查询
-            this.searchCondition1.pageNo =""+(parseInt(this.searchCondition1.pageNo) + 1);
-            let data = {
-                    currentPage:this.searchCondition1.pageNo,
-                    PRD_TYPE: "2",
-                    PRD_TYPE: ""
-                };
-            API.financial.getMyInvestOver(data, res => { 
-                this.pageList1 = this.pageList1.concat(res.PAGE.retList);
-                if(this.pageList1.length<this.searchCondition1.pageSize){
-                    this.allLoaded = true;
-                    Bus.$emit(BusName.showToast, "数据全部加载完成")
-                }
-            });
-
-          }else{
-                  // 已持有分页查询
-                this.searchCondition.pageNo =""+(parseInt(this.searchCondition.pageNo) + 1);
-                let data = {
-                        currentPage:this.searchCondition.pageNo,
-                        PRD_TYPE: "2",
-                        PRD_TYPE: ""
-                    };
-                API.financial.getMyInvestHold(data, res => { 
-                    this.pageList = this.pageList.concat(res.PAGE.retList);
-                    if(this.pageList.length<this.searchCondition.pageSize){
-                        this.allLoaded = true;
-                        Bus.$emit(BusName.showToast, "数据全部加载完成")
-                    }
-                });
-          }
-         
-      
-
-        // this.api.loadPageList(this.searchCondition).then(data=>{
-        //   this.pageList = this.pageList.concat(data.result.pageList);
-        //   this.isHaveMore(data.result.haveMore);
-        // });
-
-
-
-      },
-      isHaveMore:function(isHaveMore){
-        // 是否还有下一页，如果没有就禁止上拉刷新
-        this.allLoaded = true; //true是禁止上拉加载
-        if(isHaveMore){
-          this.allLoaded = false;
-        }
+    loadTop: function() {
+      //组件提供的下拉触发方法
+      //下拉加载
+      this.loadPageList();
+      if (this.nowIndex == 1) {
+        this.$refs.loadmore1.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+      } else {
+        this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       }
+    },
+    loadBottom: function() {
+      // 上拉加载
+      this.more(); // 上拉触发的分页查询
+      if (this.nowIndex == 1) {
+        this.$refs.loadmore1.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+      } else {
+        this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+      }
+    },
+    loadPageList: function() {
+      // 初始化
+      this.searchCondition.pageNo = "1";
+      this.searchCondition1.pageNo = "1";
+      this.allLoaded = false;
+      // 查询数据
 
+      //   alert(this.nowIndex);
+      if (this.nowIndex == 1) {
+        //已到期数据
+        let data = {
+          currentPage: this.searchCondition1.pageNo,
+          PRD_TYPE: "2"
+        };
+        API.financial.getMyInvestOver(data, res => {
+          this.pageList1 = res.PAGE.retList;
+           if(this.pageList1.length<this.searchCondition1.pageSize){
+                  this.allLoaded = true;
+           }
+           if (this.pageList1.length <= 0) {
+            Bus.$emit(BusName.showToast, "暂无数据");
+           }
+          this.$nextTick(function() {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
+          });
+        });
+      } else {
+        //持有数据
+        let data = {
+          currentPage: this.searchCondition.pageNo,
+          PRD_TYPE: "2"
+        };
+        API.financial.getMyInvestHold(data, res => {
+          this.pageList = res.PAGE.retList;
+          if (this.pageList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+          }
+          if (this.pageList.length <= 0) {
+            Bus.$emit(BusName.showToast, "暂无数据");
+          }
+          this.$nextTick(function() {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
+          });
+        });
+      }
+    },
+    more: function() {
+      if (this.nowIndex == 1) {
+        // 已到期分页查询
+        this.searchCondition1.pageNo =
+          "" + (parseInt(this.searchCondition1.pageNo) + 1);
+        let data = {
+          currentPage: this.searchCondition1.pageNo,
+          PRD_TYPE: "2"
+        };
+        API.financial.getMyInvestOver(data, res => {
+          this.pageList1 = this.pageList1.concat(res.PAGE.retList);
+          if (this.pageList1.length < this.searchCondition1.pageSize) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }
+        });
+      } else {
+        // 已持有分页查询
+        this.searchCondition.pageNo =
+          "" + (parseInt(this.searchCondition.pageNo) + 1);
+        let data = {
+          currentPage: this.searchCondition.pageNo,
+          PRD_TYPE: "2"
+        };
+        API.financial.getMyInvestHold(data, res => {
+          this.pageList = this.pageList.concat(res.PAGE.retList);
+          if (this.pageList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }
+        });
+      }
+    }
   }
 };
 </script>
@@ -389,7 +246,7 @@ export default {
   border-top: 2px solid #fff;
   height: px2rem(11);
   width: px2rem(11);
-  left: px2rem(15);
+  left: px2rem(18);
   top: 0.6rem;
   -webkit-transform: rotate(228deg);
   border-left: px2rem(2) solid transparent;
@@ -524,7 +381,8 @@ export default {
   }
 }
 
-.main-body{ height: 17rem; overflow:auto;}
-
-// .main-body{height:9rem;overflow: scroll;}
+.main-body {
+  min-height: 9rem;
+  overflow: auto;
+}
 </style>

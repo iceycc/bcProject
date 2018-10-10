@@ -116,5 +116,6 @@ export const LsName = {
     ORG_ID:'ORG_ID',
     Infos:'Infos',
     RechargeQuery:'RechargeQuery',
+    PRD_TYPE:'PRD_TYPE',
 }
 

@@ -57,7 +57,7 @@
                         ¥{{bankDetail.lcAsset.API_FINA_ASSET | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
                     </span>
             </section>
-            <ul v-if="licaiShow">
+            <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
                 <li class="financing-li" v-for="item in proList">
                     <span class="li-left">
                         {{item.PRD_NAME}}</span>
@@ -99,6 +99,7 @@
                 toPageName: {
                     BankBalance: PageName.BankBalance,
                     MoreService: PageName.MoreService,
+                    Financialproducts: PageName.Financialproducts,
                 },
                 bankDetail: {
                     TOTAL_ASSET: '0.00', // 总资产(投资金额+可用余额)

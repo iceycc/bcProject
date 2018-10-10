@@ -32,6 +32,7 @@ var formatNum =  (str) =>{
 }
 
  var timerFormat = (val)=>{
+    if(!val) return val;
     let date = new Date(parseInt(val));
         let Y = date.getFullYear() + '-',
          M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-',

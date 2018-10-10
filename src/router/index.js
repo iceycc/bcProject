@@ -30,7 +30,7 @@ let routes = [
     {
         path: '/',
         redirect: {
-            path: PageName.Productlist
+            path: PageName.BankAccount
         }
     }
 ]

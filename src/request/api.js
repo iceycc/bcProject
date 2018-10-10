@@ -363,10 +363,20 @@ export const API = {
             }
             return http.post(options, config, success, error)
         },
+        // 账户明细 openapi/bank/apiQryRechCashHis
+        // /openapi/invest/apiQryRechCashHis
+        apiQryRechCashHis(params, success, error) {
+            let options = {
+                url: 'openapi/bank/apiQryRechCashHis',
+                params,
+            }
+            return http.post(options, config, success, error)
+        },
+
     },
 
     /**
-     * watch
+     * watch 用于埋点
      */
     watch: {
         watchApi(params, success, error) {
@@ -419,7 +429,6 @@ export const API = {
             return http.post(options, config, success, error)
 
         },
-
 
 
     }

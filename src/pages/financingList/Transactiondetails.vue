@@ -167,11 +167,6 @@ export default {
       },
 
       pageList: [
-        {
-          TRANS_AMT: "交易金额",
-          TRANS_TIME: "交易时间",
-          TRANS_TYPE_NAME: "交易类型名称"
-        }
       ],
       allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
       scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
