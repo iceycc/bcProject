@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="hello">
         <app-bar title="安全登录"></app-bar>
-        <img class="logo" src="../../assets/images/img/logoaaa_03.png" alt="">
+        <img class="logo" src="../../assets/images/logoaaa_03.png" alt="">
         <p class="titlecontent">
             欢迎登录晋商银行直销账户</p>
         <div class="login_box">
@@ -34,7 +34,7 @@
         </div>
         <div class="bottomcontent">
             <p>
-                <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
+                <img src="../../assets/images/icon_dunpai@2x.png" alt="">
                 晋商银行已与比财实现安全直连</p>
         </div>
     </div>

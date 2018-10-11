@@ -48,7 +48,7 @@
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
-                    <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
+                    <img src="../../assets/images/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
                 <section class="field_row_wrap">
                     <p class="field_row_key">
@@ -120,7 +120,6 @@
             console.log('lsData>>', lsData);
             this.ORG_NAME = lsData.ORG_NAME
             this.logo = lsData.LOGO_URL
-
             this.reChangeHandele()
         },
         methods: {
@@ -150,7 +149,6 @@
             },
 
             getCode() { // 获取充值协议码
-
                 API.reChange.apiRechargeProtoCode({}, res => {
                     console.log(res);
                     this.PIN = res.PIN
@@ -207,7 +205,6 @@
                 console.log(this.write);
                 let msg
                 if (msg = util.Check.trim(this.APPLY_AMOUN, '充值金额')) return Bus.$emit(BusName.showToast, msg);
-                //
                 if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
                     Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
                     return
@@ -384,7 +381,7 @@
     .bang {
         margin-left: 0.5rem;
         margin-top: 0.5rem;
-        background: url(../../assets/images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
         font-size: 0.4rem;
         color: #808080;
@@ -393,7 +390,7 @@
     }
 
     .no {
-        background: url(../../assets/images/img/onagree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
     }
 

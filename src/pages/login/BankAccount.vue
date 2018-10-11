@@ -27,11 +27,11 @@
                     </li>
                     <li>
                         <P>昨日收益</P>
-                        <P>{{bank.YSD_INCOME}}</P>
+                        <P><i v-if="bank.YSD_INCOME>=0">+</i>{{bank.YSD_INCOME}}</P>
                     </li>
                     <li>
                         <P>累计收益</P>
-                        <P>{{bank.TOTAL_INCOME}}</P>
+                        <P><i v-if="bank.TOTAL_INCOME>=0">+</i>{{bank.TOTAL_INCOME}}</P>
                     </li>
                 </ul>
             </section>
@@ -110,10 +110,9 @@
         },
         methods:{
             goPage(page,ORG_ID){
-                console.log(page);
                 util.storage.session.set(LsName.ORG_ID,ORG_ID)
                 if(page=='login'){
-                    util.storage.session.set(LsName.loginType,'电子账户')
+                    util.storage.session.set(LsName.loginType,PageName.BankAccount)
                     this.$router.push({
                         name:PageName.login,
                     })
@@ -146,7 +145,9 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
-
+    i{
+        font-style: normal;
+    }
     .m-bank-box {
         width: 100%;
         .m-title{

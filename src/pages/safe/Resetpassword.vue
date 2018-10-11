@@ -247,7 +247,7 @@
     }
 
     .opening_box section .limit {
-        background-image: url(../../assets/images/img/problom2@2x.png);
+        background-image: url(../../assets/images/problom2@2x.png);
         background-size: 12px 12px;
         background-position: 0 2.5px;
         background-repeat: no-repeat;

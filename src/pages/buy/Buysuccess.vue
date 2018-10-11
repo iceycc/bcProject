@@ -2,7 +2,7 @@
     <div id="app" class="app">
         <app-bar title="购买"></app-bar>
         <div class="buysuccessimg">
-            <img src="../../assets/images/img/Verificationsuccess@2x.png" alt="">
+            <img src="../../assets/images/Verificationsuccess@2x.png" alt="">
             <p>购买成功</p>
         </div>
         <div class="buysuccessdetail">

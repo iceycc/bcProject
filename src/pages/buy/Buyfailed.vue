@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="购买"></app-bar>
         <div class="chattuimg">
-            <img src="../../assets/images/img/buyfail@2x.png" style="width:25%" alt="">
+            <img src="../../assets/images/buyfail@2x.png" style="width:25%" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，购买失败!</h2>

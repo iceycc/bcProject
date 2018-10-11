@@ -109,7 +109,7 @@ export const LsName = {
     ProDuctData: 'ProDuctData', // 其他页面跳转登录页进行跳转的页面  主要跳转后情况
     LAST_STEP_NUM: 'LAST_STEP_NUM', // 开户步数
     REQ_SERIAL: 'REQ_SERIAL', // 开户流水
-    loginType: 'loginType', // loginType
+    loginType: 'loginType', //  用于测评完成后跳转功能（购买，预约，电子账户，更多服务）
     ProTitle: 'ProTitle', // ProTitle
     goBuy: 'goBuy', // goBuy
     ORG_ID:'ORG_ID',

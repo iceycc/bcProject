@@ -92,7 +92,9 @@
         methods: {
             goPage(pageName) {
                 let data = {}
+                console.log(pageName);
                 if (pageName == PageName.fengxianresult) {
+                    util.storage.session.set(LsName.loginType,PageName.MoreService) // 用于跳转风险测评返回判断
                     data = this.fenxianQuery
                 }
                 else {

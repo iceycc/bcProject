@@ -138,9 +138,9 @@
                 showType: 0,
                 imgStyle1: 'width:30%;vertical-align: middle',
                 imgStyle2: 'width:30%;vertical-align: middle;',
-                stepImg: require('../../assets/images/img/account_icon_green2@2x.png'),
-                stepImg2: require('../../assets/images/img/step2@2x.png'),
-                stepImg3: require('../../assets/images/img/step3.png'),
+                stepImg: require('../../assets/images/account_icon_green2@2x.png'),
+                stepImg2: require('../../assets/images/step2@2x.png'),
+                stepImg3: require('../../assets/images/step3.png'),
                 test1: '',
                 test2: '',
                 agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
@@ -154,8 +154,8 @@
                     memberId: null,
                     phoneNum: null
                 },
-                preSrc1: require('../../assets/images/img/cameracopy@2x.png'),
-                preSrc2: require('../../assets/images/img/cameracopy@2x.png'),
+                preSrc1: require('../../assets/images/cameracopy@2x.png'),
+                preSrc2: require('../../assets/images/cameracopy@2x.png'),
                 picZheng: require('../../assets/images/id-zheng.jpg'),
                 picFan: require('../../assets/images/id-fan.jpg'),
                 job: [
@@ -607,7 +607,7 @@
 
     .bang {
         margin-left: 0.5rem;
-        background: url(../../assets/images/img/agree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
         font-size: 0.35rem;
         color: #808080;
@@ -616,7 +616,7 @@
     }
 
     .no {
-        background: url(../../assets/images/img/onagree@3x.png) no-repeat 0 0.05rem;
+        background: url(../../assets/images/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
     }
 

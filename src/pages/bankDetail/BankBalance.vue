@@ -98,7 +98,7 @@
     .m-top {
         width: 100%;
         height: px2rem(120);
-        background: url("../../assets/images/img/OvalCopy.png") no-repeat center center;
+        background: url("../../assets/images/OvalCopy.png") no-repeat center center;
         padding-left: px2rem(25);
         padding-top: px2rem(25);
         box-sizing: border-box;

@@ -54,7 +54,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../assets/images/img/icon_dunpai@2x.png" alt="">
+                        <img src="../../assets/images/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -122,9 +122,9 @@
                 paypass: '',
                 paypassLen: 0,
                 ifGet: false,
-                stepImg: require('../../assets/images/img/account_icon_green2@2x.png'),
-                stepImg2: require('../../assets/images/img/step2@2x.png'),
-                stepImg3: require('../../assets/images/img/step3.png'),
+                stepImg: require('../../assets/images/account_icon_green2@2x.png'),
+                stepImg2: require('../../assets/images/step2@2x.png'),
+                stepImg3: require('../../assets/images/step3.png'),
                 errMsg: ''
 
             }

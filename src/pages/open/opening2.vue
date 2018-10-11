@@ -88,9 +88,9 @@
                 bankList: [],
                 bank: '-1',
                 bankText: '请选择银行',
-                stepImg: require('../../assets/images/img/account_icon_green2@2x.png'),
-                stepImg2: require('../../assets/images/img/step2@2x.png'),
-                stepImg3: require('../../assets/images/img/step3.png'),
+                stepImg: require('../../assets/images/account_icon_green2@2x.png'),
+                stepImg2: require('../../assets/images/step2@2x.png'),
+                stepImg3: require('../../assets/images/step3.png'),
                 AllBankListObj: {},
                 errMsg: '',
                 checkBankName1: false

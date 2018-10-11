@@ -74,8 +74,9 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
         </section>
+
         <p class="foot-text">
-            如有疑问请拔打银行客服电话{{bankDetail.ORG_HOTLINE}}
+            如有疑问请拔打银行客服电话<a :href="'tel:'+bankDetail.ORG_HOTLINE">{{bankDetail.ORG_HOTLINE}}</a>
         </p>
     </div>
 </template>
@@ -220,7 +221,7 @@
 
     .banner {
         height: px2rem(120);
-        background: url("../../assets/images/img/background@2x.png") no-repeat;
+        background: url("../../assets/images/background@2x.png") no-repeat;
         background-size: contain;
         box-sizing: border-box;
         padding: px2rem(0) px2rem(10);
@@ -340,7 +341,7 @@
                     content: '';
                     width: px2rem(15);
                     height: px2rem(15);
-                    background: url("../../assets/images/img/property_icon_financing.png") no-repeat center;
+                    background: url("../../assets/images/property_icon_financing.png") no-repeat center;
                     background-size: contain;
                 }
             }
@@ -413,6 +414,10 @@
         text-align: center;
         padding: px2rem(30) 0;
         color: #2B74FE;
+        a{
+            color: #2B74FE;
+
+        }
     }
 
 </style>

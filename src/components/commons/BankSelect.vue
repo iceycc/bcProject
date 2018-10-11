@@ -4,8 +4,8 @@
                  :class="{'infoText':true,'activeTitle':titleSelect}">
             <span @click="showBankList">{{text}}</span>
             <span class="down" @click="bankShowHandle">
-                <img @click.stop="showBankList" src="../../assets/images/img/GroupCopy14@2x.png" alt="">
-                <img src="../../assets/images/img/problom2@2x.png" alt="">
+                <img @click.stop="showBankList" src="../../assets/images/GroupCopy14@2x.png" alt="">
+                <img src="../../assets/images/problom2@2x.png" alt="">
                <span class="xiane">银行限额</span>
             </span>
         </section>
@@ -35,8 +35,8 @@
             </section>
         </div>
         <div class="bank-xiane" v-if="backShow">
-            <img @click="backShow = false" class="close" src="../../assets/images/img/icon_ask_close.svg" alt="">
-            <img src="../../assets/images/img/bank@2x.png" alt="">
+            <img @click="backShow = false" class="close" src="../../assets/images/icon_ask_close.svg" alt="">
+            <img src="../../assets/images/bank@2x.png" alt="">
         </div>
     </div>
 </template>
@@ -85,7 +85,7 @@
         },
         data() {
             return {
-                closeImg: require('../../assets/images/img/icon_ask_close.svg'),
+                closeImg: require('../../assets/images/icon_ask_close.svg'),
                 titleSelect: false,
                 show: false,
                 selectValue: 1,

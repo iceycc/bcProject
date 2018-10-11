@@ -2,7 +2,7 @@
     <div id="app" class="app">
         <app-bar title="风险评测"></app-bar>
         <div class="chattuimg">
-            <img src="../../assets/images/img/account_illustrations@2x.png" style="width:70%" alt="">
+            <img src="../../assets/images/account_illustrations@2x.png" style="width:70%" alt="">
         </div>
         <div class="fenxiancontent">
             <div class="fenxiantitle">
