@@ -250,7 +250,7 @@
                     this.queryStatus({
                         text: '正在充值中',
                         data: params,
-                        fn: (result) => {
+                        fn: (result,timer,count) => {
                             util.storage.session.set(LsName.reload, true)
                             if ('1' == result.RES_CODE) {
                                 clearInterval(timer)
@@ -261,10 +261,7 @@
                                         err: result.RES_MSG
                                     }
                                 })
-                                // setTimeout(()=>{
-                                //     this.Londing.close()
-                                //     window.location.reload()
-                                // },1000)
+
                             }
                             else if ('0' == result.RES_CODE) {
                                 clearInterval(timer)
@@ -277,16 +274,17 @@
                                         ...res
                                     }
                                 })
-                                return
                             } else {
-                                Bus.$emit(BusName.showToast, result.RES_MSG);
-                                this.$router.push({
-                                    name: PageName.Rechargefailure,
-                                    query: {
-                                        err: result.RES_MSG
-                                    }
-                                })
-                                return
+                                if(count==5){
+                                    clearInterval(timer)
+                                    Bus.$emit(BusName.showToast, result.RES_MSG);
+                                    this.$router.push({ // todo是否要跳转
+                                        name: PageName.Rechargefailure,
+                                        query: {
+                                            err: result.RES_MSG
+                                        }
+                                    })
+                                }
                             }
                         }
                     })

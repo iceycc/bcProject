@@ -116,7 +116,7 @@
                             {
                                 text: '提现中',
                                 data: params,
-                                fn: (result,timer) => {
+                                fn: (result,timer,count) => {
                                     util.storage.session.set(LsName.reload, true)
                                     if ('1' == result.RES_CODE) {
                                         clearInterval(timer)
@@ -139,16 +139,16 @@
                                                 ...res
                                             }
                                         })
-                                        return
                                     } else {
-                                        Bus.$emit(BusName.showToast, result.RES_MSG);
-                                        this.$router.push({
-                                            name: PageName.WaitForWithdraw,
-                                            query: {
-                                                err: result.RES_MSG
-                                            }
-                                        })
-                                        return
+                                        if(count==5){
+                                            Bus.$emit(BusName.showToast, result.RES_MSG);
+                                            this.$router.push({
+                                                name: PageName.WaitForWithdraw,
+                                                query: {
+                                                    err: result.RES_MSG
+                                                }
+                                            })
+                                        }
                                     }
                                 }
                             }

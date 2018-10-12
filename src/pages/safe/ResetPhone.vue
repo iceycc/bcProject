@@ -80,8 +80,9 @@
                     // 是否应该
                     util.storage.session.remove(LsName.token)
                     util.storage.session.remove(LsName.Infos)
+                    util.storage.session.set(LsName.loginType,PageName.BankDetail)
                     this.$router.push({
-                        name:PageName.Login
+                        name:PageName.login
                     })
                 },err=>{
                     this.showErrMsg(err)

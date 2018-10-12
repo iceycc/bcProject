@@ -62,22 +62,26 @@ export const UtilMixin = {
                 })
             }
         },
-        queryStatus({text = '等待中...', data, fn}) {
+        queryStatus({
+                        text = '等待中...', // 轮询等待提示
+                        data, // 轮询参数
+                        fn // 轮询回调
+                    }) {
             this.Londing.open({
                 text: text
             })
             let i = 1
             let timer = setInterval(() => {
                 i++
+                API.query.apiQueryBizStatus(data, result => {
+                    console.log('RES_CODE>>', result.RES_CODE);
+                    fn && fn(result, timer, i) // result轮询结果，timer用于回调內清除定时器
+                })
                 if (i == 5) {
                     clearInterval(timer)
                     this.Londing.close()
                     return
                 }
-                API.query.apiQueryBizStatus(data, result => {
-                    console.log('RES_CODE>>', result.RES_CODE);
-                    fn && fn(result, timer)
-                })
             }, 2000)
         }
 

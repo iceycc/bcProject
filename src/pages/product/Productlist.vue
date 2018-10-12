@@ -79,8 +79,6 @@
                     REMARK_DATA: '异业合作-落地页产品列表', // 中文备
                     FROM_ID: id
                 })
-                // document.title = title
-                util.storage.session.set(LsName.ProTitle,title)
                 this.$router.push({
                     name: PageName.Productreservation,
                     query: {

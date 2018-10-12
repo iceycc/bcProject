@@ -110,11 +110,11 @@ export const LsName = {
     LAST_STEP_NUM: 'LAST_STEP_NUM', // 开户步数
     REQ_SERIAL: 'REQ_SERIAL', // 开户流水
     loginType: 'loginType', //  用于测评完成后跳转功能（购买，预约，电子账户，更多服务）
-    ProTitle: 'ProTitle', // ProTitle
     goBuy: 'goBuy', // goBuy
-    ORG_ID:'ORG_ID',
-    Infos:'Infos',
-    RechargeQuery:'RechargeQuery',
-    PRD_TYPE:'PRD_TYPE',
+    ORG_ID:'ORG_ID', // 机构id
+    Infos:'Infos', // 存储个人信息
+    RechargeQuery:'RechargeQuery', // 充值页需要的参数
+    PRD_TYPE:'PRD_TYPE', // 产品类型
+    OriginPage:'OriginPage', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
 }
 

@@ -15,6 +15,8 @@
     </div>
 </template>
 <script>
+    import {LsName} from "../../Constant";
+    import {util} from "../../common/utils/util";
     export default {
         data(){
             return{
@@ -23,13 +25,15 @@
                 data:''
             }
         },
-        // mixins: [Mixin],
         created(){
             this.data = this.$route.query
         },
         methods:{
             goNext(){
-                this.$router.go(-2)
+                let OriginPage =util.storage.session.get(LsName.OriginPage)
+                this.$router.push({
+                    name:OriginPage
+                })
             }
 
         }

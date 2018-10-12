@@ -235,15 +235,9 @@
                         PHONE_NUM: this.tel,
                         msg: err
                     })
-                    // this.reload()
                     setTimeout(() => {
                         window.location.reload()
                     }, 1500)
-                    // this.refur =!this.refur
-                    // this.show = false;
-                    // this.$nextTick(()=>{
-                    //     this.show = true
-                    // })
                 })
             },
             focusHandle() {

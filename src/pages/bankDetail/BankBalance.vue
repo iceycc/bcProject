@@ -66,6 +66,7 @@
             },
             goPage(page){
                 let query = {}
+                util.storage.session.set(LsName.OriginPage,this.$route.name)
                 if(page=='Withdraw'){
                     query = {
                         ACC_REST:this.ACC_REST

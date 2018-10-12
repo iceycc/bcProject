@@ -162,7 +162,6 @@ router.beforeEach((to, from, next) => {
         };
         document.body.appendChild(iframe);
     }
-    // let Prot = util.storage.session.get(LsName.ProTitle) || '产品详情'
     if (to.name == PageName.Productreservation) {
         window.document.title = to.query.title;
         if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
@@ -190,12 +189,7 @@ router.beforeEach((to, from, next) => {
         if (sign) {
             next()
         } else {
-            // Indicator.open({
-            //     text:'您还未登录，请先登录'
-            // })
-            // setTimeout(()=>{
-            //     Indicator.close()
-            // },300)
+
             Bus.$emit(BusName.showToast, '您还未登录，请先登录')
             next({
                 name: PageName.login,

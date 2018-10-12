@@ -73,69 +73,49 @@
 
 <script>
     import {API} from "../../service/api";
-    import Bus from '../../plugin/bus'
-    import {PageName, BusName, LsName,imgSrc} from "../../Constant";
+    import {PageName, LsName, imgSrc} from "../../Constant";
     import util from "../../common/utils/util";
-
     export default {
         name: "SafeLogin",
-        data(){
-          return{
-              imgSrc,
-              BankList:[
-                  // {
-                  //     ORG_NAME:'廊坊直销银行',
-                  //     DESCRIPT:'廊坊银行',
-                  //     TotalNum:'500',
-                  //     PreMoney:'0.30',
-                  //     GetMoney:'100.30',
-                  //     HAS_LOGIN:false
-                  // },
-                  // {
-                  //     ORG_NAME:'廊坊直销银行',
-                  //     DESCRIPT:'廊坊银行',
-                  //     TotalNum:'500',
-                  //     PreMoney:'0.30',
-                  //     GetMoney:'100.30',
-                  //     HAS_LOGIN:true
-                  // },
-              ],
-              ISLoginBankList:[],
-              NOLoginBankList:[]
-          }
+        data() {
+            return {
+                imgSrc,
+                BankList: [],
+                ISLoginBankList: [],
+                NOLoginBankList: []
+            }
         },
-        created(){
+        created() {
             util.storage.session.remove(LsName.ORG_ID)
             this.getBankList()
         },
-        methods:{
-            goPage(page,ORG_ID){
-                util.storage.session.set(LsName.ORG_ID,ORG_ID)
-                if(page=='login'){
-                    util.storage.session.set(LsName.loginType,PageName.BankAccount)
+        methods: {
+            goPage(page, ORG_ID) {
+                util.storage.session.set(LsName.ORG_ID, ORG_ID)
+                if (page == 'login') {
+                    util.storage.session.set(LsName.loginType, PageName.BankAccount)
                     this.$router.push({
-                        name:PageName.login,
+                        name: PageName.login,
                     })
                 }
-                if(page=='BankDetail'){
+                if (page == 'BankDetail') {
                     this.$router.push({
-                        name:PageName.BankDetail,
+                        name: PageName.BankDetail,
                     })
                 }
-
             },
             // get
-            getBankList(){
+            getBankList() {
                 let data = {}
-                API.account.apiBankList(data,(res)=>{
+                API.account.apiBankList(data, (res) => {
                     this.BankList = res.BANK_LIST
-                    this.ISLoginBankList = this.BankList.filter((item,index)=>{
+                    this.ISLoginBankList = this.BankList.filter((item, index) => {
                         return item.HAS_LOGIN == 1
                     })
-                    this.NOLoginBankList = this.BankList.filter((item,index)=>{
+                    this.NOLoginBankList = this.BankList.filter((item, index) => {
                         return item.HAS_LOGIN == 2
                     })
-                },(err)=>{
+                }, (err) => {
                     console.log(err);
                 })
             }
@@ -145,12 +125,14 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
-    i{
+
+    i {
         font-style: normal;
     }
+
     .m-bank-box {
         width: 100%;
-        .m-title{
+        .m-title {
             padding-left: px2rem(20);
             font-size: px2rem(12);
             height: px2rem(30);
@@ -165,58 +147,58 @@
             padding-left: px2rem(20);
             padding-top: px2rem(20);
             padding-bottom: px2rem(18);
-            .m-logo{
+            .m-logo {
                 box-sizing: border-box;
                 width: px2rem(52);
-                img{
+                img {
                     width: px2rem(34);
                     height: px2rem(34);
                 }
             }
-            .m-name{
+            .m-name {
                 width: px2rem(200);
-                p{
-                    color:#A8B4C4;
+                p {
+                    color: #A8B4C4;
                 }
             }
-            .m-btn{
+            .m-btn {
 
             }
 
-
         }
-        .left13{
+        .left13 {
             box-sizing: border-box;
             padding-left: px2rem(13);
         }
-        .left17{
+        .left17 {
             box-sizing: border-box;
             padding-left: px2rem(19);
         }
-        .m-bottom{
+        .m-bottom {
             background: #fff;
             padding-left: px2rem(20);
             padding-bottom: px2rem(13);
             font-size: px2rem(14);
-            li{
+            li {
                 display: inline-block;
                 width: px2rem(130);
                 box-sizing: border-box;
                 padding-top: px2rem(15);
-                &:last-child{
+                &:last-child {
                     width: auto;
                 }
-                p:first-child{
+                p:first-child {
                     color: #666;
                     line-height: 1.5;
                 }
-                p:last-child{
+                p:last-child {
                     color: #333;
                 }
             }
         }
     }
-    .u-btn{
+
+    .u-btn {
         display: inline-block;
         width: px2rem(80);
         height: px2rem(24);

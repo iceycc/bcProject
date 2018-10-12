@@ -68,7 +68,8 @@
                 })
             },
             goReChang() {
-                util.storage.session.get(LsName.RechargeQuery, {
+                util.storage.session.set(LsName.OriginPage,this.$route.name)
+                util.storage.session.set(LsName.RechargeQuery, {
                     PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
                     id: this.proDetail.id,
                     ORG_NAME: this.proDetail.ORG_NAME, // 直销银行名称
