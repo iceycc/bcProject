@@ -16,14 +16,11 @@
     import Bus from '../../plugin/bus'
     import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
-
-
     export default {
         created() {
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
             this.errMsg = ''
         },
-        // mixins: [Mixin],
         data() {
             return {
                 errMsg: ''

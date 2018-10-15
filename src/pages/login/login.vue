@@ -45,7 +45,7 @@
     import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin, UtilMixin} from '../../common/mixin/mixin'
+    import {Mixin, UtilMixin} from '../../common/mixins'
 
     let watchPassPluginPassTimer
 

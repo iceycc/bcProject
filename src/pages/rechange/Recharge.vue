@@ -78,7 +78,7 @@
     import Bus from '../../plugin/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
     import {util} from "../../common/utils/util";
-    import {Mixin, UtilMixin} from '../../common/mixin/mixin'
+    import {Mixin, UtilMixin} from '../../common/mixins'
 
     let time = 60
     let timer;

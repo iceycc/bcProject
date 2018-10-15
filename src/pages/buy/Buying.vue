@@ -39,7 +39,7 @@
     import {PageName, BusName, imgSrc, LsName} from "../../Constant"
     import Bus from '../../plugin/bus'
     import {API} from "../../service/api"
-    import {Mixin} from '../../common/mixin/mixin'
+    import {Mixin} from '../../common/mixins'
     import util from "../../common/utils/util";
 
 

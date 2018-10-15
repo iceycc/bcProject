@@ -160,10 +160,9 @@ import Bus from "../../plugin/bus";
 import { PageName, imgSrc, LsName, BusName } from "../../Constant";
 import util from "../../common/utils/util";
 
-// import {Mixin} from '../../common/utils/mixin'
+// import {Index} from '../../common/utils/mixin'
 
 export default {
-  // mixins: [Mixin],
   data() {
     return {
       productDetail: {

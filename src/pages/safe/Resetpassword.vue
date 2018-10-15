@@ -62,7 +62,7 @@
     import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin} from '../../common/mixin/mixin'
+    import {Mixin} from '../../common/mixins'
 
     let time = 60
     export default {

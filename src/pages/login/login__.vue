@@ -50,7 +50,7 @@
     import Bus from '../../plugin/bus'
     import {HOST} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
-    import {Mixin} from '../../common/mixin/mixin'
+    import {Mixin} from '../../common/mixins'
 
 
     export default {

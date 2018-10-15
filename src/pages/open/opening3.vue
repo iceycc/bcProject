@@ -100,7 +100,7 @@
     import PassInput from '../../components/commons/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
     import {util} from "../../common/utils/util";
-    import {Mixin} from '../../common/mixin/mixin'
+    import {Mixin} from '../../common/mixins'
 
 
     export default {
