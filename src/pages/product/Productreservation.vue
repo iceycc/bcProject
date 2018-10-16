@@ -186,7 +186,8 @@ export default {
       xing: 5,
       title: "",
       invest: "",
-      interest: "0" ? "0" : "0"
+      interest: "0" ? "0" : "0",
+      PRD_TYPE:""
     };
   },
   activated() {},
@@ -269,8 +270,15 @@ export default {
       if (b != -1) {
         let c = a.substring(b + 1, a.length);
         if (c.length > 3) {
-          this.interest =
+
+          if(this.PRD_TYPE==4){
+             this.interest =
             "￥" +  util.formatNum( ""+(this.numFilter(e)) )  + "~" + "￥" + util.formatNum( ""+(this.numFilter1(e)) );
+          }else{
+             this.interest =
+            "￥" +  util.formatNum( ""+(this.numFilter(e)) );
+          }
+         
         } else {
           this.interest = "￥" + util.formatNum( ""+(this.numFilter(e)));
         }
@@ -293,6 +301,7 @@ export default {
         let str = this.productDetail.TXT_MIN_AMOUNT;
         let invest = str.substring(0, str.length - 1);
         util.storage.session.set(LsName.PRD_TYPE, this.productDetail.PRD_TYPE);
+        this.PRD_TYPE=this.productDetail.PRD_TYPE;
         if(this.productDetail.PRD_TYPE==2){
              if (invest > 3000) {
                 this.invest = invest;
