@@ -39,7 +39,6 @@
 
 <style lang="scss" scoped>
     .header {
-
         height: 1.3rem;
         line-height: 1.3rem;
         font-size: 0.4rem;

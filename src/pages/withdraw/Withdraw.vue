@@ -3,7 +3,7 @@
         <app-bar title="提现"></app-bar>
         <div class="rechargetitle">提现到{{CARD_BANK_NAME}}直销银行</div>
         <div class="minshengbank">
-            <span class="minshengbankLogo"><img src="../../assets/images/beijingbank@2x.png" style="width:75%"
+            <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
             {{CARD_BANK_NAME}}
         </div>
@@ -64,7 +64,8 @@
                 ACC_REST: '',
                 pass: '',
                 len: null,
-                canClick: false
+                canClick: false,
+                logo:''
 
             }
         },
@@ -85,6 +86,7 @@
         created() {
             this.getUserInfos()
             this.ACC_REST = this.$route.query.ACC_REST
+
         },
         methods: {
             checkMoney() {
@@ -93,6 +95,7 @@
             getUserInfos() {
                 API.safe.apiBandCard({}, (res) => {
                     this.CARD_BANK_NAME = res.CARD_BANK_NAME
+                    this.logo = res.CARD_BANK_URL
                 })
             },
             doWithdraw() {

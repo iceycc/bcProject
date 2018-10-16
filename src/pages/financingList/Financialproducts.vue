@@ -1,27 +1,31 @@
 <template>
     <div class="wrap pro">
-        <app-bar title="理财产品"></app-bar>
-        <div class="triangle"></div>
-
-        <div class="f-box">
-            <ul>
-                <li>
-                    <p>{{financialData.TOTAL_ASSET | formatNum}}</p>
-                    <p>总资产</p>
-                </li>
-                <li>
-                    <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
-                    <p>累计收益</p>
-                </li>
-            </ul>
+        <div class="w-top">
+            <app-bar title="理财产品"></app-bar>
+            <div></div>
+            <div class="f-box">
+                <ul>
+                    <li>
+                        <p>{{financialData.TOTAL_ASSET | formatNum}}</p>
+                        <p>总资产</p>
+                    </li>
+                    <li>
+                        <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+                        <p>累计收益</p>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="tab-box">
             <ul class="tabs">
-                <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)" :class="{active:index==nowIndex}">{{item}}</li>
+                <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
+                    :class="{active:index==nowIndex}">{{item}}
+                </li>
             </ul>
             <div class="divTab" v-show="nowIndex===0">
                 <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-                    <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+                    <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
+                                :auto-fill="false" ref="loadmore">
                         <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
                             <h4>
                                 <strong>{{item.PRD_NAME}}</strong>
@@ -46,7 +50,8 @@
             </div>
             <div class="divTab" v-show="nowIndex===1">
                 <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-                    <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore1">
+                    <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
+                                :auto-fill="false" ref="loadmore1">
                         <div class="divTab-1" v-for="(item,index) in pageList1" :key="index">
                             <h4>
                                 <strong>{{item.PRD_NAME}}</strong>
@@ -68,320 +73,358 @@
 
             </div>
         </div>
-
     </div>
 </template>
 <script>
-import { API } from "../../service/api";
-import { LsName, PageName, BusName } from "../../Constant";
-import util from "../../common/utils/util";
-import Bus from "../../plugin/bus";
-import { Loadmore } from "mint-ui";
+    import {API} from "../../service/api";
+    import {BusName} from "../../Constant";
+    import util from "../../common/utils/util";
+    import Bus from "../../plugin/bus";
+    import {Loadmore} from "mint-ui";
 
-export default {
-  data() {
-    return {
-      searchCondition: {
-        //分页属性
-        pageNo: "1",
-        pageSize: "10"
-      },
+    export default {
+        data() {
+            return {
+                searchCondition: {
+                    //分页属性
+                    pageNo: "1",
+                    pageSize: "10"
+                },
 
-      pageList: [],
-      allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-      scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+                pageList: [],
+                allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+                scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 
-      searchCondition1: {
-        //分页属性
-        pageNo: "1",
-        pageSize: "10"
-      },
-      pageList1: [],
-      tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
-      nowIndex: 0, //默认第一个tab为激活状态
-      financialData: {}
+                searchCondition1: {
+                    //分页属性
+                    pageNo: "1",
+                    pageSize: "10"
+                },
+                pageList1: [],
+                tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
+                nowIndex: 0, //默认第一个tab为激活状态
+                financialData: {},
+            };
+        },
+        components: {
+            "v-loadmore": Loadmore
+        },
+        created() {
+            this.getData(); //理财产品列表
+        },
+        mounted() {
+            this.loadPageList(); //初次访问查询列表
+            this.getWinHeight()
+            let winHeigt = this.getWinHeight()
+            let wTopHeight = this.getDivSize('.w-top').height
+            let tabsHeight = this.getDivSize('.tabs').height
+            let bottomHeight =winHeigt-wTopHeight-tabsHeight
+            console.log(bottomHeight);
+            document.querySelector('.main-body').style.height = bottomHeight + 'px'
+        },
+        methods: {
+            getDivSize(ele){
+                var divBox = document.querySelector(ele)
+
+                return {
+                    with:divBox.offsetWidth,
+                    height:divBox.offsetHeight
+                }
+            },
+            getWinHeight(){
+                var winHeight;
+                if (window.innerHeight){
+                    winHeight = window.innerHeight;
+                }
+                else if ((document.body) && (document.body.clientHeight)){
+                    winHeight = document.body.clientHeight;
+                }
+                return winHeight
+            },
+            toggleTabs(index) {
+                this.nowIndex = index;
+                this.loadPageList();
+            },
+            getData() {
+                let data = {
+                    PRD_TYPE: ""
+                };
+                API.financial.apiMyAssetByType(data, res => {
+                    this.financialData = res.lcAsset;
+                });
+            },
+            loadTop: function () {
+                //组件提供的下拉触发方法
+                //下拉加载
+                this.loadPageList();
+                if (this.nowIndex == 1) {
+                    this.$refs.loadmore1.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+                } else {
+                    this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+                }
+            },
+            loadBottom: function () {
+                // 上拉加载
+                this.more(); // 上拉触发的分页查询
+                if (this.nowIndex == 1) {
+                    this.$refs.loadmore1.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+                } else {
+                    this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
+                }
+            },
+            loadPageList: function () {
+                // 初始化
+                this.searchCondition.pageNo = "1";
+                this.searchCondition1.pageNo = "1";
+                this.allLoaded = false;
+                // 查询数据
+
+                //   alert(this.nowIndex);
+                if (this.nowIndex == 1) {
+                    //已到期数据
+                    let data = {
+                        currentPage: this.searchCondition1.pageNo,
+                        PRD_TYPE: "2"
+                    };
+                    API.financial.getMyInvestOver(data, res => {
+                        this.pageList1 = res.PAGE.retList;
+                        if (this.pageList1.length < this.searchCondition1.pageSize) {
+                            this.allLoaded = true;
+                        }
+                        //    if (this.pageList1.length <= 0) {
+                        //     Bus.$emit(BusName.showToast, "暂无数据");
+                        //    }
+                        this.$nextTick(function () {
+                            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+                            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+                            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+                            this.scrollMode = "touch";
+                        });
+                    });
+                } else {
+                    //持有数据
+                    let data = {
+                        currentPage: this.searchCondition.pageNo,
+                        PRD_TYPE: "2"
+                    };
+                    API.financial.getMyInvestHold(data, res => {
+                        this.pageList = res.PAGE.retList;
+                        // this.pageList = res.PAGE.retList;
+                        if (this.pageList.length < this.searchCondition.pageSize) {
+                            this.allLoaded = true;
+                        }
+                        //   if (this.pageList.length <= 0) {
+                        //     Bus.$emit(BusName.showToast, "暂无数据");
+                        //   }
+                        this.$nextTick(function () {
+                            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+                            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+                            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+                            this.scrollMode = "touch";
+                        });
+                    });
+                }
+            },
+            more: function () {
+                if (this.nowIndex == 1) {
+                    // 已到期分页查询
+                    this.searchCondition1.pageNo =
+                            "" + (parseInt(this.searchCondition1.pageNo) + 1);
+                    let data = {
+                        currentPage: this.searchCondition1.pageNo,
+                        PRD_TYPE: "2"
+                    };
+                    API.financial.getMyInvestOver(data, res => {
+                        this.pageList1 = this.pageList1.concat(res.PAGE.retList);
+                        if (this.pageList1.length < this.searchCondition1.pageSize) {
+                            this.allLoaded = true;
+                            Bus.$emit(BusName.showToast, "数据全部加载完成");
+                        }
+                    });
+                } else {
+                    // 已持有分页查询
+                    this.searchCondition.pageNo =
+                            "" + (parseInt(this.searchCondition.pageNo) + 1);
+                    let data = {
+                        currentPage: this.searchCondition.pageNo,
+                        PRD_TYPE: "2"
+                    };
+                    API.financial.getMyInvestHold(data, res => {
+                        this.pageList = this.pageList.concat(res.PAGE.retList);
+                        if (this.pageList.length < this.searchCondition.pageSize) {
+                            this.allLoaded = true;
+                            Bus.$emit(BusName.showToast, "数据全部加载完成");
+                        }
+                    });
+                }
+            }
+        }
     };
-  },
-  components: {
-    "v-loadmore": Loadmore
-  },
-  created() {
-    this.getData(); //理财产品列表
-  },
-  mounted() {
-    this.loadPageList(); //初次访问查询列表
-  },
-  methods: {
-    toggleTabs(index) {
-      this.nowIndex = index;
-      this.loadPageList();
-    },
-    getData() {
-      let data = {
-        PRD_TYPE: ""
-      };
-      API.financial.apiMyAssetByType(data, res => {
-        this.financialData = res.lcAsset;
-      });
-    },
-    loadTop: function() {
-      //组件提供的下拉触发方法
-      //下拉加载
-      this.loadPageList();
-      if (this.nowIndex == 1) {
-        this.$refs.loadmore1.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-      } else {
-        this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-      }
-    },
-    loadBottom: function() {
-      // 上拉加载
-      this.more(); // 上拉触发的分页查询
-      if (this.nowIndex == 1) {
-        this.$refs.loadmore1.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-      } else {
-        this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-      }
-    },
-    loadPageList: function() {
-      // 初始化
-      this.searchCondition.pageNo = "1";
-      this.searchCondition1.pageNo = "1";
-      this.allLoaded = false;
-      // 查询数据
-
-      //   alert(this.nowIndex);
-      if (this.nowIndex == 1) {
-        //已到期数据
-        let data = {
-          currentPage: this.searchCondition1.pageNo,
-          PRD_TYPE: "2"
-        };
-        API.financial.getMyInvestOver(data, res => {
-          this.pageList1 = res.PAGE.retList;
-           if(this.pageList1.length<this.searchCondition1.pageSize){
-                  this.allLoaded = true;
-           }
-        //    if (this.pageList1.length <= 0) {
-        //     Bus.$emit(BusName.showToast, "暂无数据");
-        //    }
-          this.$nextTick(function() {
-            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-            this.scrollMode = "touch";
-          });
-        });
-      } else {
-        //持有数据
-        let data = {
-          currentPage: this.searchCondition.pageNo,
-          PRD_TYPE: "2"
-        };
-        API.financial.getMyInvestHold(data, res => {
-          this.pageList = res.PAGE.retList;
-          if (this.pageList.length < this.searchCondition.pageSize) {
-            this.allLoaded = true;
-          }
-        //   if (this.pageList.length <= 0) {
-        //     Bus.$emit(BusName.showToast, "暂无数据");
-        //   }
-          this.$nextTick(function() {
-            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-            this.scrollMode = "touch";
-          });
-        });
-      }
-    },
-    more: function() {
-      if (this.nowIndex == 1) {
-        // 已到期分页查询
-        this.searchCondition1.pageNo =
-          "" + (parseInt(this.searchCondition1.pageNo) + 1);
-        let data = {
-          currentPage: this.searchCondition1.pageNo,
-          PRD_TYPE: "2"
-        };
-        API.financial.getMyInvestOver(data, res => {
-          this.pageList1 = this.pageList1.concat(res.PAGE.retList);
-          if (this.pageList1.length < this.searchCondition1.pageSize) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
-          }
-        });
-      } else {
-        // 已持有分页查询
-        this.searchCondition.pageNo =
-          "" + (parseInt(this.searchCondition.pageNo) + 1);
-        let data = {
-          currentPage: this.searchCondition.pageNo,
-          PRD_TYPE: "2"
-        };
-        API.financial.getMyInvestHold(data, res => {
-          this.pageList = this.pageList.concat(res.PAGE.retList);
-          if (this.pageList.length < this.searchCondition.pageSize) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
-          }
-        });
-      }
-    }
-  }
-};
 </script>
 
 <style lang="scss">
-.pro .header img {
-  display: none;
-}
+    .pro .header img {
+        display: none;
+    }
 </style>
 <style lang="scss" scoped>
-@import "../../assets/px2rem";
-.pro .header:after {
-  position: absolute;
-  content: "";
-  border-right: 2px solid #fff;
-  border-top: 2px solid #fff;
-  height: px2rem(11);
-  width: px2rem(11);
-  left: px2rem(18);
-  top: 0.6rem;
-  -webkit-transform: rotate(228deg);
-  border-left: px2rem(2) solid transparent;
-  border-bottom: px2rem(2) solid transparent;
-}
-.wrap {
-  width: 100%;
-  box-sizing: border-box;
-  height: 100%;
-  background: #f4f4f8;
-}
-.header {
-  background-color: #518bee;
-  color: #fff;
-  border-bottom: 1px solid #518bee;
-  position: relative;
-}
-.f-box {
-  height: px2rem(158);
-  background: #518bee;
-  ul {
-    display: flex;
-    li {
-      flex: 1;
-      p {
-        text-align: center;
+    @import "../../assets/px2rem";
+
+    .pro .header:after {
+        position: absolute;
+        content: "";
+        border-right: 2px solid #fff;
+        border-top: 2px solid #fff;
+        height: px2rem(11);
+        width: px2rem(11);
+        left: px2rem(18);
+        top: 0.6rem;
+        -webkit-transform: rotate(228deg);
+        border-left: px2rem(2) solid transparent;
+        border-bottom: px2rem(2) solid transparent;
+    }
+
+    .wrap {
+        width: 100%;
+        box-sizing: border-box;
+        height: 100%;
+        background: #f4f4f8;
+        overflow: hidden;
+    }
+
+    .header {
+        background-color: #518bee;
         color: #fff;
-      }
-      p:first-child {
-        font-size: px2rem(22);
-        line-height: px2rem(30);
-        padding-top: px2rem(52);
-        padding-bottom: px2rem(7);
-      }
-      p:last-child {
-        font-size: px2rem(12);
-        line-height: px2rem(17);
-      }
+        border-bottom: 1px solid #518bee;
+        position: relative;
     }
-    li:first-child {
-      position: relative;
+    .w-top{
+        position: fixed;
+        top:px2rem(0);
+        width: 100%;
+        z-index: 10;
     }
-    li:first-child:after {
-      position: absolute;
-      content: "";
-      width: px2rem(1);
-      height: px2rem(20);
-      right: 0;
-      background: #fff;
-      top: px2rem(67);
-    }
-    li.active {
-      background: #eee;
-    }
-  }
-}
-
-.tab-box {
-  // background:#f4f4f8; height: 100%; position:fixed; width:100%;
-  ul {
-    background: #fff;
-    display: flex;
-    margin-bottom: px2rem(20);
-    li {
-      flex: 1;
-      height: px2rem(50);
-      font-size: px2rem(18);
-      line-height: px2rem(50);
-      text-align: center;
-    }
-    li.active {
-      color: #508cee;
-      position: relative;
-    }
-    li.active:after {
-      position: absolute;
-      width: px2rem(20);
-      height: px2rem(3);
-      content: "";
-      background: #508cee;
-      border-radius: px2rem(2);
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-    }
-  }
-  .divTab {
-    background: #f4f4f8;
-    padding-bottom: px2rem(10);
-    .divTab-1 {
-      background: #fff;
-      font-size: px2rem(12);
-      margin: px2rem(10) px2rem(15) 0;
-      border-radius: px2rem(12);
-      box-sizing: border-box;
-      padding: px2rem(20) px2rem(15) px2rem(10);
-      h4 {
-        overflow: hidden;
-      }
-      h4 strong {
-        color: #333333;
-        font-size: px2rem(16);
-        line-height: px2rem(12);
-      }
-      h4 a {
-        font-size: px2rem(12);
-        color: #508cee;
-        line-height: px2rem(17);
-        float: right;
-        font-weight: normal;
-      }
-      p {
-        color: #666;
-        font-size: px2rem(12);
-        line-height: px2rem(17);
-        padding-bottom: px2rem(8);
-        overflow: hidden;
-        span {
-          float: right;
-          color: #999999;
+    .f-box {
+        width: 100%;
+        height: px2rem(158);
+        background: #518bee;
+        z-index: 2;
+        ul {
+            display: flex;
+            li {
+                flex: 1;
+                p {
+                    text-align: center;
+                    color: #fff;
+                }
+                p:first-child {
+                    font-size: px2rem(22);
+                    line-height: px2rem(30);
+                    padding-top: px2rem(52);
+                    padding-bottom: px2rem(7);
+                }
+                p:last-child {
+                    font-size: px2rem(12);
+                    line-height: px2rem(17);
+                }
+            }
+            li:first-child {
+                position: relative;
+            }
+            li:first-child:after {
+                position: absolute;
+                content: "";
+                width: px2rem(1);
+                height: px2rem(20);
+                right: 0;
+                background: #fff;
+                top: px2rem(67);
+            }
+            li.active {
+                background: #eee;
+            }
         }
-      }
-      p:first-of-type {
-        padding: px2rem(4) 0 px2rem(10);
-        border-bottom: px2rem(1) solid #f5f5f5;
-        margin-bottom: px2rem(16);
-      }
-      // p:last-of-type{ padding-bottom: 0;}
     }
-  }
-}
 
-.main-body {
-  min-height: 9rem;
-  overflow: auto;
-}
+    .tab-box {
+        position: fixed;
+        width: 100%;
+        top: px2rem(218);
+        ul {
+            background: #fff;
+            display: flex;
+            margin-bottom: px2rem(10);
+            li {
+                flex: 1;
+                height: px2rem(50);
+                font-size: px2rem(18);
+                line-height: px2rem(50);
+                text-align: center;
+            }
+            li.active {
+                color: #508cee;
+                position: relative;
+            }
+            li.active:after {
+                position: absolute;
+                width: px2rem(20);
+                height: px2rem(3);
+                content: "";
+                background: #508cee;
+                border-radius: px2rem(2);
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+        }
+        .divTab {
+            background: #f4f4f8;
+            padding-bottom: px2rem(10);
+            .divTab-1 {
+                background: #fff;
+                font-size: px2rem(12);
+                margin: px2rem(10) px2rem(15) 0;
+                border-radius: px2rem(12);
+                box-sizing: border-box;
+                padding: px2rem(20) px2rem(15) px2rem(10);
+                h4 {
+                    overflow: hidden;
+                }
+                h4 strong {
+                    color: #333333;
+                    font-size: px2rem(16);
+                    line-height: px2rem(12);
+                }
+                h4 a {
+                    font-size: px2rem(12);
+                    color: #508cee;
+                    line-height: px2rem(17);
+                    float: right;
+                    font-weight: normal;
+                }
+                p {
+                    color: #666;
+                    font-size: px2rem(12);
+                    line-height: px2rem(17);
+                    padding-bottom: px2rem(8);
+                    overflow: hidden;
+                    span {
+                        float: right;
+                        color: #999999;
+                    }
+                }
+                p:first-of-type {
+                    padding: px2rem(4) 0 px2rem(10);
+                    border-bottom: px2rem(1) solid #f5f5f5;
+                    margin-bottom: px2rem(16);
+                }
+                // p:last-of-type{ padding-bottom: 0;}
+            }
+        }
+    }
+
+    .main-body {
+        overflow-y: auto;
+    }
 </style>
