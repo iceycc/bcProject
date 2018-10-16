@@ -1,7 +1,6 @@
 // 静态值定义： 【应用配置】
+import { version } from '../package'
 
-
-let url = 'http://192.168.100.96'
 
 /**
  *
@@ -24,6 +23,12 @@ export const AppUrl = { // app下载地址
     Android: '',
     Ios: ''
 }
+
+/**
+ * 项目前缀
+ */
+export const PROJECT_PREFIX = 'YIDU'+ version
+export const STORE_PREFIX = '_MX_'
 
 /**
  * logo图片地址
