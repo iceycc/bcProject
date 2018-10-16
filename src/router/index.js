@@ -39,8 +39,8 @@ let routes = [
  * buy
  */
 
-addRouter(PageName.Buyfailed, {keepAlive: false, title: '理财产品'});
-addRouter(PageName.Buysuccess, {keepAlive: false, title: '购买成功'});
+addRouter(PageName.Buyfailed, {keepAlive: false, title: '购买失败',needLogin: false});
+addRouter(PageName.Buysuccess, {keepAlive: false, title: '购买成功',needLogin: false});
 addRouter(PageName.surebuy, {keepAlive: false, title: '购买'});
 addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
 

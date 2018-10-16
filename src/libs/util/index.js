@@ -1,11 +1,10 @@
-import cookies from './util.cookies'
-import local from './util.localstorage'
-import session from './util.sessionstorage'
-const storage = {
-    cookies,
-    session,
-    local
-}
+
+
+import storage from './util.storage'
+import Check from './util.check'
+import isEquipment from './util.checkuserAgent'
 export default {
-    storage
+    storage,
+    Check,
+    isEquipment
 }

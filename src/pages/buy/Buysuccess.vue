@@ -35,7 +35,7 @@
     import util from "../../common/utils/util";
     import {WatchApi} from "../../service/api";
     import Bus from '../../plugin/bus'
-    import {BusName, LsName} from "../../Constant";
+    import {BusName} from "../../Constant";
 
     export default {
         data() {
@@ -54,9 +54,7 @@
                     FUNCTION_ID: 'ptb0A010', // 点位
                     REMARK_DATA: '异业合作-购买成功-下载比财', // 中文备注
                 })
-                util.downLoad(() => {
-                    Bus.$emit(BusName, '请在浏览器中下载')
-                })
+                util.downLoad()
             }
         }
     }

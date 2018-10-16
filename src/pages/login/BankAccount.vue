@@ -27,7 +27,9 @@
                     </li>
                     <li>
                         <P>昨日收益</P>
-                        <P><i v-if="bank.YSD_INCOME>=0">+</i>{{bank.YSD_INCOME}}</P>
+                        <P>
+                            <!--<i v-if="bank.YSD_INCOME>=0">+</i>-->
+                            {{bank.YSD_INCOME}}</P>
                     </li>
                     <li>
                         <P>累计收益</P>
@@ -48,7 +50,7 @@
                         <p>隶属于{{bank.DESCRIPT}}</p>
                     </div>
                     <div class="m-btn">
-                        <span class="u-btn" @click="goPage('login',bank.ORG_ID)">安全登陆</span>
+                        <span class="u-btn" @click="goPage('login',bank.ORG_ID)">安全登录</span>
                     </div>
 
                 </div>

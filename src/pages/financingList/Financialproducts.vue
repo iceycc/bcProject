@@ -6,7 +6,7 @@
             <div class="f-box">
                 <ul>
                     <li>
-                        <p>{{financialData.TOTAL_ASSET | formatNum}}</p>
+                        <p>{{total | formatNum}}</p>
                         <p>总资产</p>
                     </li>
                     <li>
@@ -78,7 +78,6 @@
 <script>
     import {API} from "../../service/api";
     import {BusName} from "../../Constant";
-    import util from "../../common/utils/util";
     import Bus from "../../plugin/bus";
     import {Loadmore} from "mint-ui";
 
@@ -104,6 +103,7 @@
                 tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
                 nowIndex: 0, //默认第一个tab为激活状态
                 financialData: {},
+                total: ''
             };
         },
         components: {
@@ -111,6 +111,8 @@
         },
         created() {
             this.getData(); //理财产品列表
+            this.total = this.$route.query.total
+
         },
         mounted() {
             this.loadPageList(); //初次访问查询列表
@@ -118,25 +120,24 @@
             let winHeigt = this.getWinHeight()
             let wTopHeight = this.getDivSize('.w-top').height
             let tabsHeight = this.getDivSize('.tabs').height
-            let bottomHeight =winHeigt-wTopHeight-tabsHeight
-            console.log(bottomHeight);
+            let bottomHeight = winHeigt - wTopHeight - tabsHeight - 25
             document.querySelector('.main-body').style.height = bottomHeight + 'px'
         },
         methods: {
-            getDivSize(ele){
+            getDivSize(ele) {
                 var divBox = document.querySelector(ele)
 
                 return {
-                    with:divBox.offsetWidth,
-                    height:divBox.offsetHeight
+                    with: divBox.offsetWidth,
+                    height: divBox.offsetHeight
                 }
             },
-            getWinHeight(){
+            getWinHeight() {
                 var winHeight;
-                if (window.innerHeight){
+                if (window.innerHeight) {
                     winHeight = window.innerHeight;
                 }
-                else if ((document.body) && (document.body.clientHeight)){
+                else if ((document.body) && (document.body.clientHeight)) {
                     winHeight = document.body.clientHeight;
                 }
                 return winHeight
@@ -266,6 +267,7 @@
     .pro .header img {
         display: none;
     }
+
 </style>
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
@@ -298,12 +300,14 @@
         border-bottom: 1px solid #518bee;
         position: relative;
     }
-    .w-top{
+
+    .w-top {
         position: fixed;
-        top:px2rem(0);
+        top: px2rem(0);
         width: 100%;
         z-index: 10;
     }
+
     .f-box {
         width: 100%;
         height: px2rem(158);
@@ -426,5 +430,9 @@
 
     .main-body {
         overflow-y: auto;
+        .mint-loadmore-content {
+            padding-bottom: px2rem(50) !important;
+        }
     }
+
 </style>

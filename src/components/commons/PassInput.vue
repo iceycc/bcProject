@@ -1,5 +1,5 @@
 <template>
-    <div :id="inputID"
+    <div :id="iptId"
          v-if="show"
          style="color: #ccc"
          modulus-hex="9c4ebeacd2f30283df44853e59b1c825f1a95760c44f48db786560806431faccc8b54e19bc5f37ba54ffc2b138ba336b545e51a51e1b5b297e84e4149e4440f845f6d2ac44829aa301b742a30e28efa619bcd7d148a5ec819808ae3974b5fd7672a2df0fce835031f45b897cb82887de57a5247f1989d24ac79cbb1df678918b"
@@ -31,12 +31,20 @@
                 toUrl: "",
                 passValue: '',
                 show: true,
-                DeviceId:''
+                DeviceId:'',
+                iptId:''
             }
         },
+        beforeDestroy(){
+            this.iptId = ''
+        },
         created() {
+            this.iptId = this.inputID
             console.log(this.inputID + '>> 创建了')
             this.DeviceId = util.storage.session.get(LsName.DEVICE_ID)
+        },
+        activated(){
+            this.iptId = this.inputID
         },
         watch: {
             doGetData(newVal, oldVal) {
@@ -47,7 +55,6 @@
             refur(newVal, oldVal) {
                 this.show = false
                 this.$nextTick(() => {
-                    console.log('refur');
                     this.show = true
                 })
             }

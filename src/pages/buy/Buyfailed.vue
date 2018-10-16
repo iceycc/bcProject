@@ -32,9 +32,7 @@
                     FUNCTION_ID: 'ptb0A011', // 点位
                     REMARK_DATA: '异业合作-购买失败-下载比财', // 中文备注
                 })
-                util.downLoad(() => {
-                    Bus.$emit(BusName, '请在浏览器中下载')
-                })
+                util.downLoad()
             }
         }
     }

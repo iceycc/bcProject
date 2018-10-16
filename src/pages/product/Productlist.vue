@@ -4,6 +4,7 @@
         <div class="banner">
             <img src="../../assets/images/banner.png" alt="">
         </div>
+        <!-- 九宫格 -->
         <div class="productlist" v-if="!show">
             <ul class="ul-li">
                 <li class="productdetail clearfix"
@@ -20,6 +21,7 @@
                 </li>
             </ul>
         </div>
+        <!--列表-->
         <div class="productdetail2" v-if="show">
             <ul>
                 <li class="clearfix" v-for="item,index in dataList" :key="index"
@@ -65,12 +67,14 @@
             getListData() {
                 API.product.apiGetChannelPrdList({}, (res) => {
                     let num = res.length
-                    if (num < 9) {
+                    if (num < 6) {
                         this.show = true
                     } else {
                         this.show = false
                     }
-                    this.dataList = res.splice(0, 9)
+                    if(num>9){
+                        this.dataList = res.splice(0, 9)
+                    }
                 })
             },
             goDetail(id,title) {

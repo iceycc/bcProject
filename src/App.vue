@@ -52,6 +52,7 @@
             console.log('设备userAgent>>' + navigator.userAgent);
             // alert(navigator.userAgent);
             Bus.$on(BusName.showToast, (val) => {
+                console.log(val);
                 this.showToast = true
                 this.msg = val
                 setTimeout(() => {

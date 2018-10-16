@@ -1,12 +1,12 @@
 <template>
     <div>
-        <app-bar title="更换手机号"></app-bar>
+        <app-bar title="修改手机号"></app-bar>
         <section class="m-form">
             <section class="m-line">
                 <span class="n-left">原手机号</span>
                 <span class="n-right">{{tel}}</span>
             </section>
-            <active-input valuePlaceholder="新手机号" v-model="params.PHONE_NUM"></active-input>
+            <active-input valuePlaceholder="新手机号码" v-model="PHONE_NUM"></active-input>
             <active-input valuePlaceholder="验证码" v-model="params.PHONE_CODE">
                 <template slot="btn">
                     <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
@@ -14,7 +14,7 @@
             </active-input>
             <section class="submit-box">
                 <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
-                <button class="submit-btn" @click="goNext">提交</button>
+                <button class="submit-btn" @click="goNext">下一步</button>
             </section>
             <section class="foot-text">
                 <p>温馨提示：</p>
@@ -46,10 +46,20 @@
                     PHONE_CODE:'',
                     MESSAGE_TOKEN:''
                 },
+                PHONE_NUM:'',
                 tel:'',
                 disable:false,
                 codeText:'获取验证码',
                 time:60
+            }
+        },
+        watch:{
+            PHONE_NUM(n,o){
+                if (n.length > 11) { // >11截取
+                    this.PHONE_NUM = n.toString().substr(0, 11)
+                    console.log(this.PHONE_NUM);
+                    return
+                }
             }
         },
         created() {
@@ -58,6 +68,7 @@
         methods: {
             goNext() {
                 let msg;
+                this.params.PHONE_NUM = this.PHONE_NUM
                 if (msg = util.Check.tel(this.params.PHONE_NUM)) {
                     this.showErrMsg(msg)
                     return

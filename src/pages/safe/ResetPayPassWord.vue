@@ -11,7 +11,6 @@
                 <span class="n-left">手机号</span>
                 <span class="n-right">{{tel}}</span>
             </section>
-            <input type="text" v-model="tel">
             <active-input valuePlaceholder="验证码" v-model="PHONE_CODE">
                 <template slot="btn">
                     <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>

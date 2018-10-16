@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <app-bar title="提现"></app-bar>
-        <div class="rechargetitle">提现到{{CARD_BANK_NAME}}直销银行</div>
+        <div class="rechargetitle">提现到{{CARD_BANK_NAME}}</div>
         <div class="minshengbank">
             <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
@@ -10,7 +10,7 @@
         <section class="inputAmount">
             <span class="Amount">金额</span>
             <input @change="checkMoney"
-                   v-model="APPLY_AMOUN" type="number" placeholder="请输入金额">
+                   v-model="APPLY_AMOUN" type="number" placeholder="请输入提现金额">
         </section>
         <p class="info">本卡当前余额{{ACC_REST}}元 <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
         <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
@@ -25,7 +25,7 @@
                     </p>
                     <div class="field_row_value">
                         <pass-input
-                                inputID="withdrawPayPass"
+                                :inputID="inputID"
                         ></pass-input>
                     </div>
                     <p class="info">密码由数字组成，必须为6位</p>
@@ -42,7 +42,7 @@
 <script>
     import {API} from "../../service/api";
     import AppBar from '../../components/header/AppBar'
-    import {HOST, LsName} from '../../Constant'
+    import { LsName} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../plugin/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
@@ -65,8 +65,8 @@
                 pass: '',
                 len: null,
                 canClick: false,
-                logo:''
-
+                logo:'',
+                inputID:''
             }
         },
         watch: {
@@ -76,6 +76,9 @@
                 } else {
                     this.canClick = false
                 }
+            },
+            show(n,O){
+              this.inputID  = n?'withdrawPayPass':''
             }
         },
         components: {
@@ -157,7 +160,7 @@
                             }
                     )
                 }, err => {
-
+                    Bus.$emit(BusName.showToast, err);
                 })
             },
             doNext() {
@@ -264,9 +267,9 @@
     }
 
     .info {
-        padding-left: px2rem(20);
-        padding-top: px2rem(20);
-        font-size: px2rem(14);
+        padding-left: px2rem(10);
+        padding-top: px2rem(0);
+        font-size: px2rem(18);
         color: #9199A1;
     }
 

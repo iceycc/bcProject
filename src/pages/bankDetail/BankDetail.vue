@@ -45,7 +45,7 @@
             <div class="bank-test">
                 <p class="">{{bankDetail.ORG_NAME}}</p>
                 <p class="card-no" v-if="pass">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
-                <p class="card-no" v-else>**** **** **** ****</p>
+                <p class="card-no" v-if="!pass">**** **** **** ****</p>
             </div>
         </section>
         <section class="financing-list" v-if="pass">
@@ -131,10 +131,15 @@
         },
         methods: {
             goPage(pageName) {
-                console.log(pageName)
-
+                let query
+                if(pageName==this.toPageName.Financialproducts){
+                    query = {
+                        total:this.bankDetail.lcAsset.API_FINA_ASSET
+                    }
+                }
                 this.$router.push({
-                    name: pageName
+                    name: pageName,
+                    query
                 })
             },
             show() {
