@@ -73,7 +73,7 @@
                     PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
                     id: this.proDetail.id,
                     ORG_NAME: this.proDetail.ORG_NAME, // 直销银行名称
-                    logo: this.proDetail.logo, // 直销银行名称
+                    LOGO_URL: this.proDetail.logo, // 直销银行名称
                 })
                 this.$router.push({
                     name: PageName.Recharge,
