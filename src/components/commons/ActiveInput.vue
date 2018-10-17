@@ -4,11 +4,11 @@
             <p class="label" v-show="valueShow">{{defaultPlaceholderText}}</p>
         </transition>
         <section>
-            <input class="input" type="number"
+            <input class="input" :type="type"
                    name="text1" :placeholder="placeholderText"
-                   :value="value"
-                   @input="$emit('input', $event.target.value)"
-                   @change="changeFn($event.target.value)"
+                   :value="currentValue"
+                   @input="handleInput($event.target.value)"
+                   @change="handleChange($event.target.value)"
             >
             <slot name="btn" class="slot">
             </slot>
@@ -24,14 +24,30 @@
                 type: null,
                 default: '请填写'
             },
-            value:null
+            value: null,
+            type: {
+                type: null,
+                default: 'text'
+            },
+            max: {
+                type: null,
+                default: Infinity,
+            },
         },
         data() {
+            var currentValue = '0'
+            this.val = this.val + ''
+            if (this.val.length > this.max) {
+                currentValue = this.val.toString().substr(0,this.max)
+            }else {
+                currentValue = this.value
+            }
             return {
                 valueShow: false,
                 placeholderText: '',
                 defaultPlaceholderText: '',
-                ifActive:true
+                ifActive: true,
+                currentValue: currentValue
             }
         },
         created() {
@@ -39,16 +55,39 @@
             this.placeholderText = this.valuePlaceholder
 
         },
-        methods:{
-            changeFn(val){
-                this.$emit('changeHandle',val)
+        methods: {
+            handleChange(val) {
+                // this.$emit('changeHandle',val)
+            },
+            isValueNumber(value){
+                return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
+            },
+            handleInput(val) {
+                var val = event.target.value.trim() ;
+                if(this.isValueNumber(val)){
+                    var max = this.max ;
+                    val = val + '';
+                    this.currentValue = val ;
+                    if(val.length>max) {
+                        this.currentValue = val.toString().substr(0,max)
+                    } ;
+                }else{
+                    // 如果输入的非数字，则保留之前的数据
+                    if(val == '') {
+                        return
+                    }
+                    event.target.value = this.currentValue ;
+                }
+                // this.$emit('input',val)
             }
         },
+        computed: {},
         watch: {
+            currentValue(val) {
+                this.$emit('input', val);
+                this.$emit('on-change', val);
+            },
             value(n, o) {
-                // if (n.length > 1) { // >1时不必校验
-                //     return
-                // }
                 if (!n) { // 删除到 '' 是触发
                     this.ifActive = true
                     this.valueShow = false
@@ -65,6 +104,7 @@
 
 <style lang="scss" scoped>
     @import "../../assets/px2rem";
+
     .input-box {
         box-sizing: border-box;
         position: relative;
@@ -96,15 +136,16 @@
         /* line-height: 40px; */
         outline: none;
     }
-    .slot{
+
+    .slot {
         position: absolute;
         z-index: 3;
         right: 0;
     }
 
-    .active-input{
+    .active-input {
         height: px2rem(42);
-        .input{
+        .input {
             font-size: px2rem(14);
         }
     }

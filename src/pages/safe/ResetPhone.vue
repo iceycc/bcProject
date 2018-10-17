@@ -6,7 +6,9 @@
                 <span class="n-left">原手机号</span>
                 <span class="n-right">{{tel}}</span>
             </section>
-            <active-input valuePlaceholder="新手机号码" v-model="PHONE_NUM"></active-input>
+            <active-input valuePlaceholder="新手机号码"
+                          max='11'
+                          v-model="PHONE_NUM"></active-input>
             <active-input valuePlaceholder="验证码" v-model="params.PHONE_CODE">
                 <template slot="btn">
                     <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
@@ -54,19 +56,14 @@
             }
         },
         watch:{
-            PHONE_NUM(n,o){
-                if (n.length > 11) { // >11截取
-                    this.PHONE_NUM = n.toString().substr(0, 11)
-                    console.log(this.PHONE_NUM);
-                    return
-                }
-            }
+
         },
         created() {
             this.tel = util.storage.session.get(LsName.Infos).PHONE_NUM
         },
         methods: {
             goNext() {
+                console.log(this.PHONE_NUM);
                 let msg;
                 this.params.PHONE_NUM = this.PHONE_NUM
                 if (msg = util.Check.tel(this.params.PHONE_NUM)) {

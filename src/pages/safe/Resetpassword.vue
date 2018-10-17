@@ -13,7 +13,8 @@
             </section>
             <section>
                 <span>手机号</span>
-                <input v-model="tel" type="number" name="text1" placeholder="请输入登录手机号">
+                <input v-model="tel"
+                       type="number" name="text1" placeholder="请输入登录手机号">
             </section>
             <section>
                 <span>新登录密码</span>

@@ -74,6 +74,9 @@
                     }
                     if(num>9){
                         this.dataList = res.splice(0, 9)
+                    }else {
+                        this.dataList = res
+
                     }
                 })
             },

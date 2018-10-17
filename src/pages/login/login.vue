@@ -9,7 +9,7 @@
                 <transition name="fade">
                     <p class="label" v-show="telShow">开户手机号</p>
                 </transition>
-                <input class="input" type="number"
+                <input class="input" type="text"
                        name="text1" :placeholder="telPaceholder" v-model="tel">
             </section>
             <!--<p><input type="password" name="text1" placeholder="登录密码" v-model="pass"></p>-->
@@ -66,7 +66,8 @@
                 passShow: false,
                 passText: '登录密码',
                 telPaceholder: '开户手机号',
-                passPluginText: ''
+                passPluginText: '',
+                currentTel:''
             }
         },
         mixins: [Mixin, UtilMixin],
@@ -85,10 +86,17 @@
         },
         watch: {
             tel(n, o) {
-                console.log(n);
+                if(n == '') {
+                    return
+                }
+                if(!this.isValueNumber(n)){
+                    this.tel = this.currentTel
+                    return
+                }
                 if (n.length > 11) { // >11截取
                     this.tel = this.tel.toString().substr(0, 11)
                 }
+                this.currentTel = n
                 if (n.length > 1) { // >1时不必校验
                     return
                 }
@@ -111,6 +119,9 @@
             next()
         },
         methods: {
+            isValueNumber(value){
+                return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
+            },
             watchPassPluginPass() {
                 let num = 1
                 // this.Londing.open({

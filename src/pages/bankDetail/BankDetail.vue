@@ -8,8 +8,8 @@
                     <span class="bk-text2">（元）</span>
                     <icon-font iconClass="icon-eye" iconStyle="eye" @doClick="pass =!pass"></icon-font>
                 </section>
-                <p class="money" v-if="pass">{{bankDetail.TOTAL_ASSET}}</p>
-                <p class="money" v-else>****</p>
+                <p class="money" v-if="pass">{{bankDetail.TOTAL_ASSET | formatNum}}</p>
+                <p class="money" v-if="!pass">****</p>
                 <section class="income">
                     <p>昨日到账收益
                         <span class="left-text">
@@ -28,7 +28,7 @@
             <section class="info-card">
                 <div class="ic-left">
                     <span class="bk-text1">可用余额</span><span class="bk-text2">（元）</span>
-                    <p class="money" v-if="pass">{{bankDetail.ACC_REST}}</p>
+                    <p class="money" v-if="pass">{{bankDetail.ACC_REST | formatNum}}</p>
                     <p class="money" v-else>****</p>
                 </div>
                 <span class="ic-right" @click="goPage(toPageName.BankBalance)">
@@ -54,7 +54,7 @@
                         理财</span>
                 <span :class="{'top-right':true,select:licaiShow}">
 
-                        ¥{{bankDetail.lcAsset.API_FINA_ASSET | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
+                        ¥{{bankDetail.lcAsset.API_FINA_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
                     </span>
             </section>
             <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
@@ -62,7 +62,7 @@
                     <span class="li-left">
                         {{item.PRD_NAME}}</span>
                     <span>
-                        ¥{{item.INVEST_AMOUNT | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
+                        ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
                     </span>
                 </li>
             </ul>

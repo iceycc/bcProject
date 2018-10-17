@@ -463,6 +463,9 @@ export const util = {
 
         return res;
     },
+    isValueNumber(value){
+        return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
+    },
 
     isTel: function (phone) {
         let reg = /^1[3578]\d{9}$|^(?:0\d{2,3}-?)?[2-9]\d{6,7}$/g;
