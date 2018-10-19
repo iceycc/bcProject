@@ -2,7 +2,6 @@
     <div class="wrap">
         <app-bar title="交易明细"></app-bar>
         <div class="t-tab">
-
             <ul class="tabs">
                 <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
                     :class="{active:index==nowIndex}">{{item}}
@@ -517,5 +516,6 @@
     .main-body {
         height: 17rem;
         overflow: auto;
+        padding-bottom: px2rem(50);
     }
 </style>

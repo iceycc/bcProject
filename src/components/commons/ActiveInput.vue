@@ -17,6 +17,8 @@
 </template>
 
 <script>
+    import {util} from '../../common/utils/util'
+
     export default {
         name: "ActiveInput",
         props: {
@@ -27,7 +29,7 @@
             value: null,
             type: {
                 type: null,
-                default: 'text'
+                default: 'tel'
             },
             max: {
                 type: null,
@@ -35,13 +37,7 @@
             },
         },
         data() {
-            var currentValue = '0'
-            this.val = this.val + ''
-            if (this.val.length > this.max) {
-                currentValue = this.val.toString().substr(0,this.max)
-            }else {
-                currentValue = this.value
-            }
+            var currentValue = ''
             return {
                 valueShow: false,
                 placeholderText: '',
@@ -55,40 +51,48 @@
             this.placeholderText = this.valuePlaceholder
 
         },
-        methods: {
-            handleChange(val) {
-                // this.$emit('changeHandle',val)
-            },
-            isValueNumber(value){
-                return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
-            },
-            handleInput(val) {
-                var val = event.target.value.trim() ;
-                if(this.isValueNumber(val)){
-                    var max = this.max ;
-                    val = val + '';
-                    this.currentValue = val ;
-                    if(val.length>max) {
-                        this.currentValue = val.toString().substr(0,max)
-                    } ;
-                }else{
-                    // 如果输入的非数字，则保留之前的数据
-                    if(val == '') {
-                        return
-                    }
-                    event.target.value = this.currentValue ;
-                }
-                // this.$emit('input',val)
+        mounted() {
+            if (this.currentValue) {
+                this.ifActive = false
+                this.placeholderText = ''
+                this.valueShow = true
             }
         },
-        computed: {},
-        watch: {
-            currentValue(val) {
-                this.$emit('input', val);
-                this.$emit('on-change', val);
+
+        methods: {
+            handleChange(val) {
             },
-            value(n, o) {
-                if (!n) { // 删除到 '' 是触发
+            isValueNumber(value) {
+                return {
+                    isValueNumOrX: (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9,x,X]*$)|(^-?0{1}$)/).test(value),
+                    isOne: (/[0-9,X,x]/).test(value)
+                }
+            },
+            throttle(cb, ms = 300, val) {
+                console.log(val);
+                let timer = true
+                return () => {
+                    console.log('timer', timer);
+                    if (!timer) {
+                        return
+                    }
+                    timer = false
+                    setTimeout(() => {
+                        cb(val)
+                        timer = true
+                    }, ms)
+                }
+            },
+            doInputThrottle(val) {
+                this.throttle(this.handleInput, 1000, val)
+            },
+            handleInput(val) {
+                this.controlInputStyle(val)
+                this.controlInputValue(val)
+                // this.controlInputValue(val)
+            },
+            controlInputStyle(val) {
+                if (!val) { // 删除到 '' 是触发
                     this.ifActive = true
                     this.valueShow = false
                     this.placeholderText = this.defaultPlaceholderText
@@ -97,8 +101,36 @@
                     this.placeholderText = ''
                     this.valueShow = true
                 }
-            }
-        }
+            },
+            controlInputValue(val) {
+                val = val.toString().trim()
+                this.currentValue = val
+                if (val.length >this.max) {
+                    this.currentValue = val.toString().substr(0, this.max)
+                }
+                // let lastT = val.substr(val.length - 1, 1)
+
+                // if (this.isValueNumber(lastT).isOne) {
+                //     var max = this.max;
+                //     val = val + '';
+                //     this.currentValue = val;
+                //     if (val.length > max) {
+                //         this.currentValue = val.toString().substr(0, max)
+                //     }
+                //     ;
+                // } else {
+                //     // 如果输入的非数字，则保留之前的数据
+                //     if (val == '') {
+                //         this.currentValue = '';
+                //         event.target.value = ''
+                //     } else {
+                //         event.target.value = this.currentValue;
+                //     }
+                // }
+                this.$emit('input', this.currentValue); // 给父组件  传值
+            },
+
+        },
     }
 </script>
 
@@ -112,7 +144,7 @@
         height: px2rem(70);
         background-size: 0.7rem 0.7rem;
         border-bottom: 1px #E5E5E5 solid;
-        padding-top: px2rem(15);
+        padding-top: px2rem(12);
     }
 
     .label {

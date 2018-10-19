@@ -6,7 +6,7 @@
                 <span class="n-left">姓名</span>
                 <span class="n-right">{{Infos.USER_NAME}}</span>
             </section>
-            <active-input valuePlaceholder="身份证号码" v-model="IDCardNum"></active-input>
+            <active-input valuePlaceholder="身份证号" v-model="IDCardNum" type="text"></active-input>
             <section class="m-line">
                 <span class="n-left">手机号</span>
                 <span class="n-right">{{tel}}</span>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="btn">
                     <button @click="cancel">取消</button>
-                    <button @click="submit">提交</button>
+                    <button @click="submit">确定</button>
                 </div>
             </div>
 
@@ -96,7 +96,9 @@
                 time: 60,
                 tel: '',
                 IDCardNum: "",
-                Infos: {},
+                Infos: {
+                    USER_NAME:'',
+                },
                 PHONE_CODE: '',
                 MESSAGE_TOKEN:''
             }
@@ -112,11 +114,12 @@
                 util.storage.session.remove('rePayPasswordInfo')
             }
 
-            this.Infos = util.storage.session.get(LsName.Infos)
+            this.Infos = util.storage.session.get(LsName.Infos) || this.Infos
             this.tel = this.Infos.PHONE_NUM
         },
         methods: {
             goNext() {
+                console.log(this.IDCardNum);
                 let msg;
                 if (msg = util.Check.idNumber(this.IDCardNum)) {
                     this.showErrMsg(msg)
@@ -143,10 +146,22 @@
                 },2000)
             },
             submit() {
+
+                // API.open.apiGetUserLastCompleteStep({
+                //     ID_NUMBER:this.IDCardNum,
+                // })
                 let BANK_PAY_PW = $('#reset_payPass').$getCiphertext(),
                         reset_payPass_len = $('#reset_payPass').$getPasswordLength() - 0 || 0,
                         BANK_PAY_PW2 = $('#reset_repayPass').$getCiphertext(),
                         reset_repayPass_len = $('#reset_repayPass').$getPasswordLength() - 0 || 0;
+                let msg
+                if(msg =util.Check.payPassLen(reset_payPass_len)){
+                    return Bus.$emit(BusName.showToast,msg)
+                }
+                if(msg =util.Check.payPassLen(reset_repayPass_len,true)){
+                    return Bus.$emit(BusName.showToast,msg)
+                }
+
                 let data = {
                     PHONE_CODE: this.PHONE_CODE,
                     USER_CARD_ID: this.IDCardNum,

@@ -135,7 +135,7 @@
                     return true
                 }
                 else if (val.length < 15 || val.length > 19) {
-                    this.showErrMsg('银行卡号格式不正确')
+                    this.showErrMsg('银行卡号有误，请确认后再次输入')
                     return true
                 }
                 else {
@@ -171,7 +171,7 @@
                 this.errMsg = msg;
                 setTimeout(() => {
                     this.errMsg = '';
-                }, 2000)
+                }, 4000)
             },
             subumit() {
                 let LoginPass = $('#change_bank_pay_pass').$getCiphertext()

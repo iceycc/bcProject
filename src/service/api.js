@@ -59,7 +59,7 @@ export const API = {
             }
             return http.post(options, Config.config, success, error)
         },
-        //   回显2
+        //   回显 根据身份证查询注册状态
         apiGetUserLastCompleteStep(params, delMsg, success, error) {
             let options = {
                 url: '/openapi/comm/apiGetUserLastCompleteStep',

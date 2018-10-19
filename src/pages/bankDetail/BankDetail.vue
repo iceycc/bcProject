@@ -1,25 +1,32 @@
 <template>
     <div class="main">
-        <app-bar title="我的银行"></app-bar>
+        <app-bar :title="bankDetail.ORG_NAME"></app-bar>
         <section class="container" style="padding-top: 7px">
             <section class="banner">
                 <section>
                     <span class="bk-text1">总资产</span>
                     <span class="bk-text2">（元）</span>
-                    <icon-font iconClass="icon-eye" iconStyle="eye" @doClick="pass =!pass"></icon-font>
+                    <icon-font :iconClass="pass?'icon-eye':'icon-icon-eye-close'" iconStyle="eye"
+                               @doClick="pass =!pass"></icon-font>
                 </section>
                 <p class="money" v-if="pass">{{bankDetail.TOTAL_ASSET | formatNum}}</p>
                 <p class="money" v-if="!pass">****</p>
                 <section class="income">
                     <p>昨日到账收益
-                        <span class="left-text">
+                        <span class="left-text" v-if="pass">
                              <i>{{bankDetail.YSD_INCOME>=0?'+':''}}</i>
                             {{bankDetail.YSD_INCOME}}</span>
+                        <span class="left-text" v-if="!pass">
+                            ****
+                        </span>
                     </p>
                     <p style="text-align: right">累计收益
-                        <span class="right-text">
+                        <span class="right-text" v-if="pass">
                              <i>{{bankDetail.TOTAL_INCOME>=0?'+':''}}</i>
                             {{bankDetail.TOTAL_INCOME}}</span>
+                        <span class="right-text" v-if="!pass">
+                            ****
+                        </span>
                     </p>
                 </section>
             </section>
@@ -44,26 +51,28 @@
             </div>
             <div class="bank-test">
                 <p class="">{{bankDetail.ORG_NAME}}</p>
-                <p class="card-no" v-if="pass">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
-                <p class="card-no" v-if="!pass">**** **** **** ****</p>
+                <p class="card-no">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
             </div>
         </section>
-        <section class="financing-list" v-if="pass">
+        <section class="financing-list">
             <section class="top" @click="licaiShow=!licaiShow">
                     <span class="top-left">
                         理财</span>
-                <span :class="{'top-right':true,select:licaiShow}">
-
+                <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
                         ¥{{bankDetail.lcAsset.API_FINA_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
                     </span>
+                <span class="top-right" v-if="!pass">
+                    ****
+                </span>
             </section>
-            <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
+            <ul v-if="licaiShow && pass" @click="goPage(toPageName.Financialproducts)">
                 <li class="financing-li" v-for="item in proList">
                     <span class="li-left">
                         {{item.PRD_NAME}}</span>
                     <span>
                         ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
                     </span>
+
                 </li>
             </ul>
         </section>
@@ -84,7 +93,7 @@
 <script>
     import IconFont from '../../components/commons/IconFont'
     import {API} from "../../service/api";
-    import { PageName, imgSrc} from "../../Constant";
+    import {PageName, imgSrc} from "../../Constant";
 
     export default {
         name: "bankDetail",
@@ -94,7 +103,7 @@
         data() {
             return {
                 imgSrc,
-                proList:[],
+                proList: [],
                 pass: true,
                 licaiShow: false,
                 toPageName: {
@@ -110,7 +119,7 @@
                     YSD_INCOME: '0.00', // 昨日收益
                     EC_ACCOUNT_NO: '',
                     lcAsset: '',
-                    ORG_HOTLINE:''
+                    ORG_HOTLINE: ''
                 }
             }
         },
@@ -128,13 +137,14 @@
             this.getBankDetail()
             this.scroll()
             this.getProList()
+            document.title = this.$route.query.NAME
         },
         methods: {
             goPage(pageName) {
                 let query
-                if(pageName==this.toPageName.Financialproducts){
+                if (pageName == this.toPageName.Financialproducts) {
                     query = {
-                        total:this.bankDetail.lcAsset.API_FINA_ASSET
+                        total: this.bankDetail.lcAsset.API_FINA_ASSET
                     }
                 }
                 this.$router.push({
@@ -155,12 +165,12 @@
             // getMyInvesthandle(){
             //     API.account.getMyInvest({})
             // }
-            getProList(){ // 获取产品列表
+            getProList() { // 获取产品列表
                 let data = {
-                    currentPage:'1',
-                    PRD_TYPE:'2'
+                    currentPage: '1',
+                    PRD_TYPE: '2'
                 }
-                API.account.getMyInvestHold(data,(res)=>{
+                API.account.getMyInvestHold(data, (res) => {
                     this.proList = res.PAGE.retList
                 })
             },
@@ -419,7 +429,7 @@
         text-align: center;
         padding: px2rem(30) 0;
         color: #2B74FE;
-        a{
+        a {
             color: #2B74FE;
 
         }

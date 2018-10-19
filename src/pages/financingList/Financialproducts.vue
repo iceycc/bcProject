@@ -26,25 +26,27 @@
                 <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
                     <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                                 :auto-fill="false" ref="loadmore">
-                        <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
-                            <h4>
-                                <strong>{{item.PRD_NAME}}</strong>
-                                <!-- <router-link to="/Transactiondetails">明细</router-link> -->
-                            </h4>
-                            <p>{{item.ORG_NAME}}</p>
-                            <p>当前价值（元）
-                                <span>{{item.INVEST_AMOUNT | formatNum}}</span>
-                            </p>
-                            <p>预期年化收益率
-                                <span>{{item.RATE}}%</span>
-                            </p>
-                            <p>预期参考收益（元）
-                                <span>{{item.YQ_INCOME_AMOUNT | formatNum}}</span>
-                            </p>
-                            <p>到期日期
-                                <span>{{item.OVER_DATE}}</span>
-                            </p>
-                        </div>
+                     <div style="padding-bottom: 20px">
+                         <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
+                             <h4>
+                                 <strong>{{item.PRD_NAME}}</strong>
+                                 <!-- <router-link to="/Transactiondetails">明细</router-link> -->
+                             </h4>
+                             <p>隶属于{{item.ORG_NAME}}</p>
+                             <p>当前价值（元）
+                                 <span>{{item.INVEST_AMOUNT | formatNum}}</span>
+                             </p>
+                             <p>预期年化收益率
+                                 <span>{{item.RATE}}%</span>
+                             </p>
+                             <p>预期参考收益（元）
+                                 <span>{{item.YQ_INCOME_AMOUNT | formatNum}}</span>
+                             </p>
+                             <p>到期日期
+                                 <span>{{item.OVER_DATE}}</span>
+                             </p>
+                         </div>
+                     </div>
                     </v-loadmore>
                 </div>
             </div>
@@ -57,7 +59,7 @@
                                 <strong>{{item.PRD_NAME}}</strong>
                                 <!-- <router-link to="/Transactiondetails">明细</router-link> -->
                             </h4>
-                            <p>{{item.ORG_NAME}}</p>
+                            <p>隶属于{{item.ORG_NAME}}</p>
                             <p>投资金额（元）
                                 <span>{{item.INVEST_AMOUNT | formatNum}}</span>
                             </p>
@@ -92,7 +94,7 @@
 
                 pageList: [],
                 allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-                scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+                scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 
                 searchCondition1: {
                     //分页属性
@@ -126,7 +128,6 @@
         methods: {
             getDivSize(ele) {
                 var divBox = document.querySelector(ele)
-
                 return {
                     with: divBox.offsetWidth,
                     height: divBox.offsetHeight
@@ -157,6 +158,7 @@
             loadTop: function () {
                 //组件提供的下拉触发方法
                 //下拉加载
+                console.log('下拉加载');
                 this.loadPageList();
                 if (this.nowIndex == 1) {
                     this.$refs.loadmore1.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
@@ -166,6 +168,7 @@
             },
             loadBottom: function () {
                 // 上拉加载
+                console.log('上拉加载');
                 this.more(); // 上拉触发的分页查询
                 if (this.nowIndex == 1) {
                     this.$refs.loadmore1.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
@@ -189,8 +192,8 @@
                     };
                     API.financial.getMyInvestOver(data, res => {
                         this.pageList1 = res.PAGE.retList;
-                        if (this.pageList1.length < this.searchCondition1.pageSize) {
-                            this.allLoaded = true;
+                        if (this.pageList1.length ==0) {
+                            // this.allLoaded = true;
                         }
                         //    if (this.pageList1.length <= 0) {
                         //     Bus.$emit(BusName.showToast, "暂无数据");
@@ -392,6 +395,9 @@
                 border-radius: px2rem(12);
                 box-sizing: border-box;
                 padding: px2rem(20) px2rem(15) px2rem(10);
+                &:last-child{
+                    margin-bottom: px2rem(50);
+                }
                 h4 {
                     overflow: hidden;
                 }
@@ -430,9 +436,7 @@
 
     .main-body {
         overflow-y: auto;
-        .mint-loadmore-content {
-            padding-bottom: px2rem(50) !important;
-        }
+        padding-bottom: px2rem(50);
     }
 
 </style>

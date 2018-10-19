@@ -2,10 +2,10 @@
     <div style="background: #f6f6f9;height: 100%">
         <app-bar title="电子账户"></app-bar>
         <section class="m-bank-box" v-if="ISLoginBankList.length >0">
-            <p class="m-title">已登陆</p>
+            <p class="m-title">已登录</p>
             <section class="m-bank-card"
                      v-for="bank,index in ISLoginBankList" :key="index"
-                     @click.stop="goPage('BankDetail',bank.ORG_ID)"
+                     @click.stop="goPage('BankDetail',bank.ORG_ID,bank.ORG_NAME)"
             >
                 <div class="m-top">
                     <div class="m-logo">
@@ -13,7 +13,7 @@
                     </div>
                     <div class="m-name">
                         <h3>{{bank.ORG_NAME}}</h3>
-                        <p>隶属于{{bank.DESCRIPT}}</p>
+                        <p>{{bank.DESCRIPT}}</p>
                     </div>
                     <div class="m-btn">
                         <!--<span class="u-btn" @click="goLogin">安全登陆</span>-->
@@ -23,23 +23,23 @@
                 <ul class="m-bottom">
                     <li>
                         <P>总资产</P>
-                        <P>{{bank.TOTAL_ASSET}}</P>
+                        <P>{{bank.TOTAL_ASSET | formatNum}}</P>
                     </li>
                     <li>
                         <P>昨日收益</P>
                         <P>
                             <!--<i v-if="bank.YSD_INCOME>=0">+</i>-->
-                            {{bank.YSD_INCOME}}</P>
+                            {{bank.YSD_INCOME | formatNum}}</P>
                     </li>
                     <li>
                         <P>累计收益</P>
-                        <P><i v-if="bank.TOTAL_INCOME>=0">+</i>{{bank.TOTAL_INCOME}}</P>
+                        <P><i v-if="bank.TOTAL_INCOME>=0">+</i>{{bank.TOTAL_INCOME | formatNum}}</P>
                     </li>
                 </ul>
             </section>
         </section>
         <section class="m-bank-box" v-if="NOLoginBankList.length >0">
-            <p class="m-title">未登陆</p>
+            <p class="m-title">未登录</p>
             <section class="m-bank-card" v-for="bank,index in NOLoginBankList" :key="index">
                 <div class="m-top">
                     <div class="m-logo">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="m-name">
                         <h3>{{bank.ORG_NAME}}</h3>
-                        <p>隶属于{{bank.DESCRIPT}}</p>
+                        <p>{{bank.DESCRIPT}}</p>
                     </div>
                     <div class="m-btn">
                         <span class="u-btn" @click="goPage('login',bank.ORG_ID)">安全登录</span>
@@ -92,7 +92,7 @@
             this.getBankList()
         },
         methods: {
-            goPage(page, ORG_ID) {
+            goPage(page, ORG_ID,NAME) {
                 util.storage.session.set(LsName.ORG_ID, ORG_ID)
                 if (page == 'login') {
                     util.storage.session.set(LsName.loginType, PageName.BankAccount)
@@ -103,6 +103,9 @@
                 if (page == 'BankDetail') {
                     this.$router.push({
                         name: PageName.BankDetail,
+                        query:{
+                            NAME
+                        }
                     })
                 }
             },

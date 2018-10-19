@@ -236,19 +236,18 @@
         display: inline-block;
         height: 100%;
         width: 1.8rem;
+        font-size: px2rem(14);
     }
 
     .tijiao {
-        margin-top: 50px;
-        font-size: 0.5rem;
+        font-size: px2rem(18);
         color: #fff;
         background-color: #e4e4e4;
         /* border-radius: 0.1rem; */
         line-height: 1.2rem;
-        width: 80%;
-        margin: 0 auto;
+        width: px2rem(255);
+        margin: px2rem(40) auto 0;
         text-align: center;
-        margin-top: 0.8rem;
         border: 0px;
         outline: none;
         display: block;
@@ -267,9 +266,9 @@
     }
 
     .info {
-        padding-left: px2rem(10);
+        padding-left: px2rem(20);
         padding-top: px2rem(0);
-        font-size: px2rem(18);
+        font-size: px2rem(14);
         color: #9199A1;
     }
 

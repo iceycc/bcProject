@@ -39,11 +39,13 @@
             <div class="calculation">
                 <div class="calculation-1">
                     <label for="input-1">我要投资(元)</label>
+                    <span class="input" v-show="!canEdit" @click="getFocus">{{investForm}}</span>
                     <input id="input-1" v-model="invest" ref="content"
+                           placeholder="0.00"
+                           v-show="canEdit"
+                           @blur="canEdit=false"
                            @change="formatNumHandle(invest)"
                            @keyup="getInterest(invest,productDetail.RATE,productDetail.PERIOD)" @keydown="handleInput2">
-
-                    <!--  -->
 
                     <img src="../../assets/images/p-invest@2x.png" @click="getFocus">
                 </div>
@@ -100,16 +102,16 @@
                     <div style="display: inline-block;width:25%">
                         <img :src="imgurl + productDetail.LOGO_URL" style="width:90%" alt="">
                     </div>
-                    <div style="float:right;width:65%">
-                        <p style="font-size:0.5rem;">{{productDetail.ORG_NAME}}</p>
-                        <p style="font-size:0.4rem; color:#999999 ">隶属于 {{productDetail.ORG_NAME}} </p>
-                        <div style="font-size: 0;padding: 3px 0">
+                    <div class="bank-info">
+                        <p class="info-1">{{productDetail.ORG_NAME}}</p>
+                        <p class="info-2">隶属于 {{productDetail.ORG_NAME}} </p>
+                        <div class="info-3">
                             <img class="start" v-for="i in productDetail.ORG_LEVEL"
                                  src="../../assets/images/account_icon_star1.png" alt="">
                             <img class="start" v-for="i in (5 - productDetail.ORG_LEVEL)"
                                  src="../../assets/images/account_icon_star.png" alt="">
                         </div>
-                        <p style="font-size:0.4rem;color:#999999">比财评级依据产品属性和银行运营情况综合评定</p>
+                        <p class="info-4">比财评级依据产品属性和银行运营情况综合评定</p>
                     </div>
                 </div>
             </div>
@@ -193,7 +195,9 @@
                 invest: "",
                 interest: "0" ? "0" : "0",
                 PRD_TYPE: "",
-                currentVal:''
+                currentVal: '',
+                investForm:'¥3,000,00',
+                canEdit:''
             };
         },
         activated() {
@@ -206,7 +210,7 @@
         filters: {
             TXT_MIN_AMOUNT_Filter(val) {
                 let str = val.toString()
-                return str.substring(0,str.length-1)
+                return str.substring(0, str.length - 1)
             },
             IS_INTERVIEW_filter(val) {
                 // if(!val) return val
@@ -235,8 +239,9 @@
         },
 
         methods: {
-            formatNumHandle(cash){
-                this.invest = util.formatNum(cash)
+            formatNumHandle(cash) {
+                this.canEdit = false
+                this.investForm = '¥' + util.formatNum(cash)
                 this.currentVal = ''
             },
             // 保留小数点后两位的过滤器，尾数不四舍五入
@@ -279,9 +284,9 @@
                 e.target.value = e.target.value.match(/^\d*(\.?\d{0,1})/g)[0] || null;
             },
             getInterest(cash, profit, day) {
-                if(cash == '')  return
-                if(!util.isValueNumber(cash)){
-                    this.invest = this.currentVal
+                if (cash == '') return
+                if (!util.isValueNumber(cash)) {
+                    this.investForm = this.currentVal
                     return
                 }
                 this.currentVal = cash
@@ -309,9 +314,10 @@
                 }
             },
             getFocus() {
-                this.invest = "";
-                this.interest = "￥0";
-                this.$refs.content.focus();
+                this.canEdit = true
+                if(this.canEdit){
+                    this.$refs.content.focus();
+                }
             },
             getData(id) {
                 let data = {
@@ -333,7 +339,7 @@
                                     this.productDetail.PERIOD
                             );
                         } else {
-                            this.invest = "3,000.00";
+                            this.invest = "3000";
                             this.getInterest(
                                     "3000",
                                     this.productDetail.RATE,
@@ -349,7 +355,7 @@
                                     this.productDetail.PERIOD
                             );
                         } else {
-                            this.invest = "1,000.00";
+                            this.invest = "1000";
                             this.getInterest(
                                     "1000",
                                     this.productDetail.RATE,
@@ -781,7 +787,15 @@
         padding: 0 px2rem(20) px2rem(12);
         margin-bottom: px2rem(9);
         border-bottom: px2rem(9) solid #f9fbff;
-
+        .input{
+            display: inline-block;
+            width: 50%;
+            float: right;
+            padding-top: px2rem(18);
+            color: #FF9200;
+            font-size: px2rem(14);
+            text-align: right;
+        }
         input {
             display: inline-block;
             width: 50%;
@@ -820,6 +834,28 @@
             }
         }
 
+    }
+
+    .bank-info {
+        float: right;
+        width: 65%;
+        .info-1 {
+            font-size: 0.5rem;
+        }
+        .info-2 {
+            padding-top: px2rem(3);
+            font-size: 0.4rem;
+            color: #999999
+        }
+        .info-3{
+            font-size: 0;
+            padding-bottom:px2rem(10)
+        }
+        .info-4{
+            line-height: 1.2;
+            font-size:0.4rem;
+            color:#999999
+        }
     }
 
     .p-color {

@@ -64,7 +64,8 @@
         methods: {
             getInfo() {
                 API.buy.apiQueryAccRest({}, res => {
-                    this.payNum = res.TOTAL_ASSET
+                    console.log(res);
+                    this.payNum = res.ACC_REST
                 })
             },
             goReChang() {

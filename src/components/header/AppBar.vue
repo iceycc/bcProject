@@ -19,7 +19,7 @@
         props:{
             'title':{
                 type:null,
-                default:'产品详情'
+                default:''
             }
         },
         created(){
