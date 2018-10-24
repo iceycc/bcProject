@@ -1,12 +1,14 @@
 <template>
     <div class="wrap">
-        <app-bar title="交易明细"></app-bar>
-        <div class="t-tab">
+        <div class="wrap-top">
+            <app-bar title="交易明细"></app-bar>
             <ul class="tabs">
                 <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
                     :class="{active:index==nowIndex}">{{item}}
                 </li>
             </ul>
+        </div>
+        <div class="t-tab">
             <div class="divTab">
                 <div class="t-date" v-show="nowIndex===3">
                     <ul>
@@ -49,6 +51,7 @@
     import {BusName} from "../../Constant";
     import Bus from "../../plugin/bus";
     import {Loadmore} from "mint-ui";
+    import util from "../../common/utils/util";
 
     export default {
         data() {
@@ -66,7 +69,11 @@
                 tabsParam: ["1个月", "2个月", "3个月", " "], //（这个也可以用对象key，value来实现）
                 nowIndex: 0, //默认第一个tab为激活状态
                 startDate: "",
-                endDate: ""
+                endDate: "",
+                divSizeObj:{
+                    small:{},
+                    large:{}
+                }
             };
         },
         created() {
@@ -78,8 +85,21 @@
         mounted() {
             //交易数据
             this.loadPageList(); //初次访问查询列表
+            this.setEleSize()
+
         },
         methods: {
+            setEleSize(){
+                console.log(this.nowIndex);
+                let winheight = util.getWinSize().winHeight
+                let topheight = util.getDivSize('.wrap-top').height
+                let toptabsheight = util.getDivSize('.tabs').height
+                let tDateheight = this.nowIndex == 3 ? toptabsheight : 0
+                let maiheight = winheight - topheight - tDateheight
+                console.log(topheight,maiheight,tDateheight)
+                document.querySelector('.t-tab').style.top = topheight + 'px'
+                document.querySelector('.main-body').style.height = maiheight + 'px'
+            },
             loadTop: function () {
                 //组件提供的下拉触发方法
                 //下拉加载
@@ -97,7 +117,8 @@
                 this.searchCondition.pageNo = "1";
                 this.allLoaded = false;
                 let index = this.nowIndex
-                if(this.nowIndex == 3) {
+                this.setEleSize()
+                if (this.nowIndex == 3) {
                     index = 0
                 }
                 this.endDate = this.getLastMonthYestdy(0);
@@ -348,18 +369,20 @@
     }
 
     .wrap {
+        position: relative;
         width: 100%;
-        box-sizing: border-box;
         height: 100%;
+        box-sizing: border-box;
         background: #f4f4f8;
+        overflow: hidden;
     }
 
-    .t-tab {
-        position: relative;
-        ul.tabs {
+    .wrap-top {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        .tabs {
             position: relative;
-            // margin-right: px2rem(60);
-            background: #ccc;
             display: flex;
             height: px2rem(44);
             line-height: px2rem(44);
@@ -410,7 +433,11 @@
                 color: #508cee;
             }
         }
+    }
 
+    .t-tab {
+        position: absolute;
+        width: 100%;
         .divTab {
             .t-content {
                 h4 {
@@ -514,8 +541,8 @@
     }
 
     .main-body {
-        height: 17rem;
         overflow: auto;
+        box-sizing: border-box;
         padding-bottom: px2rem(50);
     }
 </style>

@@ -65,12 +65,15 @@
                     ****
                 </span>
             </section>
-            <ul v-if="licaiShow && pass" @click="goPage(toPageName.Financialproducts)">
+            <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
                 <li class="financing-li" v-for="item in proList">
                     <span class="li-left">
                         {{item.PRD_NAME}}</span>
-                    <span>
+                    <span v-if="pass">
                         ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
+                    </span>
+                    <span v-if="!pass">
+                        ****
                     </span>
 
                 </li>

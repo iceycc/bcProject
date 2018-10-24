@@ -11,8 +11,11 @@
             <span class="Amount">金额</span>
             <input @change="checkMoney"
                    v-model="APPLY_AMOUN" type="number" placeholder="请输入提现金额">
+            <img
+                    v-show="!ifCheckMoneyEmpty"
+                    src="../../assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
         </section>
-        <p class="info">本卡当前余额{{ACC_REST}}元 <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
+        <p class="info1">本卡当前余额{{ACC_REST | formatNum}}元 <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
         <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
         <section v-if="show" class="bgbox">
             <section class="passbox">
@@ -66,15 +69,18 @@
                 len: null,
                 canClick: false,
                 logo:'',
-                inputID:''
+                inputID:'',
+                ifCheckMoneyEmpty:true
             }
         },
         watch: {
             APPLY_AMOUN(n, o) {
                 if (n && n - 0 > 0) {
                     this.canClick = true
+                    this.ifCheckMoneyEmpty = false
                 } else {
                     this.canClick = false
+                    this.ifCheckMoneyEmpty = true
                 }
             },
             show(n,O){
@@ -180,6 +186,10 @@
                     this.show = true
                 }, 1000)
             },
+            clearNumHandle(){
+                //
+                this.APPLY_AMOUN = ''
+            }
 
         }
     }
@@ -205,6 +215,7 @@
     }
 
     .inputAmount {
+        position: relative;
         padding-left: px2rem(20);
         height: px2rem(50);
         line-height: px2rem(50);
@@ -219,6 +230,16 @@
             padding: .1rem;
             border: 1px solid #508CEE;
             color: #508CEE
+        }
+        .close-icon{
+            position: absolute;
+            display:inline-block;
+            width: px2rem(15);
+            height: px2rem(15);
+            top: 50%;
+            right: px2rem(80);
+            margin-top: px2rem(-15/2);
+
         }
         input {
             width: 50%;
@@ -265,12 +286,7 @@
         padding-top: 0.4rem;
     }
 
-    .info {
-        padding-left: px2rem(20);
-        padding-top: px2rem(0);
-        font-size: px2rem(14);
-        color: #9199A1;
-    }
+
 
     .bgbox {
         z-index: 0;
@@ -291,6 +307,7 @@
         .field_row_key {
             font-size: 0.4rem;
         }
+
         .title {
             margin-bottom: 0.5rem;
             text-align: center;
@@ -313,14 +330,7 @@
             line-height: 0.9rem;
             margin: 0.2rem 0;
         }
-        .info {
-            font-size: 0.3rem;
-            line-height: 0.6rem;
-            color: #aeaeae;
-            span {
-                color: #389CFF
-            }
-        }
+
         .btn {
             display: flex;
             button {
@@ -328,6 +338,22 @@
                 text-align: center;
                 flex: 1;
             }
+        }
+        .info {
+            font-size: px2rem(14);
+            line-height: 0.6rem;
+            padding-top: px2rem(0);
+            color: #9199A1;
+        }
+
+    }
+    .info1 {
+        padding-left: px2rem(20);
+        font-size: px2rem(14);
+        line-height: 0.6rem;
+        color: #9199A1;
+        span {
+            color: #389CFF
         }
     }
 </style>

@@ -82,6 +82,7 @@
     import {BusName} from "../../Constant";
     import Bus from "../../plugin/bus";
     import {Loadmore} from "mint-ui";
+    import {util} from "../../common/utils/util";
 
     export default {
         data() {
@@ -118,31 +119,14 @@
         },
         mounted() {
             this.loadPageList(); //初次访问查询列表
-            this.getWinHeight()
-            let winHeigt = this.getWinHeight()
-            let wTopHeight = this.getDivSize('.w-top').height
-            let tabsHeight = this.getDivSize('.tabs').height
+            let winHeigt = util.getWinSize().winHeight
+            let wTopHeight = util.getDivSize('.w-top').height
+            let tabsHeight = util.getDivSize('.tabs').height
             let bottomHeight = winHeigt - wTopHeight - tabsHeight - 25
             document.querySelector('.main-body').style.height = bottomHeight + 'px'
+            document.querySelector('.tab-box').style.top = wTopHeight + 'px'
         },
         methods: {
-            getDivSize(ele) {
-                var divBox = document.querySelector(ele)
-                return {
-                    with: divBox.offsetWidth,
-                    height: divBox.offsetHeight
-                }
-            },
-            getWinHeight() {
-                var winHeight;
-                if (window.innerHeight) {
-                    winHeight = window.innerHeight;
-                }
-                else if ((document.body) && (document.body.clientHeight)) {
-                    winHeight = document.body.clientHeight;
-                }
-                return winHeight
-            },
             toggleTabs(index) {
                 this.nowIndex = index;
                 this.loadPageList();
@@ -295,6 +279,7 @@
         height: 100%;
         background: #f4f4f8;
         overflow: hidden;
+        position: relative;
     }
 
     .header {
@@ -305,7 +290,7 @@
     }
 
     .w-top {
-        position: fixed;
+        position: absolute;
         top: px2rem(0);
         width: 100%;
         z-index: 10;
@@ -354,9 +339,8 @@
     }
 
     .tab-box {
-        position: fixed;
+        position: absolute;
         width: 100%;
-        top: px2rem(218);
         ul {
             background: #fff;
             display: flex;
@@ -436,6 +420,7 @@
 
     .main-body {
         overflow-y: auto;
+        box-sizing: border-box;
         padding-bottom: px2rem(50);
     }
 

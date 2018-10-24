@@ -42,7 +42,7 @@ let routes = [
 addRouter(PageName.Buyfailed, {keepAlive: false, title: '购买失败',needLogin: false});
 addRouter(PageName.Buysuccess, {keepAlive: false, title: '购买成功',needLogin: false});
 addRouter(PageName.surebuy, {keepAlive: false, title: '购买'});
-addRouter(PageName.Buying, {keepAlive: true, title: '购买'});
+addRouter(PageName.Buying, {keepAlive: false, title: '购买'});
 
 /**
  * login
@@ -88,7 +88,7 @@ addRouter(PageName.DocsPage, {keepAlive: false, title: '协议', needLogin: true
 addRouter(PageName.UserLicenseAgreement, {keepAlive: false, title: '用户授权服务协议', needLogin: false});
 addRouter(PageName.ChangeBank, {keepAlive: false, title: '更换银行卡',needLogin:false});
 addRouter(PageName.ResetPayPassWord, {keepAlive: false, title: '更换支付密码',needLogin:false});
-addRouter(PageName.ResetPhone, {keepAlive: false, title: '更换手机号',needLogin:false});
+addRouter(PageName.ResetPhone, {keepAlive: false, title: '修改手机号',needLogin:false});
 
 
 /**
@@ -141,48 +141,11 @@ router.beforeEach((to, from, next) => {
 
     if (to.meta.title) {
         document.title = to.meta.title
-        // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
-        if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-            const hackIframe = document.createElement('iframe');
-            hackIframe.style.display = 'none';
-            hackIframe.src = '/static/html/fixIosTitle.html?r=' + Math.random();
-            document.body.appendChild(hackIframe);
-            setTimeout(_ => {
-                document.body.removeChild(hackIframe)
-            }, 300)
-        }
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
+        util.IOSTitileUpdat()
     }
     if (to.name == PageName.Productreservation) {
         window.document.title = to.query.title;
-        if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-            const hackIframe = document.createElement('iframe');
-            hackIframe.style.display = 'none';
-            hackIframe.src = '/static/html/fixIosTitle.html?r=' + Math.random();
-            document.body.appendChild(hackIframe);
-            setTimeout(_ => {
-                document.body.removeChild(hackIframe)
-            }, 300)
-        }
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.onload = function () {
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        document.body.appendChild(iframe);
+        util.IOSTitileUpdat()
     }
     if (to.meta && to.meta.needLogin) {
         let sign = util.storage.session.get(LsName.token)

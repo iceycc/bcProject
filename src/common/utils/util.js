@@ -140,11 +140,11 @@ const Check = {
             msg = '手机号码不能为空'
         }
         else if (val.length != 11) {
-            msg = '手机号码不是11位'
+            msg = '手机号错误，请输入正确手机号'
         }
 
         else if (!reg.test(val)) {
-            msg = '手机号格式错误'
+            msg = '手机号错误，请输入正确手机号'
         }
         else {
 
@@ -357,7 +357,7 @@ export const util = {
                 }
             },
             // 获取当前可使区域的高度 宽度
-            getWinHeight() {
+            getWinSize() {
                 var winHeight, winWidth;
                 if (window.innerHeight) {
                     winHeight = window.innerHeight;
@@ -891,6 +891,29 @@ export const util = {
                 }
             }
             ,
+            IOSTitileUpdat(){
+                // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
+                if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+                    const hackIframe = document.createElement('iframe');
+                    hackIframe.style.display = 'none';
+                    hackIframe.src = '/static/html/fixIosTitle.html?r=' + Math.random();
+                    document.body.appendChild(hackIframe);
+                    setTimeout(_ => {
+                        document.body.removeChild(hackIframe)
+                    }, 300)
+                }
+                var iframe = document.createElement('iframe');
+                iframe.style.visibility = 'hidden';
+                iframe.style.width = '1px';
+                iframe.style.height = '1px';
+                iframe.onload = function () {
+                    setTimeout(function () {
+                        document.body.removeChild(iframe);
+                    }, 0);
+                };
+                document.body.appendChild(iframe);
+            },
+
             /**
              *
              * 金额自动补小数点后两位,碰到3的倍数则加上“,”号

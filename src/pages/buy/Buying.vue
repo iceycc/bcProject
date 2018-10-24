@@ -56,11 +56,12 @@
         },
         mixins: [Mixin],
         created() {
-
             this.getInfo()
             this.proDetail = this.$route.query // 数据
         },
+        activated(){
 
+        },
         methods: {
             getInfo() {
                 API.buy.apiQueryAccRest({}, res => {
@@ -165,37 +166,35 @@
         padding: 0.4rem 0.4rem;
         border-top: 10px solid #F6F6F9;
         border-bottom: 0.5rem solid #F6F6F9;
+        display: flex;
+        .buytitleleft {
+            display: inline-block;
+            flex: 1;
+            .buytitleleftimg {
+                vertical-align: middle;
+                padding-top: 0.2rem;
+                width: 1rem;
+                display: inline-block;
+
+            }
+            .buytitleleftcontent {
+                vertical-align: middle;
+                padding-top: -0.5rem;
+                display: inline-block;
+                padding-left: 0.4rem;
+                font-size: 0.35rem;
+            }
+        }
+
+        .buytitleright {
+            float: right;
+            text-align: right;
+            font-size: 0.35rem;
+            color: #666;
+        }
     }
 
-    .buytitleleft {
-        display: inline-block;
-        width: 50%;
 
-    }
-
-    .buytitleleftimg {
-        vertical-align: middle;
-        padding-top: 0.2rem;
-        width: 1rem;
-        display: inline-block;
-
-    }
-
-    .buytitleleftcontent {
-        vertical-align: middle;
-        padding-top: -0.5rem;
-        display: inline-block;
-        padding-left: 0.4rem;
-        font-size: 0.35rem;
-    }
-
-    .buytitleright {
-        float: right;
-        width: 50%;
-        text-align: right;
-        font-size: 0.35rem;
-        color: #666;
-    }
 
     .buysuccessdetails {
         padding: 0 0.4rem;

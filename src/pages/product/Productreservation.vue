@@ -38,19 +38,20 @@
             </div>
             <div class="calculation">
                 <div class="calculation-1">
-                    <label for="input-1">我要投资(元)</label>
-                    <span class="input" v-show="!canEdit" @click="getFocus">{{investForm}}</span>
-                    <input id="input-1" v-model="invest" ref="content"
+                    <span class="label">我要投资(元)</span>
+                    <label class="input" v-show="!canEdit" @click="getFocus">{{investForm}}</label>
+                    <input id="input-1" v-model="invest"
                            placeholder="0.00"
-                           v-show="canEdit"
+                           v-if="canEdit"
                            @blur="canEdit=false"
+                           v-focus
                            @change="formatNumHandle(invest)"
                            @keyup="getInterest(invest,productDetail.RATE,productDetail.PERIOD)" @keydown="handleInput2">
 
                     <img src="../../assets/images/p-invest@2x.png" @click="getFocus">
                 </div>
                 <div class="calculation-2">
-                    <label>参考收益(元)</label>
+                    <span class="label">参考收益(元)</span>
                     <span>{{this.interest}}</span>
                     <!--                     <input type="type" id="input-2" v-model="interest" >
  -->
@@ -196,8 +197,8 @@
                 interest: "0" ? "0" : "0",
                 PRD_TYPE: "",
                 currentVal: '',
-                investForm:'¥3,000,00',
-                canEdit:''
+                investForm: '¥3,000.00',
+                canEdit: ''
             };
         },
         activated() {
@@ -206,6 +207,13 @@
             this.title = this.$route.query.title;
             this.proID = this.$route.query.id;
             this.getData(this.proID);
+        },
+        directives:{
+            focus:{
+                inserted(el){
+                    el.focus()
+                }
+            }
         },
         filters: {
             TXT_MIN_AMOUNT_Filter(val) {
@@ -241,6 +249,14 @@
         methods: {
             formatNumHandle(cash) {
                 this.canEdit = false
+                if (!cash) {
+                    cash = '3000'
+                    this.getInterest(
+                            cash,
+                            this.productDetail.RATE,
+                            this.productDetail.PERIOD
+                    )
+                }
                 this.investForm = '¥' + util.formatNum(cash)
                 this.currentVal = ''
             },
@@ -315,9 +331,6 @@
             },
             getFocus() {
                 this.canEdit = true
-                if(this.canEdit){
-                    this.$refs.content.focus();
-                }
             },
             getData(id) {
                 let data = {
@@ -777,7 +790,7 @@
     }
 
     .calculation {
-        label {
+        .label {
             font-size: px2rem(14);
             color: #333;
             line-height: px2rem(50);
@@ -787,7 +800,7 @@
         padding: 0 px2rem(20) px2rem(12);
         margin-bottom: px2rem(9);
         border-bottom: px2rem(9) solid #f9fbff;
-        .input{
+        .input {
             display: inline-block;
             width: 50%;
             float: right;
@@ -847,14 +860,14 @@
             font-size: 0.4rem;
             color: #999999
         }
-        .info-3{
+        .info-3 {
             font-size: 0;
-            padding-bottom:px2rem(10)
+            padding-bottom: px2rem(10)
         }
-        .info-4{
+        .info-4 {
             line-height: 1.2;
-            font-size:0.4rem;
-            color:#999999
+            font-size: 0.4rem;
+            color: #999999
         }
     }
 

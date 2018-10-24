@@ -8,7 +8,7 @@
             </section>
             <active-input valuePlaceholder="新手机号码"
                           max='11'
-                          v-model="PHONE_NUM"></active-input>
+                          v-model="PHONE_NUM" type="tel"></active-input>
             <active-input valuePlaceholder="验证码" v-model="params.PHONE_CODE">
                 <template slot="btn">
                     <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
