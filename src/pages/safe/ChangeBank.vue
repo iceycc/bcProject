@@ -10,7 +10,7 @@
                              title="银行列表"></Bank-select>
 
             </section>
-            <active-input valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20"></active-input>
+            <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20"></active-input>
             <section class="submit-box">
                 <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
                 <button class="submit-btn" @click="goNext">下一步</button>

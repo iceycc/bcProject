@@ -70,7 +70,7 @@
                 })
             },
             goReChang() {
-                util.storage.session.set(LsName.OriginPage,this.$route.name)
+                util.storage.session.set(LsName.OriginPage,this.$route.fullPath)
                 util.storage.session.set(LsName.RechargeQuery, {
                     PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
                     id: this.proDetail.id,

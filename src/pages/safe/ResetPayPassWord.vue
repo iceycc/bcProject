@@ -6,7 +6,7 @@
                 <span class="n-left">姓名</span>
                 <span class="n-right">{{Infos.USER_NAME}}</span>
             </section>
-            <active-input valuePlaceholder="身份证号" v-model="IDCardNum" type="text"></active-input>
+            <active-input check-type="idCard" valuePlaceholder="身份证号" v-model="IDCardNum" type="text"></active-input>
             <section class="m-line">
                 <span class="n-left">手机号</span>
                 <span class="n-right">{{tel}}</span>
@@ -19,10 +19,6 @@
             <section class="submit-box">
                 <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
                 <button class="submit-btn" @click="goNext">下一步</button>
-            </section>
-            <section class="foot-text">
-                <p>温馨提示：</p>
-                <p> 更换手机号之前，请您确认新手机号与绑定的银行卡的预留手机号相同，如果不同请先更换绑定银行卡的预留手机号。</p>
             </section>
         </section>
 

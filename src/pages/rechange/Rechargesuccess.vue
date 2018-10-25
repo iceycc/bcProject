@@ -32,7 +32,7 @@
             goNext(){
                 let OriginPage =util.storage.session.get(LsName.OriginPage)
                 this.$router.push({
-                    name:OriginPage
+                    path:OriginPage
                 })
             }
 

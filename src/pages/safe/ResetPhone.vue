@@ -6,7 +6,7 @@
                 <span class="n-left">原手机号</span>
                 <span class="n-right">{{tel}}</span>
             </section>
-            <active-input valuePlaceholder="新手机号码"
+            <active-input check-type="number" valuePlaceholder="新手机号码"
                           max='11'
                           v-model="PHONE_NUM" type="tel"></active-input>
             <active-input valuePlaceholder="验证码" v-model="params.PHONE_CODE">

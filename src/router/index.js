@@ -100,7 +100,7 @@ addRouter(PageName.Incomeprogress, {keepAlive: false, title: '货币基金'});
 /**
  * bankDetail
  */
-addRouter(PageName.BankDetail, {keepAlive: false, title: '我的银行',needLogin:false});
+addRouter(PageName.BankDetail, {keepAlive: true, title: '我的银行',needLogin:false});
 addRouter(PageName.BankBalance, {keepAlive: false, title: '可用余额',needLogin:false});
 addRouter(PageName.MoreService, {keepAlive: false, title: '更多服务',needLogin:false});
 

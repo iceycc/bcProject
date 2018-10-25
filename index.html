@@ -44,5 +44,25 @@
 <div id="app"></div>
 <!-- built files will be auto injected -->
 <!--<script src="static/lib/vconsole.min.js"></script>-->
+
+<script>
+  // 限制双击缩放吧
+  window.onload = function () {
+    document.documentElement.addEventListener('touchstart', function (event) {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    }, false);
+
+    var lastTouchEnd = 0;
+    document.documentElement.addEventListener('touchend', function (event) {
+      var now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+  }
+</script>
 </body>
 </html>

@@ -9,7 +9,7 @@
                 <transition name="fade">
                     <p class="label" v-show="telShow">开户手机号</p>
                 </transition>
-                <input class="input" type="text"
+                <input class="input" type="input"
                        name="text1" :placeholder="telPaceholder" v-model="tel">
             </section>
             <!--<p><input type="password" name="text1" placeholder="登录密码" v-model="pass"></p>-->
