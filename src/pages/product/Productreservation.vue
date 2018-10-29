@@ -47,7 +47,7 @@
                  v-focus
                  type="tel"
                  @change="formatNumHandle(invest)"
-                 @input="inputHandle(invest,productDetail.RATE,productDetail.PERIOD)" @keydown="handleInput2">
+          >
 
           <img src="../../assets/images/p-invest@2x.png" @click="getFocus">
         </div>
@@ -167,7 +167,7 @@
   import Bus from "../../plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "../../Constant";
   import util from "../../common/utils/util";
-
+  // let defaultManey = 3000
   // import {Index} from '../../common/utils/mixin'
 
   export default {
@@ -193,15 +193,26 @@
         imgurl: imgSrc,
         xing: 5,
         title: "",
-        invest: "",
-        interest: "0" ? "0" : "0",
         PRD_TYPE: "",
+        canEdit: false,
+
+        defaultManey:'',
         currentVal: '',
-        investForm: '¥3,000.00',
-        canEdit: '',
+        invest: "", // 计算传人
       };
     },
-    activated() {
+    computed:{
+      investForm(){
+        return '¥' + util.formatNum(this.invest + '')
+      },
+      interest(){
+        return this.getInterest(
+            this.invest,
+            this.productDetail.RATE,
+            this.productDetail.PERIOD
+        );
+
+      }
     },
     created() {
       this.title = this.$route.query.title;
@@ -209,7 +220,7 @@
       this.getData(this.proID);
     },
     directives: {
-      focus: {
+      focus: { // 自定义事件
         inserted(el) {
           el.focus()
         }
@@ -243,21 +254,13 @@
     beforeRouteLeave(to, from, next) {
       next();
     },
-    mounted() {
-    },
-
     methods: {
       formatNumHandle(cash) {
         this.canEdit = false
-        if (!cash) {
-          cash = '3000'
-          this.getInterest(
-              cash,
-              this.productDetail.RATE,
-              this.productDetail.PERIOD
-          )
+        if (!(cash-0) || !cash) {
+          cash = this.defaultManey + ''
+          this.invest = this.defaultManey
         }
-        this.investForm = '¥' + util.formatNum(cash)
         this.currentVal = ''
       },
       // 保留小数点后两位的过滤器，尾数不四舍五入
@@ -291,25 +294,20 @@
         }
         return result;
       },
-
-      handleInput2(e) {
-        // 通过正则过滤小数点后两位
-        if (e.target.value == "") {
-          this.interest = "0";
-        }
-        e.target.value = e.target.value.match(/^\d*(\.?\d{0,1})/g)[0] || null;
-      },
-      //
-      inputHandle(cash,profit,day){
-        this.getInterest(cash, profit, day)
-      },
+      /**
+       * 计算收益率
+       */
       getInterest(cash, profit, day) {
+        let interest;
+        cash = cash +''
+        this.invest = cash
         if (cash == '') cash = 0
-        if (!util.isValueNumber(cash)) {
-          this.interest = this.currentVal
-          return
+        if (!util.isValueNumber(cash - 0)) {
+          this.invest = this.currentVal
+          cash = this.currentVal
+        }else {
+          this.currentVal = cash
         }
-        this.interest = cash
         let e = cash * profit / 100 * day / 360;
         let a = cash * profit / 100 * day / 360;
         a = a + "";
@@ -319,23 +317,28 @@
           if (c.length > 3) {
 
             if (this.PRD_TYPE == 4) {
-              this.interest =
+              interest =
                   "￥" + util.formatNum("" + (this.numFilter(e))) + "~" + "￥" + util.formatNum("" + (this.numFilter1(e)));
             } else {
-              this.interest =
+              interest =
                   "￥" + util.formatNum("" + (this.numFilter(e)));
             }
 
           } else {
-            this.interest = "￥" + util.formatNum("" + (this.numFilter(e)));
+            interest = "￥" + util.formatNum("" + (this.numFilter(e)));
           }
         } else {
-          this.interest = "￥" + util.formatNum("" + e);
+          interest = "￥" + util.formatNum("" + e);
         }
+        return interest
       },
+      /**
+       * 切换样式
+       */
       getFocus() {
         this.canEdit = !this.canEdit
       },
+
       getData(id) {
         let data = {
           ID: id + ""
@@ -348,36 +351,22 @@
           util.storage.session.set(LsName.PRD_TYPE, this.productDetail.PRD_TYPE);
           this.PRD_TYPE = this.productDetail.PRD_TYPE;
           if (this.productDetail.PRD_TYPE == 2) {
-            if (invest > 3000) {
-              this.formatNumHandle(invest);
-              this.getInterest(
-                  invest,
-                  this.productDetail.RATE,
-                  this.productDetail.PERIOD
-              );
+            if (invest > '3000') {
+              this.defaultManey = invest
+              this.invest = invest;
+
             } else {
-              this.invest = "3000";
-              this.getInterest(
-                  "3000",
-                  this.productDetail.RATE,
-                  this.productDetail.PERIOD
-              );
+              this.defaultManey = '3000'
+              this.invest = '3000';
+
             }
           } else {
             if (invest > 1000) {
-              this.formatNumHandle(invest);
-              this.getInterest(
-                  invest,
-                  this.productDetail.RATE,
-                  this.productDetail.PERIOD
-              );
+              this.defaultManey = invest
+              this.invest = invest
             } else {
+              this.defaultManey = '1000'
               this.invest = "1000";
-              this.getInterest(
-                  "1000",
-                  this.productDetail.RATE,
-                  this.productDetail.PERIOD
-              );
             }
           }
 

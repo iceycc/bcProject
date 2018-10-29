@@ -55,7 +55,7 @@
       </div>
     </section>
     <section class="financing-list">
-      <section class="top" @click="licaiShow=!licaiShow">
+      <section class="top" @click="tapList">
                     <span class="top-left">
                         理财</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
@@ -67,6 +67,7 @@
       </section>
       <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
         <li class="financing-li" v-for="item in proList">
+                  <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
                     <span class="li-left">
                         {{item.PRD_NAME}}</span>
           <span v-if="pass">
@@ -146,6 +147,12 @@
     }
     ,
     methods: {
+      tapList(){
+        if(!this.proList || this.proList.length ==0){
+          return
+        }
+        this.licaiShow=!this.licaiShow
+      },
       goPage(pageName) {
         let query
         if (pageName == this.toPageName.Financialproducts) {
@@ -385,6 +392,7 @@
 
     }
     .financing-li {
+      position: relative;
       display: flex;
       font-size: px2rem(14);
       padding: px2rem(15) 0;
@@ -392,23 +400,17 @@
       height: px2rem(28);
       line-height: px2rem(28);
       color: #333;
+      .li-yuan{
+        position: absolute;
+        left: 0;
+        font-size: px2rem(4);
+        color: #4F96FF;
+      }
       .li-left {
         position: relative;
         flex: 1;
         padding-left: px2rem(10);
         box-sizing: border-box;
-        &:before {
-          position: absolute;
-          display: inline-block;
-          content: '';
-          left: px2rem(0);
-          top: 50%;
-          transform: translateY(-50%);
-          width: px2rem(4);
-          height: px2rem(4);
-          border-radius: px2rem(2);
-          background: #4F96FF;
-        }
       }
       &:last-child {
         border-bottom: none;
