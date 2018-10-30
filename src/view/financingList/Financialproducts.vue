@@ -6,7 +6,7 @@
             <div class="f-box">
                 <ul>
                     <li>
-                        <p>{{total | formatNum}}</p>
+                        <p>{{financialData.TOTAL_AMOUNT | formatNum}}</p>
                         <p>总资产</p>
                     </li>
                     <li>
@@ -114,8 +114,7 @@
         },
         created() {
             this.getData(); //理财产品列表
-            this.total = this.$route.query.total
-
+            // this.total = this.$route.query.total
         },
         mounted() {
             this.loadPageList(); //初次访问查询列表

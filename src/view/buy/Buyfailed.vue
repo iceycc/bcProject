@@ -13,8 +13,6 @@
 </template>
 <script>
     import {WatchApi} from "../../service/api";
-    import Bus from '../../plugin/bus'
-    import {BusName} from "../../Constant";
     import util from "../../common/utils/util";
     export default {
         created() {

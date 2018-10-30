@@ -331,7 +331,6 @@
         position: relative;
         ul.tabs {
             position: relative;
-            // margin-right: px2rem(60);
             display: flex;
             height: px2rem(44);
             line-height: px2rem(44);
