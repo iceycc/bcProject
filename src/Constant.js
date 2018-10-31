@@ -50,7 +50,6 @@ export const PageName = {
     Rechargesuccess: 'Rechargesuccess',
     Rechargefailure: 'Rechargefailure',
     Resetpassword: 'Resetpassword',
-    Riskassessment: 'Riskassessment',
     Riskproblom: 'Riskproblom',
     surebuy: 'surebuy',
     Verificationsuccess: 'Verificationsuccess',

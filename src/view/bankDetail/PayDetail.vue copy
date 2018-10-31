@@ -50,7 +50,7 @@
 <script>
     import {API} from "../../request/api";
     import {LsName, PageName, BusName} from "../../Constant";
-    import util from "../../common/utils/util";
+    import util from "libs/utilExpand";
     import Bus from '../../common/js/bus';
 
     export default {

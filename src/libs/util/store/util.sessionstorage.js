@@ -1,4 +1,4 @@
-import {STORE_PREFIX} from '../../Constant'
+import {STORE_PREFIX} from '../../../Constant'
 export default {
     set(key, value) {
         if (!key) return false

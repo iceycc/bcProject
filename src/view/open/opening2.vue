@@ -61,7 +61,7 @@
 <script>
     import {API,WatchApi} from "../../service/api";
     import {PageName, BusName, LsName} from "../../Constant";
-    import {util} from "../../common/utils/util";
+    import util from "libs/util";
     import Bus from '../../plugin/bus'
     import BankSelect from '../../components/commons/BankSelect'
     import {imgSrc} from "../../Constant";
@@ -299,7 +299,7 @@
                     Bus.$emit(BusName.showToast, '短信验证码异常')
                     return
                 }
-                // util.storage.session.set(LsName.token,this.data.PRE_PHONE_NUM)
+                // utilExpand.storage.session.set(LsName.token,this.data.PRE_PHONE_NUM)
                 let preData = this.$route.params.data
                 this.data = Object.assign(this.data, preData)
                 console.log('data >>>', this.data);

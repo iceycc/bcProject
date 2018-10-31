@@ -44,7 +44,7 @@
     </div>
 </template>
 <script>
-    import util from '../../common/utils/util'
+    import util from 'libs/util'
     import {API,WatchApi} from '../../service/api'
     import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../plugin/bus'

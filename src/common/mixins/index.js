@@ -1,4 +1,4 @@
-import util from "../utils/util";
+import util from "libs/util";
 import {LsName, PageName} from "../../Constant";
 import {API} from "../../service/api";
 

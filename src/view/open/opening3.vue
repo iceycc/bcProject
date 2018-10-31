@@ -99,7 +99,7 @@
     import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
-    import {util} from "../../common/utils/util";
+    import util from "libs/util";
     import {Mixin} from '../../common/mixins'
 
 

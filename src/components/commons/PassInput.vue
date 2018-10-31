@@ -10,7 +10,7 @@
 <script>
     import Bus from '../../plugin/bus'
     import {HOST, LsName} from "../../Constant";
-    import util from '../../common/utils/util'
+    import util from "libs/util";
 
     let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
     export default {

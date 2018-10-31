@@ -82,7 +82,7 @@
     import {BusName} from "../../Constant";
     import Bus from "../../plugin/bus";
     import {Loadmore} from "mint-ui";
-    import {util} from "../../common/utils/util";
+    import util from "libs/util";
 
     export default {
         data() {

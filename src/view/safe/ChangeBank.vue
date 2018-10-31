@@ -58,7 +58,7 @@
     import {API} from "../../service/api";
     import {imgSrc, BusName, LsName,PageName} from "../../Constant";
     import Bus from '../../plugin/bus'
-    import util from "../../common/utils/util";
+    import util from "libs/util";
     import PassInput from '../../components/commons/PassInput'
     import {Mixin} from '../../common/mixins'
 

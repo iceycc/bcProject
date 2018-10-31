@@ -40,7 +40,7 @@
     import IconFont from '../../components/commons/IconFont'
     import {API} from "../../service/api";
     import {LsName, PageName} from "../../Constant";
-    import util from "../../common/utils/util";
+    import util from "libs/util";
 
     export default {
         name: "MoreService",

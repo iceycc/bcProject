@@ -83,12 +83,6 @@ let frameIn = [
     component: resolve => require(['view/product/Productlist.vue'], resolve),
     meta: {keepAlive: false, title: '产品列表', needLogin: false}
   },
-  // {
-  //   path: '/' + PageName.Productlist2,
-  //   name: PageName.Productlist2,
-  //   component: resolve => require(['view/buy/Buysuccess.vue'], resolve),
-  //   meta: {keepAlive: false, title: '产品列表', needLogin: false}
-  // },
   {
     path: '/' + PageName.Productreservation,
     name: PageName.Productreservation,
@@ -130,12 +124,6 @@ let frameIn = [
     path: '/' + PageName.Verificationsuccess,
     name: PageName.Verificationsuccess,
     component: resolve => require(['view/riskEvaluation/Verificationsuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '风险测评', needLogin: false}
-  },
-  {
-    path: '/' + PageName.Riskassessment,
-    name: PageName.Riskassessment,
-    component: resolve => require(['view/riskEvaluation/Riskassessment.vue'], resolve),
     meta: {keepAlive: false, title: '风险测评', needLogin: false}
   },
   {
@@ -278,7 +266,6 @@ let frameIn = [
   },
 
 ]
-
 
 export default [
   ...frameIn

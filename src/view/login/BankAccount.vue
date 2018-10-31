@@ -76,7 +76,7 @@
 <script>
     import {API} from "../../service/api";
     import {PageName, LsName, imgSrc} from "../../Constant";
-    import util from "../../common/utils/util";
+    import util from "libs/util";
     export default {
         name: "SafeLogin",
         data() {

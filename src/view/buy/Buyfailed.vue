@@ -13,7 +13,7 @@
 </template>
 <script>
     import {WatchApi} from "../../service/api";
-    import util from "../../common/utils/util";
+    import util from "libs/util";
     export default {
         created() {
             this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'

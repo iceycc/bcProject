@@ -18,7 +18,7 @@
     import Bus from './plugin/bus'
     import {BusName} from './Constant'
     import {API} from "./service/api";
-    import util from "./common/utils/util";
+    import util from "libs/util";
 
 
     export default {

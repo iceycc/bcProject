@@ -16,7 +16,7 @@
 </template>
 <script>
     import {LsName} from "../../Constant";
-    import {util} from "../../common/utils/util";
+    import util from "libs/util";
     export default {
         data(){
             return{

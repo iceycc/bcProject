@@ -56,7 +56,7 @@
     import {PageName,BusName,LsName,imgSrc} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'
     import Bus from '../../plugin/bus'
-    import {util} from "../../common/utils/util";
+    import util from "libs/util";
     import {Mixin} from '../../common/mixins'
 
     export default {

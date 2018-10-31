@@ -1,10 +1,12 @@
 
 
-import storage from './util.storage'
-import Check from './util.check'
-import isEquipment from './util.checkuserAgent'
+import storage from './store/util.storage'
+import Check from './check/util.check'
+import isEquipment from './check/util.checkuserAgent'
+import utils from './util.expand'
 export default {
     storage,
     Check,
-    isEquipment
+    isEquipment,
+    ...utils
 }

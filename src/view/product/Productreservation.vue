@@ -166,7 +166,7 @@
   import {API, WatchApi} from "../../service/api";
   import Bus from "../../plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "../../Constant";
-  import util from "../../common/utils/util";
+  import util from "libs/util";
   // let defaultManey = 3000
   // import {Index} from '../../common/utils/mixin'
 

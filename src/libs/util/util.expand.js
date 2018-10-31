@@ -8,7 +8,7 @@ import {BusName} from "../../Constant";
 
 import EXIF from 'exif-js'
 
-export const util = {
+export const utilExpand = {
 
       //上传图片
       // throttle: 当持续触发事件时，保证一定时间段内只调用一次事件处理函数。
@@ -474,7 +474,7 @@ export const util = {
           'hydsite.printerHandler.availablePrinter', //打印机上报
           'hydsite.printHandler.getReceiptPrintData' //打印任务处理
         ];
-        let query = util.getQuery(url);
+        let query = utilExpand.getQuery(url);
         if (query && query['p0']) {
           return excludeFns.includes(query['p0']);
         }
@@ -488,7 +488,7 @@ export const util = {
           'hydsite.printerHandler.availablePrinter' //打印机上报
         ];
 
-        let query = util.getQuery(url);
+        let query = utilExpand.getQuery(url);
         if (query && query['p0']) {
           return excludeFns.includes(query['p0']);
         }
@@ -618,32 +618,6 @@ export const util = {
         }
       }
       ,
-      /**
-       * 判断终端
-       * @returns {{isAndroid: (*|boolean), isIOS: (*|boolean), isMobile: (*|boolean), isApp: boolean, isWeixin: (*|boolean), isQQ: (*|boolean), isPC: boolean, isWeibo: (*|boolean)}}
-       */
-      isEquipment() {
-        let UA = navigator.userAgent,
-            isAndroid = /android|adr|linux/gi.test(UA),
-            isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
-            isBlackBerry = /BlackBerry/i.test(UA),
-            isWindowPhone = /IEMobile/i.test(UA),
-            isApp = /besharp/gi.test(UA), // UA.indexOf('besharp') > -1, // 自己的app
-            isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone,
-            isDingTalk = /DingTalk/gi.test(UA);
-        return {
-          isAndroid: isAndroid,
-          isIOS: isIOS,
-          isMobile: isMobile,
-          isApp: isApp,
-          isWeixin: /MicroMessenger/gi.test(UA),
-          isQQ: /QQ/gi.test(UA),
-          isPC: !isMobile,
-          isWeibo: /WeiBo/gi.test(UA),
-          isDingTalk: isDingTalk
-        }
-      }
-      ,
       IOSTitileUpdat() {
         // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
         if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
@@ -705,4 +679,4 @@ export const util = {
     }
 ;
 
-export default util;
+export default utilExpand;

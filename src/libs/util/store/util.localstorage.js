@@ -1,4 +1,4 @@
-import {STORE_PREFIX} from '../../Constant'
+import {STORE_PREFIX} from '../../../Constant'
 export default {
     getUsedSize() {
         return unescape(encodeURIComponent(JSON.stringify(localStorage))).length;

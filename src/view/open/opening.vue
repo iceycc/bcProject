@@ -124,7 +124,7 @@
     </div>
 </template>
 <script>
-    import {util} from "../../common/utils/util";
+    import util from "libs/util";
     import {PageName, BusName, HOST} from "../../Constant";
     import {API,WatchApi} from "../../service/api";
     import Bus from "../../plugin/bus"

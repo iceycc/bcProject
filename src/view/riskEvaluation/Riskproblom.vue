@@ -43,7 +43,7 @@
     import {API} from "../../service/api";
     import Bus from '../../plugin/bus'
     import {BusName, PageName, LsName} from "../../Constant";
-    import util from '../../common/utils/util'
+    import util from "libs/util";
 
     const ProblomIndex = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
     const _NUM = 0
@@ -134,7 +134,7 @@
                         name: PageName.fengxianresult,
                         query: res
                     })
-                    // util.storage.local()
+                    // utilExpand.storage.local()
                 })
                 return
             },

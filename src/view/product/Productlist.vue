@@ -45,7 +45,7 @@
 <script>
     import {API,WatchApi} from "../../service/api";
     import {LsName, PageName,imgSrc} from "../../Constant";
-    import util from "../../common/utils/util";
+    import util from "libs/util";
 
 
     export default {
