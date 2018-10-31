@@ -346,39 +346,6 @@ export default {
     return obj !== null && typeof obj === 'object'
   }
   ,
-  //检测是否是微信浏览器
-  isWeiXin: function () {
-    let ua = window.navigator.userAgent.toLowerCase();
-    if (ua.match(/microMessenger/i) == 'micromessenger') {
-      return true;
-    }
-    return false;
-  }
-  ,
-  //检测是否是支付宝内置浏览器
-  isAlipay: function () {
-    let ua = window.navigator.userAgent.toLowerCase();
-    if (ua.match(/alipay/i) == 'alipay') return true;
-    return false;
-  }
-  ,
-  encryptPwdF: function (value) {
-    let raw = Crypto.enc.Base64.stringify(Crypto.MD5(value, {asBytes: true}));
-    raw = this.replaceAll(raw, "\\", "_");
-    raw = this.replaceAll(raw, "/", "-");
-    raw = this.replaceAll(raw, "+", "]");
-    return raw;
-  }
-  ,
-  encryptPwd: function (raw, key) {
-    let enc = Crypto.HmacMD5(raw, key) + "";
-    return enc.toUpperCase();
-  }
-  ,
-  encryptEnc: function (pwd) {
-    return 'RAW_' + pwd;
-  }
-  ,
   replaceAll: function (str, match, ment) {
     while (true) {
       let pos = str.indexOf(match);
