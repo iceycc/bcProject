@@ -1,4 +1,4 @@
-import util from './util.js'
+import util from "libs/util";
 
 function plugin(Vue) {
     if (plugin.installed) {

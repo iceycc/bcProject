@@ -2,107 +2,15 @@
 import Bus from '../../plugin/bus'
 import {BusName} from "../../Constant";
 
-/*========本地存储===========*/
-const STORE_PREFIX = '_MX_'
-
-let Trim = {
-  all(str) {
-    return str.replace(/(^\s*)|(\s*$)/g, "");
-  },
-  left(str) {
-    return str.replace(/(^\s*)/g, "");
-  },
-  right(str) {
-    return str.replace(/(\s*$)/g, "");
-  }
-}
-
-/**
- * 用于校验
- * @type {{}}
- */
-
-const Check = {
-  trim(str, type = '') {
-    let msg;
-    if (Trim.all(str) == '') {
-      msg = `${type}不能为空`
-    }
-    return msg
-  },
-  tel(val) {
-    let msg;
-    var reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-    if (Trim.all(val) == '') {
-      msg = '手机号码不能为空'
-    }
-    else if (val.length != 11) {
-      msg = '手机号错误，请输入正确手机号'
-    }
-
-    else if (!reg.test(val)) {
-      msg = '手机号错误，请输入正确手机号'
-    }
-    else {
-
-    }
-    return msg
-  },
-  name(val) {
-    let msg;
-    let reg = /[\u4E00-\u9FA5]{2,5}(?:·[\u4E00-\u9FA5]{2,5})*/
-    if (Trim.all(val) == '') {
-      msg = '姓名不能为空'
-    }
-    else if (!reg.test(val)) {
-      msg = '请填写2到5位中文姓名'
-    }
-    else {
-
-    }
-    return msg
-  },
-  idNumber(val) {
-    let msg;
-    let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X)$)/
-    if (Trim.all(val) == '') {
-      msg = '身份证号码不能为空'
-    }
-    else if (!reg.test(val)) {
-      msg = '身份证号码有误，请确认后再次重新输入'
-    }
-    else {
-
-    }
-    return msg
-  },
 
 
-  payPassLen(len,r=false) {
-    let msg;
-    if (len != 6) {
-      msg = r? '重复交易密码有误，请重新输入':'交易密码有误，请重新输入'
-    }
-    return msg
-  },
-  loginPassLen(len) {
-    let msg;
-    if (len < 8 || len > 20) {
-      msg = '登录密码有误，请重新输入'
-    }
-    return msg
-  }
-}
+
 
 import EXIF from 'exif-js'
 
 export const util = {
-      //本地存储
-      storage: storage,
-      // 校验规则
-      Check: Check,
+
       //上传图片
-      Trim: Trim,
       // throttle: 当持续触发事件时，保证一定时间段内只调用一次事件处理函数。
       throttle(cb, ms = 300) {
         let timer = true
@@ -117,10 +25,7 @@ export const util = {
             timer = true
           }, ms)
         }
-      }
-      ,
-
-
+      },
       /**
        * 上传图片
        * @param  {string}   url          服务器上传请求地址
@@ -187,7 +92,7 @@ export const util = {
       }
       ,
 
-//图片压缩
+      //图片压缩
       imgScale(imgUrl, fileList, quality) {
         return new Promise(function (resolve, reject) {
           let img = new Image();
@@ -269,7 +174,7 @@ export const util = {
           winWidth
         }
       },
-
+      //
       getPhotoOrientation(img) {
         console.log('img', img);
         var orient;
@@ -278,8 +183,7 @@ export const util = {
           ;
         });
         return orient;
-      }
-      ,
+      },
       canvasUpload(url, data, rawFile, type, uploadingFn, successFn, failerFn) {
         console.log("rawFile>>>>>>>>>", rawFile);
         var text = window.atob(data.split(",")[1]);
@@ -351,10 +255,9 @@ export const util = {
               return Promise.reject(sts);
             }
         );
-      }
-      ,
+      },
 
-//获取url查询字符串
+      //获取url查询字符串
       getQuery(url) {
         url = decodeURIComponent(url);
         var theRequest = {};
@@ -365,10 +268,9 @@ export const util = {
           }
         }
         return theRequest;
-      }
-      ,
+      },
 
-//设置url查询字符串
+      //设置url查询字符串
       setQuery: function (params) {
         if (Object.prototype.toString.call(params) !== "[object Object]") {
           return "";
@@ -379,8 +281,7 @@ export const util = {
         }
         url = url.replace(/\&$/g, "").replace(/^\?$/g, "");
         return url;
-      }
-      ,
+      },
 
       /**
        * 解析字符串
@@ -408,8 +309,7 @@ export const util = {
         }
 
         return res;
-      }
-      ,
+      },
       isValueNumber(value) {
         return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
       }
@@ -466,15 +366,6 @@ export const util = {
         return false;
       }
       ,
-// encryptPwd: function(key, value) {
-//   let raw = Crypto.enc.Base64.stringify(Crypto.MD5(value, { asBytes: true }));
-//   raw = this.replaceAll(raw, "\\", "_");
-//   raw = this.replaceAll(raw, "/", "-");
-//   raw = this.replaceAll(raw, "+", "]");
-//   let enc = Crypto.HmacMD5(raw, key) + "";
-//   return enc.toUpperCase();
-
-// },
       encryptPwdF: function (value) {
         let raw = Crypto.enc.Base64.stringify(Crypto.MD5(value, {asBytes: true}));
         raw = this.replaceAll(raw, "\\", "_");
@@ -504,21 +395,6 @@ export const util = {
         return str;
       }
       ,
-
-      /*doSign: function(data) {
-
-          let sign = "";
-          for (let p in data) {
-              sign += `${p}=${data[p]}&`;
-          }
-          sign = sign.replace(/\&$/g, "").split("&").filter((item, index) => /^p\d\=/g.test(item)).join("&");
-
-          sign += storage.local.get('signKey') || "";
-          sign = Crypto.enc.Utf8.parse(sign);
-          sign = Crypto.MD5(sign, { asBytes: true });
-          sign = Crypto.enc.Hex.stringify(sign);
-          return sign;
-      },*/
       format: function (date, fmt) {
         date = new Date(date);
         let o = {
@@ -550,8 +426,7 @@ export const util = {
       formatTimeStamp(stringTime) {
         var timestamp = stringTime ? new Date(stringTime).getTime() : '';
         return timestamp;
-      }
-      ,
+      },
 
       /**
        * 深拷贝
@@ -564,12 +439,10 @@ export const util = {
         if (obj === null || typeof obj !== 'object') {
           return obj
         }
-
         const hit = this.find(cache, c => c.original === obj)
         if (hit) {
           return hit.copy
         }
-
         const copy = Array.isArray(obj) ? [] : {}
 
         cache.push({
@@ -582,39 +455,32 @@ export const util = {
         })
 
         return copy
-      }
-      ,
+      },
 
       find(list, f) {
         return list.filter(f)[0]
-      }
-      ,
+      },
 
       /**
        * forEach for object
        */
       forEachValue(obj, fn) {
         Object.keys(obj).forEach(key => fn(obj[key], key))
-      }
-      ,
+      },
 
-//URL包含
+      //URL包含
       urlExclude: function (url) {
         let excludeFns = [
           'hydsite.printerHandler.availablePrinter', //打印机上报
           'hydsite.printHandler.getReceiptPrintData' //打印任务处理
         ];
-
         let query = util.getQuery(url);
         if (query && query['p0']) {
           return excludeFns.includes(query['p0']);
         }
-
         return false;
-      }
-      ,
-
-//跳过网络检测
+      },
+      //跳过网络检测
       skipCheckNet(url) {
         let excludeFns = [
           'hydsite.localServiceHandler.getLocalServiceId', //获取本地服务ID
@@ -628,45 +494,35 @@ export const util = {
         }
 
         return false;
-      }
-      ,
-
-//检查请求参数
+      },
+      //检查请求参数
       checkParams: function ({fn, param, fullresult}) {
         if (!fn || !fn.length) {
           console.error("请求方法(fn)必须传入！");
           return false;
         }
-
         if (!Array.isArray(param)) {
           console.error("请求参数(param)必须是数组！");
           return false;
         }
-
         return true;
-      }
-      ,
-
-//组合httpURL
+      },
+      //组合httpURL
       combHttpURL: function (baseURL, data) {
         let httpURL = baseURL.toString();
         if (!httpURL.includes("?")) {
           httpURL += "?"
         }
-
         for (var key of Object.keys(data)) {
           httpURL += (key + "=" + data[key]) + "&";
         }
-
         //没有内容
         if (httpURL.endsWith("?")) {
           httpURL = httpURL.substring(0, httpURL.length - 1);
         }
-
         if (httpURL.endsWith("&")) {
           httpURL = httpURL.substring(0, httpURL.length - 1);
         }
-
         return httpURL;
       }
       ,
@@ -788,7 +644,7 @@ export const util = {
         }
       }
       ,
-      IOSTitileUpdat(){
+      IOSTitileUpdat() {
         // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
         if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
           const hackIframe = document.createElement('iframe');
