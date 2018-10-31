@@ -133,12 +133,6 @@ let frameIn = [
     meta: {keepAlive: false, title: '风险测评', needLogin: false}
   },
   {
-    path: '/' + PageName.Riskassessment,
-    name: PageName.Riskassessment,
-    component: resolve => require(['view/riskEvaluation/Riskassessment.vue'], resolve),
-    meta: {keepAlive: false, title: '风险测评', needLogin: false}
-  },
-  {
     path: '/' + PageName.Riskproblom,
     name: PageName.Riskproblom,
     component: resolve => require(['view/riskEvaluation/Riskproblom.vue'], resolve),
