@@ -1,6 +1,9 @@
-
-
-var formatNum =  (str) =>{
+/**
+ * 格式化金额
+ * @param str  eg:30000
+ * @returns {*} eg:3,000.00
+ */
+export const formatNum =  (str) =>{
     if(!str) return str
     if(!Number(str)) return str
     var newStr = "";
@@ -31,7 +34,12 @@ var formatNum =  (str) =>{
     }
 }
 
- var timerFormat = (val)=>{
+/**
+ * 格式化时间
+ * @param val
+ * @returns {*}
+ */
+ export const timerFormat = (val)=>{
     if(!val) return val;
     let date = new Date(parseInt(val));
         let Y = date.getFullYear() + '-',
@@ -43,15 +51,16 @@ var formatNum =  (str) =>{
     return Y+M+D+h+m+s;
 }
 
-var BankNo_Filter = (val)=>{
+/**
+ * 格式化银行卡号 隔四位增减空格
+ * @param val
+ * @returns {*}
+ * @constructor
+ */
+export const BankNo_Filter = (val)=>{
     if(!val){
         return val
     }else {
         return val.replace(/(\d{4})(?=\d)/g,"$1"+" ")
     }
-}
-export {
-    formatNum,
-    timerFormat,
-    BankNo_Filter
 }

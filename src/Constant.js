@@ -15,7 +15,6 @@ let Configs = {
 }
 export const HOST = process.env.NODE_ENV == 'development'
         ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
-
 /**
  *
  */

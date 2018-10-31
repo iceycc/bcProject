@@ -3,9 +3,6 @@ import Bus from '../../plugin/bus'
 import {BusName} from "../../Constant";
 
 
-
-
-
 import EXIF from 'exif-js'
 
 export const utilExpand = {
@@ -468,33 +465,6 @@ export const utilExpand = {
         Object.keys(obj).forEach(key => fn(obj[key], key))
       },
 
-      //URL包含
-      urlExclude: function (url) {
-        let excludeFns = [
-          'hydsite.printerHandler.availablePrinter', //打印机上报
-          'hydsite.printHandler.getReceiptPrintData' //打印任务处理
-        ];
-        let query = utilExpand.getQuery(url);
-        if (query && query['p0']) {
-          return excludeFns.includes(query['p0']);
-        }
-        return false;
-      },
-      //跳过网络检测
-      skipCheckNet(url) {
-        let excludeFns = [
-          'hydsite.localServiceHandler.getLocalServiceId', //获取本地服务ID
-          'hydsite.printHandler.getReceiptPrintData', //打印任务处理
-          'hydsite.printerHandler.availablePrinter' //打印机上报
-        ];
-
-        let query = utilExpand.getQuery(url);
-        if (query && query['p0']) {
-          return excludeFns.includes(query['p0']);
-        }
-
-        return false;
-      },
       //检查请求参数
       checkParams: function ({fn, param, fullresult}) {
         if (!fn || !fn.length) {
@@ -527,7 +497,7 @@ export const utilExpand = {
       }
       ,
 
-//input自动获取焦点
+      //input自动获取焦点
       autoFocus: function (ref, isFocus, isSelect) {
         if (isFocus) {
           ref.$el.children[0].focus();
@@ -538,7 +508,7 @@ export const utilExpand = {
       }
       ,
 
-//组合httpURL
+      //组合httpURL
       combHttpURL: function (baseURL, data) {
         let httpURL = baseURL.toString();
         if (!httpURL.includes("?")) {
