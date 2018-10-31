@@ -273,7 +273,7 @@ let testPage = [
   {
     path: '/' + PageName.test,
     name: PageName.test,
-    component: resolve => require(['viewss/testPage.vue'], resolve),
+    component: resolve => require(['views/testPage.vue'], resolve),
   }
 ]
 

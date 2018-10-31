@@ -44,35 +44,7 @@ export const imgSrc = process.env.NODE_ENV == 'development' ? imgSrcHost.dev : i
  * page名称
  */
 export const PageName = {
-<<<<<<< HEAD
-    login: 'login',
-    Productlist: 'Productlist',
-    Rechargesuccess: 'Rechargesuccess',
-    Rechargefailure: 'Rechargefailure',
-    Resetpassword: 'Resetpassword',
-    Riskproblom: 'Riskproblom',
-    surebuy: 'surebuy',
-    Verificationsuccess: 'Verificationsuccess',
-    Recharge: 'Recharge',
-    Productlist2: 'Productlist2',
-    opening3: 'opening3',
-    opening2: 'opening2',
-    opening: 'opening',
-    Investmentdetails: 'Investmentdetails',
-    Incomeprogress: 'Incomeprogress',
-    fengxianresult: 'fengxianresult',
-    Buysuccess: 'Buysuccess',
-    Buying: 'Buying',
-    Productreservation: 'Productreservation',
-    Buyfailed: 'Buyfailed',
-    OrderNextSuccess: 'OrderNextSuccess',
-    DocsPage: 'DocsPage',
-    UserLicenseAgreement: 'UserLicenseAgreement',
-    // 理财列表
-    Financialproducts: 'Financialproducts',
-    // 交易明细
-    Transactiondetails: 'Transactiondetails',
-=======
+
   /**
    * test
    */
@@ -107,7 +79,6 @@ export const PageName = {
   Financialproducts: 'Financialproducts',
   // 交易明细
   Transactiondetails: 'Transactiondetails',
->>>>>>> uitl-libs
 
   /*
   wby二期新增
