@@ -1,4 +1,5 @@
 import {PageName} from '../Constant'
+
 let frameIn = [
   {
     path: '/',
@@ -267,6 +268,16 @@ let frameIn = [
 
 ]
 
+
+let testPage = [
+  {
+    path: '/' + PageName.test,
+    name: PageName.test,
+    component: resolve => require(['view/testPage.vue'], resolve),
+  }
+]
+
 export default [
-  ...frameIn
+  ...frameIn,
+  ...testPage
 ]

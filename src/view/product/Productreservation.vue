@@ -3,7 +3,6 @@
     <div class="wrap">
       <app-bar :title="title"></app-bar>
       <div class="banner">
-        {{testNUm | formatNum}}
         <div class="bannercontent">
           <div class="bannertop">
             <div class="bannertopleft">
@@ -174,7 +173,6 @@
   export default {
     data() {
       return {
-        testNUm:10000,
         productDetail: {
           RATE: "",
           PERIOD: "",

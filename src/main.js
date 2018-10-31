@@ -25,7 +25,7 @@ import Calendar from 'vue2-datepick';
 Vue.use(Calendar);
 
 Vue.component('app-bar', AppBar);
-import * as custom from './common/filters';
+import custom from './common/filters';
 
 console.log(custom);
 

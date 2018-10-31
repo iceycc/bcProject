@@ -65,10 +65,6 @@
                         title="学历列表"
                         class="selectStyle" :text="educationText" :options="education"
                         @getValue="getEduction"></js-select>
-                <!--<select name="" id="" v-model="data.USER_EDUCATION">-->
-                <!--<option :value="item.value" v-for="item,index in education" :key="index">{{item.name}}</option>-->
-                <!--</select>-->
-                <!--<input type="number" name="text1" placeholder="请选择学历" v-model="data.USER_EDUCATION">-->
             </section>
 
         </div>
