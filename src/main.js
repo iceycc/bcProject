@@ -1,6 +1,5 @@
 import Vue from 'vue'
-// import libRender from './common/importLib'
-// libRender()
+
 import store from './store/index'
 import {
   Button,
@@ -18,20 +17,17 @@ Vue.prototype.Meg = MessageBox
 Vue.component(Button.name, Button)
 Vue.component(Cell.name, Cell)
 Vue.component(Radio.name, Radio)
-// Vue.component(Indicator.name, Indicator)
 
-// import MintUI from 'mint-ui'
-// import 'mint-ui/lib/style.css'
-// Vue.use(MintUI)
 
 import AppBar from './components/header/AppBar'
 import Calendar from 'vue2-datepick';
 
 Vue.use(Calendar);
 
-Vue.component('app-bar', AppBar)
-// import {HOST} from "./Constant";
-import * as custom from './common/filters/filters'
+Vue.component('app-bar', AppBar);
+import custom from './common/filters';
+
+console.log(custom);
 
 Object.keys(custom).forEach(key => {
   Vue.filter(key, custom[key])

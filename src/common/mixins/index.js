@@ -1,4 +1,4 @@
-import util from "../utils/util";
+import util from "libs/util";
 import {LsName, PageName} from "../../Constant";
 import {API} from "../../service/api";
 
@@ -14,7 +14,10 @@ export const Mixin = {
 
 export const UtilMixin = {
     methods: {
-        toPreProduct() { // 用于登陆和测评结束后判断 源头是购买还是预约  还是电子账户来源
+      /**
+       * 用于登陆和测评结束后判断 源头是购买还是预约  还是电子账户来源
+       */
+      toPreProduct() {
             let SOURCE_URL = util.storage.session.get(LsName.loginType)
             let goBuyData = util.storage.session.get(LsName.goBuy)
             if (SOURCE_URL == '预约下期') { // 判断是从预约产品过来的 ， 直接预约
@@ -62,6 +65,12 @@ export const UtilMixin = {
                 })
             }
         },
+      /**
+       * 用于处理 交易时的轮询
+       * @param text
+       * @param data
+       * @param fn
+       */
         queryStatus({
                         text = '等待中...', // 轮询等待提示
                         data, // 轮询参数

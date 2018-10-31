@@ -1,10 +1,13 @@
+import storage from './store/util.storage'
+import Check from './check/util.check'
+import isEquipment from './check/util.checkuserAgent'
+import expand from './util.expand'
+import filters from './util.filters'
 
-
-import storage from './util.storage'
-import Check from './util.check'
-import isEquipment from './util.checkuserAgent'
 export default {
-    storage,
-    Check,
-    isEquipment
+  storage, // 数据存储操作库
+  Check, //
+  isEquipment, // 终端校验
+  ...filters,// 过滤
+  ...expand
 }
