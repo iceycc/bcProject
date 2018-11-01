@@ -48,9 +48,9 @@ export const PageName = {
   /**
    * test
    */
-  test:'test',
+  testPage:'testPage',
   /**
-   * MAIN
+   * main
    */
   login: 'login',
   Productlist: 'Productlist',
