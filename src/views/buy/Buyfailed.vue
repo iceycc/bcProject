@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-    import {WatchApi} from "../../service/api";
+    import {WatchApi} from "../../service/api/api";
     import util from "libs/util";
     export default {
         created() {
@@ -26,7 +26,7 @@
         },
         methods: {
             goApp() {
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A011', // 点位
                     REMARK_DATA: '异业合作-购买失败-下载比财', // 中文备注
                 })

@@ -1,50 +1,21 @@
-import http from './http'
-import watchHttp from './watchHttp'
-import {HOST} from "../Constant";
-
+import http from '../http'
+import {HOST} from "../../Constant";
 /**
  * axios 配置
  */
 const Config = {
-    /**
-     *
-     */
-    config:{
-        method: 'post',
-        baseURL:HOST,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        timeout: 30000,
-    },
-    /**
-     *  watch 用于埋点接口配置
-     */
-    watchConfig:{
-        method: 'post',
-        baseURL:HOST,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        timeout: 30000,
-    }
+  config:{
+    method: 'post',
+    baseURL:HOST,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    timeout: 30000,
+  },
 }
 
-/**
- * watch 用于埋点
- */
-export const WatchApi = {
-    watch: {
-        watchApi(params, success, error) {
-            let options = {
-                url: '/finsuitPhone/deal',
-                params
-            }
-            return watchHttp.post(options,Config.watchConfig, success, error)
-
-        },
-    },
-}
 /**
  * 业务api
  */
-export const API = {
+export default  {
     /**
      * 注册相关 open
      */
@@ -83,7 +54,6 @@ export const API = {
         getMsgCode(params, success, error) {
             let options = {
                 url: '/openapi/comm/apiSendPhoneCode',
-                // 'param_key='JSON.stringify(params)
                 params
             }
             return http.post(options, Config.config, success, error)
@@ -103,9 +73,6 @@ export const API = {
                 url: '/openapi/comm/apiIdCardFrontPhoneOcr',
                 params
             }
-            // Object.assign(config,{
-            //     headers: {'Content-Type': 'multipart/form-data'},
-            // })
             return http.post(options, Config.config, success, error)
         },
         // 反
@@ -167,7 +134,7 @@ export const API = {
      * 充值相关
      */
     reChange: {
-        // 39查询用户是否已签约充值协议
+        // 查询用户是否已签约充值协议
         apiRechargeProtoQuery(params, success, error) {
             let options = {
                 url: '/openapi/biz/apiRechargeProtoQuery',
@@ -445,10 +412,7 @@ export const API = {
                 params
             }
             return http.post(options, Config.config, success, error)
-
         },
-
-
     }
 }
 

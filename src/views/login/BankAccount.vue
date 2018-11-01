@@ -74,7 +74,7 @@
 </template>
 
 <script>
-    import {API} from "../../service/api";
+    import API from "../../service";
     import {PageName, LsName, imgSrc} from "../../Constant";
     import util from "libs/util";
     export default {

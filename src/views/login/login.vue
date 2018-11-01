@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-    import {API,WatchApi} from '../../service/api'
+    import API from '../../service'
     import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
@@ -187,7 +187,7 @@
                 })
             },
             goOpen() {
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A008', // 点位
                     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
                 })
@@ -211,7 +211,7 @@
 
                 util.storage.session.remove(LsName.token, this.tel)
                 API.login(data, (res) => {
-                    WatchApi.watch.watchApi({
+                    API.watchApi({
                         FUNCTION_ID: 'ptb0A007', // 点位
                         REMARK_DATA: '异业合作-登录', // 中文备注
                         SOURCE_URL: SOURCE_URL
@@ -236,7 +236,7 @@
                     }
 
                 }, err => {
-                    WatchApi.watch.watchApi({
+                    API.watchApi({
                         FUNCTION_ID: 'ptb0A007', // 点位
                         REMARK_DATA: '异业合作-登录', // 中文备注
                     })

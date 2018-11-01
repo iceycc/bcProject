@@ -59,7 +59,7 @@
     </div>
 </template>
 <script>
-    import {API,WatchApi} from "../../service/api";
+    import API from "../../service";
     import {PageName, BusName, LsName} from "../../Constant";
     import util from "libs/util";
     import Bus from '../../plugin/bus'
@@ -320,7 +320,7 @@
                             setTimeout(() => {
                                 this.errMsg = ''
                             }, 2000)
-                            WatchApi.watch.watchApi({
+                            API.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })
@@ -336,7 +336,7 @@
                             })
                         },
                         err => {
-                            WatchApi.watch.watchApi({
+                            API.watchApi({
                                 FUNCTION_ID: 'ptb0A004', // 点位
                                 REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
                             })

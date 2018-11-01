@@ -38,7 +38,7 @@
 <script>
     import {PageName, BusName, imgSrc, LsName} from "../../Constant"
     import Bus from '../../plugin/bus'
-    import {API} from "../../service/api"
+    import API from "../../service"
     import {Mixin} from '../../common/mixins'
     import util from "libs/util";
 

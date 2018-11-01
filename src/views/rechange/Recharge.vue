@@ -71,7 +71,7 @@
     </div>
 </template>
 <script>
-    import {API} from "../../service/api";
+    import API from "../../service";
     import AppBar from '../../components/header/AppBar'
     import {HOST, LsName} from '../../Constant'
     import PassInput from '../../components/commons/PassInput'

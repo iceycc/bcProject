@@ -33,7 +33,7 @@
 </template>
 <script>
     import util from "libs/util";
-    import {WatchApi} from "../../service/api";
+    import {WatchApi} from "../../service/api/api";
     import Bus from '../../plugin/bus'
     import {BusName} from "../../Constant";
 
@@ -50,7 +50,7 @@
         },
         methods: {
             goApp() {
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A010', // 点位
                     REMARK_DATA: '异业合作-购买成功-下载比财', // 中文备注
                 })

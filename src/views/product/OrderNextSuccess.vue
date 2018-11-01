@@ -13,7 +13,7 @@
 </template>
 <script>
     import util from 'libs/util'
-    import {WatchApi} from "../../service/api"
+    import API from "../../service/api/api"
     import Bus from '../../plugin/bus'
     import {BusName} from "../../Constant";
 
@@ -28,7 +28,7 @@
         },
         methods:{
             goApp(){
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A009', // 点位
                     REMARK_DATA: '异异业合作-预约成功-下载比财', // 中文备注
                 })

@@ -40,7 +40,7 @@
 
 </template>
 <script>
-    import {API} from "../../service/api";
+    import API from "../../service";
     import Bus from '../../plugin/bus'
     import {BusName, PageName, LsName} from "../../Constant";
     import util from "libs/util";

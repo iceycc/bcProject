@@ -122,7 +122,7 @@
 <script>
     import util from "libs/util";
     import {PageName, BusName, HOST} from "../../Constant";
-    import {API,WatchApi} from "../../service/api";
+    import API from "../../service";
     import Bus from "../../plugin/bus"
     import JsSelect from '../../components/commons/JsSelect'
     import EXIF from 'exif-js'
@@ -283,7 +283,7 @@
                 this.agree = !this.agree
             },
             doNext() {
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A003', // 点位
                     REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
                 })

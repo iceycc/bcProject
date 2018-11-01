@@ -1,21 +1,42 @@
-
-
 export default {
-  state:{
-    moneyCanSee:true
-  },
-  actions:{
-    changeMoneyCanSee(state){
-      state.moneyCanSee = !state.moneyCanSee
-    },
-  },
-  mutations:{
-    changeMoneyCanSee({commit}){
-      commit.commit('changeMoneyCanSee')
+  state: {
+    bankInfo: {
+      bankName: '',
+      bankLogo: '',
+      ifNeedPass: '',
+      msgTime: '',
     }
   },
-  getters:{
-
+  // dispatch -> actions
+  actions: {
+    addBankInfo({state, dispatch}, {
+      bankName,
+      bankLogo,
+      ifNeedPass,
+      msgTime
+    }) {
+      state.bankInfo = {
+        bankName,
+        bankLogo,
+        ifNeedPass,
+        msgTime
+      }
+      dispatch('printInfos')
+    },
+    printInfos() {
+      console.log('printInfos');
+    }
+  },
+  // commit-> mutations
+  mutations: {
+    setMsgTime({bankInfo}) {
+      bankInfo.msgTime++
+    }
+  },
+  getters: {
+    getMsg:(state) =>{
+      return state.bankInfo.msgTime
+    }
   }
 
 }

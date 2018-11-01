@@ -43,7 +43,7 @@
     </div>
 </template>
 <script>
-    import {API,WatchApi} from "../../service/api";
+    import API from "../../service";
     import {LsName, PageName,imgSrc} from "../../Constant";
     import util from "libs/util";
 
@@ -57,7 +57,7 @@
             }
         },
         created() {
-            WatchApi.watch.watchApi({
+            API.watchApi({
                 REMARK_DATA: '异业合作-落地页',
                 FUNCTION_ID: 'ptp0A000'
             })
@@ -81,7 +81,7 @@
                 })
             },
             goDetail(id,title) {
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A001', // 点位
                     REMARK_DATA: '异业合作-落地页产品列表', // 中文备
                     FROM_ID: id

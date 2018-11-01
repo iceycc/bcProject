@@ -39,6 +39,7 @@ module.exports = {
       '@': resolve('src'),
       'views': resolve('src/views'),
       'libs':resolve('src/libs'),
+      'plugin':resolve('src/plugin'),
     }
   },
   module: {

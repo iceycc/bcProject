@@ -55,7 +55,7 @@
     import BankSelect from '../../components/commons/BankSelect'
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import {API} from "../../service/api";
+    import API from "../../service";
     import {imgSrc, BusName, LsName,PageName} from "../../Constant";
     import Bus from '../../plugin/bus'
     import util from "libs/util";

@@ -163,7 +163,7 @@
   </div>
 </template>
 <script>
-  import {API, WatchApi} from "../../service/api";
+  import API from "../../service";
   import Bus from "../../plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "../../Constant";
   import util from "libs/util";
@@ -389,7 +389,7 @@
         };
         if (type == 1) {
           // 去安全购买
-          WatchApi.watch.watchApi({
+          API.watchApi({
             FUNCTION_ID: "ptb0A002",
             REMARK_DATA: "异业合作-产品详情页-购买-安全购买", // 中文备注
             FROM_ID: this.proID // 产品ID、机构ID
@@ -419,7 +419,7 @@
           }
         } else {
           // 预约 得先登录
-          WatchApi.watch.watchApi({
+          API.watchApi({
             FUNCTION_ID: "ptb0A002",
             REMARK_DATA: "异业合作-产品详情页-购买-预约下期", // 中文备注
             FROM_ID: this.proID // 产品ID、机构ID

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import util from "libs/util";
-import {LsName} from '../Constant'
+import {LsName} from '../../Constant'
 
 var instance = axios.create(null);
 export default {

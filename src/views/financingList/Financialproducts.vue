@@ -78,7 +78,7 @@
     </div>
 </template>
 <script>
-    import {API} from "../../service/api";
+    import API from "../../service";
     import {BusName} from "../../Constant";
     import Bus from "../../plugin/bus";
     import {Loadmore} from "mint-ui";

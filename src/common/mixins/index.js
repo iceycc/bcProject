@@ -1,6 +1,6 @@
 import util from "libs/util";
 import {LsName, PageName} from "../../Constant";
-import {API} from "../../service/api";
+import API from "../../service";
 
 export const Mixin = {
     beforeCreate() {

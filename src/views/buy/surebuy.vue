@@ -51,7 +51,7 @@
     </div>
 </template>
 <script>
-    import {API} from "../../service/api";
+    import API from "../../service";
 
     import {PageName,BusName,LsName,imgSrc} from "../../Constant";
     import PassInput from '../../components/commons/PassInput'

@@ -38,7 +38,7 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
-    import {API} from "../../service/api";
+    import API from "../../service";
     import {LsName, PageName} from "../../Constant";
     import util from "libs/util";
 

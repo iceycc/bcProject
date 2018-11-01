@@ -95,7 +95,7 @@
     </div>
 </template>
 <script>
-    import {API,WatchApi} from "../../service/api";
+    import API from "../../service";
     import Bus from '../../plugin/bus'
     import PassInput from '../../components/commons/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
@@ -215,7 +215,7 @@
                 })
             },
             subumit() {
-                WatchApi.watch.watchApi({
+                API.watchApi({
                     FUNCTION_ID: 'ptb0A005', // 点位
                     REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
                 })
