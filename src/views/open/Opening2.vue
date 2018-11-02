@@ -1,7 +1,6 @@
 <template>
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
-
         <section class="wrapicon">
             <section class="circle">
                 <span class="line1">
@@ -15,7 +14,6 @@
                 </span>
                 <p class="step-text">绑定银行卡</p>
             </section>
-
             <section class="circle">
                  <span class="line3 hui">
                     <img :src='stepImg3' alt="">
@@ -238,7 +236,7 @@
                         // Bus.$emit(BusName.showToast, "您已经实名成功")
                         setTimeout(() => {
                             this.$router.push({
-                                name: PageName.opening3,
+                                name: PageName.Opening3,
                                 params: {
                                     step
                                 },
@@ -252,7 +250,7 @@
                         // Bus.$emit(BusName.showToast, "您已经开户成功")
                         setTimeout(() => {
                             this.$router.push({
-                                name: PageName.login,
+                                name: PageName.Login,
                             })
                         }, 1000)
                     }
@@ -329,7 +327,7 @@
                                 return
                             }
                             this.$router.push({
-                                name: PageName.opening3,
+                                name: PageName.Opening3,
                                 query: { // todo方便测试
                                     REQ_SERIAL: res.REQ_SERIAL,
                                 }

@@ -30,7 +30,7 @@
                          <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
                              <h4>
                                  <strong>{{item.PRD_NAME}}</strong>
-                                 <!-- <router-link to="/Transactiondetails">明细</router-link> -->
+                                 <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                              </h4>
                              <p>隶属于{{item.ORG_NAME}}</p>
                              <p>当前价值（元）
@@ -57,7 +57,7 @@
                         <div class="divTab-1" v-for="(item,index) in pageList1" :key="index">
                             <h4>
                                 <strong>{{item.PRD_NAME}}</strong>
-                                <!-- <router-link to="/Transactiondetails">明细</router-link> -->
+                                <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                             </h4>
                             <p>隶属于{{item.ORG_NAME}}</p>
                             <p>投资金额（元）

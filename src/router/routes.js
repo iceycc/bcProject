@@ -11,22 +11,22 @@ let frameIn = [
    * buy
    */
   {
-    path: '/' + PageName.Buyfailed,
-    name: PageName.Buyfailed,
-    component: resolve => require(['views/buy/Buyfailed.vue'], resolve),
+    path: '/' + PageName.BuyFailed,
+    name: PageName.BuyFailed,
+    component: resolve => require(['views/buy/BuyFailed.vue'], resolve),
     meta: {keepAlive: false, title: '购买失败', needLogin: false}
   },
   {
-    path: '/' + PageName.Buysuccess,
-    name: PageName.Buysuccess,
-    component: resolve => require(['views/buy/Buysuccess.vue'], resolve),
+    path: '/' + PageName.BuySuccess,
+    name: PageName.BuySuccess,
+    component: resolve => require(['views/buy/BuySuccess.vue'], resolve),
     meta: {keepAlive: false, title: '购买成功', needLogin: false}
 
   },
   {
-    path: '/' + PageName.surebuy,
-    name: PageName.surebuy,
-    component: resolve => require(['views/buy/surebuy.vue'], resolve),
+    path: '/' + PageName.SureBuy,
+    name: PageName.SureBuy,
+    component: resolve => require(['views/buy/SureBuy.vue'], resolve),
     meta: {keepAlive: false, title: '购买', needLogin: false}
   },
   {
@@ -40,9 +40,9 @@ let frameIn = [
    * login
    */
   {
-    path: '/' + PageName.login,
-    name: PageName.login,
-    component: resolve => require(['views/login/login.vue'], resolve),
+    path: '/' + PageName.Login,
+    name: PageName.Login,
+    component: resolve => require(['views/login/Login.vue'], resolve),
     meta: {keepAlive: false, title: '安全登录', needLogin: false}
   },
   {
@@ -57,21 +57,21 @@ let frameIn = [
    * open 开户
    */
   {
-    path: '/' + PageName.opening,
-    name: PageName.opening,
-    component: resolve => require(['views/open/opening.vue'], resolve),
+    path: '/' + PageName.Opening1,
+    name: PageName.Opening1,
+    component: resolve => require(['views/open/Opening1.vue'], resolve),
     meta: {keepAlive: false, title: '信息填写', needLogin: false}
   },
   {
-    path: '/' + PageName.opening2,
-    name: PageName.opening2,
-    component: resolve => require(['views/open/opening2.vue'], resolve),
+    path: '/' + PageName.Opening2,
+    name: PageName.Opening2,
+    component: resolve => require(['views/open/Opening2.vue'], resolve),
     meta: {keepAlive: false, title: '信息填写', needLogin: false}
   },
   {
-    path: '/' + PageName.opening3,
-    name: PageName.opening3,
-    component: resolve => require(['views/open/opening3.vue'], resolve),
+    path: '/' + PageName.Opening3,
+    name: PageName.Opening3,
+    component: resolve => require(['views/open/Opening3.vue'], resolve),
     meta: {keepAlive: false, title: '信息填写', needLogin: false}
   },
 
@@ -79,15 +79,15 @@ let frameIn = [
    * product
    */
   {
-    path: '/' + PageName.Productlist,
-    name: PageName.Productlist,
-    component: resolve => require(['views/product/Productlist.vue'], resolve),
+    path: '/' + PageName.ProductList,
+    name: PageName.ProductList,
+    component: resolve => require(['views/product/ProductList.vue'], resolve),
     meta: {keepAlive: false, title: '产品列表', needLogin: false}
   },
   {
-    path: '/' + PageName.Productreservation,
-    name: PageName.Productreservation,
-    component: resolve => require(['views/product/Productreservation.vue'], resolve),
+    path: '/' + PageName.ProductReservation,
+    name: PageName.ProductReservation,
+    component: resolve => require(['views/product/ProductReservation.vue'], resolve),
     meta: {keepAlive: false, needLogin: false}
   },
   {
@@ -107,24 +107,24 @@ let frameIn = [
     meta: {keepAlive: false, title: '充值', needLogin: false}
   },
   {
-    path: '/' + PageName.Rechargefailure,
-    name: PageName.Rechargefailure,
-    component: resolve => require(['views/rechange/Rechargefailure.vue'], resolve),
+    path: '/' + PageName.RechargeFailure,
+    name: PageName.RechargeFailure,
+    component: resolve => require(['views/rechange/RechargeFailure.vue'], resolve),
     meta: {keepAlive: false, title: '充值失败', needLogin: false}
   },
   {
-    path: '/' + PageName.Rechargesuccess,
-    name: PageName.Rechargesuccess,
-    component: resolve => require(['views/rechange/Rechargesuccess.vue'], resolve),
+    path: '/' + PageName.RechargeSuccess,
+    name: PageName.RechargeSuccess,
+    component: resolve => require(['views/rechange/RechargeSuccess.vue'], resolve),
     meta: {keepAlive: false, title: '充值成功', needLogin: false}
   },
   /**
    * riskEvaluation 风险评估
    */
   {
-    path: '/' + PageName.Verificationsuccess,
-    name: PageName.Verificationsuccess,
-    component: resolve => require(['views/riskEvaluation/Verificationsuccess.vue'], resolve),
+    path: '/' + PageName.VerificationSuccess,
+    name: PageName.VerificationSuccess,
+    component: resolve => require(['views/riskEvaluation/VerificationSuccess.vue'], resolve),
     meta: {keepAlive: false, title: '风险测评', needLogin: false}
   },
   {
@@ -134,18 +134,18 @@ let frameIn = [
     meta: {keepAlive: false, title: '风险测评', needLogin: false}
   },
   {
-    path: '/' + PageName.fengxianresult,
-    name: PageName.fengxianresult,
-    component: resolve => require(['views/riskEvaluation/fengxianresult.vue'], resolve),
+    path: '/' + PageName.FengxianResult,
+    name: PageName.FengxianResult,
+    component: resolve => require(['views/riskEvaluation/FengxianResult.vue'], resolve),
     meta: {keepAlive: false, title: '风险测评', needLogin: false}
   },
   /**
    * safe
    */
   {
-    path: '/' + PageName.Resetpassword,
-    name: PageName.Resetpassword,
-    component: resolve => require(['views/safe/Resetpassword.vue'], resolve),
+    path: '/' + PageName.ResetPassword,
+    name: PageName.ResetPassword,
+    component: resolve => require(['views/safe/ResetPassword.vue'], resolve),
     meta: {keepAlive: false, title: '重置密码', needLogin: false}
   },
   {
@@ -167,9 +167,9 @@ let frameIn = [
     meta: {keepAlive: false, title: '更换银行卡', needLogin: false}
   },
   {
-    path: '/' + PageName.ResetPayPassWord,
-    name: PageName.ResetPayPassWord,
-    component: resolve => require(['views/safe/ResetPayPassWord.vue'], resolve),
+    path: '/' + PageName.ResetPayPassword,
+    name: PageName.ResetPayPassword,
+    component: resolve => require(['views/safe/ResetPayPassword.vue'], resolve),
     meta: {keepAlive: false, title: '更换支付密码', needLogin: false}
   },
   {
@@ -183,15 +183,15 @@ let frameIn = [
    * financingDetail
    */
   {
-    path: '/' + PageName.Investmentdetails,
-    name: PageName.Investmentdetails,
-    component: resolve => require(['views/financingDetail/Investmentdetails.vue'], resolve),
+    path: '/' + PageName.InvestmentDetails,
+    name: PageName.InvestmentDetails,
+    component: resolve => require(['views/financingDetail/InvestmentDetails.vue'], resolve),
     meta: {keepAlive: false, title: '银行理财', needLogin: false}
   },
   {
-    path: '/' + PageName.Incomeprogress,
-    name: PageName.Incomeprogress,
-    component: resolve => require(['views/financingDetail/Incomeprogress.vue'], resolve),
+    path: '/' + PageName.IncomeProgress,
+    name: PageName.IncomeProgress,
+    component: resolve => require(['views/financingDetail/IncomeProgress.vue'], resolve),
     meta: {keepAlive: false, title: '货币基金', needLogin: false}
   },
 
@@ -254,15 +254,15 @@ let frameIn = [
    * financingList
    */
   {
-    path: '/' + PageName.Financialproducts,
-    name: PageName.Financialproducts,
-    component: resolve => require(['views/financingList/Financialproducts.vue'], resolve),
+    path: '/' + PageName.FinancialProducts,
+    name: PageName.FinancialProducts,
+    component: resolve => require(['views/financingList/FinancialProducts.vue'], resolve),
     meta: {keepAlive: false, title: '理财产品', needLogin: false}
   },
   {
-    path: '/' + PageName.Transactiondetails,
-    name: PageName.Transactiondetails,
-    component: resolve => require(['views/financingList/Transactiondetails.vue'], resolve),
+    path: '/' + PageName.TransactionDetails,
+    name: PageName.TransactionDetails,
+    component: resolve => require(['views/financingList/TransactionDetails.vue'], resolve),
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
 

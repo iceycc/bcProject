@@ -131,7 +131,7 @@
                 API.risk.apiRiskTestAnswer(data, (res) => {
                     util.storage.session.set(LsName.HAS_GRADE, 2)
                     this.$router.push({
-                        name: PageName.fengxianresult,
+                        name: PageName.FengxianResult,
                         query: res
                     })
                     // utilExpand.storage.local()

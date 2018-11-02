@@ -2,7 +2,7 @@
 
 export default {
     state:{
-        name:'login'
+        name:'Login'
     },
     actions:{
     },

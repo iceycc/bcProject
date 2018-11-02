@@ -50,7 +50,7 @@
                         <p>{{bank.DESCRIPT}}</p>
                     </div>
                     <div class="m-btn">
-                        <span class="u-btn" @click="goPage('login',bank.ORG_ID)">安全登录</span>
+                        <span class="u-btn" @click="goPage('Login',bank.ORG_ID)">安全登录</span>
                     </div>
 
                 </div>
@@ -74,8 +74,8 @@
 </template>
 
 <script>
-    import API from "../../service";
-    import {PageName, LsName, imgSrc} from "../../Constant";
+    import API from "@/service";
+    import {PageName, LsName, imgSrc} from "@/Constant";
     import util from "libs/util";
     export default {
         name: "SafeLogin",
@@ -94,10 +94,10 @@
         methods: {
             goPage(page, ORG_ID,NAME) {
                 util.storage.session.set(LsName.ORG_ID, ORG_ID)
-                if (page == 'login') {
+                if (page == 'Login') {
                     util.storage.session.set(LsName.loginType, PageName.BankAccount)
                     this.$router.push({
-                        name: PageName.login,
+                        name: PageName.Login,
                     })
                 }
                 if (page == 'BankDetail') {

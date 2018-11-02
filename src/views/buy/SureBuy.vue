@@ -54,7 +54,7 @@
     import API from "../../service";
 
     import {PageName,BusName,LsName,imgSrc} from "../../Constant";
-    import PassInput from '../../components/commons/PassInput'
+    import PassInput from '@/components/password/PassInput'
     import Bus from '../../plugin/bus'
     import util from "libs/util";
     import {Mixin} from '../../common/mixins'
@@ -134,7 +134,7 @@
                                 clearInterval(timer)
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
                                 this.$router.push({
-                                    name: PageName.Buyfailed,
+                                    name: PageName.BuyFailed,
                                     query: {
                                         err:result.RES_MSG
                                     }
@@ -158,7 +158,7 @@
                             }else {
                                 Bus.$emit(BusName.showToast,result.RES_MSG);
                                 this.$router.push({
-                                    name: PageName.Buyfailed,
+                                    name: PageName.BuyFailed,
                                     query: {
                                         err:result.RES_MSG
                                     }
@@ -171,7 +171,7 @@
                     this.Londing.close()
                     util.storage.session.set(LsName.reload,true)
                     this.$router.push({
-                        name: PageName.Buyfailed,
+                        name: PageName.BuyFailed,
                         query: {
                             err:err.RES_MSG
                         }

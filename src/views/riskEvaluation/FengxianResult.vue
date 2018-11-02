@@ -50,7 +50,7 @@
                     this.toPreProduct()
                 } catch (e) {
                     this.$router.push({
-                        name: PageName.Productlist
+                        name: PageName.ProductList
                     })
                 }
             }

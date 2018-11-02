@@ -52,33 +52,32 @@ export const PageName = {
   /**
    * main
    */
-  login: 'login',
-  Productlist: 'Productlist',
-  Rechargesuccess: 'Rechargesuccess',
-  Rechargefailure: 'Rechargefailure',
-  Resetpassword: 'Resetpassword',
+  Login: 'Login',
+  ProductList: 'ProductList',
+  RechargeSuccess: 'RechargeSuccess',
+  RechargeFailure: 'RechargeFailure',
+  ResetPassword: 'ResetPassword',
   Riskproblom: 'Riskproblom',
-  surebuy: 'surebuy',
-  Verificationsuccess: 'Verificationsuccess',
+  SureBuy: 'SureBuy',
+  VerificationSuccess: 'VerificationSuccess',
   Recharge: 'Recharge',
-  Productlist2: 'Productlist2',
-  opening3: 'opening3',
-  opening2: 'opening2',
-  opening: 'opening',
-  Investmentdetails: 'Investmentdetails',
-  Incomeprogress: 'Incomeprogress',
-  fengxianresult: 'fengxianresult',
-  Buysuccess: 'Buysuccess',
+  Opening3: 'Opening3',
+  Opening2: 'Opening2',
+  Opening1: 'Opening1',
+  InvestmentDetails: 'InvestmentDetails',
+  IncomeProgress: 'IncomeProgress',
+  FengxianResult: 'FengxianResult',
+  BuySuccess: 'BuySuccess',
   Buying: 'Buying',
-  Productreservation: 'Productreservation',
-  Buyfailed: 'Buyfailed',
+  ProductReservation: 'ProductReservation',
+  BuyFailed: 'BuyFailed',
   OrderNextSuccess: 'OrderNextSuccess',
   DocsPage: 'DocsPage',
   UserLicenseAgreement: 'UserLicenseAgreement',
   // 理财列表
-  Financialproducts: 'Financialproducts',
+  FinancialProducts: 'FinancialProducts',
   // 交易明细
-  Transactiondetails: 'Transactiondetails',
+  TransactionDetails: 'TransactionDetails',
 
   /*
   wby二期新增
@@ -86,7 +85,7 @@ export const PageName = {
   BankDetail: 'BankDetail', // 银行详情
   BankBalance: 'BankBalance', // 可用余额
   ChangeBank: 'ChangeBank', // 更改银行
-  ResetPayPassWord: 'ResetPayPassWord', // 重制密码
+  ResetPayPassword: 'ResetPayPassword', // 重制密码
   ResetPhone: 'ResetPhone', // 重制手机号
   MoreService: 'MoreService', // 更多服务
   BankAccount: 'BankAccount', // 安全登陆 ->电子账户

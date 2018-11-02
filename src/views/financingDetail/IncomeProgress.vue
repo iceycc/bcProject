@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <app-bar title="货币基金"></app-bar>
-        <div class="Incomeprogresstitle">
+        <div class="IncomeProgresstitle">
             <p>总资产（元）</p>
             <h4>6000.00</h4>
             <div class="Profitdetails">
@@ -65,20 +65,20 @@
 </script>
 
 <style lang="scss" scoped>
-    .Incomeprogresstitle {
+    .IncomeProgresstitle {
         padding-top: 60px;
         width: 100%;
         height: 165px;
         background: #508CEE;
     }
 
-    .Incomeprogresstitle p {
+    .IncomeProgresstitle p {
         text-align: center;
         font-size: 14px;
         color: #fff;
     }
 
-    .Incomeprogresstitle h4 {
+    .IncomeProgresstitle h4 {
         text-align: center;
         color: #fff;
         font-size: 44px;

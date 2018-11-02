@@ -140,7 +140,7 @@
                     this.Londing.close()
                 }, 500)
                 this.$router.push({
-                    name: PageName.surebuy,
+                    name: PageName.SureBuy,
                     query: {
                         money: this.moneyNum,
                         PRD_NAME: this.proDetail.PRD_NAME,

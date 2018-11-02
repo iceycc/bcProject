@@ -74,7 +74,7 @@
     import API from "../../service";
     import AppBar from '../../components/header/AppBar'
     import {HOST, LsName} from '../../Constant'
-    import PassInput from '../../components/commons/PassInput'
+    import PassInput from '@/components/password/PassInput'
     import Bus from '../../plugin/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
     import util from "libs/util";
@@ -256,7 +256,7 @@
                                 clearInterval(timer)
                                 Bus.$emit(BusName.showToast, result.RES_MSG);
                                 this.$router.push({ // todo是否要跳转
-                                    name: PageName.Rechargefailure,
+                                    name: PageName.RechargeFailure,
                                     query: {
                                         err: result.RES_MSG
                                     }
@@ -268,7 +268,7 @@
                                 Bus.$emit(BusName.showToast, result.RES_MSG);
                                 this.Londing.close()
                                 this.$router.push({
-                                    name: PageName.Rechargesuccess,
+                                    name: PageName.RechargeSuccess,
                                     query: {
                                         money: this.APPLY_AMOUN,
                                         ...res
@@ -279,7 +279,7 @@
                                     clearInterval(timer)
                                     Bus.$emit(BusName.showToast, result.RES_MSG);
                                     this.$router.push({ // todo是否要跳转
-                                        name: PageName.Rechargefailure,
+                                        name: PageName.RechargeFailure,
                                         query: {
                                             err: result.RES_MSG
                                         }
@@ -291,7 +291,7 @@
                 }, err => {
                     util.storage.session.set(LsName.reload, true)
                     this.$router.push({
-                        name: PageName.Rechargefailure,
+                        name: PageName.RechargeFailure,
                         query: {
                             err: err.RES_MSG
                         }

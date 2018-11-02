@@ -97,7 +97,7 @@
 <script>
     import API from "../../service";
     import Bus from '../../plugin/bus'
-    import PassInput from '../../components/commons/PassInput'
+    import PassInput from '@/components/password/PassInput'
     import {BusName, LsName, PageName} from "../../Constant";
     import util from "libs/util";
     import {Mixin} from '../../common/mixins'
@@ -201,7 +201,7 @@
                     setTimeout(() => {
                         this.Londing.close()
                         this.$router.replace({
-                            name: PageName.login
+                            name: PageName.Login
                         })
                     }, 1500)
                 }, err => {

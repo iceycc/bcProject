@@ -408,7 +408,7 @@
             // 未评估
             Bus.$emit(BusName.showToast, "请先进行评估");
             this.$router.push({
-              name: PageName.Verificationsuccess
+              name: PageName.VerificationSuccess
             });
           } else {
             // 其他的话  正常
@@ -456,7 +456,7 @@
             util.storage.session.set(LsName.loginType, "预约下期");
             setTimeout(() => {
               this.$router.push({
-                name: PageName.login,
+                name: PageName.Login,
                 query: {
                   target
                 }

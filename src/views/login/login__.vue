@@ -49,7 +49,7 @@
     import {LsName, BusName, PageName} from "../../Constant";
     import Bus from '../../plugin/bus'
     import {HOST} from "../../Constant";
-    import PassInput from '../../components/commons/PassInput'
+    import PassInput from '@/components/password/PassInput'
     import {Mixin} from '../../common/mixins'
 
 
@@ -189,7 +189,7 @@
             },
             goRePass() {
                 this.$router.push({
-                    name: PageName.Resetpassword
+                    name: PageName.ResetPassword
                 })
             },
             goOpen() {
@@ -197,7 +197,7 @@
                     FUNCTION_ID: 'ptb0A008', // 点位
                     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
                 })
-                this.$router.push({name: PageName.opening})
+                this.$router.push({name: PageName.Opening1})
             },
             doLogin() {
 
@@ -248,13 +248,13 @@
                     if (type == 1) {
                         Bus.$emit(BusName.showToast, '请先进行评估')
                         this.$router.push({
-                            name: PageName.Verificationsuccess,
+                            name: PageName.VerificationSuccess,
                         })
                     }
                     else if (type == 2) {
                         // 2的话
                         this.$router.push({
-                            path: target ? target : '/' + PageName.Productlist
+                            path: target ? target : '/' + PageName.ProductList
                         })
                     } else {
 

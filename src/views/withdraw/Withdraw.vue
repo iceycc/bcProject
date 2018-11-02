@@ -46,7 +46,7 @@
     import API from "../../service";
     import AppBar from '../../components/header/AppBar'
     import { LsName} from '../../Constant'
-    import PassInput from '../../components/commons/PassInput'
+    import PassInput from '@/components/password/PassInput'
     import Bus from '../../plugin/bus'
     import {PageName, imgSrc, BusName} from "../../Constant";
     import util from "libs/util";

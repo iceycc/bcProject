@@ -34,7 +34,7 @@ export const UtilMixin = {
                     util.storage.session.remove(LsName.loginType)
                 }, err => {
                     this.$router.push({
-                        path: PageName.Productlist
+                        path: PageName.ProductList
                     })
                     // Bus.$emit(BusName.showToast,err)
                     util.storage.session.remove(LsName.ProDuctData)
@@ -61,7 +61,7 @@ export const UtilMixin = {
                     return
                 }
                 this.$router.push({
-                    path: PageName.Productlist
+                    path: PageName.ProductList
                 })
             }
         },

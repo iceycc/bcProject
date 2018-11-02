@@ -65,7 +65,7 @@
                     ****
                 </span>
       </section>
-      <ul v-if="licaiShow" @click="goPage(toPageName.Financialproducts)">
+      <ul v-if="licaiShow" @click="goPage(toPageName.FinancialProducts)">
         <li class="financing-li" v-for="item in proList">
                   <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
                     <span class="li-left">
@@ -113,7 +113,7 @@
         toPageName: {
           BankBalance: PageName.BankBalance,
           MoreService: PageName.MoreService,
-          Financialproducts: PageName.Financialproducts,
+          FinancialProducts: PageName.FinancialProducts,
         },
         bankDetail: {
           TOTAL_ASSET: '0.00', // 总资产(投资金额+可用余额)
@@ -154,7 +154,7 @@
       },
       goPage(pageName) {
         let query
-        if (pageName == this.toPageName.Financialproducts) {
+        if (pageName == this.toPageName.FinancialProducts) {
           query = {
             total: this.bankDetail.lcAsset.API_FINA_ASSET
           }

@@ -70,13 +70,13 @@
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
     import API from "../../service";
-    import PassInput from '../../components/commons/PassInput'
+    import PassInput from '@/components/password/PassInput'
     import Bus from '../../plugin/bus'
     import {PageName, BusName, LsName} from "../../Constant";
     import util from "libs/util";
 
     export default {
-        name: "ResetPayPassWord",
+        name: "ResetPayPassword",
         components: {
             ActiveInput,
             ErrMsg,

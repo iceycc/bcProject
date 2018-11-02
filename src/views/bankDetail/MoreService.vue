@@ -25,7 +25,7 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
             </section>
-            <section class="more" @click="goPage(toPageName.ResetPayPassWord)">
+            <section class="more" @click="goPage(toPageName.ResetPayPassword)">
              <span class="more-left">
                         更换支付密码</span>
                 <span class="more-right">
@@ -52,10 +52,10 @@
                 RISK_TOLERANCE_LEVEL: '',
                 CARD_BANK_NAME: '',
                 toPageName: {
-                    fenxian: PageName.fengxianresult,
+                    fenxian: PageName.FengxianResult,
                     ChangeBank: PageName.ChangeBank,
                     ResetPhone: PageName.ResetPhone,
-                    ResetPayPassWord: PageName.ResetPayPassWord,
+                    ResetPayPassword: PageName.ResetPayPassword,
                 },
                 PHONE_NUM:'',
                 fenxianQuery: {}
@@ -93,7 +93,7 @@
             goPage(pageName) {
                 let data = {}
                 console.log(pageName);
-                if (pageName == PageName.fengxianresult) {
+                if (pageName == PageName.FengxianResult) {
                     util.storage.session.set(LsName.loginType,PageName.MoreService) // 用于跳转风险测评返回判断
                     data = this.fenxianQuery
                 }
@@ -116,7 +116,7 @@
                     this.RISK_TOLERANCE_LEVEL = res.RISK_TOLERANCE_LEVEL
                     this.CARD_BANK_NAME = res.CARD_BANK_NAME
                     this.toPageName.fenxian = res.HAS_GRADE ==2
-                            ?PageName.fengxianresult:PageName.Riskassessment
+                            ?PageName.FengxianResult:PageName.Riskassessment
                     this.fenxianQuery = {
                         RISK_LEV_EXPLAIN:res.RISK_LEV_EXPLAIN,
                         RISK_TOLERANCE_DESC:res.RISK_TOLERANCE_DESC, //

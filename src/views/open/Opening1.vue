@@ -318,7 +318,7 @@
                 this.checkID((REQ_SERIAL, step, PHONE_NUM = '') => {
                     // console.log(1111)
                     this.$router.push({
-                        name: PageName.opening2,
+                        name: PageName.Opening2,
                         query: {
                             REQ_SERIAL: REQ_SERIAL,
                             LAST_STEP_NUM: step,
@@ -351,7 +351,7 @@
                         // todo
                         // fn && fn(REQ_SERIAL, step, PHONE_NUM)
                         this.$router.push({
-                            name: PageName.opening2,
+                            name: PageName.Opening2,
                             query: {
                                 REQ_SERIAL: REQ_SERIAL,
                                 LAST_STEP_NUM: step,
@@ -368,7 +368,7 @@
                         Bus.$emit(BusName.showToast, "您已经实名成功")
                         setTimeout(() => {
                             this.$router.push({
-                                name: PageName.opening3,
+                                name: PageName.Opening3,
                                 params: {
                                     step
                                 },
@@ -382,7 +382,7 @@
                         Bus.$emit(BusName.showToast, "您已经开户成功")
                         setTimeout(() => {
                             this.$router.push({
-                                name: PageName.login,
+                                name: PageName.Login,
                             })
                         }, 1000)
                     }

@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.title
         util.IOSTitileUpdat()
     }
-    if (to.name == PageName.Productreservation) {
+    if (to.name == PageName.ProductReservation) {
         window.document.title = to.query.title;
         util.IOSTitileUpdat()
     }
@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
 
             Bus.$emit(BusName.showToast, '您还未登录，请先登录')
             next({
-                name: PageName.login,
+                name: PageName.Login,
                 query: {
                     target: to.fullPath
                 }

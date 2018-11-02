@@ -5,7 +5,7 @@
             <img src="../../assets/images/banner.png" alt="">
         </div>
         <!-- 九宫格 -->
-        <div class="productlist" v-if="!show">
+        <div class="ProductList" v-if="!show">
             <ul class="ul-li">
                 <li class="productdetail clearfix"
                     v-for="item,index in dataList" :key="index"
@@ -87,7 +87,7 @@
                     FROM_ID: id
                 })
                 this.$router.push({
-                    name: PageName.Productreservation,
+                    name: PageName.ProductReservation,
                     query: {
                         id,
                         title

@@ -90,7 +90,7 @@
                     util.storage.session.remove(LsName.Infos)
                     util.storage.session.set(LsName.loginType,PageName.BankDetail)
                     this.$router.push({
-                        name:PageName.login
+                        name:PageName.Login
                     })
                 },err=>{
                     this.showErrMsg(err)

@@ -47,7 +47,7 @@
   import API from "../../service"
   import {LsName, BusName, PageName} from "../../Constant";
   import Bus from '../../plugin/bus'
-  import PassInput from '../../components/commons/PassInput'
+  import PassInput from '@/components/password/PassInput'
   import {Mixin} from '../../common/mixins'
 
   let time = 60
@@ -188,7 +188,7 @@
           util.storage.session.set(LsName.reload, true)
           util.storage.session.remove('rePasswordInfo')
           this.$router.replace({
-            name: PageName.login
+            name: PageName.Login
           })
         }, err => {
           util.storage.session.set('rePasswordInfo', {

@@ -85,7 +85,7 @@ export default {
         Bus.$emit(BusName.showToast, result.head.MSG)
         util.storage.session.remove(LsName.token)
         Router.push({
-          name: PageName.login,
+          name: PageName.Login,
           query: {
             target: Router.currentRoute.fullPath
           }
@@ -95,7 +95,7 @@ export default {
         Bus.$emit(BusName.showToast, result.head.MSG)
         util.storage.session.remove(LsName.token)
         Router.push({
-          name: PageName.login,
+          name: PageName.Login,
           query: {
             target: Router.currentRoute.fullPath
           }
@@ -108,7 +108,7 @@ export default {
         }
         if (result.head.MSG == '未登陆银行') {
           Router.push({
-            name: PageName.login,
+            name: PageName.Login,
             query: {
               target: Router.currentRoute.fullPath
             }
