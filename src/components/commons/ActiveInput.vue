@@ -18,25 +18,37 @@
 
 <script>
   import util from "libs/util";
-
-
+  /**
+   * 几个校验：
+   * 1- 银行卡和手机号：只能输入数字
+   *    type = 'tel'  input属性
+   *        ：ios可以强制调取数字键盘，限制不能切换字母键盘，但是没有限制数学符号输入
+   *        ：安卓强制启动数字键盘，但是没有限制字母键盘
+   *    checkType = 'number'  会启用自定义的数字校验规则
+   *        ：ios建议配合 type='tel'，同时限制了数学符号输入
+   *        ：安卓主流浏览器暂时没发现问题
+   * 2- 身份证：可以输入数字 + 字母：X x
+   *    type='text' +  checkType= 'idCard' 配合使用 自定义校验规则
+   *      : 问题：ios低版本 输入法会切换很传统的九宫格的字母输入，字母切换时监控字符变化会出现异常。造成自定义校验
+   *      ：安卓：暂时无问题
+   */
   export default {
     name: "ActiveInput",
     props: {
-      valuePlaceholder: {
+      valuePlaceholder: { // placeholder值
         type: null,
         default: '请填写'
       },
       value: null,
-      type: {
+      type: { // input类型
         type: null,
         default: 'tel'
       },
-      checkType: {
+      checkType: { // 校验类型
         type: null,
         default: 'number'
       },
-      max: {
+      max: { // 设置最大位数
         type: null,
         default: Infinity,
       },
@@ -114,7 +126,7 @@
         }
       },
       controlInputValue(val) {
-        if (util.isEquipment().isIOS && this.checkType  == 'idCard') {
+        if (util.isEquipment().isIOS && this.checkType == 'idCard') {
           // ios限制字母输入有兼容问题  九宫格输入英文字母 不按套路
           this.currentValue = val
           this.$emit('input', this.currentValue); // 给父组件  传值
@@ -147,7 +159,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/px2rem";
+  @import "~@/assets/px2rem";
 
   .input-box {
     box-sizing: border-box;

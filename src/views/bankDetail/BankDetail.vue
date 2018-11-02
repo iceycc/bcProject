@@ -95,9 +95,9 @@
 </template>
 
 <script>
-  import IconFont from '../../components/commons/IconFont'
-  import API from "../../service";
-  import {PageName, imgSrc} from "../../Constant";
+  import IconFont from '@/components/commons/IconFont'
+  import API from "@/service";
+  import {PageName, imgSrc} from "@/Constant";
 
   export default {
     name: "bankDetail",
@@ -233,7 +233,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../../assets/px2rem";
+  @import "~@/assets/px2rem";
 
   i {
     font-style: normal;
@@ -249,10 +249,9 @@
     background: #fff;
     box-sizing: border-box;
   }
-
   .banner {
     height: px2rem(120);
-    background: url("../../assets/images/background@2x.png") no-repeat;
+    background: url("~@/assets/images/background@2x.png") no-repeat;
     background-size: contain;
     box-sizing: border-box;
     padding: px2rem(0) px2rem(10);
@@ -372,7 +371,7 @@
           content: '';
           width: px2rem(15);
           height: px2rem(15);
-          background: url("../../assets/images/property_icon_financing.png") no-repeat center;
+          background: url("~@/assets/images/property_icon_financing.png") no-repeat center;
           background-size: contain;
         }
       }

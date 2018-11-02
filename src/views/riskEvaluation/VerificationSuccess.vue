@@ -2,7 +2,7 @@
     <div id="app" class="app">
         <app-bar title="风险测评"></app-bar>
         <div class="chattuimg">
-            <img src="../../assets/images/illustration@2x.png" style="width:70%" alt="">
+            <img src="@/assets/images/illustration@2x.png" style="width:70%" alt="">
         </div>
         <div class="fenxiangcontent">
             为了使您更好的了解自己的风险承受能力，理性地参与金融产品的投资，并诺”本人基于自己的真实情况完成一下问卷，选项与自身真实情况相符“，请选择相应的选项，感谢您的合作
@@ -11,9 +11,9 @@
     </div>
 </template>
 <script>
-    import {PageName} from "../../Constant";
+    import {PageName} from "@/Constant";
     import AppBar from '../../components/header/AppBar'
-    import API from "../../service";
+    import API from "@/service";
     export default {
         components:{
             AppBar
@@ -34,7 +34,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .app {
         width: 100%;

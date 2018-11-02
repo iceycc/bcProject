@@ -48,7 +48,7 @@
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
-                    <img src="../../assets/images/icon_dunpai@2x.png" alt="">
+                    <img src="@/assets/images/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
                 <section class="field_row_wrap">
                     <p class="field_row_key">
@@ -71,12 +71,12 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
+    import API from "@/service";
     import AppBar from '../../components/header/AppBar'
     import {HOST, LsName} from '../../Constant'
     import PassInput from '@/components/password/PassInput'
-    import Bus from '../../plugin/bus'
-    import {PageName, imgSrc, BusName} from "../../Constant";
+    import Bus from '@/plugin/bus'
+    import {PageName, imgSrc, BusName} from "@/Constant";
     import util from "libs/util";
     import {Mixin, UtilMixin} from '../../common/mixins'
 
@@ -161,8 +161,7 @@
                 })
             },
             getMsg() {
-                let msg
-                if (msg = util.Check.trim(this.APPLY_AMOUN, '充值金额')) return Bus.$emit(BusName.showToast, msg);
+                if (util.Check.trim(this.APPLY_AMOUN, '充值金额',true)) return;
                 //
                 if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
                     Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
@@ -203,8 +202,7 @@
             },
             doNext() {
                 console.log(this.write);
-                let msg
-                if (msg = util.Check.trim(this.APPLY_AMOUN, '充值金额')) return Bus.$emit(BusName.showToast, msg);
+                if (util.Check.trim(this.APPLY_AMOUN, '充值金额',true)) return;
                 if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
                     Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
                     return
@@ -214,7 +212,7 @@
                     return
                 }
                 if (!this.write) {
-                    if (msg = util.Check.trim(this.msgCode, '手机验证码')) return Bus.$emit(BusName.showToast, msg);
+                    if (util.Check.trim(this.msgCode, '手机验证码',true)) return;
                 }
                 if (!this.agree1) {
                     Bus.$emit(BusName.showToast, '请获取手机验证码')
@@ -232,8 +230,7 @@
             doReCange() {
                 this.pass = $('#payPass').$getCiphertext()
                 this.len = $('#payPass').$getPasswordLength()
-                let msg;
-                if (msg = util.Check.payPassLen(this.len)) return Bus.$emit(BusName.showToast, msg);
+                if (util.Check.payPassLen(this.len,true)) return;
                 this.show = false
                 let data = {
                     PHONE_CODE: this.msgCode, // todo
@@ -379,7 +376,7 @@
     .bang {
         margin-left: 0.5rem;
         margin-top: 0.5rem;
-        background: url(../../assets/images/agree@3x.png) no-repeat 0 0.05rem;
+        background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
         font-size: 0.4rem;
         color: #808080;
@@ -388,7 +385,7 @@
     }
 
     .no {
-        background: url(../../assets/images/onagree@3x.png) no-repeat 0 0.05rem;
+        background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
         background-size: 0.4rem 0.4rem;
     }
 

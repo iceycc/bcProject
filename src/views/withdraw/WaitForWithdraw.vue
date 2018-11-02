@@ -19,7 +19,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
     .begain {
         display: block;
         font-size: px2rem(16);

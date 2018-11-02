@@ -2,7 +2,7 @@
     <div class="wrap">
         <app-bar title="产品列表"></app-bar>
         <div class="banner">
-            <img src="../../assets/images/banner.png" alt="">
+            <img src="@/assets/images/banner.png" alt="">
         </div>
         <!-- 九宫格 -->
         <div class="ProductList" v-if="!show">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="ratereturn ratereturnright">
                         <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
-                        <img class="logoy" v-if="item.IS_ENABLED == 2" src="../../assets/images/yuyue.png" alt="">
+                        <img class="logoy" v-if="item.IS_ENABLED == 2" src="@/assets/images/yuyue.png" alt="">
                         <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.1rem">
                             {{item.PRD_NAME}}</p>
                         <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem">理财期限{{item.PERIOD}}天</p>
@@ -43,8 +43,8 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
-    import {LsName, PageName,imgSrc} from "../../Constant";
+    import API from "@/service";
+    import {LsName, PageName,imgSrc} from "@/Constant";
     import util from "libs/util";
 
 
@@ -99,7 +99,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .wrap {
         width: 100%;

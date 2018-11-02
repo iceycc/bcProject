@@ -40,9 +40,9 @@
 
 </template>
 <script>
-    import API from "../../service";
-    import Bus from '../../plugin/bus'
-    import {BusName, PageName, LsName} from "../../Constant";
+    import API from "@/service";
+    import Bus from '@/plugin/bus'
+    import {BusName, PageName, LsName} from "@/Constant";
     import util from "libs/util";
 
     const ProblomIndex = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
@@ -152,7 +152,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .app {
         width: 94%;

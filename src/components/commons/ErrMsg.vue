@@ -23,7 +23,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .Tips {
         margin: px2rem(17) auto 0;

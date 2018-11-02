@@ -54,7 +54,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../assets/images/icon_dunpai@2x.png" alt="">
+                        <img src="@/assets/images/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -95,10 +95,10 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
-    import Bus from '../../plugin/bus'
+    import API from "@/service";
+    import Bus from '@/plugin/bus'
     import PassInput from '@/components/password/PassInput'
-    import {BusName, LsName, PageName} from "../../Constant";
+    import {BusName, LsName, PageName} from "@/Constant";
     import util from "libs/util";
     import {Mixin} from '../../common/mixins'
 
@@ -122,9 +122,9 @@
                 paypass: '',
                 paypassLen: 0,
                 ifGet: false,
-                stepImg: require('../../assets/images/account_icon_green2@2x.png'),
-                stepImg2: require('../../assets/images/step2@2x.png'),
-                stepImg3: require('../../assets/images/step3.png'),
+                stepImg: require('@/assets/images/account_icon_green2@2x.png'),
+                stepImg2: require('@/assets/images/step2@2x.png'),
+                stepImg3: require('@/assets/images/step3.png'),
                 errMsg: ''
 
             }
@@ -229,13 +229,11 @@
                 this.loginpass = $('#loginPass').$getCiphertext()
                 this.loginpassLen = $('#loginPass').$getPasswordLength() - 0 || 0
 
-                let msg;
-                if (msg = util.Check.loginPassLen(this.loginpassLen)) return Bus.$emit(BusName.showToast, msg);
-                if (msg = util.Check.payPassLen(this.paypassLen)) return Bus.$emit(BusName.showToast, msg);
+                if (util.Check.loginPassLen(this.loginpassLen,true)) return;
+                if (util.Check.payPassLen(this.paypassLen,true)) return;
                 this.s_loginPass = '********'
                 this.s_payPass = '******'
                 this.disabled = false
-                // this.ifShow = false
                 this.postData()
             }
 
@@ -245,7 +243,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .bgbox {
         width: 100%;

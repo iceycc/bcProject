@@ -1,5 +1,5 @@
-import watchHttp from '../../plugin/watchBuryingPoint/watchHttp'
-import {HOST} from "../../Constant";
+import watchHttp from '@/plugin/watchBuryingPoint/watchHttp'
+import {HOST} from "@/Constant";
 const Config = {
   watchConfig:{
     method: 'post',

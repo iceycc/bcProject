@@ -1,5 +1,6 @@
 // 静态值定义： 【应用配置】
 import {version} from '../package'
+
 /**
  *
  */
@@ -32,12 +33,11 @@ export const STORE_PREFIX = '_MX_'
  */
 let imgSrcHost = {
   dev: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
-  pro:"https://finsuit.oss-cn-beijing.aliyuncs.com/",
+  pro: "https://finsuit.oss-cn-beijing.aliyuncs.com/",
   // pro: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
 }
 
 export const imgSrc = process.env.NODE_ENV == 'development' ? imgSrcHost.dev : imgSrcHost.pro
-
 
 
 /**
@@ -48,10 +48,11 @@ export const PageName = {
   /**
    * test
    */
-  testPage:'testPage',
+  testPage: 'TestPage',
   /**
    * main
    */
+  // 一期
   Login: 'Login',
   ProductList: 'ProductList',
   RechargeSuccess: 'RechargeSuccess',
@@ -78,10 +79,7 @@ export const PageName = {
   FinancialProducts: 'FinancialProducts',
   // 交易明细
   TransactionDetails: 'TransactionDetails',
-
-  /*
-  wby二期新增
-   */
+  //wby二期新增
   BankDetail: 'BankDetail', // 银行详情
   BankBalance: 'BankBalance', // 可用余额
   ChangeBank: 'ChangeBank', // 更改银行

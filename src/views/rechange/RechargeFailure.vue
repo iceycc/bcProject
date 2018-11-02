@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="充值"></app-bar>
         <div class="chattuimg">
-            <img src="../../assets/images/buyfail@2x.png" alt="">
+            <img src="@/assets/images/buyfail@2x.png" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>很抱歉，充值失败!</h2>
@@ -31,7 +31,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .app {
         width: 100%;

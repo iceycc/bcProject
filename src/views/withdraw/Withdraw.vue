@@ -13,14 +13,14 @@
                    v-model="APPLY_AMOUN" type="number" placeholder="请输入提现金额">
             <img
                     v-show="!ifCheckMoneyEmpty"
-                    src="../../assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
+                    src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
         </section>
         <p class="info1">本卡当前余额{{ACC_REST | formatNum}}元 <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
         <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
         <section v-if="show" class="bgbox">
             <section class="passbox">
                 <p class="title">
-                    <img src="../../assets/images/icon_dunpai@2x.png" alt="">
+                    <img src="@/assets/images/icon_dunpai@2x.png" alt="">
                     由晋商银行提供技术保障</p>
                 <section class="field_row_wrap">
                     <p class="field_row_key">
@@ -43,12 +43,12 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
+    import API from "@/service";
     import AppBar from '../../components/header/AppBar'
     import { LsName} from '../../Constant'
     import PassInput from '@/components/password/PassInput'
-    import Bus from '../../plugin/bus'
-    import {PageName, imgSrc, BusName} from "../../Constant";
+    import Bus from '@/plugin/bus'
+    import {PageName, imgSrc, BusName} from "@/Constant";
     import util from "libs/util";
     import {Mixin, UtilMixin} from '../../common/mixins'
 
@@ -95,7 +95,6 @@
         created() {
             this.getUserInfos()
             this.ACC_REST = this.$route.query.ACC_REST
-
         },
         methods: {
             checkMoney() {
@@ -110,8 +109,7 @@
             doWithdraw() {
                 this.pass = $('#withdrawPayPass').$getCiphertext()
                 this.len = $('#withdrawPayPass').$getPasswordLength()
-                let msg;
-                if (msg = util.Check.payPassLen(this.len)) return Bus.$emit(BusName.showToast, msg);
+                if (util.Check.payPassLen(this.len,true)) return
                 let data = {
                     PHONE_CODE: "",
                     EITHDRAW_ALL: "0",
@@ -170,9 +168,7 @@
                 })
             },
             doNext() {
-                let msg
-                if (msg = util.Check.trim(this.APPLY_AMOUN, '提现金额')) {
-                    Bus.$emit(BusName.showToast, msg)
+                if (util.Check.trim(this.APPLY_AMOUN, '提现金额',true)) {
                     return
                 }
                 //
@@ -196,7 +192,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .rechargetitle {
         padding-left: px2rem(20);

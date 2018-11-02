@@ -78,9 +78,9 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
-    import {BusName} from "../../Constant";
-    import Bus from "../../plugin/bus";
+    import API from "@/service";
+    import {BusName} from "@/Constant";
+    import Bus from "@/plugin/bus";
     import {Loadmore} from "mint-ui";
     import util from "libs/util";
 
@@ -256,7 +256,7 @@
 
 </style>
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .pro .header:after {
         position: absolute;

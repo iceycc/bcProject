@@ -7,7 +7,7 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
+    import API from "@/service";
 
     export default {
         name: "DocsPage",

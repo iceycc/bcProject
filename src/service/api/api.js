@@ -1,5 +1,5 @@
 import http from '../http'
-import {HOST} from "../../Constant";
+import {HOST} from "@/Constant";
 /**
  * axios 配置
  */

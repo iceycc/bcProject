@@ -29,9 +29,9 @@
 <script>
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import API from "../../service";
-    import Bus from '../../plugin/bus'
-    import {PageName, BusName, LsName} from "../../Constant";
+    import API from "@/service";
+    import Bus from '@/plugin/bus'
+    import {PageName, BusName, LsName} from "@/Constant";
     import util from "libs/util";
 
     export default {
@@ -137,7 +137,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .m-form {
         width: 100%;

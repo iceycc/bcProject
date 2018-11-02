@@ -271,9 +271,9 @@ let frameIn = [
 
 let testPage = [
   {
-    path: '/' + PageName.testPage,
-    name: PageName.testPage,
-    component: resolve => require(['views/testPages/testPage.vue'], resolve),
+    path: '/' + PageName.TestPage,
+    name: PageName.TestPage,
+    component: resolve => require(['views/testPages/TestPage.vue'], resolve),
   }
 ]
 

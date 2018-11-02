@@ -2,7 +2,7 @@
     <div id="app" class="app">
         <app-bar title="风险评测"></app-bar>
         <div class="chattuimg">
-            <img src="../../assets/images/account_illustrations@2x.png" style="width:70%" alt="">
+            <img src="@/assets/images/account_illustrations@2x.png" style="width:70%" alt="">
         </div>
         <div class="fenxiancontent">
             <div class="fenxiantitle">
@@ -19,7 +19,7 @@
     </div>
 </template>
 <script>
-    import {PageName} from "../../Constant";
+    import {PageName} from "@/Constant";
     import {UtilMixin} from '../../common/mixins'
 
     export default {
@@ -60,7 +60,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .app {
         width: 100%;

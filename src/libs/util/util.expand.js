@@ -1,12 +1,12 @@
 // import Crypto from "crypto-js";
-import Bus from '../../plugin/bus'
-import {BusName} from "../../Constant";
+import Bus from '@/plugin/bus'
+import {BusName} from "@/Constant";
 
 
-import EXIF from 'exif-js'
+// import EXIF from 'exif-js'
 
 export default {
-  //上传图片
+  //
   // throttle: 当持续触发事件时，保证一定时间段内只调用一次事件处理函数。
   throttle(cb, ms = 300) {
     let timer = true
@@ -45,7 +45,6 @@ export default {
         uploadingFn && uploadingFn(progress);
       }
     };
-
     // 上传文件
     return new Promise(function (resolve, reject) {
       let client = new XMLHttpRequest();
@@ -88,11 +87,15 @@ export default {
   }
   ,
 
-  //图片压缩
-  imgScale(imgUrl, fileList, quality) {
+  /**
+   * 图片压缩  待完善
+   * @param imgUrl
+   * @param fileList
+   * @returns {Promise}
+   */
+  imgScale(imgUrl, fileList) {
     return new Promise(function (resolve, reject) {
       let img = new Image();
-
       let _this = this;
       let canvas = document.createElement('canvas');
       let ctx = canvas.getContext('2d');
@@ -114,6 +117,9 @@ export default {
           console.log(width, height)
           canvas.width = width;
           canvas.height = height;
+          /**
+           * 解决图片垂直问题 进行旋转
+           */
           if (img.naturalWidth < img.naturalHeight) {
             console.log(1);
             canvas.height = width;
@@ -146,7 +152,11 @@ export default {
     })
   }
   ,
-  // 传人 元素类名 或者 元素id 获取该元素的宽度和高度
+  /**
+   * 获取某元素的长和宽
+   * @param ele
+   * @returns {{with: number | any, height: number | any}}
+   */
   getDivSize(ele) {
     var divBox = document.querySelector(ele)
     return {
@@ -154,7 +164,10 @@ export default {
       height: divBox.offsetHeight
     }
   },
-  // 获取当前可使区域的高度 宽度
+  /**
+   * 获取当前可使区域的高度 宽度
+   * @returns {{winHeight: *, winWidth: *}}
+   */
   getWinSize() {
     var winHeight, winWidth;
     if (window.innerHeight) {
@@ -170,90 +183,11 @@ export default {
       winWidth
     }
   },
-  //
-  getPhotoOrientation(img) {
-    console.log('img', img);
-    var orient;
-    EXIF.getData(img, function () {
-      orient = EXIF.getAllTags(this)
-      ;
-    });
-    return orient;
-  },
-  canvasUpload(url, data, rawFile, type, uploadingFn, successFn, failerFn) {
-    console.log("rawFile>>>>>>>>>", rawFile);
-    var text = window.atob(data.split(",")[1]);
-    var buffer = new ArrayBuffer(text.length);
-    var ubuffer = new Uint8Array(buffer);
-    var pecent = 0, loop = null;
 
-    for (var i = 0; i < text.length; i++) {
-      ubuffer[i] = text.charCodeAt(i);
-    }
-
-    var Builder = window.WebKitBlobBuilder || window.MozBlobBuilder;
-    var blob;
-
-    if (Builder) {
-      var builder = new Builder();
-      builder.append(buffer);
-      blob = builder.getBlob(type);
-    } else {
-      blob = new window.Blob([buffer], {type: type});
-    }
-
-    var fmData = new FormData();
-    fmData.append("imagefile", blob, rawFile.name);
-
-    // 监听进度回调
-    const uploadProgress = function (event) {
-      if (event.lengthComputable) {
-        let progress = 100 * Math.round(event.loaded) / event.total;
-        console.log('上传进度：', progress);
-        uploadingFn && uploadingFn(progress);
-      }
-    };
-
-    // 上传文件
-    return new Promise(function (resolve, reject) {
-      let client = new XMLHttpRequest();
-      client.open('POST', url, true);
-      client.onreadystatechange = function () {
-        if (this.readyState !== 4) {
-          return;
-        }
-        if (this.status === 200 || this.status === 201) {
-          resolve(JSON.parse(this.responseText));
-        } else {
-          reject(this.status);
-        }
-      };
-
-      client.upload.addEventListener("progress", uploadProgress, false); //监听进度
-
-      // 设置header
-      if (typeof headers == 'object' && headers) {
-        Object.keys(headers).forEach((k) => {
-          client.setRequestHeader(k, headers[k]);
-        })
-      }
-
-      client.send(fmData);
-    }).then(
-        // 上传成功
-        function (resData) {
-          successFn && successFn(resData);
-          return Promise.resolve(resData);
-        },
-        // 上传失败
-        function (sts) {
-          failerFn && failerFn(sts);
-          return Promise.reject(sts);
-        }
-    );
-  },
-
-  //获取url查询字符串
+  /**
+   * 获取url查询字符串
+   * @param url
+   */
   getQuery(url) {
     url = decodeURIComponent(url);
     var theRequest = {};
@@ -266,7 +200,11 @@ export default {
     return theRequest;
   },
 
-  //设置url查询字符串
+  /**
+   * 设置url查询字符串
+   * @param params
+   * @returns {string}
+   */
   setQuery: function (params) {
     if (Object.prototype.toString.call(params) !== "[object Object]") {
       return "";
@@ -306,6 +244,9 @@ export default {
 
     return res;
   },
+  /**
+   *  判断输入的是否是数字
+   */
   isValueNumber(value) {
     return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
   }
@@ -321,21 +262,14 @@ export default {
     return reg.test(authCode) ? true : false;
   }
   ,
-  isNumber: function (dinnerNum) {
-    let reg = /^\d{1,3}$/g;
-    return reg.test(dinnerNum) ? true : false;
-  }
-  ,
   isNum: function (dinnerNum) {
     let reg = /^\d$/g;
     return reg.test(dinnerNum) ? true : false;
-  }
-  ,
+  },
   isEmail: function (email) {
     let reg = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
     return reg.test(email) ? true : false;
-  }
-  ,
+  },
   isMoney: function (mon) {
     let reg = /^(?:0|[1-9]\d*)\.\d{1,2}$|^[1-9]\d*$|^0$/g;
 
@@ -356,8 +290,13 @@ export default {
       }
     }
     return str;
-  }
-  ,
+  },
+  /**
+   *
+   * @param date
+   * @param fmt
+   * @returns {*}
+   */
   format: function (date, fmt) {
     date = new Date(date);
     let o = {
@@ -378,10 +317,7 @@ export default {
       }
     }
     return fmt;
-  }
-  ,
-
-
+  },
 
   /**
    * 时间 转 时间戳
@@ -433,83 +369,12 @@ export default {
     Object.keys(obj).forEach(key => fn(obj[key], key))
   },
 
-  //检查请求参数
-  checkParams: function ({fn, param, fullresult}) {
-    if (!fn || !fn.length) {
-      console.error("请求方法(fn)必须传入！");
-      return false;
-    }
-    if (!Array.isArray(param)) {
-      console.error("请求参数(param)必须是数组！");
-      return false;
-    }
-    return true;
-  },
-  //组合httpURL
-  combHttpURL: function (baseURL, data) {
-    let httpURL = baseURL.toString();
-    if (!httpURL.includes("?")) {
-      httpURL += "?"
-    }
-    for (var key of Object.keys(data)) {
-      httpURL += (key + "=" + data[key]) + "&";
-    }
-    //没有内容
-    if (httpURL.endsWith("?")) {
-      httpURL = httpURL.substring(0, httpURL.length - 1);
-    }
-    if (httpURL.endsWith("&")) {
-      httpURL = httpURL.substring(0, httpURL.length - 1);
-    }
-    return httpURL;
-  }
-  ,
-
-  //input自动获取焦点
-  autoFocus: function (ref, isFocus, isSelect) {
-    if (isFocus) {
-      ref.$el.children[0].focus();
-    }
-    if (isSelect) {
-      ref.inputSelect();
-    }
-  }
-  ,
-
-  //组合httpURL
-  combHttpURL: function (baseURL, data) {
-    let httpURL = baseURL.toString();
-    if (!httpURL.includes("?")) {
-      httpURL += "?"
-    }
-
-    for (var key of Object.keys(data)) {
-      httpURL += (key + "=" + data[key]) + "&";
-    }
-
-    //没有内容
-    if (httpURL.endsWith("?")) {
-      httpURL = httpURL.substring(0, httpURL.length - 1);
-    }
-
-    if (httpURL.endsWith("&")) {
-      httpURL = httpURL.substring(0, httpURL.length - 1);
-    }
-
-    return httpURL;
-  }
-  ,
-
-  getResultErrMsg(result) {
-    return (result && (result.message || (result.target && result.target.message))) || "获取数据失败";
-  }
-  ,
+  /**
+   *
+   *  callback1  安卓微信中打开指示图层指示用户在浏览器中下载
+   *  callback2  判断浏览器失败跳转到推荐给好友页面
+   */
   downLoad(callback1, callback2, fn) {
-
-    /*
-     *	callback1  安卓微信中打开指示图层指示用户在浏览器中下载
-     *	callback2  判断浏览器失败跳转到推荐给好友页面
-     */
     let u = navigator.userAgent;
     let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
@@ -537,8 +402,8 @@ export default {
   ,
 
   openApp(src) {
-// 通过iframe的方式试图打开APP，如果能正常打开，会直接切换到APP，并自动阻止a标签的默认行为
-// 否则打开a标签的href链接
+    // 通过iframe的方式试图打开APP，如果能正常打开，会直接切换到APP，并自动阻止a标签的默认行为
+    // 否则打开a标签的href链接
     var ifr = document.createElement('iframe');
     ifr.src = src;
     ifr.style.display = 'none';
@@ -548,14 +413,10 @@ export default {
     }, 2000);
   }
   ,
-  reDo(fn) {
-    for (let i = 1; i <= 3; i++) {
-      setTimeout(() => {
-        fn && fn()
-      }, 1000)
-    }
-  }
-  ,
+  /**
+   * 解决ios页面标题的更新问题
+   * @constructor
+   */
   IOSTitileUpdat() {
     // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
     if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
@@ -578,8 +439,6 @@ export default {
     };
     document.body.appendChild(iframe);
   },
-
-
 
 }
 ;

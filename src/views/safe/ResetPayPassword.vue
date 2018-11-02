@@ -26,7 +26,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../assets/images/icon_dunpai@2x.png" alt="">
+                        <img src="@/assets/images/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -69,10 +69,10 @@
 <script>
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import API from "../../service";
+    import API from "@/service";
     import PassInput from '@/components/password/PassInput'
-    import Bus from '../../plugin/bus'
-    import {PageName, BusName, LsName} from "../../Constant";
+    import Bus from '@/plugin/bus'
+    import {PageName, BusName, LsName} from "@/Constant";
     import util from "libs/util";
 
     export default {
@@ -150,14 +150,8 @@
                         reset_payPass_len = $('#reset_payPass').$getPasswordLength() - 0 || 0,
                         BANK_PAY_PW2 = $('#reset_repayPass').$getCiphertext(),
                         reset_repayPass_len = $('#reset_repayPass').$getPasswordLength() - 0 || 0;
-                let msg
-                if(msg =util.Check.payPassLen(reset_payPass_len)){
-                    return Bus.$emit(BusName.showToast,msg)
-                }
-                if(msg =util.Check.payPassLen(reset_repayPass_len,true)){
-                    return Bus.$emit(BusName.showToast,msg)
-                }
-
+                if(util.Check.payPassLen(reset_payPass_len,true)) return;
+                if(util.Check.payPassLen(reset_repayPass_len,true)) return;
                 let data = {
                     PHONE_CODE: this.PHONE_CODE,
                     USER_CARD_ID: this.IDCardNum,
@@ -217,7 +211,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .m-form {
         width: 100%;

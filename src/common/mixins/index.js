@@ -1,6 +1,6 @@
 import util from "libs/util";
-import {LsName, PageName} from "../../Constant";
-import API from "../../service";
+import {LsName, PageName} from "@/Constant";
+import API from "@/service";
 
 export const Mixin = {
     beforeCreate() {
@@ -53,7 +53,7 @@ export const UtilMixin = {
             }
             else {
                 //
-                util.storage.session.remove(LsName.loginType)
+                // util.storage.session.remove(LsName.loginType)
                 if (SOURCE_URL) {
                     this.$router.push({
                         name: SOURCE_URL

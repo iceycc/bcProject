@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="hello">
         <app-bar title="安全登录"></app-bar>
-        <img class="logo" src="../../assets/images/logoaaa_03.png" alt="">
+        <img class="logo" src="@/assets/images/logoaaa_03.png" alt="">
         <p class="titlecontent">
             欢迎登录晋商银行直销账户</p>
         <div class="login_box">
@@ -34,15 +34,15 @@
         </div>
         <div class="bottomcontent">
             <p>
-                <img src="../../assets/images/icon_dunpai@2x.png" alt="">
+                <img src="@/assets/images/icon_dunpai@2x.png" alt="">
                 晋商银行已与比财实现安全直连</p>
         </div>
     </div>
 </template>
 <script>
-    import API from '../../service'
-    import {LsName, BusName, PageName} from "../../Constant";
-    import Bus from '../../plugin/bus'
+    import API from "@/service"
+    import {LsName, BusName, PageName} from "@/Constant";
+    import Bus from '@/plugin/bus'
     import PassInput from '@/components/password/PassInput'
     import {Mixin, UtilMixin} from '../../common/mixins'
     import util from 'libs/util'
@@ -130,7 +130,6 @@
                     let flag = this.checkPassWordTextIsEmpty()
                     if (flag > 0) {
                         this.passShow = true
-
                         if (this.tel.length > 0 && flag == 2) {
                             this.disabled = false
 
@@ -197,12 +196,10 @@
 
             doLogin() {
                 clearInterval(watchPassPluginPassTimer)
-                let msg;
-                if (msg = util.Check.tel(this.tel)) return Bus.$emit(BusName.showToast, msg);
+                if (util.Check.tel(this.tel,true)) return
                 let pass = $('#login_loginPass').$getCiphertext()
                 let lengths = $('#login_loginPass').$getCiphertext()
-                if (msg = util.Check.loginPassLen(lengths)) return Bus.$emit(BusName.showToast, msg);
-
+                if (util.Check.loginPassLen(lengths,true)) return
                 let data = {
                     PHONE_NUM: this.tel,
                     BANK_LOGIN_PW: pass
@@ -262,7 +259,7 @@
     }
 </script>
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .logo {
         width: px2rem(140);
@@ -358,7 +355,6 @@
             box-sizing: border-box;
             font-size: px2rem(16);
             color: #333;
-            /* line-height: 40px; */
             outline: none;
         }
     }

@@ -57,12 +57,12 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
-    import {PageName, BusName, LsName} from "../../Constant";
+    import API from "@/service";
+    import {PageName, BusName, LsName} from "@/Constant";
     import util from "libs/util";
-    import Bus from '../../plugin/bus'
+    import Bus from '@/plugin/bus'
     import BankSelect from '../../components/commons/BankSelect'
-    import {imgSrc} from "../../Constant";
+    import {imgSrc} from "@/Constant";
 
     let time = 60
     export default {
@@ -86,9 +86,9 @@
                 bankList: [],
                 bank: '-1',
                 bankText: '请选择银行',
-                stepImg: require('../../assets/images/account_icon_green2@2x.png'),
-                stepImg2: require('../../assets/images/step2@2x.png'),
-                stepImg3: require('../../assets/images/step3.png'),
+                stepImg: require('@/assets/images/account_icon_green2@2x.png'),
+                stepImg2: require('@/assets/images/step2@2x.png'),
+                stepImg3: require('@/assets/images/step3.png'),
                 AllBankListObj: {},
                 errMsg: '',
                 checkBankName1: false
@@ -184,8 +184,7 @@
             getMsgCodeHandle() {
                 this.data.PRE_PHONE_NUM = this.tel + ''
                 console.log(this.data.PRE_PHONE_NUM);
-                let msg
-                if (msg = util.Check.tel(this.data.PRE_PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
+                if (util.Check.tel(this.data.PRE_PHONE_NUM,true)) return;
                 let sTime = time
                 this.disable = true
                 let timer = setInterval(() => {
@@ -364,7 +363,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .warp {
         width: 100%;

@@ -1,7 +1,7 @@
 <template>
     <div class="header" v-if="show">
             <a class="goBack" href="javascript:;" @click="goBack">
-                <img src="../../assets/images/back@2x.png" alt="">
+                <img src="@/assets/images/back@2x.png" alt="">
             </a>
             <p>{{title}}</p>
     </div>

@@ -2,7 +2,7 @@
     <div class="app">
         <app-bar title="预约成功"></app-bar>
         <div class="chattuimg">
-            <img src="../../assets/images/Verificationsuccess@2x.png" style="width:25%" alt="">
+            <img src="@/assets/images/Verificationsuccess@2x.png" style="width:25%" alt="">
         </div>
         <div class="fenxiangcontent">
             <h2>预约成功</h2>
@@ -13,9 +13,9 @@
 </template>
 <script>
     import util from 'libs/util'
-    import API from "../../service/api/api"
-    import Bus from '../../plugin/bus'
-    import {BusName} from "../../Constant";
+    import API from "@/service/api/api"
+    import Bus from '@/plugin/bus'
+    import {BusName} from "@/Constant";
 
     export default {
         data(){

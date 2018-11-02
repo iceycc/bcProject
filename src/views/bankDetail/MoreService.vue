@@ -38,8 +38,8 @@
 
 <script>
     import IconFont from '../../components/commons/IconFont'
-    import API from "../../service";
-    import {LsName, PageName} from "../../Constant";
+    import API from "@/service";
+    import {LsName, PageName} from "@/Constant";
     import util from "libs/util";
 
     export default {
@@ -131,7 +131,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .m-main {
         margin-top: px2rem(10);

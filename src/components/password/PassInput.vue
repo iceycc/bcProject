@@ -8,8 +8,8 @@
     </div>
 </template>
 <script>
-    import Bus from '../../plugin/bus/index'
-    import {HOST, LsName} from "../../Constant";
+    import Bus from '@/plugin/bus/index'
+    import {HOST, LsName} from "@/Constant";
     import util from "libs/util";
     let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
     export default {

@@ -25,7 +25,7 @@
             <div class="passbox">
                 <div class="top">
                     <p class="title">
-                        <img src="../../assets/images/icon_dunpai@2x.png" alt="">
+                        <img src="@/assets/images/icon_dunpai@2x.png" alt="">
                         由晋商银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
@@ -55,9 +55,9 @@
     import BankSelect from '../../components/commons/BankSelect'
     import ActiveInput from '../../components/commons/ActiveInput'
     import ErrMsg from '../../components/commons/ErrMsg'
-    import API from "../../service";
-    import {imgSrc, BusName, LsName,PageName} from "../../Constant";
-    import Bus from '../../plugin/bus'
+    import API from "@/service";
+    import {imgSrc, BusName, LsName,PageName} from "@/Constant";
+    import Bus from '@/plugin/bus'
     import util from "libs/util";
     import PassInput from '@/components/password/PassInput'
     import {Mixin} from '../../common/mixins'
@@ -221,7 +221,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .m-form {
         width: 100%;

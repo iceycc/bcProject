@@ -23,9 +23,9 @@
 </template>
 
 <script>
-    import IconFont from '../../components/commons/IconFont'
-    import API from "../../service";
-    import {LsName, PageName} from "../../Constant";
+    import IconFont from '@/components/commons/IconFont'
+    import API from "@/service";
+    import {LsName, PageName} from "@/Constant";
     import util from "libs/util";
     export default {
         name: "bankBalance",
@@ -83,7 +83,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     i {
         font-style: normal;
@@ -99,7 +99,7 @@
     .m-top {
         width: 100%;
         height: px2rem(120);
-        background: url("../../assets/images/OvalCopy.png") no-repeat center center;
+        background: url("~@/assets/images/OvalCopy.png") no-repeat center center;
         padding-left: px2rem(25);
         padding-top: px2rem(25);
         box-sizing: border-box;

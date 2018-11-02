@@ -47,9 +47,9 @@
     </div>
 </template>
 <script>
-    import API from "../../service";
-    import {BusName} from "../../Constant";
-    import Bus from "../../plugin/bus";
+    import API from "@/service";
+    import {BusName} from "@/Constant";
+    import Bus from "@/plugin/bus";
     import {Loadmore} from "mint-ui";
     import util from "libs/util";
 
@@ -350,7 +350,7 @@
 </style>
 
 <style lang="scss" scoped>
-    @import "../../assets/px2rem";
+    @import "~@/assets/px2rem";
 
     .icon {
         position: absolute;
@@ -364,7 +364,7 @@
         display: block;
         margin-top: px2rem(10);
         z-index: 2;
-        background: url("../../assets/images/icon_shaixuan@2x.png") no-repeat;
+        background: url("~@/assets/images/icon_shaixuan@2x.png") no-repeat;
         background-size: 100%;
     }
 
@@ -407,7 +407,7 @@
                 height: px2rem(22);
                 display: block;
                 z-index: 2;
-                background: url("../../assets/images/icon_shaixuan@2x.png") no-repeat;
+                background: url("~@/assets/images/icon_shaixuan@2x.png") no-repeat;
                 background-size: 100%;
                 top: 0;
                 left: 0;
@@ -421,7 +421,7 @@
                 height: px2rem(22);
                 display: block;
                 z-index: 2;
-                background: url("../../assets/images/icon_shaixuan-1@2x.png") no-repeat;
+                background: url("~@/assets/images/icon_shaixuan-1@2x.png") no-repeat;
                 background-size: 100%;
                 top: 0;
                 left: 0;

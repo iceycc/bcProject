@@ -44,9 +44,9 @@
 </template>
 <script>
   import util from "libs/util";
-  import API from "../../service"
-  import {LsName, BusName, PageName} from "../../Constant";
-  import Bus from '../../plugin/bus'
+  import API from "@/service"
+  import {LsName, BusName, PageName} from "@/Constant";
+  import Bus from '@/plugin/bus'
   import PassInput from '@/components/password/PassInput'
   import {Mixin} from '../../common/mixins'
 
@@ -106,8 +106,7 @@
     methods: {
       getCode() {
         this.data.PHONE_NUM = this.tel
-        let msg
-        if (msg = util.Check.tel(this.data.PHONE_NUM)) return Bus.$emit(BusName.showToast, msg)
+        if (util.Check.tel(this.data.PHONE_NUM,true)) return;
         let sTime = time
         this.disable = true
         let timer = setInterval(() => {
@@ -157,7 +156,6 @@
         this.data.BANK_LOGIN_PW2 = $('#reLoginPass').$getCiphertext()
         this.data.BANK_LOGIN_PW2_LEN = $('#reLoginPass').$getPasswordLength()
         if (msg = util.Check.trim(this.data.BANK_LOGIN_PW, ',密码')) {
-
           this.showErrMsg(msg)
           return
         }
@@ -206,7 +204,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/px2rem";
+  @import "~@/assets/px2rem";
 
   .warp {
     width: 100%;
@@ -233,7 +231,7 @@
   }
 
   .opening_box section .limit {
-    background-image: url(../../assets/images/problom2@2x.png);
+    background-image: url(~@/assets/images/problom2@2x.png);
     background-size: 12px 12px;
     background-position: 0 2.5px;
     background-repeat: no-repeat;
