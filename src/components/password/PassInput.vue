@@ -10,7 +10,6 @@
 <script>
     import Bus from '@/plugin/bus/index'
     import {HOST, LsName} from "@/Constant";
-    import util from "libs/util";
     let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
     export default {
         name: "PassInput",
@@ -40,7 +39,7 @@
         created() {
             this.iptId = this.inputID
             console.log(this.inputID + '>> 创建了')
-            this.DeviceId = util.storage.session.get(LsName.DEVICE_ID)
+            this.DeviceId = this.$store.getters.GET_ACCOUNT_STATE.DEVICE_ID
         },
         activated(){
             this.iptId = this.inputID

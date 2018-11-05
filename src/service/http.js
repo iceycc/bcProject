@@ -34,10 +34,7 @@ export default {
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
     let ORG_ID = store.getters.GET_BANK_INFO.ORG_ID
-    let token1 = store.getters.GET_ACCOUNT_STATE.TOKEN || token
-    let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
-    let channel_id = util.storage.session.get(LsName.CHANNEL_ID) + ''
-    params = Object.assign(params, {ORG_ID: ORG_ID + ''})
+    let {DEVICE_ID, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -48,12 +45,15 @@ export default {
           SESSION_ID: "",
           SYSTEM_TYPE: "h5",
           TYPE,
-          TOKEN: token1, //15011352818 15711310733
-          DEVICE_ID: DeviceId
+          TOKEN: TOKEN, //15011352818 15711310733
+          DEVICE_ID: DEVICE_ID + ''
         },
-        param: params,
+        param: {
+          ORG_ID, // 70
+          ...params
+        },
       },
-      channel_id: channel_id
+      channel_id: CHANNEL_ID + ''
     }
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)
@@ -66,8 +66,7 @@ export default {
       util.storage.session.remove(LsName.LAST_STEP_NUM)
       util.storage.session.remove(LsName.REQ_SERIAL)
       if (result.head.TOKEN) { // 接口有返回token就更新token
-        store.commit('SET_TOKEN',result.head.TOKEN)
-        // util.storage.session.set(LsName.token, result.head.TOKEN)
+        store.commit('SET_TOKEN', result.head.TOKEN)
       }
       if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
         // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
@@ -84,7 +83,7 @@ export default {
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
         Bus.$emit(BusName.showToast, result.head.MSG)
         // util.storage.session.remove(LsName.token)
-        store.commit('SET_TOKEN','')
+        store.commit('SET_TOKEN', '')
         Router.push({
           name: PageName.Login,
           query: {
@@ -94,7 +93,7 @@ export default {
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
-        store.commit('SET_TOKEN','')
+        store.commit('SET_TOKEN', '')
         // util.storage.session.remove(LsName.token)
         Router.push({
           name: PageName.Login,

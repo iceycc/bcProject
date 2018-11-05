@@ -118,7 +118,8 @@
     methods: {
       initPassPlugin(inputID, parentDiv) {
         let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
-        let DeviceId = util.storage.session.get(LsName.DEVICE_ID)
+        let DeviceId = this.$store.getters.GET_ACCOUNT_STATE.DEVICE_ID
+
         let toUrl = base_url + '?orgId=' + 70 + "&isPasswd=" + true + "&deviceId=" + DeviceId + "&width="
         let parent = document.querySelector(`#${parentDiv}`)
         let child = document.querySelector(`#${inputID}`)
