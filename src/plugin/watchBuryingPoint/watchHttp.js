@@ -16,13 +16,13 @@ export default {
   request: function (method, {url, params}, config, success, error) {
     method = method || 'post';
     // let token = util.storage.session.get(LsName.token) || ''
-    let token = store.getters.GET_TOKEN
+    let {TOKEN} = store.getters.GET_ACCOUNT_STATE
     let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + ''
     let CHANNEL_ID = util.storage.session.get(LsName.CHANNEL_ID) + ''
     let datas = {
       head: {
         TYPE: "BATCH_RECORD_FUNCTION_LOG_INFO",
-        TOKEN: token,
+        TOKEN: TOKEN,
         SESSION_ID: "",
         DEVICE_ID: DeviceId,
         CHANNEL_TYPE: 'H5'

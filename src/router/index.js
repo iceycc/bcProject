@@ -36,8 +36,8 @@ router.beforeEach((to, from, next) => {
         util.IOSTitileUpdat()
     }
     if (to.meta && to.meta.needLogin) {
-        let sign = this.$store.getters.GET_TOKEN
-        if (sign) {
+        let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+        if (TOKEN) {
             next()
         } else {
 

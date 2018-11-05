@@ -34,7 +34,7 @@ export default {
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
     let ORG_ID = store.getters.GET_BANK_INFO.ORG_ID
-    let token1 = store.getters.GET_TOKEN || token
+    let token1 = store.getters.GET_ACCOUNT_STATE.TOKEN || token
     let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
     let channel_id = util.storage.session.get(LsName.CHANNEL_ID) + ''
     params = Object.assign(params, {ORG_ID: ORG_ID + ''})

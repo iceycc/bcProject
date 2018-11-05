@@ -196,16 +196,16 @@
         PRD_TYPE: "",
         canEdit: false,
 
-        defaultManey:'',
+        defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
       };
     },
-    computed:{
-      investForm(){
+    computed: {
+      investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
-      interest(){
+      interest() {
         return this.getInterest(
             this.invest,
             this.productDetail.RATE,
@@ -257,7 +257,7 @@
     methods: {
       formatNumHandle(cash) {
         this.canEdit = false
-        if (!(cash-0) || !cash) {
+        if (!(cash - 0) || !cash) {
           cash = this.defaultManey + ''
           this.invest = this.defaultManey
         }
@@ -299,13 +299,13 @@
        */
       getInterest(cash, profit, day) {
         let interest;
-        cash = cash +''
+        cash = cash + ''
         this.invest = cash
         if (cash == '') cash = 0
         if (!util.isValueNumber(cash - 0)) {
           this.invest = this.currentVal
           cash = this.currentVal
-        }else {
+        } else {
           this.currentVal = cash
         }
         let e = cash * profit / 100 * day / 360;
@@ -394,8 +394,6 @@
             REMARK_DATA: "异业合作-产品详情页-购买-安全购买", // 中文备注
             FROM_ID: this.proID // 产品ID、机构ID
           });
-          // let sign = util.storage.session.get(LsName.token);
-          let sign = this.$store.getters.GET_TOKEN
           // 购买参数
           let goBuyData = {
             id: this.proID,
@@ -430,8 +428,8 @@
             PRD_NUMBER: this.productDetail.ID + ""
           };
           // let sign = util.storage.session.get(LsName.token);
-          let sign = this.$store.getters.GET_TOKEN
-          if (sign) {
+          let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+          if (TOKEN) {
             // 正常
             API.product.apiSaveSubscribeInfo(
                 data,
