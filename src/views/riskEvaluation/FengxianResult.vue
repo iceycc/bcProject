@@ -20,7 +20,7 @@
 </template>
 <script>
     import {PageName} from "@/Constant";
-    import {UtilMixin} from '../../common/mixins'
+    import {UtilMixin} from '@/mixins'
 
     export default {
         data() {

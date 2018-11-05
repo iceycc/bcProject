@@ -100,7 +100,7 @@
     import PassInput from '@/components/password/PassInput'
     import {BusName, LsName, PageName} from "@/Constant";
     import util from "libs/util";
-    import {Mixin} from '../../common/mixins'
+    import {Mixin} from '@/mixins'
 
 
     export default {
@@ -193,7 +193,8 @@
                         return
                     }
                     Bus.$emit(BusName.showToast, '注册成功,即将跳转登录页')
-                    util.storage.session.remove(LsName.token)
+                    // util.storage.session.remove(LsName.token)
+                  this.$store.commit('SET_TOKEN','')
                     util.storage.session.set(LsName.reload, true)
                     this.Londing.open({
                         text: '即将跳转登录页'

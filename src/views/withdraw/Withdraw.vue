@@ -50,7 +50,7 @@
     import Bus from '@/plugin/bus'
     import {PageName, imgSrc, BusName} from "@/Constant";
     import util from "libs/util";
-    import {Mixin, UtilMixin} from '../../common/mixins'
+    import {Mixin, UtilMixin} from '@/mixins'
 
     let time = 60
     let timer;

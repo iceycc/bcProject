@@ -60,7 +60,7 @@
     import Bus from '@/plugin/bus'
     import util from "libs/util";
     import PassInput from '@/components/password/PassInput'
-    import {Mixin} from '../../common/mixins'
+    import {Mixin} from '@/mixins'
 
     export default {
         name: "changeBank",

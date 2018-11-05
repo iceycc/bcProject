@@ -3,6 +3,7 @@ import Bus from '../plugin/bus/index'
 import {BusName, PageName, LsName} from "../Constant";
 import util from "libs/util";
 import Router from '../router/index'
+import store from '../store'
 
 export default {
   /*
@@ -32,11 +33,11 @@ export default {
    */
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
-    let ORG_ID = util.storage.session.get(LsName.ORG_ID) || 70 // todo ORG_ID的动态获取
-    params = Object.assign(params, {ORG_ID: ORG_ID + ''})
-    let token1 = util.storage.session.get(LsName.token) || token
+    let ORG_ID = store.getters.GET_BANK_INFO.ORG_ID
+    let token1 = store.getters.GET_TOKEN || token
     let DeviceId = util.storage.session.get(LsName.DEVICE_ID) + '' // 外部传人 ?DEVICE_ID
     let channel_id = util.storage.session.get(LsName.CHANNEL_ID) + ''
+    params = Object.assign(params, {ORG_ID: ORG_ID + ''})
     let datas = {
       biz_data: {
         head: {
@@ -54,8 +55,6 @@ export default {
       },
       channel_id: channel_id
     }
-
-
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)
     config.url = url
@@ -67,7 +66,8 @@ export default {
       util.storage.session.remove(LsName.LAST_STEP_NUM)
       util.storage.session.remove(LsName.REQ_SERIAL)
       if (result.head.TOKEN) { // 接口有返回token就更新token
-        util.storage.session.set(LsName.token, result.head.TOKEN)
+        store.commit('SET_TOKEN',result.head.TOKEN)
+        // util.storage.session.set(LsName.token, result.head.TOKEN)
       }
       if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
         // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
@@ -83,7 +83,8 @@ export default {
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
         Bus.$emit(BusName.showToast, result.head.MSG)
-        util.storage.session.remove(LsName.token)
+        // util.storage.session.remove(LsName.token)
+        store.commit('SET_TOKEN','')
         Router.push({
           name: PageName.Login,
           query: {
@@ -93,7 +94,8 @@ export default {
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
-        util.storage.session.remove(LsName.token)
+        store.commit('SET_TOKEN','')
+        // util.storage.session.remove(LsName.token)
         Router.push({
           name: PageName.Login,
           query: {

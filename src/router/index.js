@@ -7,6 +7,7 @@ import {BusName, LsName, PageName} from '../Constant'
 import util from "libs/util";
 import Bus from '../plugin/bus/index'
 import routes from "./routes"
+import store from "../store";
 
 
 Vue.use(VueRouter)
@@ -35,7 +36,7 @@ router.beforeEach((to, from, next) => {
         util.IOSTitileUpdat()
     }
     if (to.meta && to.meta.needLogin) {
-        let sign = util.storage.session.get(LsName.token)
+        let sign = this.$store.getters.GET_TOKEN
         if (sign) {
             next()
         } else {

@@ -394,7 +394,8 @@
             REMARK_DATA: "异业合作-产品详情页-购买-安全购买", // 中文备注
             FROM_ID: this.proID // 产品ID、机构ID
           });
-          let sign = util.storage.session.get(LsName.token);
+          // let sign = util.storage.session.get(LsName.token);
+          let sign = this.$store.getters.GET_TOKEN
           // 购买参数
           let goBuyData = {
             id: this.proID,
@@ -428,7 +429,8 @@
             PRD_TYPE: "2",
             PRD_NUMBER: this.productDetail.ID + ""
           };
-          let sign = util.storage.session.get(LsName.token);
+          // let sign = util.storage.session.get(LsName.token);
+          let sign = this.$store.getters.GET_TOKEN
           if (sign) {
             // 正常
             API.product.apiSaveSubscribeInfo(

@@ -57,7 +57,7 @@
   import PassInput from '@/components/password/PassInput'
   import Bus from '@/plugin/bus'
   import util from "libs/util";
-  import {Mixin} from '../../common/mixins'
+  import {Mixin} from '@/mixins'
 
   export default {
     data() {

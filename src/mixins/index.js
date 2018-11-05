@@ -1,6 +1,7 @@
 import util from "libs/util";
 import {LsName, PageName} from "@/Constant";
 import API from "@/service";
+import loginMixins from './login-mixins'
 
 export const Mixin = {
     beforeCreate() {
@@ -96,3 +97,6 @@ export const UtilMixin = {
 
     }
 }
+
+
+export const LoginMixins = loginMixins

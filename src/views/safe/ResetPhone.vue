@@ -86,7 +86,8 @@
                 API.safe.apiChangePhoneNum(data,true,res=>{
                     Bus.$emit(BusName.showToast,'更换手机号成功，请重新登陆')
                     // 是否应该
-                    util.storage.session.remove(LsName.token)
+                    // util.storage.session.remove(LsName.token)
+                  this.$store.commit('SET_TOKEN','')
                     util.storage.session.remove(LsName.Infos)
                     util.storage.session.set(LsName.loginType,PageName.BankDetail)
                     this.$router.push({

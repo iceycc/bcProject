@@ -39,7 +39,7 @@
     import {PageName, BusName, imgSrc, LsName} from "@/Constant"
     import Bus from '@/plugin/bus'
     import API from "@/service"
-    import {Mixin} from '../../common/mixins'
+    import {Mixin} from '@/mixins'
     import util from "libs/util";
 
 

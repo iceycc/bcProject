@@ -45,13 +45,15 @@ let frameIn = [
     component: resolve => require(['views/login/Login.vue'], resolve),
     meta: {keepAlive: false, title: '安全登录', needLogin: false}
   },
+  /**
+   * 电子账户
+   */
   {
     path: '/' + PageName.BankAccount,
     name: PageName.BankAccount,
-    component: resolve => require(['views/login/BankAccount.vue'], resolve),
+    component: resolve => require(['views/account/BankAccount.vue'], resolve),
     meta: {keepAlive: false, title: '电子账户', needLogin: false}
   },
-
 
   /**
    * open 开户

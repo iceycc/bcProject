@@ -48,7 +48,7 @@
   import {LsName, BusName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import PassInput from '@/components/password/PassInput'
-  import {Mixin} from '../../common/mixins'
+  import {Mixin} from '@/mixins'
 
   let time = 60
   export default {
@@ -182,7 +182,8 @@
         let delMsg = true;
         API.safe.apiUserResetLoginPass(data, delMsg, res => {
           Bus.$emit(BusName.showToast, '修改密码成功')
-          util.storage.session.remove(LsName.token)
+          // util.storage.session.remove(LsName.token)
+          this.$store.commit('SET_TOKEN','')
           util.storage.session.set(LsName.reload, true)
           util.storage.session.remove('rePasswordInfo')
           this.$router.replace({
