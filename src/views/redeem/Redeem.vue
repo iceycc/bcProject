@@ -30,7 +30,7 @@
             <p>如果赎回金额超过实施赎回额度，请进行普通赎回操作。</p>
             <p>普通赎回T+1工作日16:30后到账。</p>
         </div>
-        <div class="r-btn">赎回</div>
+        <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn">赎回</button>
         <div class="r-agreement">
            立即赎回代表您已阅读并同意<span>《“日添利-博时基金 ”产品业务服务协议》</span>
         </div>
@@ -71,12 +71,22 @@
     export default {
         data() {
             return {
-                money:'',
                 isFocus: false,
                 typeShow: false,
                 cur: 0,
+                money: '',
                 typeText: '请选择',
-                normalShow: false
+                normalShow: false,
+                availBtn: false
+            }
+        },
+        watch: {
+            money(n, o) {
+                if (n && n - 0 > 0) {
+                    this.availBtn = true
+                } else {
+                    this.availBtn = false
+                }
             }
         },
         components:{
@@ -178,12 +188,16 @@
         width: px2rem(255);
         height: px2rem(44);
         line-height: px2rem(44);
+        display: block;
         margin: 0 auto;
         text-align: center;
-        background-color: #518BEE;
+        background-color: #e4e4e4;
         color: #fff;
         font-size: px2rem(18);
         border-radius: px2rem(6);
+        &.active {
+            background-color: #518BEE;
+        }
     }
     .r-agreement {
         padding: px2rem(20) px2rem(20) px2rem(65);
