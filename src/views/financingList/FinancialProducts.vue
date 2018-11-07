@@ -4,16 +4,21 @@
             <app-bar title="理财产品"></app-bar>
             <div></div>
             <div class="f-box">
-                <ul>
-                    <li>
-                        <p>{{financialData.TOTAL_AMOUNT | formatNum}}</p>
-                        <p>总资产</p>
-                    </li>
-                    <li>
-                        <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+                <!-- 头部详情样式改动 -->
+                <div class="total-price">
+                    <p>总资产<i>(元)</i></p>
+                    <p>{{financialData.TOTAL_AMOUNT | formatNum}}</p>
+                </div>
+                <div class="profit">
+                    <div>
+                        <p>昨日收益</p>
+                        <p>+2.30</p>
+                    </div>
+                    <div>
                         <p>累计收益</p>
-                    </li>
-                </ul>
+                        <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-box">
@@ -28,6 +33,8 @@
                                 :auto-fill="false" ref="loadmore">
                      <div style="padding-bottom: 20px">
                          <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
+                             <!-- 新加明细按钮 -->
+                             <span class="detail">明细</span>
                              <h4>
                                  <strong>{{item.PRD_NAME}}</strong>
                                  <!-- <router-link to="/TransactionDetails">明细</router-link> -->
@@ -45,6 +52,15 @@
                              <p>到期日期
                                  <span>{{item.OVER_DATE}}</span>
                              </p>
+                             <!-- 新加赎回追加按钮 -->
+                             <div class="bottom-btn">
+                                 <div>
+                                     <span>赎回</span>
+                                 </div>
+                                 <div>
+                                     <span>追加</span>
+                                 </div>
+                             </div>
                          </div>
                      </div>
                     </v-loadmore>
@@ -55,6 +71,8 @@
                     <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                                 :auto-fill="false" ref="loadmore1">
                         <div class="divTab-1" v-for="(item,index) in pageList1" :key="index">
+                            <!-- 新加明细按钮 -->
+                            <span class="detail">明细</span>
                             <h4>
                                 <strong>{{item.PRD_NAME}}</strong>
                                 <!-- <router-link to="/TransactionDetails">明细</router-link> -->
@@ -69,6 +87,15 @@
                             <p>到期日期
                                 <span>{{item.OVER_DATE}}</span>
                             </p>
+                            <!-- 新加赎回追加按钮 -->
+                            <div class="bottom-btn">
+                                 <div>
+                                     <span>赎回</span>
+                                 </div>
+                                 <div>
+                                     <span>追加</span>
+                                 </div>
+                             </div>
                         </div>
                     </v-loadmore>
                 </div>
@@ -248,16 +275,15 @@
         }
     };
 </script>
-
-<style lang="scss">
-    .pro .header img {
-        display: none;
-    }
-
-</style>
 <style lang="scss" scoped>
     @import "~@/assets/px2rem";
 
+    .pro .header img {
+        display: none;
+    }
+    i {
+        font-style: normal;
+    }
     .pro .header:after {
         position: absolute;
         content: "";
@@ -297,42 +323,27 @@
 
     .f-box {
         width: 100%;
-        height: px2rem(158);
+        height: px2rem(150);
         background: #518bee;
         z-index: 2;
-        ul {
+        color: #ffffff;
+        text-align: center;
+        font-size: px2rem(14);
+        .total-price {
+            padding: px2rem(8) 0;           
+            p:last-child{
+                font-size: px2rem(34);
+            }
+        }        
+        .profit {
             display: flex;
-            li {
+            div {
                 flex: 1;
-                p {
-                    text-align: center;
-                    color: #fff;
+                p:last-child{
+                    font-weight: bold;
+                    padding-top: px2rem(6);
+                    font-size: px2rem(18);
                 }
-                p:first-child {
-                    font-size: px2rem(22);
-                    line-height: px2rem(30);
-                    padding-top: px2rem(52);
-                    padding-bottom: px2rem(7);
-                }
-                p:last-child {
-                    font-size: px2rem(12);
-                    line-height: px2rem(17);
-                }
-            }
-            li:first-child {
-                position: relative;
-            }
-            li:first-child:after {
-                position: absolute;
-                content: "";
-                width: px2rem(1);
-                height: px2rem(20);
-                right: 0;
-                background: #fff;
-                top: px2rem(67);
-            }
-            li.active {
-                background: #eee;
             }
         }
     }
@@ -373,11 +384,18 @@
             padding-bottom: px2rem(10);
             .divTab-1 {
                 background: #fff;
+                position: relative;
                 font-size: px2rem(12);
                 margin: px2rem(10) px2rem(15) 0;
                 border-radius: px2rem(12);
                 box-sizing: border-box;
-                padding: px2rem(20) px2rem(15) px2rem(10);
+                padding: px2rem(15) px2rem(15) 0 px2rem(15);
+                .detail {
+                    position: absolute;
+                    right: px2rem(15);
+                    top: px2rem(15);
+                    color: #508CEE;
+                }
                 &:last-child{
                     margin-bottom: px2rem(50);
                 }
@@ -413,6 +431,21 @@
                     margin-bottom: px2rem(16);
                 }
                 // p:last-of-type{ padding-bottom: 0;}
+                .bottom-btn {
+                    padding: px2rem(4) 0;
+                    text-align: center;
+                    display: flex;
+                    border-top: 1px solid #F5F5F5;
+                    div {
+                        flex: 1;
+                        font-size: px2rem(14);
+                        padding: px2rem(11) 0;
+                        color: #333333;
+                        &:first-child{
+                            border-right: 1px solid #F6F6F9;
+                        }
+                    }
+                }
             }
         }
     }

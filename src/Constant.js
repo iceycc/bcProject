@@ -92,6 +92,7 @@ export const PageName = {
   WithdrawFaild: 'WithdrawFaild', // 提现失败
   WaitForWithdraw: 'WaitForWithdraw', // 提现zhong
   PayDetail: 'PayDetail', // 提现失败
+  Redeem: 'Redeem'  // 赎回
 }
 
 /**

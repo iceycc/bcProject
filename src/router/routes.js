@@ -267,6 +267,13 @@ let frameIn = [
     component: resolve => require(['views/financingList/TransactionDetails.vue'], resolve),
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
+  // 赎回
+  {
+    path: '/' + PageName.Redeem,
+    name: PageName.Redeem,
+    component: resolve => require(['views/redeem/Redeem.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
+  }
 
 ]
 
