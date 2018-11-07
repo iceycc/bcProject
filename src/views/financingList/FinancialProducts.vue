@@ -134,7 +134,7 @@
                 let data = {
                     PRD_TYPE: ""
                 };
-                API.financial.apiMyAssetByType(data, res => {
+                API.JINSHANG.financial.apiMyAssetByType(data, res => {
                     this.financialData = res.lcAsset;
                 });
             },
@@ -173,7 +173,7 @@
                         currentPage: this.searchCondition1.pageNo,
                         PRD_TYPE: "2"
                     };
-                    API.financial.getMyInvestOver(data, res => {
+                    API.JINSHANG.financial.getMyInvestOver(data, res => {
                         this.pageList1 = res.PAGE.retList;
                         if (this.pageList1.length ==0) {
                             // this.allLoaded = true;
@@ -194,7 +194,7 @@
                         currentPage: this.searchCondition.pageNo,
                         PRD_TYPE: "2"
                     };
-                    API.financial.getMyInvestHold(data, res => {
+                    API.JINSHANG.financial.getMyInvestHold(data, res => {
                         this.pageList = res.PAGE.retList;
                         // this.pageList = res.PAGE.retList;
                         if (this.pageList.length < this.searchCondition.pageSize) {
@@ -221,7 +221,7 @@
                         currentPage: this.searchCondition1.pageNo,
                         PRD_TYPE: "2"
                     };
-                    API.financial.getMyInvestOver(data, res => {
+                    API.JINSHANG.financial.getMyInvestOver(data, res => {
                         this.pageList1 = this.pageList1.concat(res.PAGE.retList);
                         if (this.pageList1.length < this.searchCondition1.pageSize) {
                             this.allLoaded = true;
@@ -236,7 +236,7 @@
                         currentPage: this.searchCondition.pageNo,
                         PRD_TYPE: "2"
                     };
-                    API.financial.getMyInvestHold(data, res => {
+                    API.JINSHANG.financial.getMyInvestHold(data, res => {
                         this.pageList = this.pageList.concat(res.PAGE.retList);
                         if (this.pageList.length < this.searchCondition.pageSize) {
                             this.allLoaded = true;

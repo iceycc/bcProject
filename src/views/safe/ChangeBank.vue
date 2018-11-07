@@ -148,7 +148,7 @@
                 return this.AllBankListObj[pin]
             },
             getBankList() {
-                API.list.apiGetBankCardList({}, res => {
+                API.JINSHANG.list.apiGetBankCardList({}, res => {
                     let obj = {}
                     res.BAND_CARD_LIST.forEach(item => {
                         obj[item.BANK_CARD_BIN] = item.BANK_NAME
@@ -188,7 +188,7 @@
                 }
                 let delMsg = true
 
-                API.safe.apiChangeBingCard(data, delMsg, res => {
+                API.JINSHANG.safe.apiChangeBingCard(data, delMsg, res => {
                     Bus.$emit(BusName.showToast,'更换银行卡成功')
                     this.$router.push({
                         name:PageName.MoreService

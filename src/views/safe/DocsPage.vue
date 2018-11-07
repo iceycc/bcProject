@@ -32,7 +32,7 @@
                     PRD_ID:id + '',
                     PROTO_TYPE: type, // B S
                 }
-                API.safe.apiAgreement(data, res => {
+                API.JINSHANG.safe.apiAgreement(data, res => {
                     this.docs = res.AGREEMENT_HTML
                 })
             },

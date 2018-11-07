@@ -1,9 +1,9 @@
-import axios from '../plugin/request/_axios'
-import Bus from '../plugin/bus/index'
-import {BusName, PageName, LsName} from "../Constant";
+import axios from '../../plugin/request/_axios'
+import Bus from '../../plugin/bus/index'
+import {BusName, PageName, LsName} from "../../Constant";
 import util from "libs/util";
-import Router from '../router/index'
-import store from '../store'
+import Router from '../../router/index'
+import store from '../../store/index'
 
 export default {
   /*
@@ -45,7 +45,7 @@ export default {
           SESSION_ID: "",
           SYSTEM_TYPE: "h5",
           TYPE,
-          TOKEN: TOKEN, //15011352818 15711310733
+          TOKEN: TOKEN,
           DEVICE_ID: DEVICE_ID + ''
         },
         param: {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import store from './store/index'
 import App from './App'
 import router from './router'
+// import $ from 'jquery'
 
 /**
  * 核心插件引入

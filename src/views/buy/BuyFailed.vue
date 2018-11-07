@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-    import {WatchApi} from "@/service/api/api";
+    import {WatchApi} from "@/service";
     import util from "libs/util";
     export default {
         created() {

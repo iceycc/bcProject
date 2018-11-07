@@ -52,7 +52,7 @@
         },
         methods:{
             getBankDetail() {
-                API.account.apiQueryAccRest({}, (res) => {
+                API.JINSHANG.account.apiQueryAccRest({}, (res) => {
                     this.ACC_REST = res.ACC_REST
                     let ReChargeData = {
                         ORG_NAME:　res.ORG_NAME,

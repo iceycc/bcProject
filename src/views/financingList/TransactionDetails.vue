@@ -135,7 +135,7 @@
                     START_DATE: this.startDate,
                     END_DATE: this.endDate
                 };
-                API.financial.apiQryTradeHis(data, res => {
+                API.JINSHANG.financial.apiQryTradeHis(data, res => {
                     this.pageList = this.pageList.concat(res.PAGE.retList);
                     if (res.PAGE.retList.length < this.searchCondition.pageSize) {
                         this.allLoaded = true;
@@ -151,7 +151,7 @@
                     START_DATE: start,
                     END_DATE: end
                 };
-                API.financial.apiQryTradeHis(data, res => {
+                API.JINSHANG.financial.apiQryTradeHis(data, res => {
                     this.pageList = res.PAGE.retList;
                     if (this.pageList.length < this.searchCondition.pageSize) {
                         this.allLoaded = true;

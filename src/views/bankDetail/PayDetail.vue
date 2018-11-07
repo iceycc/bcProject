@@ -112,7 +112,7 @@
           START_DATE: this.startDate,
           END_DATE: this.endDate
         }
-        API.account.apiQryRechCashHis(params, res => {
+        API.JINSHANG.account.apiQryRechCashHis(params, res => {
           if (res.PAGE.retList.length == 0) {
             this.allLoaded = true
             return

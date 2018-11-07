@@ -98,7 +98,7 @@
                 this.goNext()
             },
             getProblom() {
-                API.risk.apiGetRiskTestQuest({}, (res) => {
+                API.JINSHANG.risk.apiGetRiskTestQuest({}, (res) => {
                     this.optionsArr = res.QUEST_LIST
                     this.proNubmer = res.QUEST_LIST.length
                 })
@@ -128,7 +128,7 @@
                 let data = {
                     ANSWER_LIST
                 }
-                API.risk.apiRiskTestAnswer(data, (res) => {
+                API.JINSHANG.risk.apiRiskTestAnswer(data, (res) => {
                     util.storage.session.set(LsName.HAS_GRADE, 2)
                     this.$router.push({
                         name: PageName.FengxianResult,

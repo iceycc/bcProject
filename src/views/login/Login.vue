@@ -5,6 +5,9 @@
     <template v-if="ORG_ID=='70'">
       <img class="logo" src="@/assets/images/logoaaa_03.png" alt="">
     </template>
+    <template v-if="ORG_ID=='100'">
+      <img class="logo" src="@/assets/images/logoaaa_03.png" alt="">
+    </template>
     <p class="titlecontent">
       欢迎登录{{BANK_NAME}}直销账户</p>
     <div class="login_box">
@@ -70,7 +73,7 @@
         passPluginText: '',
         currentTel: '',
 
-        ORG_ID: '70',
+        ORG_ID: '70', //
         BANK_NAME:'',
         LOGO_URL:''
       }

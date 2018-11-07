@@ -111,7 +111,7 @@
             width: .4rem;
             height: .4rem;
             top: 50%;
-            right: -30px;
+            right: 10px;
             transform:translateY(-50%);
         }
     }

@@ -64,7 +64,7 @@
         },
         methods: {
             getInfo() {
-                API.buy.apiQueryAccRest({}, res => {
+                API.JINSHANG.buy.apiQueryAccRest({}, res => {
                     console.log(res);
                     this.payNum = res.ACC_REST
                 })

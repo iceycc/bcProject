@@ -216,7 +216,7 @@
 
         // util.storage.session.remove(LsName.token)
         this.$store.commit('SET_TOKEN', '')
-        API.login(data, (res) => {
+        API.JINSHANG.login(data, (res) => {
           API.watchApi({
             FUNCTION_ID: 'ptb0A007', // 点位
             REMARK_DATA: '异业合作-登录', // 中文备注
@@ -224,7 +224,7 @@
           // todo
           let ProDuctData = util.storage.session.get(LsName.ProDuctData)
           if (ProDuctData) { // 判断是从预约产品过来的 ， 直接预约
-            API.product.apiSaveSubscribeInfo(ProDuctData, res => {
+            API.JINSHANG.product.apiSaveSubscribeInfo(ProDuctData, res => {
               console.log(res);
               util.storage.session.remove(LsName.ProDuctData)
               this.$router.push({

@@ -6,6 +6,7 @@ import {version} from '../package'
  */
 let Configs = {
   DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
+  // DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit/', // 郑州开发环境
   // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
   // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
   PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
@@ -123,5 +124,15 @@ export const LsName = {
   RechargeQuery: 'RechargeQuery', // 充值页需要的参数
   PRD_TYPE: 'PRD_TYPE', // 产品类型
   OriginPage: 'OriginPage', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
+}
+
+/**
+ * ORG_ID 对应不同的机构
+ */
+
+export const ORG_ID_NUM = {
+  JinShang:'70',
+  ZhengZhou:'49',
+  ZhongBang:'100'
 }
 

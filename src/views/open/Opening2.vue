@@ -164,7 +164,7 @@
                 this.bankText = val.name
             },
             getBankList() {
-                API.list.apiGetBankCardList({}, res => {
+                API.JINSHANG.list.apiGetBankCardList({}, res => {
                     let obj = {}
                     res.BAND_CARD_LIST.forEach(item => {
                         obj[item.BANK_CARD_BIN] = item.BANK_NAME
@@ -202,7 +202,7 @@
                     PHONE_NUM: this.data.PRE_PHONE_NUM,
                     BIZ_TYPE: '1',
                 }
-                API.open.getMsgCode(data, res => {
+                API.JINSHANG.open.getMsgCode(data, res => {
                     Bus.$emit(BusName.showToast, '验证码发送成功')
                     this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 }, err => {
@@ -217,7 +217,7 @@
                     ID_NUMBER: this.$route.params.data.USER_CARD_ID
                 }
                 let delMsg = true
-                API.open.apiGetUserLastCompleteStep(getStepDatas,delMsg, res => {
+                API.JINSHANG.open.apiGetUserLastCompleteStep(getStepDatas,delMsg, res => {
                     let step = res.LAST_STEP_NUM
                     let REQ_SERIAL = res.REQ_SERIAL
                     // let PHONE_NUM = res.PHONE_NUM ||'' // 改身份证是否有手机号回显
@@ -309,7 +309,7 @@
                 this.data.PHONE_NUM = this.data.PRE_PHONE_NUM
                 let delMsg = true
                 let OTHER = true  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
-                API.open.doRegeist(this.data, delMsg, OTHER,
+                API.JINSHANG.open.doRegeist(this.data, delMsg, OTHER,
                         res => {
                             clearInterval(timer)
                             this.Londing.close()

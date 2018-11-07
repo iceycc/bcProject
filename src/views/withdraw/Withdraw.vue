@@ -101,7 +101,7 @@
 
             },
             getUserInfos() {
-                API.safe.apiBandCard({}, (res) => {
+                API.JINSHANG.safe.apiBandCard({}, (res) => {
                     this.CARD_BANK_NAME = res.CARD_BANK_NAME
                     this.logo = res.CARD_BANK_URL
                 })
@@ -117,7 +117,7 @@
                     BANK_PAY_PW: this.pass
                 }
                 this.show = false
-                API.withdraw.apiCash(data, res => {
+                API.JINSHANG.withdraw.apiCash(data, res => {
                     let params = {
                         BIZ_TYPE: '4', // 提现
                         BESHARP_SEQ: res.BESHARP_CASH_SEQ

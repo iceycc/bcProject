@@ -173,11 +173,11 @@
                     BANK_PAY_PW: this.paypass,
                     LAST_STEP_NUM: this.LAST_STEP_NUM
                 }
-                API.open.setPassWord(data, res => {
+                API.JINSHANG.open.setPassWord(data, res => {
                     // todo
                     let ProDuctData = util.storage.session.get(LsName.ProDuctData)
                     if (ProDuctData) { // 判断是从预约产品过来的 ， 直接预约
-                        API.product.apiSaveSubscribeInfo(ProDuctData, res => {
+                        API.JINSHANG.product.apiSaveSubscribeInfo(ProDuctData, res => {
                             console.log(res);
                             util.storage.session.remove(LsName.ProDuctData)
                             this.$router.push({

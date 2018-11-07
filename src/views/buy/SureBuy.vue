@@ -109,7 +109,7 @@
         }
         if (util.Check.payPassLen(this.len,true)) return;
         this.show = false
-        API.buy.apiBuy(data, (res) => {
+        API.JINSHANG.buy.apiBuy(data, (res) => {
           let data = {
             BIZ_TYPE: '6',
             BESHARP_SEQ: res.BESHARP_BUY_SEQ
@@ -121,7 +121,7 @@
           let timer = setInterval(() => {
             i++
 
-            API.query.apiQueryBizStatus(data, result => {
+            API.JINSHANG.query.apiQueryBizStatus(data, result => {
               console.log(result.RES_CODE);
               util.storage.session.set(LsName.reload, true)
               if ('1' == result.RES_CODE && i == 5) {

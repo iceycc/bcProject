@@ -33,7 +33,7 @@
 </template>
 <script>
     import util from "libs/util";
-    import {WatchApi} from "@/service/api/api";
+    import {WatchApi} from "@/service";
     import Bus from '@/plugin/bus'
     import {BusName} from "@/Constant";
 

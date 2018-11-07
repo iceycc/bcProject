@@ -13,7 +13,7 @@
 </template>
 <script>
     import util from 'libs/util'
-    import API from "@/service/api/api"
+    import API from "@/service"
     import Bus from '@/plugin/bus'
     import {BusName} from "@/Constant";
 

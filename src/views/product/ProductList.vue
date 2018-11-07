@@ -65,7 +65,7 @@
         },
         methods: {
             getListData() {
-                API.product.apiGetChannelPrdList({}, (res) => {
+                API.JINSHANG.product.apiGetChannelPrdList({}, (res) => {
                     let num = res.length
                     if (num < 6) {
                         this.show = true

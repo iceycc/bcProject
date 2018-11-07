@@ -1,7 +1,15 @@
 import util from "libs/util";
 import {LsName, PageName} from "@/Constant";
 import API from "@/service";
+
 import loginMixins from './login-mixins'
+import opening1Mixins from './opening/opening1-mixins'
+import opening2Mixins from './opening/opening2-mixins'
+
+export const LoginMixins = loginMixins
+export const Opening1Mixins = opening1Mixins
+export const Opening2Mixins = opening2Mixins
+
 
 export const Mixin = {
     beforeCreate() {
@@ -12,7 +20,6 @@ export const Mixin = {
         }
     }
 }
-
 export const UtilMixin = {
     methods: {
       /**
@@ -23,7 +30,7 @@ export const UtilMixin = {
             let goBuyData = util.storage.session.get(LsName.goBuy)
             if (SOURCE_URL == '预约下期') { // 判断是从预约产品过来的 ， 直接预约
                 let ProDuctData = util.storage.session.get(LsName.ProDuctData)
-                API.product.apiSaveSubscribeInfo(ProDuctData, res => {
+                API.JINSHANG.product.apiSaveSubscribeInfo(ProDuctData, res => {
                     console.log(res);
                     this.$router.push({
                         name: PageName.OrderNextSuccess,
@@ -83,7 +90,7 @@ export const UtilMixin = {
             let i = 1
             let timer = setInterval(() => {
                 i++
-                API.query.apiQueryBizStatus(data, result => {
+                API.JINSHANG.query.apiQueryBizStatus(data, result => {
                     console.log('RES_CODE>>', result.RES_CODE);
                     fn && fn(result, timer, i) // result轮询结果，timer用于回调內清除定时器
                 })
@@ -99,4 +106,3 @@ export const UtilMixin = {
 }
 
 
-export const LoginMixins = loginMixins

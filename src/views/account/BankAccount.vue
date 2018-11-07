@@ -119,7 +119,7 @@
       // get
       getBankList() {
         let data = {}
-        API.account.apiBankList(data, (res) => {
+        API.JINSHANG.account.apiBankList(data, (res) => {
           this.BankList = res.BANK_LIST
           this.ISLoginBankList = this.BankList.filter((item, index) => {
             return item.HAS_LOGIN == 1

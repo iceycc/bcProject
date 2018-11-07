@@ -1,8 +1,9 @@
-import apis from './api/api'
-import wacthApi from './api/watchApi'
-
+import JINSHANG from './api/api.JINSHANG'
+import ZHENGZHOU from './api/api.ZHENGZHOU'
+import wacthApi from './api/api.watch'
 
 export default {
-    ...apis,
-    ...wacthApi
+  JINSHANG,
+  ZHENGZHOU,
+  ...wacthApi
 }

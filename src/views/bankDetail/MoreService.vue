@@ -107,7 +107,7 @@
             },
             getInfos() {
                 let data = {}
-                API.safe.apiBandCard(data, (res) => {
+                API.JINSHANG.safe.apiBandCard(data, (res) => {
                     util.storage.session.set(LsName.Infos,{
                         PHONE_NUM:res.PHONE_NUM,
                         USER_CARD_ID:res.USER_CARD_ID,

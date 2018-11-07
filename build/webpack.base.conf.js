@@ -1,4 +1,5 @@
 'use strict'
+const webpack = require('webpack')
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
@@ -38,8 +39,8 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
       'views': resolve('src/views'),
-      'libs':resolve('src/libs'),
-      'plugin':resolve('src/plugin'),
+      'libs': resolve('src/libs'),
+      'plugin': resolve('src/plugin'),
     }
   },
   module: {
@@ -96,5 +97,5 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
 }

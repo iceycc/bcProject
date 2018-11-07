@@ -170,22 +170,22 @@
       }
       ,
       getBankDetail() {
-        API.account.getMyInvest({}, (res) => {
+        API.JINSHANG.account.getMyInvest({}, (res) => {
           this.bankDetail = res
         })
-        API.account.apiQueryAccRest({}, (res) => {
+        API.JINSHANG.account.apiQueryAccRest({}, (res) => {
         })
       }
       ,
       // getMyInvesthandle(){
-      //     API.account.getMyInvest({})
+      //     API.JINSHANG.account.getMyInvest({})
       // }
       getProList() { // 获取产品列表
         let data = {
           currentPage: '1',
           PRD_TYPE: '2'
         }
-        API.account.getMyInvestHold(data, (res) => {
+        API.JINSHANG.account.getMyInvestHold(data, (res) => {
           this.proList = res.PAGE.retList
         })
       }

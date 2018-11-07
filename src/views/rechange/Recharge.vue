@@ -124,7 +124,7 @@
         },
         methods: {
             getInfos() {
-                API.safe.apiBandCard({}, res => {
+                API.JINSHANG.safe.apiBandCard({}, res => {
                     this.CARD_BANK_NAME = res.CARD_BANK_NAME;
                     this.CARD_BANK_URL = res.CARD_BANK_URL
                     this.SINGLE_QUOTA = res.SINGLE_QUOTA
@@ -133,7 +133,7 @@
             },
             reChangeHandele() { // 39查询用户是否已签约充值协议
                 let data = {}
-                API.reChange.apiRechargeProtoQuery(data, (res) => {
+                API.JINSHANG.reChange.apiRechargeProtoQuery(data, (res) => {
                     console.log(res);
                     if (res.SIGN_STATE == 'N') {
                         // 没写
@@ -149,7 +149,7 @@
             },
 
             getCode() { // 获取充值协议码
-                API.reChange.apiRechargeProtoCode({}, res => {
+                API.JINSHANG.reChange.apiRechargeProtoCode({}, res => {
                     console.log(res);
                     this.PIN = res.PIN
                     this.agree1 = true
@@ -239,7 +239,7 @@
                     APPLY_AMOUNT: this.APPLY_AMOUN
                 }
 
-                API.reChange.apiRecharge(data, res => {
+                API.JINSHANG.reChange.apiRecharge(data, res => {
                     let params = {
                         BIZ_TYPE: '3',
                         BESHARP_SEQ: res.BESHARP_RECHARGE_SEQ

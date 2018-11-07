@@ -83,7 +83,7 @@
                     PHONE_CODE:this.params.PHONE_CODE,
                     MESSAGE_TOKEN:this.params.MESSAGE_TOKEN,
                 }
-                API.safe.apiChangePhoneNum(data,true,res=>{
+                API.JINSHANG.safe.apiChangePhoneNum(data,true,res=>{
                     Bus.$emit(BusName.showToast,'更换手机号成功，请重新登陆')
                     // 是否应该
                     // util.storage.session.remove(LsName.token)
@@ -121,7 +121,7 @@
                     PHONE_NUM: this.tel + '',
                     BIZ_TYPE: '10', //
                 }
-                API.open.getMsgCode(data, res => {
+                API.JINSHANG.open.getMsgCode(data, res => {
                     Bus.$emit(BusName.showToast, '验证码发送成功')
                     this.params.MESSAGE_TOKEN = res.MESSAGE_TOKEN
                 }, err => {

@@ -124,7 +124,7 @@
           PHONE_NUM: this.data.PHONE_NUM + '',
           BIZ_TYPE: '9'
         }
-        API.open.getMsgCode(data, res => {
+        API.JINSHANG.open.getMsgCode(data, res => {
           this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
         })
       },
@@ -180,7 +180,7 @@
           ...this.data
         }
         let delMsg = true;
-        API.safe.apiUserResetLoginPass(data, delMsg, res => {
+        API.JINSHANG.safe.apiUserResetLoginPass(data, delMsg, res => {
           Bus.$emit(BusName.showToast, '修改密码成功')
           // util.storage.session.remove(LsName.token)
           this.$store.commit('SET_TOKEN','')

@@ -39,6 +39,7 @@ export default {
         case '70': //
           this.doLogin_JINSHANG();
           break;
+
         default:
           // 银行id获取异常
       }
@@ -59,7 +60,7 @@ export default {
       let SOURCE_URL = util.storage.session.get(LsName.loginType)
       // util.storage.session.remove(LsName.token)
       this.$store.commit('SET_TOKEN','')
-      API.login(data, (res) => {
+      API.JINSHANG.login(data, (res) => {
         API.watchApi({
           FUNCTION_ID: 'ptb0A007', // 点位
           REMARK_DATA: '异业合作-登录', // 中文备注
@@ -166,8 +167,11 @@ export default {
      * 郑州银行
      */
     doLogin_ZHENGZHOU() {
-
+    // todo
     },
+    /**
+     *
+     */
 
 
   }

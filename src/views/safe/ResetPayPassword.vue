@@ -143,7 +143,7 @@
             },
             submit() {
 
-                // API.open.apiGetUserLastCompleteStep({
+                // API.JINSHANG.open.apiGetUserLastCompleteStep({
                 //     ID_NUMBER:this.IDCardNum,
                 // })
                 let BANK_PAY_PW = $('#reset_payPass').$getCiphertext(),
@@ -160,7 +160,7 @@
                     MESSAGE_TOKEN:this.MESSAGE_TOKEN,
                     PHONE_NUM:this.tel
                 }
-                API.safe.apiUserResetPayPass(data, true,res=>{
+                API.JINSHANG.safe.apiUserResetPayPass(data, true,res=>{
                     Bus.$emit(BusName.showToast,'修改支付密码成功')
                     this.$router.push({
                         name:PageName.MoreService
@@ -192,7 +192,7 @@
                     PHONE_NUM: this.tel + '',
                     BIZ_TYPE: '9', // todo 类型
                 }
-                API.open.getMsgCode(data, res => {
+                API.JINSHANG.open.getMsgCode(data, res => {
                     Bus.$emit(BusName.showToast, '验证码发送成功')
 
                     this.MESSAGE_TOKEN = res.MESSAGE_TOKEN

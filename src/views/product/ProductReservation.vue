@@ -343,7 +343,7 @@
         let data = {
           ID: id + ""
         };
-        API.product.apiGetChannelPrdInfo(data, res => {
+        API.JINSHANG.product.apiGetChannelPrdInfo(data, res => {
           this.productDetail = res;
           // 判断起购金额是否大于默认金额
           let str = this.productDetail.TXT_MIN_AMOUNT;
@@ -431,7 +431,7 @@
           let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
           if (TOKEN) {
             // 正常
-            API.product.apiSaveSubscribeInfo(
+            API.JINSHANG.product.apiSaveSubscribeInfo(
                 data,
                 res => {
                   this.$router.push({
