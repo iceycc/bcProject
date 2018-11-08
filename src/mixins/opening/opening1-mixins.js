@@ -4,11 +4,18 @@ import {PageName, BusName} from "@/Constant";
 import util from "libs/util";
 import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
+let ORG_ID = store.getters.GET_ORG_ID
 
 /**
  * 开户公共方法，根据ORG_ID区分不同的业务逻辑
  */
 let commons = {
+  data(){
+    return{
+      ORG_ID_NUM,
+      ORG_ID
+    }
+  },
   created() {
     console.log('commons');
   },
@@ -265,7 +272,7 @@ let ZhengZhou = {
     idCardZhengOcr(data) {
       let CARD_BASE = data.split(',')[1].replace(/\+/g, '%2B')
       let params = {
-        TYPE: '',
+        TYPE: 'ID_CARD_FRONT_PHONE_OCR',
         MEMBER_ID: '15621189933',
         ORG_ID: '49',
         ISFRONT: true,
@@ -361,14 +368,13 @@ let ZhongBang = {
   }
 }
 
-let ORG_ID = store.getters.GET_ORG_ID
-let MIX;
+let MIX = {};
 switch (ORG_ID) {
   case ORG_ID_NUM.JinShang:
     MIX = JinShang;
     break;
   case ORG_ID_NUM.ZhengZhou:
-    MIX = JinShang;
+    MIX = ZhengZhou;
     break;
   case ORG_ID_NUM.ZhongBang:
     MIX = ZhongBang;

@@ -62,6 +62,7 @@
   import Bus from '@/plugin/bus'
   import BankSelect from '../../components/commons/BankSelect'
   import {imgSrc} from "@/Constant";
+  import {Opening2Mixins} from '@/mixins'
 
   export default {
     data() {
@@ -92,6 +93,7 @@
         checkBankName1: false
       }
     },
+    mixins:[Opening2Mixins],
     components: {
 
       BankSelect
@@ -183,7 +185,7 @@
         })
       },
       // 下一步
-      doNext(){
+      goNext(){
         this.doOpening()
       }
 

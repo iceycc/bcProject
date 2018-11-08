@@ -96,7 +96,7 @@
 
     <!--todo 抽离开户页面的文档组件-->
     <p
-        v-if="DOCS == 'JinShang'"
+        v-if="ORG_ID == ORG_ID_NUM.JinShang"
         :class="{'bang':true,'no':agree == false}"
        @click="doAgree">
       <span>我已阅读并同意注册</span>
@@ -104,7 +104,7 @@
       <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《晋商银行直销银行电子账户服务协议》</a>
     </p>
     <p
-        v-if="DOCS == 'ZhengZhou'"
+        v-if="ORG_ID == ORG_ID_NUM.ZhengZhou"
         :class="{'bang':true,'no':agree == false}"
        @click="doAgree">
       <span>我已阅读并同意注册</span>

@@ -5,10 +5,12 @@ import API from "@/service";
 import loginMixins from './login-mixins'
 import opening1Mixins from './opening/opening1-mixins'
 import opening2Mixins from './opening/opening2-mixins'
+import opening3Mixins from './opening/opening3-mixins'
 
 export const LoginMixins = loginMixins
 export const Opening1Mixins = opening1Mixins
 export const Opening2Mixins = opening2Mixins
+export const Opening3Mixins = opening3Mixins
 
 
 export const Mixin = {

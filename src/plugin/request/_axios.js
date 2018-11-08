@@ -19,7 +19,8 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
         response => {
-            Indicator.close();
+          console.log('response>',response);
+          Indicator.close();
             // todo http code校验
             return response.data;
         },

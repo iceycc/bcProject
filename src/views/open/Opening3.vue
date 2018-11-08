@@ -1,7 +1,6 @@
 <template>
     <div class="warp">
         <app-bar title="信息填写"></app-bar>
-
         <section class="wrapicon">
             <section class="circle">
                 <span class="line1">
@@ -24,7 +23,7 @@
             </section>
         </section>
         <div class="login_box">
-            <section class="input-box">
+            <section class="input-box" v-if="showLoginPass">
                 <transition name="fade">
                     <p class="label" v-if="loginShow">登录密码</p>
                 </transition>
@@ -33,7 +32,7 @@
                       @click="showBox"
                 >{{telPaceholder}}</span>
             </section>
-            <section class="input-box">
+            <section class="input-box" v-if="showPayPass">
                 <transition name="fade">
                     <p class="label" v-if="loginShow">交易密码</p>
                 </transition>
@@ -51,7 +50,8 @@
                 @click="postData" :disabled="disabled">开户
         </button>
         <div v-if="ifShow" class="bgbox">
-            <div class="passbox">
+            <!--晋商-->
+            <div v-if="ORG_ID=='70'" class="passbox">
                 <div class="top">
                     <p class="title">
                         <img src="@/assets/images/icon_dunpai@2x.png" alt="">
@@ -90,7 +90,32 @@
                     <button @click="subumit">提交</button>
                 </div>
             </div>
+            <!--郑州-->
+            <div v-if="ORG_ID=='49'" class="passbox">
+                <div class="top">
+                    <p class="title">
+                        <img src="@/assets/images/icon_dunpai@2x.png" alt="">
+                        由郑州银行提供技术保障</p>
+                    <div class="field_row_wrap">
+                        <p class="field_row_key">
+                            交易密码
+                        </p>
+                        <div class="field_row_value">
+                            <pass-input
+                                inputID="payPass"
+                                :doGetData="ifGet"
+                            ></pass-input>
+                        </div>
 
+                        <p class="info">密码由数字组成，必须为6位</p>
+                    </div>
+
+                </div>
+                <div class="btn">
+                    <button @click="cancel">取消</button>
+                    <button @click="subumit">提交</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -100,7 +125,7 @@
     import PassInput from '@/components/password/PassInput'
     import {BusName, LsName, PageName} from "@/Constant";
     import util from "libs/util";
-    import {Mixin} from '@/mixins'
+    import {Mixin,Opening3Mixins} from '@/mixins'
 
 
     export default {
@@ -132,7 +157,7 @@
         components: {
             PassInput
         },
-        mixins: [Mixin],
+        mixins: [Mixin,Opening3Mixins],
         created() {
             this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
             this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
@@ -462,6 +487,7 @@
 
     .login_box {
         position: relative;
+        padding-top: px2rem(20);
         .input-box {
             margin-left: px2rem(20);
             width: 90%;
