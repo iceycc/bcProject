@@ -16,6 +16,7 @@
 </template>
 <script>
     import {LsName} from "@/Constant";
+    import {StoreMixin} from '@/mixins'
     import util from "libs/util";
     export default {
         data(){
@@ -30,7 +31,9 @@
         },
         methods:{
             goNext(){
-                let OriginPage =util.storage.session.get(LsName.OriginPage)
+                // let OriginPage =util.storage.session.get(LsName.OriginPage)
+                let OriginPage = this.$store.getters.GET_COMMON_STATE.OriginPage
+
                 this.$router.push({
                     path:OriginPage
                 })

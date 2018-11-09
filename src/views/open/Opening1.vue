@@ -45,21 +45,24 @@
       <section v-if="DOMShow.USER_NAME">
         <span>姓名</span>
         <input class="inputBox2" type="text"  placeholder="请输入您的姓名"
+              disabled
                v-model="data.USER_NAME">
       </section>
       <section v-if="DOMShow.USER_CARD_ID">
         <span>身份证号</span>
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
+               disabled
                v-model="data.USER_CARD_ID" @bulr="checkID">
       </section>
       <section v-if="DOMShow.USER_CARD_ID_DATA">
         <span>身份证有效期</span>
         <input class="inputBox2" type="text" placeholder=""
+               disabled
                v-model="data.USER_CARD_ID_DATA">
       </section>
       <section v-if="DOMShow.PHONE">
         <span>手机号码</span>
-        <input class="inputBox2" type="text" placeholder=""
+        <input class="inputBox2" type="tel" placeholder="请输入手机号"
                v-model="data.PHONE">
       </section>
       <section v-if="DOMShow.NATION">
@@ -154,7 +157,7 @@
 <script>
   import {PageName, BusName, HOST} from "@/Constant";
   import JsSelect from '../../components/commons/JsSelect'
-  import {Opening1Mixins} from '@/mixins'
+  import {Opening1Mixins,StoreMixin} from '@/mixins'
   export default {
     data() {
       return {
@@ -165,13 +168,15 @@
           USER_EDUCATION: '', // 学历
           CARD_FRONT_FILE: '',
           CARD_BACK_FILE: '',
-          USER_CARD_ID_DATA:'2018.10.22-2038.10.22', //身份证有效期
-          ADDRESS:'北京市东城区', // 地址
-          NATION:'汉', // 民族
-          PHONE:'15621189932',
+          USER_CARD_ID_DATA:'', //身份证有效期
+          ADDRESS:'', // 地址
+          NATION:'', // 民族
+          PHONE:'',
 
           memberId: null, // 晋商回显需要的
           phoneNum: null, // 晋商回显需要的
+          MEMBER_ID:null,
+          PHONE_NUM:null
         },
 
         showType: 0,
@@ -188,25 +193,7 @@
         preSrc2: require('@/assets/images/cameracopy@2x.png'),
         picZheng: require('@/assets/images/id-zheng.jpg'),
         picFan: require('@/assets/images/id-fan.jpg'),
-        job: [
-          {name: '国家机关、社会组织、企事业单位负责人', value: '0'},
-          {name: '科、教、工、贸等专业技术人员', value: '1'},
-          {name: '批发、零售业服务人员', value: '2'},
-          {name: '交通运输、仓储、邮政业服务人员', value: '3'},
-          {name: '信息传输、软件和信息技术服务人员', value: '4'},
-          {name: '水利、环境和公共设施管理服务人员', value: '5'},
-          {name: '电力、燃气及水供应服务人员', value: '6'},
-          {name: '文化、体育和娱乐服务人员', value: '7'},
-          {name: '旅游、餐饮、住宿服务人员', value: '8'},
-          {name: '金融服务人员', value: '9'},
-          {name: '房地产、物业、建筑、装修服务人员', value: '10'},
-          {name: '居民生活服务人员', value: '11'},
-          {name: '军人、警察、安全、消防人员', value: '12'},
-          {name: '农林牧渔业生产及辅助人员', value: '13'},
-          {name: '学生', value: '14'},
-          {name: '退休人员', value: '15'},
-          {name: '不便分类劳动者', value: '16'},
-        ],
+
         education: [
           {name: '研究生', value: '0'},
           {name: '大学本科', value: '20'},
@@ -229,7 +216,7 @@
     components: {
       JsSelect
     },
-    mixins: [Opening1Mixins],
+    mixins: [Opening1Mixins,StoreMixin],
     methods: {
       //获取学历
       getEduction(val) {

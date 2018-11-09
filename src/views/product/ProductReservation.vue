@@ -66,7 +66,7 @@
         <div class="bannercontent">
           <span class="bannercontenttitle">起购金额</span>
           <span
-              class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT | TXT_MIN_AMOUNT_Filter | formatNum}}元</span>
+            class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT | TXT_MIN_AMOUNT_Filter | formatNum}}元</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">递增金额</span>
@@ -118,7 +118,8 @@
       </div>
       <div class="contentbottom contenttop">
         <div>
-          <p style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
+          <p
+            style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
           <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT">
           </div>
@@ -167,6 +168,7 @@
   import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
+  import {StoreMixin} from "@/mixins";
   // let defaultManey = 3000
   // import {Index} from '../../common/utils/mixin'
 
@@ -201,15 +203,16 @@
         invest: "", // 计算传人
       };
     },
+    mixins: [StoreMixin],
     computed: {
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
       interest() {
         return this.getInterest(
-            this.invest,
-            this.productDetail.RATE,
-            this.productDetail.PERIOD
+          this.invest,
+          this.productDetail.RATE,
+          this.productDetail.PERIOD
         );
 
       }
@@ -318,10 +321,10 @@
 
             if (this.PRD_TYPE == 4) {
               interest =
-                  "￥" + util.formatNum("" + (this.numFilter(e))) + "~" + "￥" + util.formatNum("" + (this.numFilter1(e)));
+                "￥" + util.formatNum("" + (this.numFilter(e))) + "~" + "￥" + util.formatNum("" + (this.numFilter1(e)));
             } else {
               interest =
-                  "￥" + util.formatNum("" + (this.numFilter(e)));
+                "￥" + util.formatNum("" + (this.numFilter(e)));
             }
 
           } else {
@@ -343,12 +346,12 @@
         let data = {
           ID: id + ""
         };
-        API.JINSHANG.product.apiGetChannelPrdInfo(data, res => {
+        API.product.apiGetChannelPrdInfo(data, res => {
           this.productDetail = res;
           // 判断起购金额是否大于默认金额
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
-          util.storage.session.set(LsName.PRD_TYPE, this.productDetail.PRD_TYPE);
+          this.setComState({type:'PRD_TYPE',value:this.productDetail.PRD_TYPE})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;
           if (this.productDetail.PRD_TYPE == 2) {
             if (invest > '3000') {
@@ -375,10 +378,9 @@
         });
       },
       goNext(type) {
-        util.storage.session.remove(LsName.ProDuctData);
+        this.removeComState('ProDuctData')
         let target = this.$route.fullPath;
-        // todo 判断登录
-        //
+        // 判断登录
         let data = {
           // 跳转购买需要的参数
           PRD_NAME: this.productDetail.PRD_NAME,
@@ -400,9 +402,13 @@
             logo: this.productDetail.LOGO_URL,
             ...data
           };
-          util.storage.session.set(LsName.goBuy, goBuyData); // 跳转购买的参数
-          util.storage.session.set(LsName.loginType, "安全购买"); //
-          let HAS_GRADE = util.storage.session.get(LsName.HAS_GRADE) || 0;
+          this.setComState({type:'goBuy',value:goBuyData})
+          this.setComState({type:'loginType',value:'安全购买'})
+
+          // util.storage.session.set(LsName.goBuy, goBuyData);
+          // util.storage.session.set(LsName.loginType, "安全购买"); //
+
+          let HAS_GRADE = this.getComState.HAS_GRADE|| 0;
           if (HAS_GRADE == 1) {
             // 未评估
             Bus.$emit(BusName.showToast, "请先进行评估");
@@ -431,29 +437,27 @@
           let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
           if (TOKEN) {
             // 正常
-            API.JINSHANG.product.apiSaveSubscribeInfo(
-                data,
-                res => {
-                  this.$router.push({
-                    name: PageName.OrderNextSuccess,
-                    query: {
-                      PRD_NAME: this.productDetail.PRD_NAME
-                    }
-                  });
-                },
-                err => {
-                  console.log(err);
-                }
+            API.product.apiSaveSubscribeInfo(
+              data,
+              res => {
+                this.$router.push({
+                  name: PageName.OrderNextSuccess,
+                  query: {
+                    PRD_NAME: this.productDetail.PRD_NAME
+                  }
+                });
+              },
+              err => {
+                console.log(err);
+              }
             );
           } else {
             // 未登录
             Bus.$emit(BusName.showToast, "您还未登录，请先登录");
             // 预约或者参数
-            util.storage.session.set(
-                LsName.ProDuctData,
-                Object.assign(data, {PRD_NAME: this.productDetail.PRD_NAME})
-            );
-            util.storage.session.set(LsName.loginType, "预约下期");
+            this.setComState({type:'ProDuctData',value: Object.assign(data, {PRD_NAME: this.productDetail.PRD_NAME})})
+            this.setComState({type:'loginType',value:'预约下期'})
+            // util.storage.session.set(LsName.loginType, "预约下期");
             setTimeout(() => {
               this.$router.push({
                 name: PageName.Login,

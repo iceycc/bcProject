@@ -83,19 +83,24 @@
       }
     },
     created() {
-      util.storage.session.remove(LsName.ORG_ID)
       this.getBankList()
     },
     methods: {
       ...mapActions(['SET_BANK_INFO']),
       goPage(page, bank) {
-        util.storage.session.set(LsName.ORG_ID, bank.ORG_ID)
+        // util.storage.session.set(LsName.ORG_ID, bank.ORG_ID)
         // this.$store.dispatch('SET_BANK_INFO',...)
         this.SET_BANK_INFO({
             ...bank
         })
         if (page == 'Login') {
-          util.storage.session.set(LsName.loginType, PageName.BankAccount)
+          this.setComState(
+            {
+              type:'loginType',
+              value:PageName.BankAccount
+            }
+          )
+          // util.storage.session.set(LsName.loginType, PageName.BankAccount)
           this.$router.push({
             name: PageName.Login,
           })
@@ -112,7 +117,7 @@
       // get
       getBankList() {
         let data = {}
-        API.JINSHANG.account.apiBankList(data, (res) => {
+        API.account.apiBankList(data, (res) => {
           this.BankList = res.BANK_LIST
           this.ISLoginBankList = this.BankList.filter((item, index) => {
             return item.HAS_LOGIN == 1

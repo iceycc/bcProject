@@ -49,7 +49,7 @@ export const PageName = {
   /**
    * test
    */
-  testPage: 'TestPage',
+  TestPage: 'TestPage',
   /**
    * main
    */
@@ -122,9 +122,9 @@ export const LsName = {
   goBuy: 'goBuy', // goBuy
   ORG_ID: 'ORG_ID', // 机构id
   Infos: 'Infos', // 存储个人信息
-  RechargeQuery: 'RechargeQuery', // 充值页需要的参数
+  // RechargeQuery: 'RechargeQuery', // 充值页需要的参数
   PRD_TYPE: 'PRD_TYPE', // 产品类型
-  OriginPage: 'OriginPage', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
+  // OriginPage: 'OriginPage', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
 }
 
 /**

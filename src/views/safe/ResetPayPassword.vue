@@ -74,6 +74,7 @@
     import Bus from '@/plugin/bus'
     import {PageName, BusName, LsName} from "@/Constant";
     import util from "libs/util";
+    import {Mixin,StoreMixin} from "../../mixins";
 
     export default {
         name: "ResetPayPassword",
@@ -99,18 +100,15 @@
                 MESSAGE_TOKEN:''
             }
         },
+        mixins:[Mixin,StoreMixin],
         created() {
-            let beforeInfo;
-            if (beforeInfo = util.storage.session.get('rePayPasswordInfo')) {
+          this.getErrMsg((beforeInfo)=>{
                 this.IDCardNum = beforeInfo.USER_CARD_ID
                 this.errMsg = beforeInfo.msg
-                setTimeout(() => {
-                    this.errMsg = ''
-                }, 2000)
-                util.storage.session.remove('rePayPasswordInfo')
-            }
+          })
 
-            this.Infos = util.storage.session.get(LsName.Infos) || this.Infos
+            this.Infos =this.$store.getters.GET_COMMON_STATE.Infos || this.Infos
+            // this.Infos = util.storage.session.get(LsName.Infos) || this.Infos
             this.tel = this.Infos.PHONE_NUM
         },
         methods: {
@@ -143,7 +141,7 @@
             },
             submit() {
 
-                // API.JINSHANG.open.apiGetUserLastCompleteStep({
+                // API.open.apiGetUserLastCompleteStep({
                 //     ID_NUMBER:this.IDCardNum,
                 // })
                 let BANK_PAY_PW = $('#reset_payPass').$getCiphertext(),
@@ -160,16 +158,20 @@
                     MESSAGE_TOKEN:this.MESSAGE_TOKEN,
                     PHONE_NUM:this.tel
                 }
-                API.JINSHANG.safe.apiUserResetPayPass(data, true,res=>{
+                API.safe.apiUserResetPayPass(data, true,res=>{
                     Bus.$emit(BusName.showToast,'修改支付密码成功')
                     this.$router.push({
                         name:PageName.MoreService
                     })
                 },err=>{
-                    util.storage.session.set('rePayPasswordInfo', {
-                        USER_CARD_ID: this.IDCardNum,
-                        msg: err
+                    this.setErrMsg({
+                      USER_CARD_ID: this.IDCardNum,
+                      msg: err
                     })
+                    // util.storage.session.set('rePayPasswordInfo', {
+                    //     USER_CARD_ID: this.IDCardNum,
+                    //     msg: err
+                    // })
                     window.location.reload()
                 })
                 console.log(data);
@@ -190,9 +192,9 @@
                 }, 1000)
                 let data = {
                     PHONE_NUM: this.tel + '',
-                    BIZ_TYPE: '9', // todo 类型
+                    BIZ_TYPE: '9', // 类型
                 }
-                API.JINSHANG.open.getMsgCode(data, res => {
+                API.open.getMsgCode(data, res => {
                     Bus.$emit(BusName.showToast, '验证码发送成功')
 
                     this.MESSAGE_TOKEN = res.MESSAGE_TOKEN

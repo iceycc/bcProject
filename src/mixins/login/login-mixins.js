@@ -1,53 +1,59 @@
 import util from "libs/util";
-import {LsName, PageName,BusName} from "@/Constant";
+import {LsName, PageName, BusName} from "@/Constant";
 import API from "@/service";
 import Bus from '@/plugin/bus'
 
 let watchPassPluginPassTimer;// 晋商密码控件轮询计时器标志
 
+import store from '@/store'
+import {ORG_ID_NUM} from '@/Constant'
+
+let ORG_ID = store.getters.GET_ORG_ID
 
 /**
- * 用于不同银行登录
- * 包括密码控件的一些方法个例方法
+ * 开户公共方法，根据ORG_ID区分不同的业务逻辑
  */
-export default {
+let commons = {
   data() {
     return {
+      ORG_ID_NUM,
+      ORG_ID,
       rePass: true, //密码框
     }
   },
   created() {
-    clearInterval(watchPassPluginPassTimer)
+    console.log('commons');
   },
-  mounted() {
-    if (this.ORG_ID == '70') {
-      // 晋商银行密码控件需要轮询获取密码长度
-      this.watchPassPluginPass()
-      this.watchPassPlugin()
-    }
+  methods: {}
+}
+
+
+/**
+ * 晋商银行开户相关
+ */
+let JinShang = {
+  mixins: [commons],
+  data() {
+    return {}
+  },
+  created() {
+    console.log('JinShang');
   },
   beforeRouteLeave(to, from, next) {
     clearInterval(watchPassPluginPassTimer)
     next()
   },
+  mounted() {
+    console.log('mounted');
+    // 晋商银行密码控件需要轮询获取密码长度
+    this.watchPassPluginPass()
+    this.watchPassPlugin()
+  },
   methods: {
-    /**
-     * 控制登录走向 ORG_ID前后端约定。银行的唯一标示
-     */
-    loginFactory(ORG_ID) {
-      switch (ORG_ID) {
-        case '70': //
-          this.doLogin_JINSHANG();
-          break;
-
-        default:
-          // 银行id获取异常
-      }
-    },
     /**
      * 晋商银行相关
      */
-    doLogin_JINSHANG() {
+    loginFactory() {
       clearInterval(watchPassPluginPassTimer)
       if (util.Check.tel(this.tel, true)) return
       let pass = $('#login_loginPass').$getCiphertext()
@@ -57,20 +63,23 @@ export default {
         PHONE_NUM: this.tel,
         BANK_LOGIN_PW: pass
       }
-      let SOURCE_URL = util.storage.session.get(LsName.loginType)
+      // let SOURCE_URL = util.storage.session.get(LsName.loginType)
+      let SOURCE_URL = store.getters.GET_COMMON_STATE.loginType
       // util.storage.session.remove(LsName.token)
-      this.$store.commit('SET_TOKEN','')
-      API.JINSHANG.login(data, (res) => {
+      this.$store.commit('SET_TOKEN', null)
+
+      API.login(data, (res) => {
         API.watchApi({
           FUNCTION_ID: 'ptb0A007', // 点位
           REMARK_DATA: '异业合作-登录', // 中文备注
           SOURCE_URL: SOURCE_URL
         })
 
-        util.storage.session.set(LsName.reload, true)  // 每次在调用密码框时进行植入标签，下次碰到密码框页面时进行校验刷新
-        util.storage.session.remove('loginInfo')
+        this.setComState({type: "reload", value: true})// reload-001  // 每次在调用密码框时进行植入标签，下次碰到密码框页面时进行校验刷新
+        this.removeComState('loginInfo')
         let type = res.HAS_GRADE
-        util.storage.session.set(LsName.HAS_GRADE, type)
+        this.setComState({type: 'HAS_GRADE', value: type})
+        // util.storage.session.set(LsName.HAS_GRADE, type)
         if (type == 1) {
           Bus.$emit(BusName.showToast, '请先进行评估')
           this.$router.push({
@@ -91,10 +100,13 @@ export default {
           REMARK_DATA: '异业合作-登录', // 中文备注
         })
         // util.storage.session.remove(LsName.token)
-        this.$store.commit('SET_TOKEN','')
-        util.storage.session.set('loginInfo', {
-          PHONE_NUM: this.tel,
-          msg: err
+        this.$store.commit('SET_TOKEN', null)
+        this.setComState({
+          type: 'loginInfo',
+          value: {
+            PHONE_NUM: this.tel,
+            msg: err
+          }
         })
         setTimeout(() => {
           window.location.reload()
@@ -163,17 +175,47 @@ export default {
         return 1
       }
     },
-    /**
-     * 郑州银行
-     */
-    doLogin_ZHENGZHOU() {
-    // todo
-    },
-    /**
-     *
-     */
-
-
   }
 }
+/**
+ * 郑州银行相关
+ */
+let ZhengZhou = {
+  mixins: [commons],
+  data() {
+    return {}
+  },
+  created() {
+    console.log('ZhengZhou');
+    clearInterval(watchPassPluginPassTimer)
+  },
+  methods: {}
+}
+/**
+ * 众邦银行开户相关
+ */
+let ZhongBang = {
+  mixins: [commons],
+  data() {
+    return {}
+  },
+  created() {
+    console.log('ZhengZhou');
+  },
+  methods: {}
+}
 
+
+let MIX = {};
+switch (ORG_ID) {
+  case ORG_ID_NUM.JinShang:
+    MIX = JinShang;
+    break;
+  case ORG_ID_NUM.ZhengZhou:
+    MIX = ZhengZhou;
+    break;
+  case ORG_ID_NUM.ZhongBang:
+    MIX = ZhongBang;
+    break;
+}
+export default MIX

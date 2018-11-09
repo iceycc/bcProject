@@ -54,21 +54,22 @@
         <p class="card-no">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
       </div>
     </section>
-    <section class="financing-list">
+    <!--货币基金-->
+    <section class="financing-list" v-if="proList.hjAsset && proList.hjAsset.length>0">
       <section class="top" @click="tapList">
                     <span class="top-left">
-                        理财</span>
+                        货币基金</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
-                        ¥{{bankDetail.lcAsset.API_FINA_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
+                        ¥{{bankDetail.hjAsset.API_FUND_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
                     </span>
         <span class="top-right" v-if="!pass">
                     ****
                 </span>
       </section>
       <ul v-if="licaiShow" @click="goPage(toPageName.FinancialProducts)">
-        <li class="financing-li" v-for="item in proList">
-                  <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
-                    <span class="li-left">
+        <li class="financing-li" v-for="item in proList.hjAsset">
+          <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
+          <span class="li-left">
                         {{item.PRD_NAME}}</span>
           <span v-if="pass">
                         ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
@@ -80,6 +81,34 @@
         </li>
       </ul>
     </section>
+    <!--理财-->
+    <section class="financing-list" v-if="proList.retList && proList.retList.length>0">
+      <section class="top" @click="tapList">
+                    <span class="top-left">
+                        理财</span>
+        <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
+                        ¥{{bankDetail.lcAsset.API_FINA_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
+                    </span>
+        <span class="top-right" v-if="!pass">
+                    ****
+                </span>
+      </section>
+      <ul v-if="licaiShow" @click="goPage(toPageName.FinancialProducts)">
+        <li class="financing-li" v-for="item in proList.retList">
+          <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
+          <span class="li-left">
+                        {{item.PRD_NAME}}</span>
+          <span v-if="pass">
+                        ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
+                    </span>
+          <span v-if="!pass">
+                        ****
+                    </span>
+
+        </li>
+      </ul>
+    </section>
+    <!--更多服务-->
     <section class="more" @click="goPage(toPageName.MoreService)">
              <span class="more-left">
                         更多服务</span>
@@ -96,14 +125,16 @@
 
 <script>
   import IconFont from '@/components/commons/IconFont'
-  import API from "@/service";
   import {PageName, imgSrc} from "@/Constant";
+  import {BankDetailMixins, StoreMixin} from '@/mixins'
+
 
   export default {
     name: "bankDetail",
     components: {
       IconFont
     },
+    mixins: [StoreMixin, BankDetailMixins],
     data() {
       return {
         imgSrc,
@@ -146,11 +177,11 @@
     }
     ,
     methods: {
-      tapList(){
-        if(!this.proList || this.proList.length ==0){
+      tapList() {
+        if (!this.proList || this.proList.length == 0) {
           return
         }
-        this.licaiShow=!this.licaiShow
+        this.licaiShow = !this.licaiShow
       },
       goPage(pageName) {
         let query
@@ -169,27 +200,11 @@
         console.log('show');
       }
       ,
-      getBankDetail() {
-        API.JINSHANG.account.getMyInvest({}, (res) => {
-          this.bankDetail = res
-        })
-        API.JINSHANG.account.apiQueryAccRest({}, (res) => {
-        })
-      }
-      ,
+
       // getMyInvesthandle(){
-      //     API.JINSHANG.account.getMyInvest({})
+      //     API.account.getMyInvest({})
       // }
-      getProList() { // 获取产品列表
-        let data = {
-          currentPage: '1',
-          PRD_TYPE: '2'
-        }
-        API.JINSHANG.account.getMyInvestHold(data, (res) => {
-          this.proList = res.PAGE.retList
-        })
-      }
-      ,
+
       scroll() {
         let _this = this
         //--------------上拉加载更多---------------
@@ -249,6 +264,7 @@
     background: #fff;
     box-sizing: border-box;
   }
+
   .banner {
     height: px2rem(120);
     background: url("~@/assets/images/background@2x.png") no-repeat;
@@ -398,7 +414,7 @@
       height: px2rem(28);
       line-height: px2rem(28);
       color: #333;
-      .li-yuan{
+      .li-yuan {
         position: absolute;
         left: 0;
         font-size: px2rem(4);

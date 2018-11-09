@@ -25,9 +25,9 @@
           <p class="label" v-show="passShow">登录密码</p>
         </transition>
         <pass-input
-            :text="passText"
-            class="input"
-            inputID="login_loginPass"
+          :text="passText"
+          class="input"
+          inputID="login_loginPass"
         ></pass-input>
       </section>
       <button :disabled="rePass" :class="{forget:true,forget2:rePass}" @click="goRePass">忘记密码？</button>
@@ -51,7 +51,7 @@
   import {LsName, BusName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import PassInput from '@/components/password/PassInput'
-  import {Mixin, UtilMixin, LoginMixins} from '@/mixins'
+  import {Mixin, UtilMixin, LoginMixins,StoreMixin} from '@/mixins'
   import util from 'libs/util'
 
   export default {
@@ -74,11 +74,11 @@
         currentTel: '',
 
         ORG_ID: '70', //
-        BANK_NAME:'',
-        LOGO_URL:''
+        BANK_NAME: '',
+        LOGO_URL: ''
       }
     },
-    mixins: [Mixin, UtilMixin, LoginMixins],
+    mixins: [Mixin, UtilMixin, LoginMixins,StoreMixin],
     components: {
       PassInput
     },
@@ -86,11 +86,11 @@
     created() {
       this.ORG_ID = this.$store.getters.GET_BANK_INFO.ORG_ID
       this.BANK_NAME = this.$store.getters.GET_BANK_INFO.BANK_NAME
-      let preInfo;
-      if (preInfo = util.storage.session.get('loginInfo')) {
+      let preInfo = this.getComState.loginInfo;
+      if (preInfo) {
         this.tel = preInfo.PHONE_NUM
         Bus.$emit(BusName.showToast, preInfo.msg)
-        util.storage.session.remove('loginInfo')
+        this.removeComState('loginInfo')
       }
     },
     watch: {
@@ -125,7 +125,8 @@
       },
 
       goRePass() { // 去重制密码
-        util.storage.session.set(LsName.reload, true)
+        // this.setComState({type:"reload",value:true}) // reload-001
+        this.setComState({type: 'reload', value: true})
         this.$router.push({
           name: PageName.ResetPassword
         })
@@ -135,7 +136,8 @@
           FUNCTION_ID: 'ptb0A008', // 点位
           REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
         })
-        util.storage.session.set(LsName.reload, true)
+        this.setComState({type: 'reload', value: true})
+        // this.setComState({type:"reload",value:true}) // reload-001
         this.$router.push({name: PageName.Opening1})
       },
       focusHandle() {

@@ -1,22 +1,19 @@
 <template>
   <div>
     测试页面
-    <button @click="print">++</button>
+    <pass-word-zhengzhou></pass-word-zhengzhou>
   </div>
 </template>
-
 <script>
+  import PassWordZhengzhou from '../../components/password/PassInputZhengzhou'
   export default {
     name: "testPage",
     created(){
 
     },
-    methods:{
+    components:{
+      PassWordZhengzhou
+    },
 
-    }
   }
 </script>
-
-<style scoped>
-
-</style>

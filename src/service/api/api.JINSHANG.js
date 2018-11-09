@@ -20,7 +20,7 @@ export default  {
    * 注册相关 open
    */
   open: {
-    // 用户注册信息回显接口 ?? todo
+    // 用户注册信息回显接口
     doApiRegisterBackShow(params, token, success, error) {
       let options = {
         url: '/openapi/comm/apiRegisterBackShow',
@@ -142,7 +142,7 @@ export default  {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 协议页 todo 1
+    // 协议页
     // finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
     // 40.	获取充值协议码
     apiRechargeProtoCode(params, success, error) {

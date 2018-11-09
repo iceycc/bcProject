@@ -18,8 +18,8 @@
       <section>
         <span>新登录密码</span>
         <pass-input
-            style="display:inline-block;color: #dedede"
-            inputID="loginPass"
+          style="display:inline-block;color: #dedede"
+          inputID="loginPass"
         ></pass-input>
 
       </section>
@@ -27,8 +27,8 @@
         <span>确认登录密码</span>
 
         <pass-input
-            style="display:inline-block;color: #dedede"
-            inputID="reLoginPass"
+          style="display:inline-block;color: #dedede"
+          inputID="reLoginPass"
         ></pass-input>
       </section>
       <section>
@@ -48,7 +48,7 @@
   import {LsName, BusName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import PassInput from '@/components/password/PassInput'
-  import {Mixin} from '@/mixins'
+  import {Mixin,StoreMixin} from '@/mixins'
 
   let time = 60
   export default {
@@ -80,33 +80,24 @@
         }
       }
     },
-    mixins: [Mixin],
+    mixins: [Mixin,StoreMixin],
     components: {
       PassInput
     },
     created() {
-      if (util.storage.session.get(LsName.reload)) {
-        location.reload()
-        util.storage.session.remove(LsName.reload)
-      }
-      let beforeInfo;
-      if (beforeInfo = util.storage.session.get('rePasswordInfo')) {
+      this.getErrMsg((beforeInfo)=>{
         this.data = {
           USER_REAL_NAME: beforeInfo.USER_REAL_NAME, // 姓名
           USER_CARD_ID: beforeInfo.USER_CARD_ID, // idCard
           PHONE_NUM: beforeInfo.PHONE_NUM, //tel
         }
         this.errMsg = beforeInfo.msg
-        setTimeout(() => {
-          this.errMsg = ''
-        }, 2000)
-        util.storage.session.remove('rePasswordInfo')
-      }
+      })
     },
     methods: {
       getCode() {
         this.data.PHONE_NUM = this.tel
-        if (util.Check.tel(this.data.PHONE_NUM,true)) return;
+        if (util.Check.tel(this.data.PHONE_NUM, true)) return;
         let sTime = time
         this.disable = true
         let timer = setInterval(() => {
@@ -124,7 +115,7 @@
           PHONE_NUM: this.data.PHONE_NUM + '',
           BIZ_TYPE: '9'
         }
-        API.JINSHANG.open.getMsgCode(data, res => {
+        API.open.getMsgCode(data, res => {
           this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
         })
       },
@@ -180,22 +171,28 @@
           ...this.data
         }
         let delMsg = true;
-        API.JINSHANG.safe.apiUserResetLoginPass(data, delMsg, res => {
+        API.safe.apiUserResetLoginPass(data, delMsg, res => {
           Bus.$emit(BusName.showToast, '修改密码成功')
           // util.storage.session.remove(LsName.token)
-          this.$store.commit('SET_TOKEN','')
-          util.storage.session.set(LsName.reload, true)
-          util.storage.session.remove('rePasswordInfo')
+          this.$store.commit('SET_TOKEN', '')
+          this.setComState({type:"reload",value:true}) // reload-001
+
+
+          this.setErrMsg(null)
           this.$router.replace({
             name: PageName.Login
           })
         }, err => {
-          util.storage.session.set('rePasswordInfo', {
+
+          this.setErrMsg({
             USER_REAL_NAME: this.data.USER_REAL_NAME, // 姓名
             USER_CARD_ID: this.data.USER_CARD_ID, // idCard
             PHONE_NUM: this.data.PHONE_NUM, //tel
             msg: err
           })
+          // util.storage.session.set('rePasswordInfo', {
+          //
+          // })
           window.location.reload()
         })
       },

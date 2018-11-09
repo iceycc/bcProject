@@ -17,8 +17,6 @@
 <script>
   import Bus from './plugin/bus'
   import {BusName} from './Constant'
-
-
   export default {
     provide() {
       return {

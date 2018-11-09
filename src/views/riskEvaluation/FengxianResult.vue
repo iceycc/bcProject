@@ -20,7 +20,7 @@
 </template>
 <script>
     import {PageName} from "@/Constant";
-    import {UtilMixin} from '@/mixins'
+    import {UtilMixin,StoreMixin} from '@/mixins'
 
     export default {
         data() {
@@ -31,7 +31,7 @@
                 target: ''
             }
         },
-        mixins: [UtilMixin],
+        mixins: [UtilMixin,StoreMixin],
         created() {
             let data = this.$route.query
             this.RISK_TOLERANCE_DESC = data.RISK_TOLERANCE_DESC // 描述
@@ -45,7 +45,7 @@
                 })
             },
             goNext() {
-                // todo 跳转到购买
+                // 跳转到购买
                 try {
                     this.toPreProduct()
                 } catch (e) {

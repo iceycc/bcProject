@@ -16,8 +16,10 @@
     import API from "@/service"
     import Bus from '@/plugin/bus'
     import {BusName} from "@/Constant";
+    import {StoreMixin} from "@/mixins";
 
     export default {
+      mixins:[StoreMixin],
         data(){
             return{
                 PRD_NAME:'比财'

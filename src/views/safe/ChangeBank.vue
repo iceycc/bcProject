@@ -60,7 +60,7 @@
     import Bus from '@/plugin/bus'
     import util from "libs/util";
     import PassInput from '@/components/password/PassInput'
-    import {Mixin} from '@/mixins'
+    import {Mixin,StoreMixin} from '@/mixins'
 
     export default {
         name: "changeBank",
@@ -84,19 +84,16 @@
 
             }
         },
-        mixins: [Mixin],
+        mixins: [Mixin,StoreMixin],
         created() {
-            let beforeInfo;
-            if (beforeInfo = util.storage.session.get('ChangeBankInfo')) {
-                this.errMsg = beforeInfo.msg
-                setTimeout(() => {
-                    this.errMsg = ''
-                }, 2000)
-                util.storage.session.remove('ChangeBankInfo')
-            }
+          this.getErrMsg((beforeInfo)=>{
+            this.errMsg = beforeInfo.msg
+          })
 
             this.getBankList()
-            this.params = util.storage.session.get(LsName.Infos)
+
+            // this.params = util.storage.session.get(LsName.Infos)
+            this.params = this.$store.getters.GET_COMMON_STATE.Infos
         },
         watch: {
             bankNo(n, o) {
@@ -148,7 +145,7 @@
                 return this.AllBankListObj[pin]
             },
             getBankList() {
-                API.JINSHANG.list.apiGetBankCardList({}, res => {
+                API.list.apiGetBankCardList({}, res => {
                     let obj = {}
                     res.BAND_CARD_LIST.forEach(item => {
                         obj[item.BANK_CARD_BIN] = item.BANK_NAME
@@ -188,7 +185,7 @@
                 }
                 let delMsg = true
 
-                API.JINSHANG.safe.apiChangeBingCard(data, delMsg, res => {
+                API.safe.apiChangeBingCard(data, delMsg, res => {
                     Bus.$emit(BusName.showToast,'更换银行卡成功')
                     this.$router.push({
                         name:PageName.MoreService
@@ -197,9 +194,12 @@
                     console.log('err>>>>>>>>1111', err);
                     this.errMsg = err
                     this.ifShow = false
-                    util.storage.session.set('ChangeBankInfo', {
-                        msg: err
+                    this.setErrMsg({
+                      msg:err
                     })
+                    // util.storage.session.set('ChangeBankInfo', {
+                    //     msg: err
+                    // })
                     setTimeout(() => {
                         window.location.reload()
                     }, 500)

@@ -24,7 +24,7 @@
 
     <div class="opening_box">
       <section class="bank">
-        <span style="padding-right: 5px">选择银行</span>
+        <span style="padding-right: 0px">选择银行</span>
         <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
         <!-- <span  class="limit">银行限额</span>  -->
         <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
@@ -33,18 +33,25 @@
       </section>
       <section class="input-box">
         <p> 绑定卡卡号</p>
-        <input type="number" @change="checkBankNo(data.CARD_NO)" @input="checkBankName(data.CARD_NO)"
+        <input type="number"
+               @blur="checkBankNo(data.CARD_NO)"
+               @input="checkBankName(data.CARD_NO)"
                name="backname" placeholder="绑定卡卡号" v-model="data.CARD_NO">
       </section>
+
       <section class="input-box">
         <p>手机号码</p>
-        <input type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
+        <input
+            :disabled="telDisabled"
+            type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
       </section>
       <section class="input-box">
         <p>验证码</p>
         <section style="display: flex">
-          <input type="text" placeholder="验证码" v-model="data.PHONE_CODE">
-          <button class="msg-code" @click="getMsgCodeHandle" :disabled="disable">{{codeText}}</button>
+          <input
+              style="padding-right: 10px"
+              type="text" placeholder="验证码" v-model="data.PHONE_CODE">
+          <button class="msg-code" @click="clickMsgCodeHandle" :disabled="disable">{{codeText}}</button>
         </section>
       </section>
     </div>
@@ -54,22 +61,44 @@
     </div>
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <button class="tijiao" @click="goNext">下一步</button>
+
+    <div v-if="ZhengZhouPass" class="bgbox">
+      <!--晋商-->
+      <div class="passbox">
+        <div class="top">
+          <div class="field_row_wrap">
+            <p class="field_row_key">
+              请输入郑州银行（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
+            </p>
+            <div class="field_row_value">
+              <pass-word-zhengzhou
+                  BankCardPass="bank-pass"
+              ></pass-word-zhengzhou>
+            </div>
+            <p class="info">密码为6位数字</p>
+          </div>
+
+        </div>
+        <div class="btn">
+          <button @click="cancel">取消</button>
+          <button @click="subumit">提交</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-  import API from "@/service";
   import {PageName, BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import BankSelect from '../../components/commons/BankSelect'
-  import {imgSrc} from "@/Constant";
-  import {Opening2Mixins} from '@/mixins'
+  import {Opening2Mixins,StoreMixin} from '@/mixins'
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
 
   export default {
     data() {
       return {
         data: {
-          ORG_ID: '70',
-          CARD_NO: '', // 银行卡号 6214830182284272  6217730711297810
+          CARD_NO: '6258091683948389', // 银行卡号 6214830182284272  6217730711297810
           HAS_BAND: '0', // 是否绑定过
           PHONE_NUM: '', // 15711310733   15011352818
           PRE_PHONE_NUM: '', // 预留 这个是页面取的
@@ -93,10 +122,10 @@
         checkBankName1: false
       }
     },
-    mixins:[Opening2Mixins],
+    mixins: [Opening2Mixins,StoreMixin],
     components: {
-
-      BankSelect
+      BankSelect,
+      PassWordZhengzhou
     },
     watch: {
       tel(n, o) {
@@ -106,7 +135,6 @@
         }
       },
       bankText(n, o) {
-
         this.checkBankName(this.data.CARD_NO)
       }
     },
@@ -120,7 +148,7 @@
     created() {
       this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
       this.data.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM
-      this.tel = this.$route.query.PHONE_NUM || ''
+      // this.tel = this.$route.query.PHONE_NUM || ''
       this.getBankList()
     },
     methods: {
@@ -141,6 +169,8 @@
         }
       },
       checkBankNo(val) {
+        console.log(1);
+        this.checkBankType && this.checkBankType()
         val = val.toString()
         let reg = /\d{15}|\d{19}/
         console.log(!reg.test(val));
@@ -163,32 +193,11 @@
         console.log(val);
         this.bankText = val.name
       },
-      /**
-       * 获取支持的银行列表
-       */
-      getBankList() {
-        API.JINSHANG.list.apiGetBankCardList({}, res => {
-          let obj = {}
-          res.BAND_CARD_LIST.forEach(item => {
-            obj[item.BANK_CARD_BIN] = item.BANK_NAME
-          })
-          // console.log('bankObj>>>',obj);
-          this.AllBankListObj = obj
-          this.bankList = res.SUPPORT_BANK_LIST.map((item) => {
-            return {
-              name: item.BANK_NAME,
-              value: 0,
-              src: imgSrc + item.BANK_LOGO_URL,
-              Index: item.INITIAL
-            }
-          })
-        })
-      },
-      // 下一步
-      goNext(){
-        this.doOpening()
-      }
 
+      // 下一步
+      goNext() {
+        this.doOpengingSecond()
+      }
     }
 
   }
@@ -198,6 +207,7 @@
   @import "~@/assets/px2rem";
 
   .warp {
+    height: 100%;
     width: 100%;
     position: relative;
   }
@@ -210,23 +220,28 @@
       background-size: 0.7rem 0.7rem;
       border-bottom: 1px #E5E5E5 solid;
       display: flex;
+      font-size: px2rem(14);
     }
     .input-box {
       margin-left: 0.6rem;
       width: 90%;
       background-size: 0.7rem 0.7rem;
       border-bottom: 1px #E5E5E5 solid;
+      display: flex;
       p {
-        font-size: px2rem(12);
+        width: px2rem(100);
+        font-size: px2rem(14);
         font-family: PingFangSC-Regular;
-        color: #858E9F;
-        padding-bottom: 0;
-        padding-top: px2rem(15);
+        color: #444;
+        padding: px2rem(15) 0;
       }
       input {
+        text-align: right;
         font-size: px2rem(20);
         color: #333
-
+      }
+      button {
+        margin-top: px2rem(12);
       }
     }
   }
@@ -248,7 +263,7 @@
 
   .bank-box {
     display: inline-block;
-    width: px2rem(160);
+    width: px2rem(150);
     vertical-align: middle;
   }
 
@@ -347,5 +362,65 @@
     }
   }
 
-
+  .bgbox {
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, .7);
+    position: absolute;
+    padding-top: px2rem(100);
+    top: 0;
+    left: 0;
+    .passbox {
+      background: #fff;
+      width: 80%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .top {
+      padding: 0.4rem;
+    }
+    .field_row_key {
+      font-size: 0.4rem;
+    }
+    .title {
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-size: 0.4rem;
+      color: #666;
+      height: .6rem;
+      line-height: .6rem;
+      img {
+        vertical-align: top;
+        width: .5rem;
+      }
+    }
+    .field_row_wrap {
+      margin-bottom: 0.2rem;
+    }
+    .field_row_value {
+      border-radius: px2rem(4);
+      border: 1px solid #DDD;
+      height: px2rem(34);
+      line-height: px2rem(34);
+      padding-left: px2rem(3);
+      margin: 0.2rem 0;
+    }
+    .info {
+      font-size: 0.3rem;
+      line-height: 0.6rem;
+      color: #aeaeae;
+    }
+    .btn {
+      border-top: 1px solid #efefef;
+      padding: px2rem(14) 0;
+      display: flex;
+      button {
+        color: #108EE9;
+        font-size: px2rem(17);
+        margin: 0 .3rem;
+        text-align: center;
+        flex: 1;
+      }
+    }
+  }
 </style>

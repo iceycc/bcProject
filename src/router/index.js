@@ -15,7 +15,7 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // todo 外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
+  // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
   let {DEVICE_ID, CHANNEL_ID} = store.getters.GET_ACCOUNT_STATE
   if (!DEVICE_ID) {
     let DEVICE_ID = to.query.DEVICE_ID

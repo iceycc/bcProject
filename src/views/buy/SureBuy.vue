@@ -37,7 +37,7 @@
           </p>
           <div class="field_row_value">
             <pass-input
-                inputID="payPass"
+              inputID="payPass"
             ></pass-input>
           </div>
           <p class="info">密码由数字组成，必须为6位</p>
@@ -52,12 +52,11 @@
 </template>
 <script>
   import API from "@/service";
-
   import {PageName, BusName, LsName, imgSrc} from "@/Constant";
   import PassInput from '@/components/password/PassInput'
   import Bus from '@/plugin/bus'
   import util from "libs/util";
-  import {Mixin} from '@/mixins'
+  import {Mixin, StoreMixin} from '@/mixins'
 
   export default {
     data() {
@@ -72,8 +71,7 @@
         banck: '',
       }
     },
-    mixins: [Mixin],
-
+    mixins: [Mixin, StoreMixin],
     components: {
       PassInput
     },
@@ -107,9 +105,9 @@
           APPLY_AMOUNT: this.datas.money + '',
           BANK_PAY_PW: this.pass + ''
         }
-        if (util.Check.payPassLen(this.len,true)) return;
+        if (util.Check.payPassLen(this.len, true)) return;
         this.show = false
-        API.JINSHANG.buy.apiBuy(data, (res) => {
+        API.buy.apiBuy(data, (res) => {
           let data = {
             BIZ_TYPE: '6',
             BESHARP_SEQ: res.BESHARP_BUY_SEQ
@@ -121,9 +119,9 @@
           let timer = setInterval(() => {
             i++
 
-            API.JINSHANG.query.apiQueryBizStatus(data, result => {
+            API.query.apiQueryBizStatus(data, result => {
               console.log(result.RES_CODE);
-              util.storage.session.set(LsName.reload, true)
+              this.setComState({type:"reload",value:true}) // reload-001
               if ('1' == result.RES_CODE && i == 5) {
                 this.Londing.close()
                 clearInterval(timer)
@@ -166,7 +164,7 @@
           }, 2000)
         }, err => {
           this.Londing.close()
-          util.storage.session.set(LsName.reload, true)
+          this.setComState({type:"reload",value:true}) // reload-001
           this.$router.push({
             name: PageName.BuyFailed,
             query: {
