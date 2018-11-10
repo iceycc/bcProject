@@ -5,9 +5,9 @@ import {version} from '../package'
  *
  */
 let Configs = {
-  DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
+  // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
   // DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit/', // 郑州开发环境
-  // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
+  DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
   // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
   PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
   // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,// 生产

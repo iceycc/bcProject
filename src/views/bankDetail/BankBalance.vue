@@ -28,7 +28,7 @@
   import API from "@/service";
   import {LsName, PageName} from "@/Constant";
   import util from "libs/util";
-  import {BankBalanceMixins} from "@/mixins";
+  import {BankBalanceMixins,StoreMixin} from "@/mixins";
 
   export default {
     name: "bankBalance",
@@ -40,7 +40,7 @@
         ACC_REST: '0.00',
       }
     },
-    mixins: [BankBalanceMixins],
+    mixins: [BankBalanceMixins,StoreMixin],
     filters: {
       preLcAssetFilter(val) {
         if (!val) return ''
