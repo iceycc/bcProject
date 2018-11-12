@@ -3,11 +3,11 @@
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {BusName, LsName, PageName} from '../Constant'
+import {BusName, LsName, PageName} from '@/Constant'
 import util from "libs/util";
-import Bus from '../plugin/bus/index'
+import Bus from '@/plugin/bus/index'
 import routes from "./routes"
-import store from "../store";
+import store from "@/store";
 Vue.use(VueRouter)
 
 let router = new VueRouter({

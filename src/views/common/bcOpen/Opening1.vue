@@ -1,0 +1,618 @@
+<template>
+  <div class="warp">
+    <app-bar title="信息填写"></app-bar>
+    <section class="wrapicon">
+      <section class="circle">
+                <span class="line1">
+                    <img :src='stepImg' alt="">
+                </span>
+        <span class="step-text" style="color:#92d048">开户信息验证</span>
+      </section>
+      <section class="circle">
+                 <span class="line2 hui">
+                    <img :src='stepImg2' alt="">
+                </span>
+        <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
+      </section>
+
+      <section class="circle">
+                 <span class="line3 hui">
+                    <img :src='stepImg3' alt="">
+                </span>
+        <span class="step-text" style="color:#D3D3D3">设置密码</span>
+      </section>
+    </section>
+    <div class="opening_box">
+      <p class="infos" style="margin: 10px 0;">请拍摄并上传身份证</p>
+      <section class="photo" style="border-bottom: none">
+        <div class="cameraphoto">
+          <div class="cameraphotoimg">
+            <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
+            <input type="file" capture="camera" accept="image/*" class="inputBox"
+                   @change="imgToBaseZheng($event)">
+          </div>
+          <div class="words">身份证人像页照</div>
+        </div>
+        <div class="cameraphoto">
+          <div class="cameraphotoimg">
+            <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
+            <input type="file" capture="camera" accept="image/*" class="inputBox"
+                   @change="imgToBaseFan($event)">
+          </div>
+          <div class="words">身份证国徽页照</div>
+        </div>
+      </section>
+      <p class="infos" style="padding-top: 20px">请确认您的个人信息，若有误请点击修改</p>
+      <section v-if="DOMShow.USER_NAME">
+        <span>姓名</span>
+        <input class="inputBox2" type="text"  placeholder="请输入您的姓名"
+              disabled
+               v-model="data.USER_NAME">
+      </section>
+      <section v-if="DOMShow.USER_CARD_ID">
+        <span>身份证号</span>
+        <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
+               disabled
+               v-model="data.USER_CARD_ID" @bulr="checkID">
+      </section>
+      <section v-if="DOMShow.USER_CARD_ID_DATA">
+        <span>身份证有效期</span>
+        <input class="inputBox2" type="text" placeholder=""
+               disabled
+               v-model="data.USER_CARD_ID_DATA">
+      </section>
+      <div class="foot-img">
+        <p class="title">拍摄要求：</p>
+        <ul>
+          <li>
+            <img src="" alt="">
+            <p>
+              <icon-font iconClass="icon-finish" iconStyle="finish"></icon-font>
+              标准</p>
+          </li>
+          <li>
+            <img src="" alt="">
+            <p>
+              <icon-font iconClass="icon-cuohao" iconStyle="cuohao"></icon-font>
+              边角缺失</p>
+          </li>
+          <li>
+            <img src="" alt="">
+            <p>
+              <icon-font iconClass="icon-cuohao" iconStyle="cuohao"></icon-font>
+              信息模糊</p>
+          </li>
+          <li>
+            <img src="" alt="">
+            <p>
+              <icon-font iconClass="icon-cuohao" iconStyle="cuohao"></icon-font>
+              闪光强烈</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="IDphoto">
+      <div class="IDphotoPositive"></div>
+      <div class="IDphotoback"></div>
+    </div>
+    <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
+    <button class="tijiao" @click="doOpeningFirstFactory">下一步</button>
+  </div>
+</template>
+<script>
+  import {PageName, BusName, HOST} from "@/Constant";
+  import JsSelect from '@/components/commons/JsSelect'
+  import API from "@/service";
+  import Bus from "@/plugin/bus"
+  import util from "libs/util";
+  import IconFont from '@/components/commons/IconFont'
+
+
+  export default {
+    data() {
+      return {
+        data: {// 姓名 身份证 职业 学历 身份证正反面
+          USER_NAME: '',
+          USER_CARD_ID: '',// 身份证号码  612601198509174013
+          CARD_FRONT_FILE: '',
+          CARD_BACK_FILE: '',
+          USER_CARD_ID_DATA:'', //身份证有效期
+          PHONE:'',
+
+          memberId: null, // 晋商回显需要的
+          phoneNum: null, // 晋商回显需要的
+          MEMBER_ID:null,
+          PHONE_NUM:null
+        },
+
+        showType: 0,
+        imgStyle1: 'width:30%;vertical-align: middle',
+        imgStyle2: 'width:30%;vertical-align: middle;',
+        stepImg: require('@/assets/images/account_icon_green2@2x.png'),
+        stepImg2: require('@/assets/images/step2@2x.png'),
+        stepImg3: require('@/assets/images/step3.png'),
+        test1: '',
+        test2: '',
+
+        preSrc1: require('@/assets/images/cameracopy@2x.png'),
+        preSrc2: require('@/assets/images/cameracopy@2x.png'),
+        picZheng: require('@/assets/images/id-zheng.jpg'),
+        picFan: require('@/assets/images/id-fan.jpg'),
+
+        errMsg: '',
+        // 配置不同标签的展示
+        DOMShow: {
+          USER_NAME: true,
+          USER_CARD_ID: true,// 身份证号码
+          USER_DUTY: true, // 职业
+          USER_EDUCATION: false, //学历
+          ADDRESS: false, // 地址
+          NATION: false, // 民族
+          PHONE: true, // 手机号
+          USER_CARD_ID_DATA: true, //身份证有效期
+        },
+      }
+    },
+    components: {
+      JsSelect,
+      IconFont
+    },
+    methods: {
+      doOpeningFirstFactory() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A003', // 点位
+          REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
+        })
+        this.$store.commit('SET_OPENING1_DATA',this.data)
+        this.ORG_ID = this.$store.getters.GET_ORG_ID
+        this.doOpengingFirst()
+
+      },
+      imgToBaseFan(e) {
+        let newsrc = this.getObjectURL(e.target.files[0]);
+        console.log(e.target);
+        this.imgStyle2 = 'width:100%;max-height:100%'
+        util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
+          this.preSrc2 = data
+          this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+          this.idCardFanOcr(data)
+        })
+      },
+      imgToBaseZheng(e) {
+        let newsrc = this.getObjectURL(e.target.files[0]);
+        console.log(e.target);
+        this.imgStyle1 = 'width:100%;max-height:100%'
+        util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
+          this.preSrc1 = data
+          this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+          this.idCardZhengOcr(data)
+        })
+      },
+      //建立一個可存取到該file的url
+      getObjectURL(file) {
+        let url = null;
+        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+        if (window.createObjectURL != undefined) { // basic
+          url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+          url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+          url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+      },
+
+
+      /**
+       * 身份证 ocr
+       */
+      idCardZhengOcr() {
+        let params = {
+          idcardFrontPhoto: this.data.CARD_FRONT_FILE
+        }
+        API.bicai.postFrontIDCard(params, (res) => {
+          this.data.USER_NAME = res.NAME
+          this.data.USER_CARD_ID = res.NUM
+          this.data.ADDRESS = res.ADDRESS
+          this.data.MEMBER_ID = res.MEMBER_ID
+
+          this.data.PHONE_NUM = res.PHONE_NUM
+          this.checkID()
+          // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
+        })
+      },
+      idCardFanOcr() {
+        let params = {
+          idcardBackPhoto: this.data.CARD_BACK_FILE
+        }
+        API.bicai.postBackIDCard(params, (res) => {
+          this.data.USER_CARD_ID_DATA = res.PERIOD
+          this.data.MEMBER_ID = res.MEMBER_ID
+          this.data.PHONE_NUM = res.PHONE_NUM
+          // this.data.CREDENTIAL_BURL = res.SUN_ECM_CONTENT_ID
+        })
+      },
+      /**
+       *注册
+       */
+      // 1 实名认证
+      doOpengingFirst() {
+        // todo 校验
+
+        let params = {
+          // IDFA:'aaa',
+          // APP_MARKET_CODE:'111',
+
+          ORG_ID: '49',
+          MEMBER_ID: this.data.MEMBER_ID,
+          TYPE: 'API_REGISTER_VALI_USER',
+          PHONE_NUM: this.data.PHONE + '',
+          // PHONE_NUM: this.data.PHONE + '',
+          PASSWORD: 'aaa111111',
+          USER_NAME: this.data.USER_NAME + '',
+          USER_CARD_ID: this.data.USER_CARD_ID + '',
+          CARD_FRONT_FILE: this.data.CARD_FRONT_FILE,
+          CARD_BACK_FILE: this.data.CARD_BACK_FILE,
+          USER_DUTY: this.data.USER_DUTY + '',
+          CREDENTIAL_POV: this.data.USER_CARD_ID_DATA + ''
+        }
+        console.log(params);
+        API.open.apiRegisterValiUser(params, (res) => {
+          //
+          let FirstData = {
+            BESHARP_REGISTER_VALI_USER_SEQ:this.res.BESHARP_REGISTER_VALI_USER_SEQ,
+            CREDENTIAL_AURL:this.CREDENTIAL_AURL,
+            CREDENTIAL_BURL:this.CREDENTIAL_BURL
+          }
+          this.$store.commit('SET_OPENING1_DATA',FirstData)
+        })
+      },
+      /**
+       * 身份证验证接口
+       */
+      checkID() {
+        let data = {
+          idName:'',
+          idNumber:'',
+          updateFlag:'',
+          frontSessionId:''
+        }
+        API.bicai.checkIDCard(data,res=>{
+
+        })
+      },
+      /**
+       * 用户认证状态回显数据
+       */
+      getUserMemberInfo(){
+        let data = {
+
+        }
+        API.bicai.getUserMemberInfo(data)
+      }
+    }
+
+  }
+</script>
+
+<style lang="scss" scoped>
+  @import "~@/assets/px2rem";
+
+  body {
+    font-size: .3rem;
+  }
+  .infos{
+    padding-left: px2rem(20);
+    font-size:px2rem(14)
+  }
+  .wrapicon {
+    margin:  px2rem(4) auto px2rem(10);
+    text-align: center;
+    display: flex;
+    position: relative;
+    width: px2rem(235);
+    .step-text {
+      padding-top: px2rem(7);
+    }
+    .circle {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .line1, .line2, .line3 {
+      position: relative;
+      img {
+        width: px2rem(23);
+      }
+      &:after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-100%);
+        content: '';
+        width: 39%;
+        background: #92d048;
+        height: .1rem;
+        overflow: hidden;
+
+      }
+    }
+    .hui {
+      &:after, &.line2:before {
+        background: #dee1e3 !important;
+      }
+
+    }
+
+    .line2 {
+      &:after {
+        left: 0;
+        right: auto;
+      }
+      &:before {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-100%);
+        content: '';
+        width: 45%;
+        background: #92d048;
+        height: .1rem;
+        overflow: hidden;
+      }
+    }
+    .line3 {
+      &:after {
+        left: 0;
+        right: auto;
+      }
+    }
+
+  }
+  .foot-img{
+    .finish{
+      font-size: px2rem(12);
+      color:#9DCE81 ;
+    }
+    .cuohao{
+      font-size: px2rem(12);
+      color: #FF2A00;
+    }
+    img{
+      width: px2rem(70);
+      height: px2rem(44);
+      display: inline-block;
+      background: #ccc;
+    }
+    .title{
+      padding-left: px2rem(20);
+      margin: px2rem(16) 0;
+      color:#666;
+      font-size:px2rem(14);
+    }
+    ul{
+      text-align: center;
+      font-size: 0;
+      margin: 0 auto;
+      width: 90%;
+      p{
+        margin: px2rem(5) 0;
+        color:#666;
+        font-size:px2rem(12);
+      }
+      li{
+        display: inline-block;
+        width: 25%;
+      }
+    }
+  }
+  .warp {
+    width: 100%;
+    position: relative;
+  }
+
+  .opening_box {
+    .photo {
+      margin-left: 0.6rem;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      line-height: 1rem;
+      width: 90%;
+      background-size: 0.7rem 0.7rem;
+      background-position: .2rem .2rem;
+      display: flex;
+      .words {
+        padding-left: px2rem(20);
+        font-size: px2rem(12);
+        color: #A3DBFF;
+      }
+    }
+    section {
+      display: flex;
+      margin-left: 0.6rem;
+      line-height: 1rem;
+      width: 90%;
+      border-bottom: 1px #E5E5E5 solid;
+    }
+    input, select {
+      border: none;
+      box-sizing: border-box;
+      font-size: 14px; /*px*/
+      color: #333;
+      outline: none;
+      background: #fff;
+      height: 1rem;
+    }
+    span {
+      font-family: PingFangSC-Regular;
+      color: #444444;
+      font-size: .4rem;
+      display: inline-block;
+      width: px2rem(130);
+    }
+    .limit {
+      color: #0096FE;
+      font-family: PingFangSC-Regular;
+    }
+    .getpassword {
+      display: inline-block;
+      text-align: center;
+      line-height: 1.5rem;
+      font-size: 0.2rem;
+      width: 2rem;
+      height: 1rem;
+      border: 1px solid #2B74FE;
+      color: #2B74FE;
+      /* border-radius:6px; */
+    }
+  }
+
+
+  .cameraphoto {
+    flex: 1;
+    padding-left: 6%;
+  }
+
+  .cameraphotoimg {
+    position: relative;
+    text-align: center;
+    margin-bottom: 10px;
+    width: px2rem(126);
+    height: px2rem(80);
+    border: 1px dotted #eaeaea;
+    &:after {
+      display: inline-block;
+      content: '';
+      height: 100%;
+      width: 1px;
+      vertical-align: middle;
+    }
+  }
+
+  .tijiao {
+    display: block;
+    font-size: px2rem(16);
+    color: #fff;
+    background-color: #508CEE;
+    border-radius: px2rem(4);
+    line-height: 1rem;
+    width: px2rem(255);
+    height: px2rem(44);
+    margin: px2rem(75) auto px2rem(20);
+    text-align: center;
+    border: none;
+    outline: none;
+  }
+
+  .Tips {
+    margin-top: 0.8rem;
+    background-color: #FF5B05;
+    width: 60%;
+  }
+
+  .bang {
+    margin-left: 0.5rem;
+    background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
+    background-size: 0.4rem 0.4rem;
+    font-size: 0.35rem;
+    color: #808080;
+    padding: 0 0.5rem;
+
+  }
+
+  .no {
+    background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
+    background-size: 0.4rem 0.4rem;
+  }
+
+  .inputBox2 {
+    padding-left: px2rem(12);
+    text-align: right;
+  }
+
+  .inputBox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    width: 100%;
+    height: px2rem(80) !important;
+    opacity: 0;
+    vertical-align: middle;
+  }
+
+  .selectStyle {
+    width: px2rem(220);
+    font-size: .4rem;
+  }
+
+  .page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 100;
+    .docs {
+      box-sizing: border-box;
+      border: none;
+      width: 100%;
+      height: 90%;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 .2rem;
+    }
+    .docsself {
+      box-sizing: border-box;
+      border: none;
+      width: 100%;
+      height: 90%;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 .3rem;
+      /*style="padding: 20px 20px 0;font-size: 12px" */
+      h2,
+      h5 {
+        font-size: px2rem(11) !important;
+        color: #000 !important;
+      }
+      p {
+        font-size: px2rem(9) !important;
+        color: #000 !important;
+        line-height: px2rem(15);
+      }
+
+    }
+    .indocs {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .btn {
+      padding: 0 1rem;
+      text-align: center;
+      button {
+        width: 3.5rem;
+        margin-right: .4rem;
+      }
+    }
+  }
+
+  .msg-err {
+    font-size: px2rem(12);
+    color: #fff;
+    background-color: #FF5B05;
+    border-radius: px2rem(5);
+    width: px2rem(204);
+    height: px2rem(29);
+    line-height: px2rem(29);
+    margin: px2rem(20) auto 0;
+    text-align: center;
+  }
+
+</style>

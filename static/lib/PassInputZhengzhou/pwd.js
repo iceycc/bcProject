@@ -1,4 +1,4 @@
-(function(t, e) {
+;(function(t, e) {
     "use strict";
     var host = 'http://192.168.100.247:11050/getPasswordKeyboard'
     var i = {};

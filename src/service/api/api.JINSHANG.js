@@ -1,12 +1,13 @@
 import http from '../http/http.JINSHANG'
 import {HOST} from "@/Constant";
+
 /**
  * axios 配置
  */
 const Config = {
-  config:{
+  config: {
     method: 'post',
-    baseURL:HOST,
+    baseURL: HOST,
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     timeout: 30000,
   },
@@ -15,7 +16,7 @@ const Config = {
 /**
  * 业务api
  */
-export default  {
+export default {
   /**
    * 注册相关 open
    */
@@ -98,13 +99,15 @@ export default  {
   /**
    * login 登录相关
    */
-  login(params, success, error) {
-    let options = {
-      url: '/openapi/comm/apiLoginBank',
-      params,
-      login: true
-    }
-    return http.post(options, Config.config, success, error)
+  login: {
+    apiLoginBank(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiLoginBank',
+        params,
+        login: true
+      }
+      return http.post(options, Config.config, success, error)
+    },
   },
   /**
    *  buying

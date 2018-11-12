@@ -13,7 +13,6 @@
     let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
     export default {
         name: "PassInput",
-        props: ['inputID', 'doGetData', 'pass', 'refur'],
         props: {
             inputID:null,
             doGetData:null,

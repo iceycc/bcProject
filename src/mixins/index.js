@@ -1,31 +1,31 @@
 import util from "libs/util";
 import {LsName, PageName} from "@/Constant";
 import API from "@/service";
+import {mapMutations, mapGetters} from 'vuex'
 import store from '@/store'
-import {mapActions, mapGetters} from 'vuex'
-import loginMixins from './login/login-mixins'
-import opening1Mixins from './opening/opening1-mixins'
-import opening2Mixins from './opening/opening2-mixins'
-import opening3Mixins from './opening/opening3-mixins'
+import {ORG_ID_NUM} from '@/Constant'
+import JinShang from './mixins-jinshang'
+import ZhengZhou from './mixins-jinshang'
+import ZhongBang from './mixins-jinshang'
 
-import bankDetailMixins from './bankDetail/bankDetail-mixins'
-import bankBalanceMixins from './bankDetail/bankBalance-mixins'
-import rechangeMixins from './rechange/recharge-mixins'
-
-export const LoginMixins = loginMixins
-export const Opening1Mixins = opening1Mixins
-export const Opening2Mixins = opening2Mixins
-export const Opening3Mixins = opening3Mixins
-
-export const BankDetailMixins = bankDetailMixins
-export const BankBalanceMixins = bankBalanceMixins
-export const RechangeMixins = rechangeMixins
-
+let ORG_ID = store.getters.GET_ORG_ID
+let MainMixins = {};
+switch (ORG_ID) {
+  case ORG_ID_NUM.JinShang:
+    MainMixins = JinShang;
+    break;
+  case ORG_ID_NUM.ZhengZhou:
+    MainMixins = ZhengZhou;
+    break;
+  case ORG_ID_NUM.ZhongBang:
+    MainMixins = ZhongBang;
+    break;
+}
 
 // 展开公共的store方法
-export const StoreMixin = {
+const StoreMixin = {
   methods: {
-    ...mapActions({
+    ...mapMutations({
       setComState: 'SET_COMMON_STATE',
       removeComState:'REMOVE_COMMON_STATE'
     })
@@ -36,12 +36,13 @@ export const StoreMixin = {
     })
   }
 }
-export const Mixin = {
+const HandleMixin = {
+  mixins:[StoreMixin],
   beforeCreate() {
     console.log('beforeCreate');
-    let reload = this.getComState.reload
+    let reload = store.getters.GET_COMMON_STATE.reload
     if (reload) {
-      this.setComState({type:"reload",value:false})
+      store.commit('SET_COMMON_STATE',{type:"reload",value:false})
       location.reload()
     }
   },
@@ -65,7 +66,7 @@ export const Mixin = {
     }
   }
 }
-export const UtilMixin = {
+const UtilMixin = {
   methods: {
     /**
      * 用于登陆和测评结束后判断 源头是购买还是预约  还是电子账户来源
@@ -159,4 +160,8 @@ export const UtilMixin = {
   }
 }
 
-
+export default {
+  StoreMixin,
+  HandleMixin,
+  UtilMixin
+}

@@ -8,7 +8,9 @@ export default {
     // 渠道id
     CHANNEL_ID: '',
     // TODO 保存登录过银行的凭证信息
-    BANKS_TOKEN: []
+    BANKS_TOKEN: [],
+    //
+    SESSION_ID:''
   },
   actions: {},
   mutations: {
@@ -20,6 +22,9 @@ export default {
     },
     SET_CHANNEL_ID(state, CHANNEL_ID = 3) {
       state.CHANNEL_ID = CHANNEL_ID + ''
+    },
+    SET_SESSION_ID(state, SESSION_ID = '') {
+      state.SESSION_ID = SESSION_ID + ''
     },
   },
   getters: {

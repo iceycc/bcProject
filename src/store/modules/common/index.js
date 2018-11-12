@@ -14,6 +14,7 @@ export default {
     OriginPage: '', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
     ErrMsg:'', // 用于保存返回的错误信息 刷新时可以展示
     loginInfo:'',// 登录刷新需要的信息
+    buyNextData:''
   },
   //
   actions:{
@@ -28,7 +29,7 @@ export default {
     },
   },
   getters: {
-    GET_COMMON_STATE(state) {
+    GET_COMMON_STATE:(state) =>{
       return state
     },
   }
