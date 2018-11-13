@@ -6,19 +6,19 @@
                 <span class="line1">
                     <img :src='stepImg' alt="">
                 </span>
-        <p class="step-text" style="color:#92d048">开户信息验证</p>
+        <p class="step-text">开户信息验证</p>
       </section>
       <section class="circle">
                  <span class="line2">
                     <img :src='stepImg' alt="">
                 </span>
-        <p class="step-text" style="color:#92d048">绑定银行卡</p>
+        <p class="step-text">绑定银行卡</p>
       </section>
       <section class="circle">
                  <span class="line3 hui">
                     <img :src='stepImg3' alt="">
                 </span>
-        <p class="step-text" style="color:#D3D3D3">设置密码</p>
+        <p class="step-text">设置密码</p>
       </section>
     </section>
 
@@ -59,20 +59,38 @@
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
 
+
+    <section class="safe-code" v-show="showSafeCode">
+      <div>
+        <img :src="safeCodeUrl+ SESSION_ID" alt="">
+        <input type="text" placeholder="请输入图形验证码" v-model="safeCode">
+        <button @click="getSafeCode">确定</button>
+      </div>
+    </section>
   </div>
 </template>
 <script>
-  import {PageName, BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import BankSelect from '@/components/commons/BankSelect'
-  import Opening2Mixins from './Opening2'
-  import Mixins from "@/mixins";
-
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
+  import {HOST} from "@/Constant";
+  import API from "@/service";
+  import {imgSrc} from "@/Constant";
+  import {PageName, BusName, LsName} from "@/Constant";
+  import util from "libs/util";
+
+  const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
+  let time = 60
 
   export default {
     data() {
       return {
+        // 图形验证码相关
+        safeCode: '',
+        safeCodeUrl,
+        SESSION_ID: '',
+        showSafeCode: false,
+
         data: {
           CARD_NO: '', // 银行卡号 6214830182284272  6217730711297810
           HAS_BAND: '0', // 是否绑定过
@@ -83,7 +101,7 @@
           MESSAGE_TOKEN: '',
           REQ_SERIAL: ''
         },
-        cantNext:true,
+        // cantNext:true,
         tel: '',
         canClick: true,
         codeText: "获取验证码",
@@ -96,10 +114,11 @@
         stepImg3: require('@/assets/images/step3.png'),
         AllBankListObj: {},
         errMsg: '',
-        checkBankName1: false
+        checkBankName1: false,
+
+        telDisabled: false,
       }
     },
-    mixins: [Opening2Mixins],
     components: {
       BankSelect,
       PassWordZhengzhou,
@@ -112,7 +131,17 @@
         }
       },
       bankText(n, o) {
-        this.checkBankName(this.data.CARD_NO)
+        // this.checkBankName(this.data.CARD_NO)
+      },
+    },
+    computed: {
+      // data.PHONE_CODE
+      cantNext() {
+        if (this.tel.length > 0 && this.data.PHONE_CODE.length > 0 && this.data.CARD_NO.length > 0) {
+          return false
+        } else {
+          return true
+        }
       }
     },
     filters: {
@@ -120,21 +149,146 @@
         if (n.length > 11) { // >11截取
           return n.toString().substr(0, 11)
         }
+      },
+      CARD_NO_Fliter(n) {
+        if (n) {
+          return n.substr(n.length - 4)
+        } else {
+          return n
+        }
       }
     },
     created() {
       this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
       this.data.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM
       // this.tel = this.$route.query.PHONE_NUM || ''
+      this.tel = this.$store.getters.GET_OPENING1_DATA.PHONE || ''
       this.getBankList()
     },
     methods: {
+      // msg倒计时
+      timeDown() {
+        let sTime = time
+        this.disable = true
+        let timer = setInterval(() => {
+          if (sTime == 0) {
+            this.codeText = '重新发送'
+            this.disable = false
+            clearInterval(timer)
+            return
+          }
+          sTime--
+          this.codeText = `${sTime}s`
+        }, 1000)
+      },
+
+      subumit() {
+        $('#PWDKBD').remove();
+        this.pwd = $("#bank-pass").getKBD(); //获取密码
+        this.pwdLen = $("#bank-pass").getLenKBD(); //获取密码长度
+        console.log(this.pwd);
+        console.log(this.pwdLen);
+        if (util.Check.payPassLen(this.pwdLen, true)) return;
+        this.ZhengZhouPass = false
+      },
+      // 点击获取验证码
+      clickMsgCodeHandle() {
+        let PHONE = this.tel
+        PHONE = PHONE + ''
+        console.log(PHONE);
+        if (util.Check.tel(PHONE, true)) return;
+        this.SESSION_ID = this.$store.getters.GET_ACCOUNT_STATE.SESSION_ID
+        this.showSafeCode = true
+      },
+      // 获取短信验证码
+      getMsgCode() {
+        let data = {
+          PHONE_NUM: this.tel,
+          SAFT_CODE: this.safeCode, // 图片验证码
+          BANK_CARD: this.data.CARD_NO
+        }
+        API.bicai.sendSMSCodeToBindCard(data, res => {
+          // 0发送成功
+          // 1发送失败
+          // 2手机号码错误
+          // 3.停止短信服务
+          // 4.用户短信验证码输入错误达到三次，24小时内不能再次绑卡
+          Bus.$emit(BusName.showToast, res.MESSAGE)
+          this.showSafeCode = false
+        }, err => {
+          this.codeText = '重新发送'
+          this.disable = false
+          console.log(err);
+        })
+      },
+
+      // 注册第一次返回失败 需要轮询 查询 是否成功
+      pollHandle() {
+        let conut = 0
+        let timer = setInterval(() => {
+          conut++
+          console.log(conut);
+          if (conut == 6) {
+            this.Londing.close()
+            clearInterval(timer)
+            return
+          }
+          this.Londing.open()
+          this.checkID()
+        }, 5000)
+      },
+      checkID(){
+        API.bicai.getMerberAuthStatusInfo({},res=>{
+          let {status} = res
+          console.log(status);
+          if(status ==3 || status ==4 ){
+            clearInterval(timer)
+            this.$router.push({name:PageName.BcOpening3})
+          }
+        })
+      },
+      // 根据银行卡号获取银行名称
+      getBankNameByCardNo() {
+        let data = {
+          cardNo: this.data.CARD_NO
+        }
+        API.bicai.getCardBinList(data, res => {
+          if (res.length > 0) {
+            this.bankText = res[0].ISSUER_NAME
+
+          }
+        })
+      },
+      /**
+       * 获取银行列表
+       */
+      getBankList() {
+        API.bicai.getBingingCardsList({}, res => {
+          let obj = {}
+          // res.bankList.forEach(item => {
+          //   obj[item.BANK_CARD_BIN] = item.BANK_NAME
+          // })
+          // console.log('bankObj>>>',obj);
+          this.AllBankListObj = obj
+          this.bankList = res.bankList.map((item) => {
+            return {
+              name: item.ORG_NAME,
+              value: 0,
+              src: imgSrc + item.LOGO_URL,
+              Index: item.ORG_NAME_FIRST_LETTER
+            }
+          })
+        })
+      },
+      // 点击图形验证吗
+      getSafeCode() {
+        this.timeDown()
+        this.getMsgCode()
+      },
       checkBankName() {
         this.getBankNameByCardNo()
       },
       checkBankNo(val) {
-        console.log(1);
-        this.checkBankType && this.checkBankType()
         val = val.toString()
         let reg = /\d{15}|\d{19}/
         console.log(!reg.test(val));
@@ -155,9 +309,75 @@
         this.bankText = val.name
       },
       // 下一步
+      // 注册
       goNext() {
-        this.doOpengingSecond()
-      }
+        this.data.PRE_PHONE_NUM = this.tel
+        console.log(this.data.PRE_PHONE_NUM);
+        if (this.bankText == '请选择银行') {
+          Bus.$emit(BusName.showToast, '请选择银行')
+          return
+        }
+        if (this.data.CARD_NO == '') {
+          Bus.$emit(BusName.showToast, '银行卡号不能为空')
+          return
+        }
+        // if (this.checkBankName1) {
+        //   Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
+        //   return
+        // }
+        if (this.checkBankNo(this.data.CARD_NO)) {
+          return
+        }
+        if (this.data.PRE_PHONE_NUM == '') {
+          Bus.$emit(BusName.showToast, '手机号不能为空')
+          return
+        }
+        if (this.data.PHONE_CODE == '') {
+          Bus.$emit(BusName.showToast, '短信验证码不能为空')
+          return
+        }
+        // if (this.data.MESSAGE_TOKEN == '') {
+        //   Bus.$emit(BusName.showToast, '短信验证码异常')
+        //   return
+        // }
+        let params = {
+          bankCardNo: this.data.CARD_NO,
+          mobile: this.tel,
+          smsCode: this.data.PHONE_CODE
+        }
+        API.bicai.bindCardFourELement(params,
+          res => {
+            this.Londing.close()
+            setTimeout(() => {
+              this.errMsg = ''
+            }, 2000)
+            let status= res.status
+            console.log('status>>>',status);
+            if(status==0){
+              this.$router.push({name:PageName.BcOpening3})
+            }else {
+              this.pollHandle()
+            }
+            API.watchApi({
+              FUNCTION_ID: 'ptb0A004', // 点位
+              REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+            })
+
+          },
+          err => {
+            API.watchApi({
+              FUNCTION_ID: 'ptb0A004', // 点位
+              REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+            })
+            this.pollHandle()
+            this.errMsg = err
+            setTimeout(() => {
+              this.errMsg = ''
+            }, 2000)
+            console.log(err);
+            this.disable = false
+          })
+      },
     }
 
   }
@@ -220,15 +440,17 @@
     text-align: center;
     border: none;
     outline: none;
-    &.cantNext{
+    &.cantNext {
       background: #ccc;
       color: #fff;
     }
   }
-  .infos{
+
+  .infos {
     padding-left: px2rem(20);
-    font-size:px2rem(14)
+    font-size: px2rem(14)
   }
+
   .bank-box {
     display: inline-block;
     width: px2rem(150);
@@ -248,11 +470,11 @@
   }
 
   .wrapicon {
-    margin:  px2rem(4) auto px2rem(10);
     text-align: center;
     display: flex;
     position: relative;
-    width: px2rem(235);
+    margin-bottom: .3rem;
+    margin-top: px2rem(4);
     .step-text {
       padding-top: px2rem(7);
     }
@@ -265,7 +487,7 @@
     .line1, .line2, .line3 {
       position: relative;
       img {
-        width: px2rem(23);
+        width: .5rem;
       }
       &:after {
         display: block;
@@ -274,7 +496,7 @@
         right: 0;
         transform: translateY(-100%);
         content: '';
-        width: 39%;
+        width: 45%;
         background: #92d048;
         height: .1rem;
         overflow: hidden;
@@ -287,7 +509,6 @@
       }
 
     }
-
     .line2 {
       &:after {
         left: 0;
@@ -300,7 +521,7 @@
         right: 0;
         transform: translateY(-100%);
         content: '';
-        width: 36%;
+        width: 45%;
         background: #92d048;
         height: .1rem;
         overflow: hidden;
@@ -331,4 +552,38 @@
     }
   }
 
+  .safe-code {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    div {
+      box-sizing: border-box;
+      margin: px2rem(200) auto 0;
+      background: #fff;
+      padding-top: px2rem(10);
+      text-align: center;
+      width: px2rem(250);
+      height: px2rem(150);
+    }
+    img {
+
+    }
+    button {
+      width: px2rem(80);
+      height: px2rem(30);
+      background: #2f74ff;
+      color: #fff;
+    }
+    input {
+      margin: px2rem(10) auto px2rem(10);
+      padding-left: px2rem(10);
+      display: block;
+      width: px2rem(150);
+      height: px2rem(40);
+      border: 1px solid #ccc;
+    }
+  }
 </style>

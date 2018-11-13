@@ -6,20 +6,20 @@
                 <span class="line1">
                     <img :src='stepImg' alt="">
                 </span>
-        <span class="step-text" style="color:#92d048">开户信息验证</span>
+        <span class="step-text">开户信息验证</span>
       </section>
       <section class="circle">
                  <span class="line2 hui">
                     <img :src='stepImg2' alt="">
                 </span>
-        <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
+        <span class="step-text">绑定银行卡</span>
       </section>
 
       <section class="circle">
                  <span class="line3 hui">
                     <img :src='stepImg3' alt="">
                 </span>
-        <span class="step-text" style="color:#D3D3D3">设置密码</span>
+        <span class="step-text">设置密码</span>
       </section>
     </section>
     <div class="opening_box">
@@ -45,48 +45,49 @@
       <p class="infos" style="padding-top: 20px">请确认您的个人信息，若有误请点击修改</p>
       <section v-if="DOMShow.USER_NAME">
         <span>姓名</span>
-        <input class="inputBox2" type="text"  placeholder="请输入您的姓名"
-              disabled
+        <input class="inputBox2" type="text" placeholder="请输入您的姓名"
                v-model="data.USER_NAME">
       </section>
       <section v-if="DOMShow.USER_CARD_ID">
         <span>身份证号</span>
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
-               disabled
-               v-model="data.USER_CARD_ID" @bulr="checkID">
+               v-model="data.USER_CARD_ID">
       </section>
       <section v-if="DOMShow.USER_CARD_ID_DATA">
-        <span>身份证有效期</span>
+        <span>有效期至</span>
         <input class="inputBox2" type="text" placeholder=""
-               disabled
                v-model="data.USER_CARD_ID_DATA">
       </section>
       <div class="foot-img">
         <p class="title">拍摄要求：</p>
         <ul>
           <li>
-            <img src="" alt="">
+            <img src="@/assets/images/common/biaozhun@2x.png" alt="">
             <p>
               <icon-font iconClass="icon-finish" iconStyle="finish"></icon-font>
-              标准</p>
+              标准
+            </p>
           </li>
           <li>
-            <img src="" alt="">
+            <img src="@/assets/images/common/biaozhun@2x.png" alt="">
             <p>
               <icon-font iconClass="icon-cuohao" iconStyle="cuohao"></icon-font>
-              边角缺失</p>
+              边角缺失
+            </p>
           </li>
           <li>
-            <img src="" alt="">
+            <img src="@/assets/images/common/indistinct@2x.png" alt="">
             <p>
               <icon-font iconClass="icon-cuohao" iconStyle="cuohao"></icon-font>
-              信息模糊</p>
+              信息模糊
+            </p>
           </li>
           <li>
-            <img src="" alt="">
+            <img src="@/assets/images/common/flashlight@2x.png" alt="">
             <p>
               <icon-font iconClass="icon-cuohao" iconStyle="cuohao"></icon-font>
-              闪光强烈</p>
+              闪光强烈
+            </p>
           </li>
         </ul>
       </div>
@@ -116,26 +117,21 @@
           USER_CARD_ID: '',// 身份证号码  612601198509174013
           CARD_FRONT_FILE: '',
           CARD_BACK_FILE: '',
-          USER_CARD_ID_DATA:'', //身份证有效期
-          PHONE:'',
-
-          memberId: null, // 晋商回显需要的
-          phoneNum: null, // 晋商回显需要的
-          MEMBER_ID:null,
-          PHONE_NUM:null
+          USER_CARD_ID_DATA: '', //身份证有效期
+          frontSessionId: null,
         },
 
         showType: 0,
-        imgStyle1: 'width:30%;vertical-align: middle',
-        imgStyle2: 'width:30%;vertical-align: middle;',
+        imgStyle1: 'width:100%;height:100%;vertical-align: middle',
+        imgStyle2: 'width:100%;height:100%;vertical-align: middle;',
         stepImg: require('@/assets/images/account_icon_green2@2x.png'),
         stepImg2: require('@/assets/images/step2@2x.png'),
         stepImg3: require('@/assets/images/step3.png'),
         test1: '',
         test2: '',
 
-        preSrc1: require('@/assets/images/cameracopy@2x.png'),
-        preSrc2: require('@/assets/images/cameracopy@2x.png'),
+        preSrc1: require('@/assets/images/common/zheng@2x.png'),
+        preSrc2: require('@/assets/images/common/fan@2x.png'),
         picZheng: require('@/assets/images/id-zheng.jpg'),
         picFan: require('@/assets/images/id-fan.jpg'),
 
@@ -159,11 +155,13 @@
     },
     methods: {
       doOpeningFirstFactory() {
+        this.checkID()
+        return
         API.watchApi({
           FUNCTION_ID: 'ptb0A003', // 点位
           REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
         })
-        this.$store.commit('SET_OPENING1_DATA',this.data)
+        this.$store.commit('SET_OPENING1_DATA', this.data)
         this.ORG_ID = this.$store.getters.GET_ORG_ID
         this.doOpengingFirst()
 
@@ -211,13 +209,10 @@
           idcardFrontPhoto: this.data.CARD_FRONT_FILE
         }
         API.bicai.postFrontIDCard(params, (res) => {
-          this.data.USER_NAME = res.NAME
-          this.data.USER_CARD_ID = res.NUM
-          this.data.ADDRESS = res.ADDRESS
-          this.data.MEMBER_ID = res.MEMBER_ID
-
-          this.data.PHONE_NUM = res.PHONE_NUM
-          this.checkID()
+          this.data.USER_NAME = res.idName
+          this.data.USER_CARD_ID = res.idNumber
+          this.data.frontSessionId = res.frontSessionId
+          // this.checkID()
           // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
         })
       },
@@ -226,9 +221,8 @@
           idcardBackPhoto: this.data.CARD_BACK_FILE
         }
         API.bicai.postBackIDCard(params, (res) => {
-          this.data.USER_CARD_ID_DATA = res.PERIOD
-          this.data.MEMBER_ID = res.MEMBER_ID
-          this.data.PHONE_NUM = res.PHONE_NUM
+          this.data.USER_CARD_ID_DATA = res.validityPeriod
+          // this.data.frontSessionId = res.frontSessionId
           // this.data.CREDENTIAL_BURL = res.SUN_ECM_CONTENT_ID
         })
       },
@@ -260,34 +254,35 @@
         API.open.apiRegisterValiUser(params, (res) => {
           //
           let FirstData = {
-            BESHARP_REGISTER_VALI_USER_SEQ:this.res.BESHARP_REGISTER_VALI_USER_SEQ,
-            CREDENTIAL_AURL:this.CREDENTIAL_AURL,
-            CREDENTIAL_BURL:this.CREDENTIAL_BURL
+            BESHARP_REGISTER_VALI_USER_SEQ: this.res.BESHARP_REGISTER_VALI_USER_SEQ,
+            CREDENTIAL_AURL: this.CREDENTIAL_AURL,
+            CREDENTIAL_BURL: this.CREDENTIAL_BURL
           }
-          this.$store.commit('SET_OPENING1_DATA',FirstData)
+          this.$store.commit('SET_OPENING1_DATA', FirstData)
         })
       },
       /**
-       * 身份证验证接口
+       * 身份证验证接口 点击下一步
        */
       checkID() {
         let data = {
-          idName:'',
-          idNumber:'',
-          updateFlag:'',
-          frontSessionId:''
+          idName: this.data.USER_NAME,
+          idNumber: this.data.USER_CARD_ID,
+          updateFlag: true,
+          frontSessionId: this.data.frontSessionId
         }
-        API.bicai.checkIDCard(data,res=>{
-
+        API.bicai.checkIDCard(data, res => {
+          Bus.$emit(BusName.showToast, res.message)
+          if (res.verifyStatus == 0 || res.verifyStatus == 1) {
+            this.$router.push(PageName.BcOpening2)
+          }
         })
       },
       /**
        * 用户认证状态回显数据
        */
-      getUserMemberInfo(){
-        let data = {
-
-        }
+      getUserMemberInfo() {
+        let data = {}
         API.bicai.getUserMemberInfo(data)
       }
     }
@@ -301,16 +296,18 @@
   body {
     font-size: .3rem;
   }
-  .infos{
+
+  .infos {
     padding-left: px2rem(20);
-    font-size:px2rem(14)
+    font-size: px2rem(14)
   }
+
   .wrapicon {
-    margin:  px2rem(4) auto px2rem(10);
     text-align: center;
     display: flex;
     position: relative;
-    width: px2rem(235);
+    margin-bottom: .3rem;
+    margin-top: px2rem(4);
     .step-text {
       padding-top: px2rem(7);
     }
@@ -323,7 +320,7 @@
     .line1, .line2, .line3 {
       position: relative;
       img {
-        width: px2rem(23);
+        width: .5rem;
       }
       &:after {
         display: block;
@@ -332,7 +329,7 @@
         right: 0;
         transform: translateY(-100%);
         content: '';
-        width: 39%;
+        width: 45%;
         background: #92d048;
         height: .1rem;
         overflow: hidden;
@@ -345,7 +342,6 @@
       }
 
     }
-
     .line2 {
       &:after {
         left: 0;
@@ -372,43 +368,45 @@
     }
 
   }
-  .foot-img{
-    .finish{
+
+  .foot-img {
+    .finish {
       font-size: px2rem(12);
-      color:#9DCE81 ;
+      color: #9DCE81;
     }
-    .cuohao{
+    .cuohao {
       font-size: px2rem(12);
       color: #FF2A00;
     }
-    img{
+    img {
       width: px2rem(70);
       height: px2rem(44);
       display: inline-block;
       background: #ccc;
     }
-    .title{
+    .title {
       padding-left: px2rem(20);
       margin: px2rem(16) 0;
-      color:#666;
-      font-size:px2rem(14);
+      color: #666;
+      font-size: px2rem(14);
     }
-    ul{
+    ul {
       text-align: center;
       font-size: 0;
       margin: 0 auto;
       width: 90%;
-      p{
+      p {
         margin: px2rem(5) 0;
-        color:#666;
-        font-size:px2rem(12);
+        color: #666;
+        font-size: px2rem(12);
       }
-      li{
+      li {
         display: inline-block;
         width: 25%;
       }
     }
   }
+
   .warp {
     width: 100%;
     position: relative;
@@ -470,7 +468,6 @@
     }
   }
 
-
   .cameraphoto {
     flex: 1;
     padding-left: 6%;
@@ -501,7 +498,7 @@
     line-height: 1rem;
     width: px2rem(255);
     height: px2rem(44);
-    margin: px2rem(75) auto px2rem(20);
+    margin: px2rem(55) auto px2rem(20);
     text-align: center;
     border: none;
     outline: none;

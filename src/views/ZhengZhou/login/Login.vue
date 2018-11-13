@@ -50,7 +50,7 @@
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Mixins from "@/mixins";
   import util from "libs/util";
-  import {HOST} from "../../../Constant";
+  import {HOST} from "@/Constant";
 
   const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
   let time = 60
@@ -79,8 +79,8 @@
         ORG_ID: '', //
         BANK_NAME: '',
         LOGO_URL: '',
-        safeCode:'',
-        showSafeCode:false
+        safeCode: '',
+        showSafeCode: false
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
@@ -150,10 +150,10 @@
     },
 
     methods: {
-      reImg(){
+      reImg() {
 
       },
-      getSafeCode(){
+      getSafeCode() {
         this.getMsg(true)
         this.showSafeCode = false
       },
@@ -161,25 +161,25 @@
         return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
       },
 
-      getMsg(canLogin =false) {
+      getMsg(canLogin = false) {
         let data = {
           PHONE_NUM: this.tel + '',
-          SAFT_CODE: ''
+          SAFT_CODE: this.safeCode
         }
-        API.bicai.sendSMS(data, (res,SESSION_ID)=>{
+        API.bicai.sendSMS(data, (res, SESSION_ID) => {
           let data = res
           let mark = data.mark // 0 未满5次，1满五次
           this.SESSION_ID = SESSION_ID
           console.log(SESSION_ID);
           console.log(canLogin);
-          if(mark==0){
+          if (mark == 0) {
             this.timeDown()
-          }else {
+          } else {
             console.log(canLogin);
-            if(canLogin){ // 用于拦截第一次
+            if (canLogin) { // 用于拦截第一次
               this.timeDown()
-            }else {
-              this.showSafeCode =true
+            } else {
+              this.showSafeCode = true
             }
           }
         }, err => {
@@ -200,8 +200,39 @@
             REMARK_DATA: '异业合作-登录', // 中文备注
             SOURCE_URL: SOURCE_URL
           })
-
-
+          this.$store.commit('SET_BICAI_USER', res)
+          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          this.checkAuthStatus(data => {
+            let {AUTH_STATUS, isOldMember} = data
+            //  AUTH_STATUS 返回码：
+            // 0:未认证，
+            // 1:身份证认证，
+            // 2:银行卡认证，
+            // 3:密码设置，
+            // 4:认证完成，
+            // 5:身份证过期
+            console.log(AUTH_STATUS);
+            switch (Number(AUTH_STATUS)) {
+              case 0:
+                break;
+              case 1:
+                this.$router.push(PageName.BcOpening1)
+                break;
+              case 2:
+                this.$router.push(PageName.BcOpening2)
+                break;
+              case 3:
+                this.$router.push(PageName.BcOpening3)
+                break;
+              case 4:
+                // todo 再判断对应的直销银行有没有开户
+                break;
+              case 5:
+                //
+                this.$router.push(PageName.BcOpening1)
+                break;
+            }
+          })
 
         }, err => {
           API.watchApi({
@@ -222,15 +253,21 @@
           }, 1500)
         })
       },
-      goOpen() { // 去开户
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A008', // 点位
-          REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
+      //
+      checkAuthStatus(fn) {
+        API.bicai.getAuthStatus({}, res => {
+          fn && fn(res)
         })
-        this.setComState({type: 'reload', value: true})
-        // this.setComState({type:"reload",value:true}) // reload-001
-        this.$router.push({name: PageName.Opening1})
       },
+      // goOpen() { // 去开户
+      //   API.watchApi({
+      //     FUNCTION_ID: 'ptb0A008', // 点位
+      //     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
+      //   })
+      //   this.setComState({type: 'reload', value: true})
+      //   // this.setComState({type:"reload",value:true}) // reload-001
+      //   this.$router.push({name: PageName.Opening1})
+      // },
       focusHandle() {
         this.telShow = true
         this.telPaceholder = ''

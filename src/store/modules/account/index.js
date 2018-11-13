@@ -10,7 +10,9 @@ export default {
     // TODO 保存登录过银行的凭证信息
     BANKS_TOKEN: [],
     //
-    SESSION_ID:''
+    SESSION_ID:'',
+    //
+    BICAI_USER:{}
   },
   actions: {},
   mutations: {
@@ -25,6 +27,9 @@ export default {
     },
     SET_SESSION_ID(state, SESSION_ID = '') {
       state.SESSION_ID = SESSION_ID + ''
+    },
+    SET_BICAI_USER(state,BICAI_USER ) {
+      state.BICAI_USER = BICAI_USER
     },
   },
   getters: {

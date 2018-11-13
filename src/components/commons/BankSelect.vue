@@ -97,7 +97,6 @@
 
         methods: {
             showBankList() {
-                console.log(this.canClick);
                 if (!this.canClick) {
                     return
                 }
@@ -117,7 +116,6 @@
                         obj[bank.Index].push(bank)
                     }
                 })
-                console.log(obj);
                 return obj
             },
             select(index, name) {
@@ -127,7 +125,6 @@
                 this.selectValue = index
             },
             toBank(val) {
-                console.log(val);
                 if (document.getElementById(val)) {
                     document.getElementById(val).scrollIntoView()
 

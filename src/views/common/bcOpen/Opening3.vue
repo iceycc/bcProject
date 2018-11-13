@@ -338,14 +338,13 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
-
+    .step-text {
+      padding-top: px2rem(7);
+    }
     .circle {
       flex: 1;
       display: flex;
       flex-direction: column;
-    }
-    .step-text {
-      padding-top: px2rem(7);
     }
 
     .line1, .line2, .line3 {
