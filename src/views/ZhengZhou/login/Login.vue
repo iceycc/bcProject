@@ -34,7 +34,7 @@
       </p>
 
     </div>
-    <section class="safe-code" v-if="showSafeCode">
+    <section class="safe-code" v-show="showSafeCode">
       <div>
         <img :src="safeCodeUrl+ SESSION_ID" alt="" @click="reImg">
         <input type="text" placeholder="请输入图形验证码" v-model="safeCode">
@@ -49,7 +49,7 @@
   import Bus from '@/plugin/bus'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Mixins from "@/mixins";
-  import util from "libs/util";
+  import util from "../../../libs/util";
   import {HOST} from "@/Constant";
 
   const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
@@ -166,13 +166,14 @@
           PHONE_NUM: this.tel + '',
           SAFT_CODE: this.safeCode
         }
+        this.safeCode = ''
+        this.SESSION_ID = ''
         API.bicai.sendSMS(data, (res, SESSION_ID) => {
           let data = res
           let mark = data.mark // 0 未满5次，1满五次
           this.SESSION_ID = SESSION_ID
-          console.log(SESSION_ID);
-          console.log(canLogin);
           if (mark == 0) {
+            Bus.$emit(BusName.showToast,'验证码发送成功')
             this.timeDown()
           } else {
             console.log(canLogin);
@@ -214,7 +215,6 @@
             console.log(AUTH_STATUS);
             switch (Number(AUTH_STATUS)) {
               case 0:
-                break;
               case 1:
                 this.$router.push(PageName.BcOpening1)
                 break;
@@ -225,6 +225,7 @@
                 this.$router.push(PageName.BcOpening3)
                 break;
               case 4:
+                this.checkBankStatus()
                 // todo 再判断对应的直销银行有没有开户
                 break;
               case 5:
@@ -254,6 +255,32 @@
         })
       },
       //
+      // 登陆比财成功 且 在比财实名成功 然后 检查在本行状态
+      checkBankStatus(){
+        let data = {}
+        API.common.apiRegisterBackShow(data,res =>{
+          let step =  res.LAST_STEP_NUM
+        // （0未提交，1提交第一步，2提交第二步，3提交第三步）
+          if(step==0){
+            util.storage.session.set('USERINFO',res)
+            this.$router.push({name:PageName.Opening1})
+          }
+          if(step==1){
+            util.storage.session.set('USERINFO',res)
+            this.$router.push({name:PageName.Opening2})
+          }
+          if(step==2){
+            util.storage.session.set('USERINFO',res)
+            this.$router.push({name:PageName.Opening3})
+          }
+          if(step==3){
+            // todo登陆成功后判断拿来的去哪里
+            // this.$router.push({name:PageName.Opening3})
+          }
+
+        })
+      },
+      // 判断该用户在比财的实名认证状态
       checkAuthStatus(fn) {
         API.bicai.getAuthStatus({}, res => {
           fn && fn(res)
@@ -285,11 +312,11 @@
       // msg倒计时
       timeDown() {
         let sTime = time
-        this.disable = true
+        this.msgDisabled = true
         let timer = setInterval(() => {
           if (sTime == 0) {
             this.codeText = '重新发送'
-            this.disable = false
+            this.msgDisabled = false
             clearInterval(timer)
             return
           }

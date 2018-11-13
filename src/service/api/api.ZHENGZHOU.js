@@ -11,7 +11,7 @@ const Config = {
     // baseURL:'http://192.168.100.141:8080/',
     method: 'post',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    timeout: 30000,
+    timeout: 300000,
   },
 }
 
@@ -46,6 +46,23 @@ export default {
         params,
       }
       return http.post(options, Config.config, success, error)
+    },
+    // 用户注册信息回显
+    apiRegisterBackShow(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiRegisterBackShow',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    // 轮询查询状态
+    apiQueryBizStatus(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiQueryBizStatus',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
     },
   },
   /**
@@ -332,15 +349,7 @@ export default {
    * 查询类
    */
   query: {
-    // openapi/comm/apiQueryBizStatus 轮询查询状态
-    apiQueryBizStatus(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiQueryBizStatus',
-        params
-      }
-      return http.post(options, Config.config, success, error)
 
-    },
   },
   /**
    * 账户相关

@@ -101,7 +101,6 @@ export default {
       let params = {
         TYPE: 'ID_CARD_FRONT_PHONE_OCR',
         MEMBER_ID: this.data.MEMBER_ID || '',
-        ORG_ID: '49',
         ISFRONT: 'true',
         CARD_BASE: this.data.CARD_FRONT_FILE
       }
@@ -120,7 +119,6 @@ export default {
       let params = {
         TYPE: 'ID_CARD_BACK_PHONE_OCR',
         MEMBER_ID: this.data.MEMBER_ID || '',
-        ORG_ID: '49',
         ISFRONT: 'false',
         CARD_BASE: this.data.CARD_BACK_FILE
       }

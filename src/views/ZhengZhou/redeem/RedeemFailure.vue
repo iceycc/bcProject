@@ -1,30 +1,27 @@
 <template>
   <div class="app">
-    <app-bar title="充值"></app-bar>
+    <app-bar title="赎回失败"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/buyfail@2x.png" alt="">
+      <h2>很抱歉，赎回失败!</h2>
+      <p class="err-msg">{{errMsg}}</p>
     </div>
-    <div class="fenxiangcontent">
-      <h2>很抱歉，充值失败!</h2>
-      <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
-    </div>
-    <span @click="reCharge" class="btn">重新充值</span>
+    <span @click="reWithdraw" class="btn">重新赎回</span>
     <span @click="goBank" class="btn btn-back">返回银行页</span>
   </div>
 </template>
 <script>
-
   export default {
-    created() {
-      this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
-    },
     data() {
       return {
-        errMsg: ''
+        errMsg:''
       }
     },
+    created() {
+      this.errMsg = this.$route.query.err
+    },
     methods: {
-      reCharge() {
+      reWithdraw() {
         this.$router.go(-1)
       },
       goBank(){
@@ -45,20 +42,22 @@
   }
 
   .chattuimg {
-    margin-top: 2rem;
+    margin-top: px2rem(80);
     text-align: center;
-    img {
+    img{
       width: px2rem(70);
       height: px2rem(70);
     }
-  }
+    h2 {
+      font-size: px2rem(18);
+      margin: px2rem(20) 0;
+    }
+    .err-msg{
+      font-size: px2rem(16);
+      text-align: center;
+      color:#F22C17
+    }
 
-  .fenxiangcontent {
-    text-align: center;
-    padding: 0 .4rem;
-    font-size: 0.4rem;
-    color: #333;
-    margin-top: 1rem;
   }
 
   .btn {

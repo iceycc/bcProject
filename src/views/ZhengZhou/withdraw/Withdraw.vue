@@ -14,9 +14,11 @@
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
+      <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST<=DAY_REST? ACC_REST:DAY_REST">全部提现</span>
     </section>
-    <p class="info1">本卡当前余额{{ACC_REST | formatNum}}元 <span style="color:#389CFF"
-                                                           @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
+    <p class="info1">
+      本卡当前余额{{ACC_REST | formatNum}}元，每日限额{{DAY_REST |formatNum}}元
+    </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
     <section v-if="show" class="bgbox">
       <section class="passbox">
@@ -28,9 +30,9 @@
             交易密码
           </p>
           <div class="field_row_value">
-            <pass-input
-              :inputID="inputID"
-            ></pass-input>
+            <pass-word-zhengzhou
+              BankCardPass="payPassDD"
+            ></pass-word-zhengzhou>
           </div>
           <p class="info">密码由数字组成，必须为6位</p>
         </section>
@@ -47,7 +49,7 @@
   import API from "@/service";
   import AppBar from '@/components/header/AppBar'
   import {LsName} from '@/Constant'
-  import PassInput from '@/components/password/PassInput'
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
@@ -71,7 +73,8 @@
         canClick: false,
         logo: '',
         inputID: '',
-        ifCheckMoneyEmpty: true
+        ifCheckMoneyEmpty: true,
+        DAY_REST:'10000', // todo取每日限额
       }
     },
     watch: {
@@ -90,7 +93,7 @@
     },
     components: {
       AppBar,
-      PassInput
+      PassWordZhengzhou
     },
     mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
     created() {
@@ -108,14 +111,16 @@
         })
       },
       doWithdraw() {
-        this.pass = $('#withdrawPayPass').$getCiphertext()
-        this.len = $('#withdrawPayPass').$getPasswordLength()
+        this.pass = $('#payPassDD').getKBD()
+        this.len = $('#payPassDD').getLenKBD()
         if (util.Check.payPassLen(this.len, true)) return
         let data = {
           PHONE_CODE: "",
           EITHDRAW_ALL: "0",
           APPLY_AMOUNT: this.APPLY_AMOUN,
-          BANK_PAY_PW: this.pass
+          BANK_PAY_PW: this.pass,
+          PREFIX:'',//  密码标识 TODO 密码标识 查询银行类型
+          IS_UNIONPAY:'', // 是否他行卡 必填 1：他行 0:本行
         }
         this.show = false
         API.withdraw.apiCash(data, res => {
@@ -123,6 +128,7 @@
             BIZ_TYPE: '4', // 提现
             BESHARP_SEQ: res.BESHARP_CASH_SEQ
           }
+          // 轮询 查寻交易状态
           this.queryStatus(
             {
               text: '提现中',
@@ -234,19 +240,17 @@
       width: px2rem(15);
       height: px2rem(15);
       top: 50%;
-      right: px2rem(80);
+      right: px2rem(100);
       margin-top: px2rem(-15/2);
 
     }
     input {
-      width: 50%;
+      width: px2rem(200);
       border: none;
       box-sizing: border-box;
       font-size: 0.4rem;
       color: #333;
-      /* line-height: 0.5rem; */
       outline: none;
-
     }
   }
 
@@ -260,8 +264,8 @@
   .tijiao {
     font-size: px2rem(18);
     color: #fff;
-    background-color: #e4e4e4;
-    /* border-radius: 0.1rem; */
+    background: #518BEE;
+     border-radius: px2rem(6);
     line-height: 1.2rem;
     width: px2rem(255);
     margin: px2rem(40) auto 0;

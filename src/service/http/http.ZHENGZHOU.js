@@ -34,7 +34,7 @@ export default {
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
     let ORG_ID = store.getters.GET_BANK_INFO.ORG_ID
-    let {DEVICE_ID, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
+    let {DEVICE_ID, CHANNEL_ID,TOKEN=token,SESSION_ID=''} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -42,7 +42,7 @@ export default {
           CHANNEL_TYPE: 'H5',
           VERSION: "",
           IMSI: "460026325010440",
-          SESSION_ID: "",
+          SESSION_ID: SESSION_ID,
           SYSTEM_TYPE: "h5",
           TYPE,
           TOKEN: TOKEN,
@@ -53,7 +53,8 @@ export default {
           ...params
         },
       },
-      channel_id: CHANNEL_ID + ''
+      channel_id: '1', // 注意这个！！
+      // channel_id: CHANNEL_ID + '',
     }
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)
@@ -80,8 +81,6 @@ export default {
           type:'REQ_SERIAL',
           value:result.data.REQ_SERIAL
         })
-        // util.storage.session.set(LsName.LAST_STEP_NUM, result.data.LAST_STEP_NUM) // 序列号
-        // util.storage.session.set(LsName.REQ_SERIAL, result.data.REQ_SERIAL) //
       }
       // 根据状态码 做业务状态校验 分流
       if (result.head.CODE == 0) {
@@ -92,25 +91,14 @@ export default {
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
         Bus.$emit(BusName.showToast, result.head.MSG)
-        // util.storage.session.remove(LsName.token)
         store.commit('SET_TOKEN', '')
-        Router.push({
-          name: PageName.Login,
-          query: {
-            target: Router.currentRoute.fullPath
-          }
-        })
+        goLogin()
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
-        // util.storage.session.remove(LsName.token)
-        Router.push({
-          name: PageName.Login,
-          query: {
-            target: Router.currentRoute.fullPath
-          }
-        })
+        goLogin()
+
       }
       else {
         console.log('错误msg >>>', result.head.MSG);
@@ -118,12 +106,7 @@ export default {
           Bus.$emit(BusName.showToast, result.head.MSG)
         }
         if (result.head.MSG == '未登陆银行') {
-          Router.push({
-            name: PageName.Login,
-            query: {
-              target: Router.currentRoute.fullPath
-            }
-          })
+          goLogin()
         }
         return Promise.reject(result.head.MSG)
       }
@@ -135,4 +118,12 @@ export default {
 
   }
 
+}
+function goLogin() {
+  Router.push({
+    name: PageName.Login,
+    query: {
+      target: Router.currentRoute.fullPath
+    }
+  })
 }

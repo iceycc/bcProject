@@ -46,6 +46,14 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+    // 用户注册信息回显
+    apiRegisterBackShow(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiRegisterBackShow',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+    },
   },
   /**
    * 注册相关 open

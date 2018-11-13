@@ -1,45 +1,38 @@
 <template>
   <div class="app">
-    <app-bar title="充值"></app-bar>
+    <app-bar title="赎回成功"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>充值成功</h2>
+      <h2>赎回成功</h2>
     </div>
     <section class="m-card">
-      <p><span>充值金额</span>{{data.money}}</p>
-      <p><span>交易流水号</span>{{data.BESHARP_RECHARGE_SEQ}}</p>
+      <p><span>赎回金额</span>{{money}}</p>
+      <p><span>收款账户</span>{{account}}</p>
+      <p><span>资金预计到账日期</span>{{date}}</p>
     </section>
-    <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
-    <!--<div class="begain">下载比财app</div>-->
-    <button class="begain" @click="goBalance">查看余额</button>
+    <button class="begain" @click="goNext">完成</button>
   </div>
 </template>
 <script>
-  import {LsName} from "@/Constant";
-  //
-  import Mixins from "@/mixins";
-  import util from "libs/util";
-  import {PageName} from "../../../Constant";
-
   export default {
     data() {
       return {
-        data: {
-          money:'',
-          BESHARP_RECHARGE_SEQ:''
-        }
+        money: '',
+        num: '',
+        BESHARP_CASH_SEQ: '',
+        date: '2020-10-11',
+        account: ''
       }
     },
     created() {
-      this.data = this.$route.query
+      let preData = this.$route.query
+      this.BESHARP_CASH_SEQ = preData.BESHARP_CASH_SEQ
+      this.money = preData.money
     },
     methods: {
-      goBalance() {
-        this.$router.push({
-          name: PageName.BankBalance
-        })
+      goNext() {
+        this.$router.go(-2)
       }
-
     }
   }
 </script>
@@ -53,26 +46,27 @@
   }
 
   .chattuimg {
-    margin-top: px2rem(80);
+    .img {
+      width: px2rem(70);
+    }
+    margin-top: px2rem(70);
     color: #2B74FE;
     text-align: center;
     h2 {
+      font-size: px2rem(18);
       margin: px2rem(20) 0;
-    }
-    .img {
-      width: px2rem(70);
     }
   }
 
   .m-card {
     padding: px2rem(20);
-    font-size: px2rem(14);
+    font-size: px2rem(16);
     color: #9199A1;
     border-top: 1px solid #eeeef0;
     border-bottom: 1px solid #eeeef0;
     span {
       display: inline-block;
-      width: px2rem(100);
+      width: px2rem(120);
     }
   }
 
@@ -85,7 +79,7 @@
 
   .begain {
     display: block;
-    font-size: px2rem(16);
+    font-size: px2rem(18);
     background: #518BEE;
     border-radius: px2rem(6);
     width: px2rem(255);

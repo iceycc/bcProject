@@ -1,5 +1,5 @@
 // 有些地方需要调用比财接口呢
-import axios from 'axios'
+import axios from '@/plugin/request/_axios'
 import store from '@/store/index'
 import {HOST} from "@/Constant";
 import Bus from '@/plugin/bus/index'
@@ -10,7 +10,6 @@ const config = {
   method: 'post',
   // baseURL: '/api/finsuit/PHONE/deal',
   baseURL: HOST + '/finsuitPhone/deal',
-
   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   timeout: 100000,
 }

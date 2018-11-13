@@ -58,7 +58,8 @@
     mixins: [Mixins.HandleMixin],
     created() {
       this.getInfo()
-      this.proDetail = this.$route.query // 数据
+      this.proDetail = this.$route.query || this.getComState.goBuy // 数据
+// 数据
     },
     activated() {
 

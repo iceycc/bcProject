@@ -35,7 +35,7 @@
     },
     data() {
       return {
-        ACC_REST: '0.00',
+        ACC_REST: '100',
       }
     },
     mixins: [Mixins.HandleMixin,BankBalanceMixins],
@@ -58,7 +58,7 @@
         this.setComState({type: 'OriginPage', value: this.$route.fullPath})
         if (page == 'Withdraw') {
           query = {
-            ACC_REST: this.ACC_REST
+            ACC_REST: this.ACC_REST // 可用余额
           }
         }
         console.log(page);

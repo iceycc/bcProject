@@ -6,6 +6,7 @@ import {version} from '../package'
 let Configs = {
   // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
   DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit/', // 郑州开发环境
+  // DEV_HOST: 'http://192.168.100.141:8080', // 郑州开发环境
   // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
   // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
   PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
@@ -92,13 +93,19 @@ export const PageName = {
   WithdrawFaild: 'WithdrawFaild', // 提现失败
   WaitForWithdraw: 'WaitForWithdraw', // 提现zhong
   PayDetail: 'PayDetail', // 提现失败
-  Redeem: 'Redeem',  // 赎回
   /**
    * 比财新加
    */
   BcOpening3: 'BcOpening3',
   BcOpening2: 'BcOpening2',
   BcOpening1: 'BcOpening1',
+  /**
+   * 郑州新增
+   */
+  // 赎回相关
+  Redeem:'Redeem',
+  RedeemFailure:'RedeemFailure',
+  RedeemSuccess:'RedeemSuccess',
 
 }
 

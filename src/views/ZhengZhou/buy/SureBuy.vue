@@ -38,7 +38,7 @@
           <div class="field_row_value">
             <!--<PassInputZhengzhou></PassInputZhengzhou> -->
             <pass-word-zhengzhou
-              BankCardPass="payPass"
+              BankCardPass="payPasscc"
             ></pass-word-zhengzhou>
           </div>
           <p class="info">密码由数字组成，必须为6位</p>
@@ -74,14 +74,13 @@
         banck: '',
       }
     },
-    mixins: [Mixins.HandleMixin ],
+    mixins: [Mixins.HandleMixin],
     components: {
       PassWordZhengzhou
     },
     created() {
       this.datas = this.$route.query
     },
-
     methods: {
       getAgreement(type) {
         this.$router.push({
@@ -100,11 +99,70 @@
           this.Londing.close()
         }, 500)
       },
+      // 轮询查询交易状态！！
+      polling(res) {
+        let data = {
+          BIZ_TYPE: '6', // 购买
+          BESHARP_SEQ: res.BESHARP_BUY_SEQ
+        }
+        // 交易轮询
+        this.Londing.open({
+          text: '正在购买中'
+        })
+        let i = 1
+        let timer = setInterval(() => {
+          i++
+          API.common.apiQueryBizStatus(data, result => {
+            console.log(result.RES_CODE);
+            this.setComState({type: "reload", value: true}) // reload-001
+            if ('1' == result.RES_CODE && i == 5) {
+              this.Londing.close()
+              clearInterval(timer)
+              Bus.$emit(BusName.showToast, result.RES_MSG);
+              this.$router.push({
+                name: PageName.BuyFailed,
+                query: {
+                  err: result.RES_MSG
+                }
+              })
+            }
+            else if ('0' == result.RES_CODE) { // 成功
+              clearInterval(timer)
+              Bus.$emit(BusName.showToast, result.RES_MSG);
+              this.Londing.close()
+              let buyData = {
+                money: this.datas.money, // 金额
+                PRD_NAME: this.datas.PRD_NAME, // 产品名称
+                ORG_NAME: this.datas.ORG_NAME, // 机构名称
+                OPERA_DATE: res.OPERA_DATE, // 交易日期
+                BESHARP_BUY_SEQ: res.BESHARP_BUY_SEQ, // 流水号
+                EXPECT_PROFIT_DATE: '' // TODO 缺字段 预计收益日期
+
+              }
+              this.setComState({type: 'buyData', value: buyData})
+              this.$router.push({
+                name: PageName.BuySuccess,
+              })
+              return
+            } else {
+              if (i > 5) {
+                Bus.$emit(BusName.showToast, result.RES_MSG);
+                this.$router.push({
+                  name: PageName.BuyFailed,
+                  query: {
+                    err: result.RES_MSG
+                  }
+                })
+                return
+              }
+            }
+          })
+        }, 2000)
+      },
+      // 交易
       doPay() {
-        this.pass = $("#payPass").getKBD(); //获取密码
-        this.len  = $("#payPass").getLenKBD(); //获取密码长度
-        // this.pass = $('#payPass').$getCiphertext()
-        // this.len = $('#payPass').$getPasswordLength()
+        this.pass = $("#payPasscc").getKBD(); //获取密码
+        this.len = $("#payPasscc").getLenKBD(); //获取密码长度
         let data = {
           PRD_ID: this.datas.id + '',
           APPLY_AMOUNT: this.datas.money + '',
@@ -113,63 +171,10 @@
         if (util.Check.payPassLen(this.len, true)) return;
         this.show = false
         API.buy.apiBuy(data, (res) => {
-          let data = {
-            BIZ_TYPE: '6',
-            BESHARP_SEQ: res.BESHARP_BUY_SEQ
-          }
-          this.Londing.open({
-            text: '正在购买中'
-          })
-          let i = 1
-          let timer = setInterval(() => {
-            i++
-
-            API.query.apiQueryBizStatus(data, result => {
-              console.log(result.RES_CODE);
-              this.setComState({type:"reload",value:true}) // reload-001
-              if ('1' == result.RES_CODE && i == 5) {
-                this.Londing.close()
-                clearInterval(timer)
-                Bus.$emit(BusName.showToast, result.RES_MSG);
-                this.$router.push({
-                  name: PageName.BuyFailed,
-                  query: {
-                    err: result.RES_MSG
-                  }
-                })
-              }
-              else if ('0' == result.RES_CODE) { // 成功
-                clearInterval(timer)
-                Bus.$emit(BusName.showToast, result.RES_MSG);
-                this.Londing.close()
-                this.$router.push({
-                  name: PageName.BuySuccess,
-                  query: {
-                    money: this.datas.money,
-                    PRD_NAME: this.datas.PRD_NAME,
-                    ORG_NAME: this.datas.ORG_NAME,
-                    OPERA_DATE: res.OPERA_DATE,
-                    BESHARP_BUY_SEQ: res.BESHARP_BUY_SEQ
-                  }
-                })
-                return
-              } else {
-                if (i > 5) {
-                  Bus.$emit(BusName.showToast, result.RES_MSG);
-                  this.$router.push({
-                    name: PageName.BuyFailed,
-                    query: {
-                      err: result.RES_MSG
-                    }
-                  })
-                  return
-                }
-              }
-            })
-          }, 2000)
+          this.polling(res)
         }, err => {
           this.Londing.close()
-          this.setComState({type:"reload",value:true}) // reload-001
+          this.setComState({type: "reload", value: true}) // reload-001
           this.$router.push({
             name: PageName.BuyFailed,
             query: {

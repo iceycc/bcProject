@@ -52,15 +52,15 @@
       <section class="passbox">
         <p class="title">
           <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由晋商银行提供技术保障</p>
+          由郑州银行提供技术保障</p>
         <section class="field_row_wrap">
           <p class="field_row_key">
             交易密码
           </p>
           <div class="field_row_value">
-            <pass-input
-              inputID="payPass"
-            ></pass-input>
+            <pass-word-zhengzhou
+              BankCardPass="payPassAA"
+            ></pass-word-zhengzhou>
           </div>
           <p class="info">密码由数字组成，必须为6位</p>
         </section>
@@ -78,8 +78,8 @@
 </template>
 <script>
   import API from "@/service";
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import {HOST, LsName} from '@/Constant'
-  import PassInput from '@/components/password/PassInput'
   import UpSelect from '@/components/commons/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
@@ -110,8 +110,8 @@
         logo: '',
         CARD_BANK_NAME: '',
         CARD_BANK_URL: '',
-        DAY_QUOTA: '',
-        SINGLE_QUOTA: '',
+        DAY_QUOTA: '10000', // 单日限额
+        SINGLE_QUOTA: '500',// 单笔限额
         msgCode: '',
         codeText: '获取验证码',
         disable: false,
@@ -120,20 +120,19 @@
       }
     },
     components: {
-      PassInput,
-      UpSelect
+      UpSelect,
+      PassWordZhengzhou
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
-      let lsData = this.getComState.RechargeQuery
+      let lsData = this.getComState.goBuy
       console.log('lsData>>', lsData);
       this.ORG_NAME = lsData.ORG_NAME
       this.logo = lsData.LOGO_URL
       this.reChangeHandele()
     },
     methods: {
-
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
         //
@@ -202,8 +201,8 @@
         this.agree = !this.agree
       },
       doReCange() {
-        this.pass = $('#payPass').$getCiphertext()
-        this.len = $('#payPass').$getPasswordLength()
+        this.pass = $("#payPassAA").getKBD(); //获取密码
+        this.len = $("#payPassAA").getLenKBD(); //获取密码长度
         if (util.Check.payPassLen(this.len, true)) return;
         this.show = false
         this.handleApiRecharge()
