@@ -29,27 +29,7 @@ export default [
     component: resolve => require(['views/ZhengZhou/buy/Buying.vue'], resolve),
     meta: {keepAlive: false, title: '购买', needLogin: false}
   },
-  /**
-   * 郑州新增：赎回
-   */
-  {
-    path: '/' + PageName.Redeem,
-    name: PageName.Redeem,
-    component: resolve => require(['views/ZhengZhou/Redeem/Redeem.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
-  },
-  {
-    path: '/' + PageName.RedeemSuccess,
-    name: PageName.RedeemSuccess,
-    component: resolve => require(['views/ZhengZhou/Redeem/RedeemSuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
-  },
-  {
-    path: '/' + PageName.RedeemFailure,
-    name: PageName.RedeemFailure,
-    component: resolve => require(['views/ZhengZhou/Redeem/RedeemFailure.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
-  },
+
 
   /**
    * login
@@ -249,5 +229,25 @@ export default [
     component: resolve => require(['views/ZhengZhou/financingList/TransactionDetails.vue'], resolve),
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
-
+  /**
+   * 郑州新增：赎回
+   */
+  {
+    path: '/' + PageName.Redeem,
+    name: PageName.Redeem,
+    component: resolve => require(['views/ZhengZhou/redeem/Redeem.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
+  },
+  {
+    path: '/' + PageName.RedeemSuccess,
+    name: PageName.RedeemSuccess,
+    component: resolve => require(['views/ZhengZhou/redeem/RedeemSuccess.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
+  },
+  {
+    path: '/' + PageName.RedeemFailure,
+    name: PageName.RedeemFailure,
+    component: resolve => require(['views/ZhengZhou/redeem/RedeemFailure.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
+  },
 ]

@@ -6,11 +6,11 @@
       <h2>赎回成功</h2>
     </div>
     <section class="m-card">
-      <p><span>赎回金额</span>{{money}}</p>
-      <p><span>收款账户</span>{{account}}</p>
-      <p><span>资金预计到账日期</span>{{date}}</p>
+      <p><span>赎回金额</span><span>{{money}}</span></p>
+      <p><span>收款账户</span><span>{{account}}</span></p>
+      <p><span>资金预计到账日期</span><span>{{date}}</span></p>
     </section>
-    <button class="begain" @click="goNext">完成</button>
+    <button class="begain" @click="goNext">完成1</button>
   </div>
 </template>
 <script>
@@ -64,9 +64,15 @@
     color: #9199A1;
     border-top: 1px solid #eeeef0;
     border-bottom: 1px solid #eeeef0;
-    span {
-      display: inline-block;
-      width: px2rem(120);
+    p {
+      display: flex;
+      span:first-child {
+        width: px2rem(130);
+      }
+      span:last-child{
+        flex:1;
+        text-align:right;
+      }
     }
   }
 

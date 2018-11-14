@@ -12,7 +12,7 @@
         <div class="profit">
           <div>
             <p>昨日收益</p>
-            <p>+2.30</p>
+            <p>{{financialData.YSD_INCOME | formatNum}}</p>
           </div>
           <div>
             <p>累计收益</p>
@@ -40,16 +40,17 @@
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
                 <p>隶属于{{item.ORG_NAME}}</p>
+                <!--todo 这三个参数现在还不对别忘记改-->
                 <p>当前价值（元）
                   <span>{{item.INVEST_AMOUNT | formatNum}}</span>
                 </p>
-                <p>预期年化收益率
+                <p>昨日收益
                   <span>{{item.RATE}}%</span>
                 </p>
-                <p>预期参考收益（元）
+                <p>累计收益
                   <span>{{item.YQ_INCOME_AMOUNT | formatNum}}</span>
                 </p>
-                <p>到期日期
+                <p>七日年化
                   <span>{{item.OVER_DATE}}</span>
                 </p>
                 <!-- 新加赎回追加按钮 -->
@@ -123,7 +124,16 @@
           pageSize: "10"
         },
 
-        pageList: [],
+        pageList: [
+          {
+            PRD_NAME:'测试产品1',
+            ORG_NAME:'郑州银行',
+            INVEST_AMOUNT:'0.00',
+            RATE:'0',
+            YQ_INCOME_AMOUNT:'0.00',
+            OVER_DATE:'0'
+          }
+        ],
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 
@@ -132,10 +142,24 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList1: [],
+        pageList1: [
+          {
+            PRD_NAME:'测试产品1',
+            ORG_NAME:'郑州银行',
+            INVEST_AMOUNT:'0.00',
+            RATE:'0',
+            YQ_INCOME_AMOUNT:'0.00',
+            OVER_DATE:'0'
+          }
+        ],
         tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
-        financialData: {},
+        financialData: {
+          TOTAL_AMOUNT:'0.00',
+          YSD_INCOME:'0.00',
+          TOTAL_INCOME:'0.00',
+
+        },
         total: ''
       };
     },
@@ -157,6 +181,7 @@
     },
     methods: {
       toggleTabs(index) {
+        debugger
         this.nowIndex = index;
         this.loadPageList();
       },
@@ -165,7 +190,7 @@
           PRD_TYPE: ""
         };
         API.financial.apiMyAssetByType(data, res => {
-          this.financialData = res.lcAsset;
+          this.financialData = res.hjAsset;
         });
       },
       loadTop: function () {

@@ -12,7 +12,7 @@
         <div class="profit">
           <div>
             <p>昨日收益</p>
-            <p>+2.30</p>
+            <p>{{financialData.YSD_INCOME | formatNum}}</p>
           </div>
           <div>
             <p>累计收益</p>
@@ -123,7 +123,15 @@
           pageSize: "10"
         },
 
-        pageList: [],
+        pageList: [
+          {
+            PRD_NAME:'测试产品1',
+            ORG_NAME:'郑州银行',
+            INVEST_AMOUNT:'0.00',
+            RATE:'0',
+            YQ_INCOME_AMOUNT:'0.00',
+          }
+        ],
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 

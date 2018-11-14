@@ -60,7 +60,7 @@
                     <span class="top-left">
                         货币基金</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
-                        ¥{{bankDetail.hjAsset.API_FUND_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
+                        ¥{{bankDetail.hjAsset.API_FUND_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.hjAsset.API_FUND_ASSET | lastLcAssetFilter}}</i>
                     </span>
         <span class="top-right" v-if="!pass">
                     ****
@@ -110,7 +110,14 @@
     data() {
       return {
         imgSrc,
-        proList: [],
+        proList: {
+          hjAsset:[
+            {
+              PRD_NAME:'测试产品1',
+              INVEST_AMOUNT:'0.00'
+            }
+          ]
+        },
         pass: true,
         licaiShow: false,
         toPageName: {
@@ -126,7 +133,10 @@
           YSD_INCOME: '0.00', // 昨日收益
           EC_ACCOUNT_NO: '',
           lcAsset: '',
-          ORG_HOTLINE: ''
+          ORG_HOTLINE: '',
+          hjAsset:{
+            API_FUND_ASSET:'0.00'
+          }
         }
       }
     },
