@@ -15,10 +15,10 @@
         <span>提现</span>
         <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
       </section>
-      <!--<section class="m-li" @click="goPage('TransactionDetails')">-->
-        <!--<span>明细查询</span>-->
-        <!--<icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>-->
-      <!--</section>-->
+      <section class="m-li" @click="goPage('DealDetails')">
+        <span>明细查询</span>
+        <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
+      </section>
     </section>
   </div>
 </template>
@@ -35,7 +35,7 @@
     },
     data() {
       return {
-        ACC_REST: '100',
+        ACC_REST: '0.00',
       }
     },
     mixins: [Mixins.HandleMixin,BankBalanceMixins],

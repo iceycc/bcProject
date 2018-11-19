@@ -7,12 +7,12 @@
         <!-- 头部详情样式改动 -->
         <div class="total-price">
           <p>总资产<i>(元)</i></p>
-          <p>{{financialData.TOTAL_AMOUNT | formatNum}}</p>
+          <p>{{financialData.ACC_REST | formatNum}}</p>
         </div>
         <div class="profit">
           <div>
             <p>昨日收益</p>
-            <p>+2.30</p>
+            <p>{{financialData.YSD_INCOME | formatNum}}</p>
           </div>
           <div>
             <p>累计收益</p>
@@ -34,28 +34,29 @@
             <div style="padding-bottom: 20px">
               <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
                 <!-- 新加明细按钮 -->
-                <span class="detail">明细</span>
+                <span class="detail" @click="geDetails(item)">明细</span>
                 <h4>
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
                 <p>隶属于{{item.ORG_NAME}}</p>
-                <p>当前价值（元）
-                  <span>{{item.INVEST_AMOUNT | formatNum}}</span>
+                <!--todo 这三个参数现在还不对别忘记改-->
+                <p>持有金额（元）
+                  <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
-                <p>预期年化收益率
-                  <span>{{item.RATE}}%</span>
+                <p>昨日收益
+                  <span>{{item.CURRENT_INCOME}}</span>
                 </p>
-                <p>预期参考收益（元）
-                  <span>{{item.YQ_INCOME_AMOUNT | formatNum}}</span>
+                <p>累计收益
+                  <span>{{item.ADD_INCOME | formatNum}}</span>
                 </p>
-                <p>到期日期
+                <p>七日年化
                   <span>{{item.OVER_DATE}}</span>
                 </p>
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
                   <div>
-                    <span>赎回</span>
+                    <span @click="goRedeem(item)">赎回</span>
                   </div>
                   <div>
                     <span>追加</span>
@@ -79,23 +80,11 @@
               </h4>
               <p>隶属于{{item.ORG_NAME}}</p>
               <p>投资金额（元）
-                <span>{{item.INVEST_AMOUNT | formatNum}}</span>
+                <span>{{item.HOLD_AMOUNT | formatNum}}</span>
               </p>
-              <p>投资收益（元）
-                <span>{{item.TOTAL_INCOME | formatNum}}</span>
+              <p>累计收益
+                <span>{{item.ADD_INCOME | formatNum}}</span>
               </p>
-              <p>到期日期
-                <span>{{item.OVER_DATE}}</span>
-              </p>
-              <!-- 新加赎回追加按钮 -->
-              <div class="bottom-btn">
-                <div>
-                  <span>赎回</span>
-                </div>
-                <div>
-                  <span>追加</span>
-                </div>
-              </div>
             </div>
           </v-loadmore>
         </div>
@@ -111,6 +100,7 @@
   import {Loadmore} from "mint-ui";
   import util from "libs/util";
   import Mixins from "@/mixins";
+  import {PageName} from "../../../Constant";
 
 
   export default {
@@ -122,8 +112,17 @@
           pageNo: "1",
           pageSize: "10"
         },
-
-        pageList: [],
+        pageList: [
+          {
+            PRD_NAME:'测试产品1',
+            ORG_NAME:'郑州银行22',
+            INVEST_AMOUNT:'0.00',
+            RATE:'0',
+            YQ_INCOME_AMOUNT:'0.00',
+            OVER_DATE:'0',
+            PRD_INDEX_ID:'0'
+          }
+        ],
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 
@@ -132,10 +131,24 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList1: [],
+        pageList1: [
+          {
+            PRD_NAME:'测试产品1',
+            ORG_NAME:'郑州银行',
+            INVEST_AMOUNT:'0.00',
+            RATE:'0',
+            YQ_INCOME_AMOUNT:'0.00',
+            OVER_DATE:'0',
+            PRD_INDEX_ID:'0'
+          }
+        ],
         tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
-        financialData: {},
+        financialData: {
+          ACC_REST:'0.00',
+          YSD_INCOME:'0.00',
+          TOTAL_INCOME:'0.00',
+        },
         total: ''
       };
     },
@@ -156,16 +169,28 @@
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
     methods: {
+      geDetails(item){
+        let {FUND_NO,PRD_INDEX_ID,PRD_NAME} = item
+        this.$router.push({name:PageName.TransactionDetails,query:{FUND_NO,PRD_INDEX_ID,PRD_NAME}})
+      },
+      goRedeem(data){
+        this.setComState({
+          type:'redeemData',
+          value:data
+        })
+        this.$router.push({name:PageName.Redeem})
+      },
       toggleTabs(index) {
         this.nowIndex = index;
         this.loadPageList();
       },
       getData() {
         let data = {
-          PRD_TYPE: ""
+          type:'API_QRY_ASSET',
         };
-        API.financial.apiMyAssetByType(data, res => {
-          this.financialData = res.lcAsset;
+        //
+        API.bank.apiQryAsset(data, res => {
+          this.financialData = res;
         });
       },
       loadTop: function () {
@@ -201,10 +226,11 @@
           //已到期数据
           let data = {
             currentPage: this.searchCondition1.pageNo,
-            PRD_TYPE: "2"
+            PRD_TYPE: "1"
           };
-          API.financial.getMyInvestOver(data, res => {
-            this.pageList1 = res.PAGE.retList;
+          API.bank.apiQryHoldInfo(data, res => {
+
+            this.pageList1 = res.retList || [];
             if (this.pageList1.length == 0) {
               // this.allLoaded = true;
             }
@@ -222,10 +248,10 @@
           //持有数据
           let data = {
             currentPage: this.searchCondition.pageNo,
-            PRD_TYPE: "2"
+            PRD_TYPE: "1"
           };
-          API.financial.getMyInvestHold(data, res => {
-            this.pageList = res.PAGE.retList;
+          API.bank.apiQryHoldInfo(data, res => {
+            this.pageList = res.retList;
             // this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
               this.allLoaded = true;
@@ -251,8 +277,8 @@
             currentPage: this.searchCondition1.pageNo,
             PRD_TYPE: "2"
           };
-          API.financial.getMyInvestOver(data, res => {
-            this.pageList1 = this.pageList1.concat(res.PAGE.retList);
+          API.bank.apiQryHoldInfo(data, res => {
+            this.pageList1 = this.pageList1.concat(res.retList);
             if (this.pageList1.length < this.searchCondition1.pageSize) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
@@ -266,8 +292,8 @@
             currentPage: this.searchCondition.pageNo,
             PRD_TYPE: "2"
           };
-          API.financial.getMyInvestHold(data, res => {
-            this.pageList = this.pageList.concat(res.PAGE.retList);
+          API.bank.apiQryHoldInfo(data, res => {
+            this.pageList = this.pageList.concat(res.retList);
             if (this.pageList.length < this.searchCondition.pageSize) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");

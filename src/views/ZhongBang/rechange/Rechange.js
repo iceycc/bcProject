@@ -1,5 +1,7 @@
 import API from "@/service";
 import {PageName, BusName} from "@/Constant";
+import Bus from '@/plugin/bus'
+
 export default {
   data() {
     return {}
@@ -8,26 +10,26 @@ export default {
     console.log('JinShang');
   },
   methods: {
-    getCode() { // 获取充值协议码
-      API.reChange.apiRechargeProtoCode({}, res => {
-        console.log(res);
-        this.PIN = res.PIN
-        this.agree1 = true
-        // this.page = false
-      }, err => {
-        this.codeText = '重新发送'
-        this.disable = false
-        clearInterval(timer)
-      })
+    getCode() { // 充值短信
+      let data = {
+        PHONE_NUM:this.PHONE_NUM,
+        BIZ_TYPE:'1004', // 充值需要
+        AMOUNT:this.APPLY_AMOUN
+      }
+      API.common.apiSendPhoneCode(data)
     },
     handleApiRecharge(){
+      // TYPE	请求类型
+      // ORG_ID	机构ID
+      // APPLY_AMOUNT	充值金额
+      // VRFY_FLAG	校验标志
+      // PHONE_CODE	短信验证码
       let data = {
         TYPE:'API_RECHARGE',
         PHONE_CODE: this.msgCode,
-        PIN: this.PIN,
-        BANK_PAY_PW: this.pass,
-        APPLY_AMOUNT: this.APPLY_AMOUN
-      }
+        APPLY_AMOUNT: this.APPLY_AMOUN,
+        VRFY_FLAG:'00',// 使用标志位进行判断，1-校验，0不校验： 第1位是否校验短信验证码 第2位是否校验密码。例：00-不校验；10-校验短信；01-校验密码；11-短信和密码都校验
+    }
       API.reChange.apiRecharge(data, res => {
         let params = {
           BIZ_TYPE: '3',
@@ -47,7 +49,6 @@ export default {
                   err: result.RES_MSG
                 }
               })
-
             }
             else if ('0' == result.RES_CODE) {
               clearInterval(timer)
@@ -85,11 +86,17 @@ export default {
       })
     },
     getInfos() {
+      // 获取机构名称  机构logo 用于充值提现
       API.safe.apiBandCard({}, res => {
+        this.logo = res.BANK_BG_URL
+        this.ORG_NAME = res.BANK_USER_CODE
+        this.ACCT_NO = res.CARD_NUM
+        this.PHONE_NUM = res.PHONE_NUM
         this.CARD_BANK_NAME = res.CARD_BANK_NAME;
         this.CARD_BANK_URL = res.CARD_BANK_URL
-        this.SINGLE_QUOTA = res.SINGLE_QUOTA
-        this.DAY_QUOTA = res.DAY_QUOTA
+        // todo
+        // this.SINGLE_QUOTA = res.SINGLE_QUOTA
+        // this.DAY_QUOTA = res.DAY_QUOTA
         let cardNum =res.CARD_NUM
         this.mainBankList.push({
           logo:res.CARD_BANK_URL,

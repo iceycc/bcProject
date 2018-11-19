@@ -1,18 +1,27 @@
 <template>
   <div>
-    测试页面
-    <pass-word-zhengzhou></pass-word-zhengzhou>
   </div>
 </template>
 <script>
-  import PassWordZhengzhou from '../../components/password/PassInputZhengzhou'
+  import util from '../../libs/util'
+  import {PageName} from "../../Constant";
   export default {
     name: "testPage",
-    created(){
-
-    },
-    components:{
-      PassWordZhengzhou
+    created() {
+      let reload = util.storage.session.get('reload') || null
+      let flag = util.storage.session.get('flag') || null
+      console.log(reload);
+      if (reload) {
+        util.storage.session.remove('reload')
+        window.location.reload()
+      } else {
+        let data = this.$route.query
+        util.storage.session.remove('flag')
+        this.$router.push({
+          name: flag,
+          query: data
+        })
+      }
     },
 
   }

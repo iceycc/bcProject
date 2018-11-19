@@ -54,6 +54,8 @@
 
   const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
   let time = 60
+  let timer;
+
   export default {
     data() {
       return {
@@ -89,7 +91,9 @@
     },
     inject: ['reload'],
     created() {
-      this.ORG_ID = this.$store.getters.GET_BANK_INFO.ORG_ID
+      this.ORG_ID = util.storage.session.get('ORG_ID')  || ''
+
+      // this.ORG_ID = this.$store.getters.GET_BANK_INFO.ORG_ID
       this.BANK_NAME = this.$store.getters.GET_BANK_INFO.BANK_NAME
       let preInfo = this.getComState.loginInfo;
       if (preInfo) {
@@ -173,7 +177,7 @@
           let mark = data.mark // 0 未满5次，1满五次
           this.SESSION_ID = SESSION_ID
           if (mark == 0) {
-            Bus.$emit(BusName.showToast,'验证码发送成功')
+            Bus.$emit(BusName.showToast, '验证码发送成功')
             this.timeDown()
           } else {
             console.log(canLogin);
@@ -203,38 +207,10 @@
           })
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
-          this.checkAuthStatus(data => {
-            let {AUTH_STATUS, isOldMember} = data
-            //  AUTH_STATUS 返回码：
-            // 0:未认证，
-            // 1:身份证认证，
-            // 2:银行卡认证，
-            // 3:密码设置，
-            // 4:认证完成，
-            // 5:身份证过期
-            console.log(AUTH_STATUS);
-            switch (Number(AUTH_STATUS)) {
-              case 0:
-              case 1:
-                this.$router.push(PageName.BcOpening1)
-                break;
-              case 2:
-                this.$router.push(PageName.BcOpening2)
-                break;
-              case 3:
-                this.$router.push(PageName.BcOpening3)
-                break;
-              case 4:
-                this.checkBankStatus()
-                // todo 再判断对应的直销银行有没有开户
-                break;
-              case 5:
-                //
-                this.$router.push(PageName.BcOpening1)
-                break;
-            }
-          })
-
+          // todo 登陆比财 首先判断比财开户的状态 暂时注释。
+          // this.checkAuthStatus()
+          // 跳过校验比财开户状态 直接判断郑州银行回显
+          this.checkBankStatus()
         }, err => {
           API.watchApi({
             FUNCTION_ID: 'ptb0A007', // 点位
@@ -249,52 +225,103 @@
               msg: err
             }
           })
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
-      },
-      //
-      // 登陆比财成功 且 在比财实名成功 然后 检查在本行状态
-      checkBankStatus(){
-        let data = {}
-        API.common.apiRegisterBackShow(data,res =>{
-          let step =  res.LAST_STEP_NUM
-        // （0未提交，1提交第一步，2提交第二步，3提交第三步）
-          if(step==0){
-            util.storage.session.set('USERINFO',res)
-            this.$router.push({name:PageName.Opening1})
-          }
-          if(step==1){
-            util.storage.session.set('USERINFO',res)
-            this.$router.push({name:PageName.Opening2})
-          }
-          if(step==2){
-            util.storage.session.set('USERINFO',res)
-            this.$router.push({name:PageName.Opening3})
-          }
-          if(step==3){
-            // todo登陆成功后判断拿来的去哪里
-            // this.$router.push({name:PageName.Opening3})
-          }
 
         })
       },
       // 判断该用户在比财的实名认证状态
-      checkAuthStatus(fn) {
+      checkAuthStatus() {
         API.bicai.getAuthStatus({}, res => {
-          fn && fn(res)
+          let {AUTH_STATUS, isOldMember} = res
+          //  AUTH_STATUS 返回码：
+          // 0:未认证，
+          // 1:身份证认证，
+          // 2:银行卡认证，
+          // 3:密码设置，
+          // 4:认证完成，
+          // 5:身份证过期
+          console.log(AUTH_STATUS);
+          switch (Number(AUTH_STATUS)) {
+            case 0:
+            case 1:
+              this.$router.push(PageName.BcOpening1)
+              break;
+            case 2:
+              this.$router.push(PageName.BcOpening2)
+              break;
+            case 3:
+              this.$router.push(PageName.BcOpening3)
+              break;
+            case 4:
+              this.checkBankStatus()
+              // todo 再判断对应的直销银行有没有开户
+              break;
+            case 5:
+              //
+              this.$router.push(PageName.BcOpening1)
+              break;
+          }
+        },err=>{
+          this.codeText = '重新发送'
+          this.msgDisabled = false
+          clearInterval(timer)
         })
       },
-      // goOpen() { // 去开户
-      //   API.watchApi({
-      //     FUNCTION_ID: 'ptb0A008', // 点位
-      //     REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
-      //   })
-      //   this.setComState({type: 'reload', value: true})
-      //   // this.setComState({type:"reload",value:true}) // reload-001
-      //   this.$router.push({name: PageName.Opening1})
-      // },
+      // 判断该用户在本行的开户状态
+      checkBankStatus() {
+        // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
+        let data = {}
+        API.common.apiRegisterBackShow(data, res => {
+          let step = res.LAST_STEP_NUM
+          // （0未提交，1提交第一步，2提交第二步，3提交第三步）
+          util.storage.session.set('USERINFO', res)
+          if (step == 0) {
+            // this.$store.commit('SET_OPENING_DATA', 1)
+            this.setComState({type:'openingData',value:res})
+            this.$router.push({name: PageName.Opening1})
+          }
+          if (step == 1) {
+            this.setComState({type:'openingData',value:res})
+            // this.$store.commit('SET_OPENING_DATA', 1)
+            this.$router.push({name: PageName.Opening2})
+          }
+          if (step == 2) {
+            this.setComState({type:'openingData',value:res})
+            // this.$store.commit('SET_OPENING_DATA', 1)
+            this.$router.push({name: PageName.Opening3})
+          }
+          if (step == 3) {
+            // todo登陆成功后判断拿来的去哪里
+            this.setComState({type:'Infos',value:res})
+            this.checkIfPinggu(res)
+          }
+        },err=>{
+          this.codeText = '重新发送'
+          this.msgDisabled = false
+          clearInterval(timer)
+        })
+      },
+      // 判断是否评估
+      checkIfPinggu(res){
+        // this.$router.push({name:PageName.Opening3})
+        this.removeComState('loginInfo')
+        let type = res.HAS_GRADE
+        this.setComState({type: 'HAS_GRADE', value: type})
+        // util.storage.session.set(LsName.HAS_GRADE, type)
+        if (type == 1) {
+          Bus.$emit(BusName.showToast, '请先进行评估')
+          this.$router.push({
+            name: PageName.VerificationSuccess,
+          })
+        }
+        else if (type == 2) { // 评估过
+          // 2的话
+          this.toPreProduct() // 评估过判断是否去哪里
+
+        } else {
+          this.toPreProduct() // 评估过判断是否去哪里
+        }
+      },
+      //
       focusHandle() {
         this.telShow = true
         this.telPaceholder = ''
@@ -313,7 +340,7 @@
       timeDown() {
         let sTime = time
         this.msgDisabled = true
-        let timer = setInterval(() => {
+        timer = setInterval(() => {
           if (sTime == 0) {
             this.codeText = '重新发送'
             this.msgDisabled = false

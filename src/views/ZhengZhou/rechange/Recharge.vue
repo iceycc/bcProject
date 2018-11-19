@@ -101,7 +101,7 @@
         APPLY_AMOUN: '',
         toUrl: '',
         ifGet: false,
-        write: true, // 是否签约
+        write: false, // 是否签约
         agree: true, // 是否阅读
         agree1: true, // 是否获取短信
         agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
@@ -116,7 +116,11 @@
         codeText: '获取验证码',
         disable: false,
         upseletShow: false,
-        mainBankList: []
+        mainBankList: [],
+
+        passCode:'',
+        ACCT_NO:'', // TODO
+        PHONE_NUM:''
       }
     },
     components: {
@@ -126,10 +130,7 @@
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
-      let lsData = this.getComState.goBuy
-      console.log('lsData>>', lsData);
-      this.ORG_NAME = lsData.ORG_NAME
-      this.logo = lsData.LOGO_URL
+
       this.reChangeHandele()
     },
     methods: {
@@ -180,17 +181,17 @@
           Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
           return
         }
-        if (!this.agree) {
-          Bus.$emit(BusName.showToast, '您还未签约充值协议')
-          return
-        }
-        if (!this.write) {
-          if (util.Check.trim(this.msgCode, '手机验证码', true)) return;
-        }
-        if (!this.agree1) {
-          Bus.$emit(BusName.showToast, '请获取手机验证码')
-          return
-        }
+        // if (!this.agree) {
+        //   Bus.$emit(BusName.showToast, '您还未签约充值协议')
+        //   return
+        // }
+        // if (!this.write) {
+        //   if (util.Check.trim(this.msgCode, '手机验证码', true)) return;
+        // }
+        // if (!this.agree1) {
+        //   Bus.$emit(BusName.showToast, '请获取手机验证码')
+        //   return
+        // }
         this.Londing.open()
         setTimeout(() => {
           this.Londing.close()
@@ -203,6 +204,7 @@
       doReCange() {
         this.pass = $("#payPassAA").getKBD(); //获取密码
         this.len = $("#payPassAA").getLenKBD(); //获取密码长度
+        this.passCode = $("#payPassAA").getBDCode(); //获取密码长度
         if (util.Check.payPassLen(this.len, true)) return;
         this.show = false
         this.handleApiRecharge()

@@ -5,7 +5,7 @@
       <div :id="BankCardPass" class="pwd-box"
            placeholder="请输入登录密码"
            tabindex="1"
-           kbdtype="Alnum"
+           kbdtype="Number"
            action="http://192.168.100.100:11020/getPasswordKeyboard"
            modulus-hex="8e33dd35128b9ff1262e22948e7130349ab949f4e64d8476fda0ee6de00ed48536e232f39ab1b0d5118553b4d8e2b303a372e03451246155f357b846ab70e87c122a5c66fb05f92fca8c6db71c01ea2cde5de29790e035d85170b12f5df60fce19e32856d1ec9598a3f73c86d07cd7136e58529581dde7792ee47c7f00929e45"
            readonly="readonly">
@@ -27,7 +27,7 @@
       },
       kbdtype:{
         type:null,
-        default:'Alnum'
+        default:'Number'
       }
     },
     mounted() {

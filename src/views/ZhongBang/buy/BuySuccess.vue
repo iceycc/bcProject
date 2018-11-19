@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app">
+  <div>
     <app-bar title="购买"></app-bar>
     <div class="buysuccessimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
@@ -19,8 +19,12 @@
         <div class="buysuccessdetailright">{{datas.money}}元</div>
       </div>
       <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">购买日期</div>
+        <div class="buysuccessdetailleft">交易申请日期</div>
         <div class="buysuccessdetailright">{{datas.OPERA_DATE}}</div>
+      </div>
+      <div class="buysuccessdetails">
+        <div class="buysuccessdetailleft">预期开始收益日期</div>
+        <div class="buysuccessdetailright">{{datas.EXPECT_PROFIT_DATE}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易流水号</div>
@@ -28,40 +32,41 @@
       </div>
 
     </div>
-    <div class="xiazai" @click="goApp">下载比财app查看资产</div>
+    <div class="btn">
+      <span @click="goMyAssets" class="begain">查看我的资产</span>
+      <span @click="goBuyOther" class="begain">购买其它产品</span>
+    </div>
   </div>
 </template>
 <script>
-  import util from "libs/util";
   import {WatchApi} from "@/service";
-  import {BusName} from "@/Constant";
+  import {BusName,PageName} from "@/Constant";
   import Mixins from "@/mixins";
-
-
   export default {
+    mixins:[Mixins.StoreMixin],
     data() {
       return {
-        datas: [],
+        datas: {},
         downUrl: 'http://www.baidu.com'
       }
     },
     created() {
-
-      this.datas = this.$route.query
+      this.datas = this.getComState.buyData || {}
+      console.log(this.datas);
     },
     methods: {
-      goApp() {
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A010', // 点位
-          REMARK_DATA: '异业合作-购买成功-下载比财', // 中文备注
-        })
-        util.downLoad()
+      goMyAssets(){
+        this.$router.push({name:PageName.FinancialProducts})
+      },
+      goBuyOther(){
+        this.$router.push({name:PageName.ProductList})
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  @import "~@/assets/px2rem";
   .buytitle {
     width: 92%;
     height: 1.7rem;
@@ -144,5 +149,24 @@
     margin-top: 1rem;
     border: 0px;
     outline: none;
+  }
+
+  .btn{
+    margin-top: px2rem(20);
+    text-align: center;
+    .begain {
+      margin: 0 px2rem(5);
+      display: inline-block;
+      color: #fff;
+      background: #508CEE;
+      border-radius: px2rem(6);
+      font-size: px2rem(18);
+      width: px2rem(160);
+      height: px2rem(44);
+      line-height: px2rem(44);
+      text-align: center;
+      border: 0px;
+      outline: none;
+    }
   }
 </style>

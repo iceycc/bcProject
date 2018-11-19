@@ -4,22 +4,26 @@ import {PageName, BusName, LsName} from "@/Constant";
 import util from "libs/util";
 import {ORG_ID_NUM} from '@/Constant'
 import {imgSrc} from "@/Constant";
+import commons from './common'
+
 let time = 60
 
  export default {
+   mixins:[commons],
   data() {
     return {
       telDisabled: false,
       ZhengZhouPass: false, // 实体卡密码，可空，本行卡和村镇卡必输
-      ACC_FLAG: 0,
+      ACC_FLAG: '0',
 
       pwd:'',
-      pwdLen:''
+      pwdLen:'',
+      pwCode:''
     }
   },
   created() {
     console.log('ZhengZhou');
-    this.tel = this.$store.getters.GET_OPENING1_DATA.PHONE || ''
+
   },
   filters:{
     CARD_NO_Fliter(n){
@@ -54,12 +58,15 @@ let time = 60
     },
     subumit() {
       $('#PWDKBD').remove();
-      this.pwd = $("#bank-pass").getKBD(); //获取密码
-      this.pwdLen = $("#bank-pass").getLenKBD(); //获取密码长度
+      this.pwd = $("#bank-passCCCC").getKBD(); //获取密码
+      this.pwdLen = $("#bank-passCCCC").getLenKBD(); //获取密码长度
+      this.pwCode = $("#bank-passCCCC").getBDCode();
       console.log(this.pwd);
       console.log(this.pwdLen);
+      console.log(this.pwCode);
       if (util.Check.payPassLen(this.pwdLen,true)) return;
       this.ZhengZhouPass = false
+      this.doApiOpenging2()
     },
     /**
      * 银行账户属性查询
@@ -89,7 +96,7 @@ let time = 60
       let data = {
         TYPE: 'API_SEND_PHONE_CODE',
         PHONE_NUM: PHONE,
-        ORG_ID: '49',
+
         BIZ_TYPE: '11',// 开户第二步
         ACCT_NO: this.data.CARD_NO
       }
@@ -99,22 +106,31 @@ let time = 60
       }, err => {
         this.codeText = '重新发送'
         this.disable = false
+        try {
+            clearInterval(timer)
+        }catch (e) {
+
+        }
         console.log(err);
       })
     },
     // 注册
     doOpengingSecond() {
       // 判断银行类型 是否调用密码控件
+      // 实体卡密码，可空，本行卡和村镇卡必输
       if (this.ACC_FLAG == 0) {
-        $('#PWDKBD').remove();
-        $(window).loadKBD();
-        this.ZhengZhouPass = true
+        this.doApiOpenging2()
+        // this.ZhengZhouPass = true
         // 其他行
-        return
       } else {
         // 本地 或者村镇银行 要调取密码控件
+        $('#PWDKBD').remove();
         this.ZhengZhouPass = true
+        return
       }
+
+    },
+    doApiOpenging2(){
       this.data.PRE_PHONE_NUM = this.tel
       console.log(this.data.PRE_PHONE_NUM);
       if (this.bankText == '请选择银行') {
@@ -125,10 +141,10 @@ let time = 60
         Bus.$emit(BusName.showToast, '银行卡号不能为空')
         return
       }
-      if (this.checkBankName1) {
-        Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
-        return
-      }
+      // if (this.checkBankName1) {
+      //   Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
+      //   return
+      // }
       if (this.checkBankNo(this.data.CARD_NO)) {
         return
       }
@@ -149,37 +165,34 @@ let time = 60
 
       let params = {
         TYPE: 'API_REGISTER_BAND_CARD',
-        ORG_ID: '49',
-        BIND_AC_NO: this.CARD_NO, // 银行卡
-        BANK_NAME: this.bankText, //
+        BIND_AC_NO: this.data.CARD_NO, // 银行卡
+        BANK_NAME: '平安银行', //
+        // BANK_NAME: this.bankText, //
         // 密码
         ACC_FLAG: this.ACC_FLAG, // 账户类型 0：他行；1：本行；2：村镇
-        PREFIX: '', // 密码控件调用时返回，密码必传时该字段必填
-        PASSWD:'', //
+        PREFIX: this.pwCode || null, // todo 密码控件调用时返回，密码必传时该字段必填
+        PASSWD:this.pwd || null, //
 
-        COMMON_USER_ID:'', // 用户中心ID
-
+        COMMON_USER_ID:this.callbackInfos.COMMON_USER_ID, // 用户中心ID
         // 短信
         SND_MSG_TYPE:'11' , // 短信类型
         SND_MSG:this.data.PHONE_CODE,
-
-        ETHNIC_CD:'', // 民族
-        ADDR:'', // 地址
-        HAS_BAND:'',// 是否已经绑定过卡
+        HAS_BAND:(this.callbackInfos.hasCardList&&this.callbackInfos.hasCardList.length>0)?'1':'0',// 是否已经绑定过卡
 
         // 身份证相关
-        CREDENTIAL_AURL:'', //证件电子照正面批次号
-        CREDENTIAL_BURL:'', //证件电子照反面批次号
-        CREDENTIAL_POV:'', //
-        USER_NAME:'', // 卡所属姓名
-        USER_DUTY:'', // 职业
+        CARD_FRONT_URL:this.callbackInfos.CARD_FRONT_URL.replace(/\+/g, '%2B'), //证件电子照正面批次号
+        CARD_BACK_URL:this.callbackInfos.CARD_BACK_URL.replace(/\+/g, '%2B'), //证件电子照反面批次号
+        USER_NAME:this.callbackInfos.USER_NAME, // 卡所属姓名
+        USER_DUTY:this.callbackInfos.USER_DUTY, // 职业
 
 
-        PHONE_NUM:'', // 银行预留手机号(绑卡行)
-        BESHARP_REGISTER_VALI_USER_SEQ:'', //实名认证流水号
+        PHONE_NUM:this.callbackInfos.PHONE_NUM, // 银行预留手机号(绑卡行)
+        BESHARP_REGISTER_VALI_USER_SEQ:this.callbackInfos.BESHARP_REGISTER_VALI_USER_SEQ, //实名认证流水号
 
       }
       let OTHER = true  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
+      console.log('params');
+      console.log(params);
       API.open.apiRegisterBandCard(params, delMsg, OTHER,
         res => {
           clearInterval(timer)
@@ -196,11 +209,9 @@ let time = 60
           if (res.CODE != 0) { // 不是0的话返回
             return
           }
+          this.setComState({type:'openingData',value:res})
           this.$router.push({
             name: PageName.Opening3,
-            query: { // todo方便测试
-              REQ_SERIAL: res.REQ_SERIAL,
-            }
           })
         },
         err => {
@@ -215,7 +226,7 @@ let time = 60
           console.log(err);
           this.disable = false
         })
-      this.pollHandle()
+      // this.pollHandle()
     },
     // 注册第一次返回失败 需要轮询 查询 是否成功
     pollHandle() {
@@ -237,7 +248,7 @@ let time = 60
      */
     getBankList() {
       API.common.apiGetBankCardList({
-        ORG_ID: '49'
+
       }, res => {
         let obj = {}
         res.BAND_CARD_LIST.forEach(item => {

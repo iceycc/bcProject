@@ -2,9 +2,9 @@
   <div>
     <app-bar title="赎回"></app-bar>
     <div class="r-top">
-      <img src="@/assets/images/licaiicon@2x.png" alt="">
+      <img :src="imgSrc+redeemData.LOGO_URL" alt="">
       <div>
-        <p>博时日添利</p>
+        <p>{{redeemData.PRD_NAME}}</p>
         <span>货币基金</span>
       </div>
     </div>
@@ -13,9 +13,9 @@
       <div class="money">
         <div class="number">
           <i v-show="isFocus">￥</i>
-          <input type="number" @focus="focus" @blur="blur" placeholder="最多可赎回金额 1,000,000.00元" v-model="money">
+          <input type="number" @focus="focus" @blur="blur" :placeholder="placeholder" v-model="money">
         </div>
-        <div class="all">全部赎回</div>
+        <div class="all" @click="selectAll">全部赎回</div>
       </div>
     </div>
     <div class="r-type">
@@ -30,7 +30,7 @@
       <p>如果赎回金额超过实施赎回额度，请进行普通赎回操作。</p>
       <p>普通赎回T+1工作日16:30后到账。</p>
     </div>
-    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn">赎回</button>
+    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">赎回</button>
     <div class="r-agreement">
       立即赎回代表您已阅读并同意<span>《“日添利-博时基金 ”产品业务服务协议》</span>
     </div>
@@ -46,12 +46,13 @@
         赎回类型
         <i @click="typeShow = false">&times;</i>
       </div>
+      <!--// 1 普通赎回  0 快速赎回-->
       <ul class="r-type-list">
-        <li :class="cur === 1 ? 'active' : ''" @click="chooseType(1,$event)">
+        <li :class="cur == '0' ? 'active' : ''" @click="chooseType('0',$event)">
           <span>快速赎回</span>
           <i></i>
         </li>
-        <li :class="cur === 2 ? 'active' : ''" @click="chooseType(2,$event)">
+        <li :class="cur == '1' ? 'active' : ''" @click="chooseType('1',$event)">
           <span>普通赎回</span>
           <i></i>
         </li>
@@ -63,27 +64,73 @@
       </div>
       <div class="cofirm-btn">
         <div>取消</div>
-        <div>确定</div>
+        <div @click="sure">确定</div>
       </div>
     </div>
+    <section v-if="show" class="bgbox">
+      <section class="passbox">
+        <p class="title">
+          <img src="@/assets/images/icon_dunpai@2x.png" alt="">
+          由郑州银行提供技术保障</p>
+        <section class="field_row_wrap">
+          <p class="field_row_key">
+            交易密码
+          </p>
+          <div class="field_row_value">
+            <!--<PassInputZhengzhou></PassInputZhengzhou> -->
+            <pass-word-zhengzhou
+              BankCardPass="payPasscAAAc"
+            ></pass-word-zhengzhou>
+          </div>
+          <p class="info">密码由数字组成，必须为6位</p>
+        </section>
+        <div class="btn">
+          <mt-button @click="show =!show" type="primary">取消</mt-button>
+          <mt-button @click="doPay" type="primary">提交</mt-button>
+        </div>
+      </section>
+    </section>
   </div>
 </template>
 <script>
-  import Mixins from "@/mixins";
-
+  import API from '@/service'
+  import util from "libs/util";
+  import {PageName, BusName, LsName, imgSrc} from "@/Constant";
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
+  import Mixins from '@/mixins'
+  import Bus from '@/plugin/bus'
 
   export default {
     data() {
       return {
+        imgSrc,
+        show: false,
         isFocus: false,
         typeShow: false,
-        cur: 0,
+        cur: '0',
         money: '',
-        typeText: '请选择',
+        typeText: '快速赎回',
         normalShow: false,
-        availBtn: false
+        availBtn: false,
+        redeemData: {
+          HOLD_AMOUNT: '',
+          FUND_NO: '',
+          PRD_TYPE: '1',
+        },
+
+        passCode: '',
+        len: '',
+        pass: ''
       }
     },
+    computed: {
+      // placeholder:'
+      placeholder() {
+        let num = this.redeemData.HOLD_AMOUNT
+        return `最多可赎回金额${util.formatNum(num)}元`
+      }
+    },
+    mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
     watch: {
       money(n, o) {
         if (n && n - 0 > 0) {
@@ -93,18 +140,113 @@
         }
       }
     },
-    components: {},
+    created() {
+      this.redeemData = this.getComState.redeemData
+    },
+    components: {
+      PassWordZhengzhou
+    },
     methods: {
+
       focus() {
         this.isFocus = true;
       },
       blur() {
         this.money.length > 0 ? this.isFocus = true : this.isFocus = false;
       },
-      chooseType(val, e) {
-        this.cur = val;
+      sure() {
         this.typeShow = false;
+        this.normalShow = false
+        this.show = true
+      },
+      chooseType(val, e) {
+        // 普通赎回需要弹出层
+        this.cur = val; // 1 普通赎回  0 快速赎回
         this.typeText = e.target.innerText;
+        this.typeShow = false;
+      },
+      selectAll() {
+        this.isFocus = true
+        this.money = this.totalNum
+      },
+      showPass() {
+        if (this.cur == 1) {
+          this.normalShow = true
+        } else {
+          this.show = true
+        }
+      },
+      doPay() {
+        this.redeemHandle()
+      },
+      redeemHandle() {
+        this.pass = $("#payPasscAAAc").getKBD(); //获取密码
+        this.len = $("#payPasscAAAc").getLenKBD(); //获取密码长度
+        this.passCode = $("#payPasscAAAc").getBDCode(); //获取密码长度
+        let data = {
+          TYPE: 'API_REDEMPTION',
+          PRD_ID: this.redeemData.PRD_INDEX_ID, //  产品索引
+          // PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
+          PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
+          // FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
+          FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
+          APPLY_AMOUNT: this.money, // 赎回金额
+          REDEEM_TYPE: this.redeemData.PRD_TYPE == 1 ? this.cur : "1", // TODO  赎回类型 赎回类型(1 为普通赎回，0 为 D+0 赎回)非 货币只有普通赎回
+          FUND_TRANS_TYPE: '2', // 基金交易类型（1:申购，2:赎回）
+          PREFIX: this.passCode, // 输入密码
+          BANK_PAY_PW: this.pass, // 赎回密码
+        }
+        API.redeem.apiRedemption(data, res => {
+          console.log(res);
+          // this.$router.push({name:PageName.RedeemSuccess,query:res})
+          let REQ_SERIAL = res.REQ_SERIAL // 交易标示 用于轮询查询
+          let params = {
+            BIZ_TYPE: '7', // 提现
+            BESHARP_SEQ: REQ_SERIAL
+          }
+          // 轮询 查寻交易状态
+          this.queryStatus(
+            {
+              text: '赎回中',
+              data: params,
+              fn: (result, timer, count) => {
+                if ('1' == result.RES_CODE) {
+                  clearInterval(timer)
+                  Bus.$emit(BusName.showToast, result.RES_MSG);
+                  this.$router.push({ // todo是否要跳转
+                    name: PageName.RedeemFailure,
+                    query: {
+                      err: result.RES_MSG
+                    }
+                  })
+                }
+                else if ('0' == result.RES_CODE) {
+                  clearInterval(timer)
+                  Bus.$emit(BusName.showToast, result.RES_MSG);
+                  this.Londing.close()
+                  this.$router.push({
+                    name: PageName.RedeemSuccess,
+                    query: {
+                      money: this.APPLY_AMOUN,
+                      ...res
+                    }
+                  })
+                } else {
+                  clearInterval(timer)
+                  // if (count == 5) {
+                    Bus.$emit(BusName.showToast, result.RES_MSG);
+                    this.$router.push({
+                      name: PageName.RedeemFailure,
+                      query: {
+                        err: result.RES_MSG
+                      }
+                    })
+                  // }
+                }
+              }
+            }
+          )
+        })
       }
     }
   }
@@ -317,6 +459,62 @@
         }
       }
 
+    }
+  }
+
+  .bgbox {
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, .7);
+    position: fixed;
+    padding-top: 0.7rem;
+    top: 0;
+    left: 0;
+    .passbox {
+      background: #fff;
+      width: 80%;
+      margin: 0 auto;
+      padding: 0.4rem;
+      box-sizing: border-box;
+    }
+    .field_row_key {
+      font-size: 0.4rem;
+    }
+    .title {
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-size: 0.4rem;
+      color: #666;
+      height: .6rem;
+      line-height: .6rem;
+      img {
+        vertical-align: top;
+        width: .5rem;
+      }
+    }
+    .field_row_wrap {
+      margin-bottom: 0.2rem;
+    }
+    .field_row_value {
+      border-radius: 4px;
+      border: 1px solid #9e9e9e;
+      height: 0.9rem;
+      line-height: 0.9rem;
+      margin: 0.2rem 0;
+    }
+    .info {
+      font-size: 0.3rem;
+      line-height: 0.6rem;
+      color: #aeaeae;
+    }
+    .btn {
+      display: flex;
+      button {
+        margin: 0 .3rem;
+        text-align: center;
+        flex: 1;
+      }
     }
   }
 </style>

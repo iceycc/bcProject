@@ -17,6 +17,17 @@ const Config = {
  * 业务api
  */
 export default {
+  common:{
+    // 轮询查询状态
+    apiQueryBizStatus(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiQueryBizStatus',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+  },
   /**
    * 注册相关 open
    */
@@ -307,20 +318,6 @@ export default {
     apiGetBankCardList(params, success, error) {
       let options = {
         url: '/openapi/comm/apiGetBankCardList',
-        params
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-  },
-  /**
-   * 查询类
-   */
-  query: {
-    // openapi/comm/apiQueryBizStatus 轮询查询状态
-    apiQueryBizStatus(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiQueryBizStatus',
         params
       }
       return http.post(options, Config.config, success, error)

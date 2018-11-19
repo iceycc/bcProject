@@ -2,7 +2,6 @@ import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName, LsName} from "@/Constant";
 import util from "libs/util";
-import {ORG_ID_NUM} from '@/Constant'
 import {imgSrc} from "@/Constant";
 let time = 60
 

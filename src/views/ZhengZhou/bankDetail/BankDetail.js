@@ -8,19 +8,30 @@ export default {
     console.log('JinShang');
   },
   methods: {
-    // 和晋商一样
-    getBankDetail() {
-      API.account.getMyInvest({}, (res) => {
-        this.bankDetail = res
-      })
-    },
-    getProList() { // 获取产品列表
+    getProList() {
+      // API.account.getMyInvest({}, (res) => {
+      //   this.bankDetail = res
+      // })
       let data = {
-        currentPage: '1',
-        PRD_TYPE: '2'
+        TYPE:'API_QRY_INCOM_HIS',
+        currentPage:'1',
+        PRD_TYPE:'1',
+        PRD_INDEX_ID:'1',
+        FUN_NO:'1',
+
+      };
+      //
+      API.bank.apiQryHoldInfo(data, res => {
+        this.proList = res;
+      });
+
+    },
+    getBankDetail() { // 获取产品列表
+      let data = {
       }
-      API.account.getMyInvestHold(data, (res) => {
-        this.proList = res.PAGE
+
+      API.bank.apiQryAsset(data, (res) => {
+        this.bankDetail = res
       })
     },
   }

@@ -44,20 +44,17 @@
       <img :src="test1" alt="">
       <section v-if="DOMShow.USER_NAME">
         <span>姓名</span>
-        <input class="inputBox2" type="text"  placeholder="请输入您的姓名"
-              disabled
+        <input class="inputBox2" type="text" placeholder="请输入您的姓名"
                v-model="data.USER_NAME">
       </section>
       <section v-if="DOMShow.USER_CARD_ID">
         <span>身份证号</span>
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
-               disabled
                v-model="data.USER_CARD_ID" @bulr="checkID">
       </section>
       <section v-if="DOMShow.USER_CARD_ID_DATA">
         <span>身份证有效期</span>
         <input class="inputBox2" type="text" placeholder=""
-               disabled
                v-model="data.USER_CARD_ID_DATA">
       </section>
       <section v-if="DOMShow.PHONE">
@@ -78,15 +75,15 @@
       <section v-if="DOMShow.USER_DUTY">
         <span>职业</span>
         <js-select
-            title="职业列表"
-            class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
+          title="职业列表"
+          class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
       </section>
       <section v-if="DOMShow.USER_EDUCATION">
         <span>学历</span>
         <js-select
-            title="学历列表"
-            class="selectStyle" :text="educationText" :options="education"
-            @getValue="getEduction"></js-select>
+          title="学历列表"
+          class="selectStyle" :text="educationText" :options="education"
+          @getValue="getEduction"></js-select>
       </section>
 
     </div>
@@ -99,17 +96,8 @@
 
     <!--todo 抽离开户页面的文档组件-->
     <p
-        v-if="ORG_ID == ORG_ID_NUM.JinShang"
-        :class="{'bang':true,'no':agree == false}"
-       @click="doAgree">
-      <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage('2')" style=" color:#0096FE;">《用户授权服务协议》</a>
-      <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《晋商银行直销银行电子账户服务协议》</a>
-    </p>
-    <p
-        v-if="ORG_ID == ORG_ID_NUM.ZhengZhou"
-        :class="{'bang':true,'no':agree == false}"
-       @click="doAgree">
+      :class="{'bang':true,'no':agree == false}"
+      @click="doAgree">
       <span>我已阅读并同意注册</span>
       <a href="javascript:;" @click.stop="showPage('2')" style=" color:#0096FE;">《郑州银行鼎融易直营银行客户服务协议》、</a>
       <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《隐私政策》</a>
@@ -158,6 +146,9 @@
   import {PageName, BusName, HOST} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
   import Opening1Mixins from './Opening1'
+  import util from "../../../libs/util"
+
+
   export default {
     data() {
       return {
@@ -168,15 +159,12 @@
           USER_EDUCATION: '', // 学历
           CARD_FRONT_FILE: '',
           CARD_BACK_FILE: '',
-          USER_CARD_ID_DATA:'', //身份证有效期
-          ADDRESS:'', // 地址
-          NATION:'', // 民族
-          PHONE:'',
+          IDENT_VLD_DT: '', //身份证有效期
+          ADDRESS: '', // 地址
+          NATION: '', // 民族
+          PHONE: '',
+          PARTNER_ORDER_ID:'' // 众邦的实名流水信息
 
-          memberId: null, // 晋商回显需要的
-          phoneNum: null, // 晋商回显需要的
-          MEMBER_ID:null,
-          PHONE_NUM:null
         },
 
         showType: 0,
@@ -217,6 +205,32 @@
       JsSelect
     },
     mixins: [Opening1Mixins],
+    created() {
+      // 1-获取回显数据
+      // let suerinfo = this.$store.getters.GET_OPEN_STATE.opening
+      let suerinfo = this.getComState.openingData
+      console.log("suerinfo>>",suerinfo);
+      // this.setComState({type: 'openingData', value: suerinfo})
+      // this.$store.commit('SET_OPENING_DATA', suerinfo)
+      if (suerinfo) {
+        this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL
+        this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL
+        this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
+        this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
+        // this.data.USER_NAME = suerinfo.USER_NAME
+        // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
+        // this.data.PHONE = suerinfo.PHONE_NUM  || suerinfo.BANK_CARD_PHONE
+        this.data.PHONE = '15621185521'
+        this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
+        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
+        if(this.data.CARD_BACK_FILE){
+          this.idCardFanOcr()
+        }
+        if(this.data.CARD_FRONT_FILE){
+          this.idCardZhengOcr()
+        }
+      }
+    },
     methods: {
       //获取学历
       getEduction(val) {

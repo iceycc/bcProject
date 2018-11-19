@@ -6,11 +6,12 @@ import {HOST} from "@/Constant";
  */
 const Config = {
   config: {
-    baseURL: 'https://finsuitdev.udomedia.com.cn/finsuit/',
+    baseURL: HOST,
+    // baseURL: 'https://finsuitdev.udomedia.com.cn/finsuit/',
     // baseURL:'http://192.168.100.141:8080/',
     method: 'post',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    timeout: 30000,
+    timeout: 300000,
   },
 }
 
@@ -22,15 +23,16 @@ export default {
    *
    */
   common: {
-    // 获取短信验证码
+    // 获取短信验证码  ifHave=y
     apiSendPhoneCode(params, success, error) {
+      params.PHONE_NUM = '15621185521'
       let options = {
         url: '/openapi/comm/apiSendPhoneCode',
-        params,
+        params ,
       }
       return http.post(options, Config.config, success, error)
     },
-    // 查询产品/机构支持的绑定卡
+    // 查询产品/机构支持的绑定卡 ifHave=y
     apiGetBankCardList(params, success, error) {
       let options = {
         url: '/openapi/comm/apiGetBankCardList',
@@ -38,10 +40,10 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 账户属性查询
+    // 账户属性查询 ifHave=y
     apiUserAccountProperties(params, success, error) {
       let options = {
-        url: '/openapi/zzh/biz/apiUserAccountProperties',
+        url: '/openapi/zbh/biz/apiUserAccountProperties',
         params,
       }
       return http.post(options, Config.config, success, error)
@@ -54,6 +56,15 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+    // 轮询查询状态
+    apiQueryBizStatus(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiQueryBizStatus',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
   },
   /**
    * 注册相关 open
@@ -62,7 +73,7 @@ export default {
     // 身份证OCR扫描
     IdCardFrontPhoneOcr(params, success, error) {
       let options = {
-        url: '/openapi/zzh/biz/IdCardFrontPhoneOcr',
+        url: '/openapi/zbh/biz/IdCardFrontPhoneOcr',
         params,
       }
       return http.post(options, Config.config, success, error)
@@ -144,7 +155,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 查询账户余额
+    // 查询账户余额  todo 无
     apiQueryAccRest(params, success, error) {
       let options = {
         url: '/openapi/comm/apiQueryAccRest',
@@ -159,7 +170,7 @@ export default {
    * 充值相关
    */
   reChange: {
-    // 查询用户是否已签约充值协议
+    // 查询用户是否已签约充值协议  todo 无
     apiRechargeProtoQuery(params, success, error) {
       let options = {
         url: '/openapi/biz/apiRechargeProtoQuery',
@@ -169,7 +180,7 @@ export default {
     },
     // 协议页
     // finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
-    // 40.	获取充值协议码
+    // 40.	获取充值协议码 todo 无
     apiRechargeProtoCode(params, success, error) {
       let options = {
         url: '/openapi/biz/apiRechargeProtoCode',
@@ -177,7 +188,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 充值 /openapi/biz/apiRecharge
+    // 充值
     apiRecharge(params, success, error) {
       let options = {
         url: '/openapi/biz/apiRecharge',
@@ -204,17 +215,28 @@ export default {
    * risk 风险评估相关
    */
   risk: {
-    apiGetRiskTestQuest(params, success, error) {
+    //  查看风险测评
+    apiRiskGrade(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiGetRiskTestQuest',
+        url: '/openapi/comm/apiRiskGrade',
         params
       }
       return http.post(options, Config.config, success, error)
 
     },
-    apiRiskTestAnswer(params, success, error) {
+    //  获取风险评估问题和答案
+    apiGetRiskEvaPaper(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiRiskTestAnswer',
+        url: '/openapi/comm/apiGetRiskEvaPaper',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+    //  风险测评提交 openapi/comm/apiRiskEvalution
+    apiRiskEvalution(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiRiskEvalution',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -222,44 +244,12 @@ export default {
     },
 
   },
-  /**
-   * Product 产品列表相关
-   */
-  product: {
-    // 列表
-    apiGetChannelPrdList(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiGetChannelPrdList',
-        params
-      }
-      return http.post(options, Config.config, success, error)
 
-    },
-    //
-    apiGetChannelPrdInfo(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiGetChannelPrdInfo',
-        params
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-    // 预约/
-    apiSaveSubscribeInfo(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiSaveSubscribeInfo',
-        params,
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-
-  },
   /**
    *  安全相关
    */
   safe: {
-    // 重制密码
+    // 重制密码 todo 无
     apiUserResetLoginPass(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiUserResetLoginPass',
@@ -269,8 +259,6 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 获取充值协议
-    // /finsuit/static/finsuit/js/openapi/js/xieyi/cz.html
     // 查询登录用户某机构绑定卡信息 apiBandCard
     apiBandCard(params, success, error) {
       let options = {
@@ -280,7 +268,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换银行卡：openapi/comm/apiChangeBingCard
+    // 更换银行卡：openapi/comm/apiChangeBingCard todo 无需求
     apiChangeBingCard(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiChangeBingCard',
@@ -291,7 +279,7 @@ export default {
 
     },
     // 更换手机号
-    // openapi/comm/apiChangePhoneNum
+    // openapi/comm/apiChangePhoneNum todo 无需求
     apiChangePhoneNum(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiChangePhoneNum',
@@ -301,7 +289,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换支付密码：openapi/comm/apiUserResetPayPass
+    // 更换支付密码：todo 无
     apiUserResetPayPass(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiUserResetPayPass',
@@ -311,7 +299,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 协议
+    // 协议  API_BUY  todo 整理协议接口
     apiAgreement(params, success, error) {
       let options = {
         url: '/openapi/biz/apiAgreement',
@@ -325,7 +313,7 @@ export default {
    * list相关
    */
   list: {
-    // /openapi/comm/apiGetBankCardList
+    //   查询产品/机构支持的绑卡行/
     apiGetBankCardList(params, success, error) {
       let options = {
         url: '/openapi/comm/apiGetBankCardList',
@@ -336,24 +324,10 @@ export default {
     },
   },
   /**
-   * 查询类
-   */
-  query: {
-    // openapi/comm/apiQueryBizStatus 轮询查询状态
-    apiQueryBizStatus(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiQueryBizStatus',
-        params
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-  },
-  /**
    * 账户相关
    */
   account: {
-    // 电子列表
+    // 电子列表 todo 提取
     apiBankList(params, success, error) {
       let options = {
         url: 'openapi/bank/apiBankList',
@@ -363,7 +337,7 @@ export default {
       return http.post(options, Config.config, success, error)
     },
 
-    // 银行账户查询：/openapi/comm/apiQueryAccRest
+    // 银行账户查询：/openapi/comm/apiQueryAccRest  todo 无
     apiQueryAccRest(params, success, error) { // 下面的代替了
       let options = {
         url: 'openapi/comm/apiQueryAccRest',
@@ -371,19 +345,10 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 我的投资情况(汇总)  ok
+    // 我的投资情况(汇总)  ok  todo 无
     getMyInvest(params, success, error) {
       let options = {
         url: 'openapi/invest/getMyInvest',
-        params,
-      }
-      return http.post(options, Config.config, success, error)
-    },
-    // 获取我的投资持有中数据(分页)
-    // openapi/invest/getMyInvestHold
-    getMyInvestHold(params, success, error) {
-      let options = {
-        url: 'openapi/invest/getMyInvestHold',
         params,
       }
       return http.post(options, Config.config, success, error)
@@ -400,28 +365,37 @@ export default {
 
   },
   /**
-   * 理财产品
+   * 银行产品相关的
    */
-  financial: {
-    // 理财产品列表  总资产数据获取接口
-    apiMyAssetByType(params, success, error) {
+  bank:{
+    // 38.	查询用户博时基金收益明细
+    //
+    apiQryIncomHis(params, success, error) {
       let options = {
-        url: '/openapi/bank/apiMyAssetByType',
+        url: '/openapi/bank/apiQryIncomHis',
         params
       }
       return http.post(options, Config.config, success, error)
-
     },
-    // 理财产品持有中数据（分页）
-    getMyInvestHold(params, success, error) {
+    //  42.	获取我的投资持有中数据/openapi/zbh/biz/apiQryHoldInfo
+    apiQryHoldInfo(params, success, error) {
       let options = {
-        url: '/openapi/invest/getMyInvestHold',
+        url: '/openapi/zbh/biz/apiQryHoldInfo',
         params
       }
       return http.post(options, Config.config, success, error)
-
     },
-    // 理财产品已到期（分页）
+    // 33.	获取单个银行资产数据(汇总) 未到期
+    // /openapi/zbh/biz/apiQryAsset
+    apiQryAsset(params, success, error) {
+      let options = {
+        url: '/openapi/zbh/biz/apiQryAsset',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    // 33 todo未到期
+    // 理财产品已到期（分页） todo 无
     getMyInvestOver(params, success, error) {
       let options = {
         url: '/openapi/invest/getMyInvestOver',
@@ -430,10 +404,47 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 交易明细
+    //36.	查询用户近期交易信息
+    apiQryBuyHis(params, success, error) {
+      let options = {
+        url: 'openapi/bank/apiQryBuyHis',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    //37.	电子账户交易明细查询
+    apiQryEleTransDetail(params, success, error) {
+      let options = {
+        url: 'openapi/bank/apiQryEleTransDetail',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+  },
+
+  /**
+   * 产品
+   */
+  financial: {
+
+    // 交易明细 todo 无
     apiQryTradeHis(params, success, error) {
       let options = {
         url: '/openapi/bank/apiQryTradeHis',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+  },
+
+  /**
+   * 赎回
+   */
+  redeem: {
+    // 赎回 openapi/biz/apiRedemption
+    apiRedemption(params, success, error) {
+      let options = {
+        url: '/openapi/biz/apiRedemption',
         params
       }
       return http.post(options, Config.config, success, error)

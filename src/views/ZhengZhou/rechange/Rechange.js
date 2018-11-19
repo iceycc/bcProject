@@ -1,5 +1,7 @@
 import API from "@/service";
 import {PageName, BusName} from "@/Constant";
+import Bus from '@/plugin/bus'
+
 export default {
   data() {
     return {}
@@ -8,36 +10,34 @@ export default {
     console.log('JinShang');
   },
   methods: {
-    getCode() { // 获取充值协议码
-      API.reChange.apiRechargeProtoCode({}, res => {
-        console.log(res);
-        this.PIN = res.PIN
-        this.agree1 = true
-        // this.page = false
-      }, err => {
-        this.codeText = '重新发送'
-        this.disable = false
-        clearInterval(timer)
-      })
+    getCode() { // 充值短信
+      let data = {
+        PHONE_NUM:this.PHONE_NUM,
+        BIZ_TYPE:'12', // 充值需要
+        ACCT_NO:this.ACCT_NO
+      }
+      API.common.apiSendPhoneCode(data)
     },
     handleApiRecharge(){
       let data = {
         TYPE:'API_RECHARGE',
         PHONE_CODE: this.msgCode,
-        PIN: this.PIN,
+        // PIN: this.PIN,
         BANK_PAY_PW: this.pass,
-        APPLY_AMOUNT: this.APPLY_AMOUN
+        APPLY_AMOUNT: this.APPLY_AMOUN,
+        PREFIX:this.passCode,
+        IS_UNIONPAY:'1'
       }
       API.reChange.apiRecharge(data, res => {
         let params = {
           BIZ_TYPE: '3',
           BESHARP_SEQ: res.BESHARP_RECHARGE_SEQ
         }
+        console.log(params);
         this.queryStatus({
           text: '正在充值中',
           data: params,
           fn: (result, timer, count) => {
-            this.setComState({type:"reload",value:true}) // reload-001
             if ('1' == result.RES_CODE) {
               clearInterval(timer)
               Bus.$emit(BusName.showToast, result.RES_MSG);
@@ -47,7 +47,6 @@ export default {
                   err: result.RES_MSG
                 }
               })
-
             }
             else if ('0' == result.RES_CODE) {
               clearInterval(timer)
@@ -75,7 +74,6 @@ export default {
           }
         })
       }, err => {
-        this.setComState({type:"reload",value:true}) // reload-001
         this.$router.push({
           name: PageName.RechargeFailure,
           query: {
@@ -85,7 +83,12 @@ export default {
       })
     },
     getInfos() {
+      // 获取机构名称  机构logo 用于充值提现
       API.safe.apiBandCard({}, res => {
+        this.logo = res.BANK_BG_URL
+        this.ORG_NAME = res.BANK_USER_CODE
+        this.ACCT_NO = res.CARD_NUM
+        this.PHONE_NUM = res.PHONE_NUM
         this.CARD_BANK_NAME = res.CARD_BANK_NAME;
         this.CARD_BANK_URL = res.CARD_BANK_URL
         this.SINGLE_QUOTA = res.SINGLE_QUOTA

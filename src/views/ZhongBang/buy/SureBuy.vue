@@ -21,34 +21,23 @@
       <div class="jiaoyibankname">交易银行</div>
       <div class="jiaoyibankzhixiaoname">{{datas.ORG_NAME}}</div>
     </div>
+    <section class="inputAmount">
+            <span class="Amount">
+                验证码
+            </span>
+      <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+      <button
+        :disabled="msgdisable"
+        @click="getMsg"
+        class="button">{{codeText}}
+      </button>
+    </section>
     <mt-button @click="buyHandle" class="tijiao">确认购买</mt-button>
     <p class="bang">我已阅读并同意注册
       <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
       <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('B')">《晋商银行直销银行"安鑫富"投融资协议》</a>
     </p>
-    <section v-if="show" class="bgbox">
-      <section class="passbox">
-        <p class="title">
-          <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由晋商银行提供技术保障</p>
-        <section class="field_row_wrap">
-          <p class="field_row_key">
-            交易密码
-          </p>
-          <div class="field_row_value">
-            <!--<PassInputZhengzhou></PassInputZhengzhou> -->
-            <pass-word-zhengzhou
-              BankCardPass="payPass"
-            ></pass-word-zhengzhou>
-          </div>
-          <p class="info">密码由数字组成，必须为6位</p>
-        </section>
-        <div class="btn">
-          <mt-button @click="show =!show" type="primary">取消</mt-button>
-          <mt-button @click="doPay" type="primary">提交</mt-button>
-        </div>
-      </section>
-    </section>
+
   </div>
 </template>
 <script>
@@ -61,9 +50,15 @@
   import Mixins from "@/mixins";
 
 
+  let time = 60
+
   export default {
     data() {
       return {
+        msgdisable: false,
+        msgCode: '',
+        disable: false,
+        codeText: '获取验证码',
         show: false,
         money: null,
         datas: {},
@@ -74,15 +69,37 @@
         banck: '',
       }
     },
-    mixins: [Mixins.HandleMixin ],
+    mixins: [Mixins.HandleMixin],
     components: {
       PassWordZhengzhou
     },
     created() {
       this.datas = this.$route.query
     },
-
     methods: {
+      getCode() { // 充值短信
+        let data = {
+          PHONE_NUM: this.PHONE_NUM,
+          BIZ_TYPE: '1008', // 购买众邦需要
+          AMOUNT: this.APPLY_AMOUN
+        }
+        API.common.apiSendPhoneCode(data)
+      },
+      getMsg() {
+        let times = time
+        this.disable = true
+        timer = setInterval(() => {
+          if (times == 0) {
+            this.codeText = '重新发送'
+            this.disable = false
+            clearInterval(timer)
+            return
+          }
+          times--
+          this.codeText = `${times}s`
+        }, 1000)
+        this.getCode()
+      },
       getAgreement(type) {
         this.$router.push({
           name: PageName.DocsPage,
@@ -94,41 +111,53 @@
 
       },
       buyHandle() {
-        this.Londing.open()
-        setTimeout(() => {
-          this.show = true
-          this.Londing.close()
-        }, 500)
+        this.doPay()
       },
-      doPay() {
-        this.pass = $("#payPass").getKBD(); //获取密码
-        this.len  = $("#payPass").getLenKBD(); //获取密码长度
-        // this.pass = $('#payPass').$getCiphertext()
-        // this.len = $('#payPass').$getPasswordLength()
+      // 轮询查询交易状态！！
+      polling(res) {
         let data = {
-          PRD_ID: this.datas.id + '',
-          APPLY_AMOUNT: this.datas.money + '',
-          BANK_PAY_PW: this.pass + ''
+          BIZ_TYPE: '6', // 购买
+          BESHARP_SEQ: res.BESHARP_ORDER_NO
         }
-        if (util.Check.payPassLen(this.len, true)) return;
-        this.show = false
-        API.buy.apiBuy(data, (res) => {
-          let data = {
-            BIZ_TYPE: '6',
-            BESHARP_SEQ: res.BESHARP_BUY_SEQ
-          }
-          this.Londing.open({
-            text: '正在购买中'
-          })
-          let i = 1
-          let timer = setInterval(() => {
-            i++
+        // 交易轮询
+        this.Londing.open({
+          text: '正在购买中'
+        })
+        let i = 1
+        let timer = setInterval(() => {
+          i++
+          API.common.apiQueryBizStatus(data, result => {
+            if ('1' == result.RES_CODE || i == 5) {
+              this.Londing.close()
+              clearInterval(timer)
+              Bus.$emit(BusName.showToast, result.RES_MSG);
+              this.$router.push({
+                name: PageName.BuyFailed,
+                query: {
+                  err: result.RES_MSG
+                }
+              })
+            }
+            else if ('0' == result.RES_CODE) { // 成功
+              clearInterval(timer)
+              Bus.$emit(BusName.showToast, result.RES_MSG);
+              this.Londing.close()
+              let buyData = {
+                money: this.datas.money, // 金额
+                PRD_NAME: this.datas.PRD_NAME, // 产品名称
+                ORG_NAME: this.datas.ORG_NAME, // 机构名称
+                OPERA_DATE: res.OPERA_DATE, // 交易日期
+                BESHARP_BUY_SEQ: res.BESHARP_SEQ, // 流水号
+                EXPECT_PROFIT_DATE: res.INC_DATE// TODO 缺字段 预计收益日期
 
-            API.query.apiQueryBizStatus(data, result => {
-              console.log(result.RES_CODE);
-              this.setComState({type:"reload",value:true}) // reload-001
-              if ('1' == result.RES_CODE && i == 5) {
-                this.Londing.close()
+              }
+              this.setComState({type: 'buyData', value: buyData})
+              this.$router.push({
+                name: PageName.BuySuccess,
+              })
+              return
+            } else {
+              if (i > 5) {
                 clearInterval(timer)
                 Bus.$emit(BusName.showToast, result.RES_MSG);
                 this.$router.push({
@@ -137,39 +166,39 @@
                     err: result.RES_MSG
                   }
                 })
-              }
-              else if ('0' == result.RES_CODE) { // 成功
-                clearInterval(timer)
-                Bus.$emit(BusName.showToast, result.RES_MSG);
-                this.Londing.close()
-                this.$router.push({
-                  name: PageName.BuySuccess,
-                  query: {
-                    money: this.datas.money,
-                    PRD_NAME: this.datas.PRD_NAME,
-                    ORG_NAME: this.datas.ORG_NAME,
-                    OPERA_DATE: res.OPERA_DATE,
-                    BESHARP_BUY_SEQ: res.BESHARP_BUY_SEQ
-                  }
-                })
                 return
-              } else {
-                if (i > 5) {
-                  Bus.$emit(BusName.showToast, result.RES_MSG);
-                  this.$router.push({
-                    name: PageName.BuyFailed,
-                    query: {
-                      err: result.RES_MSG
-                    }
-                  })
-                  return
-                }
               }
-            })
-          }, 2000)
+            }
+          }, err => {
+            clearInterval(timer)
+            Bus.$emit(BusName.showToast, err);
+
+          })
+        }, 2000)
+      },
+      // 交易
+      // TYPE	请求类型
+      // ORG_ID	机构ID
+      // PRD_ID	产品ID
+      // APPLY_AMOUNT	购买金额
+      // PHONE_CODE	短信验证码
+      // ACCEPT_RISK	超出客户风险承受力时必填，需要确认  0 或空 表示未确认 1 表示已确认
+
+
+      doPay() {
+        let data = {
+          PRD_ID: '17819',
+          // PRD_ID: this.datas.id + '',
+          TYPE: 'API_BUY',
+          APPLY_AMOUNT: this.datas.money + '',
+          PHONE_CODE: this.msgCode,
+          ACCEPT_RISK: '1'
+        }
+        API.buy.apiBuy(data, (res) => {
+          this.polling(res)
         }, err => {
           this.Londing.close()
-          this.setComState({type:"reload",value:true}) // reload-001
+          this.setComState({type: "reload", value: true}) // reload-001
           this.$router.push({
             name: PageName.BuyFailed,
             query: {
@@ -271,61 +300,30 @@
     }
   }
 
-  .bgbox {
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    background: rgba(1, 1, 1, .7);
-    position: fixed;
-    padding-top: 0.7rem;
-    top: 0;
-    left: 0;
-    .passbox {
-      background: #fff;
-      width: 80%;
-      margin: 0 auto;
-      padding: 0.4rem;
+  .inputAmount {
+    padding-left: 0.5rem;
+    height: 1.2rem;
+    line-height: 1rem;
+    font-size: 0.4rem;
+    border-bottom: 1px solid #EEEEF0;
+    .button {
+      vertical-align: middle;
+      width: 2.5rem;
+      display: inline-block;
+      padding: .1rem;
+      border: 1px solid #508CEE;
+      color: #508CEE
+    }
+    input {
+      width: 50%;
+      border: none;
       box-sizing: border-box;
-    }
-    .field_row_key {
       font-size: 0.4rem;
-    }
-    .title {
-      margin-bottom: 0.5rem;
-      text-align: center;
-      font-size: 0.4rem;
-      color: #666;
-      height: .6rem;
-      line-height: .6rem;
-      img {
-        vertical-align: top;
-        width: .5rem;
-      }
-    }
-    .field_row_wrap {
-      margin-bottom: 0.2rem;
-    }
-    .field_row_value {
-      border-radius: 4px;
-      border: 1px solid #9e9e9e;
-      height: 0.9rem;
-      line-height: 0.9rem;
-      margin: 0.2rem 0;
-    }
-    .info {
-      font-size: 0.3rem;
-      line-height: 0.6rem;
-      color: #aeaeae;
-    }
-    .btn {
-      display: flex;
-      button {
-        margin: 0 .3rem;
-        text-align: center;
-        flex: 1;
-      }
+      color: #333;
+      /* line-height: 0.5rem; */
+      outline: none;
+
     }
   }
-
 
 </style>

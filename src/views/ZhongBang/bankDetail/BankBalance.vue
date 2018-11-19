@@ -15,7 +15,7 @@
         <span>提现</span>
         <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
       </section>
-      <section class="m-li" @click="goPage('TransactionDetails')">
+      <section class="m-li" @click="goPage('DealDetails')">
         <span>明细查询</span>
         <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
       </section>
@@ -58,7 +58,7 @@
         this.setComState({type: 'OriginPage', value: this.$route.fullPath})
         if (page == 'Withdraw') {
           query = {
-            ACC_REST: this.ACC_REST
+            ACC_REST: this.ACC_REST // 可用余额
           }
         }
         console.log(page);

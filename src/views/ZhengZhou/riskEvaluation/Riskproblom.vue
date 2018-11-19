@@ -10,17 +10,16 @@
 
           <section>
 
-            <p class="que-title">{{item.questionNum +'、'+ item.questionContent}}</p>
-            <section v-for="answer in item.options" :key="answer.optionNum"
-                     :class="{'radio-box':true,'select':answer.optionNum==values[item.questionNum]}"
+            <p class="que-title">{{item.questionNo +'、'+ item.subject}}</p>
+            <section v-for="answer in item.riskOptionList" :key="answer.questionNo"
+                     :class="{'radio-box':true,'select':answer.riskOption==values[item.questionNo]}"
             >
               <label
-                :for="'qestion'+ item.questionNum +'-'+ answer.optionNum">{{answer.option |
-                optionFilter(answer.optionNum)}}</label>
+                :for="'qestion'+ item.questionNo +'-'+ answer.riskOption">{{answer.riskOption }}、{{ answer.subject}}</label>
               <input
-                @click="selecthandle(answer.optionNum)"
-                :id="'qestion'+ item.questionNum +'-'+ answer.optionNum" type="radio"
-                :value="answer.optionNum" v-model="values[item.questionNum]"
+                @click="selecthandle(answer.riskOption)"
+                :id="'qestion'+ item.questionNo +'-'+ answer.riskOption" type="radio"
+                :value="answer.riskOption" v-model="values[item.questionNo]"
               >
             </section>
           </section>
@@ -73,7 +72,8 @@
     mixins:[''],
     filters: {
       optionFilter(val, index) {
-        return `${ProblomIndex[index - 1]}、${val}`
+        return val
+        // return `${ProblomIndex[index - 1]}、${val}`
       }
     },
     created() {
@@ -101,9 +101,10 @@
         this.goNext()
       },
       getProblom() {
-        API.risk.apiGetRiskTestQuest({}, (res) => {
-          this.optionsArr = res.QUEST_LIST
-          this.proNubmer = res.QUEST_LIST.length
+        API.risk.apiGetRiskEvaPaper({}, (res) => {
+
+          this.optionsArr = res
+          this.proNubmer = res.length
         })
       },
       goRre() {
@@ -121,17 +122,18 @@
           Bus.$emit(BusName.showToast, "请选择")
           return
         }
-        let ANSWER_LIST = []
-        for (var i in this.values) {
-          ANSWER_LIST.push({
-            questionNum: i,
-            optionNum: this.values[i]
-          })
+        // 1_A,2_B,3_C
+        console.log(this.values);
+        let str = ""
+        // for (var i) 
+        for(var i in this.values){
+          str += `${i}_${this.values[i]},`
         }
         let data = {
-          ANSWER_LIST
+          ANSWER:str.substr(0,str.length-1)
         }
-        API.risk.apiRiskTestAnswer(data, (res) => {
+        console.log(data);
+        API.risk.apiRiskEvalution(data, (res) => {
           this.setComState({type:'HAS_GRADE',value:2})
           this.$router.push({
             name: PageName.FengxianResult,

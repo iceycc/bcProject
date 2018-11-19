@@ -48,6 +48,7 @@
   import PassInput from '@/components/password/PassInput'
   import LoginMixins from './Login'
   import Mixins from "@/mixins";
+  import util from 'libs/util'
   export default {
     data() {
       return {
@@ -77,7 +78,9 @@
     },
     inject: ['reload'],
     created() {
-      this.ORG_ID = this.$store.getters.GET_BANK_INFO.ORG_ID
+
+      this.ORG_ID = util.storal
+      // this.ORG_ID = this.$store.getters.GET_BANK_INFO.ORG_ID
       this.BANK_NAME = this.$store.getters.GET_BANK_INFO.BANK_NAME
       let preInfo = this.getComState.loginInfo;
       if (preInfo) {

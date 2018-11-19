@@ -1,6 +1,7 @@
 (function(t, e) {
   "use strict";
-  var host = 'http://192.168.100.247:11050/getPasswordKeyboard'
+  // var host = 'http://192.168.100.247:11050/getPasswordKeyboard'
+  var host = 'https://finsuitdev.udomedia.com.cn/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
 
   var i = {};
   var reset = {
@@ -234,8 +235,8 @@
       if ($("div[kbdtype='Graph']").length > 0) {
         $("div[kbdtype='Graph']").text("").attr("disabled", true);
         $.get(host+"?style=Graph&shuffle=2", function(t) {
-          $("#PWDKBD").append(t.param.kbdhtml);
-          window.sessionStorage.setItem('KEY_T',t.keyt);
+          $("#PWDKBD").append(t.biz_data.data.kbdhtml);
+          window.sessionStorage.setItem('KEY_T',t.biz_data.data.prefix);
           $("div[kbdtype='Graph']").text("").attr("disabled", false);
           var e = $("#GraphKBD");
           e.css({
@@ -279,8 +280,8 @@
       if ($("div[kbdtype='Alnum']").length > 0) {
         $("div[kbdtype='Alnum']").text("").attr("disabled", true);
         $.get(host+"?style=Alnum&shuffle=2", function(t) {
-          $("#PWDKBD").append(t.param.kbdhtml);
-          window.sessionStorage.setItem('KEY_T',t.keyt);
+          $("#PWDKBD").append(t.biz_data.data.kbdhtml);
+          window.sessionStorage.setItem('KEY_T',t.biz_data.data.prefix);
           $("div[kbdtype='Alnum']").text("").attr("disabled", false);
           var e = $("#AlnumKBD");
           e.css({
@@ -335,8 +336,10 @@
       if ($("div[kbdtype='Number']").length > 0) {
         $("div[kbdtype='Number']").text("").attr("disabled", true);
         $.get(host+"?type=Number", function(t) {
-          $("#PWDKBD").append(t.param.kbdhtml);
-          window.sessionStorage.setItem('KEY_T',t.keyt);
+          console.log(t);
+          $("#PWDKBD").append(t.biz_data.data.kbdhtml);
+          // $("#PWDKBD").append(t.data.kbdhtml);
+          window.sessionStorage.setItem('KEY_T',t.biz_data.data.prefix);
           $("div[kbdtype='Number']").text("").attr("disabled", false);
           var e = $("#NumberKBD");
           e.css({
@@ -381,6 +384,10 @@
     },
     getLenKBD: function() {
       return this.attr("data-passwordlength") || 0
+    },
+    // wby自己添加
+    getBDCode:function(){
+      return window.sessionStorage.getItem('KEY_T') || null
     },
     reloadPWD:function(){
       i={};

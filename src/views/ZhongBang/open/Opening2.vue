@@ -69,7 +69,7 @@
             </p>
             <div class="field_row_value">
               <pass-word-zhengzhou
-                BankCardPass="bank-pass"
+                BankCardPass="bank-passCCCC"
               ></pass-word-zhengzhou>
             </div>
             <p class="info">密码为6位数字</p>
@@ -89,7 +89,7 @@
   import Bus from '@/plugin/bus'
   import BankSelect from '@/components/commons/BankSelect'
   import Opening2Mixins from './Opening2'
-  import Mixins from "@/mixins";
+  import util from "../../../libs/util";
 
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
 
@@ -118,7 +118,8 @@
         stepImg3: require('@/assets/images/step3.png'),
         AllBankListObj: {},
         errMsg: '',
-        checkBankName1: false
+        checkBankName1: false,
+        callbackInfos: {}
       }
     },
     mixins: [Opening2Mixins],
@@ -145,10 +146,13 @@
       }
     },
     created() {
-      this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
-      this.data.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM
-      // this.tel = this.$route.query.PHONE_NUM || ''
-      this.getBankList()
+      if (this.$route.name !== PageName.Opening1) {
+        this.checkBankStatus()
+      }
+      this.callbackInfos = this.getComState.openingData
+      console.log('callbackInfos>>>', this.callbackInfos);
+      this.tel = this.callbackInfos.PHONE_NUM || ''
+      // this.getBankList()
     },
     methods: {
       checkBankName(val) {
@@ -168,8 +172,8 @@
         }
       },
       checkBankNo(val) {
-        console.log(1);
-        this.checkBankType && this.checkBankType()
+        // 查询银行账户类型
+        // this.checkBankType && this.checkBankType()
         val = val.toString()
         let reg = /\d{15}|\d{19}/
         console.log(!reg.test(val));

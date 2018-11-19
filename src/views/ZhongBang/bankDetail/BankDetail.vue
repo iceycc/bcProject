@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <app-bar :title="bankDetail.ORG_NAME"></app-bar>
+    <app-bar :title="proList.PRD_TYPE_NAME"></app-bar>
+    <!--<app-bar title="活期存款"></app-bar>-->
     <section class="container" style="padding-top: 7px">
       <section class="banner">
         <section>
@@ -55,39 +56,12 @@
       </div>
     </section>
     <!--货币基金-->
-    <section class="financing-list" v-if="proList.hjAsset && proList.hjAsset.length>0">
+    <section class="financing-list">
       <section class="top" @click="tapList">
                     <span class="top-left">
-                        货币基金</span>
+                        银行存款</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
-                        ¥{{bankDetail.hjAsset.API_FUND_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
-                    </span>
-        <span class="top-right" v-if="!pass">
-                    ****
-                </span>
-      </section>
-      <ul v-if="licaiShow" @click="goPage(toPageName.FinancialProducts)">
-        <li class="financing-li" v-for="item in proList.hjAsset">
-          <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
-          <span class="li-left">
-                        {{item.PRD_NAME}}</span>
-          <span v-if="pass">
-                        ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
-                    </span>
-          <span v-if="!pass">
-                        ****
-                    </span>
-
-        </li>
-      </ul>
-    </section>
-    <!--理财-->
-    <section class="financing-list" v-if="proList.retList && proList.retList.length>0">
-      <section class="top" @click="tapList">
-                    <span class="top-left">
-                        理财</span>
-        <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
-                        ¥{{bankDetail.lcAsset.API_FINA_ASSET | formatNum | preLcAssetFilter}}<i class="small-number">{{bankDetail.lcAsset.API_FINA_ASSET | lastLcAssetFilter}}</i>
+                        ¥{{proList.TOTAL_AMT | formatNum | preLcAssetFilter}}<i class="small-number">{{proList.TOTAL_AMT |formatNum| lastLcAssetFilter}}</i>
                     </span>
         <span class="top-right" v-if="!pass">
                     ****
@@ -99,7 +73,7 @@
           <span class="li-left">
                         {{item.PRD_NAME}}</span>
           <span v-if="pass">
-                        ¥{{item.INVEST_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.INVEST_AMOUNT | lastLcAssetFilter}}</i>
+                        ¥{{item.HOLD_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.HOLD_AMOUNT |formatNum| lastLcAssetFilter}}</i>
                     </span>
           <span v-if="!pass">
                         ****
@@ -118,7 +92,9 @@
     </section>
 
     <p class="foot-text">
-      如有疑问请拔打银行客服电话<a :href="'tel:'+bankDetail.ORG_HOTLINE">{{bankDetail.ORG_HOTLINE}}</a>
+      银行热线 <a :href="'tel:'+bankDetail.CUST_SERVICE_HOTLINE">{{bankDetail.CUST_SERVICE_HOTLINE}}</a> <br>
+      {{bankDetail.CUST_SERVICE_TIME}}
+
     </p>
   </div>
 </template>
@@ -137,7 +113,9 @@
     data() {
       return {
         imgSrc,
-        proList: [],
+        proList: {
+          TOTAL_AMT:'0.00',
+        },
         pass: true,
         licaiShow: false,
         toPageName: {
@@ -146,14 +124,10 @@
           FinancialProducts: PageName.FinancialProducts,
         },
         bankDetail: {
-          TOTAL_ASSET: '0.00', // 总资产(投资金额+可用余额)
-          TOTAL_AMOUNT: '0.00', // 投资总金额(不包括可用余额)
-          ACC_REST: '0.00', // 可用余额
-          TOTAL_INCOME: '0.00',//	累计收益
-          YSD_INCOME: '0.00', // 昨日收益
-          EC_ACCOUNT_NO: '',
-          lcAsset: '',
-          ORG_HOTLINE: ''
+          TOTAL_ASSET:'0.00',
+          TOTAL_INCOME:'0.00',
+          ACC_REST:'0.00',
+          YSD_INCOME:'0.00',
         }
       }
     },
@@ -172,26 +146,19 @@
       this.getBankDetail()
       this.scroll()
       this.getProList()
-      document.title = this.$route.query.NAME
+      document.title = this.$route.query.NAME || '货币基金'
     }
     ,
     methods: {
       tapList() {
-        if (!this.proList || this.proList.length == 0) {
+        if (!this.proList.retList || this.proList.retList.length == 0) {
           return
         }
         this.licaiShow = !this.licaiShow
       },
       goPage(pageName) {
-        let query
-        if (pageName == this.toPageName.FinancialProducts) {
-          query = {
-            total: this.bankDetail.lcAsset.API_FINA_ASSET
-          }
-        }
         this.$router.push({
           name: pageName,
-          query
         })
       }
       ,

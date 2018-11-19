@@ -67,13 +67,18 @@
         toUrl: '',
         CARD_BANK_NAME: '',
         imgSrc: imgSrc,
-        ACC_REST: '',
+
         pass: '',
         len: null,
+        passCode:'',
+
         canClick: false,
         logo: '',
         inputID: '',
         ifCheckMoneyEmpty: true,
+
+
+        ACC_REST: '200',
         DAY_REST:'10000', // todo取每日限额
       }
     },
@@ -98,7 +103,7 @@
     mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
     created() {
       this.getUserInfos()
-      this.ACC_REST = this.$route.query.ACC_REST
+      this.ACC_REST = this.$route.query.ACC_REST || '200'
     },
     methods: {
       checkMoney() {
@@ -113,14 +118,15 @@
       doWithdraw() {
         this.pass = $('#payPassDD').getKBD()
         this.len = $('#payPassDD').getLenKBD()
+        this.passCode = $('#payPassDD').getBDCode()
         if (util.Check.payPassLen(this.len, true)) return
         let data = {
           PHONE_CODE: "",
-          EITHDRAW_ALL: "0",
-          APPLY_AMOUNT: this.APPLY_AMOUN,
-          BANK_PAY_PW: this.pass,
-          PREFIX:'',//  密码标识 TODO 密码标识 查询银行类型
-          IS_UNIONPAY:'', // 是否他行卡 必填 1：他行 0:本行
+          EITHDRAW_All: "1",// 0 全部提现
+          APPLY_AMOUNT: this.APPLY_AMOUN, //
+          BANK_PAY_PW: this.pass, //
+          PREFIX:this.passCode,//  密码标识 TODO 密码标识 查询银行类型
+          IS_UNIONPAY:'1', // 是否他行卡 必填 1：他行 0:本行 todo 判断银行类型
         }
         this.show = false
         API.withdraw.apiCash(data, res => {
@@ -134,7 +140,6 @@
               text: '提现中',
               data: params,
               fn: (result, timer, count) => {
-                this.setComState({type:"reload",value:true}) // reload-001
                 if ('1' == result.RES_CODE) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);

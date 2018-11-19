@@ -8,7 +8,8 @@
       <h2>很抱歉，充值失败!</h2>
       <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
     </div>
-    <span @click="reCharge" class="begain">重新充值</span>
+    <span @click="reCharge" class="btn">重新充值</span>
+    <span @click="goBank" class="btn btn-back">返回银行页</span>
   </div>
 </template>
 <script>
@@ -25,6 +26,11 @@
     methods: {
       reCharge() {
         this.$router.go(-1)
+      },
+      goBank(){
+        this.$router.push({
+          name:''
+        })
       }
     }
   }
@@ -55,18 +61,23 @@
     margin-top: 1rem;
   }
 
-  .begain {
-    font-size: 0.4rem;
+  .btn {
+    font-size: px2rem(18);
     color: #fff;
-    background-color: #0096FE;
-    border-radius: 0.3rem;
-    line-height: 1rem;
-    width: 80%;
-    margin: 0 auto;
+    background: #0096FE;
+    border-radius: px2rem(6);
+    height: px2rem(44);
+    line-height: px2rem(44);
+    width: px2rem(255);
+    margin:px2rem(30) auto 0;
     text-align: center;
-    margin-top: 1rem;
-    border: 0px;
+    border: 0;
     outline: none;
     display: block;
+    &.btn-back{
+      color: #0096FE;
+      background-color: #fff;
+      border: 1px solid #0096FE;
+    }
   }
 </style>

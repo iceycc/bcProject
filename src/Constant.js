@@ -1,12 +1,13 @@
 // 静态值定义： 【应用配置】
 import {version} from '../package'
+
 /**
  *
  */
 let Configs = {
   // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
   DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit/', // 郑州开发环境
-  // DEV_HOST: 'http://192.168.100.141:8080', // 郑州开发环境
+  // DEV_HOST: 'http://192.168.10.87:8080', // 郑州开发环境
   // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
   // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
   PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
@@ -14,7 +15,7 @@ let Configs = {
   APP_DOWN_URL: 'http://www.baidu.com',
 }
 export const HOST = process.env.NODE_ENV == 'development'
-    ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
+  ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
 /**
  *
  */
@@ -103,10 +104,21 @@ export const PageName = {
    * 郑州新增
    */
   // 赎回相关
-  Redeem:'Redeem',
-  RedeemFailure:'RedeemFailure',
-  RedeemSuccess:'RedeemSuccess',
+  Redeem: 'Redeem',
+  RedeemFailure: 'RedeemFailure',
+  RedeemSuccess: 'RedeemSuccess',
+  DealDetails: 'DealDetails',
 
+  /**
+   * 众邦银行新增
+   */
+  BindingBank:'BindingBank',
+
+  /**
+   * 郑州银行 密码控件
+   * 原生交互
+   */
+  PayPassWord:'PayPassWord',
 }
 
 /**
@@ -145,8 +157,8 @@ export const LsName = {
  */
 
 export const ORG_ID_NUM = {
-  JinShang:'70',
-  ZhengZhou:'49',
-  ZhongBang:'100'
+  JinShang: '70',
+  ZhengZhou: '49',
+  ZhongBang: '227'
 }
 

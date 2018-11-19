@@ -2,18 +2,39 @@ import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName} from "@/Constant";
 import util from "libs/util";
-import store from '@/store'
-import {ORG_ID_NUM} from '@/Constant'
-let ORG_ID = store.getters.GET_ORG_ID
-let commons = {
+import commons from './common'
+
+export default {
+  mixins: [commons],
   data() {
     return {
-      ORG_ID_NUM,
-      ORG_ID
+      // 配置不同标签的展示
+      DOMShow: {
+        USER_NAME: true,
+        USER_CARD_ID: true,// 身份证号码
+        USER_DUTY:false,// 职业
+        USER_EDUCATION: false, //学历
+        ADDRESS: false, // 地址
+        NATION: false, // 民族
+        PHONE: false, // 手机号
+        USER_CARD_ID_DATA: true, //身份证有效期
+      },
+      DOCS: 'ZhengZhou',
+      job: [
+        {name: '党的机关、国家机关、群众团体和社会组织、企事业单位负责人', value: '10000'},
+        {name: '专业技术人员', value: '20000'},
+        {name: '办事人员和有关人员', value: '30000'},
+        {name: '社会生产服务和生活服务人员', value: '40000'},
+        {name: '农、林、牧、渔业生产及辅助人员', value: '50000'},
+        {name: '生产制造及有关人员', value: '60000'},
+        {name: '军人', value: '70000'},
+        {name: '其他从业人员', value: '80000'},
+        {name: '未知', value: '90000'},
+      ],
     }
   },
   created() {
-    console.log('ZZ');
+    console.log('ZhengZhou');
   },
   methods: {
     doOpeningFirstFactory() {
@@ -21,8 +42,10 @@ let commons = {
         FUNCTION_ID: 'ptb0A003', // 点位
         REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
       })
-      this.$store.commit('SET_OPENING1_DATA',this.data)
-      this.ORG_ID = this.$store.getters.GET_ORG_ID
+      this.$store.commit('SET_OPENING1_DATA', this.data)
+      this.ORG_ID = util.storage.session.get('ORG_ID')  || ''
+
+      // this.ORG_ID = this.$store.getters.GET_ORG_ID
       this.doOpengingFirst()
 
     },
@@ -59,169 +82,97 @@ let commons = {
       }
       return url;
     },
-  }
-}
-export default {
-  mixins: [commons],
-  data() {
-    return {
-      // 配置不同标签的展示
-      DOMShow: {
-        USER_NAME: true,
-        USER_CARD_ID: true,// 身份证号码
-        USER_DUTY: true, // 职业
-        USER_EDUCATION: false, //学历
-        ADDRESS: false, // 地址
-        NATION: false, // 民族
-        PHONE: true, // 手机号
-        USER_CARD_ID_DATA: true, //身份证有效期
-      },
-      DOCS: 'ZhengZhou',
-      job: [
-        {name: '党的机关、国家机关、群众团体和社会组织、企事业单位负责人', value: '10000'},
-        {name: '专业技术人员', value: '20000'},
-        {name: '办事人员和有关人员', value: '30000'},
-        {name: '社会生产服务和生活服务人员', value: '40000'},
-        {name: '农、林、牧、渔业生产及辅助人员', value: '50000'},
-        {name: '生产制造及有关人员', value: '60000'},
-        {name: '军人', value: '70000'},
-        {name: '其他从业人员', value: '80000'},
-        {name: '未知', value: '90000'},
-      ],
-    }
-  },
-  created() {
-    console.log('ZhengZhou');
-  },
-  methods: {
     /**
      * 身份证 ocr
      */
+
+
     idCardZhengOcr() {
       let params = {
+        PHONE_NUM:this.data.PHONE,
         TYPE: 'ID_CARD_FRONT_PHONE_OCR',
-        MEMBER_ID: this.data.MEMBER_ID || '',
-        ORG_ID: '49',
-        ISFRONT: 'true',
-        CARD_BASE: this.data.CARD_FRONT_FILE
+        IDENT_PHOTO:this.data.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+        MARK: '1',
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
-        this.data.USER_NAME = res.NAME
-        this.data.USER_CARD_ID = res.NUM
-        this.data.ADDRESS = res.ADDRESS
-        this.data.MEMBER_ID = res.MEMBER_ID
+        this.data.USER_NAME = res.ID_NAME
+        this.data.USER_CARD_ID = res.ID_NUMBER
+        this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
+        // this.data.ADDRESS = res.ADDRESS
 
-        this.data.PHONE_NUM = res.PHONE_NUM
-        this.checkID()
+        // this.checkID()
         // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
       })
     },
+    // TYPE	请求类型
+    // ORG_ID	机构ID
+    // PHONE_NUM	手机号码
+    // IDENT_PHOTO // 身份证图片
+    // MARK // 身份证正反面标识
+
+
     idCardFanOcr() {
       let params = {
+        PHONE_NUM:this.data.PHONE,
         TYPE: 'ID_CARD_BACK_PHONE_OCR',
-        MEMBER_ID: this.data.MEMBER_ID || '',
-        ORG_ID: '49',
-        ISFRONT: 'false',
-        CARD_BASE: this.data.CARD_BACK_FILE
+        MARK: '2',
+        IDENT_PHOTO: this.data.CARD_BACK_FILE.replace(/\+/g, '%2B'),
+
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
-        this.data.USER_CARD_ID_DATA = res.PERIOD
-        this.data.MEMBER_ID = res.MEMBER_ID
-        this.data.PHONE_NUM = res.PHONE_NUM
-        // this.data.CREDENTIAL_BURL = res.SUN_ECM_CONTENT_ID
+        console.log('aaaaaaaaaaaaaa');
+        console.log(res.VALIDITY_PERIOD);
+        this.data.USER_CARD_ID_DATA = res.VALIDITY_PERIOD,
+        this.data.IDENT_VLD_DT =this.transformDATA(res.VALIDITY_PERIOD).END
+        this.data.IDENT_LSS_DT = this.transformDATA(res.VALIDITY_PERIOD).STA
+        this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
+
+        // IDENT_LSS_DT	证件签发日期
+        // IDENT_VLD_DT	证件有效期
 
       })
     },
+
     /**
      *注册
      */
     // 1 实名认证
     doOpengingFirst() {
       // todo 校验
+      // TYPE	请求类型
+      // ORG_ID	机构ID
+      // PHONE_NUM	注册手机号
+      // USER_CARD_ID// 身份证号
+      // USER_NAME// 姓名
+      // CARD_FRONT_FILE // 身份证正面图像
+      // CARD_BACK_FILE // 身份证反面图像
 
+      // IDENT_LSS_DT	证件签发日期
+      // IDENT_VLD_DT	证件有效期
       let params = {
-        // IDFA:'aaa',
-        // APP_MARKET_CODE:'111',
-
-        ORG_ID: '49',
-        MEMBER_ID: this.data.MEMBER_ID,
         TYPE: 'API_REGISTER_VALI_USER',
         PHONE_NUM: this.data.PHONE + '',
-        // PHONE_NUM: this.data.PHONE + '',
-        PASSWORD: 'aaa111111',
         USER_NAME: this.data.USER_NAME + '',
         USER_CARD_ID: this.data.USER_CARD_ID + '',
         CARD_FRONT_FILE: this.data.CARD_FRONT_FILE,
         CARD_BACK_FILE: this.data.CARD_BACK_FILE,
-        USER_DUTY: this.data.USER_DUTY + '',
-        CREDENTIAL_POV: this.data.USER_CARD_ID_DATA + ''
+        IDENT_LSS_DT:this.data.IDENT_LSS_DT,
+        IDENT_VLD_DT:this.data.IDENT_VLD_DT,
       }
-      console.log(params);
+      console.log('open1Params>>', params);
+
       API.open.apiRegisterValiUser(params, (res) => {
-        //
-        let FirstData = {
-          BESHARP_REGISTER_VALI_USER_SEQ:this.res.BESHARP_REGISTER_VALI_USER_SEQ,
-          CREDENTIAL_AURL:this.CREDENTIAL_AURL,
-          CREDENTIAL_BURL:this.CREDENTIAL_BURL
-        }
-        this.$store.commit('SET_OPENING1_DATA',FirstData)
+        // todo
+        // 保存第一步的数据
+        this.setComState({type: 'openingState', value: {...res, ...params}})
+        // 回显是否实名成功
+        this.checkBankStatus() //
+        // this.$router.push({name:PageName.Opening2})
+      },err=>{
+        this.checkBankStatus() //
       })
     },
-    /**
-     * 注册回显是否成功
-     */
-    checkID(fn) {
-      let data = {
-        ORG_ID:'49',
-        ID_NUMBER:this.data.USER_CARD_ID,
-      }
-      API.open.apiGetUserLastCompleteStep(data,res=>{
-        let step = res.LAST_STEP_NUM
-        let REQ_SERIAL = res.REQ_SERIAL|| ''
-        let PHONE_NUM = res.PHONE_NUM || '' // 改身份证是否有手机号回显
-        console.log('步数 >>>', step);
-        if (step == 0) {
-          // Bus.$emit(BusName.showToast,"欢迎注册")
-          fn && fn(REQ_SERIAL, step)
-        }
-        if (step == 1) { //
-          // fn && fn(REQ_SERIAL, step, PHONE_NUM)
-          this.$router.push({
-            name: PageName.Opening2,
-            query: {
-              REQ_SERIAL: REQ_SERIAL,
-              LAST_STEP_NUM: step,
-              PHONE_NUM: PHONE_NUM
-            },
-            params: {
-              data: this.data,
-            }
-          })
-        }
-        if (step == 2) { // 跳转设置密码页
-          Bus.$emit(BusName.showToast, "您已经实名成功")
-          setTimeout(() => {
-            this.$router.push({
-              name: PageName.Opening3,
-              params: {
-                step
-              },
-              query: {
-                REQ_SERIAL: REQ_SERIAL
-              }
-            })
-          }, 600)
-        }
-        if (step == 3) {
-          Bus.$emit(BusName.showToast, "您已经开户成功")
-          setTimeout(() => {
-            this.$router.push({
-              name: PageName.Login,
-            })
-          }, 1000)
-        }
-      })
-    },
+
   }
 }
 

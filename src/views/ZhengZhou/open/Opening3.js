@@ -9,7 +9,8 @@ export default {
       showLoginPass: false,
       showPayPass: true,
       pwd: '',
-      pwdLen: ''
+      pwdLen: '',
+      pwdCode:''
     }
   },
   created() {
@@ -17,6 +18,8 @@ export default {
   },
   methods: {
     setPassWord() {
+      let opening3 = this.getComState.openingData
+      this.REQ_SERIAL = opening3.BESHARP_REGISTER_VALI_USER_SEQ
       if (!this.REQ_SERIAL) {
         Bus.$emit(BusName.showToast, '实名认证异常，请重新注册')
         setTimeout(() => {
@@ -26,20 +29,21 @@ export default {
         })
         return
       }
+
+      let CUST_NO = opening3.CUST_NO || null
       let data = {
         TYPE: 'API_REGISTER_SET_PSW',
-        ORG_ID: '49',
-        PREFIX: '',　// 密码控件唯一标识
+        PREFIX: this.pwdCode,　// 密码控件唯一标识
         REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
-        PASSWD: this.loginpass,
-        CUST_NO: '', // 客户号
+        PASSWD: this.pwd,
+        CUST_NO: CUST_NO, // 客户号
       }
+      console.log(data);
       API.open.apiRegisterSetPsw(data, res => {
         // todo 是否要判断预约来的还是购买来的
 
         Bus.$emit(BusName.showToast, '注册成功,即将跳转登录页')
         this.$store.commit('SET_TOKEN', '')
-        this.setComState({type: "reload", value: true}) // reload-001
         this.Londing.open({
           text: '即将跳转登录页'
         })
@@ -54,9 +58,7 @@ export default {
         this.setErrMsg({
           msg: err
         })
-        setTimeout(() => {
-          window.location.reload()
-        }, 500)
+
       })
     },
     subumit() {
@@ -64,11 +66,9 @@ export default {
         FUNCTION_ID: 'ptb0A005', // 点位
         REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
       })
-      $('#PWDKBD').remove();
       this.pwd = $("#pay-pass").getKBD(); //获取密码
       this.pwdLen = $("#pay-pass").getLenKBD(); //获取密码长度
-      console.log(this.pwd);
-      console.log(this.pwdLen);
+      this.pwdCode = $("#pay-pass").getBDCode(); //获取密码长度
       this.disabled = false
       this.setPassWord()
     }

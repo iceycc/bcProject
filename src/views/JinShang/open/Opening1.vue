@@ -99,21 +99,13 @@
 
     <!--todo 抽离开户页面的文档组件-->
     <p
-        v-if="ORG_ID == ORG_ID_NUM.JinShang"
         :class="{'bang':true,'no':agree == false}"
        @click="doAgree">
       <span>我已阅读并同意注册</span>
       <a href="javascript:;" @click.stop="showPage('2')" style=" color:#0096FE;">《用户授权服务协议》</a>
       <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《晋商银行直销银行电子账户服务协议》</a>
     </p>
-    <p
-        v-if="ORG_ID == ORG_ID_NUM.ZhengZhou"
-        :class="{'bang':true,'no':agree == false}"
-       @click="doAgree">
-      <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage('2')" style=" color:#0096FE;">《郑州银行鼎融易直营银行客户服务协议》、</a>
-      <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《隐私政策》</a>
-    </p>
+
 
     <section v-show="page" class="page">
       <div class="docs" v-if="showType == 1">

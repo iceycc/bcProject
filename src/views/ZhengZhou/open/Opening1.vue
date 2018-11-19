@@ -45,19 +45,16 @@
       <section v-if="DOMShow.USER_NAME">
         <span>姓名</span>
         <input class="inputBox2" type="text" placeholder="请输入您的姓名"
-               disabled
                v-model="data.USER_NAME">
       </section>
       <section v-if="DOMShow.USER_CARD_ID">
         <span>身份证号</span>
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
-               disabled
                v-model="data.USER_CARD_ID" @bulr="checkID">
       </section>
       <section v-if="DOMShow.USER_CARD_ID_DATA">
         <span>身份证有效期</span>
         <input class="inputBox2" type="text" placeholder=""
-               disabled
                v-model="data.USER_CARD_ID_DATA">
       </section>
       <section v-if="DOMShow.PHONE">
@@ -99,15 +96,6 @@
 
     <!--todo 抽离开户页面的文档组件-->
     <p
-      v-if="ORG_ID == ORG_ID_NUM.JinShang"
-      :class="{'bang':true,'no':agree == false}"
-      @click="doAgree">
-      <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage('2')" style=" color:#0096FE;">《用户授权服务协议》</a>
-      <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《晋商银行直销银行电子账户服务协议》</a>
-    </p>
-    <p
-      v-if="ORG_ID == ORG_ID_NUM.ZhengZhou"
       :class="{'bang':true,'no':agree == false}"
       @click="doAgree">
       <span>我已阅读并同意注册</span>
@@ -158,7 +146,8 @@
   import {PageName, BusName, HOST} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
   import Opening1Mixins from './Opening1'
-  import util from "../../../libs/util";
+  import util from "../../../libs/util"
+
 
   export default {
     data() {
@@ -221,7 +210,11 @@
     mixins: [Opening1Mixins],
     created() {
       // 1-获取回显数据
-      let suerinfo = util.storage.session.get('USERINFO')
+      // let suerinfo = this.$store.getters.GET_OPEN_STATE.opening
+      let suerinfo = this.getComState.openingData
+      console.log("suerinfo>>",suerinfo);
+      // this.setComState({type: 'openingData', value: suerinfo})
+      // this.$store.commit('SET_OPENING_DATA', suerinfo)
       if (suerinfo) {
         this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL
         this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL
@@ -229,13 +222,12 @@
         this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
         // this.data.USER_NAME = suerinfo.USER_NAME
         // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-        // this.data.PHONE = suerinfo.PHONE_NUM
-        // this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
-        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_FILE
+        this.data.PHONE = suerinfo.PHONE_NUM
+        this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
+        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
         this.idCardFanOcr()
         this.idCardZhengOcr()
       }
-      console.log(suerinfo);
     },
     methods: {
       //获取学历

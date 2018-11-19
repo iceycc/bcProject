@@ -2,14 +2,10 @@ import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName} from "@/Constant";
 import util from "libs/util";
-import store from '@/store'
-import {ORG_ID_NUM} from '@/Constant'
-let ORG_ID = store.getters.GET_ORG_ID
+
 let commons = {
   data() {
     return {
-      ORG_ID_NUM,
-      ORG_ID
     }
   },
   created() {
@@ -22,8 +18,8 @@ let commons = {
         REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
       })
       this.$store.commit('SET_OPENING1_DATA',this.data)
-      this.ORG_ID = this.$store.getters.GET_ORG_ID
       this.doOpengingFirst()
+
 
     },
     imgToBaseFan(e) {

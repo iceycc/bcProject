@@ -11,7 +11,6 @@ export default {
    */
   post: function (option, config, success, error) {
     return this.request('POST', option, config, success, error).catch(err => {
-      console.log(err);
       return Promise.reject(err)
     });
   },
@@ -33,7 +32,10 @@ export default {
    */
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
-    let ORG_ID = store.getters.GET_BANK_INFO.ORG_ID
+    let ORG_ID = util.storage.session.get('ORG_ID') || ''
+    if(JSON.stringify(ORG_ID)=='{}'){
+      ORG_ID = ''
+    }
     let {DEVICE_ID, CHANNEL_ID,TOKEN=token,SESSION_ID=''} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
@@ -49,12 +51,12 @@ export default {
           DEVICE_ID: DEVICE_ID + ''
         },
         param: {
-          ORG_ID, // 70
+          ORG_ID:ORG_ID+'', // 70
           ...params
         },
       },
-      channel_id: '1', // 注意这个！！
-      // channel_id: CHANNEL_ID + '',
+      // channel_id: '1', // 注意这个！！
+      channel_id: CHANNEL_ID + '',
     }
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)
@@ -62,7 +64,7 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
-      console.log('res >>>', result.data);
+      // console.log('res >>>', result.data);
       console.log('code >>>', result.head.CODE);
       store.commit('REMOVE_COMMON_STATE','LAST_STEP_NUM')
       store.commit('REMOVE_COMMON_STATE','REQ_SERIAL')
@@ -101,7 +103,6 @@ export default {
 
       }
       else {
-        console.log('错误msg >>>', result.head.MSG);
         if (!delMsg) {
           Bus.$emit(BusName.showToast, result.head.MSG)
         }
@@ -112,7 +113,7 @@ export default {
       }
     }).catch(errors => {
       error && error(errors.toString());
-      console.log('http errors>>', errors);
+      console.log('错误msg>>', errors);
       return Promise.reject(errors.toString())
     })
 
@@ -120,10 +121,10 @@ export default {
 
 }
 function goLogin() {
-  Router.push({
-    name: PageName.Login,
-    query: {
-      target: Router.currentRoute.fullPath
-    }
-  })
+  // Router.push({
+  //   name: PageName.Login,
+  //   query: {
+  //     target: Router.currentRoute.fullPath
+  //   }
+  // })
 }

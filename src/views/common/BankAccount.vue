@@ -1,6 +1,36 @@
 <template>
-  <div style="background: #f6f6f9;height: 100%">
+  <div style="background: #f6f6f9;height: 100%" v-show="Bshow">
     <app-bar title="电子账户"></app-bar>
+    <section class="m-bank-box">
+      <p class="m-title">测试</p>
+      <section class="m-bank-card" v-for="bank,index in textBankList" :key="index">
+        <div class="m-top">
+          <div class="m-logo">
+            <img :src="imgSrc + bank.LOGO_URL" alt="">
+          </div>
+          <div class="m-name">
+            <div>{{bank.ORG_NAME}}</div>
+            <p>{{bank.DESCRIPT}}</p>
+          </div>
+          <div class="m-btn" @click="goPage('Login',bank)">安全登录</div>
+        </div>
+        <ul class="m-bottom">
+          <li>
+            <P>总资产</P>
+            <P>- -</P>
+          </li>
+          <li>
+            <P>昨日收益</P>
+            <P>- -</P>
+          </li>
+          <li>
+            <P>累计收益</P>
+            <P>- -</P>
+          </li>
+        </ul>
+      </section>
+    </section>
+
     <section class="m-bank-box" v-if="ISLoginBankList.length >0">
       <p class="m-title">已登录</p>
       <section class="m-bank-card"
@@ -63,10 +93,10 @@
         </ul>
       </section>
     </section>
-  <div class="footer-btn">
-    <button>产品列表</button>
-    <button>我的资产</button>
-  </div>
+  <!--<div class="footer-btn">-->
+    <!--<button>产品列表</button>-->
+    <!--<button>我的资产</button>-->
+  <!--</div>-->
   </div>
 </template>
 
@@ -80,17 +110,62 @@
     name: "SafeLogin",
     data() {
       return {
+        Bshow:true,
         imgSrc,
         BankList: [],
         ISLoginBankList: [],
-        NOLoginBankList: []
+        NOLoginBankList: [],
+        textBankList:[
+          {
+            ORG_ID: '49',
+            ORG_NAME: '郑州银行',
+            LOGO_URL: '',
+            DESCRIPT: '隶属于郑州银行',
+            BANK_NAME: '郑州银行'
+          },
+          {
+            ORG_ID: '70',
+            ORG_NAME: '晋商银行',
+            LOGO_URL: '',
+            DESCRIPT: '隶属于晋商银行',
+            BANK_NAME: '晋商银行'
+          },
+          {
+            ORG_ID: '227',
+            ORG_NAME: '众邦银行',
+            LOGO_URL: '',
+            DESCRIPT: '隶属于郑州银行',
+            BANK_NAME: '众邦银行'
+          },
+        ]
       }
     },
     created() {
-      this.getBankList()
+      this.reLoadToLogin()
+
     },
     methods: {
       ...mapActions(['SET_BANK_INFO']),
+      reLoadToLogin(){
+        let reload = util.storage.session.get('reload') || null
+        let flag = util.storage.session.get('flag') || null
+        if (reload) {
+          this.Bshow=false
+          setTimeout(()=>{
+            this.Bshow=true
+          },1000)
+          let NAME = this.$route.query.NAME
+          util.storage.session.remove('reload')
+          util.storage.session.remove('flag')
+          this.$router.push({
+            name: flag, query: {
+              NAME: NAME
+            }
+          })
+        }else {
+          this.getBankList()
+        }
+      },
       goPage(page, bank) {
         // util.storage.session.set(LsName.ORG_ID, bank.ORG_ID)
         // this.$store.dispatch('SET_BANK_INFO',...)
@@ -104,24 +179,33 @@
               value:PageName.BankAccount
             }
           )
+          util.storage.session.set('ORG_ID',bank.ORG_ID)
+          util.storage.session.set('flag',PageName.Login)
+          util.storage.session.set('reload',true)
+          window.location.reload()
           // util.storage.session.set(LsName.loginType, PageName.BankAccount)
-          this.$router.push({
-            name: PageName.Login,
-          })
+          // this.$router.push({
+          //   name: PageName.TestPage,
+          // })
         }
         if (page == 'BankDetail') {
-          this.$router.push({
-            name: PageName.BankDetail,
-            query: {
-              NAME: bank.ORG_NAME
-            }
-          })
+          util.storage.session.set('ORG_ID',bank.ORG_ID)
+          util.storage.session.set('flag',PageName.BankDetail)
+          util.storage.session.set('reload',true)
+          window.location.reload()
+
+          // this.$router.push({
+          //   name: PageName.TestPage,
+          //   query: {
+          //     NAME: bank.ORG_NAME
+          //   }
+          // })
         }
       },
       // get
       getBankList() {
         let data = {}
-        API.account.apiBankList(data, (res) => {
+        API.commonApi.apiBankList(data, (res) => {
           this.BankList = res.BANK_LIST
           this.ISLoginBankList = this.BankList.filter((item, index) => {
             return item.HAS_LOGIN == 1

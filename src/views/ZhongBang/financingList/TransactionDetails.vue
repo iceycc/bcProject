@@ -2,6 +2,10 @@
   <div class="wrap">
     <div class="wrap-top">
       <app-bar title="交易明细"></app-bar>
+      <!--<ul class="w-tap">-->
+        <!--<li :class="{actvie:cur==1}" @click="tap(1)">收益明细</li>-->
+        <!--<li :class="{actvie:cur==2}" @click="tap(2)">交易明细</li>-->
+      <!--</ul>-->
       <ul class="tabs">
         <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
             :class="{active:index==nowIndex}">{{item}}
@@ -30,10 +34,16 @@
             <div>
               <ul>
                 <li v-for="(item,index) in pageList" :key="index">
-                  <h5>{{item.TRANS_TYPE_NAME}}</h5>
+                  <h5 style="display: flex">
+                    <span style="flex: 1">{{PRD_NAME}}</span>
+                    <span style="width: 40%;text-align: right" v-if="cur==1">收益</span>
+                    <span style="width: 40%;text-align: right" v-if="cur==2 && item.TYPE==1">买入</span>
+                    <span style="width: 40%;text-align: right" v-if="cur==2 && item.TYPE==2">卖出</span>
+                  </h5>
                   <p>
-                    <span>{{item.TRANS_TIEM | timerFormat}}</span>
-                    <em>¥{{item.TRANS_AMT | formatNum}}</em>
+                    <span>{{item.OPERA_DATE }}</span>
+                    <!--1:买入 2:卖出-->
+                    <em>{{item.TYPE==2?'-':'+'}}  {{item.TRANS_AMT}}</em>
                   </p>
                 </li>
 
@@ -52,13 +62,19 @@
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
-  import Mixins from "@/mixins";
 
 
   export default {
-    mixins: [''],
     data() {
       return {
+        cur:1,
+        pageList1:[{
+          TRANS_TYPE_NAME:'百度',
+          TRANS_TIEM:'AAA',
+          TRANS_AMT:'11'
+
+        }],
+        PRD_NAME:'',
         // 1月分页
         searchCondition: {
           //分页属性
@@ -76,10 +92,22 @@
         divSizeObj: {
           small: {},
           large: {}
-        }
+        },
+
+        FUND_NO:'',
+        PRD_INDEX_ID:''
       };
     },
+    watch:{
+      cur(){
+        this.loadPageList(); //初次访问查  询列表
+        this.setEleSize()
+      }
+    },
     created() {
+      this.FUND_NO = this.$route.query.FUND_NO
+      this.PRD_INDEX_ID = this.$route.query.PRD_INDEX_ID
+      this.PRD_NAME = this.$route.query.PRD_NAME
     },
     components: {
       "v-loadmore": Loadmore // 为组件起别名，vue转换template标签时不会区分大小写，例如：loadMore这种标签转换完就会变成loadmore，容易出现一些匹配问题
@@ -87,11 +115,22 @@
     },
     mounted() {
       //交易数据
-      this.loadPageList(); //初次访问查询列表
+      this.loadPageList(); //初次访问查  询列表
       this.setEleSize()
 
     },
     methods: {
+      getData(){
+        if(this.cur==1){
+
+        }
+        if(this.cur==2){
+
+        }
+      },
+      tap(index){
+        this.cur = index
+      },
       setEleSize() {
         console.log(this.nowIndex);
         let winheight = util.getWinSize().winHeight
@@ -134,42 +173,96 @@
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
         let data = {
+          TYPE: 'API_QRY_BUY_HIS',
+          QRY_TYPE: '0',
+          PRD_TYPE: '4',
+          FUND_NO: this.FUND_NO,
+          PRD_INDEX_ID:this.PRD_INDEX_ID,
           currentPage: this.searchCondition.pageNo,
           START_DATE: this.startDate,
           END_DATE: this.endDate
         };
-        API.financial.apiQryTradeHis(data, res => {
-          this.pageList = this.pageList.concat(res.PAGE.retList);
-          if (res.PAGE.retList.length < this.searchCondition.pageSize) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
-          }
-        });
+        // TYPE	请求类型
+        // currentPage	当前页
+        // QRY_TYPE	查询类型
+        // PRD_TYPE	产品类型
+        // PRD_INDEX_ID	产品ID
+        // ORG_ID	机构ID
+        // START_DATE	开始日期
+        // END_DATE	结束日期
 
+        if(this.cur==1){
+          API.bank.apiQryBuyHis(data, res => {
+            this.pageList = this.pageList.concat(res.PAGE.retList);
+            if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+            }
+          });
+        }
+        if(this.cur==2){
+          API.bank.apiQryBuyHis(data, res => {
+            this.pageList = this.pageList.concat(res.PAGE.retList);
+            if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+            }
+          });
+        }
       },
 
       apiQryTradeHis(start, end) {
+
         let data = {
+          TYPE: 'API_QRY_BUY_HIS',
           currentPage: "1",
+          QRY_TYPE: '0',
+          PRD_TYPE: '4',
+          FUND_NO: this.FUND_NO,
+          PRD_INDEX_ID:'',
+          // PRD_INDEX_ID:'',
           START_DATE: start,
           END_DATE: end
         };
-        API.financial.apiQryTradeHis(data, res => {
-          this.pageList = res.PAGE.retList;
-          if (this.pageList.length < this.searchCondition.pageSize) {
-            this.allLoaded = true;
-          }
-          if (this.pageList.length <= 0) {
-            Bus.$emit(BusName.showToast, "暂无数据");
-          }
-          this.$nextTick(function () {
-            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-            this.scrollMode = "touch";
-          });
 
-        });
+        if(this.cur==1){
+          API.bank.apiQryBuyHis(data, res => {
+            this.pageList = res.PAGE.retList;
+            if (this.pageList.length < this.searchCondition.pageSize) {
+              this.allLoaded = true;
+            }
+            if (this.pageList.length <= 0) {
+              Bus.$emit(BusName.showToast, "暂无数据");
+            }
+            this.$nextTick(function () {
+              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+              this.scrollMode = "touch";
+            });
+
+          });
+        }
+        if(this.cur==2){
+          API.bank.apiQryBuyHis(data, res => {
+            this.pageList = res.PAGE.retList;
+            if (this.pageList.length < this.searchCondition.pageSize) {
+              this.allLoaded = true;
+            }
+            if (this.pageList.length <= 0) {
+              Bus.$emit(BusName.showToast, "暂无数据");
+            }
+            this.$nextTick(function () {
+              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+              this.scrollMode = "touch";
+            });
+
+          });
+        }
+
+
       },
       toggleTabs(index) {
         this.nowIndex = index;
@@ -479,8 +572,6 @@
                 em {
                   font-size: px2rem(18);
                   float: right;
-                  position: relative;
-                  margin-top: px2rem(-12);
                   line-height: px2rem(25);
                   color: #333333;
                 }
@@ -547,5 +638,19 @@
     overflow: auto;
     box-sizing: border-box;
     padding-bottom: px2rem(50);
+  }
+  .w-tap{
+    display: flex;
+    li{
+      flex: 1;
+      height: px2rem(30);
+      line-height: px2rem(30);
+      text-align: center;
+      margin: px2rem(10) 0;
+      background: #fff;
+      &.actvie{
+        color: #007aff;
+      }
+    }
   }
 </style>

@@ -22,13 +22,13 @@ export default {
         setTimeout(() => {
           this.$router.push({
             name: PageName.opening
-          }, 1000)
-        })
+          })
+        },1000)
         return
       }
       let data = {
         TYPE: 'API_REGISTER_SET_PSW',
-        ORG_ID: '49',
+        ORG_ID: '',
         PREFIX: '',　// 密码控件唯一标识
         REQ_SERIAL: this.REQ_SERIAL,// BCS2018206470823115514961
         PASSWD: this.loginpass,

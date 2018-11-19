@@ -105,7 +105,7 @@
   import JsSelect from '@/components/commons/JsSelect'
   import API from "@/service";
   import Bus from "@/plugin/bus"
-  import util from "libs/util";
+  import util from "../../../libs/util";
   import IconFont from '@/components/commons/IconFont'
 
 
@@ -162,7 +162,9 @@
           REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
         })
         this.$store.commit('SET_OPENING1_DATA', this.data)
-        this.ORG_ID = this.$store.getters.GET_ORG_ID
+        // this.ORG_ID = this.$store.getters.GET_ORG_ID
+        this.ORG_ID = util.storage.session.get('ORG_ID')  || ''
+
         this.doOpengingFirst()
 
       },
@@ -237,7 +239,7 @@
           // IDFA:'aaa',
           // APP_MARKET_CODE:'111',
 
-          ORG_ID: '49',
+          ORG_ID: '',
           MEMBER_ID: this.data.MEMBER_ID,
           TYPE: 'API_REGISTER_VALI_USER',
           PHONE_NUM: this.data.PHONE + '',

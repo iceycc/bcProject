@@ -33,7 +33,11 @@ export default {
    */
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
-    let ORG_ID = store.getters.GET_BANK_INFO.ORG_ID
+    let ORG_ID = util.storage.session.get('ORG_ID') || ''
+    if(JSON.stringify(ORG_ID)=='{}'){
+      ORG_ID = ''
+    }
+
     let {DEVICE_ID, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
@@ -49,7 +53,7 @@ export default {
           DEVICE_ID: DEVICE_ID + ''
         },
         param: {
-          ORG_ID, // 70
+          ORG_ID:ORG_ID+'', // 70
           ...params
         },
       },

@@ -172,7 +172,6 @@
                     //     USER_CARD_ID: this.IDCardNum,
                     //     msg: err
                     // })
-                    window.location.reload()
                 })
                 console.log(data);
 

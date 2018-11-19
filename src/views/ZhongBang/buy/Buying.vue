@@ -46,7 +46,7 @@
       return {
         proDetail: {},
         moneyNum: null,
-        payNum: '',
+        payNum: '1000',
         agree: true,
         imgSrc: imgSrc,
         INCRE_AMOUNT: ''
@@ -55,14 +55,15 @@
     mixins: [Mixins.HandleMixin,Mixins.StoreMixin],
     created() {
       this.getInfo()
-      this.proDetail = this.$route.query // 数据
+      this.proDetail = this.getComState.goBuy // 数据
     },
     methods: {
       getInfo() {
         // 查询账户余额
         API.buy.apiQueryAccRest({}, res => {
           console.log(res);
-          this.payNum = res.ACC_REST // 账户余额(可用余额)
+          this.payNum = res.ACC_REST || 1000// 账户余额(可用余额)
+          // this.payNum = 1000// 账户余额(可用余额)
         })
       },
       goReChang() {
@@ -70,16 +71,9 @@
           type:'OriginPage',
           value:this.$route.fullPath
         })
-        let data = {
-          PRD_NAME: this.proDetail.PRD_NAME, // 产品名称
-          id: this.proDetail.id,
-          ORG_NAME: this.proDetail.ORG_NAME, // 直销银行名称
-          LOGO_URL: this.proDetail.logo, // 直销银行名称
-        }
-        this.setComState({type:'RechargeQuery',value:data})
+
         this.$router.push({
           name: PageName.Recharge,
-
         })
       },
       getAgreement(type) {

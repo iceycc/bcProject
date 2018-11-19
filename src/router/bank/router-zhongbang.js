@@ -1,6 +1,18 @@
 import {PageName} from "@/Constant";
 
 export default [
+  {
+    path: '/' + PageName.ProductReservation,
+    name: PageName.ProductReservation,
+    component: resolve => require(['views/ZhongBang/product/ProductReservation.vue'], resolve),
+    meta: {keepAlive: false, needLogin: false}
+  },
+  {
+    path: '/' + PageName.OrderNextSuccess,
+    name: PageName.OrderNextSuccess,
+    component: resolve => require(['views/ZhongBang/product/OrderNextSuccess.vue'], resolve),
+    meta: {keepAlive: false, title: '预约成功', needLogin: false}
+  },
   /**
    * buy
    */
@@ -27,8 +39,10 @@ export default [
     path: '/' + PageName.Buying,
     name: PageName.Buying,
     component: resolve => require(['views/ZhongBang/buy/Buying.vue'], resolve),
-    meta: {keepAlive: false, title: '购买', needLogin: false}
+    meta: {keepAlive: false, title: '购买', needLogin: true}
   },
+
+
   /**
    * login
    */
@@ -178,6 +192,12 @@ export default [
     component: resolve => require(['views/ZhongBang/bankDetail/MoreService.vue'], resolve),
     meta: {keepAlive: false, title: '更多服务', needLogin: false}
   },
+  {
+    path: '/' + PageName.DealDetails,
+    name: PageName.DealDetails,
+    component: resolve => require(['views/ZhongBang/bankDetail/DealDetails.vue'], resolve),
+    meta: {keepAlive: false, title: '交易明细', needLogin: false}
+  },
 
   /**
    * Withdraw
@@ -227,12 +247,34 @@ export default [
     component: resolve => require(['views/ZhongBang/financingList/TransactionDetails.vue'], resolve),
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
-  // 赎回
+  /**
+   * 郑州新增：赎回
+   */
   {
     path: '/' + PageName.Redeem,
     name: PageName.Redeem,
     component: resolve => require(['views/ZhongBang/redeem/Redeem.vue'], resolve),
     meta: {keepAlive: false, title: '赎回', needLogin: false}
+  },
+  {
+    path: '/' + PageName.RedeemSuccess,
+    name: PageName.RedeemSuccess,
+    component: resolve => require(['views/ZhongBang/redeem/RedeemSuccess.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
+  },
+  {
+    path: '/' + PageName.RedeemFailure,
+    name: PageName.RedeemFailure,
+    component: resolve => require(['views/ZhongBang/redeem/RedeemFailure.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
+  },
+  /**
+   * 郑州相关 BindingBank
+   */
+  {
+    path: '/' + PageName.BindingBank,
+    name: PageName.BindingBank,
+    component: resolve => require(['views/ZhongBang/safe/BindingBank.vue'], resolve),
+    meta: {keepAlive: false, title: '赎回', needLogin: false}
   }
-
 ]

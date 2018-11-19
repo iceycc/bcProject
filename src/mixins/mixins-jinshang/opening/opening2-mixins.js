@@ -672,7 +672,7 @@ let ZhongBang = {
 }
 
 
-let ORG_ID = store.getters.GET_ORG_ID
+let ORG_ID = util.storage.session.get('ORG_ID') || ''
 let MIX = {};
 switch (ORG_ID) {
   case ORG_ID_NUM.JinShang:

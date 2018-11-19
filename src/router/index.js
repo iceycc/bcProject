@@ -8,6 +8,7 @@ import util from "libs/util";
 import Bus from '@/plugin/bus/index'
 import routes from "./routes"
 import store from "@/store";
+
 Vue.use(VueRouter)
 
 let router = new VueRouter({
@@ -15,6 +16,13 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  let ORG_ID = util.storage.session.get('ORG_ID') || null
+  console.log('ORG_ID>>',ORG_ID);
+  if (!ORG_ID || JSON.stringify(ORG_ID)=='{}') {
+    let ORG_ID = to.query.ORG_ID || ''
+    util.storage.session.set('ORG_ID', ORG_ID)
+    window.location.reload()
+  }
   // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
   let {DEVICE_ID, CHANNEL_ID} = store.getters.GET_ACCOUNT_STATE
   if (!DEVICE_ID) {

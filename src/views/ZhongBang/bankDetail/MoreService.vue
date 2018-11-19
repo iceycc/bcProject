@@ -2,7 +2,7 @@
   <div style="background: #f6f6f9;height: 100%">
     <app-bar title="更多服务"></app-bar>
     <section class="m-main">
-      <section class="more" @click="goPage(toPageName.fenxian)">
+      <section v-if="DOM_SHOW.fenxiang" class="more" @click="goPage(toPageName.fenxian)">
              <span class="more-left">
                         风险测评</span>
         <span class="more-right">
@@ -10,7 +10,16 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
-      <section class="more" @click="goPage(toPageName.ChangeBank)">
+      <!--BindingBank-->
+      <section v-if="DOM_SHOW.BindingBank" class="more" @click="goPage(toPageName.BindingBank)">
+             <span class="more-left">
+                        绑定银行卡管理</span>
+        <span class="more-right">
+                    已绑定{{CARD_BANK_NAME}}
+                <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
+                    </span>
+      </section>
+      <section v-if="DOM_SHOW.ChangeBank" class="more" @click="goPage(toPageName.ChangeBank)">
              <span class="more-left">
                         更换银行卡</span>
         <span class="more-right">
@@ -18,14 +27,14 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
-      <section class="more" @click="goPage(toPageName.ResetPhone)">
+      <section v-if="DOM_SHOW.ResetPhone" class="more" @click="goPage(toPageName.ResetPhone)">
              <span class="more-left">
                         更换绑定手机号</span>
         <span class="more-right">
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
-      <section class="more" @click="goPage(toPageName.ResetPayPassword)">
+      <section v-if="DOM_SHOW.ResetPayPassword" class="more" @click="goPage(toPageName.ResetPayPassword)">
              <span class="more-left">
                         更换支付密码</span>
         <span class="more-right">
@@ -51,11 +60,20 @@
     mixins: [],
     data() {
       return {
+        // 功能展示
+        DOM_SHOW:{
+          fenxiang:false,
+          ChangeBank:false,
+          BindingBank: true,
+          ResetPhone:true,
+          ResetPayPassword:false
+        },
         RISK_TOLERANCE_LEVEL: '',
         CARD_BANK_NAME: '',
         toPageName: {
           fenxian: PageName.FengxianResult,
           ChangeBank: PageName.ChangeBank,
+          BindingBank: PageName.BindingBank,
           ResetPhone: PageName.ResetPhone,
           ResetPayPassword: PageName.ResetPayPassword,
         },
@@ -109,6 +127,15 @@
         })
       },
       getInfos() {
+
+        this.getRiskGrade()
+        // this.getBankCardInfo()
+      },
+      //  获取风险测评结果
+      getRiskGrade(){
+        // API.risk.apiRiskGrade({},res=>{})
+      },
+      getBankCardInfo(){
         let data = {}
         API.safe.apiBandCard(data, (res) => {
           this.setComState({

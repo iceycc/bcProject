@@ -30,7 +30,7 @@
       <section class="passbox">
         <p class="title">
           <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由晋商银行提供技术保障</p>
+          由郑州银行提供技术保障</p>
         <section class="field_row_wrap">
           <p class="field_row_key">
             交易密码
@@ -113,9 +113,7 @@
         let timer = setInterval(() => {
           i++
           API.common.apiQueryBizStatus(data, result => {
-            console.log(result.RES_CODE);
-            this.setComState({type: "reload", value: true}) // reload-001
-            if ('1' == result.RES_CODE && i == 5) {
+            if ('1' == result.RES_CODE || i == 5) {
               this.Londing.close()
               clearInterval(timer)
               Bus.$emit(BusName.showToast, result.RES_MSG);
@@ -163,18 +161,24 @@
       doPay() {
         this.pass = $("#payPasscc").getKBD(); //获取密码
         this.len = $("#payPasscc").getLenKBD(); //获取密码长度
+        let lenCode = $("#payPasscc").getBDCode(); //获取密码长度
         let data = {
-          PRD_ID: this.datas.id + '',
+          PRD_ID: '17817',
+          TYPE:'API_BUY',
+          // PRD_ID: this.datas.id + '',
           APPLY_AMOUNT: this.datas.money + '',
-          BANK_PAY_PW: this.pass + ''
+          BANK_PAY_PW: this.pass + '',
+          PREFIX:lenCode,
+          FUN_TYPE:'1', // 基金种类 基金种类 1:货币 2:非货币
+          ORDER_TYPE:'1'
         }
+
         if (util.Check.payPassLen(this.len, true)) return;
         this.show = false
         API.buy.apiBuy(data, (res) => {
           this.polling(res)
         }, err => {
           this.Londing.close()
-          this.setComState({type: "reload", value: true}) // reload-001
           this.$router.push({
             name: PageName.BuyFailed,
             query: {

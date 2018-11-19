@@ -59,7 +59,6 @@
 
       // console.log('设备userAgent>>' + navigator.userAgent);
       Bus.$on(BusName.showToast, (val) => {
-        console.log(val);
         if(!val) return
         this.showToast = true
         this.msg = val

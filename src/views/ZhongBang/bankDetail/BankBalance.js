@@ -4,15 +4,12 @@ import {PageName, BusName, LsName} from "@/Constant";
 export default {
   methods: {
     getBankDetail() {
-      API.account.apiQueryAccRest({}, (res) => {
+      API.bank.apiQryAsset({}, (res) => {
         this.ACC_REST = res.ACC_REST
-        let ReChargeData = {
-          ORG_NAME: res.ORG_NAME,
-          LOGO_URL: res.LOGO_URL
-        }
-        this.setComState({type:'ReChargeData',value:ReChargeData})
       })
+
     },
+
   }
 }
 

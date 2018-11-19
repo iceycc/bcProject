@@ -59,29 +59,6 @@
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <button class="tijiao" @click="goNext">下一步</button>
 
-    <div v-if="ZhengZhouPass" class="bgbox">
-      <!--晋商-->
-      <div class="passbox">
-        <div class="top">
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              请输入郑州银行（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
-            </p>
-            <div class="field_row_value">
-              <pass-word-zhengzhou
-                BankCardPass="bank-pass"
-              ></pass-word-zhengzhou>
-            </div>
-            <p class="info">密码为6位数字</p>
-          </div>
-
-        </div>
-        <div class="btn">
-          <button @click="cancel">取消</button>
-          <button @click="subumit">提交</button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -89,7 +66,6 @@
   import Bus from '@/plugin/bus'
   import BankSelect from '@/components/commons/BankSelect'
   import Opening2Mixins from './Opening2'
-  import Mixins from "@/mixins";
 
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
 

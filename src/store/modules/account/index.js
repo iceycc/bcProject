@@ -22,7 +22,7 @@ export default {
     SET_DEVICE_ID(state, DEVICE_ID = '3000000') {
       state.DEVICE_ID = DEVICE_ID + ''
     },
-    SET_CHANNEL_ID(state, CHANNEL_ID = 3) {
+    SET_CHANNEL_ID(state, CHANNEL_ID = 1) {
       state.CHANNEL_ID = CHANNEL_ID + ''
     },
     SET_SESSION_ID(state, SESSION_ID = '') {

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" v-if="Bshow">
     <app-bar title="产品列表"></app-bar>
     <div class="banner">
       <img src="@/assets/images/banner.png" alt="">
@@ -9,7 +9,7 @@
       <ul class="ul-li">
         <li class="productdetail clearfix"
             v-for="item,index in dataList" :key="index"
-            @click="goDetail(item.ID,item.PRD_NAME)"
+            @click="goDetail(item.ID,item.PRD_NAME,item.ORG_ID)"
             style="padding-top: .2rem"
         >
           <p class="name2">{{item.PRD_NAME}}</p>
@@ -25,7 +25,8 @@
     <div class="productdetail2" v-if="show">
       <ul>
         <li class="clearfix" v-for="item,index in dataList" :key="index"
-            @click="goDetail(item.ID,item.PRD_NAME)">
+            @click="goDetail(item.ID,item.PRD_NAME,item.ORG_ID)"
+        >
           <div class="ratereturn " style="text-align: center">
             <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
             <p style="color: #B4BECC;font-size: 0.4rem;">预期年化收益率</p>
@@ -45,28 +46,30 @@
 <script>
   import API from "@/service";
   import {LsName, PageName, imgSrc} from "@/Constant";
-  import Mixins from "@/mixins";
+  import util from 'libs/util'
+  import {BusName} from "../../../Constant";
+  import Bus from '@/plugin/bus/index'
 
 
   export default {
     data() {
       return {
+        Bshow:true,
         show: false,
         dataList: [],
         imgSrc
       }
     },
-    mixins: [''],
     created() {
       API.watchApi({
         REMARK_DATA: '异业合作-落地页',
         FUNCTION_ID: 'ptp0A000'
       })
-      this.getListData()
+      this.reLoadToLogin()
     },
     methods: {
       getListData() {
-        API.product.apiGetChannelPrdList({}, (res) => {
+        API.commonApi.apiGetChannelPrdList({}, (res) => {
           let num = res.length
           if (num < 6) {
             this.show = true
@@ -77,24 +80,52 @@
             this.dataList = res.splice(0, 9)
           } else {
             this.dataList = res
-
           }
         })
       },
-      goDetail(id, title) {
+      reLoadToLogin() {
+        let reload = util.storage.session.get('reload') || null
+        if (reload) {
+
+          let id = util.storage.session.get('id')
+          let title = util.storage.session.get('title')
+          util.storage.session.remove('id')
+          util.storage.session.remove('title')
+          util.storage.session.remove('reload')
+          this.Bshow=false
+          setTimeout(()=>{
+            this.Bshow=true
+          },1000)
+          this.$router.push({
+            name:'ProductReservation',
+            query:{
+              id,title
+            }
+          })
+        } else {
+          this.getListData()
+        }
+      },
+      goDetail(id, title, ORG_ID) {
+        if (ORG_ID != '70' && ORG_ID != '227' && ORG_ID != '49') {
+          Bus.$emit(BusName.showToast, '暂不支持改银行')
+          return
+        }
         API.watchApi({
           FUNCTION_ID: 'ptb0A001', // 点位
           REMARK_DATA: '异业合作-落地页产品列表', // 中文备
           FROM_ID: id
         })
-        this.$router.push({
-          name: PageName.ProductReservation,
-          query: {
-            id,
-            title
-          }
-        })
-      }
+        ORG_ID = ORG_ID + ''
+        util.storage.session.set('ORG_ID', ORG_ID)
+        util.storage.session.set('id', id)
+        util.storage.session.set('title', title)
+        util.storage.session.set('reload', true)
+        setTimeout(()=>{
+          window.location.reload()
+        },100)
+      },
+
     }
   }
 </script>

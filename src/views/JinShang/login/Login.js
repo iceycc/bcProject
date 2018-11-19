@@ -7,8 +7,9 @@ let watchPassPluginPassTimer;// 晋商密码控件轮询计时器标志
 
 import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
+let ORG_ID = util.storage.session.get('ORG_ID')  || ''
 
-let ORG_ID = store.getters.GET_ORG_ID
+// let ORG_ID = store.getters.GET_ORG_ID
 
 /**
  * 开户公共方法，根据ORG_ID区分不同的业务逻辑

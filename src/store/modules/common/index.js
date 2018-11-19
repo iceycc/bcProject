@@ -33,6 +33,9 @@ export default {
       BESHARP_BUY_SEQ:'2111211111211111'
     }, //
     availableBalance:'' ,// 可用余额
+    redeemData:{},
+    openingData:{},
+
   },
   //
   actions: {},

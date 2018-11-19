@@ -168,10 +168,6 @@
   import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
-  import Mixins from "@/mixins";
-
-  // let defaultManey = 3000
-  // import {Index} from '@/common/utils/mixin'
 
   export default {
     data() {
@@ -347,7 +343,7 @@
         let data = {
           ID: id + ""
         };
-        API.product.apiGetChannelPrdInfo(data, res => {
+        API.commonApi.apiGetChannelPrdInfo(data, res => {
           this.productDetail = res;
           // 判断起购金额是否大于默认金额
           let str = this.productDetail.TXT_MIN_AMOUNT;
@@ -378,7 +374,9 @@
           this.btnType = this.type == 1 ? "安全购买" : "预约下期";
         });
       },
+
       goNext(type) {
+        console.log(this.proID);
         this.removeComState('ProDuctData')
         let target = this.$route.fullPath;
         // 判断登录
@@ -413,15 +411,11 @@
           if (HAS_GRADE == 1) {
             // 未评估
             Bus.$emit(BusName.showToast, "请先进行评估");
-            this.$router.push({
-              name: PageName.VerificationSuccess
-            });
+            this.$router.push({name:PageName.VerificationSuccess})
+
           } else {
             // 其他的话  正常
-            this.$router.push({
-              name: PageName.Buying,
-              query: goBuyData
-            });
+            this.$router.push({name:PageName.Buying,query:goBuyData})
           }
         } else {
           // 预约 得先登录
@@ -438,15 +432,13 @@
           let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
           if (TOKEN) {
             // 正常
-            API.product.apiSaveSubscribeInfo(
+            API.commonApi.apiSaveSubscribeInfo(
               data,
               res => {
-                this.$router.push({
-                  name: PageName.OrderNextSuccess,
-                  query: {
+                this.$router.push({name:PageName.OrderNextSuccess,query:{
                     PRD_NAME: this.productDetail.PRD_NAME
-                  }
-                });
+
+                  }})
               },
               err => {
                 console.log(err);
@@ -460,12 +452,10 @@
             this.setComState({type:'loginType',value:'预约下期'})
             // util.storage.session.set(LsName.loginType, "预约下期");
             setTimeout(() => {
-              this.$router.push({
-                name: PageName.Login,
-                query: {
+              this.$router.push({name:PageName.Login,query:{
                   target
-                }
-              });
+                }})
+
             }, 500);
           }
         }

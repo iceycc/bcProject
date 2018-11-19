@@ -1,89 +1,87 @@
 <template>
   <div>
-    <app-bar title="赎回"></app-bar>
+    <app-bar title="支取"></app-bar>
     <div class="r-top">
-      <img src="@/assets/images/licaiicon@2x.png" alt="">
+      <img :src="imgSrc+redeemData.LOGO_URL" alt="">
       <div>
-        <p>博时日添利</p>
+        <p>{{redeemData.PRD_NAME}}</p>
         <span>货币基金</span>
       </div>
     </div>
     <div class="r-cash">
-      <div class="title">赎回金额</div>
+      <div class="title">支取金额</div>
       <div class="money">
         <div class="number">
           <i v-show="isFocus">￥</i>
-          <input type="number" @focus="focus" @blur="blur" placeholder="最多可赎回金额 1,000,000.00元" v-model="money">
+          <input type="number" @focus="focus" @blur="blur" :placeholder="placeholder" v-model="money">
         </div>
-        <div class="all">全部赎回</div>
+        <div class="all" @click="selectAll">全部支取</div>
       </div>
     </div>
-    <div class="r-type">
-      <div class="type">赎回类型</div>
-      <div class="choose" @click="typeShow = true">
-        <span>{{typeText}}</span>
-        <i class="iconfont icon-xiangyou"></i>
-      </div>
-    </div>
-    <div class="r-tips">
-      <p>每天快速赎回额度为1万元。</p>
-      <p>如果赎回金额超过实施赎回额度，请进行普通赎回操作。</p>
-      <p>普通赎回T+1工作日16:30后到账。</p>
-    </div>
-    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn">赎回</button>
+    <section class="inputAmount">
+            <span class="Amount">
+                验证码
+            </span>
+      <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+      <button
+        :disabled="msgdisable"
+        @click="getMsg"
+        class="button">{{codeText}}
+      </button>
+    </section>
+    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">支取</button>
     <div class="r-agreement">
-      立即赎回代表您已阅读并同意<span>《“日添利-博时基金 ”产品业务服务协议》</span>
+      立即支取代表您已阅读并同意<span>《定期存款收益权转让合同》</span>
     </div>
-    <div class="r-caption">
-      <p>温馨提示：</p>
-      <p>工作日指上海证券交易所和深圳证券交易所的正常交易日，非工作日指其他日期（如国家法定节假日、周六日、调休等）。
-        工作日15:00之前发起成功的存入交易申请，基金公司于第二个工作日予以确认份额，工作日15:00之后及非工作日发起成功的存入交易申请视为下一个工作日发起的交易申请，具体结果以基金公司的确认结果为准。</p>
-      <p>风险提示：产品过往业绩不代表其未来表现，不构成产品未来业绩表现的保证。理财有风险，投资需谨慎。</p>
-    </div>
-    <div class="grey-mask" v-show="typeShow"></div>
-    <div class="r-type-popup" v-show="typeShow">
-      <div class="title">
-        赎回类型
-        <i @click="typeShow = false">&times;</i>
-      </div>
-      <ul class="r-type-list">
-        <li :class="cur === 1 ? 'active' : ''" @click="chooseType(1,$event)">
-          <span>快速赎回</span>
-          <i></i>
-        </li>
-        <li :class="cur === 2 ? 'active' : ''" @click="chooseType(2,$event)">
-          <span>普通赎回</span>
-          <i></i>
-        </li>
-      </ul>
-    </div>
-    <div class="white-mask" v-show="normalShow"></div>
-    <div class="r-normal-popup" v-show="normalShow">
-      <div class="info">工作日15:30之前发起成功的普通赎回到账时间为下一个工作日16:30后到账，工作日15:00之后以及非工作日发起成功的普通赎回申请视为下一个工作日发起的交易申请。是否进行普通赎回？
-      </div>
-      <div class="cofirm-btn">
-        <div>取消</div>
-        <div>确定</div>
-      </div>
-    </div>
+
+
+
+
+
+
   </div>
 </template>
 <script>
-  import Mixins from "@/mixins";
-
+  import API from '@/service'
+  import util from "libs/util";
+  import {PageName, BusName, LsName, imgSrc} from "@/Constant";
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
+  import Mixins from '@/mixins'
+  import Bus from '@/plugin/bus'
 
   export default {
     data() {
       return {
+        msgCode:'',
+        codeText:'获取验证码',
+        imgSrc,
+        show: false,
         isFocus: false,
         typeShow: false,
-        cur: 0,
+        cur: '0',
         money: '',
-        typeText: '请选择',
+        typeText: '快速支取',
         normalShow: false,
-        availBtn: false
+        availBtn: false,
+        redeemData: {
+          HOLD_AMOUNT: '',
+          FUND_NO: '',
+          PRD_TYPE: '1',
+        },
+
+        passCode: '',
+        len: '',
+        pass: ''
       }
     },
+    computed: {
+      // placeholder:'
+      placeholder() {
+        let num = this.redeemData.HOLD_AMOUNT
+        return `最多可支取金额${util.formatNum(num)}元`
+      }
+    },
+    mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
     watch: {
       money(n, o) {
         if (n && n - 0 > 0) {
@@ -93,18 +91,114 @@
         }
       }
     },
-    components: {},
+    created() {
+      this.redeemData = this.getComState.redeemData
+    },
+    components: {
+      PassWordZhengzhou
+    },
     methods: {
+
       focus() {
         this.isFocus = true;
       },
       blur() {
         this.money.length > 0 ? this.isFocus = true : this.isFocus = false;
       },
-      chooseType(val, e) {
-        this.cur = val;
+      sure() {
         this.typeShow = false;
+        this.normalShow = false
+        this.show = true
+      },
+      chooseType(val, e) {
+        // 普通支取需要弹出层
+        this.cur = val; // 1 普通支取  0 快速支取
         this.typeText = e.target.innerText;
+        this.typeShow = false;
+      },
+      selectAll() {
+        this.isFocus = true
+        this.money = this.totalNum
+      },
+      showPass() {
+        if (this.cur == 1) {
+          this.normalShow = true
+        } else {
+          this.show = true
+        }
+      },
+      doPay() {
+        this.redeemHandle()
+      },
+      redeemHandle() {
+        this.pass = $("#payPasscAAAc").getKBD(); //获取密码
+        this.len = $("#payPasscAAAc").getLenKBD(); //获取密码长度
+        this.passCode = $("#payPasscAAAc").getBDCode(); //获取密码长度
+        let data = {
+          TYPE: 'API_REDEMPTION',
+          PRD_ID: this.redeemData.PRD_INDEX_ID, //  产品索引
+          // PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
+          PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
+          // FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
+          FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
+          APPLY_AMOUNT: this.money, // 支取金额
+          REDEEM_TYPE: this.redeemData.PRD_TYPE == 1 ? this.cur : "1", // TODO  支取类型 支取类型(1 为普通支取，0 为 D+0 支取)非 货币只有普通支取
+          FUND_TRANS_TYPE: '2', // 基金交易类型（1:申购，2:支取）
+          PREFIX: this.passCode, // 输入密码
+          BANK_PAY_PW: this.pass, // 支取密码
+        }
+        API.redeem.apiRedemption(data, res => {
+          console.log(res);
+          // this.$router.push({name:PageName.RedeemSuccess,query:res})
+          let REQ_SERIAL = res.REQ_SERIAL // 交易标示 用于轮询查询
+          let params = {
+            BIZ_TYPE: '7', // 提现
+            BESHARP_SEQ: REQ_SERIAL
+          }
+          // 轮询 查寻交易状态
+          this.queryStatus(
+            {
+              text: '支取中',
+              data: params,
+              fn: (result, timer, count) => {
+                this.setComState({type:"reload",value:true}) // reload-001
+                if ('1' == result.RES_CODE) {
+                  clearInterval(timer)
+                  Bus.$emit(BusName.showToast, result.RES_MSG);
+                  this.$router.push({ // todo是否要跳转
+                    name: PageName.RedeemFailure,
+                    query: {
+                      err: result.RES_MSG
+                    }
+                  })
+                }
+                else if ('0' == result.RES_CODE) {
+                  clearInterval(timer)
+                  Bus.$emit(BusName.showToast, result.RES_MSG);
+                  this.Londing.close()
+                  this.$router.push({
+                    name: PageName.RedeemSuccess,
+                    query: {
+                      money: this.APPLY_AMOUN,
+                      ...res
+                    }
+                  })
+                } else {
+                  clearInterval(timer)
+                  // if (count == 5) {
+                    Bus.$emit(BusName.showToast, result.RES_MSG);
+                    this.$router.push({
+                      name: PageName.RedeemFailure,
+                      query: {
+                        err: result.RES_MSG
+                      }
+                    })
+                  // }
+                }
+              }
+            }
+          )
+        })
       }
     }
   }
@@ -170,22 +264,6 @@
     }
   }
 
-  .r-type {
-    display: flex;
-    justify-content: space-between;
-    padding: px2rem(15) px2rem(20);
-    font-size: px2rem(14);
-    border-bottom: 1px solid #EEEEF0;
-    .type {
-      color: #333;
-    }
-    .choose {
-      color: #858E9F;
-      i {
-        font-size: px2rem(14);
-      }
-    }
-  }
 
   .r-tips {
     color: #B3B3B3;
@@ -217,10 +295,6 @@
     }
   }
 
-  .r-caption {
-    color: #9199A1;
-    padding: 0 px2rem(20) px2rem(80);
-  }
 
   .grey-mask {
     width: 100%;
@@ -232,92 +306,35 @@
     z-index: 9;
   }
 
-  .r-type-popup {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    z-index: 99;
-    background-color: #fff;
-    .title {
-      text-align: center;
-      height: px2rem(45);
-      line-height: px2rem(45);
-      position: relative;
-      font-size: px2rem(18);
-      color: #444;
-      border-bottom: 1px solid #EEEEF0;
-      i {
-        position: absolute;
-        top: 0;
-        right: px2rem(25);
-        font-size: px2rem(26);
-        color: #858E9F;
-      }
+  .inputAmount {
+    padding-left: 0.5rem;
+    height: 1.2rem;
+    line-height: 1rem;
+    font-size: 0.4rem;
+    border-bottom: 1px solid #EEEEF0;
+    .button {
+      vertical-align: middle;
+      width: 2.5rem;
+      display: inline-block;
+      padding: .1rem;
+      border: 1px solid #508CEE;
+      color: #508CEE
     }
-    .r-type-list {
-      li {
-        padding: px2rem(22);
-        border-bottom: 1px solid #EEEEF0;
-        display: flex;
-        justify-content: space-between;
-        span {
-          font-size: px2rem(14);
-          color: #444;
-        }
-      }
-      i {
-        width: px2rem(18);
-        height: px2rem(18);
-      }
-      .active i {
-        background: url("~@/assets/images/check.png") center center no-repeat;
-      }
-
-    }
-  }
-
-  .white-mask {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: transparent;
-    z-index: 9;
-  }
-
-  .r-normal-popup {
-    position: fixed;
-    width: px2rem(270);
-    background-color: #fff;
-    z-index: 99;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .2);
-    border-radius: px2rem(6);
-    .info {
-      padding: px2rem(20);
-      font-size: px2rem(14);
+    input {
+      width: 50%;
+      border: none;
+      box-sizing: border-box;
+      font-size: 0.4rem;
       color: #333;
-      border-bottom: 1px solid #EEEEF0;
-      line-height: px2rem(24);
-    }
-    .cofirm-btn {
-      display: flex;
-      div {
-        width: 50%;
-        box-sizing: border-box;
-        text-align: center;
-        padding: px2rem(10) 0;
-        color: #108EE9;
-        font-size: px2rem(17);
-        &:first-child {
-          border-right: 1px solid #EEEEF0;
-        }
-      }
+      /* line-height: 0.5rem; */
+      outline: none;
 
     }
   }
+
+
+
+
+
 </style>
 

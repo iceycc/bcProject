@@ -116,6 +116,15 @@
         })
       },
       getInfos() {
+
+        this.getRiskGrade()
+        // this.getBankCardInfo()
+      },
+      //  获取风险测评结果
+      getRiskGrade(){
+        API.risk.apiRiskGrade({},res=>{})
+      },
+      getBankCardInfo(){
         let data = {}
         API.safe.apiBandCard(data, (res) => {
           this.setComState({

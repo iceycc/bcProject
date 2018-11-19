@@ -202,9 +202,7 @@
                     // util.storage.session.set('ChangeBankInfo', {
                     //     msg: err
                     // })
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 500)
+
                 })
             },
             goNext() {

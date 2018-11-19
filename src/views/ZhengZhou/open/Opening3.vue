@@ -46,52 +46,12 @@
       <span>{{errMsg}}</span>
     </div>
     <button
-        :class="{'tijiao':true, 'agree':!disabled}"
-        :disabled="disabled">开户
+      :class="{'tijiao':true, 'agree':!disabled}"
+      :disabled="disabled">开户
     </button>
     <div v-if="ifShow" class="bgbox">
-      <!--晋商-->
-      <div v-if="ORG_ID=='70'" class="passbox">
-        <div class="top">
-          <p class="title">
-            <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-            由晋商银行提供技术保障</p>
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              登录密码
-            </p>
-            <div class="field_row_value">
-              <pass-input
-                  inputID="loginPass"
-                  :doGetData="ifGet"
-              ></pass-input>
-            </div>
-            <p class="info">密码由大写，小写英文字母以及数字组成</p>
-            <p class="info">密码位数大于等于8位，小于等于20位</p>
-          </div>
-
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              交易密码
-            </p>
-            <div class="field_row_value">
-              <pass-input
-                  inputID="payPass"
-                  :doGetData="ifGet"
-              ></pass-input>
-            </div>
-
-            <p class="info">密码由数字组成，必须为6位</p>
-          </div>
-
-        </div>
-        <div class="btn">
-          <button @click="cancel">取消</button>
-          <button @click="subumit">提交</button>
-        </div>
-      </div>
       <!--郑州-->
-      <div v-if="ORG_ID=='49'" class="passbox">
+      <div class="passbox">
         <div class="top">
           <p class="title">
             <img src="@/assets/images/icon_dunpai@2x.png" alt="">
@@ -102,7 +62,7 @@
             </p>
             <div class="field_row_value">
               <pass-word-zhengzhou
-                  BankCardPass="pay-pass"
+                BankCardPass="pay-pass"
               ></pass-word-zhengzhou>
             </div>
 
@@ -133,7 +93,6 @@
     data() {
       return {
         loginShow: false,
-        telPaceholder: '登录密码',
         payPaceholder: '交易密码',
         disabled: true,
         reGet: true,
@@ -159,11 +118,10 @@
       PassInput,
       PassWordZhengzhou
     },
-    mixins: [Mixins.HandleMixin,Opening3Mixins],
+    mixins: [Mixins.HandleMixin, Opening3Mixins],
     created() {
-      this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
-      this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
-      this.getErrMsg((beforeInfo)=>{
+
+      this.getErrMsg((beforeInfo) => {
         this.errMsg = beforeInfo.msg
       })
     },

@@ -1,6 +1,18 @@
 import {PageName} from "@/Constant";
 
 export default [
+  {
+    path: '/' + PageName.ProductReservation,
+    name: PageName.ProductReservation,
+    component: resolve => require(['views/JinShang/product/ProductReservation.vue'], resolve),
+    meta: {keepAlive: false, needLogin: false}
+  },
+  {
+    path: '/' + PageName.OrderNextSuccess,
+    name: PageName.OrderNextSuccess,
+    component: resolve => require(['views/JinShang/product/OrderNextSuccess.vue'], resolve),
+    meta: {keepAlive: false, title: '预约成功', needLogin: false}
+  },
   /**
    * buy
    */
@@ -27,7 +39,7 @@ export default [
     path: '/' + PageName.Buying,
     name: PageName.Buying,
     component: resolve => require(['views/JinShang/buy/Buying.vue'], resolve),
-    meta: {keepAlive: false, title: '购买', needLogin: false}
+    meta: {keepAlive: false, title: '购买', needLogin: true}
   },
   /**
    * login

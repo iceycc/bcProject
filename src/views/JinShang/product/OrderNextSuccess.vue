@@ -16,8 +16,6 @@
     import API from "@/service"
     import Bus from '@/plugin/bus'
     import {BusName} from "@/Constant";
-    import Mixins from "@/mixins";
-
     export default {
       mixins:[''],
         data(){

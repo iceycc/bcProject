@@ -52,15 +52,15 @@
       <section class="passbox">
         <p class="title">
           <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由晋商银行提供技术保障</p>
+          由郑州银行提供技术保障</p>
         <section class="field_row_wrap">
           <p class="field_row_key">
             交易密码
           </p>
           <div class="field_row_value">
-            <pass-input
-              inputID="payPass"
-            ></pass-input>
+            <pass-word-zhengzhou
+              BankCardPass="payPassAA"
+            ></pass-word-zhengzhou>
           </div>
           <p class="info">密码由数字组成，必须为6位</p>
         </section>
@@ -78,8 +78,8 @@
 </template>
 <script>
   import API from "@/service";
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import {HOST, LsName} from '@/Constant'
-  import PassInput from '@/components/password/PassInput'
   import UpSelect from '@/components/commons/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
@@ -101,7 +101,7 @@
         APPLY_AMOUN: '',
         toUrl: '',
         ifGet: false,
-        write: true, // 是否签约
+        write: false, // 是否签约
         agree: true, // 是否阅读
         agree1: true, // 是否获取短信
         agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
@@ -110,33 +110,32 @@
         logo: '',
         CARD_BANK_NAME: '',
         CARD_BANK_URL: '',
-        DAY_QUOTA: '',
-        SINGLE_QUOTA: '',
+        DAY_QUOTA: '10000', // 单日限额
+        SINGLE_QUOTA: '500',// 单笔限额
         msgCode: '',
         codeText: '获取验证码',
         disable: false,
         upseletShow: false,
-        mainBankList: []
+        mainBankList: [],
+
+        passCode: '',
+        ACCT_NO: '', // TODO
+        PHONE_NUM: ''
       }
     },
     components: {
-      PassInput,
-      UpSelect
+      UpSelect,
+      PassWordZhengzhou
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
-      let lsData = this.getComState.RechargeQuery
-      console.log('lsData>>', lsData);
-      this.ORG_NAME = lsData.ORG_NAME
-      this.logo = lsData.LOGO_URL
-      this.reChangeHandele()
+
+      // this.reChangeHandele()
     },
     methods: {
-
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
-        //
         if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
           return
@@ -181,31 +180,12 @@
           Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
           return
         }
-        if (!this.agree) {
-          Bus.$emit(BusName.showToast, '您还未签约充值协议')
-          return
-        }
-        if (!this.write) {
-          if (util.Check.trim(this.msgCode, '手机验证码', true)) return;
-        }
-        if (!this.agree1) {
-          Bus.$emit(BusName.showToast, '请获取手机验证码')
-          return
-        }
-        this.Londing.open()
-        setTimeout(() => {
-          this.Londing.close()
-          this.show = true
-        }, 1000)
+        this.doReCange()
       },
       doAgree() {
         this.agree = !this.agree
       },
       doReCange() {
-        this.pass = $('#payPass').$getCiphertext()
-        this.len = $('#payPass').$getPasswordLength()
-        if (util.Check.payPassLen(this.len, true)) return;
-        this.show = false
         this.handleApiRecharge()
       },
     }
@@ -222,7 +202,7 @@
     font-size: 0.4rem;
   }
 
-  .app .minshengbank {
+  .minshengbank {
     padding-left: 0.5rem;
     height: 1.8rem;
     line-height: 60px;
@@ -251,17 +231,16 @@
       border: 1px solid #508CEE;
       color: #508CEE
     }
-  }
+    input {
+      width: 50%;
+      border: none;
+      box-sizing: border-box;
+      font-size: 0.4rem;
+      color: #333;
+      /* line-height: 0.5rem; */
+      outline: none;
 
-  .inputAmount input {
-    width: 50%;
-    border: none;
-    box-sizing: border-box;
-    font-size: 0.4rem;
-    color: #333;
-    /* line-height: 0.5rem; */
-    outline: none;
-
+    }
   }
 
   .Amount {

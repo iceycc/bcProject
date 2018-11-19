@@ -14,32 +14,23 @@
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
+      <span class="span" style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST<=DAY_REST? ACC_REST:DAY_REST">全部提现</span>
     </section>
-    <p class="info1">本卡当前余额{{ACC_REST | formatNum}}元 <span style="color:#389CFF"
-                                                           @click="APPLY_AMOUN = ACC_REST">全部提现</span></p>
+    <section class="inputAmount">
+            <span class="Amount">
+                验证码
+            </span>
+      <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+      <button
+        :disabled="msgdisable"
+        @click="getMsg"
+        class="button">{{codeText}}
+      </button>
+    </section>
+    <p class="info1">
+      本卡当前余额{{ACC_REST | formatNum}}元，每日限额{{DAY_REST |formatNum}}元
+    </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
-    <section v-if="show" class="bgbox">
-      <section class="passbox">
-        <p class="title">
-          <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由晋商银行提供技术保障</p>
-        <section class="field_row_wrap">
-          <p class="field_row_key">
-            交易密码
-          </p>
-          <div class="field_row_value">
-            <pass-input
-              :inputID="inputID"
-            ></pass-input>
-          </div>
-          <p class="info">密码由数字组成，必须为6位</p>
-        </section>
-        <div class="btn">
-          <mt-button @click="show =!show" type="primary">取消</mt-button>
-          <mt-button @click="doWithdraw" type="primary">提交</mt-button>
-        </div>
-      </section>
-    </section>
 
   </div>
 </template>
@@ -47,7 +38,7 @@
   import API from "@/service";
   import AppBar from '@/components/header/AppBar'
   import {LsName} from '@/Constant'
-  import PassInput from '@/components/password/PassInput'
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
@@ -58,20 +49,30 @@
   export default {
     data() {
       return {
-        show: false,
+        codeText:'获取验证码',
+        msgdisable:false,
+        msgCode:'',
+
+
         html: '协议',
         page: false,
         APPLY_AMOUN: '',
         toUrl: '',
         CARD_BANK_NAME: '',
         imgSrc: imgSrc,
-        ACC_REST: '',
+
         pass: '',
         len: null,
+        passCode:'',
+
         canClick: false,
         logo: '',
         inputID: '',
-        ifCheckMoneyEmpty: true
+        ifCheckMoneyEmpty: true,
+
+
+        ACC_REST: '200',
+        DAY_REST:'10000', // todo取每日限额
       }
     },
     watch: {
@@ -90,14 +91,32 @@
     },
     components: {
       AppBar,
-      PassInput
+      PassWordZhengzhou
     },
     mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
     created() {
       this.getUserInfos()
-      this.ACC_REST = this.$route.query.ACC_REST
+      this.ACC_REST = this.$route.query.ACC_REST || '200'
     },
     methods: {
+      getMsg() {
+        let times = time
+        this.disable = true
+        timer = setInterval(() => {
+          if (times == 0) {
+            this.codeText = '重新发送'
+            this.disable = false
+            clearInterval(timer)
+            return
+          }
+          times--
+          this.codeText = `${times}s`
+        }, 1000)
+        this.getCode()
+      },
+      getCode(){
+
+      },
       checkMoney() {
 
       },
@@ -108,21 +127,27 @@
         })
       },
       doWithdraw() {
-        this.pass = $('#withdrawPayPass').$getCiphertext()
-        this.len = $('#withdrawPayPass').$getPasswordLength()
-        if (util.Check.payPassLen(this.len, true)) return
+        // TYPE	请求类型
+        // ORG_ID	机构ID
+        // APPLY_AMOUNT	提现金额
+        // VRFY_FLAG	校验标志
+        // PHONE_CODE	短信验证码
+        // EITH_DRAW_ALL	全部提取标志
+
         let data = {
-          PHONE_CODE: "",
-          EITHDRAW_ALL: "0",
-          APPLY_AMOUNT: this.APPLY_AMOUN,
-          BANK_PAY_PW: this.pass
+          PHONE_CODE: this.msgCode,
+          EITHDRAW_All: "1",// 0 全部提现
+          APPLY_AMOUNT: this.APPLY_AMOUN, //
+          VRFY_FLAG:'00',
+          EITH_DRAW_ALL:'0'
         }
         this.show = false
         API.withdraw.apiCash(data, res => {
           let params = {
             BIZ_TYPE: '4', // 提现
-            BESHARP_SEQ: res.BESHARP_CASH_SEQ
+            BESHARP_SEQ: res.TXN_REF_NO
           }
+          // 轮询 查寻交易状态
           this.queryStatus(
             {
               text: '提现中',
@@ -169,19 +194,16 @@
         })
       },
       doNext() {
-        if (util.Check.trim(this.APPLY_AMOUN, '提现金额', true)) {
-          return
-        }
-        //
-        if (this.APPLY_AMOUN - 0 > this.ACC_REST - 0) {
-          Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
-          return
-        }
-        this.Londing.open()
-        setTimeout(() => {
-          this.Londing.close()
-          this.show = true
-        }, 1000)
+        // if (util.Check.trim(this.APPLY_AMOUN, '提现金额', true)) {
+        //   return
+        // }
+        // //
+        // if (this.APPLY_AMOUN - 0 > this.ACC_REST - 0) {
+        //   Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
+        //   return
+        // }
+        this.doWithdraw()
+
       },
       clearNumHandle() {
         //
@@ -222,46 +244,51 @@
     border-bottom: 1px solid #EEEEF0;
     .button {
       vertical-align: middle;
-      width: 2.5rem;
+      width: px2rem(80);
       display: inline-block;
-      padding: .1rem;
+      padding: px2rem(3);
       border: 1px solid #508CEE;
       color: #508CEE
     }
+
     .close-icon {
       position: absolute;
       display: inline-block;
       width: px2rem(15);
       height: px2rem(15);
       top: 50%;
-      right: px2rem(80);
+      right: px2rem(100);
       margin-top: px2rem(-15/2);
 
     }
     input {
-      width: 50%;
+      width: px2rem(180);
       border: none;
       box-sizing: border-box;
       font-size: 0.4rem;
       color: #333;
-      /* line-height: 0.5rem; */
       outline: none;
-
+    }
+    .span{
+      display: inline-block;
+      text-align: center;
+      width: px2rem(80);
+    }
+    .Amount {
+      width: px2rem(80);
+      display: inline-block;
+      height: 100%;
+      font-size: px2rem(14);
     }
   }
 
-  .Amount {
-    display: inline-block;
-    height: 100%;
-    width: 1.8rem;
-    font-size: px2rem(14);
-  }
+
 
   .tijiao {
     font-size: px2rem(18);
     color: #fff;
-    background-color: #e4e4e4;
-    /* border-radius: 0.1rem; */
+    background: #518BEE;
+     border-radius: px2rem(6);
     line-height: 1.2rem;
     width: px2rem(255);
     margin: px2rem(40) auto 0;
@@ -283,65 +310,7 @@
     padding-top: 0.4rem;
   }
 
-  .bgbox {
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(1, 1, 1, .7);
-    position: fixed;
-    padding-top: 1.7rem;
-    top: 0;
-    left: 0;
-    .passbox {
-      background: #fff;
-      width: 80%;
-      margin: 0 auto;
-      padding: 0.4rem;
-      box-sizing: border-box;
-    }
-    .field_row_key {
-      font-size: 0.4rem;
-    }
 
-    .title {
-      margin-bottom: 0.5rem;
-      text-align: center;
-      font-size: 0.4rem;
-      color: #666;
-      height: .6rem;
-      line-height: .6rem;
-      img {
-        vertical-align: top;
-        width: .5rem;
-      }
-    }
-    .field_row_wrap {
-      margin-bottom: 0.2rem;
-    }
-    .field_row_value {
-      border-radius: 4px;
-      border: 1px solid #9e9e9e;
-      height: 0.9rem;
-      line-height: 0.9rem;
-      margin: 0.2rem 0;
-    }
-
-    .btn {
-      display: flex;
-      button {
-        margin: 0 .3rem;
-        text-align: center;
-        flex: 1;
-      }
-    }
-    .info {
-      font-size: px2rem(14);
-      line-height: 0.6rem;
-      padding-top: px2rem(0);
-      color: #9199A1;
-    }
-
-  }
 
   .info1 {
     padding-left: px2rem(20);

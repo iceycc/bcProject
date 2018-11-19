@@ -52,15 +52,6 @@
                 <p>到期日期
                   <span>{{item.OVER_DATE}}</span>
                 </p>
-                <!-- 新加赎回追加按钮 -->
-                <div class="bottom-btn">
-                  <div>
-                    <span>赎回</span>
-                  </div>
-                  <div>
-                    <span>追加</span>
-                  </div>
-                </div>
               </div>
             </div>
           </v-loadmore>
@@ -87,15 +78,6 @@
               <p>到期日期
                 <span>{{item.OVER_DATE}}</span>
               </p>
-              <!-- 新加赎回追加按钮 -->
-              <div class="bottom-btn">
-                <div>
-                  <span>赎回</span>
-                </div>
-                <div>
-                  <span>追加</span>
-                </div>
-              </div>
             </div>
           </v-loadmore>
         </div>

@@ -1,6 +1,18 @@
 import {PageName} from "@/Constant";
 
 export default [
+  {
+    path: '/' + PageName.ProductReservation,
+    name: PageName.ProductReservation,
+    component: resolve => require(['views/ZhengZhou/product/ProductReservation.vue'], resolve),
+    meta: {keepAlive: false, needLogin: false}
+  },
+  {
+    path: '/' + PageName.OrderNextSuccess,
+    name: PageName.OrderNextSuccess,
+    component: resolve => require(['views/ZhengZhou/product/OrderNextSuccess.vue'], resolve),
+    meta: {keepAlive: false, title: '预约成功', needLogin: false}
+  },
   /**
    * buy
    */
@@ -27,7 +39,7 @@ export default [
     path: '/' + PageName.Buying,
     name: PageName.Buying,
     component: resolve => require(['views/ZhengZhou/buy/Buying.vue'], resolve),
-    meta: {keepAlive: false, title: '购买', needLogin: false}
+    meta: {keepAlive: false, title: '购买', needLogin: true}
   },
 
 
@@ -179,6 +191,12 @@ export default [
     name: PageName.MoreService,
     component: resolve => require(['views/ZhengZhou/bankDetail/MoreService.vue'], resolve),
     meta: {keepAlive: false, title: '更多服务', needLogin: false}
+  },
+  {
+    path: '/' + PageName.DealDetails,
+    name: PageName.DealDetails,
+    component: resolve => require(['views/ZhengZhou/bankDetail/DealDetails.vue'], resolve),
+    meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
 
   /**

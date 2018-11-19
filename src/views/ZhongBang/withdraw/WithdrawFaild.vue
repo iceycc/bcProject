@@ -6,7 +6,8 @@
             <h2>很抱歉，提现失败!</h2>
             <p class="err-msg">{{errMsg}}</p>
         </div>
-        <button class="begain" @click="goNext">重现提现</button>
+      <span @click="reWithdraw" class="btn">重新提现</span>
+      <span @click="goBank" class="btn btn-back">返回银行页</span>
     </div>
 </template>
 <script>
@@ -20,9 +21,14 @@
             this.errMsg = this.$route.query.err
         },
         methods: {
-            goNext() {
-                this.$router.go(-1)
-            }
+          reWithdraw() {
+            this.$router.go(-1)
+          },
+          goBank(){
+            this.$router.push({
+              name:''
+            })
+          }
         }
     }
 </script>
@@ -54,15 +60,23 @@
 
     }
 
-    .begain {
-        display: block;
-        font-size: px2rem(16);
-        background: #518BEE;
-        border-radius: px2rem(6);
-        width: px2rem(255);
-        height: px2rem(44);
-        color: #fff;
-        text-align: center;
-        margin: px2rem(30) auto;
+    .btn {
+      font-size: px2rem(18);
+      color: #fff;
+      background: #0096FE;
+      border-radius: px2rem(6);
+      height: px2rem(44);
+      line-height: px2rem(44);
+      width: px2rem(255);
+      margin:px2rem(30) auto 0;
+      text-align: center;
+      border: 0;
+      outline: none;
+      display: block;
+      &.btn-back{
+        color: #0096FE;
+        background-color: #fff;
+        border: 1px solid #0096FE;
+      }
     }
 </style>

@@ -177,7 +177,6 @@
           Bus.$emit(BusName.showToast, '修改密码成功')
           // util.storage.session.remove(LsName.token)
           this.$store.commit('SET_TOKEN', '')
-          this.setComState({type:"reload",value:true}) // reload-001
 
 
           this.setErrMsg(null)
@@ -195,7 +194,6 @@
           // util.storage.session.set('rePasswordInfo', {
           //
           // })
-          window.location.reload()
         })
       },
     }

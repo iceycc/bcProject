@@ -8,7 +8,7 @@ import JinShang from './mixins-jinshang'
 import ZhengZhou from './mixins-jinshang'
 import ZhongBang from './mixins-jinshang'
 
-let ORG_ID = store.getters.GET_ORG_ID
+let ORG_ID = util.storage.session.get('ORG_ID') || ''
 let MainMixins = {};
 switch (ORG_ID) {
   case ORG_ID_NUM.JinShang:
@@ -22,27 +22,32 @@ switch (ORG_ID) {
     break;
 }
 
+
+// 展开开户需要的store方法
+
 // 展开公共的store方法
 const StoreMixin = {
   methods: {
     ...mapMutations({
       setComState: 'SET_COMMON_STATE',
-      removeComState:'REMOVE_COMMON_STATE'
+      removeComState: 'REMOVE_COMMON_STATE',
+      setOpenState: 'SET_OPEN_STATE'
     })
   },
   computed: {
     ...mapGetters({
-      getComState: 'GET_COMMON_STATE'
+      getComState: 'GET_COMMON_STATE',
+      getOpenState: 'GET_OPEN_STATE'
     })
   }
 }
 const HandleMixin = {
-  mixins:[StoreMixin],
+  mixins: [StoreMixin],
   beforeCreate() {
     console.log('beforeCreate');
     let reload = store.getters.GET_COMMON_STATE.reload
     if (reload) {
-      store.commit('SET_COMMON_STATE',{type:"reload",value:false})
+      store.commit('SET_COMMON_STATE', {type: "reload", value: false})
       location.reload()
     }
   },
@@ -62,7 +67,7 @@ const HandleMixin = {
       }
     },
     setErrMsg(err) {
-      this.setComState({type:'ErrMsg',err})
+      this.setComState({type: 'ErrMsg', err})
     }
   }
 }
@@ -87,8 +92,8 @@ const UtilMixin = {
               PRD_NAME: ProDuctData.PRD_NAME,
             }
           })
-          store.commit('REMOVE_COMMON_STATE','ProDuctData')
-          store.commit('REMOVE_COMMON_STATE',"loginType")
+          store.commit('REMOVE_COMMON_STATE', 'ProDuctData')
+          store.commit('REMOVE_COMMON_STATE', "loginType")
           // util.storage.session.remove(LsName.ProDuctData)
           // util.storage.session.remove(LsName.loginType)
         }, err => {
@@ -96,16 +101,16 @@ const UtilMixin = {
             path: PageName.ProductList
           })
           // Bus.$emit(BusName.showToast,err)
-          store.commit('REMOVE_COMMON_STATE','ProDuctData')
-          store.commit('REMOVE_COMMON_STATE',"loginType")
+          store.commit('REMOVE_COMMON_STATE', 'ProDuctData')
+          store.commit('REMOVE_COMMON_STATE', "loginType")
           // util.storage.session.remove(LsName.ProDuctData)
           // util.storage.session.remove(LsName.loginType)
           console.log(err);
         })
         return
       } else if (SOURCE_URL == '安全购买') { // 购买页
-        store.commit('REMOVE_COMMON_STATE','goBuy')
-        store.commit('REMOVE_COMMON_STATE',"loginType")
+        store.commit('REMOVE_COMMON_STATE', 'goBuy')
+        store.commit('REMOVE_COMMON_STATE', "loginType")
         // util.storage.session.remove(LsName.goBuy)
         // util.storage.session.remove(LsName.loginType)
         // 其他的话  正常 跳转购买页
@@ -145,9 +150,11 @@ const UtilMixin = {
       let i = 1
       let timer = setInterval(() => {
         i++
-        API.query.apiQueryBizStatus(data, result => {
+        API.common.apiQueryBizStatus(data, result => {
           console.log('RES_CODE>>', result.RES_CODE);
           fn && fn(result, timer, i) // result轮询结果，timer用于回调內清除定时器
+        },err=>{
+          clearInterval(timer)
         })
         if (i == 5) {
           clearInterval(timer)

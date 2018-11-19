@@ -1,11 +1,11 @@
 export default {
   // 用于管理当前访问银行信息
   state: {
-    ORG_ID: '49',
-    ORG_NAME: '晋享财富',
-    LOGO_URL: "ORG/6041f447-bc2a-4177-a5a0-1d807edc9cfd.png",
-    DESCRIPT: '隶属于晋商银行',
-    BANK_NAME: '晋商银行'
+    ORG_ID: '',
+    ORG_NAME: '',
+    LOGO_URL: '',
+    DESCRIPT: '',
+    BANK_NAME: ''
   },
   // dispatch -> actions
   actions: {
