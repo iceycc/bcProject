@@ -48,9 +48,21 @@ export default [
     meta: {keepAlive: false, title: '注册成功', needLogin: false}
   },
   {
-    path: '/' + PageName.PayPassWord,
-    name: PageName.PayPassWord,
-    component: resolve => require(['views/ForApp/PayPassWord.vue'], resolve),
+    path: '/' + PageName.PasswordOneForZhengZhou,
+    name: PageName.PasswordOneForZhengZhou,
+    component: resolve => require(['views/ForApp/PasswordOneForZhengZhou.vue'], resolve),
+    meta: {keepAlive: false, title: '密码', needLogin: false}
+  },
+  {
+    path: '/' + PageName.PasswordThreeForZhengZhou,
+    name: PageName.PasswordThreeForZhengZhou,
+    component: resolve => require(['views/ForApp/PasswordThreeForZhengZhou.vue'], resolve),
+    meta: {keepAlive: false, title: '密码', needLogin: false}
+  },
+  {
+    path: '/' + PageName.PasswordTowForZhengZhou,
+    name: PageName.PasswordTowForZhengZhou,
+    component: resolve => require(['views/ForApp/PasswordTowForZhengZhou.vue'], resolve),
     meta: {keepAlive: false, title: '密码', needLogin: false}
   }
 ]

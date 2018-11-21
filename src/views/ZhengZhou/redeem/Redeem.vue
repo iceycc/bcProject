@@ -167,7 +167,7 @@
       },
       selectAll() {
         this.isFocus = true
-        this.money = this.totalNum
+        this.money = this.redeemData.HOLD_AMOUNT
       },
       showPass() {
         if (this.cur == 1) {
@@ -196,10 +196,13 @@
           PREFIX: this.passCode, // 输入密码
           BANK_PAY_PW: this.pass, // 赎回密码
         }
+        this.show =false
+
         API.redeem.apiRedemption(data, res => {
           console.log(res);
           // this.$router.push({name:PageName.RedeemSuccess,query:res})
           let REQ_SERIAL = res.REQ_SERIAL // 交易标示 用于轮询查询
+          // if(REQ_SERIAL)
           let params = {
             BIZ_TYPE: '7', // 提现
             BESHARP_SEQ: REQ_SERIAL

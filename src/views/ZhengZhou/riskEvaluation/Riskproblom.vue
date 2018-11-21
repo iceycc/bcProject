@@ -135,13 +135,16 @@
         console.log(data);
         API.risk.apiRiskEvalution(data, (res) => {
           this.setComState({type:'HAS_GRADE',value:2})
-          this.$router.push({
-            name: PageName.FengxianResult,
-            query: res
-          })
+          this.getRiskGrade()
+          this.$router.push({name:PageName.FengxianResult})
           // utilExpand.storage.local()
         })
         return
+      },
+      getRiskGrade(){
+        API.risk.apiGetRiskEvalRes({},res=>{
+          this.setComState({type:'RiskResult',value:res})
+        })
       },
       goNext() {
         console.log('goNext')

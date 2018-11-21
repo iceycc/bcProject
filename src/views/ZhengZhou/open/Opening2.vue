@@ -34,9 +34,9 @@
       </section>
       <section class="input-box">
         <p class="left-p"> 绑定卡卡号</p>
+        <!--@input="checkBankName(data.CARD_NO)"-->
         <input type="number"
-               @blur="checkBankNo(data.CARD_NO)"
-               @input="checkBankName(data.CARD_NO)"
+               @blur="checkBankName(data.CARD_NO)"
                name="backname" placeholder="请输入储蓄卡卡号" v-model="data.CARD_NO">
       </section>
       <section class="input-box">
@@ -80,6 +80,11 @@
           <button @click="cancel">取消</button>
           <button @click="subumit">提交</button>
         </div>
+      </div>
+    </div>
+    <div class="add-back">
+      <div class="box">
+        <input type="text" v-model="data.CARD_NO">
       </div>
     </div>
   </div>
@@ -157,16 +162,13 @@
     methods: {
       checkBankName(val) {
         this.checkBankName1 = false
+        this.checkBankType()
         val = val.replace(/\s+/g, "")
         let bankName
-        for (var i = 3; i < 10; i++) {
+        for (var i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
-
-            if (bankName != this.bankText) {
-              // Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
-              this.checkBankName1 = true
-              return
-            }
+            this.bankText = bankName
+            console.log('bankName', bankName);
             break
           }
         }
@@ -175,8 +177,8 @@
         // 查询银行账户类型
         // this.checkBankType && this.checkBankType()
         val = val.toString()
-        let reg = /\d{15}|\d{19}/
-        console.log(!reg.test(val));
+        // let reg = /\d{15}|\d{19}/
+        // console.log(!reg.test(val));
         if (val == '') {
           Bus.$emit(BusName.showToast, '银行卡号不能为空')
           return true
@@ -426,5 +428,18 @@
         flex: 1;
       }
     }
+  }
+
+  .add-back {
+    /*z-index: 10;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*position: fixed;*/
+    /*width: px2rem(300);*/
+    /*height: px2rem(300);*/
+    /*background: #fff;*/
+    /*.box {*/
+
+    /*}*/
   }
 </style>

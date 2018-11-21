@@ -36,6 +36,7 @@ export default {
     redeemData:{},
     openingData:{},
 
+
   },
   //
   actions: {},

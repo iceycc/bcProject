@@ -6,6 +6,9 @@
         <span class="n-left">原手机号</span>
         <span class="n-right">{{tel}}</span>
       </section>
+      <active-input check-type="number" valuePlaceholder="身份证号"
+                    max='11'
+                    v-model="ID_CARD" type="tel"></active-input>
       <active-input check-type="number" valuePlaceholder="新手机号码"
                     max='11'
                     v-model="PHONE_NUM" type="tel"></active-input>
@@ -34,6 +37,7 @@
   import {PageName, BusName, LsName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
+
   export default {
     name: "ResetPhone",
     components: {
@@ -42,6 +46,7 @@
     },
     data() {
       return {
+        ID_CARD:'',
         errMsg: '',
         params: {
           PHONE_NUM: '',
@@ -89,7 +94,7 @@
           this.removeComState('TOKEN')
           this.removeComState('Infos')
 
-          this.setComState({type:'loginType',value:PageName.BankDetail})
+          this.setComState({type: 'loginType', value: PageName.BankDetail})
           this.$router.push({
             name: PageName.Login
           })

@@ -59,7 +59,7 @@
                     <span @click="goRedeem(item)">赎回</span>
                   </div>
                   <div>
-                    <span>追加</span>
+                    <span @click="goAdd(item)">追加</span>
                   </div>
                 </div>
               </div>
@@ -169,6 +169,10 @@
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
     methods: {
+      goAdd(val){
+        this.setComState({type:'goBuy',value:val})
+        this.$router.push({name:PageName.Buying})
+      },
       geDetails(item){
         let {FUND_NO,PRD_INDEX_ID,PRD_NAME} = item
         this.$router.push({name:PageName.TransactionDetails,query:{FUND_NO,PRD_INDEX_ID,PRD_NAME}})

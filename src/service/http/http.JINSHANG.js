@@ -37,6 +37,7 @@ export default {
     if(JSON.stringify(ORG_ID)=='{}'){
       ORG_ID = ''
     }
+    ORG_ID = params.ORG_ID || ORG_ID
 
     let {DEVICE_ID, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
     let datas = {

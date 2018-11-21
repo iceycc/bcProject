@@ -58,6 +58,9 @@
         let pass = $("#payPasscc").getKBD() + ''; //获取密码
         let len = $("#payPasscc").getLenKBD() + ''; //获取密码长度
         let lenCode = $("#payPasscc").getBDCode() + ''; //
+        console.log(pass);
+        console.log(len);
+        console.log(lenCode);
         if (isAndroid) {
           window.android.getOnePasswordFromZhengZhou(pass,len,lenCode);
         }

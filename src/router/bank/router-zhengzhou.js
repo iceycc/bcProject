@@ -146,13 +146,19 @@ export default [
     path: '/' + PageName.ResetPayPassword,
     name: PageName.ResetPayPassword,
     component: resolve => require(['views/ZhengZhou/safe/ResetPayPassword.vue'], resolve),
-    meta: {keepAlive: false, title: '更换支付密码', needLogin: false}
+    meta: {keepAlive: false, title: '重置密码', needLogin: false}
   },
   {
     path: '/' + PageName.ResetPhone,
     name: PageName.ResetPhone,
     component: resolve => require(['views/ZhengZhou/safe/ResetPhone.vue'], resolve),
     meta: {keepAlive: false, title: '修改手机号', needLogin: false}
+  },
+  {
+    path: '/' + PageName.ChangePayPassword,
+    name: PageName.ChangePayPassword,
+    component: resolve => require(['views/ZhengZhou/safe/ChangePayPassword.vue'], resolve),
+    meta: {keepAlive: false, title: '更换支付密码', needLogin: false}
   },
 
   /**
@@ -268,4 +274,6 @@ export default [
     component: resolve => require(['views/ZhengZhou/redeem/RedeemFailure.vue'], resolve),
     meta: {keepAlive: false, title: '赎回', needLogin: false}
   },
+
+
 ]

@@ -400,7 +400,17 @@ export default {
     }
   }
   ,
+  // 将 0 转换为 0.00
+  fromatMoney(num){
+    if(!num) return '0.00'
+    if(num.indexOf('.')!='-1'){
+      // 有点
+      return num
+    }else {
+      return num + '.00'
+    }
 
+  },
   openApp(src) {
     // 通过iframe的方式试图打开APP，如果能正常打开，会直接切换到APP，并自动阻止a标签的默认行为
     // 否则打开a标签的href链接

@@ -6,7 +6,7 @@
              <span class="more-left">
                         风险测评</span>
         <span class="more-right">
-                    {{RISK_TOLERANCE_LEVEL | RISK_TOLERANCE_LEVEL_Filter}}
+                    {{RISK_LEVEL | RISK_TOLERANCE_LEVEL_Filter}}
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
@@ -25,9 +25,16 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
+      <section v-if="DOM_SHOW.ChangePayPassword" class="more" @click="goPage(toPageName.ChangePayPassword)">
+             <span class="more-left">
+                        更改支付密码</span>
+        <span class="more-right">
+                <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
+                    </span>
+      </section>
       <section v-if="DOM_SHOW.ResetPayPassword" class="more" @click="goPage(toPageName.ResetPayPassword)">
              <span class="more-left">
-                        更换支付密码</span>
+                        重置密码</span>
         <span class="more-right">
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
@@ -56,15 +63,17 @@
           fenxiang:true,
           ChangeBank: false,
           ResetPhone:false,
-          ResetPayPassword:false
+          ResetPayPassword:true,
+          ChangePayPassword:true
         },
-        RISK_TOLERANCE_LEVEL: '',
+        RISK_LEVEL: '',
         CARD_BANK_NAME: '',
         toPageName: {
           fenxian: PageName.FengxianResult,
           ChangeBank: PageName.ChangeBank,
           ResetPhone: PageName.ResetPhone,
           ResetPayPassword: PageName.ResetPayPassword,
+          ChangePayPassword: PageName.ChangePayPassword,
         },
         PHONE_NUM: '',
         fenxianQuery: {}
@@ -122,7 +131,10 @@
       },
       //  获取风险测评结果
       getRiskGrade(){
-        API.risk.apiRiskGrade({},res=>{})
+        API.risk.apiGetRiskEvalRes({},res=>{
+          this.RISK_LEVEL = res.RISK_LEVEL
+          this.setComState({type:'RiskResult',value:res})
+        })
       },
       getBankCardInfo(){
         let data = {}
@@ -135,7 +147,6 @@
               USER_NAME: res.USER_NAME
             }
           })
-          this.RISK_TOLERANCE_LEVEL = res.RISK_TOLERANCE_LEVEL
           this.CARD_BANK_NAME = res.CARD_BANK_NAME
           this.toPageName.fenxian = res.HAS_GRADE == 2
             ? PageName.FengxianResult : PageName.Riskassessment

@@ -20,6 +20,7 @@ export default {
    *
    * @param method 方法
    * @param url 请求地址
+   * @param NO_ORG_ID
    * @param params 个例参数
    * @param TYPE 请求类型 默认
    * @param token 登录凭证，默认从store里拿，注册完成后个例接口需要外部传人
@@ -31,13 +32,14 @@ export default {
    * @param error 错误的回调
    * @returns {Promise<AxiosResponse<any>>}
    */
-  request: function (method, {url,NO_ORG_ID=false, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
+  request: function (method, {url, NO_ORG_ID = false, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
     let ORG_ID = util.storage.session.get('ORG_ID') || ''
-    if(JSON.stringify(ORG_ID)=='{}' || NO_ORG_ID){
+    if (JSON.stringify(ORG_ID) == '{}' || NO_ORG_ID) {
       ORG_ID = ''
     }
-    let {DEVICE_ID, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
+
+    let {DEVICE_ID, CHANNEL_ID, TOKEN = token} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -52,12 +54,12 @@ export default {
           DEVICE_ID: DEVICE_ID + ''
         },
         param: {
-          ORG_ID:ORG_ID+'', // 70
+          ORG_ID: ORG_ID + '', // 70
           ...params
         },
       },
       // channel_id: CHANNEL_ID + ''
-      channel_id: '3'
+      channel_id: params.channel_id || '3'
     }
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)

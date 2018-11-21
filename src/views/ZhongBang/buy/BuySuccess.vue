@@ -56,7 +56,7 @@
     },
     methods: {
       goMyAssets(){
-        this.$router.push({name:PageName.FinancialProducts})
+        this.$router.push({name:PageName.BankDetail})
       },
       goBuyOther(){
         this.$router.push({name:PageName.ProductList})

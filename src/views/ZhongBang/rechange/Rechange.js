@@ -12,24 +12,24 @@ export default {
   methods: {
     getCode() { // 充值短信
       let data = {
-        PHONE_NUM:this.PHONE_NUM,
-        BIZ_TYPE:'1004', // 充值需要
-        AMOUNT:this.APPLY_AMOUN
+        PHONE_NUM: this.PHONE_NUM,
+        BIZ_TYPE: '1004', // 充值需要
+        AMOUNT: this.APPLY_AMOUNT
       }
       API.common.apiSendPhoneCode(data)
     },
-    handleApiRecharge(){
+    handleApiRecharge() {
       // TYPE	请求类型
       // ORG_ID	机构ID
       // APPLY_AMOUNT	充值金额
       // VRFY_FLAG	校验标志
       // PHONE_CODE	短信验证码
       let data = {
-        TYPE:'API_RECHARGE',
+        TYPE: 'API_RECHARGE',
         PHONE_CODE: this.msgCode,
-        APPLY_AMOUNT: this.APPLY_AMOUN,
-        VRFY_FLAG:'00',// 使用标志位进行判断，1-校验，0不校验： 第1位是否校验短信验证码 第2位是否校验密码。例：00-不校验；10-校验短信；01-校验密码；11-短信和密码都校验
-    }
+        APPLY_AMOUNT: this.APPLY_AMOUNT,
+        VRFY_FLAG: '00',// 使用标志位进行判断，1-校验，0不校验： 第1位是否校验短信验证码 第2位是否校验密码。例：00-不校验；10-校验短信；01-校验密码；11-短信和密码都校验
+      }
       API.reChange.apiRecharge(data, res => {
         let params = {
           BIZ_TYPE: '3',
@@ -39,7 +39,7 @@ export default {
           text: '正在充值中',
           data: params,
           fn: (result, timer, count) => {
-            this.setComState({type:"reload",value:true}) // reload-001
+            this.setComState({type: "reload", value: true}) // reload-001
             if ('1' == result.RES_CODE) {
               clearInterval(timer)
               Bus.$emit(BusName.showToast, result.RES_MSG);
@@ -57,7 +57,7 @@ export default {
               this.$router.push({
                 name: PageName.RechargeSuccess,
                 query: {
-                  money: this.APPLY_AMOUN,
+                  money: this.APPLY_AMOUNT,
                   ...res
                 }
               })
@@ -76,7 +76,7 @@ export default {
           }
         })
       }, err => {
-        this.setComState({type:"reload",value:true}) // reload-001
+        this.setComState({type: "reload", value: true}) // reload-001
         this.$router.push({
           name: PageName.RechargeFailure,
           query: {
@@ -97,13 +97,13 @@ export default {
         // todo
         // this.SINGLE_QUOTA = res.SINGLE_QUOTA
         // this.DAY_QUOTA = res.DAY_QUOTA
-        let cardNum =res.CARD_NUM
+        let cardNum = res.CARD_NUM
         this.mainBankList.push({
-          logo:res.CARD_BANK_URL,
-          name:res.CARD_BANK_NAME,
-          footNum:cardNum.substr(cardNum.length-4),
-          money:'100',
-          id:this.mainBankList.length+1
+          logo: res.CARD_BANK_URL,
+          name: res.CARD_BANK_NAME,
+          footNum: cardNum.substr(cardNum.length - 4),
+          money: '100',
+          id: this.mainBankList.length + 1
         })
       })
     },
@@ -123,7 +123,7 @@ export default {
         }
       })
     },
-    clickBank(){
+    clickBank() {
       this.upseletShow = !this.upseletShow
     },
   }

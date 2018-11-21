@@ -7,7 +7,7 @@
     <div class="fenxiancontent">
       <div class="fenxiantitle">
         <p class="info">您的风险测评结果为</p>
-        <p class="code">{{RISK_TOLERANCE_SCORE}}分 {{RISK_TOLERANCE_DESC}} </p>
+        <p class="code">{{RISK_TOLERANCE_SCORE}}分 {{RISK_LEVEL|RISK_TOLERANCE_LEVEL_Filter}} </p>
       </div>
       <p>{{RISK_LEV_EXPLAIN}}</p>
     </div>
@@ -33,25 +33,37 @@
     },
     mixins: [Mixins.UtilMixin],
     created() {
-      let data = this.$route.query
-      let RISK_LEVEL = data.RISK_LEVEL
+      let data = this.getComState.RiskResult || this.$route.query
+      console.log(data);
+      this.RISK_LEVEL = data.RISK_LEVEL
       // 20分以下:保守型,1级; 21~44   稳健型 2级 46~70  平衡性3级 71~85   成长性 4级 86分以上进取型  5级
-      if(RISK_LEVEL<=20){
-        this.RISK_TOLERANCE_DESC ='保守型'
-      }else if(RISK_LEVEL>21&&RISK_LEVEL<=44){
-        this.RISK_TOLERANCE_DESC ='稳健型'
-      }else if(RISK_LEVEL>=45&&RISK_LEVEL<=70){
-        this.RISK_TOLERANCE_DESC ='平衡性'
-      }else if(RISK_LEVEL>=71&&RISK_LEVEL<=85){
-        this.RISK_TOLERANCE_DESC ='成长性'
-      }else if(RISK_LEVEL>=86){
-        this.RISK_TOLERANCE_DESC ='进取型 '
+      this.RISK_LEV_EXPLAIN = data.DESC2 //
+      this.RISK_TOLERANCE_SCORE = data.RISK_SCORE //  分数
+    },
+    filters: {
+      RISK_TOLERANCE_LEVEL_Filter(val) {
+        switch (val) {
+          case '1':
+            return '保守型'
+            break;
+
+          case '2':
+            return '谨慎型'
+            break;
+
+          case '3':
+            return '稳健型'
+            break;
+
+          case '4':
+            return '积极型'
+            break;
+
+          case '5':
+            return '激进型'
+            break;
+        }
       }
-      let AVA_DATE = data.AVA_DATE
-      let APPLY_TIME = data.APPLY_TIME
-      this.RISK_TOLERANCE_DESC = data.RISK_TOLERANCE_DESC // 描述
-      this.RISK_LEV_EXPLAIN = data.RISK_LEV_EXPLAIN //
-      this.RISK_TOLERANCE_SCORE = data.RISK_TOLERANCE_SCORE //  分数
     },
     methods: {
       reCheck() {

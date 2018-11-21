@@ -10,7 +10,7 @@
       <p><span>收款账户</span><span>{{account}}</span></p>
       <p><span>资金预计到账日期</span><span>{{date}}</span></p>
     </section>
-    <button class="begain" @click="goNext">完成1</button>
+    <button class="begain" @click="goNext">完成</button>
   </div>
 </template>
 <script>

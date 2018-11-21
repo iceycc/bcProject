@@ -4,27 +4,10 @@ import API from "@/service";
 import {mapMutations, mapGetters} from 'vuex'
 import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
-import JinShang from './mixins-jinshang'
-import ZhengZhou from './mixins-jinshang'
-import ZhongBang from './mixins-jinshang'
-
-let ORG_ID = util.storage.session.get('ORG_ID') || ''
-let MainMixins = {};
-switch (ORG_ID) {
-  case ORG_ID_NUM.JinShang:
-    MainMixins = JinShang;
-    break;
-  case ORG_ID_NUM.ZhengZhou:
-    MainMixins = ZhengZhou;
-    break;
-  case ORG_ID_NUM.ZhongBang:
-    MainMixins = ZhongBang;
-    break;
-}
+import * as Common from './common'
 
 
 // 展开开户需要的store方法
-
 // 展开公共的store方法
 const StoreMixin = {
   methods: {
@@ -109,7 +92,7 @@ const UtilMixin = {
         })
         return
       } else if (SOURCE_URL == '安全购买') { // 购买页
-        store.commit('REMOVE_COMMON_STATE', 'goBuy')
+        // store.commit('REMOVE_COMMON_STATE', 'goBuy')
         store.commit('REMOVE_COMMON_STATE', "loginType")
         // util.storage.session.remove(LsName.goBuy)
         // util.storage.session.remove(LsName.loginType)
@@ -153,7 +136,7 @@ const UtilMixin = {
         API.common.apiQueryBizStatus(data, result => {
           console.log('RES_CODE>>', result.RES_CODE);
           fn && fn(result, timer, i) // result轮询结果，timer用于回调內清除定时器
-        },err=>{
+        }, err => {
           clearInterval(timer)
         })
         if (i == 5) {
@@ -170,5 +153,6 @@ const UtilMixin = {
 export default {
   StoreMixin,
   HandleMixin,
-  UtilMixin
+  UtilMixin,
+  ...Common
 }

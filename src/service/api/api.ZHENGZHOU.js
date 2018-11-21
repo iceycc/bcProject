@@ -23,6 +23,16 @@ export default {
    *
    */
   common: {
+    // /openapi/comm/apiQryLoginStatus
+    // 查询是否该银行的登陆 开户 等状态
+    apiQryLoginStatus(params, success, error) {
+      params.PHONE_NUM = '15621185521'
+      let options = {
+        url: '/openapi/comm/apiQryLoginStatus',
+        params ,
+      }
+      return http.post(options, Config.config, success, error)
+    },
     // 获取短信验证码  ifHave=y
     apiSendPhoneCode(params, success, error) {
       params.PHONE_NUM = '15621185521'
@@ -170,10 +180,10 @@ export default {
    * 充值相关
    */
   reChange: {
-    // 查询用户是否已签约充值协议  todo 无
-    apiRechargeProtoQuery(params, success, error) {
+    // 查询用户是否已签约充值协议 openapi/zzh/biz/rechargeApply
+    rechargeApply(params, success, error) {
       let options = {
-        url: '/openapi/biz/apiRechargeProtoQuery',
+        url: '/openapi/zzh/biz/rechargeApply',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -216,9 +226,9 @@ export default {
    */
   risk: {
     //  查看风险测评
-    apiRiskGrade(params, success, error) {
+    apiGetRiskEvalRes(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiRiskGrade',
+        url: '/openapi/comm/apiGetRiskEvalRes',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -249,16 +259,39 @@ export default {
    *  安全相关
    */
   safe: {
-    // 重制密码 todo 无
-    apiUserResetLoginPass(params, delMsg, success, error) {
+    // 36.	重置交易密码审核申请
+    // /openapi/zzh/biz/apiTransactionPasswordAudit
+    resetTransactionPassword(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiUserResetLoginPass',
+        url: '/openapi/zzh/biz/apiTransactionPasswordAudit',
         params,
-        delMsg
       }
       return http.post(options, Config.config, success, error)
 
     },
+    // 35.	重置交易密码申请审核查询
+    // openapi/zzh/biz/apiUserPasswordModification
+    apiTransactionPasswordAudit(params, success, error) {
+      let options = {
+        url: '/openapi/zzh/biz/apiUserPasswordModification',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+    // 37.	文件上传
+    // openapi/zzh/biz/apiBankUserFileUpload
+    apiBankUserFileUpload(params, success, error) {
+      let options = {
+        url: '/openapi/zzh/biz/apiBankUserFileUpload',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+
+
+
     // 查询登录用户某机构绑定卡信息 apiBandCard
     apiBandCard(params, success, error) {
       let options = {
@@ -268,16 +301,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换银行卡：openapi/comm/apiChangeBingCard todo 无需求
-    apiChangeBingCard(params, delMsg, success, error) {
-      let options = {
-        url: '/openapi/comm/apiChangeBingCard',
-        params,
-        delMsg
-      }
-      return http.post(options, Config.config, success, error)
 
-    },
     // 更换手机号
     // openapi/comm/apiChangePhoneNum todo 无需求
     apiChangePhoneNum(params, delMsg, success, error) {
@@ -289,15 +313,13 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换支付密码：todo 无
-    apiUserResetPayPass(params, delMsg, success, error) {
+    // 更换支付密码：/openapi/comm/modifyTradePassword
+    modifyTradePassword(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiUserResetPayPass',
+        url: '/openapi/comm/modifyTradePassword',
         params,
-        delMsg
       }
       return http.post(options, Config.config, success, error)
-
     },
     // 协议  API_BUY  todo 整理协议接口
     apiAgreement(params, success, error) {
@@ -407,7 +429,7 @@ export default {
     // 理财产品已到期（分页） todo 无
     getMyInvestOver(params, success, error) {
       let options = {
-        url: '/openapi/invest/getMyInvestOver',
+        url: '/openapi/zzh/biz/getMyInvestOver',
         params
       }
       return http.post(options, Config.config, success, error)

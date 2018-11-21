@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="buytitleright">
-        <p>起购金额{{proDetail.TXT_MIN_AMOUNT}}</p>
+        <p>起购金额{{proDetail.MIN_AMOUNT}}元</p>
         <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
       </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="buydetails">
       <p style="margin-top: 0.3rem">购买金额</p>
       <span class="buydetailsmoney">￥</span>
-      <input type="number" :placeholder="proDetail.TXT_MIN_AMOUNT" v-model="moneyNum">
+      <input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="moneyNum">
     </div>
     <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 {{proDetail.REMAIN_AMT | formatNum}}元</p>
     <button class="tijiao" @click="goBuy">购买</button>
@@ -44,32 +44,45 @@
   export default {
     data() {
       return {
-        proDetail: {},
+        proDetail: {
+          MIN_AMOUNT: '200',
+          INCRE_AMOUNT: '10'
+
+        },
         moneyNum: null,
-        payNum: '1000',
+        payNum: '',
         agree: true,
         imgSrc: imgSrc,
-        INCRE_AMOUNT: ''
+        INCRE_AMOUNT: '',
+
       }
     },
-    mixins: [Mixins.HandleMixin,Mixins.StoreMixin],
+    mixins: [Mixins.HandleMixin, Mixins.StoreMixin],
     created() {
       this.getInfo()
-      this.proDetail = this.getComState.goBuy // 数据
+      let proData = this.getComState.goBuy
+      this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
+      this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
+      this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
+      this.proDetail.id = proData.id // 数据
+      this.proDetail.ORG_NAME = proData.ORG_NAME // 数据
+      this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
+      this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
+      console.log(proData);
     },
     methods: {
       getInfo() {
         // 查询账户余额
-        API.buy.apiQueryAccRest({}, res => {
+        API.bank.apiQryAsset({}, res => {
           console.log(res);
-          this.payNum = res.ACC_REST || 1000// 账户余额(可用余额)
+          this.payNum = res.ACC_REST // 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
         })
       },
       goReChang() {
         this.setComState({
-          type:'OriginPage',
-          value:this.$route.fullPath
+          type: 'OriginPage',
+          value: this.$route.fullPath
         })
 
         this.$router.push({
@@ -87,11 +100,12 @@
         })
       },
       checkMoneyNum(num) {
+        console.log(num);
         let a = this.proDetail.INCRE_AMOUNT
-        if (num < parseInt(this.proDetail.TXT_MIN_AMOUNT)) {
+        if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
-        } else if (num % a != 0) {
+        } else if (num * 100 % (a * 100) != 0) {
           Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
           return true
         } else {

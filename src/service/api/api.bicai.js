@@ -210,7 +210,24 @@ export default {
       params,
     }
     return http.post(options, success, error)
-  }
+  },
+  // 获取产品(货基，理财)详细信息
+  getPrdInfo(params, success, error) {
+    let options = {
+      type: 'GET_PRD_INFO',
+      params,
+    }
+    return http.post(options, success, error)
+  },
+  // GET_BANK_II_LIST
+  // 获取产品(货基，理财)详细信息
+  getBankList(params, success, error) {
+    let options = {
+      type: 'GET_BANK_II_LIST',
+      params,
+    }
+    return http.post(options, success, error)
+  },
 }
 
 

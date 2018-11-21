@@ -6,6 +6,7 @@ axios.interceptors.request.use(
     Indicator.open({
       spinnerType: 'triple-bounce'
     });
+    console.log(config.baseURL);
     return config;
   },
   error => {
@@ -23,7 +24,7 @@ axios.interceptors.response.use(
     if (typeof data == 'string') {
       data = JSON.parse(data)
     }
-    console.log('response>', data);
+    console.log('response>', data.biz_data.data);
     Indicator.close();
     // todo http code校验
     return data;

@@ -6,10 +6,9 @@ import {version} from '../package'
  */
 let Configs = {
   // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
-  DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit/', // 郑州开发环境
-  // DEV_HOST: 'http://192.168.10.87:8080', // 郑州开发环境
+  DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit', // 郑州开发环境
+  // DEV_HOST: 'http://192.168.100.151:8080/finsuit', // 郑州开发环境
   // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
-  // PRO_HOST:'http://47.94.4.11:8090/finsuit', //
   PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
   // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,// 生产
   APP_DOWN_URL: 'http://www.baidu.com',
@@ -108,19 +107,20 @@ export const PageName = {
   RedeemFailure: 'RedeemFailure',
   RedeemSuccess: 'RedeemSuccess',
   DealDetails: 'DealDetails',
+  ChangePayPassword: 'ChangePayPassword',
 
   /**
    * 众邦银行新增
    */
   BindingBank:'BindingBank',
-
   /**
    * 郑州银行 密码控件
    * 原生交互
    */
-  PayPassWord:'PayPassWord',
+  PasswordOneForZhengZhou:'PayPassWord',
+  PasswordThreeForZhengZhou:'PasswordThreeForZhengZhou',
+  PasswordTowForZhengZhou:'PasswordTowForZhengZhou',
 }
-
 /**
  * 传值的bus名称
  */
@@ -162,3 +162,10 @@ export const ORG_ID_NUM = {
   ZhongBang: '227'
 }
 
+export const CheckBank =function (val) {
+  let arr = []
+  Object.keys(ORG_ID_NUM).forEach(function(key){
+    arr.push(ORG_ID_NUM[key])
+  });
+  return arr.indexOf(val)!= '-1';
+}

@@ -23,7 +23,7 @@
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
       <input @change="checkMoney"
-             v-model="APPLY_AMOUN" type="number" placeholder="请输入金额">
+             v-model="APPLY_AMOUNT" type="number" placeholder="请输入金额">
     </section>
     <section class="inputAmount" v-if="!write">
             <span class="Amount">
@@ -98,7 +98,7 @@
         html: '协议',
         page: false,
         PIN: '',
-        APPLY_AMOUN: '',
+        APPLY_AMOUNT: '',
         toUrl: '',
         ifGet: false,
         write: false, // 是否签约
@@ -135,8 +135,8 @@
     },
     methods: {
       getMsg() {
-        if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
-        if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
+        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
           return
         }
@@ -169,14 +169,14 @@
         this.page = false
       },
       checkMoney() {
-        if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
         }
       },
       doNext() {
         console.log(this.write);
-        if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
-        if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
+        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
           return
         }

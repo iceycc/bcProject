@@ -76,7 +76,7 @@
         logo: '',
         inputID: '',
         ifCheckMoneyEmpty: true,
-
+        BankType:'0',
 
         ACC_REST: '200',
         DAY_REST:'10000', // todo取每日限额
@@ -103,7 +103,8 @@
     mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
     created() {
       this.getUserInfos()
-      this.ACC_REST = this.$route.query.ACC_REST || '200'
+      this.ACC_REST = this.$route.query.ACC_REST.split('.')[0]
+      console.log(this.ACC_REST);
     },
     methods: {
       checkMoney() {
@@ -115,6 +116,18 @@
           this.logo = res.CARD_BANK_URL
         })
       },
+      checkBankType() {
+        let data = {
+          BIND_AC_NO: this.ACCT_NO
+        }
+        API.common.apiUserAccountProperties(data, res => {
+          // 必填
+          // 0：他行；
+          // 1：本行；
+          // 2：村镇
+          this.BankType = res.ACC_FLAG
+        })
+      },
       doWithdraw() {
         this.pass = $('#payPassDD').getKBD()
         this.len = $('#payPassDD').getLenKBD()
@@ -123,10 +136,10 @@
         let data = {
           PHONE_CODE: "",
           EITHDRAW_All: "1",// 0 全部提现
-          APPLY_AMOUNT: this.APPLY_AMOUN, //
+          APPLY_AMOUNT: util.fromatMoney(this.APPLY_AMOUN,),// this.APPLY_AMOUN, //util.fromatMoney(this.datas.money),
           BANK_PAY_PW: this.pass, //
           PREFIX:this.passCode,//  密码标识 TODO 密码标识 查询银行类型
-          IS_UNIONPAY:'1', // 是否他行卡 必填 1：他行 0:本行 todo 判断银行类型
+          IS_UNIONPAY:this.BankType, // 是否他行卡 必填 1：他行 0:本行 todo 判断银行类型
         }
         this.show = false
         API.withdraw.apiCash(data, res => {

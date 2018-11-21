@@ -1,12 +1,12 @@
 <template>
   <div class="app">
-    <app-bar title="赎回失败"></app-bar>
+    <app-bar title="支取失败"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/buyfail@2x.png" alt="">
-      <h2>很抱歉，赎回失败!</h2>
+      <h2>很抱歉，支取失败!</h2>
       <p class="err-msg">{{errMsg}}</p>
     </div>
-    <span @click="reWithdraw" class="btn">重新赎回</span>
+    <span @click="reWithdraw" class="btn">重新支取</span>
     <span @click="goBank" class="btn btn-back">返回银行页</span>
   </div>
 </template>

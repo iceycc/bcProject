@@ -55,7 +55,7 @@
         <p class="card-no">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
       </div>
     </section>
-    <!--货币基金-->
+    <!--银行存款-->
     <section class="financing-list">
       <section class="top" @click="tapList">
                     <span class="top-left">
@@ -68,7 +68,7 @@
                 </span>
       </section>
       <ul v-if="licaiShow" @click="goPage(toPageName.FinancialProducts)">
-        <li class="financing-li" v-for="item in proList.retList">
+        <li class="financing-li" v-for="item in proList.PAGE.retList">
           <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
           <span class="li-left">
                         {{item.PRD_NAME}}</span>
@@ -151,7 +151,7 @@
     ,
     methods: {
       tapList() {
-        if (!this.proList.retList || this.proList.retList.length == 0) {
+        if (!this.proList.PAGE.retList || this.proList.PAGE.retList.length == 0) {
           return
         }
         this.licaiShow = !this.licaiShow

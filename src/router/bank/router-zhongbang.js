@@ -20,26 +20,26 @@ export default [
     path: '/' + PageName.BuyFailed,
     name: PageName.BuyFailed,
     component: resolve => require(['views/ZhongBang/buy/BuyFailed.vue'], resolve),
-    meta: {keepAlive: false, title: '购买失败', needLogin: false}
+    meta: {keepAlive: false, title: '存入失败', needLogin: false}
   },
   {
     path: '/' + PageName.BuySuccess,
     name: PageName.BuySuccess,
     component: resolve => require(['views/ZhongBang/buy/BuySuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '购买成功', needLogin: false}
+    meta: {keepAlive: false, title: '存入成功', needLogin: false}
 
   },
   {
     path: '/' + PageName.SureBuy,
     name: PageName.SureBuy,
     component: resolve => require(['views/ZhongBang/buy/SureBuy.vue'], resolve),
-    meta: {keepAlive: false, title: '购买', needLogin: false}
+    meta: {keepAlive: false, title: '存入', needLogin: false}
   },
   {
     path: '/' + PageName.Buying,
     name: PageName.Buying,
     component: resolve => require(['views/ZhongBang/buy/Buying.vue'], resolve),
-    meta: {keepAlive: false, title: '购买', needLogin: true}
+    meta: {keepAlive: false, title: '存入', needLogin: true}
   },
 
 
@@ -248,25 +248,25 @@ export default [
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
   /**
-   * 郑州新增：赎回
+   * 郑州新增：支取
    */
   {
     path: '/' + PageName.Redeem,
     name: PageName.Redeem,
     component: resolve => require(['views/ZhongBang/redeem/Redeem.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
+    meta: {keepAlive: false, title: '支取', needLogin: false}
   },
   {
     path: '/' + PageName.RedeemSuccess,
     name: PageName.RedeemSuccess,
     component: resolve => require(['views/ZhongBang/redeem/RedeemSuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
+    meta: {keepAlive: false, title: '支取', needLogin: false}
   },
   {
     path: '/' + PageName.RedeemFailure,
     name: PageName.RedeemFailure,
     component: resolve => require(['views/ZhongBang/redeem/RedeemFailure.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
+    meta: {keepAlive: false, title: '支取', needLogin: false}
   },
   /**
    * 郑州相关 BindingBank
@@ -275,6 +275,6 @@ export default [
     path: '/' + PageName.BindingBank,
     name: PageName.BindingBank,
     component: resolve => require(['views/ZhongBang/safe/BindingBank.vue'], resolve),
-    meta: {keepAlive: false, title: '赎回', needLogin: false}
+    meta: {keepAlive: false, title: '支取', needLogin: false}
   }
 ]

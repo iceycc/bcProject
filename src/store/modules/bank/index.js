@@ -15,7 +15,7 @@ export default {
       commit('SET_ORG_NAME', ORG_NAME)
       commit('SET_BANK_LOGO', LOGO_URL)
       commit('SET_DESCRIPT', DESCRIPT)
-      commit('SET_BANK_NAME', DESCRIPT.substring(3))
+      commit('SET_BANK_NAME', DESCRIPT)
     },
   },
   // commit-> mutations  直接操作state，与业务无关

@@ -158,6 +158,9 @@
 
       },
       getSafeCode() {
+        if(this.safeCode==''){
+          Bus.$emit(BusName.showToast,'请填写图形验证码')
+        }
         this.getMsg(true)
         this.showSafeCode = false
       },

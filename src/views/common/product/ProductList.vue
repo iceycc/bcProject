@@ -1,6 +1,10 @@
 <template>
   <div class="wrap" v-if="Bshow">
     <app-bar title="产品列表"></app-bar>
+    <ul class="w-tap">
+      <li :class="{actvie:cur==1}" @click="tap(1)">产品列表</li>
+      <li :class="{actvie:cur==2}" @click="tap(2)">我的资产</li>
+    </ul>
     <div class="banner">
       <img src="@/assets/images/banner.png" alt="">
     </div>
@@ -54,7 +58,8 @@
   export default {
     data() {
       return {
-        Bshow:true,
+        cur:'1',
+        Bshow: true,
         show: false,
         dataList: [],
         imgSrc
@@ -68,6 +73,13 @@
       this.reLoadToLogin()
     },
     methods: {
+      tap(val){
+        if(val==1){
+        }
+        if(val==2){
+          this.$router.push({name:PageName.BankAccount})
+        }
+      },
       getListData() {
         API.commonApi.apiGetChannelPrdList({}, (res) => {
           let num = res.length
@@ -85,21 +97,17 @@
       },
       reLoadToLogin() {
         let reload = util.storage.session.get('reload') || null
-        if (reload) {
-
+        console.log(reload);
+        if (reload && JSON.stringify(reload)!="{}") {
           let id = util.storage.session.get('id')
           let title = util.storage.session.get('title')
           util.storage.session.remove('id')
           util.storage.session.remove('title')
-          util.storage.session.remove('reload')
-          this.Bshow=false
-          setTimeout(()=>{
-            this.Bshow=true
-          },1000)
+          util.storage.session.set('reload', null)
           this.$router.push({
-            name:'ProductReservation',
-            query:{
-              id,title
+            name: 'ProductReservation',
+            query: {
+              id, title
             }
           })
         } else {
@@ -121,9 +129,7 @@
         util.storage.session.set('id', id)
         util.storage.session.set('title', title)
         util.storage.session.set('reload', true)
-        setTimeout(()=>{
-          window.location.reload()
-        },100)
+        window.location.reload()
       },
 
     }
@@ -270,5 +276,19 @@
     position: relative;
     top: px2rem(4);
     margin-right: px2rem(5);
+  }
+  .w-tap{
+    display: flex;
+    li{
+      flex: 1;
+      height: px2rem(40);
+      line-height: px2rem(40);
+      font-size: px2rem(18);
+      text-align: center;
+      background: #fff;
+      &.actvie{
+        color: #007aff;
+      }
+    }
   }
 </style>

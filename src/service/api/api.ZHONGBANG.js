@@ -23,6 +23,16 @@ export default {
    *
    */
   common: {
+    // /openapi/comm/apiQryLoginStatus
+    // 查询是否该银行的登陆 开户 等状态
+    apiQryLoginStatus(params, success, error) {
+      params.PHONE_NUM = '15621185521'
+      let options = {
+        url: '/openapi/comm/apiQryLoginStatus',
+        params ,
+      }
+      return http.post(options, Config.config, success, error)
+    },
     // 获取短信验证码  ifHave=y
     apiSendPhoneCode(params, success, error) {
       params.PHONE_NUM = '15621185521'
@@ -386,6 +396,7 @@ export default {
       return http.post(options, Config.config, success, error)
     },
     // 33.	获取单个银行资产数据(汇总) 未到期
+    // /openapi/zzh/biz/apiQryAsset
     // /openapi/zbh/biz/apiQryAsset
     apiQryAsset(params, success, error) {
       let options = {
@@ -394,11 +405,21 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+    // /openapi/bank/apiQryEleAccount
+    // 33.	获取单个银行资产数据(汇总) 未到期
+    // /openapi/zbh/biz/apiQryAsset
+    apiQryEleAccount(params, success, error) {
+      let options = {
+        url: '/openapi/bank/apiQryEleAccount',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
     // 33 todo未到期
-    // 理财产品已到期（分页） todo 无
+    // 理财产品已到期（分页）  /openapi/zbh/biz/getMyInvestOver无
     getMyInvestOver(params, success, error) {
       let options = {
-        url: '/openapi/invest/getMyInvestOver',
+        url:'/openapi/zbh/biz/getMyInvestOver' ,
         params
       }
       return http.post(options, Config.config, success, error)

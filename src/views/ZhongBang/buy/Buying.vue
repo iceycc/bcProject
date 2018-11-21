@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <app-bar title="购买"></app-bar>
+    <app-bar title="存入"></app-bar>
     <div class="buytitle">
       <div class="buytitleleft">
         <div class="buytitleleftimg">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="buytitleright">
-        <p>起购金额{{proDetail.TXT_MIN_AMOUNT}}</p>
+        <p>起购金额{{proDetail.MIN_AMOUNT}}元</p>
         <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
       </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="buydetails">
       <p style="margin-top: 0.3rem">购买金额</p>
       <span class="buydetailsmoney">￥</span>
-      <input type="number" :placeholder="proDetail.TXT_MIN_AMOUNT" v-model="moneyNum">
+      <input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="moneyNum">
     </div>
     <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 {{proDetail.REMAIN_AMT | formatNum}}元</p>
     <button class="tijiao" @click="goBuy">购买</button>
@@ -60,7 +60,7 @@
     methods: {
       getInfo() {
         // 查询账户余额
-        API.buy.apiQueryAccRest({}, res => {
+        API.bank.apiQryEleAccount({}, res => {
           console.log(res);
           this.payNum = res.ACC_REST || 1000// 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
@@ -88,7 +88,7 @@
       },
       checkMoneyNum(num) {
         let a = this.proDetail.INCRE_AMOUNT
-        if (num < parseInt(this.proDetail.TXT_MIN_AMOUNT)) {
+        if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
         } else if (num % a != 0) {

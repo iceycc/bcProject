@@ -4,29 +4,54 @@ import Bus from '@/plugin/bus'
 
 export default {
   data() {
-    return {}
+    return {
+      BankType: '1',
+      applyDate: ''
+    }
   },
   created() {
     console.log('JinShang');
   },
   methods: {
-    getCode() { // 充值短信
+    checkBankType() {
       let data = {
-        PHONE_NUM:this.PHONE_NUM,
-        BIZ_TYPE:'12', // 充值需要
-        ACCT_NO:this.ACCT_NO
+        BIND_AC_NO: this.ACCT_NO
       }
-      API.common.apiSendPhoneCode(data)
+      API.common.apiUserAccountProperties(data, res => {
+        // 必填
+        // 0：他行；
+        // 1：本行；
+        // 2：村镇
+        this.BankType = res.ACC_FLAG
+      })
     },
-    handleApiRecharge(){
+    getCode() { //
       let data = {
-        TYPE:'API_RECHARGE',
+        RECHARGE_AMOUNT: this.APPLY_AMOUN
+      }
+      // 充值协议
+      API.reChange.rechargeApply(data, res => {
+        this.applyDate = res
+        // WORKDATE
+        // 平台日期
+        // AGENTSERIALNO
+        // 平台流水号
+      })
+      this.checkBankType()
+    },
+    handleApiRecharge() {
+      let data = {
+        TYPE: 'API_RECHARGE',
         PHONE_CODE: this.msgCode,
         // PIN: this.PIN,
         BANK_PAY_PW: this.pass,
         APPLY_AMOUNT: this.APPLY_AMOUN,
-        PREFIX:this.passCode,
-        IS_UNIONPAY:'1'
+        PREFIX: this.passCode,
+        IS_UNIONPAY: this.BankType,
+        // ORIGWORKDATE	充值申请日期
+        // ORIGAGENTSERIALNO	充值申请流水号
+        ORIGWORKDATE: this.applyDate.WORKDATE,
+        ORIGAGENTSERIALNO: this.applyDate.AGENTSERIALNO
       }
       API.reChange.apiRecharge(data, res => {
         let params = {
@@ -86,40 +111,40 @@ export default {
       // 获取机构名称  机构logo 用于充值提现
       API.safe.apiBandCard({}, res => {
         this.logo = res.BANK_BG_URL
-        this.ORG_NAME = res.BANK_USER_CODE
+        this.ORG_NAME = res.ORG_NAME
         this.ACCT_NO = res.CARD_NUM
         this.PHONE_NUM = res.PHONE_NUM
         this.CARD_BANK_NAME = res.CARD_BANK_NAME;
         this.CARD_BANK_URL = res.CARD_BANK_URL
         this.SINGLE_QUOTA = res.SINGLE_QUOTA
         this.DAY_QUOTA = res.DAY_QUOTA
-        let cardNum =res.CARD_NUM
+        let cardNum = res.CARD_NUM
         this.mainBankList.push({
-          logo:res.CARD_BANK_URL,
-          name:res.CARD_BANK_NAME,
-          footNum:cardNum.substr(cardNum.length-4),
-          money:'100',
-          id:this.mainBankList.length+1
+          logo: res.CARD_BANK_URL,
+          name: res.CARD_BANK_NAME,
+          footNum: cardNum.substr(cardNum.length - 4),
+          money: '100',
+          id: this.mainBankList.length + 1
         })
       })
     },
     reChangeHandele() { // 查询用户是否已签约充值协议
       let data = {}
-      API.reChange.apiRechargeProtoQuery(data, (res) => {
-        console.log(res);
-        if (res.SIGN_STATE == 'N') {
-          // 没写
-          this.write = false
-          this.page = false
-          this.agree1 = false
-        } else {
-          // 填写了
-          this.write = true
-          this.agree1 = true
-        }
-      })
+      // API.reChange.apiRechargeProtoQuery(data, (res) => {
+      //   console.log(res);
+      //   if (res.SIGN_STATE == 'N') {
+      //     // 没写
+      //     this.write = false
+      //     this.page = false
+      //     this.agree1 = false
+      //   } else {
+      //     // 填写了
+      //     this.write = true
+      //     this.agree1 = true
+      //   }
+      // })
     },
-    clickBank(){
+    clickBank() {
       this.upseletShow = !this.upseletShow
     },
   }

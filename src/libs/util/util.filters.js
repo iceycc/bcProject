@@ -6,8 +6,8 @@ export default {
    * @returns {*} eg:3,000.00
    */
   formatNum(str) {
-    str = str + ''
     if (!str) return str
+    str = str + ''
     // if(str == '' || !str) return
     // if (!Number(str)) return str
     var newStr = "";

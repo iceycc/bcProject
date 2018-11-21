@@ -163,10 +163,9 @@
         this.len = $("#payPasscc").getLenKBD(); //获取密码长度
         let lenCode = $("#payPasscc").getBDCode(); //获取密码长度
         let data = {
-          PRD_ID: '17817',
           TYPE:'API_BUY',
-          // PRD_ID: this.datas.id + '',
-          APPLY_AMOUNT: this.datas.money + '',
+          PRD_ID: this.datas.id + '',
+          APPLY_AMOUNT: util.fromatMoney(this.datas.money),
           BANK_PAY_PW: this.pass + '',
           PREFIX:lenCode,
           FUN_TYPE:'1', // 基金种类 基金种类 1:货币 2:非货币

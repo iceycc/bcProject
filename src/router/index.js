@@ -21,7 +21,6 @@ router.beforeEach((to, from, next) => {
   if (!ORG_ID || JSON.stringify(ORG_ID)=='{}') {
     let ORG_ID = to.query.ORG_ID || ''
     util.storage.session.set('ORG_ID', ORG_ID)
-    window.location.reload()
   }
   // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
   let {DEVICE_ID, CHANNEL_ID} = store.getters.GET_ACCOUNT_STATE

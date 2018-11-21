@@ -14,7 +14,7 @@ let time = 60
     return {
       telDisabled: false,
       ZhengZhouPass: false, // 实体卡密码，可空，本行卡和村镇卡必输
-      ACC_FLAG: '0',
+      ACC_FLAG: '0',  // 本行
 
       pwd:'',
       pwdLen:'',
@@ -76,9 +76,11 @@ let time = 60
         TYPE: 'API_USER_ACCOUNT_PROPERTIES',
         BIND_AC_NO: this.data.CARD_NO + ''
       }, res => {
+        // 0 他行
         this.ACC_FLAG = res.ACC_FLAG
       })
     },
+
     // 校验身份证
     checkID() {
     },
@@ -126,7 +128,6 @@ let time = 60
         // 本地 或者村镇银行 要调取密码控件
         $('#PWDKBD').remove();
         this.ZhengZhouPass = true
-        return
       }
 
     },
@@ -166,7 +167,7 @@ let time = 60
       let params = {
         TYPE: 'API_REGISTER_BAND_CARD',
         BIND_AC_NO: this.data.CARD_NO, // 银行卡
-        BANK_NAME: '平安银行', //
+        BANK_NAME: this.bankText, //
         // BANK_NAME: this.bankText, //
         // 密码
         ACC_FLAG: this.ACC_FLAG, // 账户类型 0：他行；1：本行；2：村镇

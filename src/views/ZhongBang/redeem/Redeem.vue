@@ -22,7 +22,7 @@
             <span class="Amount">
                 验证码
             </span>
-      <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+      <input type="text" v-model="PHONE_CODE" placeholder="请填写短信验证码">
       <button
         :disabled="msgdisable"
         @click="getMsg"
@@ -33,12 +33,6 @@
     <div class="r-agreement">
       立即支取代表您已阅读并同意<span>《定期存款收益权转让合同》</span>
     </div>
-
-
-
-
-
-
   </div>
 </template>
 <script>
@@ -49,11 +43,14 @@
   import Mixins from '@/mixins'
   import Bus from '@/plugin/bus'
 
+  let time = 60
+  let timer;
   export default {
     data() {
       return {
-        msgCode:'',
-        codeText:'获取验证码',
+        msgdisable: false,
+        PHONE_CODE: '',
+        codeText: '获取验证码',
         imgSrc,
         show: false,
         isFocus: false,
@@ -81,7 +78,7 @@
         return `最多可支取金额${util.formatNum(num)}元`
       }
     },
-    mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     watch: {
       money(n, o) {
         if (n && n - 0 > 0) {
@@ -98,7 +95,34 @@
       PassWordZhengzhou
     },
     methods: {
-
+      getMsg() {
+        // if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
+        // if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
+        //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        //   return
+        // }
+        let times = time
+        this.msgdisable = true
+        timer = setInterval(() => {
+          if (times == 0) {
+            this.codeText = '重新发送'
+            this.msgdisable = false
+            clearInterval(timer)
+            return
+          }
+          times--
+          this.codeText = `${times}s`
+        }, 1000)
+        this.getCode()
+      },
+      getCode() { // 短信
+        let data = {
+          PHONE_NUM: this.PHONE_NUM,
+          BIZ_TYPE: '1009', // 需要
+          AMOUNT: this.money
+        }
+        API.common.apiSendPhoneCode(data)
+      },
       focus() {
         this.isFocus = true;
       },
@@ -121,85 +145,64 @@
         this.money = this.totalNum
       },
       showPass() {
-        if (this.cur == 1) {
-          this.normalShow = true
-        } else {
-          this.show = true
-        }
-      },
-      doPay() {
-        this.redeemHandle()
-      },
-      redeemHandle() {
-        this.pass = $("#payPasscAAAc").getKBD(); //获取密码
-        this.len = $("#payPasscAAAc").getLenKBD(); //获取密码长度
-        this.passCode = $("#payPasscAAAc").getBDCode(); //获取密码长度
         let data = {
-          TYPE: 'API_REDEMPTION',
-          PRD_ID: this.redeemData.PRD_INDEX_ID, //  产品索引
-          // PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
-          PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
-          // FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
-          FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
-          APPLY_AMOUNT: this.money, // 支取金额
-          REDEEM_TYPE: this.redeemData.PRD_TYPE == 1 ? this.cur : "1", // TODO  支取类型 支取类型(1 为普通支取，0 为 D+0 支取)非 货币只有普通支取
-          FUND_TRANS_TYPE: '2', // 基金交易类型（1:申购，2:支取）
-          PREFIX: this.passCode, // 输入密码
-          BANK_PAY_PW: this.pass, // 支取密码
+          // PHONE_CODE	短信验证码
+          PHONE_CODE: this.PHONE_CODE,
+          PRD_ID: this.redeemData.PRD_INDEX_ID,//	产品ID
+          APPLY_AMOUNT: this.money, //	金额
+          PRD_TYPE: this.redeemData.PRD_TYPE,//产品类型
+          ORDER_NUM: this.redeemData.ORDER_NUM
         }
         API.redeem.apiRedemption(data, res => {
-          console.log(res);
-          // this.$router.push({name:PageName.RedeemSuccess,query:res})
-          let REQ_SERIAL = res.REQ_SERIAL // 交易标示 用于轮询查询
           let params = {
-            BIZ_TYPE: '7', // 提现
-            BESHARP_SEQ: REQ_SERIAL
+            BIZ_TYPE: '7',
+            BESHARP_SEQ: res.REQ_SERIAL
           }
-          // 轮询 查寻交易状态
-          this.queryStatus(
-            {
-              text: '支取中',
-              data: params,
-              fn: (result, timer, count) => {
-                this.setComState({type:"reload",value:true}) // reload-001
-                if ('1' == result.RES_CODE) {
+          this.queryStatus({
+            text: '正在支取中',
+            data: params,
+            fn: (result, timer, count) => {
+              this.setComState({type: "reload", value: true}) // reload-001
+              if ('1' == result.RES_CODE) {
+                clearInterval(timer)
+                Bus.$emit(BusName.showToast, result.RES_MSG);
+                this.$router.push({ // todo是否要跳转
+                  name: PageName.RechargeFailure,
+                  query: {
+                    err: result.RES_MSG
+                  }
+                })
+              }
+              else if ('0' == result.RES_CODE) {
+                clearInterval(timer)
+                Bus.$emit(BusName.showToast, result.RES_MSG);
+                this.Londing.close()
+                this.$router.push({
+                  name: PageName.RedeemSuccess, query: {
+                    ...res,
+                    money:this.money
+                  }
+                })
+              } else {
+                if (count == 5) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.$router.push({ // todo是否要跳转
-                    name: PageName.RedeemFailure,
+                    name: PageName.RechargeFailure,
                     query: {
                       err: result.RES_MSG
                     }
                   })
                 }
-                else if ('0' == result.RES_CODE) {
-                  clearInterval(timer)
-                  Bus.$emit(BusName.showToast, result.RES_MSG);
-                  this.Londing.close()
-                  this.$router.push({
-                    name: PageName.RedeemSuccess,
-                    query: {
-                      money: this.APPLY_AMOUN,
-                      ...res
-                    }
-                  })
-                } else {
-                  clearInterval(timer)
-                  // if (count == 5) {
-                    Bus.$emit(BusName.showToast, result.RES_MSG);
-                    this.$router.push({
-                      name: PageName.RedeemFailure,
-                      query: {
-                        err: result.RES_MSG
-                      }
-                    })
-                  // }
-                }
               }
             }
-          )
+          })
+        }, err => {
+          alert(err)
+          this.$router.push({name: PageName.RedeemFailure, query: err})
         })
-      }
+      },
+
     }
   }
 </script>
@@ -264,7 +267,6 @@
     }
   }
 
-
   .r-tips {
     color: #B3B3B3;
     padding: px2rem(10) px2rem(20) px2rem(30);
@@ -294,7 +296,6 @@
       display: inline;
     }
   }
-
 
   .grey-mask {
     width: 100%;
@@ -331,9 +332,6 @@
 
     }
   }
-
-
-
 
 
 </style>

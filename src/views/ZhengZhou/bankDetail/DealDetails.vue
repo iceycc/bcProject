@@ -3,9 +3,9 @@
     <div class="wrap-top">
       <app-bar title="交易明细"></app-bar>
       <ul class="tabs">
-        <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
-            :class="{active:index==nowIndex}">{{item}}
-        </li>
+        <!--<li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"-->
+            <!--:class="{active:index==nowIndex}">{{item}}-->
+        <!--</li>-->
       </ul>
     </div>
     <div class="t-tab">
@@ -45,7 +45,7 @@
                     <span style="width: 40%;text-align: right">{{item.TYPE_NAME}}</span>
                   </h5>
                   <p>
-                    <span>{{item.TRANS_DATE | timerFormat}}</span>
+                    <span>{{item.TRANS_DATE }}</span>
                     <em>{{item.TRANS_AMT | formatNum}}</em>
                   </p>
                 </li>
@@ -151,8 +151,8 @@
           // PRD_INDEX_ID:'',
           // currentPage: this.searchCondition.pageNo,
           currentPage:"0" ,
-          START_DATE: '2020-08-26',
-          END_DATE: '2020-08-27',
+          // START_DATE: '2020-08-26',
+          // END_DATE: '2020-08-27',
           // START_DATE: this.startDate,
           // END_DATE: this.endDate,
           TYPE:'API_QRY_ELE_TRANS_DETAIL',
@@ -183,8 +183,8 @@
         let data = {
           currentPage:"0" ,
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
-          START_DATE: '2020-08-26',
-          END_DATE: '2020-08-27',
+          // START_DATE: '2020-08-26',
+          // END_DATE: '2020-08-27',
           // START_DATE: start,
           // END_DATE: end,
           pagenum:'10',
@@ -423,7 +423,6 @@
     .tabs {
       position: relative;
       display: flex;
-      height: px2rem(44);
       line-height: px2rem(44);
       background: #fff;
       li {

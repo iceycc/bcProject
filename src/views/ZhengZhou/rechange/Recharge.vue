@@ -17,7 +17,7 @@
       {{CARD_BANK_NAME}}
     </div>
     <div class="money">
-      <p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p>
+      <!--<p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p>-->
       <p>每日限额：{{DAY_QUOTA | formatNum}}元</p>
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
@@ -134,17 +134,18 @@
       this.reChangeHandele()
     },
     methods: {
+
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
         //
-        if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
-          return
+        // if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        //   return
+        // }
+        if (this.APPLY_AMOUN - 0 > this.DAY_QUOTA - 0) {
+          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
         }
-        if (!this.agree) {
-          Bus.$emit(BusName.showToast, '请先同意充值协议')
-          return
-        }
+
         let times = time
         this.disable = true
         timer = setInterval(() => {
@@ -170,15 +171,22 @@
         this.page = false
       },
       checkMoney() {
-        if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        // if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        // }
+        if (this.APPLY_AMOUN - 0 > this.DAY_QUOTA - 0) {
+          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
         }
       },
       doNext() {
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
-        if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        // if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        //   return
+        // }
+        if (this.APPLY_AMOUN - 0 > this.DAY_QUOTA - 0) {
+          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }
         // if (!this.agree) {

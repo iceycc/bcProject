@@ -30,71 +30,71 @@
               <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>
               <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>
               <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>
-              <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}起购</li>
+              <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
               <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.OPENAPI_BUY_COUNT}}</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="calculation">
-        <div class="calculation-1">
-          <span class="label">我要投资(元)</span>
-          <label class="input" v-show="!canEdit" @click="getFocus">{{investForm}}</label>
-          <input id="input-1" v-model="invest"
-                 placeholder="0.00"
-                 v-if="canEdit"
-                 @blur="canEdit=false"
-                 v-focus
-                 type="tel"
-                 @change="formatNumHandle(invest)"
-          >
+      <!--<div class="calculation">-->
+      <!--<div class="calculation-1">-->
+      <!--<span class="label">我要投资(元)</span>-->
+      <!--<label class="input" v-show="!canEdit" @click="getFocus">{{investForm}}</label>-->
+      <!--<input id="input-1" v-model="invest"-->
+      <!--placeholder="0.00"-->
+      <!--v-if="canEdit"-->
+      <!--@blur="canEdit=false"-->
+      <!--v-focus-->
+      <!--type="tel"-->
+      <!--@change="formatNumHandle(invest)"-->
+      <!--&gt;-->
 
-          <img src="@/assets/images/p-invest@2x.png" @click="getFocus">
-        </div>
-        <div class="calculation-2">
-          <label class="label">参考收益(元)</label>
-          <span>{{this.interest}}</span>
-          <p>参考收益根据当前产品公开市场披露信息进行推算</p>
-        </div>
-      </div>
+      <!--<img src="@/assets/images/p-invest@2x.png" @click="getFocus">-->
+      <!--</div>-->
+      <!--<div class="calculation-2">-->
+      <!--<label class="label">参考收益(元)</label>-->
+      <!--<span>{{this.interest}}</span>-->
+      <!--<p>参考收益根据当前产品公开市场披露信息进行推算</p>-->
+      <!--</div>-->
+      <!--</div>-->
       <div class="contenttop">
         <p>交易规则</p>
-        <div class="bannercontent">
-          <span class="bannercontenttitle">审核方式</span>
-          <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
-        </div>
+        <!--<div class="bannercontent">-->
+        <!--<span class="bannercontenttitle">审核方式</span>-->
+        <!--<span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>-->
+        <!--</div>-->
         <div class="bannercontent">
           <span class="bannercontenttitle">起购金额</span>
           <span
-            class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT | TXT_MIN_AMOUNT_Filter | formatNum}}元</span>
+            class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">递增金额</span>
           <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
         </div>
         <div class="bannercontent">
-          <span class="bannercontenttitle">剩余额度</span>
-          <span class="bannercontenttitlecontent">{{productDetail.REMAIN_AMT | formatNum}} 元</span>
+          <span class="bannercontenttitle">产品类型</span>
+          <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER}}</span>
         </div>
       </div>
-      <div class="wrapicon">
-        <div class="circle left">
-          <span>{{productDetail.COLLECT_START_DATE}}</span>
-          <strong>募集开始</strong>
-        </div>
-        <div class="circle">
-          <span>{{productDetail.COLLECT_END_DATE}}</span>
-          <strong>募集结束</strong>
-        </div>
-        <div class="circle">
-          <span>{{productDetail.VALUE_DATE}}</span>
-          <strong>起息日</strong>
-        </div>
-        <div class="circle right">
-          <span>{{productDetail.FIN_END_DATE}}</span>
-          <strong>到期</strong>
-        </div>
-      </div>
+      <!--<div class="wrapicon">-->
+      <!--<div class="circle left">-->
+      <!--<span>{{productDetail.COLLECT_START_DATE}}</span>-->
+      <!--<strong>募集开始</strong>-->
+      <!--</div>-->
+      <!--<div class="circle">-->
+      <!--<span>{{productDetail.COLLECT_END_DATE}}</span>-->
+      <!--<strong>募集结束</strong>-->
+      <!--</div>-->
+      <!--<div class="circle">-->
+      <!--<span>{{productDetail.VALUE_DATE}}</span>-->
+      <!--<strong>起息日</strong>-->
+      <!--</div>-->
+      <!--<div class="circle right">-->
+      <!--<span>{{productDetail.FIN_END_DATE}}</span>-->
+      <!--<strong>到期</strong>-->
+      <!--</div>-->
+      <!--</div>-->
       <div class="contentmain contenttop">
         <div class="contentmaintop">
           直销银行说明
@@ -105,7 +105,7 @@
           </div>
           <div class="bank-info">
             <p class="info-1">{{productDetail.ORG_NAME}}</p>
-            <p class="info-2">隶属于 {{productDetail.ORG_NAME}} </p>
+            <p class="info-2">隶属于 {{productDetail.ORG_DES}} </p>
             <div class="info-3">
               <img class="start" v-for="i in productDetail.ORG_LEVEL"
                    src="@/assets/images/account_icon_star1.png" alt="">
@@ -168,6 +168,7 @@
   import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
+  import Mixins from "@/mixins";
 
   export default {
     data() {
@@ -200,7 +201,7 @@
         invest: "", // 计算传人
       };
     },
-    mixins: [''],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin,Mixins.CheckAccountMixin],
     computed: {
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
@@ -214,6 +215,7 @@
 
       }
     },
+
     created() {
       this.title = this.$route.query.title;
       this.proID = this.$route.query.id;
@@ -227,6 +229,20 @@
       }
     },
     filters: {
+      PRD_TYPE_ID_FILTER(val) {
+        let str = '产品类型';
+        switch (val - 0) {
+          case 1:
+            str = '货币基金'
+            break;
+          case 2:
+            str = '理财 '
+            break;
+          case 3:
+            str = '纯债'
+        }
+        return str
+      },
       TXT_MIN_AMOUNT_Filter(val) {
         let str = val.toString()
         return str.substring(0, str.length - 1)
@@ -343,12 +359,14 @@
         let data = {
           ID: id + ""
         };
-        API.commonApi.apiGetChannelPrdInfo(data, res => {
+        // API.commonApi.apiGetChannelPrdInfo(data, res => {
+        API.bicai.getPrdInfo(data, res => {
           this.productDetail = res;
+          this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
           // 判断起购金额是否大于默认金额
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
-          this.setComState({type:'PRD_TYPE',value:this.productDetail.PRD_TYPE})
+          this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;
           if (this.productDetail.PRD_TYPE == 2) {
             if (invest > '3000') {
@@ -375,89 +393,33 @@
         });
       },
 
-      goNext(type) {
+      goNext() {
         console.log(this.proID);
         this.removeComState('ProDuctData')
-        let target = this.$route.fullPath;
+        // let target = this.$route.fullPath;
         // 判断登录
-        let data = {
-          // 跳转购买需要的参数
-          PRD_NAME: this.productDetail.PRD_NAME,
-          TXT_MIN_AMOUNT: this.productDetail.TXT_MIN_AMOUNT,
-          REMAIN_AMT: this.productDetail.REMAIN_AMT,
-          INCRE_AMOUNT: this.productDetail.INCRE_AMOUNT,
-          ORG_NAME: this.productDetail.ORG_NAME
+        // let data = {
+        //   // 跳转购买需要的参数
+        //   PRD_NAME: this.productDetail.PRD_NAME,
+        //   MIN_AMOUNT: this.productDetail.MIN_AMOUNT,
+        //   REMAIN_AMT: this.productDetail.REMAIN_AMT,
+        //   INCRE_AMOUNT: this.productDetail.INCRE_AMOUNT,
+        //   ORG_NAME: this.productDetail.ORG_NAME
+        // };
+        let goBuyData = {
+          id: this.proID,
+          logo: this.productDetail.LOGO_URL,
+          ...this.productDetail
         };
-        if (type == 1) {
-          // 去安全购买
-          API.watchApi({
-            FUNCTION_ID: "ptb0A002",
-            REMARK_DATA: "异业合作-产品详情页-购买-安全购买", // 中文备注
-            FROM_ID: this.proID // 产品ID、机构ID
-          });
-          // 购买参数
-          let goBuyData = {
-            id: this.proID,
-            logo: this.productDetail.LOGO_URL,
-            ...data
-          };
-          this.setComState({type:'goBuy',value:goBuyData})
-          this.setComState({type:'loginType',value:'安全购买'})
-
-          // util.storage.session.set(LsName.goBuy, goBuyData);
-          // util.storage.session.set(LsName.loginType, "安全购买"); //
-
-          let HAS_GRADE = this.getComState.HAS_GRADE|| 0;
-          if (HAS_GRADE == 1) {
-            // 未评估
-            Bus.$emit(BusName.showToast, "请先进行评估");
-            this.$router.push({name:PageName.VerificationSuccess})
-
-          } else {
-            // 其他的话  正常
-            this.$router.push({name:PageName.Buying,query:goBuyData})
-          }
-        } else {
-          // 预约 得先登录
-          API.watchApi({
-            FUNCTION_ID: "ptb0A002",
-            REMARK_DATA: "异业合作-产品详情页-购买-预约下期", // 中文备注
-            FROM_ID: this.proID // 产品ID、机构ID
-          });
-          let data = {
-            PRD_TYPE: "2",
-            PRD_NUMBER: this.productDetail.ID + ""
-          };
-          // let sign = util.storage.session.get(LsName.token);
-          let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-          if (TOKEN) {
-            // 正常
-            API.commonApi.apiSaveSubscribeInfo(
-              data,
-              res => {
-                this.$router.push({name:PageName.OrderNextSuccess,query:{
-                    PRD_NAME: this.productDetail.PRD_NAME
-
-                  }})
-              },
-              err => {
-                console.log(err);
-              }
-            );
-          } else {
-            // 未登录
-            Bus.$emit(BusName.showToast, "您还未登录，请先登录");
-            // 预约或者参数
-            this.setComState({type:'ProDuctData',value: Object.assign(data, {PRD_NAME: this.productDetail.PRD_NAME})})
-            this.setComState({type:'loginType',value:'预约下期'})
-            // util.storage.session.set(LsName.loginType, "预约下期");
-            setTimeout(() => {
-              this.$router.push({name:PageName.Login,query:{
-                  target
-                }})
-
-            }, 500);
-          }
+        this.setComState({type: 'goBuy', value: goBuyData})
+        this.setComState({type: 'loginType', value: '安全购买'})
+        let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+        if(TOKEN){
+          // 判断是否注册改银行
+          // 判断该用户在本行的开户状态
+          this.getBankStatus(PageName.Buying)
+        }else {
+          this.$router.push({name: PageName.Buying})
         }
       }
     }
