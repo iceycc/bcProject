@@ -16,19 +16,19 @@
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">购买金额</div>
-        <div class="buysuccessdetailright">{{datas.money}}元</div>
+        <div class="buysuccessdetailright">{{datas.PAY_AMOUT}}元</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易申请日期</div>
-        <div class="buysuccessdetailright">{{datas.OPERA_DATE}}</div>
+        <div class="buysuccessdetailright">{{datas.PAY_DATE}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">预期开始收益日期</div>
-        <div class="buysuccessdetailright">{{datas.EXPECT_PROFIT_DATE}}</div>
+        <div class="buysuccessdetailright">{{datas.INC_DATE}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易流水号</div>
-        <div class="buysuccessdetailright">{{datas.BESHARP_BUY_SEQ}}</div>
+        <div class="buysuccessdetailright">{{datas.BESHARP_SEQ}}</div>
       </div>
 
     </div>
@@ -56,7 +56,7 @@
     },
     methods: {
       goMyAssets(){
-        this.$router.push({name:PageName.FinancialProducts})
+        this.$router.push({name:PageName.BankDetail})
       },
       goBuyOther(){
         this.$router.push({name:PageName.ProductList})

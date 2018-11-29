@@ -5,38 +5,28 @@ export default {
     ORG_NAME: '',
     LOGO_URL: '',
     DESCRIPT: '',
-    BANK_NAME: ''
+    BANK_NAME: '',
+    BANK_BG_URL:''
   },
   // dispatch -> actions
   actions: {
-    // 存储当前访问的银行信息 用于处理业务
-    SET_BANK_INFO({state, commit}, {ORG_ID, ORG_NAME, LOGO_URL, DESCRIPT}) {
-      commit('SET_ORG_ID', ORG_ID)
-      commit('SET_ORG_NAME', ORG_NAME)
-      commit('SET_BANK_LOGO', LOGO_URL)
-      commit('SET_DESCRIPT', DESCRIPT)
-      commit('SET_BANK_NAME', DESCRIPT)
+    //
+    SET_BANL_STATE(){
+
     },
+    // 存储当前访问的银行信息 用于处理业务
+
   },
   // commit-> mutations  直接操作state，与业务无关
   mutations: {
-    SET_ORG_ID(state, ORG_ID) {
-      state.ORG_ID = ORG_ID
-    },
-    SET_ORG_NAME(state, ORG_NAME) {
-      state.ORG_NAME = ORG_NAME
-    },
-    SET_BANK_LOGO(state, LOGO_URL) {
-      state.LOGO_URL = LOGO_URL
-    },
-    SET_DESCRIPT(state, DESCRIPT) {
-      state.DESCRIPT = DESCRIPT
-    },
-    SET_BANK_NAME(state, BANK_NAME) {
-      state.BANK_NAME = BANK_NAME
+    SET_BANK_STATE(state,{type,value}){
+      state[type] = value
     }
   },
   getters: {
+    GET_BANK_STATE:(state)=>{
+      return state
+    },
     GET_BANK_INFO: (state) => {
       return state
     },

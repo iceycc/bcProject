@@ -5,7 +5,10 @@
     <div class="minshengbank">
             <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
-      {{ORG_NAME}}
+      <div class="bank">
+        <p>{{ORG_NAME}}</p>
+        <P>{{CARD_NUM | formatBankNo}}</P>
+      </div>
     </div>
     <div class="rechargetitle">银行卡</div>
     <div class="minshengbank"
@@ -14,7 +17,10 @@
             <span class="minshengbankLogo" style=" padding-top: 10px;">
               <img :src="imgSrc + CARD_BANK_URL" style="width:75%" alt="">
             </span>
-      {{CARD_BANK_NAME}}
+      <div class="bank">
+        <p>{{CARD_BANK_NAME}}</p>
+        <P>{{BANK_USER_CODE | formatBankNo}}</P>
+      </div>
     </div>
     <div class="money">
       <!--<p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p>-->
@@ -23,22 +29,25 @@
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
       <input @change="checkMoney"
-             v-model="APPLY_AMOUN" type="number" placeholder="请输入金额">
+             v-model="APPLY_AMOUNT" type="number" placeholder="充值金额最小为100元">
+      <img
+        v-show="!ifCheckMoneyEmpty"
+        src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
     </section>
     <section class="inputAmount" v-if="!write">
             <span class="Amount">
                 验证码
             </span>
-      <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+      <input type="text" v-model="msgCode" placeholder="输入验证码">
       <button
         :disabled="disable"
         @click="getMsg"
         class="button">{{codeText}}
       </button>
     </section>
-    <button class="tijiao" @click="doNext">确认充值</button>
+    <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认充值</button>
     <p :class="{'bang':true,'no':agree == false}" v-if="!write"
-       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值协议》</span></p>
+       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值委托代扣协议》</span></p>
     <section v-show="page" class="page">
       <div class="docs">
         <iframe :src="agreeMentSrc" class="indocs"></iframe>
@@ -74,6 +83,19 @@
       :show="upseletShow"
       :BankList="mainBankList"
     ></up-select>
+    <section class="w-alert-box" v-if="alertShow">
+      <div class="w-box">
+        <p>{{alertText}}</p>
+        <div class="btn">
+          <button @click="()=>{
+            this.go(-1)
+          }">取消</button>
+          <button @click="()=>{
+            this.alertShow = false
+          }">确认</button>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 <script>
@@ -88,17 +110,18 @@
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
 
-
   let time = 60
   let timer;
   export default {
     data() {
       return {
+        alertText:'',
+        alertShow:false,
         show: false,
         html: '协议',
         page: false,
         PIN: '',
-        APPLY_AMOUN: '',
+        APPLY_AMOUNT: '',
         toUrl: '',
         ifGet: false,
         write: false, // 是否签约
@@ -118,9 +141,25 @@
         upseletShow: false,
         mainBankList: [],
 
-        passCode:'',
-        ACCT_NO:'', // TODO
-        PHONE_NUM:''
+        passCode: '',
+        ACCT_NO: '', // TODO
+        PHONE_NUM: '',
+      }
+    },
+    computed: {
+      ifCheckMoneyEmpty() {
+        if (this.APPLY_AMOUNT) {
+          return false
+        } else {
+          return true
+        }
+      },
+      canClick() {
+        if (this.APPLY_AMOUNT >= 100 && this.msgCode && this.agree) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     components: {
@@ -130,24 +169,26 @@
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
-
       this.reChangeHandele()
     },
     methods: {
-
+      clearNumHandle() {
+        this.APPLY_AMOUNT = ''
+      },
       getMsg() {
-        if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
+        if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
         //
-        // if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
-        //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
-        //   return
-        // }
-        if (this.APPLY_AMOUN - 0 > this.DAY_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 < 100) {
+          Bus.$emit(BusName.showToast, '充值金额最小为100元')
+          return
+        }
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
         }
 
         let times = time
         this.disable = true
+        this.getCode()
         timer = setInterval(() => {
           if (times == 0) {
             this.codeText = '重新发送'
@@ -158,10 +199,34 @@
           times--
           this.codeText = `${times}s`
         }, 1000)
-        this.getCode()
+      },
+      getCode() { //
+        let data = {
+          RECHARGE_AMOUNT: this.APPLY_AMOUNT
+        }
+        // 充值协议
+        API.reChange.rechargeApply(data, res => {
+          this.applyDate = res
+          if (res.ERROR_CODE == 3) {
+            this.alertShow = true
+            this.alertText = res.MSG
+            Bus.$emit(BusName.showSendMsg, '')
+            // Bus.$emit(BusName.showToast, res.MSG)
+            return
+          }
+          Bus.$emit(BusName.showSendMsg, '')
+          // WORKDATE
+          // 平台日期
+          // AGENTSERIALNO
+          // 平台流水号
+        }, err => {
+          this.codeText = '重新发送'
+          this.disable = false
+          clearInterval(timer)
+        })
       },
       showPage() {
-        this.page = true
+        this.$router.push({name: PageName.DocsPage, query: {type: 'recharge'}})
       },
       doAgreeHandle() {
         this.agree = true
@@ -171,21 +236,21 @@
         this.page = false
       },
       checkMoney() {
-        // if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        // if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
         //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
         // }
-        if (this.APPLY_AMOUN - 0 > this.DAY_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
         }
       },
       doNext() {
         console.log(this.write);
-        if (util.Check.trim(this.APPLY_AMOUN, '充值金额', true)) return;
-        // if (this.APPLY_AMOUN - 0 > this.SINGLE_QUOTA - 0) {
+        if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
+        // if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
         //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
         //   return
         // }
-        if (this.APPLY_AMOUN - 0 > this.DAY_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
           Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }
@@ -222,7 +287,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .app .rechargetitle {
+  @import "~@/assets/px2rem";
+
+  .rechargetitle {
     padding-left: 0.5rem;
     height: 0.8rem;
     background: #F6F6F9;
@@ -231,11 +298,21 @@
     font-size: 0.4rem;
   }
 
-  .app .minshengbank {
+  .minshengbank {
     padding-left: 0.5rem;
     height: 1.8rem;
-    line-height: 60px;
-    font-size: 0.5rem;
+    display: flex;
+    .bank {
+      padding-top: px2rem(12);
+      p:first-child {
+        color: #444;
+        font-size: px2rem(16);
+      }
+      p:last-child {
+        color: #9199A1;
+        font-size: px2rem(14);
+      }
+    }
   }
 
   .money {
@@ -246,12 +323,22 @@
     font-size: 0.4rem;
   }
 
-  .app .inputAmount {
+  .inputAmount {
+    position: relative;
     padding-left: 0.5rem;
     height: 1.2rem;
     line-height: 1rem;
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
+    .close-icon {
+      position: absolute;
+      display: inline-block;
+      width: px2rem(15);
+      height: px2rem(15);
+      top: 50%;
+      transform: translateY(-50%);
+      right: px2rem(30);
+    }
     .button {
       vertical-align: middle;
       width: 2.5rem;
@@ -280,19 +367,20 @@
   }
 
   .tijiao {
-    margin-top: 50px;
-    font-size: 0.5rem;
+    font-size: px2rem(18);
     color: #fff;
-    background-color: #508CEE;
-    /* border-radius: 0.1rem; */
+    background: #ccc;
+    border-radius: px2rem(6);
     line-height: 1.2rem;
-    width: 80%;
-    margin: 0 auto;
+    width: px2rem(255);
+    margin: px2rem(40) auto 0;
     text-align: center;
-    margin-top: 0.8rem;
     border: 0px;
     outline: none;
     display: block;
+    &.active {
+      background: #508CEE;
+    }
   }
 
   .bang {
@@ -404,6 +492,39 @@
         text-align: center;
         flex: 1;
       }
+    }
+  }
+  .w-alert-box{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+    background:rgba(0,0,0,0.2);
+    z-index: 100;
+    p{
+      padding: px2rem(10);
+      font-size: px2rem(14);
+    }
+    .btn{
+      text-align: center;
+      button{
+        margin: 0 px2rem(15);
+        /*background: #007aff;*/
+        border: 1px solid #ccc;
+        /*color: #;*/
+        font-size: px2rem(18);
+        border-radius: px2rem(6);
+        width: px2rem(80);
+        height: px2rem(40);
+      }
+    }
+    .w-box{
+      margin: px2rem(250) auto;
+      width: px2rem(280);
+      height: px2rem(150);
+      background: #fff;
+      border-radius: px2rem(6);
     }
   }
 </style>

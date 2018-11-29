@@ -6,12 +6,15 @@ import {version} from '../package'
  */
 let Configs = {
   // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
-  DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit', // 郑州开发环境
-  // DEV_HOST: 'http://192.168.100.151:8080/finsuit', // 郑州开发环境
-  // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // 测试
-  PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',//
-  // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit/' ,// 生产
-  APP_DOWN_URL: 'http://www.baidu.com',
+  // DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit', // dev开发环境
+  DEV_HOST: 'http://192.168.100.109:8080', // 个人
+  // DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // adv测试
+  // DEV_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度测试
+
+  // PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',// adv
+  // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit' ,// 生产/**/
+  PRO_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度生产
+  APP_DOWN_URL: '',
 }
 export const HOST = process.env.NODE_ENV == 'development'
   ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
@@ -51,6 +54,10 @@ export const PageName = {
    */
   TestPage: 'TestPage',
   /**
+   * 登陆
+   */
+  LoginByBicai: 'LoginByBicai',
+  /**
    * main
    */
   // 一期
@@ -85,6 +92,8 @@ export const PageName = {
   BankBalance: 'BankBalance', // 可用余额
   ChangeBank: 'ChangeBank', // 更改银行
   ResetPayPassword: 'ResetPayPassword', // 重制密码
+  ResetPayPasswordApply: 'ResetPayPasswordApply', // 重制密码申请
+  ResetPayPasswordStatus: 'ResetPayPasswordStatus', // 重制密码申请结果
   ResetPhone: 'ResetPhone', // 重制手机号
   MoreService: 'MoreService', // 更多服务
   BankAccount: 'BankAccount', // 安全登陆 ->电子账户
@@ -110,16 +119,18 @@ export const PageName = {
   ChangePayPassword: 'ChangePayPassword',
 
   /**
-   * 众邦银行新增
+   * 银行新增
    */
-  BindingBank:'BindingBank',
+  BindingBank: 'BindingBank',
+  InHanding: 'InHanding',
+  RechargeWait: 'RechargeWait',
   /**
    * 郑州银行 密码控件
    * 原生交互
    */
-  PasswordOneForZhengZhou:'PayPassWord',
-  PasswordThreeForZhengZhou:'PasswordThreeForZhengZhou',
-  PasswordTowForZhengZhou:'PasswordTowForZhengZhou',
+  PasswordOneForZhengZhou: 'PayPassWord',
+  PasswordThreeForZhengZhou: 'PasswordThreeForZhengZhou',
+  PasswordTowForZhengZhou: 'PasswordTowForZhengZhou',
 }
 /**
  * 传值的bus名称
@@ -128,6 +139,7 @@ export const BusName = {
   showToast: 'showToast',
   showLoading: 'showLoading',
   Indicator: 'Indicator',
+  showSendMsg: 'showSendMsg',
 }
 
 /**
@@ -162,10 +174,10 @@ export const ORG_ID_NUM = {
   ZhongBang: '227'
 }
 
-export const CheckBank =function (val) {
+export const CheckBank = function (val) {
   let arr = []
-  Object.keys(ORG_ID_NUM).forEach(function(key){
+  Object.keys(ORG_ID_NUM).forEach(function (key) {
     arr.push(ORG_ID_NUM[key])
   });
-  return arr.indexOf(val)!= '-1';
+  return arr.indexOf(val) != '-1';
 }

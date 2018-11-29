@@ -2,23 +2,17 @@
   <div class="warp">
     <app-bar title="信息填写"></app-bar>
     <section class="wrapicon">
-      <section class="circle">
+      <section class="circle left">
                 <span class="line1">
                     <img :src='stepImg' alt="">
                 </span>
-        <p class="step-text">开户信息验证</p>
+        <span class="step-text">开户信息验证</span>
       </section>
-      <section class="circle">
-                 <span class="line2">
-                    <img :src='stepImg' alt="">
+      <section class="circle right">
+                 <span class="line2 hui">
+                    <img :src='stepImg2' alt="">
                 </span>
-        <p class="step-text">绑定银行卡</p>
-      </section>
-      <section class="circle">
-                 <span class="line3 hui">
-                    <img :src='stepImg3' alt="">
-                </span>
-        <p class="step-text" style="color:#D3D3D3">设置密码</p>
+        <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
       </section>
     </section>
 
@@ -35,8 +29,7 @@
       <section class="input-box">
         <p class="left-p"> 绑定卡卡号</p>
         <input type="number"
-               @blur="checkBankNo(data.CARD_NO)"
-               @input="checkBankName(data.CARD_NO)"
+               @blur="checkBankName(data.CARD_NO)"
                name="backname" placeholder="请输入储蓄卡卡号" v-model="data.CARD_NO">
       </section>
       <section class="input-box">
@@ -58,30 +51,6 @@
     </div>
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <button class="tijiao" @click="goNext">下一步</button>
-
-    <div v-if="ZhengZhouPass" class="bgbox">
-      <!--晋商-->
-      <div class="passbox">
-        <div class="top">
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              请输入郑州银行（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
-            </p>
-            <div class="field_row_value">
-              <pass-word-zhengzhou
-                BankCardPass="bank-passCCCC"
-              ></pass-word-zhengzhou>
-            </div>
-            <p class="info">密码为6位数字</p>
-          </div>
-
-        </div>
-        <div class="btn">
-          <button @click="cancel">取消</button>
-          <button @click="subumit">提交</button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -146,27 +115,24 @@
       }
     },
     created() {
-      if (this.$route.name !== PageName.Opening1) {
-        this.checkBankStatus()
-      }
+      // if (this.$route.name !== PageName.Opening1) {
+      //   this.checkBankStatus()
+      // }
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
       this.tel = this.callbackInfos.PHONE_NUM || ''
-      // this.getBankList()
+      this.getBankList()
     },
     methods: {
       checkBankName(val) {
         this.checkBankName1 = false
+        // this.checkBankType()
         val = val.replace(/\s+/g, "")
         let bankName
-        for (var i = 3; i < 10; i++) {
+        for (var i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
-
-            if (bankName != this.bankText) {
-              // Bus.$emit(BusName.showToast, '您输入的银行卡号和选择的银行名称不匹配')
-              this.checkBankName1 = true
-              return
-            }
+            this.bankText = bankName
+            console.log('bankName', bankName);
             break
           }
         }
@@ -284,18 +250,26 @@
   }
 
   .wrapicon {
-    text-align: center;
     display: flex;
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+    .step-text {
+      padding-top: px2rem(7);
+    }
     .circle {
       flex: 1;
       display: flex;
       flex-direction: column;
-    }
-    .step-text {
-      padding-top: px2rem(7);
+      &.left{
+        text-align: left;
+        padding-left:px2rem(30) ;
+      }
+
+      &.right{
+        text-align: right;
+        padding-right:px2rem(30) ;
+      }
     }
 
     .line1, .line2, .line3 {
@@ -310,7 +284,7 @@
         right: 0;
         transform: translateY(-100%);
         content: '';
-        width: 45%;
+        width: 90%;
         background: #92d048;
         height: .1rem;
         overflow: hidden;
@@ -332,7 +306,7 @@
         display: block;
         position: absolute;
         top: 50%;
-        right: 0;
+        right: px2rem(10);
         transform: translateY(-100%);
         content: '';
         width: 45%;
@@ -366,65 +340,5 @@
     }
   }
 
-  .bgbox {
-    width: 100%;
-    height: 100%;
-    background: rgba(1, 1, 1, .7);
-    position: absolute;
-    padding-top: px2rem(100);
-    top: 0;
-    left: 0;
-    .passbox {
-      background: #fff;
-      width: 80%;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-    .top {
-      padding: 0.4rem;
-    }
-    .field_row_key {
-      font-size: 0.4rem;
-    }
-    .title {
-      margin-bottom: 0.5rem;
-      text-align: center;
-      font-size: 0.4rem;
-      color: #666;
-      height: .6rem;
-      line-height: .6rem;
-      img {
-        vertical-align: top;
-        width: .5rem;
-      }
-    }
-    .field_row_wrap {
-      margin-bottom: 0.2rem;
-    }
-    .field_row_value {
-      border-radius: px2rem(4);
-      border: 1px solid #DDD;
-      height: px2rem(34);
-      line-height: px2rem(34);
-      padding-left: px2rem(3);
-      margin: 0.2rem 0;
-    }
-    .info {
-      font-size: 0.3rem;
-      line-height: 0.6rem;
-      color: #aeaeae;
-    }
-    .btn {
-      border-top: 1px solid #efefef;
-      padding: px2rem(14) 0;
-      display: flex;
-      button {
-        color: #108EE9;
-        font-size: px2rem(17);
-        margin: 0 .3rem;
-        text-align: center;
-        flex: 1;
-      }
-    }
-  }
+
 </style>

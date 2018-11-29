@@ -1,18 +1,18 @@
 <template>
   <div class="wrap pro">
     <div class="w-top">
-      <app-bar title="活期存款"></app-bar>
+      <app-bar title="存款产品" :ifShow="false"></app-bar>
       <div></div>
       <div class="f-box">
         <div class="profit">
           <div>
-            <p>{{financialData.ACC_REST | formatNum}}</p>
+            <p>{{financialData.TOTAL_ASSET -financialData.ACC_REST | formatNum}}</p>
             <p>总资产</p>
           </div>
           <span class="line"></span>
           <div>
-            <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p>利息</p>
+            <p>{{financialData.TOTAL_INCOME>=0 ? '+':''}}{{financialData.TOTAL_INCOME | formatNum}}</p>
+            <p>昨日收益</p>
           </div>
         </div>
       </div>
@@ -23,12 +23,12 @@
             :class="{active:index==nowIndex}">{{item}}
         </li>
       </ul>
-      <div class="divTab" v-show="nowIndex===0">
+      <div class="divTab">
         <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">
             <div style="padding-bottom: 20px">
-              <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
+              <div v-if="nowIndex===0" class="divTab-1" v-for="(item,index) in pageList" :key="index">
                 <!-- 新加明细按钮 -->
                 <span class="detail" @click="geDetails(item)">明细</span>
                 <h4>
@@ -36,7 +36,6 @@
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
                 <p>隶属于{{item.ORG_NAME}}</p>
-                <!--todo 这三个参数现在还不对别忘记改-->
                 <p>净利息
                   <span>{{item.ADD_INCOME | formatNum}}</span>
                 </p>
@@ -47,7 +46,7 @@
                   <span>{{item.RATE}}%</span>
                 </p>
                 <p>存入天数
-                  <span>{{item.INC_DATE}}</span>
+                  <span>{{item.ACTUAL_DATE_NUM}}天</span>
                 </p>
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
@@ -55,40 +54,41 @@
                     <span @click="goRedeem(item)">支取</span>
                   </div>
                   <div>
-                    <span>继续存入</span>
+                    <span @click="goBuy(item)">继续存入</span>
                   </div>
                 </div>
               </div>
-            </div>
-          </v-loadmore>
-        </div>
-      </div>
-      <div class="divTab" v-show="nowIndex===1">
-        <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-          <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
-                      :auto-fill="false" ref="loadmore1">
-            <div class="divTab-1" v-for="(item,index) in pageList1" :key="index">
-              <!-- 新加明细按钮 -->
-              <span class="detail">明细</span>
-              <h4>
-                <strong>{{item.PRD_NAME}}</strong>
-                <!-- <router-link to="/TransactionDetails">明细</router-link> -->
-              </h4>
-              <p>隶属于{{item.ORG_NAME}}</p>
-              <p>本金金额（元）
-                <span>{{item.HOLD_AMOUNT | formatNum}}</span>
-              </p>
-              <p>实际收益金额
-                <span>{{item.ADD_INCOME | formatNum}}</span>
-              </p>
-              <p>支取时间
-                <span>{{item.ADD_INCOME | formatNum}}</span>
-              </p>
-            </div>
-          </v-loadmore>
-        </div>
+              <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList" :key="index">
+                <!-- 新加明细按钮 -->
+                <span class="detail">明细</span>
+                <h4>
+                  <strong>{{item.PRD_NAME}}</strong>
+                  <!-- <router-link to="/TransactionDetails">明细</router-link> -->
+                </h4>
+                <p>隶属于{{item.ORG_NAME}}</p>
+                <p>本金金额（元）
+                  <span>{{item.HOLD_AMOUNT | formatNum}}</span>
+                </p>
+                <p>实际收益金额
+                  <span>{{item.ADD_INCOME | formatNum}}</span>
+                </p>
+                <p>支取时间
+                  <span>{{item.OVER_DATE}}</span>
+                </p>
+              </div>
 
+            </div>
+          </v-loadmore>
+        </div>
       </div>
+      <!--<div class="divTab" v-show="nowIndex===1">-->
+      <!--<div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">-->
+      <!--<v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"-->
+      <!--:auto-fill="false" ref="loadmore1">-->
+      <!--</v-loadmore>-->
+      <!--</div>-->
+
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -130,7 +130,7 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList1: [
+        pageList: [
           // {
           //   PRD_NAME:'测试产品1',
           //   ORG_NAME:'郑州银行',
@@ -168,6 +168,11 @@
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
     methods: {
+      goBuy(item) {
+
+        this.setComState({type: 'goBuy', value: item})
+        this.$router.push({name: PageName.Buying})
+      },
       geDetails(item) {
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
@@ -180,6 +185,7 @@
         this.$router.push({name: PageName.Redeem})
       },
       toggleTabs(index) {
+        this.pageList = []
         this.nowIndex = index;
         this.loadPageList();
       },
@@ -197,21 +203,13 @@
         //下拉加载
         console.log('下拉加载');
         this.loadPageList();
-        if (this.nowIndex == 1) {
-          this.$refs.loadmore1.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        } else {
-          this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        }
+        this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
       loadBottom: function () {
         // 上拉加载
         console.log('上拉加载');
         this.more(); // 上拉触发的分页查询
-        if (this.nowIndex == 1) {
-          this.$refs.loadmore1.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        } else {
-          this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        }
+        this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
       loadPageList: function () {
         // 初始化
@@ -219,21 +217,28 @@
         this.searchCondition1.pageNo = "1";
         this.allLoaded = false;
         // 查询数据
-
+        let data = {
+          currentPage: this.searchCondition1.pageNo + '',
+          PRD_TYPE: "4"
+        };
         //   alert(this.nowIndex);
         if (this.nowIndex == 1) {
           //已到期数据
-          let data = {
-            currentPage: this.searchCondition1.pageNo,
-            PRD_TYPE: "4"
-          };
+          // let data = {
+          //   currentPage: this.searchCondition1.pageNo - 1,
+          //   PRD_TYPE: "4"
+          // };
           API.bank.getMyInvestOver(data, res => {
-
-            this.pageList1 = res.PAGE.retList || [];
-            if (this.pageList1.length == 0) {
+            if (!res.PAGE) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+              return
+            }
+            this.pageList = res.PAGE.retList || [];
+            if (this.pageList.length == 0) {
               // this.allLoaded = true;
             }
-            //    if (this.pageList1.length <= 0) {
+            //    if (this.pageList.length <= 0) {
             //     Bus.$emit(BusName.showToast, "暂无数据");
             //    }
             this.$nextTick(function () {
@@ -244,12 +249,17 @@
             });
           });
         } else {
-          //持有数据
-          let data = {
-            currentPage: this.searchCondition.pageNo,
-            PRD_TYPE: "4"
-          };
+          // //持有数据
+          // let data = {
+          //   currentPage: this.searchCondition.pageNo - 1,
+          //   PRD_TYPE: "4"
+          // };
           API.bank.apiQryHoldInfo(data, res => {
+            if (!res.PAGE) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+              return
+            }
             this.pageList = res.PAGE.retList;
             // this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -269,22 +279,28 @@
       },
       more: function () {
         if (this.nowIndex == 1) {
-          // 已到期分页查询
+          // 未到期分页查询
           this.searchCondition1.pageNo =
             "" + (parseInt(this.searchCondition1.pageNo) + 1);
           let data = {
             currentPage: this.searchCondition1.pageNo,
             PRD_TYPE: "2"
           };
-          API.bank.apiQryHoldInfo(data, res => {
-            this.pageList1 = this.pageList1.concat(res.retList);
-            if (this.pageList1.length < this.searchCondition1.pageSize) {
+          API.bank.getMyInvestOver(data, res => {
+            if (!res.PAGE) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+              return
+            }
+            this.pageList = res.PAGE.retList || [];
+            this.pageList = this.pageList.concat(this.pageList);
+            if (this.pageList.length < this.searchCondition1.pageSize) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
           });
         } else {
-          // 已持有分页查询
+          // 持有分页查询
           this.searchCondition.pageNo =
             "" + (parseInt(this.searchCondition.pageNo) + 1);
           let data = {
@@ -292,7 +308,13 @@
             PRD_TYPE: "2"
           };
           API.bank.apiQryHoldInfo(data, res => {
-            this.pageList = this.pageList.concat(res.retList);
+            if (!res.PAGE) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+              return
+            }
+            this.pageList = res.PAGE.retList || [];
+            this.pageList = this.pageList.concat(this.pageList);
             if (this.pageList.length < this.searchCondition.pageSize) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
@@ -306,9 +328,9 @@
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
 
-  .pro .header img {
-    display: none;
-  }
+  /*.pro .header .goBackImg {*/
+  /*display: none !important;*/
+  /*}*/
 
   i {
     font-style: normal;
@@ -488,7 +510,7 @@
   .main-body {
     overflow-y: auto;
     box-sizing: border-box;
-    padding-bottom: px2rem(50);
+    /*padding-bottom: px2rem(50);*/
   }
 
 </style>

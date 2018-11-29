@@ -1,7 +1,8 @@
 (function(t, e) {
   "use strict";
-  // var host = 'http://192.168.100.247:11050/getPasswordKeyboard'
-  var host = 'https://finsuitdev.udomedia.com.cn/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  // var host = 'https://adv.udomedia.com.cn/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  // var host = 'https://finsuit.udomedia.com.cn/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  var host = 'https://graytest.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
 
   var i = {};
   var reset = {

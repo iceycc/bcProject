@@ -26,7 +26,6 @@ export default {
     // /openapi/comm/apiQryLoginStatus
     // 查询是否该银行的登陆 开户 等状态
     apiQryLoginStatus(params, success, error) {
-      params.PHONE_NUM = '15621185521'
       let options = {
         url: '/openapi/comm/apiQryLoginStatus',
         params ,
@@ -35,7 +34,6 @@ export default {
     },
     // 获取短信验证码  ifHave=y
     apiSendPhoneCode(params, success, error) {
-      params.PHONE_NUM = '15621185521'
       let options = {
         url: '/openapi/comm/apiSendPhoneCode',
         params ,
@@ -225,7 +223,7 @@ export default {
    * risk 风险评估相关
    */
   risk: {
-    //  查看风险测评
+    //  查看银行测评\\\
     apiGetRiskEvalRes(params, success, error) {
       let options = {
         url: '/openapi/comm/apiGetRiskEvalRes',
@@ -243,6 +241,17 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
+    // /openapi/comm/apiRiskGrade
+    //
+    apiRiskGrade(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiRiskGrade',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+
     //  风险测评提交 openapi/comm/apiRiskEvalution
     apiRiskEvalution(params, success, error) {
       let options = {
@@ -259,9 +268,9 @@ export default {
    *  安全相关
    */
   safe: {
-    // 36.	重置交易密码审核申请
+    // 1.	重置交易密码审核申请
     // /openapi/zzh/biz/apiTransactionPasswordAudit
-    resetTransactionPassword(params, success, error) {
+    apiTransactionPasswordAudit(params, success, error) {
       let options = {
         url: '/openapi/zzh/biz/apiTransactionPasswordAudit',
         params,
@@ -269,9 +278,9 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 35.	重置交易密码申请审核查询
+    // 2.	重置交易密码申请审核查询
     // openapi/zzh/biz/apiUserPasswordModification
-    apiTransactionPasswordAudit(params, success, error) {
+    apiUserPasswordModification(params, success, error) {
       let options = {
         url: '/openapi/zzh/biz/apiUserPasswordModification',
         params,
@@ -279,7 +288,16 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 37.	文件上传
+    // 3.	重置交易密码 /openapi/comm/resetTransactionPassword
+    resetTransactionPassword(params, success, error) {
+      let options = {
+        url: '/openapi/comm/resetTransactionPassword',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+    // 	文件上传
     // openapi/zzh/biz/apiBankUserFileUpload
     apiBankUserFileUpload(params, success, error) {
       let options = {

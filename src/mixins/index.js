@@ -14,13 +14,17 @@ const StoreMixin = {
     ...mapMutations({
       setComState: 'SET_COMMON_STATE',
       removeComState: 'REMOVE_COMMON_STATE',
-      setOpenState: 'SET_OPEN_STATE'
+      setOpenState: 'SET_OPEN_STATE',
+      setAccState: 'SET_ACCOUNT_STATE',
+      setBankState:'SET_BANK_STATE'
     })
   },
   computed: {
     ...mapGetters({
       getComState: 'GET_COMMON_STATE',
-      getOpenState: 'GET_OPEN_STATE'
+      getOpenState: 'GET_OPEN_STATE',
+      getAccState: 'GET_ACCOUNT_STATE',
+      getBankState:'GET_BANK_STATE'
     })
   }
 }
@@ -125,7 +129,8 @@ const UtilMixin = {
     queryStatus({
                   text = '等待中...', // 轮询等待提示
                   data, // 轮询参数
-                  fn // 轮询回调
+                  fn ,// 轮询回调
+                  time = 5
                 }) {
       this.Londing.open({
         text: text
@@ -139,7 +144,7 @@ const UtilMixin = {
         }, err => {
           clearInterval(timer)
         })
-        if (i == 5) {
+        if (i == time) {
           clearInterval(timer)
           this.Londing.close()
           return

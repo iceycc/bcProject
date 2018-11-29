@@ -15,14 +15,18 @@ export default {
   // REQUEST
   request: function (method, {url, params}, config, success, error) {
     method = method || 'post';
-    let {TOKEN,DEVICE_ID,CHANNEL_ID} = store.getters.GET_ACCOUNT_STATE
+    let {APP_FLAG,TOKEN,DEVICE_ID,CHANNEL_ID} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       head: {
         TYPE: "BATCH_RECORD_FUNCTION_LOG_INFO",
         TOKEN: TOKEN,
         SESSION_ID: "",
         DEVICE_ID: DEVICE_ID + '',
-        CHANNEL_TYPE: 'H5'
+        CHANNEL_TYPE: 'H5',
+
+        SYSTEM_TYPE: "h5",
+        CHANNEL_ID: CHANNEL_ID + '',
+        APP_FLAG: APP_FLAG
       },
       param: {
         CHANNEL_ID: CHANNEL_ID + '',

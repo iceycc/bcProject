@@ -43,7 +43,7 @@ export default {
         REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
       })
       this.$store.commit('SET_OPENING1_DATA', this.data)
-      this.ORG_ID = util.storage.session.get('ORG_ID')  || ''
+      this.ORG_ID = util.storage.session.get('ORG_ID') || ''
 
       // this.ORG_ID = this.$store.getters.GET_ORG_ID
       this.doOpengingFirst()
@@ -98,6 +98,9 @@ export default {
         this.data.ADDRESS = res.ADDRESS
         this.data.MEMBER_ID = res.MEMBER_ID
         this.data.PHONE_NUM = res.PHONE_NUM
+        if(res.PERIOD){
+          this.data.USER_CARD_ID_DATA = res.PERIOD
+        }
         // this.checkID()
         // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
       })
@@ -121,7 +124,14 @@ export default {
     // 1 实名认证
     doOpengingFirst() {
       // todo 校验
-
+      if(!this.agree){
+        Bus.$emit(BusName.showToast,'请同意相关协议')
+        return
+      }
+      if(!this.data.USER_DUTY){
+        Bus.$emit(BusName.showToast,'请选择职业')
+        return
+      }
       let params = {
         MEMBER_ID: this.data.MEMBER_ID,
         TYPE: 'API_REGISTER_VALI_USER',
@@ -141,11 +151,14 @@ export default {
         // 保存第一步的数据
         this.setComState({type: 'openingState', value: {...res, ...params}})
         // 回显是否实名成功
-        this.checkBankStatus() //
-        // this.$router.push({name:PageName.Opening2})
+        // this.checkBankStatus() //
+        this.$router.push({name:PageName.Opening2})
+      }, err => {
+        setTimeout(() => {
+          this.checkBankStatus() //
+        },1000)
       })
     },
-
   }
 }
 

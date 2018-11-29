@@ -13,7 +13,7 @@
       <!--BindingBank-->
       <section v-if="DOM_SHOW.BindingBank" class="more" @click="goPage(toPageName.BindingBank)">
              <span class="more-left">
-                        绑定银行卡管理</span>
+                        银行卡管理</span>
         <span class="more-right">
                     已绑定{{CARD_BANK_NAME}}
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
@@ -41,6 +41,7 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
+
     </section>
   </div>
 </template>
@@ -61,12 +62,12 @@
     data() {
       return {
         // 功能展示
-        DOM_SHOW:{
-          fenxiang:false,
-          ChangeBank:false,
+        DOM_SHOW: {
+          fenxiang: false,
+          ChangeBank: false,
           BindingBank: true,
-          ResetPhone:true,
-          ResetPayPassword:false
+          ResetPhone: false,
+          ResetPayPassword: false
         },
         RISK_TOLERANCE_LEVEL: '',
         CARD_BANK_NAME: '',
@@ -78,7 +79,8 @@
           ResetPayPassword: PageName.ResetPayPassword,
         },
         PHONE_NUM: '',
-        fenxianQuery: {}
+        fenxianQuery: {},
+
       }
     },
     created() {
@@ -110,6 +112,10 @@
       }
     },
     methods: {
+      getBankInfo() {
+        let OldBankInfo = this.getComState.Infos.hasCardList[0]
+        this.CARD_BANK_NAME = OldBankInfo.BANK_NAME
+      },
       goPage(pageName) {
         let data = {}
         console.log(pageName);
@@ -128,36 +134,13 @@
       },
       getInfos() {
 
-        this.getRiskGrade()
-        // this.getBankCardInfo()
+        // this.getRiskGrade()
+        this.getBankInfo()
       },
       //  获取风险测评结果
-      getRiskGrade(){
+      getRiskGrade() {
         // API.risk.apiRiskGrade({},res=>{})
       },
-      getBankCardInfo(){
-        let data = {}
-        API.safe.apiBandCard(data, (res) => {
-          this.setComState({
-            type: 'Infos',
-            value: {
-              PHONE_NUM: res.PHONE_NUM,
-              USER_CARD_ID: res.USER_CARD_ID,
-              USER_NAME: res.USER_NAME
-            }
-          })
-          this.RISK_TOLERANCE_LEVEL = res.RISK_TOLERANCE_LEVEL
-          this.CARD_BANK_NAME = res.CARD_BANK_NAME
-          this.toPageName.fenxian = res.HAS_GRADE == 2
-            ? PageName.FengxianResult : PageName.Riskassessment
-          this.fenxianQuery = {
-            RISK_LEV_EXPLAIN: res.RISK_LEV_EXPLAIN,
-            RISK_TOLERANCE_DESC: res.RISK_TOLERANCE_DESC, //
-            RISK_TOLERANCE_SCORE: res.RISK_TOLERANCE_SCORE, // 分数
-          }
-
-        })
-      }
     }
 
   }

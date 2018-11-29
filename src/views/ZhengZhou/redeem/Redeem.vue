@@ -14,6 +14,9 @@
         <div class="number">
           <i v-show="isFocus">￥</i>
           <input type="number" @focus="focus" @blur="blur" :placeholder="placeholder" v-model="money">
+          <img
+            v-show="!ifCheckMoneyEmpty"
+            src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
         </div>
         <div class="all" @click="selectAll">全部赎回</div>
       </div>
@@ -32,7 +35,7 @@
     </div>
     <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">赎回</button>
     <div class="r-agreement">
-      立即赎回代表您已阅读并同意<span>《“日添利-博时基金 ”产品业务服务协议》</span>
+      立即赎回代表您已阅读并同意<span @click="goPage">《“日添利-博时基金 ”产品业务服务协议》</span>
     </div>
     <div class="r-caption">
       <p>温馨提示：</p>
@@ -63,7 +66,7 @@
       <div class="info">工作日15:30之前发起成功的普通赎回到账时间为下一个工作日16:30后到账，工作日15:00之后以及非工作日发起成功的普通赎回申请视为下一个工作日发起的交易申请。是否进行普通赎回？
       </div>
       <div class="cofirm-btn">
-        <div>取消</div>
+        <div @click="normalShow = false">取消</div>
         <div @click="sure">确定</div>
       </div>
     </div>
@@ -109,7 +112,6 @@
         typeShow: false,
         cur: '0',
         money: '',
-        typeText: '快速赎回',
         normalShow: false,
         availBtn: false,
         redeemData: {
@@ -120,17 +122,35 @@
 
         passCode: '',
         len: '',
-        pass: ''
+        pass: '',
+        num: '',
+
       }
     },
     computed: {
+      typeText() {
+        // typeText: '快速赎回',
+        if (this.cur == 0) {
+          return '快速赎回'
+        }
+        if (this.cur == 1) {
+          return '普通赎回'
+        }
+      },
+      ifCheckMoneyEmpty() {
+        if (this.money) {
+          return false
+        } else {
+          return true
+        }
+      },
       // placeholder:'
       placeholder() {
-        let num = this.redeemData.HOLD_AMOUNT
-        return `最多可赎回金额${util.formatNum(num)}元`
+        this.num = this.redeemData.HOLD_AMOUNT
+        return `最多可赎回金额${util.formatNum(this.num)}元`
       }
     },
-    mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     watch: {
       money(n, o) {
         if (n && n - 0 > 0) {
@@ -147,7 +167,9 @@
       PassWordZhengzhou
     },
     methods: {
-
+      clearNumHandle() {
+        this.money = ''
+      },
       focus() {
         this.isFocus = true;
       },
@@ -162,7 +184,7 @@
       chooseType(val, e) {
         // 普通赎回需要弹出层
         this.cur = val; // 1 普通赎回  0 快速赎回
-        this.typeText = e.target.innerText;
+        // this.typeText = e.target.innerText;
         this.typeShow = false;
       },
       selectAll() {
@@ -170,19 +192,34 @@
         this.money = this.redeemData.HOLD_AMOUNT
       },
       showPass() {
-        if (this.cur == 1) {
+        console.log(this.num);
+        console.log(this.money);
+        if (this.money - 0 > this.num - 0) {
+          Bus.$emit(BusName.showToast, '赎回金额不足')
+          return
+        }
+        if (this.cur == 1) { // 普通赎回
+
           this.normalShow = true
-        } else {
+        } else { // 快速赎回
+          if (this.money - 0 > 10000) {
+            Bus.$emit(BusName.showToast, '每天快速赎回额度为1万元，请调整赎回额度')
+            return
+          }
           this.show = true
         }
       },
       doPay() {
         this.redeemHandle()
       },
+      goPage() {
+        this.$router.push({name: PageName.DocsPage, query: {type: 'buy'}})
+      },
       redeemHandle() {
         this.pass = $("#payPasscAAAc").getKBD(); //获取密码
         this.len = $("#payPasscAAAc").getLenKBD(); //获取密码长度
         this.passCode = $("#payPasscAAAc").getBDCode(); //获取密码长度
+
         let data = {
           TYPE: 'API_REDEMPTION',
           PRD_ID: this.redeemData.PRD_INDEX_ID, //  产品索引
@@ -190,13 +227,13 @@
           PRD_TYPE: this.redeemData.PRD_TYPE,//  产品类型 1货币基金，2理财产品，3纯债基金
           // FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
           FUND_TYPE: this.redeemData.PRD_TYPE, // 基金种类:1-货币基金;2-非货币基金
-          APPLY_AMOUNT: this.money, // 赎回金额
+          APPLY_AMOUNT: util.fromatMoney(this.money), // 赎回金额
           REDEEM_TYPE: this.redeemData.PRD_TYPE == 1 ? this.cur : "1", // TODO  赎回类型 赎回类型(1 为普通赎回，0 为 D+0 赎回)非 货币只有普通赎回
           FUND_TRANS_TYPE: '2', // 基金交易类型（1:申购，2:赎回）
           PREFIX: this.passCode, // 输入密码
           BANK_PAY_PW: this.pass, // 赎回密码
         }
-        this.show =false
+        this.show = false
 
         API.redeem.apiRedemption(data, res => {
           console.log(res);
@@ -230,20 +267,20 @@
                   this.$router.push({
                     name: PageName.RedeemSuccess,
                     query: {
-                      money: this.APPLY_AMOUN,
-                      ...res
+                      money: this.money,
+                      ...result
                     }
                   })
                 } else {
                   clearInterval(timer)
                   // if (count == 5) {
-                    Bus.$emit(BusName.showToast, result.RES_MSG);
-                    this.$router.push({
-                      name: PageName.RedeemFailure,
-                      query: {
-                        err: result.RES_MSG
-                      }
-                    })
+                  Bus.$emit(BusName.showToast, result.RES_MSG);
+                  this.$router.push({
+                    name: PageName.RedeemFailure,
+                    query: {
+                      err: result.RES_MSG
+                    }
+                  })
                   // }
                 }
               }
@@ -297,8 +334,18 @@
       justify-content: space-between;
       align-items: center;
       .number {
+        position: relative;
         width: px2rem(250);
         font-size: px2rem(24);
+        .close-icon {
+          position: absolute;
+          display: inline-block;
+          width: px2rem(15);
+          height: px2rem(15);
+          top: 50%;
+          transform: translateY(-50%);
+          right: px2rem(10);
+        }
         input {
           width: 80%;
           font-size: px2rem(24);

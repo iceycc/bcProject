@@ -4,7 +4,7 @@
       <app-bar title="交易明细"></app-bar>
       <ul class="tabs">
         <!--<li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"-->
-            <!--:class="{active:index==nowIndex}">{{item}}-->
+        <!--:class="{active:index==nowIndex}">{{item}}-->
         <!--</li>-->
       </ul>
     </div>
@@ -40,13 +40,14 @@
                 <!--BANLANCE  余额  Decimal(15,2)-->
                 <!--字符-->
                 <li v-for="(item,index) in pageList" :key="index">
-                  <h5 style="display: flex">
-                    <span style="flex: 1">{{item.ABS_INFO}}</span>
-                    <span style="width: 40%;text-align: right">{{item.TYPE_NAME}}</span>
+                  <h5 style="display: flex;color: #E62224">
+                    <!--<span style="flex: 1">{{item.ABS_INFO}}</span>-->
+                    <span style="flex: 1">{{item.TYPE_NAME}}</span>
+                    <!--<span style="width: 40%;text-align: right">{{item.TYPE_NAME}}</span>-->
                   </h5>
                   <p>
                     <span>{{item.TRANS_DATE }}</span>
-                    <em>{{item.TRANS_AMT | formatNum}}</em>
+                    <em>{{item.TYPE_NAME=='支出'?'-':'+'}}{{item.TRANS_AMT | formatNum}}</em>
                   </p>
                 </li>
 
@@ -150,19 +151,19 @@
 
           // PRD_INDEX_ID:'',
           // currentPage: this.searchCondition.pageNo,
-          currentPage:"0" ,
+          currentPage: "0",
           // START_DATE: '2020-08-26',
           // END_DATE: '2020-08-27',
           // START_DATE: this.startDate,
           // END_DATE: this.endDate,
-          TYPE:'API_QRY_ELE_TRANS_DETAIL',
-          pagenum:'10',
-          pageflag:'4'
+          TYPE: 'API_QRY_ELE_TRANS_DETAIL',
+          pagenum: '10',
+          pageflag: '4'
 
         };
         API.bank.apiQryEleTransDetail(data, res => {
           this.pageList = this.pageList.concat(res.PAGE.retList);
-          if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+          if (res.PAGE.currentPage  == res.PAGE.totalPage) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
           }
@@ -181,14 +182,14 @@
         // START_DATE	开始日期
         // END_DATE	结束日期
         let data = {
-          currentPage:"0" ,
+          currentPage: "0",
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
           // START_DATE: '2020-08-26',
           // END_DATE: '2020-08-27',
           // START_DATE: start,
           // END_DATE: end,
-          pagenum:'10',
-          pageflag:'4'
+          pagenum: '10',
+          pageflag: '4'
         };
         API.bank.apiQryEleTransDetail(data, res => {
           this.pageList = res.PAGE.retList;

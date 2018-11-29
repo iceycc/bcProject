@@ -1,48 +1,59 @@
 <template>
   <div class="bgbox">
-    <app-bar title="重置支付密码" class="m-header"></app-bar>
+    <app-bar title="更换支付密码" class="m-header"></app-bar>
     <div class="top">
-        <div class="field_row_wrap">
-          <p class="field_row_key">
-            原密码
+      <div class="field_row_wrap">
+        <p class="field_row_key" @click="oldPassShow =true" v-if="!oldPassShow">
+          <span class="left">原密码</span>
+          <span class="right">密码由6位数字组成</span>
+        </p>
+        <transition name="fade">
+          <p class="field_row_key low" v-if="oldPassShow">
+            <span class="left">原密码</span>
           </p>
-          <div class="field_row_value">
-            <pass-word-zhengzhou
-              BankCardPass="payPasscc1"
-            ></pass-word-zhengzhou>
-          </div>
-          <p class="info">密码由6位数字组成</p>
-        </div>
-
-        <div class="field_row_wrap">
-          <p class="field_row_key">
-            新密码
-          </p>
-          <div class="field_row_value">
-            <pass-word-zhengzhou
-              BankCardPass="payPasscc2"
-            ></pass-word-zhengzhou>
-          </div>
-
-          <p class="info">密码由6位数字组成</p>
-        </div>
-        <div class="field_row_wrap">
-          <p class="field_row_key">
-            重复新密码
-          </p>
-          <div class="field_row_value">
-            <pass-word-zhengzhou
-              BankCardPass="payPasscc3"
-            ></pass-word-zhengzhou>
-          </div>
-
-          <p class="info">密码由6位数字组成</p>
+        </transition>
+        <div class="field_row_value" v-show="oldPassShow">
+          <pass-word-zhengzhou
+            BankCardPass="payPasscc1"
+          ></pass-word-zhengzhou>
         </div>
       </div>
-      <div class="btn">
-        <button @click="close">取消</button>
-        <button @click="submit">确定</button>
+      <div class="field_row_wrap">
+        <p class="field_row_key" @click="newPassShow =true" v-if="!newPassShow">
+          <span class="left">新密码</span>
+          <span class="right">密码由6位数字组成</span>
+        </p>
+        <transition name="fade">
+          <p class="field_row_key low" v-if="newPassShow">
+            <span class="left">新密码</span>
+          </p>
+        </transition>
+        <div class="field_row_value" v-show="newPassShow">
+          <pass-word-zhengzhou
+            BankCardPass="payPasscc2"
+          ></pass-word-zhengzhou>
+        </div>
       </div>
+      <div class="field_row_wrap">
+        <p class="field_row_key" @click="preNewPassShow =true" v-if="!preNewPassShow">
+          <span class="left">重复新密码</span>
+          <span class="right">请重复输入新密码</span>
+        </p>
+        <transition name="fade">
+          <p class="field_row_key low" v-if="preNewPassShow">
+            <span class="left">重复新密码</span>
+          </p>
+        </transition>
+        <div class="field_row_value" v-show="preNewPassShow">
+          <pass-word-zhengzhou
+            BankCardPass="payPasscc3"
+          ></pass-word-zhengzhou>
+        </div>
+      </div>
+    </div>
+    <div class="btn">
+      <button @click="submit" :class="{active:canClick}" :disabled="!canClick">确定</button>
+    </div>
   </div>
 </template>
 
@@ -52,7 +63,22 @@
   export default {
     data() {
       return {
-        show: true
+        show: true,
+        oldPassShow: false,
+        newPassShow: false,
+        preNewPassShow: false,
+        len1: 0,
+        len2: 0,
+        len3: 0
+      }
+    },
+    computed: {
+      canClick() {
+        if (this.len1 > 0 && this.len2 > 0 && this.len3 > 0) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     components: {
@@ -62,9 +88,20 @@
     created() {
       this.winLoad()
     },
-    mounted(){
+    mounted() {
       $('#PWDKBD').remove();
       $(window).loadKBD();
+      let _this = this
+      jQuery.fn.extend({
+        validKBD: function () {
+          console.log('Input的onchange事件');
+          //类似Input的onchange事件，写密码检验
+          _this.len1 = $("#payPasscc1").getLenKBD() + ''//获取密码长度
+          _this.len2 = $("#payPasscc2").getLenKBD() + ''//获取密码长度
+          _this.len3 = $("#payPasscc3").getLenKBD() + ''//获取密码长度
+
+        }
+      })
     },
     methods: {
       close() {
@@ -101,7 +138,7 @@
         console.log(newPass);
         console.log(reNewPass);
         let threePasswordObj = {
-          oldPass,newPass,reNewPass
+          oldPass, newPass, reNewPass
         }
         // let Base64 = require('js-base64').Base64;
         // Base64.encode()
@@ -125,15 +162,55 @@
 
 <style scoped lang="scss">
   @import "~@/assets/px2rem";
-.top{
-  padding: px2rem(20);
-  .field_row_value{
+
+  .top {
+    padding: 0 px2rem(20) px2rem(20);
+
+    .field_row_value {
+      font-size: px2rem(14);
+      width: 100%;
+      height: px2rem(30);
+    }
+    .low {
+      font-size: px2rem(12);
+      color: #858E9F;
+    }
+    .field_row_wrap {
+      border-bottom: 1px solid #ccc;
+      .field_row_key {
+        display: flex;
+        height: px2rem(56);
+        line-height: px2rem(56);
+        span {
+          flex: 1;
+        }
+        .left {
+          font-size: px2rem(16);
+        }
+        .right {
+          color: #6e6e6e;
+          font-size: px2rem(16);
+          text-align: right;
+        }
+      }
+    }
 
   }
-  .field_row_value{
-    width: 100%;
-    height: px2rem(30);
-  }
 
-}
+  .btn {
+    text-align: center;
+    button {
+      width: px2rem(255);
+      height: px2rem(44);
+      color: #fff;
+      font-size: px2rem(18);
+      background: #ccc;
+      border: 1px solid #ccc;
+      border-radius: px2rem(6);
+      &.active {
+        color: #fff;
+        background: #007aff;
+      }
+    }
+  }
 </style>

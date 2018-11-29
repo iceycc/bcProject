@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <app-bar :title="proList.PRD_TYPE_NAME"></app-bar>
-    <!--<app-bar title="活期存款"></app-bar>-->
+    <!--<app-bar :title="bankObj.ORG_NAME"></app-bar>-->
+    <app-bar title="众邦直销银行"></app-bar>
     <section class="container" style="padding-top: 7px">
       <section class="banner">
         <section>
@@ -13,22 +13,24 @@
         <p class="money" v-if="pass">{{bankDetail.TOTAL_ASSET | formatNum}}</p>
         <p class="money" v-if="!pass">****</p>
         <section class="income">
-          <p>昨日到账收益
+          <section class="left">
+            <p>昨日到账收益</p>
             <span class="left-text" v-if="pass">
                              <i>{{bankDetail.YSD_INCOME>=0?'+':''}}</i>
                             {{bankDetail.YSD_INCOME}}</span>
             <span class="left-text" v-if="!pass">
                             ****
                         </span>
-          </p>
-          <p style="text-align: right">累计收益
+          </section>
+          <section class="right" style="text-align: right">
+            <p>累计收益</p>
             <span class="right-text" v-if="pass">
                              <i>{{bankDetail.TOTAL_INCOME>=0?'+':''}}</i>
                             {{bankDetail.TOTAL_INCOME}}</span>
             <span class="right-text" v-if="!pass">
                             ****
                         </span>
-          </p>
+          </section>
         </section>
       </section>
     </section>
@@ -46,20 +48,20 @@
 
       </section>
     </section>
-    <section class="bank-card container" v-if="bankDetail.EC_ACCOUNT_NO">
+    <section class="bank-card container">
       <div class="bank-logo">
-        <img :src="imgSrc + bankDetail.LOGO_URL" alt="">
+        <img :src="imgSrc + bankObj.logo" alt="">
       </div>
       <div class="bank-test">
-        <p class="">{{bankDetail.ORG_NAME}}</p>
-        <p class="card-no">{{bankDetail.EC_ACCOUNT_NO | BankNo_Filter}}</p>
+        <p class="">{{bankObj.ORG_NAME}}银行卡</p>
+        <p class="card-no">{{bankObj.ACCT_NO | BankNo_Filter}}</p>
       </div>
     </section>
     <!--银行存款-->
     <section class="financing-list">
-      <section class="top" @click="tapList">
+      <section class="top" @click="goPage(toPageName.FinancialProducts)">
                     <span class="top-left">
-                        银行存款</span>
+                        存款产品</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
                         ¥{{proList.TOTAL_AMT | formatNum | preLcAssetFilter}}<i class="small-number">{{proList.TOTAL_AMT |formatNum| lastLcAssetFilter}}</i>
                     </span>
@@ -67,8 +69,11 @@
                     ****
                 </span>
       </section>
-      <ul v-if="licaiShow" @click="goPage(toPageName.FinancialProducts)">
-        <li class="financing-li" v-for="item in proList.PAGE.retList">
+      <ul v-if="licaiShow">
+        <!-- @click="geDetails(item)"-->
+        <li class="financing-li" v-for="item,index in proList.PAGE.retList"
+            @click="geDetails(item)" v-if="index<3"
+        >
           <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
           <span class="li-left">
                         {{item.PRD_NAME}}</span>
@@ -114,21 +119,24 @@
       return {
         imgSrc,
         proList: {
-          TOTAL_AMT:'0.00',
+          TOTAL_AMT: '0.00',
+          PAGE:{}
         },
         pass: true,
-        licaiShow: false,
+        licaiShow: true,
         toPageName: {
           BankBalance: PageName.BankBalance,
           MoreService: PageName.MoreService,
           FinancialProducts: PageName.FinancialProducts,
         },
         bankDetail: {
-          TOTAL_ASSET:'0.00',
-          TOTAL_INCOME:'0.00',
-          ACC_REST:'0.00',
-          YSD_INCOME:'0.00',
-        }
+          TOTAL_ASSET: '0.00',
+          TOTAL_INCOME: '0.00',
+          ACC_REST: '0.00',
+          YSD_INCOME: '0.00',
+        },
+        bankObj:{} // 绑定点银行点列表
+
       }
     },
     filters: {
@@ -143,19 +151,20 @@
     },
 
     created() {
+      document.title = '众邦直销银行'
       this.getBankDetail()
       this.scroll()
       this.getProList()
-      document.title = this.$route.query.NAME || '货币基金'
+      this.getBankList()
     }
     ,
     methods: {
-      tapList() {
-        if (!this.proList.PAGE.retList || this.proList.PAGE.retList.length == 0) {
-          return
-        }
-        this.licaiShow = !this.licaiShow
-      },
+      // tapList() {
+      //   if (!this.proList.PAGE.retList || this.proList.PAGE.retList.length == 0) {
+      //     return
+      //   }
+      //   this.licaiShow = !this.licaiShow
+      // },
       goPage(pageName) {
         this.$router.push({
           name: pageName,
@@ -166,7 +175,10 @@
         console.log('show');
       }
       ,
-
+      geDetails(item) {
+        let {FUND_NO, PRD_INDEX_ID, PRD_NAME} = item
+        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
+      },
       // getMyInvesthandle(){
       //     API.common.getMyInvest({})
       // }
@@ -261,8 +273,12 @@
       display: flex;
       font-size: px2rem(12);
       color: rgba(255, 255, 255, .7);
-      p {
+      .left {
         flex: 1;
+      }
+      .right {
+        flex: 1;
+        text-align: right;
       }
     }
     .left-text {

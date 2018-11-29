@@ -7,10 +7,12 @@
             <p class="err-msg">{{errMsg}}</p>
         </div>
       <span @click="reWithdraw" class="btn">重新提现</span>
-      <span @click="goBank" class="btn btn-back">返回银行页</span>
+      <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
     </div>
 </template>
 <script>
+    import {PageName} from "../../../Constant";
+
     export default {
         data() {
             return {
@@ -22,7 +24,8 @@
         },
         methods: {
           reWithdraw() {
-            this.$router.go(-1)
+            // this.$router.go(-1)
+            this.$router.push({name:PageName.BankBalance})
           },
           goBank(){
             this.$router.push({

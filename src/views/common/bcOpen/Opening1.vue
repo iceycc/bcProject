@@ -163,7 +163,7 @@
         })
         this.$store.commit('SET_OPENING1_DATA', this.data)
         // this.ORG_ID = this.$store.getters.GET_ORG_ID
-        this.ORG_ID = util.storage.session.get('ORG_ID')  || ''
+        this.ORG_ID = util.storage.session.get('ORG_ID') || ''
 
         this.doOpengingFirst()
 
@@ -201,8 +201,6 @@
         }
         return url;
       },
-
-
       /**
        * 身份证 ocr
        */
@@ -244,7 +242,7 @@
           TYPE: 'API_REGISTER_VALI_USER',
           PHONE_NUM: this.data.PHONE + '',
           // PHONE_NUM: this.data.PHONE + '',
-          PASSWORD: 'aaa111111',
+          PASSWORD: '',
           USER_NAME: this.data.USER_NAME + '',
           USER_CARD_ID: this.data.USER_CARD_ID + '',
           CARD_FRONT_FILE: this.data.CARD_FRONT_FILE,

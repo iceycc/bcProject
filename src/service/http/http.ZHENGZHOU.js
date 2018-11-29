@@ -33,11 +33,11 @@ export default {
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
     let ORG_ID = util.storage.session.get('ORG_ID') || ''
-    if(JSON.stringify(ORG_ID)=='{}'){
+    if (JSON.stringify(ORG_ID) == '{}') {
       ORG_ID = ''
     }
     ORG_ID = params.ORG_ID || ORG_ID
-    let {DEVICE_ID, CHANNEL_ID,TOKEN=token,SESSION_ID=''} = store.getters.GET_ACCOUNT_STATE
+    let {DEVICE_ID, APP_FLAG, CHANNEL_ID, TOKEN = token, SESSION_ID = ''} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -46,17 +46,20 @@ export default {
           VERSION: "",
           IMSI: "460026325010440",
           SESSION_ID: SESSION_ID,
-          SYSTEM_TYPE: "h5",
           TYPE,
           TOKEN: TOKEN,
-          DEVICE_ID: DEVICE_ID + ''
+          DEVICE_ID: DEVICE_ID + '',
+
+          SYSTEM_TYPE: "h5",
+          CHANNEL_ID: CHANNEL_ID || '',
+          APP_FLAG: APP_FLAG || 'BC',
+          CLIENT_ID:"30"
         },
         param: {
-          ORG_ID:ORG_ID+'', // 70
+          ORG_ID: ORG_ID + '', // 70
           ...params
         },
       },
-      // channel_id: '1', // 注意这个！！
       channel_id: CHANNEL_ID + '',
     }
     config.method = method;
@@ -67,22 +70,25 @@ export default {
       result = result.biz_data
       // console.log('res >>>', result.data);
       console.log('code >>>', result.head.CODE);
-      store.commit('REMOVE_COMMON_STATE','LAST_STEP_NUM')
-      store.commit('REMOVE_COMMON_STATE','REQ_SERIAL')
+      store.commit('REMOVE_COMMON_STATE', 'LAST_STEP_NUM')
+      store.commit('REMOVE_COMMON_STATE', 'REQ_SERIAL')
       // util.storage.session.remove(LsName.LAST_STEP_NUM)
       // util.storage.session.remove(LsName.REQ_SERIAL)
-      if (result.head.TOKEN) { // 接口有返回token就更新token
+      if (!TOKEN && result.head.TOKEN) { //
         store.commit('SET_TOKEN', result.head.TOKEN)
       }
+      // if (result.head.TOKEN) { // 接口有返回token就更新token
+      //   store.commit('SET_TOKEN', result.head.TOKEN)
+      // }
       if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
         // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
-        store.commit('SET_COMMON_STATE',{
-          type:'LAST_STEP_NUM',
-          value:result.data.LAST_STEP_NUM
+        store.commit('SET_COMMON_STATE', {
+          type: 'LAST_STEP_NUM',
+          value: result.data.LAST_STEP_NUM
         })
-        store.commit('SET_COMMON_STATE',{
-          type:'REQ_SERIAL',
-          value:result.data.REQ_SERIAL
+        store.commit('SET_COMMON_STATE', {
+          type: 'REQ_SERIAL',
+          value: result.data.REQ_SERIAL
         })
       }
       // 根据状态码 做业务状态校验 分流
@@ -121,6 +127,7 @@ export default {
   }
 
 }
+
 function goLogin() {
   // Router.push({
   //   name: PageName.Login,

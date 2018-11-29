@@ -41,6 +41,7 @@
               @click="showBox"
         >{{payPaceholder}}</span>
       </section>
+      <p class="info">密码由数字组成，必须为6位</p>
     </div>
     <div class="Tips" v-if="errMsg">
       <span>{{errMsg}}</span>
@@ -82,12 +83,11 @@
 
   import PassInput from '@/components/password/PassInput'
   import {BusName, LsName, PageName} from "@/Constant";
-  import util from "libs/util";
   // import {HandleMixin, Opening3Mixins,} from '@/mixins'
   import Mixins from "@/mixins";
   import Opening3Mixins from './Opening3'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
-
+import Common from './common'
 
   export default {
     data() {
@@ -118,9 +118,9 @@
       PassInput,
       PassWordZhengzhou
     },
-    mixins: [Mixins.HandleMixin, Opening3Mixins],
+    mixins: [Mixins.HandleMixin, Opening3Mixins,Common],
     created() {
-
+      this.checkBankStatus()
       this.getErrMsg((beforeInfo) => {
         this.errMsg = beforeInfo.msg
       })
@@ -369,6 +369,11 @@
       input {
         @include placeholder(#333)
       }
+    }
+    .info{
+      padding-left: px2rem(20);
+      color: #B3B3B3;
+      font-size: px2rem(14);
     }
     .label {
       padding: 0;

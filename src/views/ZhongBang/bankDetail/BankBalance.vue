@@ -19,6 +19,10 @@
         <span>明细查询</span>
         <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
       </section>
+      <section class="m-li" @click="goPage('InHanding')">
+        <span>处理中记录查询</span>
+        <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
+      </section>
     </section>
   </div>
 </template>

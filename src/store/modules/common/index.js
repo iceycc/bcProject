@@ -34,6 +34,7 @@ export default {
     }, //
     availableBalance:'' ,// 可用余额
     redeemData:{},
+    redeemSuccessData:{},
     openingData:{},
 
 

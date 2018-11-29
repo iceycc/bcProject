@@ -25,12 +25,21 @@
     <div class="opening_box">
 
       <section class="bank">
-        <span style="padding-right: 0px" class="left-p">选择银行</span>
+        <!--<span style="padding-right: 0px" class="left-p">选择银行</span>-->
         <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
-        <!-- <span  class="limit">银行限额</span>  -->
-        <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
-                     title="银行列表"></Bank-select>
-
+        <!--<span  class="limit">银行限额</span>-->
+        <!--<Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"-->
+        <!--title="银行列表" xiane="false"></Bank-select>-->
+      </section>
+      <section class="input-box">
+        <p class="left-p"> 选择银行</p>
+        <!--@input="checkBankName(data.CARD_NO)"-->
+        <span class="input">
+          {{bankText}}
+        </span>
+        <img @click="showBindBankList" src="@/assets/images/GroupCopy14@2x.png" alt="" class="img">
+        <!--<input type="number"-->
+        <!--name="backname"  v-model="bankText">-->
       </section>
       <section class="input-box">
         <p class="left-p"> 绑定卡卡号</p>
@@ -58,9 +67,14 @@
     </div>
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <button class="tijiao" @click="goNext">下一步</button>
-
+    <up-select
+      @clickBankList="addBankHandle"
+      :show="upseletShow"
+      :BankList="mainBankList"
+      @chooseBank="chooseBankHandle"
+    ></up-select>
     <div v-if="ZhengZhouPass" class="bgbox">
-      <!--晋商-->
+      <!--郑州-->
       <div class="passbox">
         <div class="top">
           <div class="field_row_wrap">
@@ -82,10 +96,30 @@
         </div>
       </div>
     </div>
-    <div class="add-back">
-      <div class="box">
-        <input type="text" v-model="data.CARD_NO">
-      </div>
+    <div class="jsSelect" v-show="show">
+      <section class="select-box">
+        <i class="close" @click="show=false"><img :src="closeImg" alt=""></i>
+        <p class="title">{{title}}</p>
+        <section class="scroll-view">
+          <section :id="key" class="bank-class" v-for="bankIndex,key,index in IndexObj" :key="index">
+            <p class="bank-index">{{key}}</p>
+            <ul class="select">
+              <li
+                @click="select(item.name,item)"
+                :class="{'option':true,'active':item.name==selectValue}"
+                v-for="item,index in bankIndex"
+                :key="index">
+                <img :src="item.src" alt="" class="banklogo">
+                <span class="text">{{item.name}}</span>
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section class="right-index">
+                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr"
+                          :key="index"> {{item}}</span>
+        </section>
+      </section>
     </div>
   </div>
 </template>
@@ -95,12 +129,27 @@
   import BankSelect from '@/components/commons/BankSelect'
   import Opening2Mixins from './Opening2'
   import util from "../../../libs/util";
-
+  import UpSelect from '@/components/commons/UpSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
 
+  const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
   export default {
     data() {
       return {
+        show: false,
+        upseletShow: false,
+        title: '选择银行卡',
+        mainBankList: [
+          {
+            logo: '',
+            name: '民生银行',
+            dayNum: '100',
+            oneNum: '100',
+            id: 1,
+            bankNo: "6217710708484514"
+          }
+        ],
         data: {
           CARD_NO: '', // 银行卡号 6214830182284272  6217730711297810
           HAS_BAND: '0', // 是否绑定过
@@ -124,12 +173,20 @@
         AllBankListObj: {},
         errMsg: '',
         checkBankName1: false,
-        callbackInfos: {}
+        callbackInfos: {},
+
+        closeImg: require('@/assets/images/icon_ask_close.svg'),
+        titleSelect: false,
+        selectValue: 1,
+        IndexObj: {},
+        indexArr: Letter,
+        backShow: false
       }
     },
     mixins: [Opening2Mixins],
     components: {
       BankSelect,
+      UpSelect,
       PassWordZhengzhou
     },
     watch: {
@@ -139,9 +196,6 @@
           this.tel = n.toString().substr(0, 11)
         }
       },
-      bankText(n, o) {
-        this.checkBankName(this.data.CARD_NO)
-      }
     },
     filters: {
       telFlter(n) {
@@ -156,10 +210,27 @@
       })
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
+      if (this.callbackInfos.hasCardList.length > 0) {
+        this.data.CARD_NO = this.callbackInfos.hasCardList[0].USER_CARD_ID
+        this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
+        this.mainBankList = this.callbackInfos.hasCardList
+      }
       this.tel = this.callbackInfos.PHONE_NUM || ''
-      // this.getBankList()
+      this.getBankList()
     },
     methods: {
+      chooseBankHandle(bank) {
+        this.bankText = bank.OPEN_BANK
+        this.data.CARD_NO = bank.CARD_NO
+      },
+      showBindBankList() {
+        this.upseletShow = !this.upseletShow
+        Bus.$emit('showBankList', true)
+      },
+      addBankHandle() {
+        // this.showBindBankList()
+        this.showBankList()
+      },
       checkBankName(val) {
         this.checkBankName1 = false
         this.checkBankType()
@@ -191,6 +262,14 @@
         }
 
       },
+      toBank(val) {
+        if (document.getElementById(val)) {
+          document.getElementById(val).scrollIntoView()
+
+        } else {
+          Bus.$emit(BusName.showToast, `没有${val}开头的银行`)
+        }
+      },
       machBankName(pin) {
         return this.AllBankListObj[pin]
       },
@@ -202,6 +281,49 @@
       // 下一步
       goNext() {
         this.doOpengingSecond()
+      },
+
+
+      showBankList() {
+        console.log(this.bankList);
+        if (!this.canClick) {
+          return
+        }
+        if (JSON.stringify(this.IndexObj) == '{}') {
+          this.show = true
+          this.IndexObj = this.filterOptions(this.bankList)
+        } else {
+          this.show = true
+        }
+      },
+      filterOptions(arr) {
+        let obj = {}
+        arr.forEach(bank => {
+          if (!obj[bank.Index]) {
+            obj[bank.Index] = [bank]
+          } else {
+            obj[bank.Index].push(bank)
+          }
+        })
+        return obj
+      },
+      select(index, name) {
+        this.titleSelect = true
+        this.show = false
+        this.bankText = name.name
+        // this.$emit('getValue', name)
+        this.selectValue = index
+      },
+      toBank(val) {
+        if (document.getElementById(val)) {
+          document.getElementById(val).scrollIntoView()
+
+        } else {
+          Bus.$emit(BusName.showToast, `没有${val}开头的银行`)
+        }
+      },
+      bankShowHandle() {
+        this.backShow = true
       }
     }
 
@@ -240,11 +362,24 @@
         color: #444;
         padding: px2rem(15) 0;
       }
-      input {
+      .img {
+        padding-top: px2rem(15);
+        width: px2rem(20);
+        height: px2rem(15);
+      }
+      input, .input {
         text-align: left;
         font-size: px2rem(14);
         flex: 1;
         color: #333
+      }
+      .img {
+        padding-top: px2rem(15);
+        width: px2rem(20);
+        height: px2rem(15);
+      }
+      .input {
+        padding-top: px2rem(15);
       }
       button {
         margin-top: px2rem(12);
@@ -441,5 +576,108 @@
     /*.box {*/
 
     /*}*/
+  }
+
+  .jsSelect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, 0.3);
+    padding: 1rem 0.6rem;
+    box-sizing: border-box;
+    z-index: 3;
+    color: #333
+  }
+
+  .select-box {
+    position: relative;
+    border-radius: 10px;
+    background: #fff;
+    height: 90%;
+    padding: .3rem 0 .6rem;
+    .right-index {
+      position: absolute;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+      max-height: 91%;
+      width: 1rem;
+      right: .4rem;
+      top: px2rem(45);
+      text-align: center;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .letter {
+        color: #89afe6;
+        display: block;
+        font-size: px2rem(16);
+        line-height: 1.4;
+      }
+    }
+    .title {
+      text-align: center;
+      font-size: .5rem;
+      margin: 0 px2rem(20);
+      border-bottom: 1px solid #dedede;
+    }
+    .scroll-view {
+      max-height: 90%;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    .option {
+      border-bottom: 1px solid #dedede;
+      font-size: 0;
+      line-height: px2rem(30);
+      height: px2rem(30);
+      .text {
+        font-size: .4rem;
+        vertical-align: middle;
+        margin-left: .2rem;
+      }
+      .banklogo {
+        width: .6rem;
+        vertical-align: middle;
+      }
+    }
+    .active {
+      color: #5db0f9;
+    }
+    .close {
+      font-style: normal;
+      position: absolute;
+      top: -0.1rem;
+      right: .3rem;
+      font-weight: bold;
+      color: #ccc;
+      font-size: .6rem;
+      width: px2rem(20);
+      height: px2rem(20);
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+    }
+
+  }
+
+  .activeTitle {
+    color: #333;
+  }
+
+  .bank-class {
+    padding: 0 px2rem(20);
+    .bank-index {
+      font-size: .4rem;
+      line-height: 0;
+      padding: px2rem(20) 0 px2rem(10);
+
+    }
   }
 </style>

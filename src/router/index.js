@@ -15,24 +15,31 @@ let router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  let ORG_ID = util.storage.session.get('ORG_ID') || null
-  console.log('ORG_ID>>',ORG_ID);
-  if (!ORG_ID || JSON.stringify(ORG_ID)=='{}') {
-    let ORG_ID = to.query.ORG_ID || ''
-    util.storage.session.set('ORG_ID', ORG_ID)
-  }
+function getComParams(to) {
+  let ORG_ID = util.storage.session.get('ORG_ID')
+  console.log('ORG_ID>>', ORG_ID);
   // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
-  let {DEVICE_ID, CHANNEL_ID} = store.getters.GET_ACCOUNT_STATE
-  if (!DEVICE_ID) {
-    let DEVICE_ID = to.query.DEVICE_ID
-    store.commit('SET_DEVICE_ID', DEVICE_ID)
+  // let {DEVICE_ID, CHANNEL_ID, APP_FLAG} = store.getters.GET_ACCOUNT_STATE
+  //
+  let URL_DEVICE_ID = to.query.DEVICE_ID || ''
+  if (URL_DEVICE_ID) {
+    store.commit('SET_DEVICE_ID', URL_DEVICE_ID)
   }
-  if (!CHANNEL_ID) {
-    let CHANNEL_ID = to.query.CHANNEL_ID
-    store.commit('SET_CHANNEL_ID', CHANNEL_ID)
+  //
+  let URL_CHANNEL_ID = to.query.CHANNEL_ID || ''
+  if (URL_CHANNEL_ID) {
+    store.commit('SET_CHANNEL_ID', URL_CHANNEL_ID)
   }
+  //
+  let URL_APP_FLAG = to.query.APP_FLAG || ''
+  if (URL_APP_FLAG) {
+    store.commit('SET_APP_FLAG', URL_APP_FLAG)
+  }
+}
 
+router.beforeEach((to, from, next) => {
+
+  getComParams(to)
   if (to.meta.title) {
     document.title = to.meta.title
     util.IOSTitileUpdat()

@@ -20,15 +20,15 @@ export default {
     setPassWord() {
       let opening3 = this.getComState.openingData
       this.REQ_SERIAL = opening3.BESHARP_REGISTER_VALI_USER_SEQ
-      if (!this.REQ_SERIAL) {
-        Bus.$emit(BusName.showToast, '实名认证异常，请重新注册')
-        setTimeout(() => {
-          this.$router.push({
-            name: PageName.opening
-          }, 1000)
-        })
-        return
-      }
+      // if (!this.REQ_SERIAL) {
+      //   Bus.$emit(BusName.showToast, '实名认证异常，请重新注册')
+      //   setTimeout(() => {
+      //     this.$router.push({
+      //       name: PageName.opening
+      //     }, 1000)
+      //   })
+      //   return
+      // }
 
       let CUST_NO = opening3.CUST_NO || null
       let data = {

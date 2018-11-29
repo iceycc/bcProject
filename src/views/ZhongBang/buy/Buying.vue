@@ -4,11 +4,11 @@
     <div class="buytitle">
       <div class="buytitleleft">
         <div class="buytitleleftimg">
-          <img :src="imgSrc+proDetail.logo" style="width:100%" alt="">
+          <img :src="imgSrc+proDetail.LOGO_URL" style="width:100%" alt="">
         </div>
         <div class="buytitleleftcontent">
-          <p>{{proDetail.PRD_NAME}}</p>
-          <p style="color:#666">理财产品</p>
+          <p>{{proDetail.ORG_NAME}}</p>
+          <p style="color:#666">{{proDetail.PRD_NAME}}</p>
         </div>
       </div>
       <div class="buytitleright">
@@ -22,17 +22,32 @@
       <div class="buysuccessdetailright" @click="goReChang">充值</div>
     </div>
     <div class="buydetails">
-      <p style="margin-top: 0.3rem">购买金额</p>
+      <p style="margin-top: 0.3rem">存入金额</p>
       <span class="buydetailsmoney">￥</span>
-      <input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="moneyNum">
+      <!--<input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="APPLY_AMOUNT">-->
+      <input type="number" :placeholder="placeholder" v-model="APPLY_AMOUNT">
+      <img
+        v-show="!ifCheckMoneyEmpty"
+        src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
     </div>
-    <p style="font-size:0.3rem;padding:  0.4rem;color:#666">可投金额 {{proDetail.REMAIN_AMT | formatNum}}元</p>
-    <button class="tijiao" @click="goBuy">购买</button>
+    <!--<p class="canpay">可投金额 {{proDetail.REMAIN_AMT | formatNum}}元</p>-->
+    <section class="inputAmount">
+            <span class="Amount">
+                验证码
+            </span>
+      <input type="tel" v-model="msgCode" placeholder="输入验证码">
+      <button
+        :disabled="msgdisable"
+        @click="getMsg"
+        class="button">{{codeText}}
+      </button>
+    </section>
+    <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">存入</button>
     <p @click="agree =!agree"
-       :class="{'bang':true,'no':agree == false}">我已阅读并同意注册
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('B')">《郑州商银行直销银行投融资协议》</a>
+       :class="{'bang':true,'no':agree == false}">我已阅读并同意
+      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《众邦宝产品服务协议（个人活期版）》</a>
     </p>
+
   </div>
 </template>
 <script>
@@ -41,23 +56,53 @@
   import API from "@/service"
   import Mixins from "@/mixins";
 
+  let time = 60
+  let timer;
   export default {
     data() {
       return {
         proDetail: {},
-        moneyNum: null,
+        APPLY_AMOUNT: null,
         payNum: '1000',
         agree: true,
         imgSrc: imgSrc,
-        INCRE_AMOUNT: ''
+        INCRE_AMOUNT: '',
+        msgCode: '',
+        msgdisable: false,
+        codeText: '获取验证码',
+
       }
     },
-    mixins: [Mixins.HandleMixin,Mixins.StoreMixin],
+    computed: {
+      placeholder() {
+        let num = this.proDetail.MIN_AMOUNT || '0'
+        return num + '元起购'
+      },
+      ifCheckMoneyEmpty() {
+        if (this.APPLY_AMOUNT) {
+          return false
+        } else {
+          return true
+        }
+      },
+      canClick() {
+        if (this.APPLY_AMOUNT && this.msgCode && this.agree) {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
+    mixins: [Mixins.StoreMixin],
     created() {
       this.getInfo()
       this.proDetail = this.getComState.goBuy // 数据
+      console.log(this.proDetail);
     },
     methods: {
+      clearNumHandle() {
+        this.APPLY_AMOUNT = ''
+      },
       getInfo() {
         // 查询账户余额
         API.bank.apiQryEleAccount({}, res => {
@@ -68,8 +113,8 @@
       },
       goReChang() {
         this.setComState({
-          type:'OriginPage',
-          value:this.$route.fullPath
+          type: 'OriginPage',
+          value: this.$route.fullPath
         })
 
         this.$router.push({
@@ -82,11 +127,10 @@
           name: PageName.DocsPage,
           query: {
             type,
-            id: this.proDetail.id
           }
         })
       },
-      checkMoneyNum(num) {
+      checkAPPLY_AMOUNT(num) {
         let a = this.proDetail.INCRE_AMOUNT
         if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
@@ -103,23 +147,23 @@
           Bus.$emit(BusName.showToast, '请同意相关协议')
           return
         }
-        if (!this.moneyNum) {
+        if (!this.APPLY_AMOUNT) {
           Bus.$emit(BusName.showToast, '请输入购买金额')
           return
         }
-        if (typeof (this.moneyNum - 0) != 'number' || isNaN(this.moneyNum - 0)) {
+        if (typeof (this.APPLY_AMOUNT - 0) != 'number' || isNaN(this.APPLY_AMOUNT - 0)) {
           Bus.$emit(BusName.showToast, '请填写正确的金额')
           return
         }
 
-        if (this.moneyNum - 0 > this.payNum) {
+        if (this.APPLY_AMOUNT - 0 > this.payNum) {
           Bus.$emit(BusName.showToast, '余额不足，请充值')
           return
         }
-        if (this.checkMoneyNum(this.moneyNum)) {
+        if (this.checkAPPLY_AMOUNT(this.APPLY_AMOUNT)) {
           return
         }
-        if (this.moneyNum - 0 > this.REMAIN_AMT) {
+        if (this.APPLY_AMOUNT - 0 > this.REMAIN_AMT) {
           Bus.$emit(BusName.showToast, '可投额度不足')
           return
         }
@@ -130,24 +174,136 @@
         setTimeout(() => {
           this.Londing.close()
         }, 500)
+        this.doPay()
+        // this.$router.push({
+        //   name: PageName.SureBuy,
+        //   query: {
+        //     money: this.APPLY_AMOUNT,
+        //     PRD_NAME: this.proDetail.PRD_NAME,
+        //     id: this.proDetail.id,
+        //     ORG_NAME: this.proDetail.ORG_NAME,
+        //     logo: this.proDetail.logo,
+        //   }
+        // })
 
-        this.$router.push({
-          name: PageName.SureBuy,
-          query: {
-            money: this.moneyNum,
-            PRD_NAME: this.proDetail.PRD_NAME,
-            id: this.proDetail.id,
-            ORG_NAME: this.proDetail.ORG_NAME,
-            logo: this.proDetail.logo,
-          }
+      },
+      // 轮询查询交易状态！！
+
+      getCode() { // 充值短信
+        let TEL = this.getComState.TEL
+        let data = {
+          PHONE_NUM: TEL,
+          BIZ_TYPE: '1008', // 购买众邦需要
+          AMOUNT: this.APPLY_AMOUNT
+        }
+        API.common.apiSendPhoneCode(data, res => {
+          Bus.$emit(BusName.showSendMsg, TEL)
         })
+      },
+      getMsg() {
+        let times = time
+        this.msgdisable = true
+        timer = setInterval(() => {
+          if (times == 0) {
+            this.codeText = '重新发送'
+            this.msgdisable = false
+            clearInterval(timer)
+            return
+          }
+          times--
+          this.codeText = `${times}s`
+        }, 1000)
+        this.getCode()
+      },
+      polling(res) {
+        let data = {
+          BIZ_TYPE: '6', // 购买
+          BESHARP_SEQ: res.BESHARP_ORDER_NO
+        }
+        // 交易轮询
+        this.Londing.open({
+          text: '正在购买中'
+        })
+        let i = 1
+        let timer = setInterval(() => {
+          i++
+          API.common.apiQueryBizStatus(data, result => {
+            if ('1' == result.RES_CODE || i == 5) {
+              this.Londing.close()
+              clearInterval(timer)
+              Bus.$emit(BusName.showToast, result.RES_MSG);
+              this.$router.push({
+                name: PageName.BuyFailed,
+                query: {
+                  err: result.RES_MSG
+                }
+              })
+            }
+            else if ('0' == result.RES_CODE) { // 成功
+              clearInterval(timer)
+              Bus.$emit(BusName.showToast, result.RES_MSG);
+              this.Londing.close()
+              this.setComState({type: 'buyData', value: result})
+              this.$router.push({
+                name: PageName.BuySuccess,
+              })
+              return
+            } else {
+              if (i > 5) {
+                clearInterval(timer)
+                Bus.$emit(BusName.showToast, result.RES_MSG);
+                this.$router.push({
+                  name: PageName.BuyFailed,
+                  query: {
+                    err: result.RES_MSG
+                  }
+                })
+                return
+              }
+            }
+          }, err => {
+            clearInterval(timer)
+            Bus.$emit(BusName.showToast, err);
 
+          })
+        }, 2000)
+      },
+      // 交易
+      // TYPE	请求类型
+      // ORG_ID	机构ID
+      // PRD_ID	产品ID
+      // APPLY_AMOUNT	购买金额
+      // PHONE_CODE	短信验证码
+      // ACCEPT_RISK	超出客户风险承受力时必填，需要确认  0 或空 表示未确认 1 表示已确认
+      doPay() {
+        let data = {
+          PRD_ID: (this.proDetail.ID || this.proDetail.PRD_INDEX_ID) + '',
+          TYPE: 'API_BUY',
+          APPLY_AMOUNT: this.APPLY_AMOUNT + '',
+          PHONE_CODE: this.msgCode,
+          ACCEPT_RISK: '1'
+        }
+        console.log(data);
+        API.buy.apiBuy(data, (res) => {
+          this.polling(res)
+        }, err => {
+          this.Londing.close()
+          this.setComState({type: "reload", value: true}) // reload-001
+          this.$router.push({
+            name: PageName.BuyFailed,
+            query: {
+              err: err
+            }
+          })
+        })
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  @import "~@/assets/px2rem";
+
   body {
     margin: 0;
     padding: 0;
@@ -186,83 +342,100 @@
     }
   }
 
+  .canpay {
+    font-size: 0.3rem;
+    padding: px2rem(20);
+    color: #666
+  }
+
   .buysuccessdetails {
-    padding: 0 0.4rem;
+    padding: 0 px2rem(20);
     line-height: 1.5rem;
     height: 1.5rem;
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
+    .buysuccessdetailleft {
+      float: left;
+    }
+
+    .buysuccessdetailright {
+      color: #468EE5;
+      float: right;
+    }
   }
 
   .buydetails {
-    padding: 0 0.4rem;
+    position: relative;
+    padding: 0 px2rem(20);
     height: 2.2rem;
     font-size: 0.4rem;
+    .close-icon {
+      position: absolute;
+      display: inline-block;
+      width: px2rem(15);
+      height: px2rem(15);
+      top: 50%;
+      right: px2rem(30);
+    }
     border-bottom: 1px solid #EEEEF0;
-  }
+    .buydetailsmoney {
+      width: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.6rem;
+    }
 
-  .buydetailsmoney {
-    width: 1rem;
-    margin-top: 0.5rem;
-    font-size: 0.6rem;
-  }
+    input {
+      width: 50%;
+      border: none;
+      box-sizing: border-box;
+      font-size: 14px; /*px*/
+      color: #333;
+      line-height: 40px;
+      outline: none;
+    }
 
-  .buysuccessdetailleft {
-    float: left;
-  }
+    ::-webkit-input-placeholder {
+      font-size: 0.6rem
+    }
 
-  .buysuccessdetailright {
-    color: #468EE5;
-    float: right;
-  }
+    /* 使用webkit内核的浏览器 */
+    :-moz-placeholder {
+      font-size: 0.6rem
+    }
 
-  input {
-    width: 50%;
-    border: none;
-    box-sizing: border-box;
-    font-size: 14px; /*px*/
-    color: #333;
-    line-height: 40px;
-    outline: none;
-  }
+    /* Firefox版本4-18 */
+    ::-moz-placeholder {
+      font-size: 0.6rem
+    }
 
-  ::-webkit-input-placeholder {
-    font-size: 0.6rem
-  }
-
-  /* 使用webkit内核的浏览器 */
-  :-moz-placeholder {
-    font-size: 0.6rem
-  }
-
-  /* Firefox版本4-18 */
-  ::-moz-placeholder {
-    font-size: 0.6rem
-  }
-
-  /* Firefox版本19+ */
-  :-ms-input-placeholder {
-    font-size: 0.6rem
+    /* Firefox版本19+ */
+    :-ms-input-placeholder {
+      font-size: 0.6rem
+    }
   }
 
   .tijiao {
-    font-size: 0.5rem;
+    font-size: px2rem(18);
     color: #fff;
-    background-color: #518BEE;
-    border-radius: 0.2rem;
+    background: #ccc;
+    border-radius: px2rem(6);
     line-height: 1.2rem;
-    width: 63%;
-    margin: 0.5rem auto 0.8rem;
+    width: px2rem(255);
+    margin: px2rem(30) auto px2rem(10);
     text-align: center;
+    border: 0px;
     outline: none;
     display: block;
+    &.active {
+      background: #508CEE;
+    }
   }
 
   .bang {
     margin-left: 0.5rem;
     background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
     background-size: 0.3rem 0.3rem;
-    font-size: 0.35rem;
+    font-size: px2rem(12);
     color: #808080;
     padding: 0 0.5rem;
 
@@ -271,5 +444,33 @@
   .no {
     background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
     background-size: 0.3rem 0.3rem;
+  }
+
+  .inputAmount {
+    padding-left: px2rem(20);
+    height: px2rem(40);
+    line-height: px2rem(40);
+    font-size: px2rem(14);
+    border-bottom: 1px solid #EEEEF0;
+    .button {
+      vertical-align: middle;
+      font-size: px2rem(14);
+      width: px2rem(84);
+      height: px2rem(28);
+      line-height: px2rem(28);
+      display: inline-block;
+      border: 1px solid #508CEE;
+      border-radius: px2rem(6);
+      color: #508CEE
+    }
+    input {
+      padding-left: px2rem(10);
+      width: px2rem(200);
+      border: none;
+      box-sizing: border-box;
+      font-size: px2rem(14);
+      color: #333;
+      outline: none;
+    }
   }
 </style>

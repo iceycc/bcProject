@@ -1,5 +1,4 @@
 import {PageName} from '../Constant'
-import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
 import JinShang from './bank/router-jinshang'
 import ZhengZhou from './bank/router-zhengzhou'
@@ -9,7 +8,6 @@ import util from '../libs/util'
 // util.storage.session.set('ORG_ID',bank.ORG_ID)
 
 let ORG_ID = util.storage.session.get('ORG_ID') || ''
-console.log("ORG_ID>>>",ORG_ID);
 let frameIn = []
 switch (ORG_ID) {
   case ORG_ID_NUM.JinShang:

@@ -1,22 +1,24 @@
 <template>
   <div class="wrap pro">
     <div class="w-top">
-      <app-bar title="理财产品"></app-bar>
+      <app-bar title="货币基金" :ifShow="false"></app-bar>
       <div></div>
       <div class="f-box">
         <!-- 头部详情样式改动 -->
         <div class="total-price">
           <p>总资产<i>(元)</i></p>
-          <p>{{financialData.ACC_REST | formatNum}}</p>
+          <p>{{TOTAL| formatNum}}</p>
         </div>
         <div class="profit">
           <div>
             <p>昨日收益</p>
-            <p>{{financialData.YSD_INCOME | formatNum}}</p>
+            <p>{{financialData.YSD_INCOME>=0?'+':''}}{{financialData.YSD_INCOME | formatNum}}</p>
           </div>
           <div>
             <p>累计收益</p>
-            <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+            <p>
+              <!--{{financialData.TOTAL_INCOME>=0?'+':''}}-->
+              {{financialData.TOTAL_INCOME | formatNum}}</p>
           </div>
         </div>
       </div>
@@ -27,19 +29,19 @@
             :class="{active:index==nowIndex}">{{item}}
         </li>
       </ul>
-      <div class="divTab" v-show="nowIndex===0">
+      <div class="divTab">
         <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">
             <div style="padding-bottom: 20px">
-              <div class="divTab-1" v-for="(item,index) in pageList" :key="index">
+              <div v-if="nowIndex===0" class="divTab-1" v-for="(item,index) in pageList1" :key="index">
                 <!-- 新加明细按钮 -->
                 <span class="detail" @click="geDetails(item)">明细</span>
                 <h4>
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>隶属于{{item.ORG_NAME}}</p>
+                <p>{{item.DESCRIPT}}</p>
                 <!--todo 这三个参数现在还不对别忘记改-->
                 <p>持有金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
@@ -51,7 +53,7 @@
                   <span>{{item.ADD_INCOME | formatNum}}</span>
                 </p>
                 <p>七日年化
-                  <span>{{item.OVER_DATE}}</span>
+                  <span>{{item.RATE}}%</span>
                 </p>
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
@@ -63,33 +65,31 @@
                   </div>
                 </div>
               </div>
+              <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList2" :key="index">
+                <!-- 新加明细按钮 -->
+                <span class="detail" @click="geDetails(item)">明细</span>
+                <h4>
+                  <strong>{{item.PRD_NAME}}</strong>
+                   <!--<router-link to="/TransactionDetails">明细</router-link>-->
+                </h4>
+                <p>{{item.DESCRIPT}}</p>
+                <p>累计收益
+                  <span>{{item.ADD_INCOME | formatNum}}</span>
+                </p>
+              </div>
             </div>
           </v-loadmore>
         </div>
       </div>
-      <div class="divTab" v-show="nowIndex===1">
-        <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-          <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
-                      :auto-fill="false" ref="loadmore1">
-            <div class="divTab-1" v-for="(item,index) in pageList1" :key="index">
-              <!-- 新加明细按钮 -->
-              <span class="detail">明细</span>
-              <h4>
-                <strong>{{item.PRD_NAME}}</strong>
-                <!-- <router-link to="/TransactionDetails">明细</router-link> -->
-              </h4>
-              <p>隶属于{{item.ORG_NAME}}</p>
-              <p>投资金额（元）
-                <span>{{item.HOLD_AMOUNT | formatNum}}</span>
-              </p>
-              <p>累计收益
-                <span>{{item.ADD_INCOME | formatNum}}</span>
-              </p>
-            </div>
-          </v-loadmore>
-        </div>
+      <!--<div class="divTab" v-show="nowIndex===1">-->
+      <!--<div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">-->
+      <!--<v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"-->
+      <!--:auto-fill="false" ref="loadmore1">-->
+      <!---->
+      <!--</v-loadmore>-->
+      <!--</div>-->
 
-      </div>
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -112,17 +112,9 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList: [
-          {
-            PRD_NAME:'测试产品1',
-            ORG_NAME:'郑州银行22',
-            INVEST_AMOUNT:'0.00',
-            RATE:'0',
-            YQ_INCOME_AMOUNT:'0.00',
-            OVER_DATE:'0',
-            PRD_INDEX_ID:'0'
-          }
-        ],
+        // pageList1: [],
+        // pageList2: [],
+        pageList: [],
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 
@@ -131,27 +123,19 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList1: [
-          {
-            PRD_NAME:'测试产品1',
-            ORG_NAME:'郑州银行',
-            INVEST_AMOUNT:'0.00',
-            RATE:'0',
-            YQ_INCOME_AMOUNT:'0.00',
-            OVER_DATE:'0',
-            PRD_INDEX_ID:'0'
-          }
-        ],
         tabsParam: ["持有中", "已到期"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
-          ACC_REST:'0.00',
-          YSD_INCOME:'0.00',
-          TOTAL_INCOME:'0.00',
+          TOTAL_ASSET: '0.00',
+          ACC_REST: '0.00',
+          YSD_INCOME: '0.00',
+          TOTAL_INCOME: '0.00',
         },
-        total: ''
+        total: '',
+        TYPE: '0'
       };
     },
+
     components: {
       "v-loadmore": Loadmore
     },
@@ -168,29 +152,54 @@
       document.querySelector('.main-body').style.height = bottomHeight + 'px'
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
+    watch: {
+    },
+    computed: {
+      pageList1() {
+        if (this.TYPE == 1) {
+          // 持有中
+          return this.pageList
+        } else {
+          return []
+        }
+      },
+      pageList2() {
+        if (this.TYPE == 2) {
+          // 已到期
+          return this.pageList
+        } else {
+          return []
+        }
+      },
+      TOTAL() {
+        let t = this.financialData.TOTAL_ASSET - this.financialData.ACC_REST
+        return t ? t : '0.00'
+      }
+    },
     methods: {
-      goAdd(val){
-        this.setComState({type:'goBuy',value:val})
-        this.$router.push({name:PageName.Buying})
+      goAdd(val) {
+        this.setComState({type: 'goBuy', value: val})
+        this.$router.push({name: PageName.Buying})
       },
-      geDetails(item){
-        let {FUND_NO,PRD_INDEX_ID,PRD_NAME} = item
-        this.$router.push({name:PageName.TransactionDetails,query:{FUND_NO,PRD_INDEX_ID,PRD_NAME}})
+      geDetails(item) {
+        let {FUND_NO, PRD_INDEX_ID, PRD_NAME} = item
+        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
       },
-      goRedeem(data){
+      goRedeem(data) {
         this.setComState({
-          type:'redeemData',
-          value:data
+          type: 'redeemData',
+          value: data
         })
-        this.$router.push({name:PageName.Redeem})
+        this.$router.push({name: PageName.Redeem})
       },
       toggleTabs(index) {
+        this.pageList = []
         this.nowIndex = index;
         this.loadPageList();
       },
       getData() {
         let data = {
-          type:'API_QRY_ASSET',
+          type: 'API_QRY_ASSET',
         };
         //
         API.bank.apiQryAsset(data, res => {
@@ -202,108 +211,54 @@
         //下拉加载
         console.log('下拉加载');
         this.loadPageList();
-        if (this.nowIndex == 1) {
-          this.$refs.loadmore1.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        } else {
-          this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        }
+
+        this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
       loadBottom: function () {
         // 上拉加载
         console.log('上拉加载');
         this.more(); // 上拉触发的分页查询
-        if (this.nowIndex == 1) {
-          this.$refs.loadmore1.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        } else {
-          this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-        }
+        this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
       loadPageList: function () {
         // 初始化
         this.searchCondition.pageNo = "1";
         this.searchCondition1.pageNo = "1";
         this.allLoaded = false;
-        // 查询数据
-
-        //   alert(this.nowIndex);
-        if (this.nowIndex == 1) {
-          //已到期数据
-          let data = {
-            currentPage: this.searchCondition1.pageNo,
-            PRD_TYPE: "1"
-          };
-          API.bank.getMyInvestOver(data, res => {
-
-            this.pageList1 = res.retList || [];
-            if (this.pageList1.length == 0) {
-              // this.allLoaded = true;
-            }
-            //    if (this.pageList1.length <= 0) {
-            //     Bus.$emit(BusName.showToast, "暂无数据");
-            //    }
-            this.$nextTick(function () {
-              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-              this.scrollMode = "touch";
-            });
+        let data = {
+          currentPage: this.searchCondition.pageNo,
+          PRD_TYPE: "1"
+        };
+        API.bank.apiQryHoldInfo(data, res => {
+          this.TYPE = res.TYPE
+          this.pageList = res.retList || [];
+          // this.pageList = res.PAGE.retList;
+          if (this.pageList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+          }
+          this.$nextTick(function () {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
           });
-        } else {
-          //持有数据
-          let data = {
-            currentPage: this.searchCondition.pageNo,
-            PRD_TYPE: "1"
-          };
-          API.bank.apiQryHoldInfo(data, res => {
-            this.pageList = res.retList;
-            // this.pageList = res.PAGE.retList;
-            if (this.pageList.length < this.searchCondition.pageSize) {
-              this.allLoaded = true;
-            }
-            //   if (this.pageList.length <= 0) {
-            //     Bus.$emit(BusName.showToast, "暂无数据");
-            //   }
-            this.$nextTick(function () {
-              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-              this.scrollMode = "touch";
-            });
-          });
-        }
+        });
       },
       more: function () {
-        if (this.nowIndex == 1) {
-          // 已到期分页查询
-          this.searchCondition1.pageNo =
-            "" + (parseInt(this.searchCondition1.pageNo) + 1);
-          let data = {
-            currentPage: this.searchCondition1.pageNo,
-            PRD_TYPE: "2"
-          };
-          API.bank.getMyInvestOver(data, res => {
-            this.pageList1 = this.pageList1.concat(res.retList);
-            if (this.pageList1.length < this.searchCondition1.pageSize) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
-          });
-        } else {
-          // 已持有分页查询
-          this.searchCondition.pageNo =
-            "" + (parseInt(this.searchCondition.pageNo) + 1);
-          let data = {
-            currentPage: this.searchCondition.pageNo,
-            PRD_TYPE: "2"
-          };
-          API.bank.apiQryHoldInfo(data, res => {
-            this.pageList = this.pageList.concat(res.retList);
-            if (this.pageList.length < this.searchCondition.pageSize) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
-          });
-        }
+        // 已持有分页查询
+        this.searchCondition.pageNo =
+          "" + (parseInt(this.searchCondition.pageNo) + 1);
+        let data = {
+          currentPage: this.searchCondition.pageNo,
+          PRD_TYPE: "2"
+        };
+        API.bank.apiQryHoldInfo(data, res => {
+          this.pageList = this.pageList.concat(res.retList);
+          if (this.pageList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }
+        });
       }
     }
   };
@@ -488,7 +443,7 @@
   .main-body {
     overflow-y: auto;
     box-sizing: border-box;
-    padding-bottom: px2rem(50);
+    /*padding-bottom: px2rem(50);*/
   }
 
 </style>

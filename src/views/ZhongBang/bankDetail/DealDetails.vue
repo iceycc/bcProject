@@ -65,7 +65,6 @@
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
-  import Mixins from "@/mixins";
 
 
   export default {
@@ -82,7 +81,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["1个月", "2个月", "3个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近二个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
@@ -150,14 +149,14 @@
 
           // PRD_INDEX_ID:'',
           // currentPage: this.searchCondition.pageNo,
-          currentPage:"0" ,
+          currentPage: "0",
           START_DATE: '2020-08-26',
           END_DATE: '2020-08-27',
           // START_DATE: this.startDate,
           // END_DATE: this.endDate,
-          TYPE:'API_QRY_ELE_TRANS_DETAIL',
-          pagenum:'10',
-          pageflag:'4'
+          TYPE: 'API_QRY_ELE_TRANS_DETAIL',
+          pagenum: '10',
+          pageflag: '4'
 
         };
         API.bank.apiQryEleTransDetail(data, res => {
@@ -181,14 +180,14 @@
         // START_DATE	开始日期
         // END_DATE	结束日期
         let data = {
-          currentPage:"0" ,
+          currentPage: "0",
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
           START_DATE: '2020-08-26',
           END_DATE: '2020-08-27',
           // START_DATE: start,
           // END_DATE: end,
-          pagenum:'10',
-          pageflag:'4'
+          pagenum: '10',
+          pageflag: '4'
         };
         API.bank.apiQryHoldInfo(data, res => {
           this.pageList = res.PAGE.retList;

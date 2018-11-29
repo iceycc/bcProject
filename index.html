@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="target-densitydpi=device-dpi,width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+  <meta name="viewport"
+        content="target-densitydpi=device-dpi,width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
   <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">-->
   <!--<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
   <link rel="stylesheet" href="static/main.css">
@@ -11,21 +12,22 @@
   <meta name="format-detection" content="telephone=yes"/>
 
 
-
   <style>
-    body.open{
+    body.open {
       position: fixed;
       width: 100%;
     }
-    *{
-      -webkit-user-select:none;
-      -khtml-user-select:none;
-      -moz-user-select:none;
-      -ms-user-select:none;
-      user-select:none;	/*但是安卓不行*/
+
+    * {
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; /*但是安卓不行*/
     }
+
     input {
-      -webkit-user-select:auto; /*webkit浏览器*/
+      -webkit-user-select: auto; /*webkit浏览器*/
     }
   </style>
 </head>
@@ -35,7 +37,8 @@
 <!--<script src="static/lib/vconsole.min.js"></script>-->
 <!--TODO -->
 <script src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/jquery-1.10.1.min.js"></script>
-<script src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/login-password-widget.min.js"></script>
+<script
+  src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/login-password-widget.min.js"></script>
 <script src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/password-widget.min.js"></script>
 <script src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/jquery.base64.js"></script>
 
@@ -43,6 +46,28 @@
 <script src="static/lib/PassInputZhengzhou/pwd.js"></script>
 <script>
   // 限制双击缩放吧
+  function GetRequest() {
+    var url = location.hash.split('?')[1]; //获取url中"?"符后的字串
+    if (url) {
+      url = '?' + url
+    } else {
+      return null
+    }
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for (var i = 0; i < strs.length; i++) {
+        theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+      }
+    }
+    return theRequest;
+  }
+  console.log('FirstLoad', GetRequest());
+  if( GetRequest()&& GetRequest().ORG_ID){
+    let ORG_ID = GetRequest().ORG_ID
+    window.sessionStorage.setItem('_MX_ORG_ID',JSON.stringify(ORG_ID))
+  }
   window.onload = function () {
     document.documentElement.addEventListener('touchstart', function (event) {
       if (event.touches.length > 1) {

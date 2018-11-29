@@ -85,7 +85,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["1个月", "2个月", "3个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近二个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
@@ -93,7 +93,6 @@
           small: {},
           large: {}
         },
-
         FUND_NO:'',
         PRD_INDEX_ID:''
       };
@@ -176,8 +175,7 @@
           TYPE: 'API_QRY_BUY_HIS',
           QRY_TYPE: '0',
           PRD_TYPE: '4',
-          FUND_NO: this.FUND_NO,
-          PRD_INDEX_ID:this.PRD_INDEX_ID,
+          PRD_INDEX_ID:this.PRD_INDEX_ID + '',
           currentPage: this.searchCondition.pageNo,
           START_DATE: this.startDate,
           END_DATE: this.endDate
@@ -218,9 +216,7 @@
           currentPage: "1",
           QRY_TYPE: '0',
           PRD_TYPE: '4',
-          FUND_NO: this.FUND_NO,
-          PRD_INDEX_ID:'',
-          // PRD_INDEX_ID:'',
+          PRD_INDEX_ID:this.PRD_INDEX_ID + '',
           START_DATE: start,
           END_DATE: end
         };
@@ -430,8 +426,9 @@
         return datastr;
       },
       query() {
-        this.checkTime(this.startDate, this.endDate);
-        this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
+        if(this.checkTime(this.startDate, this.endDate)){
+          this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
+        }
       }
     }
   };

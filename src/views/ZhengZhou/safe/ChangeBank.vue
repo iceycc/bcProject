@@ -26,7 +26,7 @@
                 <div class="top">
                     <p class="title">
                         <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-                        由晋商银行提供技术保障</p>
+                        由郑州银行提供技术保障</p>
                     <div class="field_row_wrap">
                         <p class="field_row_key">
                             支付密码

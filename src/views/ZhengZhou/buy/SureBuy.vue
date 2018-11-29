@@ -24,7 +24,7 @@
     <mt-button @click="buyHandle" class="tijiao">确认购买</mt-button>
     <p class="bang">我已阅读并同意注册
       <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
-      <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('B')">《晋商银行直销银行"安鑫富"投融资协议》</a>
+      <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('B')">《郑州银行直销银行"安鑫富"投融资协议》</a>
     </p>
     <section v-if="show" class="bgbox">
       <section class="passbox">

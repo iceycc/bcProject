@@ -13,14 +13,15 @@
       <ul class="ul-li">
         <li class="productdetail clearfix"
             v-for="item,index in dataList" :key="index"
-            @click="goDetail(item.ID,item.PRD_NAME,item.ORG_ID)"
+            @click="goDetail(item)"
             style="padding-top: .2rem"
         >
           <p class="name2">{{item.PRD_NAME}}</p>
           <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
           <div class="ratereturn">
-            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
-            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">预期年化收益率</p>
+            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | fromatMoneyFilter}}%</p>
+            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">{{item.PRD_TYPE_ID |
+              typeFilter}}</p>
           </div>
         </li>
       </ul>
@@ -29,11 +30,12 @@
     <div class="productdetail2" v-if="show">
       <ul>
         <li class="clearfix" v-for="item,index in dataList" :key="index"
-            @click="goDetail(item.ID,item.PRD_NAME,item.ORG_ID)"
+            @click="goDetail(item)"
         >
           <div class="ratereturn " style="text-align: center">
-            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE}}%</p>
-            <p style="color: #B4BECC;font-size: 0.4rem;">预期年化收益率</p>
+            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | fromatMoneyFilter}}%</p>
+            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">{{item.PRD_TYPE_ID |
+              typeFilter}}</p>
           </div>
           <div class="ratereturn ratereturnright">
             <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
@@ -58,7 +60,7 @@
   export default {
     data() {
       return {
-        cur:'1',
+        cur: '1',
         Bshow: true,
         show: false,
         dataList: [],
@@ -71,17 +73,65 @@
         FUNCTION_ID: 'ptp0A000'
       })
       this.reLoadToLogin()
+
     },
-    methods: {
-      tap(val){
-        if(val==1){
+    filters: {
+      RATE_Filter(x) {
+        var f_x = parseFloat(x);
+        if (isNaN(f_x)) {
+          // alert('function:changeTwoDecimal->parameter error');
+          return x;
         }
-        if(val==2){
-          this.$router.push({name:PageName.BankAccount})
+        var f_x = Math.round(x * 100) / 100;
+        var s_x = f_x.toString();
+        var pos_decimal = s_x.indexOf('.');
+        if (pos_decimal < 0) {
+          pos_decimal = s_x.length;
+          s_x += '.';
         }
+        while (s_x.length <= pos_decimal + 2) {
+          s_x += '0';
+        }
+        return s_x;
       },
-      getListData() {
-        API.commonApi.apiGetChannelPrdList({}, (res) => {
+      typeFilter(val) {
+        if (!val) return ''
+        let str;
+        // 4.支取利率 1.七日年化收益率 3.近三个月涨幅 2 预期年化收益率
+        switch (val - 0) {
+          case 1:
+            // 货币基金
+            str = '七日年化收益率'
+            break;
+          case 2:
+            // 理财产品
+            str = '预期年化收益率'
+            break;
+          case 3:
+            str = '近三个月涨幅'
+            // 纯债
+            break;
+          case 4:
+            str = '支取利率'
+            // 存款
+            break;
+        }
+        return str
+      }
+    }
+    ,
+    methods: {
+      tap(val) {
+        if (val == 1) {
+        }
+        if (val == 2) {
+          this.$router.push({name: PageName.BankAccount})
+        }
+      }
+      ,
+      getListDataByChannel() {
+        let data = {}
+        API.bicai.getProListByChannel(data, '88', res => {
           let num = res.length
           if (num < 6) {
             this.show = true
@@ -94,11 +144,17 @@
             this.dataList = res
           }
         })
-      },
+      }
+      ,
+
       reLoadToLogin() {
         let reload = util.storage.session.get('reload') || null
         console.log(reload);
-        if (reload && JSON.stringify(reload)!="{}") {
+        if (reload && JSON.stringify(reload) != "{}") {
+          this.Bshow = false
+          setTimeout(() => {
+            this.Bshow = true
+          }, 1000)
           let id = util.storage.session.get('id')
           let title = util.storage.session.get('title')
           util.storage.session.remove('id')
@@ -107,31 +163,48 @@
           this.$router.push({
             name: 'ProductReservation',
             query: {
-              id, title
+              PRO_ID: id, title
             }
           })
         } else {
-          this.getListData()
+          // this.getListData()
+          this.getListDataByChannel()
         }
-      },
-      goDetail(id, title, ORG_ID) {
-        if (ORG_ID != '70' && ORG_ID != '227' && ORG_ID != '49') {
-          Bus.$emit(BusName.showToast, '暂不支持改银行')
-          return
-        }
+      }
+      ,
+      goDetail({ID, PRD_NAME, ORG_ID, PRD_DOCKING_TYPE, H5_URL_ANDRIOD, H5_URL_IOS}) {
         API.watchApi({
           FUNCTION_ID: 'ptb0A001', // 点位
           REMARK_DATA: '异业合作-落地页产品列表', // 中文备
-          FROM_ID: id
+          FROM_ID: ID
         })
-        ORG_ID = ORG_ID + ''
-        util.storage.session.set('ORG_ID', ORG_ID)
-        util.storage.session.set('id', id)
-        util.storage.session.set('title', title)
-        util.storage.session.set('reload', true)
-        window.location.reload()
-      },
-
+        console.log(PRD_DOCKING_TYPE);
+        if (PRD_DOCKING_TYPE == '2') {
+          // h5直联银行
+          let href = H5_URL_ANDRIOD || H5_URL_IOS
+          window.open(href);
+        }
+        else if (PRD_DOCKING_TYPE == '1') {
+          //
+          ORG_ID = ORG_ID + ''
+          util.storage.session.set('ORG_ID', ORG_ID)
+          util.storage.session.set('id', ID)
+          util.storage.session.set('title', PRD_NAME)
+          util.storage.session.set('reload', true)
+          window.location.reload()
+        }
+        else {
+          if(ORG_ID==49 || ORG_ID == 227){
+            ORG_ID = ORG_ID + ''
+            util.storage.session.set('ORG_ID', ORG_ID)
+            util.storage.session.set('id', ID)
+            util.storage.session.set('title', PRD_NAME)
+            util.storage.session.set('reload', true)
+            window.location.reload()
+          }
+        }
+      }
+      ,
     }
   }
 </script>
@@ -277,16 +350,17 @@
     top: px2rem(4);
     margin-right: px2rem(5);
   }
-  .w-tap{
+
+  .w-tap {
     display: flex;
-    li{
+    li {
       flex: 1;
       height: px2rem(40);
       line-height: px2rem(40);
       font-size: px2rem(18);
       text-align: center;
       background: #fff;
-      &.actvie{
+      &.actvie {
         color: #007aff;
       }
     }

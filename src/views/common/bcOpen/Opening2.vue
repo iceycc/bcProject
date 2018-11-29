@@ -23,12 +23,10 @@
     </section>
 
     <div class="opening_box">
-      <p class="infos" style="margin: 10px 0;">请拍摄并上传身份证</p>
       <section class="input-box">
         <p class="left-p"> 绑定卡卡号</p>
         <input type="number"
-               @blur="checkBankNo(data.CARD_NO)"
-               @input="checkBankName(data.CARD_NO)"
+               @blur="checkBankName(data.CARD_NO)"
                name="backname" placeholder="请输入储蓄卡卡号" v-model="data.CARD_NO">
       </section>
       <section class="bank">
@@ -60,11 +58,24 @@
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
 
 
+    <!--<section class="safe-code" v-show="showSafeCode">-->
+    <!--<div>-->
+    <!--<img :src="safeCodeUrl+ SESSION_ID" alt="">-->
+    <!--<input type="text" placeholder="请输入图形验证码" v-model="safeCode">-->
+    <!--<button @click="getSafeCode">确定</button>-->
+    <!--</div>-->
+    <!--</section>-->
     <section class="safe-code" v-show="showSafeCode">
       <div>
-        <img :src="safeCodeUrl+ SESSION_ID" alt="">
-        <input type="text" placeholder="请输入图形验证码" v-model="safeCode">
-        <button @click="getSafeCode">确定</button>
+        <p>请填写图形验证码</p>
+        <section class="middle">
+          <input type="tel" placeholder="请输入图形验证码" v-model="safeCode">
+          <img :src="safeCodeUrl+ SESSION_ID" alt="">
+        </section>
+        <section class="btn">
+          <button @click="showSafeCode=false">取消</button>
+          <button @click="getSafeCode">确定</button>
+        </section>
       </div>
     </section>
   </div>
@@ -162,7 +173,7 @@
       this.data.REQ_SERIAL = this.$route.query.REQ_SERIAL
       this.data.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM
       // this.tel = this.$route.query.PHONE_NUM || ''
-      this.tel = this.$store.getters.GET_OPENING1_DATA.PHONE || ''
+      // this.tel = this.$store.getters.GET_OPENING1_DATA.PHONE || ''
       this.getBankList()
     },
     methods: {
@@ -181,23 +192,13 @@
           this.codeText = `${sTime}s`
         }, 1000)
       },
-
-      subumit() {
-        $('#PWDKBD').remove();
-        this.pwd = $("#bank-pass").getKBD(); //获取密码
-        this.pwdLen = $("#bank-pass").getLenKBD(); //获取密码长度
-        console.log(this.pwd);
-        console.log(this.pwdLen);
-        if (util.Check.payPassLen(this.pwdLen, true)) return;
-        this.ZhengZhouPass = false
-      },
       // 点击获取验证码
       clickMsgCodeHandle() {
         let PHONE = this.tel
         PHONE = PHONE + ''
         console.log(PHONE);
         if (util.Check.tel(PHONE, true)) return;
-        this.SESSION_ID = this.$store.getters.GET_ACCOUNT_STATE.SESSION_ID
+        this.SESSION_ID = this.$store.getters.GET_ACCOUNT_STATE.SESSION_ID + Math.random()
         this.showSafeCode = true
       },
       // 获取短信验证码
@@ -207,21 +208,27 @@
           SAFT_CODE: this.safeCode, // 图片验证码
           BANK_CARD: this.data.CARD_NO
         }
+        this.$store.commit('SET_SESSION_ID',this.SESSION_ID)
+        this.safeCode = ''
         API.bicai.sendSMSCodeToBindCard(data, res => {
           // 0发送成功
           // 1发送失败
           // 2手机号码错误
           // 3.停止短信服务
           // 4.用户短信验证码输入错误达到三次，24小时内不能再次绑卡
+          if(res.STATUS==0){
+            this.timeDown()
+          }
           Bus.$emit(BusName.showToast, res.MESSAGE)
           this.showSafeCode = false
         }, err => {
+          this.SESSION_ID = ''
           this.codeText = '重新发送'
           this.disable = false
+          this.showSafeCode = false
           console.log(err);
         })
       },
-
       // 注册第一次返回失败 需要轮询 查询 是否成功
       pollHandle() {
         let conut = 0
@@ -237,13 +244,13 @@
           this.checkID()
         }, 5000)
       },
-      checkID(){
-        API.bicai.getMerberAuthStatusInfo({},res=>{
+      checkID() {
+        API.bicai.getMerberAuthStatusInfo({}, res => {
           let {status} = res
           console.log(status);
-          if(status ==3 || status ==4 ){
+          if (status == 3 || status == 4) {
             clearInterval(timer)
-            this.$router.push({name:PageName.BcOpening3})
+            this.$router.push({name: PageName.BcOpening3})
           }
         })
       },
@@ -265,9 +272,9 @@
       getBankList() {
         API.bicai.getBingingCardsList({}, res => {
           let obj = {}
-          // res.bankList.forEach(item => {
-          //   obj[item.BANK_CARD_BIN] = item.BANK_NAME
-          // })
+          res.bankList.forEach(item => {
+            obj[item.BANK_CARD_BIN] = item.BANK_NAME
+          })
           // console.log('bankObj>>>',obj);
           this.AllBankListObj = obj
           this.bankList = res.bankList.map((item) => {
@@ -282,11 +289,28 @@
       },
       // 点击图形验证吗
       getSafeCode() {
-        this.timeDown()
+        if(!this.safeCode){
+          Bus.$emit(BusName.showToast,'图形验证码不能为空')
+          return
+        }
         this.getMsgCode()
       },
-      checkBankName() {
+      checkBankName(val) {
+        // this.checkBankName1 = false
+        // // this.checkBankType()
+        // val = val.replace(/\s+/g, "")
+        // let bankName
+        // for (var i = 3; i < 8; i++) {
+        //   if (bankName = this.machBankName((val + '').slice(0, i))) {
+        //     this.bankText = bankName
+        //     console.log('bankName', bankName);
+        //     break
+        //   }
+        // }
         this.getBankNameByCardNo()
+      },
+      machBankName(pin) {
+        return this.AllBankListObj[pin]
       },
       checkBankNo(val) {
         val = val.toString()
@@ -351,11 +375,11 @@
             setTimeout(() => {
               this.errMsg = ''
             }, 2000)
-            let status= res.status
-            console.log('status>>>',status);
-            if(status==0){
-              this.$router.push({name:PageName.BcOpening3})
-            }else {
+            let status = res.status
+            console.log('status>>>', status);
+            if (status == 0) {
+              this.$router.push({name: PageName.BcOpening3})
+            } else {
               this.pollHandle()
             }
             API.watchApi({
@@ -559,31 +583,54 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.3);
     z-index: 10;
+
     div {
+      display: flex;
+      flex-direction: column;
       box-sizing: border-box;
       margin: px2rem(200) auto 0;
       background: #fff;
       padding-top: px2rem(10);
       text-align: center;
-      width: px2rem(250);
+      width: px2rem(280);
       height: px2rem(150);
+      border-radius: px2rem(6);
     }
-    img {
+    p {
+      flex: 1;
+      font-size: px2rem(18);
+    }
+    .btn {
+      flex: 2;
+      display: flex;
+      button {
+        flex: 1;
+        border-top: 1px solid #ccc;
+        color: #007aff;
+        &:first-child {
+          border-right: 1px solid #ccc;
+        }
+      }
 
     }
-    button {
-      width: px2rem(80);
-      height: px2rem(30);
-      background: #2f74ff;
-      color: #fff;
+
+    .middle {
+      display: flex;
+      padding: px2rem(15);
+      flex: 2;
+      img {
+        width: px2rem(80);
+        height: px2rem(40);
+      }
+      input {
+        flex: 1;
+        padding-left: px2rem(10);
+        height: px2rem(40);
+        border: 1px solid #ccc;
+      }
     }
-    input {
-      margin: px2rem(10) auto px2rem(10);
-      padding-left: px2rem(10);
-      display: block;
-      width: px2rem(150);
-      height: px2rem(40);
-      border: 1px solid #ccc;
-    }
+
   }
+
+
 </style>

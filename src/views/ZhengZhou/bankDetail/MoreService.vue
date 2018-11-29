@@ -32,7 +32,7 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
-      <section v-if="DOM_SHOW.ResetPayPassword" class="more" @click="goPage(toPageName.ResetPayPassword)">
+      <section v-if="DOM_SHOW.ResetPayPassword" class="more" @click="goResetPassword()">
              <span class="more-left">
                         重置密码</span>
         <span class="more-right">
@@ -59,12 +59,12 @@
     data() {
       return {
         // 功能展示
-        DOM_SHOW:{
-          fenxiang:true,
+        DOM_SHOW: {
+          fenxiang: true,
           ChangeBank: false,
-          ResetPhone:false,
-          ResetPayPassword:true,
-          ChangePayPassword:true
+          ResetPhone: false,
+          ResetPayPassword: true,
+          ChangePayPassword: true
         },
         RISK_LEVEL: '',
         CARD_BANK_NAME: '',
@@ -74,9 +74,10 @@
           ResetPhone: PageName.ResetPhone,
           ResetPayPassword: PageName.ResetPayPassword,
           ChangePayPassword: PageName.ChangePayPassword,
+          ResetPayPasswordApply: PageName.ResetPayPasswordApply,
         },
         PHONE_NUM: '',
-        fenxianQuery: {}
+        fenxianQuery: {},
       }
     },
     created() {
@@ -90,24 +91,61 @@
             break;
 
           case '2':
-            return '谨慎型'
-            break;
-
-          case '3':
             return '稳健型'
             break;
 
+          case '3':
+            return '平衡性'
+            break;
+
           case '4':
-            return '积极型'
+            return '成长性'
             break;
 
           case '5':
-            return '激进型'
+            return '进取型'
             break;
         }
       }
     },
     methods: {
+      goResetPassword() {
+        this.resetPayPasswordStatus()
+      },
+      // 重置交易密码状态查询
+      resetPayPasswordStatus() {
+        let data = {}
+        API.safe.apiUserPasswordModification(data, res => {
+          // 1 判断是否提交过查询申请
+          let IS_RESET = res.IS_RESET
+          let STATUS = res.STATUS
+
+          this.setComState({type: 'resetPasswordStatus', value: res})
+          if (IS_RESET == 1 || STATUS == '') {
+            this.$router.push({name: PageName.ResetPayPasswordApply})
+          } else {
+            // this.$router.push({name: PageName.ResetPayPasswordApply})
+            this.$router.push({name: PageName.ResetPayPasswordStatus})
+          }
+          // CARD_FRONT_URL
+          // 身份证正面
+          // CARD_BACK_URL
+          // 身份证反面
+          // STATUS
+          // 审核状态
+          // 1审批中，2审批通过，3审核拒绝，4验证码超时拒绝,5其它待重新申请
+          // REFUSE_REASON
+          // 拒绝原因
+          // IS_RESET
+          // 是否有密码未重置的审核记录       1：无密码未重置记录
+          // USER_NAME
+          // 用户名称
+          // ID_CARD_NO
+          // 证件号码
+          // ELECTRONIC_ACCOUNT
+          // 电子账户
+        })
+      },
       goPage(pageName) {
         let data = {}
         console.log(pageName);
@@ -130,13 +168,13 @@
         // this.getBankCardInfo()
       },
       //  获取风险测评结果
-      getRiskGrade(){
-        API.risk.apiGetRiskEvalRes({},res=>{
+      getRiskGrade() {
+        API.risk.apiGetRiskEvalRes({}, res => {
           this.RISK_LEVEL = res.RISK_LEVEL
-          this.setComState({type:'RiskResult',value:res})
+          this.setComState({type: 'RiskResult', value: res})
         })
       },
-      getBankCardInfo(){
+      getBankCardInfo() {
         let data = {}
         API.safe.apiBandCard(data, (res) => {
           this.setComState({

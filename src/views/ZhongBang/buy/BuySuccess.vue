@@ -1,9 +1,9 @@
 <template>
   <div>
-    <app-bar title="购买"></app-bar>
+    <app-bar title="存入"></app-bar>
     <div class="buysuccessimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
-      <p>购买成功</p>
+      <p>存入成功</p>
     </div>
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">
@@ -15,26 +15,30 @@
         <div class="buysuccessdetailright">{{datas.ORG_NAME}}</div>
       </div>
       <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">购买金额</div>
-        <div class="buysuccessdetailright">{{datas.money}}元</div>
+        <div class="buysuccessdetailleft">存入金额</div>
+        <div class="buysuccessdetailright">{{datas.PAY_AMOUT}}元</div>
       </div>
       <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">交易申请日期</div>
+        <div class="buysuccessdetailleft">存入日期</div>
         <div class="buysuccessdetailright">{{datas.OPERA_DATE}}</div>
       </div>
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">预期开始收益日期</div>
-        <div class="buysuccessdetailright">{{datas.EXPECT_PROFIT_DATE}}</div>
-      </div>
+      <!--<div class="buysuccessdetails">-->
+        <!--<div class="buysuccessdetailleft">预期开始收益日期</div>-->
+        <!--<div class="buysuccessdetailright">{{datas.INC_DATE}}</div>-->
+      <!--</div>-->
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易流水号</div>
-        <div class="buysuccessdetailright">{{datas.BESHARP_BUY_SEQ}}</div>
+        <div class="buysuccessdetailright">{{datas.BESHARP_SEQ}}</div>
       </div>
 
     </div>
     <div class="btn">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其它产品</span>
+      <span @click="goBuyOther" class="begain">存入其它产品</span>
+      <!--<span @click="goBuyOther" class="begain">完成</span>-->
+      <!--<span @click="()=>{-->
+      <!--this.$router.go(-1)-->
+      <!--}" class="begain">完成</span>-->
     </div>
   </div>
 </template>

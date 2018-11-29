@@ -166,10 +166,12 @@ export default {
         // 保存第一步的数据
         this.setComState({type: 'openingState', value: {...res, ...params}})
         // 回显是否实名成功
-        this.checkBankStatus() //
-        // this.$router.push({name:PageName.Opening2})
+        // this.checkBankStatus() //
+        this.$router.push({name:PageName.Opening2})
       },err=>{
-        this.checkBankStatus() //
+        setTimeout(()=>{
+          this.checkBankStatus() //
+        })
       })
     },
 

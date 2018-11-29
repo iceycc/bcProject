@@ -1,16 +1,16 @@
 <template>
   <div class="app">
-    <app-bar title="购买"></app-bar>
+    <app-bar title="存入"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/buyfail@2x.png" style="width:25%" alt="">
     </div>
     <div class="fenxiangcontent">
-      <h2>很抱歉，购买失败!</h2>
+      <h2>很抱歉，存入失败!</h2>
       <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
     </div>
     <div class="btn">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其它产品</span>
+      <span @click="goBuyOther" class="begain">存入其它产品</span>
     </div>
   </div>
 </template>
@@ -18,12 +18,9 @@
   import {PageName } from "@/Constant";
   import {WatchApi} from "@/service";
   // import util from "libs/util";
-
-
   export default {
     created() {
       this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
-      this.errMsg = ''
     },
     data() {
       return {

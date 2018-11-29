@@ -7,20 +7,20 @@
                                                 alt=""></span>
       {{CARD_BANK_NAME}}
     </div>
+    <div class="crow-line"></div>
     <section class="inputAmount">
       <span class="Amount">金额</span>
       <input @change="checkMoney"
-             v-model="APPLY_AMOUN" type="number" placeholder="请输入提现金额">
+             v-model="APPLY_AMOUNT" type="number" placeholder="请输入提现金额">
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
-      <span class="span" style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST<=DAY_REST? ACC_REST:DAY_REST">全部提现</span>
     </section>
     <section class="inputAmount">
             <span class="Amount">
                 验证码
             </span>
-      <input type="text" v-model="msgCode" placeholder="请填写短信验证码">
+      <input type="text" v-model="msgCode" placeholder="请输入验证码">
       <button
         :disabled="msgdisable"
         @click="getMsg"
@@ -28,7 +28,8 @@
       </button>
     </section>
     <p class="info1">
-      本卡当前余额{{ACC_REST | formatNum}}元，每日限额{{DAY_REST |formatNum}}元
+      本卡当前余额{{ACC_REST | formatNum}}元
+      <span class="span" style="color:#389CFF" @click="APPLY_AMOUNT = ACC_REST">全部提现</span>
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
 
@@ -49,63 +50,74 @@
   export default {
     data() {
       return {
-        codeText:'获取验证码',
-        msgdisable:false,
-        msgCode:'',
+        codeText: '获取验证码',
+        msgdisable: false,
+        msgCode: '',
 
 
         html: '协议',
         page: false,
-        APPLY_AMOUN: '',
+        APPLY_AMOUNT: '',
         toUrl: '',
         CARD_BANK_NAME: '',
         imgSrc: imgSrc,
 
         pass: '',
         len: null,
-        passCode:'',
+        passCode: '',
 
-        canClick: false,
         logo: '',
-        inputID: '',
         ifCheckMoneyEmpty: true,
 
 
         ACC_REST: '200',
-        DAY_REST:'10000', // todo取每日限额
-      }
-    },
-    watch: {
-      APPLY_AMOUN(n, o) {
-        if (n && n - 0 > 0) {
-          this.canClick = true
-          this.ifCheckMoneyEmpty = false
-        } else {
-          this.canClick = false
-          this.ifCheckMoneyEmpty = true
-        }
-      },
-      show(n, O) {
-        this.inputID = n ? 'withdrawPayPass' : ''
+        DAY_REST: '10000', // todo取每日限额
       }
     },
     components: {
       AppBar,
       PassWordZhengzhou
     },
-    mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
+    watch: {
+      APPLY_AMOUNT(n) {
+        if (n > 0) {
+          this.ifCheckMoneyEmpty = false
+        } else {
+          this.ifCheckMoneyEmpty = true
+        }
+      }
+    },
+    computed: {
+      canClick() {
+        if (this.APPLY_AMOUNT && this.msgCode) {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     created() {
       this.getUserInfos()
       this.ACC_REST = this.$route.query.ACC_REST || '200'
     },
     methods: {
+
       getMsg() {
+        if (util.Check.trim(this.APPLY_AMOUNT, '提现金额', true)) {
+          return
+        }
+        //
+        if (this.APPLY_AMOUNT - 0 > this.ACC_REST - 0) {
+          Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
+          return
+        }
         let times = time
-        this.disable = true
+        this.msgdisable = true
         timer = setInterval(() => {
           if (times == 0) {
             this.codeText = '重新发送'
-            this.disable = false
+            this.msgdisable = false
             clearInterval(timer)
             return
           }
@@ -114,8 +126,16 @@
         }, 1000)
         this.getCode()
       },
-      getCode(){
-
+      getCode() {
+        let TEL = this.getComState.TEL
+        let data = {
+          PHONE_NUM: TEL,
+          BIZ_TYPE: '1005', // 提现
+          AMOUNT: this.APPLY_AMOUNT
+        }
+        API.common.apiSendPhoneCode(data, res => {
+          Bus.$emit(BusName.showSendMsg, TEL)
+        })
       },
       checkMoney() {
 
@@ -137,9 +157,9 @@
         let data = {
           PHONE_CODE: this.msgCode,
           EITHDRAW_All: "1",// 0 全部提现
-          APPLY_AMOUNT: this.APPLY_AMOUN, //
-          VRFY_FLAG:'00',
-          EITH_DRAW_ALL:'0'
+          APPLY_AMOUNT: this.APPLY_AMOUNT, //
+          VRFY_FLAG: '00',
+          EITH_DRAW_ALL: '0'
         }
         this.show = false
         API.withdraw.apiCash(data, res => {
@@ -153,7 +173,7 @@
               text: '提现中',
               data: params,
               fn: (result, timer, count) => {
-                this.setComState({type:"reload",value:true}) // reload-001
+                this.setComState({type: "reload", value: true}) // reload-001
                 if ('1' == result.RES_CODE) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
@@ -171,17 +191,29 @@
                   this.$router.push({
                     name: PageName.WithdrawSuccess,
                     query: {
-                      money: this.APPLY_AMOUN,
+                      money: this.APPLY_AMOUNT,
                       ...res
                     }
                   })
-                } else {
+                }
+                else if ('20000' == result.RES_CODE) {
+                  clearInterval(timer)
+                  this.Londing.close()
+                  this.$router.push({
+                    name: PageName.WaitForWithdraw,
+                    query: {
+                      err: result.RES_MSG
+                    }
+                  })
+                }
+                else {
                   if (count == 5) {
-                    Bus.$emit(BusName.showToast, result.RES_MSG);
-                    this.$router.push({
-                      name: PageName.WaitForWithdraw,
+                    let msg = result.RES_CODE + ':' + result.RES_MSG
+                    Bus.$emit(BusName.showToast, msg);
+                    this.$router.push({ // todo是否要跳转
+                      name: PageName.WithdrawFaild,
                       query: {
-                        err: result.RES_MSG
+                        err: msg
                       }
                     })
                   }
@@ -194,20 +226,20 @@
         })
       },
       doNext() {
-        // if (util.Check.trim(this.APPLY_AMOUN, '提现金额', true)) {
-        //   return
-        // }
-        // //
-        // if (this.APPLY_AMOUN - 0 > this.ACC_REST - 0) {
-        //   Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
-        //   return
-        // }
+        if (util.Check.trim(this.APPLY_AMOUNT, '提现金额', true)) {
+          return
+        }
+        //
+        if (this.APPLY_AMOUNT - 0 > this.ACC_REST - 0) {
+          Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
+          return
+        }
         this.doWithdraw()
 
       },
       clearNumHandle() {
         //
-        this.APPLY_AMOUN = ''
+        this.APPLY_AMOUNT = ''
       }
 
     }
@@ -233,14 +265,17 @@
     font-size: px2rem(16)
   }
 
+  .crow-line {
+    height: px2rem(10);
+    background: #f9f9f6;
+  }
+
   .inputAmount {
     position: relative;
     padding-left: px2rem(20);
     height: px2rem(50);
     line-height: px2rem(50);
     font-size: px2rem(14);
-    margin-top: px2rem(20);
-    border-top: px2rem(20) solid #f6f6f9;
     border-bottom: 1px solid #EEEEF0;
     .button {
       vertical-align: middle;
@@ -257,7 +292,7 @@
       width: px2rem(15);
       height: px2rem(15);
       top: 50%;
-      right: px2rem(100);
+      right: px2rem(10);
       margin-top: px2rem(-15/2);
 
     }
@@ -269,7 +304,7 @@
       color: #333;
       outline: none;
     }
-    .span{
+    .span {
       display: inline-block;
       text-align: center;
       width: px2rem(80);
@@ -282,13 +317,11 @@
     }
   }
 
-
-
   .tijiao {
     font-size: px2rem(18);
     color: #fff;
-    background: #518BEE;
-     border-radius: px2rem(6);
+    background: #ccc;
+    border-radius: px2rem(6);
     line-height: 1.2rem;
     width: px2rem(255);
     margin: px2rem(40) auto 0;
@@ -309,8 +342,6 @@
     float: left;
     padding-top: 0.4rem;
   }
-
-
 
   .info1 {
     padding-left: px2rem(20);

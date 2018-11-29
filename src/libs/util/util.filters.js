@@ -67,5 +67,42 @@ export default {
     } else {
       return val.replace(/(\d{4})(?=\d)/g, "$1" + " ")
     }
-  }
+  },
+
+  /**
+   *
+   * @param no
+   * @returns {string}
+   */
+  formatBankNo(no){
+    if(!no) return ''
+    no = no + ''
+    return '**** **** **** **** ' + no.substr(no.length-4)
+  },
+  // 将 0 转换为 0.00
+  fromatMoneyFilter(x){
+    // if(!num) return '0.00'
+    // if(num.indexOf('.')!='-1'){
+    //   // 有点
+    //   return num
+    // }else {
+    //   return num + '.00'
+    // }
+    var f_x = parseFloat(x);
+    if (isNaN(f_x)) {
+      // alert('function:changeTwoDecimal->parameter error');
+      return x;
+    }
+    var f_x = Math.round(x * 100) / 100;
+    var s_x = f_x.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+      pos_decimal = s_x.length;
+      s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+      s_x += '0';
+    }
+    return s_x;
+  },
 }

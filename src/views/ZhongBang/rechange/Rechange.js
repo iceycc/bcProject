@@ -16,7 +16,9 @@ export default {
         BIZ_TYPE: '1004', // 充值需要
         AMOUNT: this.APPLY_AMOUNT
       }
-      API.common.apiSendPhoneCode(data)
+      API.common.apiSendPhoneCode(data, res => {
+        Bus.$emit(BusName.showSendMsg, this.PHONE_NUM)
+      })
     },
     handleApiRecharge() {
       // TYPE	请求类型
@@ -38,6 +40,7 @@ export default {
         this.queryStatus({
           text: '正在充值中',
           data: params,
+          time: 100,
           fn: (result, timer, count) => {
             this.setComState({type: "reload", value: true}) // reload-001
             if ('1' == result.RES_CODE) {
@@ -61,16 +64,34 @@ export default {
                   ...res
                 }
               })
-            } else {
-              if (count == 5) {
+            }
+            else if ('20000' == result.RES_CODE) {
+              clearInterval(timer)
+              this.Londing.close()
+              this.$router.push({
+                name: PageName.RechargeWait,
+              })
+            }
+            else {
+              if (count == 100) {
                 clearInterval(timer)
                 Bus.$emit(BusName.showToast, result.RES_MSG);
-                this.$router.push({ // todo是否要跳转
-                  name: PageName.RechargeFailure,
-                  query: {
-                    err: result.RES_MSG
-                  }
-                })
+                if ('20000' == result.RES_CODE) {
+                  this.$router.push({ // todo是否要跳转
+                    name: PageName.RechargeFailure,
+                    query: {
+                      err: result.RES_MSG
+                    }
+                  })
+                } else {
+                  this.$router.push({ // todo是否要跳转
+                    name: PageName.RechargeFailure,
+                    query: {
+                      err: result.RES_MSG
+                    }
+                  })
+                }
+
               }
             }
           }
@@ -89,14 +110,13 @@ export default {
       // 获取机构名称  机构logo 用于充值提现
       API.safe.apiBandCard({}, res => {
         this.logo = res.BANK_BG_URL
-        this.ORG_NAME = res.BANK_USER_CODE
+        this.ORG_NAME = res.ORG_NAME
         this.ACCT_NO = res.CARD_NUM
         this.PHONE_NUM = res.PHONE_NUM
         this.CARD_BANK_NAME = res.CARD_BANK_NAME;
         this.CARD_BANK_URL = res.CARD_BANK_URL
-        // todo
-        // this.SINGLE_QUOTA = res.SINGLE_QUOTA
-        // this.DAY_QUOTA = res.DAY_QUOTA
+        this.SINGLE_QUOTA = res.SINGLE_QUOTA
+        this.DAY_QUOTA = res.DAY_QUOTA
         let cardNum = res.CARD_NUM
         this.mainBankList.push({
           logo: res.CARD_BANK_URL,
@@ -124,7 +144,7 @@ export default {
       })
     },
     clickBank() {
-      this.upseletShow = !this.upseletShow
+      // this.upseletShow = !this.upseletShow
     },
   }
 }

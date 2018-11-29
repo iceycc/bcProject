@@ -9,7 +9,7 @@
       <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
     </div>
     <span @click="reCharge" class="btn">重新充值</span>
-    <span @click="goBank" class="btn btn-back">返回银行页</span>
+    <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
   </div>
 </template>
 <script>

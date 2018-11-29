@@ -25,6 +25,16 @@ export default {
       });
 
     },
+    getBankList() {
+      // 获取机构名称  机构logo 用于充值提现
+      API.safe.apiBandCard({}, res => {
+        this.bankObj = {
+          logo: res.BANK_BG_URL,
+          ORG_NAME: res.ORG_NAME,
+          ACCT_NO: res.BANK_USER_CODE
+        }
+      })
+    },
     getBankDetail() { // 获取产品列表
       let data = {
         TYPE:'API_QRY_ASSET'

@@ -6,32 +6,24 @@
         <div class="bannercontent">
           <div class="bannertop">
             <div class="bannertopleft">
-              <p class="p-text" style="font-size: 0.4rem;">预期年化收益率</p>
+              <p class="p-text" style="font-size: 0.4rem;">支取利率</p>
               <p>
                 <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
             <div class="bannertopright">
-              <p class="p-text" style="font-size: 0.4rem">理财期限</p>
+              <p class="p-text" style="font-size: 0.4rem;text-align: left;padding-left: .3rem">期限</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>
-                <span style="font-size: .5rem;">天</span>
+                <strong style="font-size: 0.9rem;text-align: left;padding-left: 0.1rem"> 随时支取 </strong>
               </p>
             </div>
           </div>
           <div class="bannerbottom">
             <ul>
-
-              <li class="bannerbottomfirst clearfix"
-                  v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险
-              </li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>
+              <li class="bannerbottomtwo clearfix">当日计息</li>
               <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
-              <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.OPENAPI_BUY_COUNT}}</li>
+              <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>
             </ul>
           </div>
         </div>
@@ -64,7 +56,7 @@
         <!--<span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>-->
         <!--</div>-->
         <div class="bannercontent">
-          <span class="bannercontenttitle">起购金额</span>
+          <span class="bannercontenttitle">起存金额</span>
           <span
             class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
         </div>
@@ -73,8 +65,12 @@
           <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
         </div>
         <div class="bannercontent">
+          <span class="bannercontenttitle">支取时间</span>
+          <span class="bannercontenttitlecontent">随时支取</span>
+        </div>
+        <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER}}</span>
+          <span class="bannercontenttitlecontent">活期存款</span>
         </div>
       </div>
       <!--<div class="wrapicon">-->
@@ -121,7 +117,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT">
+          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_AREA_CONTENT">
           </div>
         </div>
       </div>
@@ -218,7 +214,7 @@
 
     created() {
       this.title = this.$route.query.title;
-      this.proID = this.$route.query.id;
+      this.proID = this.$route.query.PRO_ID;
       this.getData(this.proID);
     },
     directives: {
@@ -364,6 +360,8 @@
           this.productDetail = res;
           this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
           // 判断起购金额是否大于默认金额
+          this.title = res.PRD_NAME
+          document.title = res.PRD_NAME
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
@@ -419,7 +417,7 @@
           // 判断该用户在本行的开户状态
           this.getBankStatus(PageName.Buying)
         }else {
-          this.$router.push({name: PageName.Buying})
+          this.$router.push({name: PageName.Login})
         }
       }
     }

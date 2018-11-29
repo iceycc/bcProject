@@ -21,3 +21,15 @@ export const timerFormat = util.timerFormat
  * @constructor
  */
 export const BankNo_Filter = util.BankNo_Filter
+
+
+/**
+ * 格式化银行  ****  ****  ****  ****  8903
+ * @param val
+ * @returns {*}
+ * @constructor
+ */
+export const formatBankNo = util.formatBankNo
+
+
+export const fromatMoneyFilter = util.fromatMoneyFilter

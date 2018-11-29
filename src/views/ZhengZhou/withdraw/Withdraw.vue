@@ -5,7 +5,10 @@
     <div class="minshengbank">
             <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
-      {{CARD_BANK_NAME}}
+      <div class="bank">
+        <p>{{CARD_BANK_NAME}}</p>
+        <P>{{BANK_USER_CODE | formatBankNo}}</P>
+      </div>
     </div>
     <section class="inputAmount">
       <span class="Amount">金额</span>
@@ -14,17 +17,25 @@
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
-      <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST<=DAY_REST? ACC_REST:DAY_REST">全部提现</span>
+      <span style="color:#389CFF" @click="APPLY_AMOUN = ACC_REST">全部提现</span>
     </section>
     <p class="info1">
-      本卡当前余额{{ACC_REST | formatNum}}元，每日限额{{DAY_REST |formatNum}}元
+      本卡当前余额{{ACC_REST | formatNum}}元
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
+    <div class="r-caption">
+      <p>温馨提示：</p>
+      <p>绑定卡：一个二类账户只能绑定一张银行卡，且绑定银行卡的二类户才是有效的二类户。</p>
+      <p>二类户的充值和体现只能通过绑定卡进行。</p>
+      <p>二类户的每日提现的限额为500万元，每日提现的次数为10次。</p>
+      <p>绑定卡为他行卡（除郑州银行卡）时，每笔提现的限额为5万元。</p>
+    </div>
+
     <section v-if="show" class="bgbox">
       <section class="passbox">
         <p class="title">
           <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由晋商银行提供技术保障</p>
+          由郑州银行提供技术保障</p>
         <section class="field_row_wrap">
           <p class="field_row_key">
             交易密码
@@ -66,32 +77,31 @@
         APPLY_AMOUN: '',
         toUrl: '',
         CARD_BANK_NAME: '',
+        BANK_USER_CODE: '',
         imgSrc: imgSrc,
 
         pass: '',
         len: null,
-        passCode:'',
-
-        canClick: false,
+        passCode: '',
         logo: '',
         inputID: '',
         ifCheckMoneyEmpty: true,
-        BankType:'0',
+        BankType: '0',
 
         ACC_REST: '200',
-        DAY_REST:'10000', // todo取每日限额
+        DAY_REST: '10000', // todo取每日限额
+      }
+    },
+    computed: {
+      canClick() {
+        if (this.APPLY_AMOUN) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     watch: {
-      APPLY_AMOUN(n, o) {
-        if (n && n - 0 > 0) {
-          this.canClick = true
-          this.ifCheckMoneyEmpty = false
-        } else {
-          this.canClick = false
-          this.ifCheckMoneyEmpty = true
-        }
-      },
       show(n, O) {
         this.inputID = n ? 'withdrawPayPass' : ''
       }
@@ -100,10 +110,13 @@
       AppBar,
       PassWordZhengzhou
     },
-    mixins: [Mixins.HandleMixin,Mixins.UtilMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     created() {
       this.getUserInfos()
-      this.ACC_REST = this.$route.query.ACC_REST.split('.')[0]
+      if (this.$route.query.ACC_REST) {
+        this.ACC_REST = this.$route.query.ACC_REST
+        // this.ACC_REST = this.$route.query.ACC_REST.split('.')[0]
+      }
       console.log(this.ACC_REST);
     },
     methods: {
@@ -113,6 +126,7 @@
       getUserInfos() {
         API.safe.apiBandCard({}, (res) => {
           this.CARD_BANK_NAME = res.CARD_BANK_NAME
+          this.BANK_USER_CODE = res.BANK_USER_CODE
           this.logo = res.CARD_BANK_URL
         })
       },
@@ -138,8 +152,8 @@
           EITHDRAW_All: "1",// 0 全部提现
           APPLY_AMOUNT: util.fromatMoney(this.APPLY_AMOUN,),// this.APPLY_AMOUN, //util.fromatMoney(this.datas.money),
           BANK_PAY_PW: this.pass, //
-          PREFIX:this.passCode,//  密码标识 TODO 密码标识 查询银行类型
-          IS_UNIONPAY:this.BankType, // 是否他行卡 必填 1：他行 0:本行 todo 判断银行类型
+          PREFIX: this.passCode,//  密码标识 TODO 密码标识 查询银行类型
+          IS_UNIONPAY: this.BankType, // 是否他行卡 必填 1：他行 0:本行 todo 判断银行类型
         }
         this.show = false
         API.withdraw.apiCash(data, res => {
@@ -193,12 +207,18 @@
         })
       },
       doNext() {
-        if (util.Check.trim(this.APPLY_AMOUN, '提现金额', true)) {
+        console.log(this.APPLY_AMOUN);
+        if (this.APPLY_AMOUN == '') {
+          Bus.$emit(BusName.showToast, '提现金额不能为空')
           return
         }
         //
         if (this.APPLY_AMOUN - 0 > this.ACC_REST - 0) {
           Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
+          return
+        }
+        if (this.APPLY_AMOUN - 0 > this.DAY_REST - 0) {
+          Bus.$emit(BusName.showToast, '提现金额大于每日限额，请调整提现金额')
           return
         }
         this.Londing.open()
@@ -230,9 +250,23 @@
 
   .minshengbank {
     padding-left: px2rem(20);
-    height: px2rem(65);
-    line-height: px2rem(65);
-    font-size: px2rem(16)
+    display: flex;
+    .bank {
+      padding-top: px2rem(12);
+      p:first-child {
+        color: #444;
+        font-size: px2rem(16);
+      }
+      p:last-child {
+        color: #9199A1;
+        font-size: px2rem(14);
+      }
+    }
+  }
+
+  .r-caption {
+    color: #9199A1;
+    padding: px2rem(20) px2rem(20) px2rem(80);
   }
 
   .inputAmount {
@@ -282,8 +316,8 @@
   .tijiao {
     font-size: px2rem(18);
     color: #fff;
-    background: #518BEE;
-     border-radius: px2rem(6);
+    background: #ccc;
+    border-radius: px2rem(6);
     line-height: 1.2rem;
     width: px2rem(255);
     margin: px2rem(40) auto 0;
@@ -292,7 +326,7 @@
     outline: none;
     display: block;
     &.active {
-      background-color: #508CEE;
+      background: #508CEE;
     }
   }
 

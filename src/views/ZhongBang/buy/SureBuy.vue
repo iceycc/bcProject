@@ -51,7 +51,7 @@
 
 
   let time = 60
-
+  let timer;
   export default {
     data() {
       return {

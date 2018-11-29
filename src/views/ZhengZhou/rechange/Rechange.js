@@ -1,12 +1,16 @@
 import API from "@/service";
 import {PageName, BusName} from "@/Constant";
 import Bus from '@/plugin/bus'
+import util from "libs/util";
+
 
 export default {
   data() {
     return {
       BankType: '1',
-      applyDate: ''
+      applyDate: '',
+      CARD_NUM: '', // 二类卡
+      BANK_USER_CODE: '',// 一类卡
     }
   },
   created() {
@@ -17,6 +21,7 @@ export default {
       let data = {
         BIND_AC_NO: this.ACCT_NO
       }
+      // apiUserAccountProperties
       API.common.apiUserAccountProperties(data, res => {
         // 必填
         // 0：他行；
@@ -25,27 +30,15 @@ export default {
         this.BankType = res.ACC_FLAG
       })
     },
-    getCode() { //
-      let data = {
-        RECHARGE_AMOUNT: this.APPLY_AMOUN
-      }
-      // 充值协议
-      API.reChange.rechargeApply(data, res => {
-        this.applyDate = res
-        // WORKDATE
-        // 平台日期
-        // AGENTSERIALNO
-        // 平台流水号
-      })
-      this.checkBankType()
-    },
+
     handleApiRecharge() {
       let data = {
         TYPE: 'API_RECHARGE',
         PHONE_CODE: this.msgCode,
         // PIN: this.PIN,
         BANK_PAY_PW: this.pass,
-        APPLY_AMOUNT: this.APPLY_AMOUN,
+        // APPLY_AMOUNT: this.APPLY_AMOUNT,
+        APPLY_AMOUNT: util.fromatMoney(this.APPLY_AMOUNT),
         PREFIX: this.passCode,
         IS_UNIONPAY: this.BankType,
         // ORIGWORKDATE	充值申请日期
@@ -80,7 +73,7 @@ export default {
               this.$router.push({
                 name: PageName.RechargeSuccess,
                 query: {
-                  money: this.APPLY_AMOUN,
+                  money: this.APPLY_AMOUNT,
                   ...res
                 }
               })
@@ -118,7 +111,11 @@ export default {
         this.CARD_BANK_URL = res.CARD_BANK_URL
         this.SINGLE_QUOTA = res.SINGLE_QUOTA
         this.DAY_QUOTA = res.DAY_QUOTA
+
+        this.BANK_USER_CODE = res.BANK_USER_CODE
+        this.CARD_NUM = res.CARD_NUM
         let cardNum = res.CARD_NUM
+        this.checkBankType()
         this.mainBankList.push({
           logo: res.CARD_BANK_URL,
           name: res.CARD_BANK_NAME,

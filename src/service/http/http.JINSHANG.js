@@ -39,7 +39,7 @@ export default {
     }
     ORG_ID = params.ORG_ID || ORG_ID
 
-    let {DEVICE_ID, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
+    let {DEVICE_ID,APP_FLAG, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -48,10 +48,13 @@ export default {
           VERSION: "",
           IMSI: "460026325010440",
           SESSION_ID: "",
-          SYSTEM_TYPE: "h5",
           TYPE,
           TOKEN: TOKEN,
-          DEVICE_ID: DEVICE_ID + ''
+          DEVICE_ID: DEVICE_ID + '',
+
+          SYSTEM_TYPE: "h5",
+          CHANNEL_ID: CHANNEL_ID + '',
+          APP_FLAG: APP_FLAG || 'BC'
         },
         param: {
           ORG_ID:ORG_ID+'', // 70
@@ -98,7 +101,7 @@ export default {
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
         Bus.$emit(BusName.showToast, result.head.MSG)
         // util.storage.session.remove(LsName.token)
-        store.commit('SET_TOKEN', null)
+        store.commit('SET_TOKEN', '')
         Router.push({
           name: PageName.Login,
           query: {
@@ -108,7 +111,7 @@ export default {
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
-        store.commit('SET_TOKEN', null)
+        store.commit('SET_TOKEN', '')
         // util.storage.session.remove(LsName.token)
         Router.push({
           name: PageName.Login,

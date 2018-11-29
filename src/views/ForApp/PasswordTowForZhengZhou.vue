@@ -1,51 +1,75 @@
 <template>
   <div class="bgbox">
-    <div class="passbox">
-      <div class="top">
-        <p class="title">
-          <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-          由郑州银行提供技术保障</p>
-        <div class="field_row_wrap">
-          <p class="field_row_key">
-            新密码
+    <app-bar title="重置支付密码" class="m-header"></app-bar>
+    <div class="top">
+      <div class="field_row_wrap">
+        <p class="field_row_key" @click="newPassShow =true" v-if="!newPassShow">
+          <span class="left">新密码</span>
+          <span class="right">密码由6位数字组成</span>
+        </p>
+        <transition name="fade">
+          <p class="field_row_key low" v-if="newPassShow">
+            <span class="left">新密码</span>
           </p>
-          <div class="field_row_value">
-            <pass-word-zhengzhou
-              BankCardPass="payPasscc2"
-            ></pass-word-zhengzhou>
-          </div>
-
-          <p class="info">密码由6位数字组成</p>
-        </div>
-        <div class="field_row_wrap">
-          <p class="field_row_key">
-            重复新密码
-          </p>
-          <div class="field_row_value">
-            <pass-word-zhengzhou
-              BankCardPass="payPasscc3"
-            ></pass-word-zhengzhou>
-          </div>
-
-          <p class="info">密码由6位数字组成</p>
+        </transition>
+        <div class="field_row_value" v-show="newPassShow">
+          <pass-word-zhengzhou
+            BankCardPass="payPasscc2"
+          ></pass-word-zhengzhou>
         </div>
       </div>
-      <div class="btn">
-        <button @click="close">取消</button>
-        <button @click="submit">确定</button>
+      <div class="field_row_wrap">
+        <p class="field_row_key" @click="preNewPassShow =true" v-if="!preNewPassShow">
+          <span class="left">重复新密码</span>
+          <span class="right">密码由6位数字组成</span>
+        </p>
+        <transition name="fade">
+          <p class="field_row_key low" v-if="preNewPassShow">
+            <span class="left">重复新密码</span>
+          </p>
+        </transition>
+
+        <div class="field_row_value" v-show="preNewPassShow">
+          <pass-word-zhengzhou
+            BankCardPass="payPasscc3"
+          ></pass-word-zhengzhou>
+        </div>
       </div>
+      <div class="field_row_wrap">
+        <p class="field_row_key" @click="msgCodeShow =true" v-if="!msgCodeShow">
+          <span class="left">验证码</span>
+        </p>
+        <transition name="fade">
+          <p class="field_row_key low" v-if="msgCodeShow">
+            <span class="left">验证码</span>
+          </p>
+        </transition>
+
+        <div class="field_row_value" v-show="msgCodeShow">
+          <input type="tel" v-model="CHECK_CODE">
+        </div>
+      </div>
+
     </div>
-
+    <div class="btn">
+      <button @click="submit" :class="{active:canClick}" :disabled="!canClick">确定</button>
+    </div>
   </div>
 </template>
 
 <script>
   import PassWordZhengzhou from '@/components/password/PassInputZhengZhouForMore'
+  import Bus from '@/plugin/bus'
+  import {PageName, BusName, LsName} from "@/Constant";
 
   export default {
     data() {
       return {
-        show: true
+        show: true,
+        msgCodeShow: false,
+        newPassShow: false,
+        preNewPassShow: false,
+        CHECK_CODE: ''
       }
     },
     components: {
@@ -58,6 +82,24 @@
     mounted() {
       $('#PWDKBD').remove();
       $(window).loadKBD();
+      let _this = this
+      jQuery.fn.extend({
+        validKBD: function () {
+          console.log('Input的onchange事件');
+          //类似Input的onchange事件，写密码检验
+          _this.len2 = $("#payPasscc2").getLenKBD() + ''//获取密码长度
+          _this.len3 = $("#payPasscc3").getLenKBD() + ''//获取密码长度
+        }
+      })
+    },
+    computed: {
+      canClick() {
+        if (this.CHECK_CODE && this.len2 > 0 && this.len3 > 0) {
+          return true
+        } else {
+          return false
+        }
+      }
     },
     methods: {
       close() {
@@ -85,19 +127,29 @@
           len: $("#payPasscc3").getLenKBD() + '',//获取密码长度
           passFix: $("#payPasscc3").getBDCode() + '' //
         }
-        console.log(newPass);
-        console.log(reNewPass);
-        let threePasswordObj = {
-          newPass, reNewPass
+        let CHECK_CODE = this.CHECK_CODE + ''
+        let PasswordObj = {
+          newPass, reNewPass, CHECK_CODE
         }
-        // let Base64 = require('js-base64').Base64;
-        // Base64.encode()
-        threePasswordObj = JSON.stringify(threePasswordObj)
+        console.log(PasswordObj);
+        if (newPass.len != 6) {
+          Bus.$emit(BusName.showToast, '请输入6位密码')
+          return
+        }
+        if (reNewPass.len != 6) {
+          Bus.$emit(BusName.showToast, '请输入6位密码')
+          return
+        }
+        if (!CHECK_CODE) {
+          Bus.$emit(BusName.showToast, '请输入手机验证码')
+          return
+        }
+        PasswordObj = JSON.stringify(PasswordObj)
         if (isAndroid) {
-          window.android.getTwoPasswordFromZhengZhou(threePasswordObj);
+          window.android.getTwoPasswordFromZhengZhou(PasswordObj);
         }
         if (isiOS) {
-          window.IOSWebJSInterface.getTwoPasswordFromZhengZhou(threePasswordObj);
+          window.IOSWebJSInterface.getTwoPasswordFromZhengZhou(PasswordObj);
         }
       },
       winLoad() {
@@ -111,59 +163,65 @@
 </script>
 
 <style scoped lang="scss">
-  .bgbox {
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    background: rgba(1, 1, 1, .7);
-    position: fixed;
-    padding-top: 1.5rem;
-    top: 0;
-    left: 0;
-    .passbox {
-      background: #fff;
-      width: 80%;
-      margin: 0 auto;
-      padding: 0.4rem;
-      box-sizing: border-box;
+  @import "~@/assets/px2rem";
+
+  .top {
+    padding: 0 px2rem(20) px2rem(20);
+
+    .field_row_value {
+      font-size: px2rem(14);
+      width: 100%;
+      height: px2rem(30);
     }
-    .field_row_key {
-      font-size: 0.4rem;
-    }
-    .title {
-      margin-bottom: 0.5rem;
-      text-align: center;
-      font-size: 0.4rem;
-      color: #666;
-      height: .6rem;
-      line-height: .6rem;
-      img {
-        vertical-align: top;
-        width: .5rem;
-      }
+    .low {
+      font-size: px2rem(12);
+      color: #858E9F;
     }
     .field_row_wrap {
-      margin-bottom: 0.2rem;
-    }
-    .field_row_value {
-      border-radius: 4px;
-      border: 1px solid #9e9e9e;
-      height: 0.9rem;
-      line-height: 0.9rem;
-      margin: 0.2rem 0;
-    }
-    .info {
-      font-size: 0.3rem;
-      line-height: 0.6rem;
-      color: #aeaeae;
-    }
-    .btn {
-      display: flex;
-      button {
-        margin: 0 .3rem;
-        text-align: center;
-        flex: 1;
+      border-bottom: 1px solid #ccc;
+      .field_row_key {
+        display: flex;
+        height: px2rem(56);
+        line-height: px2rem(56);
+        span {
+          flex: 1;
+        }
+        .left {
+          font-size: px2rem(16);
+        }
+        .right {
+          color: #6e6e6e;
+          font-size: px2rem(16);
+          text-align: right;
+        }
       }
     }
+
+  }
+
+  .btn {
+    text-align: center;
+    button {
+      width: px2rem(255);
+      height: px2rem(44);
+      color: #fff;
+      font-size: px2rem(18);
+      background: #ccc;
+      border: 1px solid #ccc;
+      border-radius: px2rem(6);
+      &.active {
+        color: #fff;
+        background: #007aff;
+      }
+    }
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
+    opacity: 0;
   }
 </style>

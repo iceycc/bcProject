@@ -3,14 +3,14 @@
     <app-bar title="赎回成功"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>赎回成功</h2>
+      <h2>恭喜你，赎回成功</h2>
     </div>
     <section class="m-card">
       <p><span>赎回金额</span><span>{{money}}</span></p>
       <p><span>收款账户</span><span>{{account}}</span></p>
       <p><span>资金预计到账日期</span><span>{{date}}</span></p>
     </section>
-    <button class="begain" @click="goNext">完成1</button>
+    <button class="begain" @click="goNext">完成</button>
   </div>
 </template>
 <script>
@@ -27,7 +27,9 @@
     created() {
       let preData = this.$route.query
       this.BESHARP_CASH_SEQ = preData.BESHARP_CASH_SEQ
-      this.money = preData.money
+      this.account = preData.BANK_USER_CODE
+      this.money = preData.REDEEM_AMOUNT
+      this.date = preData.OPERA_DATE
     },
     methods: {
       goNext() {
@@ -67,11 +69,11 @@
     p {
       display: flex;
       span:first-child {
-        width: px2rem(130);
+        width: px2rem(150);
       }
-      span:last-child{
-        flex:1;
-        text-align:right;
+      span:last-child {
+        flex: 1;
+        text-align: right;
       }
     }
   }

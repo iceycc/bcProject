@@ -15,6 +15,7 @@
   </div>
 </template>
 <script>
+  import Bus from '@/plugin/bus'
   export default {
     name: "PassInput",
     data() {
@@ -25,13 +26,27 @@
         type: null,
         default: 'password_id'
       },
-      kbdtype:{
-        type:null,
-        default:'Number'
+      kbdtype: {
+        type: null,
+        default: 'Number'
       }
     },
-    activated(){},
+
+    methods: {
+      showBD() {
+        $("#" + this.BankCardPass).attr('title', '输入密码');
+        $("#" + this.BankCardPass).showKBD({
+          "areaId": _this.BankCardPass + '_Pwd_Area',//必须
+          "pageId": _this.BankCardPass,//非必须
+          "minLen": 0,
+          "maxLen": 6,
+          "cursor": true,
+          "mask": true,
+        });
+      }
+    },
     mounted() {
+
       // todo 密码控件！！
       console.log('mounted pwd');
       // $('#PWDKBD').remove();

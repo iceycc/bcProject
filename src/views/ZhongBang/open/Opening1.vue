@@ -2,24 +2,17 @@
   <div class="warp">
     <app-bar title="信息填写"></app-bar>
     <section class="wrapicon">
-      <section class="circle">
+      <section class="circle left">
                 <span class="line1">
                     <img :src='stepImg' alt="">
                 </span>
         <span class="step-text">开户信息验证</span>
       </section>
-      <section class="circle">
+      <section class="circle right">
                  <span class="line2 hui">
                     <img :src='stepImg2' alt="">
                 </span>
         <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
-      </section>
-
-      <section class="circle">
-                 <span class="line3 hui">
-                    <img :src='stepImg3' alt="">
-                </span>
-        <span class="step-text" style="color:#D3D3D3">设置密码</span>
       </section>
     </section>
     <div class="opening_box">
@@ -99,47 +92,8 @@
       :class="{'bang':true,'no':agree == false}"
       @click="doAgree">
       <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage('2')" style=" color:#0096FE;">《郑州银行鼎融易直营银行客户服务协议》、</a>
-      <a href="javascript:;" @click.stop="showPage('1')" style=" color:#0096FE;">《隐私政策》</a>
+      <a href="javascript:;" @click.stop="showPage" style=" color:#0096FE;">《众邦银行直销银行电子账户服务协议》</a>
     </p>
-
-    <section v-show="page" class="page">
-      <div class="docs" v-if="showType == 1">
-        <iframe :src="agreeMentSrc" class="indocs"></iframe>
-      </div>
-      <div class="docsself" v-if="showType == 2">
-        <h2 style="text-align:center">用户授权服务协议</h2>
-        <h5>一、概述</h5>
-        <p>
-          《用户授权服务协议》（以下简称“本协议＂）是北京比财数据科技有限公司（以下简称“本公司＂）与用户（以下简称“您”）所订立的有效合约。您通过网络页面点击确认或以其他方式选择接受本协议，即表示您与本公司已达成协议并同意接受本协议的全部约定内容。在接受本协议之前，请您仔细阅读本协议的全部内容（特别是以粗体下划线标注的内容）。如您不同意本协议的内容，或无法准确理解本协议任何条款的含义，请不要进行确认及后续操作。如果您对本协议的条款有疑问的，请拨打客服电话（86-10
-          61841811）进行询问，本公司将向您解释条款内容。</p>
-
-        <h5>二、定义</h5>
-        <p>2．1北京比财数据科技有限公司开放平台：指由本公司独立开发并经营的，供第三方使用接口等资源以开发、展示、销售服务的平台系统。</p>
-        <p>2．2第三方：指通过本公司提供的平台和服务、向最终用户提供服务的各类企业或机构。</p>
-        <p>2．3用户：即指通过本公司平台或第三方平台使用本公司提供的产品、服务的自然人、法人、企业、机构等。</p>
-
-        <h5>三、授权条款</h5>
-        <p>
-          3．1您授权本公司及其关联公司向您在本服务页面选择的第三方传递您的信息，该等信息的提供以第三方为提供服务所需。页面提示上可能会展示具体授权对象、授权字段名称、范围等，授权字段通过加密通道传递给第三方。本公司会要求该第三方依法使用您的上述信息，
-          并应对您的信息保密。</p>
-        <p>
-          3．2您理解，本公司是中立平台的提供者，第三方服务由该第三方独立运营并独立承担全部责任。因该第三方服务或其使用您的信息产生的纠纷，或第三方服务违反相关法律法规或本协议约定，或您在使用第三方服务过程中遭受的损失，请您和第三方协商解決。</p>
-        <p>
-          3．3您授权本公司在您使用本服务期间或本服务终止后，基于为更好的向您提供服务之目的或向您推广其他产品服务的需要，有权保留并使用您在使用本服务期间所形成的相关信息（包括您选择的第三方合法收集、保存的您的相关信息）并提供给本公司的关联公司。</p>
-        <p>3．4您同意本协议中的授权不可变更、撤回或撤销。</p>
-
-        <h5>四、其他条款</h5>
-        <p>
-          4．1您同意，本公司有权随时对本协议内容进行单方面的变更，并通过本公司公开渠道发布通知/公告的方式进行公告，所有上述通知/公告等为本协议不可分割的组成部分。该等变更将在通知/公告载明的生效时间生效；若您在本协议内容变更生效后继续使用本公司服务的，表示您已充分阅读、理解并接受变更修改后的协议内容，也将遵循变更修改后的协议内容；若您不同意变更修改后的协议内容，您应立即停止使用本协议项下的服务。</p>
-        <p>4．2本公司重视对用户隐私的保护。除本协议约定外，本公司将按照比财平台页面相关隐私权政策保护您的身份信息和其他个人信息。</p>
-        <p>4．3本协议签订地为中国北京市朝阳区。双方在履行本协议的过程中，如发生争议，应协商解決。协商不成的，任何一方均应向协议签订地有管辖权的人民法院提起诉讼。</p>
-      </div>
-      <div class="btn">
-        <mt-button type="primary" @click="page = false">取消</mt-button>
-        <mt-button type="primary" @click="doAgreeHandle">确认</mt-button>
-      </div>
-    </section>
   </div>
 </template>
 <script>
@@ -163,7 +117,7 @@
           ADDRESS: '', // 地址
           NATION: '', // 民族
           PHONE: '',
-          PARTNER_ORDER_ID:'' // 众邦的实名流水信息
+          PARTNER_ORDER_ID: '' // 众邦的实名流水信息
 
         },
 
@@ -207,26 +161,24 @@
     mixins: [Opening1Mixins],
     created() {
       // 1-获取回显数据
-      // let suerinfo = this.$store.getters.GET_OPEN_STATE.opening
+      // this.checkBankStatus()
       let suerinfo = this.getComState.openingData
-      console.log("suerinfo>>",suerinfo);
-      // this.setComState({type: 'openingData', value: suerinfo})
-      // this.$store.commit('SET_OPENING_DATA', suerinfo)
-      if (suerinfo) {
-        this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL
-        this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL
+      console.log("suerinfo>>", suerinfo);
+      if (suerinfo&&suerinfo.CARD_FRONT_URL) {
+        this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
+        this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
         this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
         this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
         // this.data.USER_NAME = suerinfo.USER_NAME
         // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-        // this.data.PHONE = suerinfo.PHONE_NUM  || suerinfo.BANK_CARD_PHONE
-        this.data.PHONE = '15621185521'
-        this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
-        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
-        if(this.data.CARD_BACK_FILE){
+        this.data.PHONE = suerinfo.PHONE_NUM  || suerinfo.BANK_CARD_PHONE
+        // this.data.PHONE = ''
+        this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
+        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
+        if (this.data.CARD_BACK_FILE) {
           this.idCardFanOcr()
         }
-        if(this.data.CARD_FRONT_FILE){
+        if (this.data.CARD_FRONT_FILE) {
           this.idCardZhengOcr()
         }
       }
@@ -241,21 +193,14 @@
       getWork(val) {
         this.work = val.name
         this.data.USER_DUTY = val.value
-
       },
       // 切换同意按钮
       doAgree() {
         this.agree = !this.agree
       },
-
-      showPage(type) {
-        this.page = true
-        this.showType = type
+      showPage() {
+        this.$router.push({name:PageName.DocsPage,query:{type:'open'}})
       },
-      doAgreeHandle() {
-        this.page = false
-        this.argee = true
-      }
     }
 
   }
@@ -269,7 +214,6 @@
   }
 
   .wrapicon {
-    text-align: center;
     display: flex;
     position: relative;
     margin-bottom: .3rem;
@@ -281,6 +225,15 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      &.left {
+        text-align: left;
+        padding-left: px2rem(30);
+      }
+
+      &.right {
+        text-align: right;
+        padding-right: px2rem(30);
+      }
     }
 
     .line1, .line2, .line3 {
@@ -295,7 +248,7 @@
         right: 0;
         transform: translateY(-100%);
         content: '';
-        width: 45%;
+        width: 90%;
         background: #92d048;
         height: .1rem;
         overflow: hidden;
@@ -317,7 +270,7 @@
         display: block;
         position: absolute;
         top: 50%;
-        right: 0;
+        right: px2rem(10);
         transform: translateY(-100%);
         content: '';
         width: 45%;

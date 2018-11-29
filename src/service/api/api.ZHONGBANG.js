@@ -26,19 +26,17 @@ export default {
     // /openapi/comm/apiQryLoginStatus
     // 查询是否该银行的登陆 开户 等状态
     apiQryLoginStatus(params, success, error) {
-      params.PHONE_NUM = '15621185521'
       let options = {
         url: '/openapi/comm/apiQryLoginStatus',
-        params ,
+        params,
       }
       return http.post(options, Config.config, success, error)
     },
     // 获取短信验证码  ifHave=y
     apiSendPhoneCode(params, success, error) {
-      params.PHONE_NUM = '15621185521'
       let options = {
         url: '/openapi/comm/apiSendPhoneCode',
-        params ,
+        params,
       }
       return http.post(options, Config.config, success, error)
     },
@@ -70,6 +68,15 @@ export default {
     apiQueryBizStatus(params, success, error) {
       let options = {
         url: '/openapi/comm/apiQueryBizStatus',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+    // 24.	众邦充值提现处理中列表 /openapi/comm/apiQueryProcessing
+    apiQueryProcessing(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiQueryProcessing',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -117,7 +124,7 @@ export default {
       return http.post(options, Config.config, success, error)
     },
     /**
-     * 用户注册步骤查询（通过身份证号）
+     * 用户注册步骤查询（通过身份证号） /openapi/comm/apiGetUserLastCompleteStep
      */
     apiGetUserLastCompleteStep(params, success, error) {
       let options = {
@@ -377,7 +384,16 @@ export default {
   /**
    * 银行产品相关的
    */
-  bank:{
+  bank: {
+    // /openapi/comm/apiBandCard
+    // 获取用户绑定的银行卡信息
+    apiBandCard(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiBandCard',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
     // 38.	查询用户博时基金收益明细
     //
     apiQryIncomHis(params, success, error) {
@@ -415,11 +431,20 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 33 todo未到期
+    // 14.	赎回众邦宝利息试算接口openapi/zbh/biz/apiInterestCalculation
+    apiInterestCalculation(params, success, error) {
+      let options = {
+        url: '/openapi/zbh/biz/apiInterestCalculation',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+    //  33 todo未到期
     // 理财产品已到期（分页）  /openapi/zbh/biz/getMyInvestOver无
     getMyInvestOver(params, success, error) {
       let options = {
-        url:'/openapi/zbh/biz/getMyInvestOver' ,
+        url: '/openapi/zbh/biz/getMyInvestOver',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -466,6 +491,36 @@ export default {
     apiRedemption(params, success, error) {
       let options = {
         url: '/openapi/biz/apiRedemption',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+  },
+
+  // doc
+  doc: {
+    // 24.	支取协议：定期存款收益权转让协议 /openapi/zbh/biz/fixedTimeDepositAgreement
+    fixedTimeDepositAgreement(params, success, error) {
+      let options = {
+        url: '/openapi/zbh/biz/fixedTimeDepositAgreement',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    // /openapi/zbh/biz/personalAccountServiceAgreement
+    // 购买协议： 众邦宝产品服务协议（个人活期版）
+    personalAccountServiceAgreement(params, success, error) {
+      let options = {
+        url: '/openapi/zbh/biz/personalAccountServiceAgreement',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    // 23.	 开户协议：众邦银行直销银行电子账户服务协议
+    // /openapi/zbh/biz/electronicAccountAgreement
+    electronicAccountAgreement(params, success, error) {
+      let options = {
+        url: '/openapi/zbh/biz/electronicAccountAgreement',
         params
       }
       return http.post(options, Config.config, success, error)

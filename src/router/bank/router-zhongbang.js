@@ -20,26 +20,26 @@ export default [
     path: '/' + PageName.BuyFailed,
     name: PageName.BuyFailed,
     component: resolve => require(['views/ZhongBang/buy/BuyFailed.vue'], resolve),
-    meta: {keepAlive: false, title: '存入失败', needLogin: false}
+    meta: {keepAlive: false, title: '存入', needLogin: false}
   },
   {
     path: '/' + PageName.BuySuccess,
     name: PageName.BuySuccess,
     component: resolve => require(['views/ZhongBang/buy/BuySuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '存入成功', needLogin: false}
+    meta: {keepAlive: false, title: '存入', needLogin: false}
 
   },
   {
     path: '/' + PageName.SureBuy,
     name: PageName.SureBuy,
     component: resolve => require(['views/ZhongBang/buy/SureBuy.vue'], resolve),
-    meta: {keepAlive: false, title: '存入', needLogin: false}
+    meta: {keepAlive: true, title: '存入', needLogin: false}
   },
   {
     path: '/' + PageName.Buying,
     name: PageName.Buying,
     component: resolve => require(['views/ZhongBang/buy/Buying.vue'], resolve),
-    meta: {keepAlive: false, title: '存入', needLogin: true}
+    meta: {keepAlive: false, title: '存入', needLogin: false}
   },
 
 
@@ -86,13 +86,19 @@ export default [
     path: '/' + PageName.RechargeFailure,
     name: PageName.RechargeFailure,
     component: resolve => require(['views/ZhongBang/rechange/RechargeFailure.vue'], resolve),
-    meta: {keepAlive: false, title: '充值失败', needLogin: false}
+    meta: {keepAlive: false, title: '充值', needLogin: false}
   },
   {
     path: '/' + PageName.RechargeSuccess,
     name: PageName.RechargeSuccess,
     component: resolve => require(['views/ZhongBang/rechange/RechargeSuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '充值成功', needLogin: false}
+    meta: {keepAlive: false, title: '充值', needLogin: false}
+  },
+  {
+    path: '/' + PageName.RechargeWait,
+    name: PageName.RechargeWait,
+    component: resolve => require(['views/ZhongBang/rechange/RechargeWait.vue'], resolve),
+    meta: {keepAlive: false, title: '充值', needLogin: false}
   },
   /**
    * riskEvaluation 风险评估
@@ -232,6 +238,13 @@ export default [
     component: resolve => require(['views/ZhongBang/withdraw/WaitForWithdraw.vue'], resolve),
     meta: {keepAlive: false, title: '提现', needLogin: false}
   },
+  // InHanding 提现进度查询
+  {
+    path: '/' + PageName.InHanding,
+    name: PageName.InHanding,
+    component: resolve => require(['views/ZhongBang/bankDetail/InHanding.vue'], resolve),
+    meta: {keepAlive: false, title: '提现处理中记录', needLogin: false}
+  },
   /**
    * financingList
    */
@@ -239,7 +252,7 @@ export default [
     path: '/' + PageName.FinancialProducts,
     name: PageName.FinancialProducts,
     component: resolve => require(['views/ZhongBang/financingList/FinancialProducts.vue'], resolve),
-    meta: {keepAlive: false, title: '理财产品', needLogin: false}
+    meta: {keepAlive: false, title: '存款产品', needLogin: false}
   },
   {
     path: '/' + PageName.TransactionDetails,
@@ -248,7 +261,7 @@ export default [
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
   /**
-   * 郑州新增：支取
+   * 新增：支取
    */
   {
     path: '/' + PageName.Redeem,
@@ -269,7 +282,7 @@ export default [
     meta: {keepAlive: false, title: '支取', needLogin: false}
   },
   /**
-   * 郑州相关 BindingBank
+   *  BindingBank
    */
   {
     path: '/' + PageName.BindingBank,

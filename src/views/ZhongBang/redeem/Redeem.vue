@@ -4,35 +4,42 @@
     <div class="r-top">
       <img :src="imgSrc+redeemData.LOGO_URL" alt="">
       <div>
+        <!--<p>{{redeemData.ORG_NAME}}</p>-->
         <p>{{redeemData.PRD_NAME}}</p>
-        <span>货币基金</span>
+        <!--<span>{{redeemData.PRD_NAME}}</span>-->
+        <span>活期存款</span>
       </div>
     </div>
     <div class="r-cash">
       <div class="title">支取金额</div>
       <div class="money">
         <div class="number">
-          <i v-show="isFocus">￥</i>
-          <input type="number" @focus="focus" @blur="blur" :placeholder="placeholder" v-model="money">
+          <!--<i v-show="isFocus">￥</i>-->
+          <input @input="inputHandle" type="number" @focus="focus" @blur="blur" :placeholder="placeholder" v-model="money">
+          <img
+            v-show="!ifCheckMoneyEmpty"
+            src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
         </div>
         <div class="all" @click="selectAll">全部支取</div>
       </div>
     </div>
+    <p v-if="EFFCT_INTEREST_RATE>0" class="cal">收益{{EFFCT_INTEREST_RATE}}</p>
     <section class="inputAmount">
             <span class="Amount">
                 验证码
             </span>
-      <input type="text" v-model="PHONE_CODE" placeholder="请填写短信验证码">
+      <input type="tel" v-model="PHONE_CODE" placeholder="请输入验证码">
       <button
         :disabled="msgdisable"
         @click="getMsg"
         class="button">{{codeText}}
       </button>
     </section>
-    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">支取</button>
-    <div class="r-agreement">
-      立即支取代表您已阅读并同意<span>《定期存款收益权转让合同》</span>
-    </div>
+    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">立即支取</button>
+    <p @click="agree =!agree"
+       :class="{'bang':true,'no':agree == false}">我已阅读并同意注册
+      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《定期存款收益权转让协议》</a>
+    </p>
   </div>
 </template>
 <script>
@@ -42,12 +49,12 @@
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Mixins from '@/mixins'
   import Bus from '@/plugin/bus'
-
   let time = 60
   let timer;
   export default {
     data() {
       return {
+        agree: true,
         msgdisable: false,
         PHONE_CODE: '',
         codeText: '获取验证码',
@@ -59,34 +66,41 @@
         money: '',
         typeText: '快速支取',
         normalShow: false,
-        availBtn: false,
         redeemData: {
-          HOLD_AMOUNT: '',
+          INVEST_AMOUNT: '',
           FUND_NO: '',
           PRD_TYPE: '1',
         },
-
+        EFFCT_INTEREST_RATE: '',
         passCode: '',
         len: '',
         pass: ''
       }
     },
     computed: {
+      ifCheckMoneyEmpty() {
+        if (this.money) {
+          return false
+        } else {
+          return true
+        }
+      },
+      availBtn() {
+        if (this.agree && this.money && this.PHONE_CODE) {
+          return true
+        } else {
+          return false
+        }
+      },
       // placeholder:'
       placeholder() {
-        let num = this.redeemData.HOLD_AMOUNT
+        let num = this.redeemData.INVEST_AMOUNT
         return `最多可支取金额${util.formatNum(num)}元`
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     watch: {
-      money(n, o) {
-        if (n && n - 0 > 0) {
-          this.availBtn = true
-        } else {
-          this.availBtn = false
-        }
-      }
+
     },
     created() {
       this.redeemData = this.getComState.redeemData
@@ -95,12 +109,69 @@
       PassWordZhengzhou
     },
     methods: {
+      clearNumHandle() {
+        this.money = ''
+      },
+      debounce(fn, wait = 300) {
+        let timer, timeStamp=0;
+        let context, args;
+
+        let run = ()=>{
+          timer= setTimeout(()=>{
+            fn.apply(context,args);
+          },wait);
+        }
+        let clean = () => {
+          clearTimeout(timer);
+        }
+
+        return function(){
+          context=this;
+          args=arguments;
+          let now = (new Date()).getTime();
+
+          if(now-timeStamp < wait){
+            console.log('reset',now);
+            clean();  // clear running timer
+            run();    // reset new timer from current time
+          }else{
+            console.log('set',now);
+            run();    // last timer alreay executed, set a new timer
+          }
+          timeStamp=now;
+
+        }
+      },
+      inputHandle(){
+        // this.debounce(()=>{
+        //   console.log(3213)
+        // },1000)()
+        this.getPreCalculation()
+      },
+      getPreCalculation() {
+        console.log(1);
+        let data = {
+          // TYPE	请求类型
+          // ORG_ID	机构ID
+          // ORDER_NO	订单单号
+          ORDER_NO: this.redeemData.ORDER_NUM,
+          DRAW_AMOUNT: this.money // 	支取金额
+
+        }
+        API.bank.apiInterestCalculation(data, res => {
+          this.EFFCT_INTEREST_RATE = res.NET_INT
+        })
+      },
       getMsg() {
-        // if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        // if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
-        //   Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
-        //   return
-        // }
+        if (!this.money) {
+          Bus.$emit(BusName.showToast, '支取金额不能为空')
+          return
+        }
+        let num = this.redeemData.INVEST_AMOUNT || 0
+        if (this.money - 0 > num - 0) {
+          Bus.$emit(BusName.showToast, '支取金额大于可支取金额，请调整支取金额')
+          return
+        }
         let times = time
         this.msgdisable = true
         timer = setInterval(() => {
@@ -116,18 +187,20 @@
         this.getCode()
       },
       getCode() { // 短信
+        let PHONE_NUM = this.getComState.TEL
         let data = {
-          PHONE_NUM: this.PHONE_NUM,
+          PHONE_NUM: PHONE_NUM,
           BIZ_TYPE: '1009', // 需要
           AMOUNT: this.money
         }
-        API.common.apiSendPhoneCode(data)
+        API.common.apiSendPhoneCode(data, res => {
+          Bus.$emit(BusName.showSendMsg, PHONE_NUM)
+        })
       },
       focus() {
         this.isFocus = true;
       },
       blur() {
-        this.money.length > 0 ? this.isFocus = true : this.isFocus = false;
       },
       sure() {
         this.typeShow = false;
@@ -142,9 +215,23 @@
       },
       selectAll() {
         this.isFocus = true
-        this.money = this.totalNum
+        this.money = this.redeemData.INVEST_AMOUNT
+      },
+      getAgreement() {
+        // this.$router.push({name:PageName.DocsPage,query:{type:'redeem'}})
+        this.$router.push({name:PageName.DocsPage,query:{type:'buy'}})
+
       },
       showPass() {
+        if (!this.money) {
+          Bus.$emit(BusName.showToast, '支取金额不能为空')
+          return
+        }
+        let num = this.redeemData.INVEST_AMOUNT || 0
+        if (this.money - 0 > num - 0) {
+          Bus.$emit(BusName.showToast, '支取金额大于可支取金额，请调整支取金额')
+          return
+        }
         let data = {
           // PHONE_CODE	短信验证码
           PHONE_CODE: this.PHONE_CODE,
@@ -167,7 +254,7 @@
                 clearInterval(timer)
                 Bus.$emit(BusName.showToast, result.RES_MSG);
                 this.$router.push({ // todo是否要跳转
-                  name: PageName.RechargeFailure,
+                  name: PageName.RedeemFailure,
                   query: {
                     err: result.RES_MSG
                   }
@@ -177,18 +264,21 @@
                 clearInterval(timer)
                 Bus.$emit(BusName.showToast, result.RES_MSG);
                 this.Londing.close()
-                this.$router.push({
-                  name: PageName.RedeemSuccess, query: {
-                    ...res,
-                    money:this.money
+                this.setComState({
+                  type: 'pollResult', value: {
+                    ...result,
+                    money: this.money
                   }
+                })
+                this.$router.push({
+                  name: PageName.RedeemSuccess,
                 })
               } else {
                 if (count == 5) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.$router.push({ // todo是否要跳转
-                    name: PageName.RechargeFailure,
+                    name: PageName.RedeemFailure,
                     query: {
                       err: result.RES_MSG
                     }
@@ -198,7 +288,6 @@
             }
           })
         }, err => {
-          alert(err)
           this.$router.push({name: PageName.RedeemFailure, query: err})
         })
       },
@@ -249,8 +338,18 @@
       justify-content: space-between;
       align-items: center;
       .number {
+        position: relative;
         width: px2rem(250);
         font-size: px2rem(24);
+        .close-icon {
+          position: absolute;
+          display: inline-block;
+          width: px2rem(15);
+          height: px2rem(15);
+          top: 50%;
+          transform: translateY(-50%);
+          right: px2rem(10);
+        }
         input {
           width: 80%;
           font-size: px2rem(24);
@@ -273,11 +372,11 @@
   }
 
   .r-btn {
-    width: px2rem(255);
+    width: px2rem(322);
     height: px2rem(44);
     line-height: px2rem(44);
     display: block;
-    margin: 0 auto;
+    margin: px2rem(40) auto px2rem(20);
     text-align: center;
     background-color: #e4e4e4;
     color: #fff;
@@ -308,31 +407,48 @@
   }
 
   .inputAmount {
-    padding-left: 0.5rem;
-    height: 1.2rem;
-    line-height: 1rem;
+    padding-left: px2rem(20);
+    height: px2rem(44);
+    line-height: px2rem(44);
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
     .button {
       vertical-align: middle;
-      width: 2.5rem;
+      width: px2rem(84);
+      height: px2rem(28);
       display: inline-block;
-      padding: .1rem;
       border: 1px solid #508CEE;
       color: #508CEE
     }
     input {
-      width: 50%;
+      width: px2rem(200);
       border: none;
       box-sizing: border-box;
       font-size: 0.4rem;
       color: #333;
       /* line-height: 0.5rem; */
       outline: none;
-
     }
   }
 
+  .bang {
+    margin-left: 0.5rem;
+    background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
+    background-size: 0.3rem 0.3rem;
+    font-size: px2rem(12);
+    color: #808080;
+    padding: 0 0.5rem;
 
+  }
+  .cal{
+    margin-top: px2rem(5);
+    font-size: px2rem(15);
+    padding-left: px2rem(20);
+    color:#FF801A
+  }
+  .no {
+    background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
+    background-size: 0.3rem 0.3rem;
+  }
 </style>
 

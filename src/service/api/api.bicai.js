@@ -1,88 +1,4 @@
-// 有些地方需要调用比财接口呢
-import axios from '@/plugin/request/_axios'
-import store from '@/store/index'
-import {HOST} from "@/Constant";
-import Bus from '@/plugin/bus/index'
-import {BusName, PageName, LsName} from "@/Constant";
-// let HOST = 'https://finsuitdev.udomedia.com.cn/finsuit/'
-// let HOST = 'http://192.168.100.173:8080/finsuit/'
-const config = {
-  method: 'post',
-  // baseURL: '/api/finsuit/PHONE/deal',
-  baseURL: HOST + '/finsuitPhone/deal',
-  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-  timeout: 100000,
-}
-var instance = axios.create(config)
-
-class Http {
-  post({url = '', params, type}, success, error) {
-    return this.API({
-      method: 'post',
-      url,
-      params,
-      type
-    }, success, error).catch((err) => {
-      console.log(err)
-    })
-  }
-
-  API({
-        method,
-        url,
-        params,
-        type,
-        token
-      }, success, error) {
-    let {DEVICE_ID, CHANNEL_ID, TOKEN = token, SESSION_ID = ''} = store.getters.GET_ACCOUNT_STATE
-
-    let data = {
-      head: {
-        TYPE: type,
-        TOKEN,
-        SESSION_ID: SESSION_ID,
-        DEVICE_ID: '111121211112121112331111',
-        CHANNEL: CHANNEL_ID,
-        SYSTEM_TYPE: 'H5',
-        SCREEN_SIZE: ''
-      },
-      param: {
-        ...params
-      },
-    }
-    data = 'param_key=' + JSON.stringify(data)
-    return instance.request({
-      data,
-      url,
-      method
-    }).then(res => {
-      res = res.data
-      if (res.head.CODE == 0) {
-        let SESSION_ID = res.head.SESSION_ID
-        console.log('success>>', res.data);
-        store.commit('SET_SESSION_ID', SESSION_ID)
-        success && success(res.data, SESSION_ID)
-        return Promise.resolve(res.data)
-      }
-      else if (res.head.CODE == '-3') {
-        store.commit('SET_SESSION_ID', null)
-        return Promise.reject(res.head.MSG)
-      }
-      else {
-        return Promise.reject(res.head.MSG)
-      }
-    }, err => {
-      store.commit('SET_SESSION_ID', '')
-      console.log(err);
-      error && error()
-    }).catch(err => {
-      Bus.$emit(BusName.showToast, err)
-      store.commit('SET_SESSION_ID', '')
-      console.log('err>>', err)
-    })
-  }
-}
-
+import Http from "../http/http.bicai";
 let http = new Http()
 export default {
   /**
@@ -95,10 +11,39 @@ export default {
   login(params, success, error) {
     let options = {
       type: 'LOGIN',
-      params,
+      params: {
+        ...params,
+        NO_TOKEN: true
+      },
     }
     return http.post(options, success, error)
   },
+
+  // 查询渠道产品列表-H5
+
+  getProListByChannel(params, channel_id, success, error) {
+    let options = {
+      type: 'GENERALIZE_INFO_H5',
+      params: {
+        ...params,
+        NO_TOKEN: true
+      },
+      channel_id
+    }
+    return http.post(options, success, error)
+  },
+  // GET_BANK_II_LIST_H5
+  getBankListByChannelId(params, channel_id, success, error) {
+    let options = {
+      type: 'GET_BANK_II_LIST_H5',
+      params: {
+        ...params,
+      },
+      channel_id
+    }
+    return http.post(options, success, error)
+  },
+
   /**
    * 比财登陆需要的验证吗
    * @param params
@@ -109,7 +54,10 @@ export default {
   sendSMS(params, success, error) {
     let options = {
       type: 'REQ_NO_VALIDATE',
-      params,
+      params: {
+        ...params,
+        NO_TOKEN: true
+      },
     }
     return http.post(options, success, error)
   },
@@ -195,6 +143,14 @@ export default {
     }
     return http.post(options, success, error)
   },
+  // 15.	设置支付密码 SET_PAYMENT_PASSWORD
+  getPayPassword(params, success, error) {
+    let options = {
+      type: 'SET_PAYMENT_PASSWORD',
+      params,
+    }
+    return http.post(options, success, error)
+  },
   // GET_AUTH_STATUS 登录后判断是否实名
   getAuthStatus(params, success, error) {
     let options = {
@@ -216,6 +172,7 @@ export default {
     let options = {
       type: 'GET_PRD_INFO',
       params,
+
     }
     return http.post(options, success, error)
   },
@@ -229,6 +186,8 @@ export default {
     return http.post(options, success, error)
   },
 }
+
+
 
 
 

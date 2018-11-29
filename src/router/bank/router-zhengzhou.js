@@ -20,13 +20,13 @@ export default [
     path: '/' + PageName.BuyFailed,
     name: PageName.BuyFailed,
     component: resolve => require(['views/ZhengZhou/buy/BuyFailed.vue'], resolve),
-    meta: {keepAlive: false, title: '购买失败', needLogin: false}
+    meta: {keepAlive: false, title: '购买', needLogin: false}
   },
   {
     path: '/' + PageName.BuySuccess,
     name: PageName.BuySuccess,
     component: resolve => require(['views/ZhengZhou/buy/BuySuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '购买成功', needLogin: false}
+    meta: {keepAlive: false, title: '购买', needLogin: false}
 
   },
   {
@@ -39,7 +39,7 @@ export default [
     path: '/' + PageName.Buying,
     name: PageName.Buying,
     component: resolve => require(['views/ZhengZhou/buy/Buying.vue'], resolve),
-    meta: {keepAlive: false, title: '购买', needLogin: true}
+    meta: {keepAlive: false, title: '购买', needLogin: false}
   },
 
 
@@ -49,6 +49,7 @@ export default [
   {
     path: '/' + PageName.Login,
     name: PageName.Login,
+    // component: resolve => require(['views/common/login/LoginByBicai/Login.vue'], resolve),
     component: resolve => require(['views/ZhengZhou/login/Login.vue'], resolve),
     meta: {keepAlive: false, title: '安全登录', needLogin: false}
   },
@@ -146,7 +147,19 @@ export default [
     path: '/' + PageName.ResetPayPassword,
     name: PageName.ResetPayPassword,
     component: resolve => require(['views/ZhengZhou/safe/ResetPayPassword.vue'], resolve),
-    meta: {keepAlive: false, title: '重置密码', needLogin: false}
+    meta: {keepAlive: false, title: '重置支付密码', needLogin: false}
+  },
+  {
+    path: '/' + PageName.ResetPayPasswordApply,
+    name: PageName.ResetPayPasswordApply,
+    component: resolve => require(['views/ZhengZhou/safe/ResetPayPasswordApply.vue'], resolve),
+    meta: {keepAlive: false, title: '重置支付密码申请', needLogin: false}
+  },
+  {
+    path: '/' + PageName.ResetPayPasswordStatus,
+    name: PageName.ResetPayPasswordStatus,
+    component: resolve => require(['views/ZhengZhou/safe/ResetPayPasswordStatus.vue'], resolve),
+    meta: {keepAlive: false, title: '重置支付密码申请', needLogin: false}
   },
   {
     path: '/' + PageName.ResetPhone,
@@ -184,7 +197,7 @@ export default [
     path: '/' + PageName.BankDetail,
     name: PageName.BankDetail,
     component: resolve => require(['views/ZhengZhou/bankDetail/BankDetail.vue'], resolve),
-    meta: {keepAlive: false, title: '我的银行', needLogin: false}
+    meta: {keepAlive: false, title: '郑州银行', needLogin: false}
   },
   {
     path: '/' + PageName.BankBalance,
@@ -245,7 +258,7 @@ export default [
     path: '/' + PageName.FinancialProducts,
     name: PageName.FinancialProducts,
     component: resolve => require(['views/ZhengZhou/financingList/FinancialProducts.vue'], resolve),
-    meta: {keepAlive: false, title: '理财产品', needLogin: false}
+    meta: {keepAlive: false, title: '货币基金', needLogin: false}
   },
   {
     path: '/' + PageName.TransactionDetails,

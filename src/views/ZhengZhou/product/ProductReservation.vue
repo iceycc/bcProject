@@ -6,16 +6,17 @@
         <div class="bannercontent">
           <div class="bannertop">
             <div class="bannertopleft">
-              <p class="p-text" style="font-size: 0.4rem;">预期年化收益率</p>
+              <p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>
               <p>
                 <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
             <div class="bannertopright">
-              <p class="p-text" style="font-size: 0.4rem">理财期限</p>
+              <p class="p-text" style="font-size: 0.4rem">赎回到账时间</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>
+                <!--<strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>-->
+                <strong style="font-size: 1rem"> T+0</strong>
                 <span style="font-size: .5rem;">天</span>
               </p>
             </div>
@@ -23,15 +24,15 @@
           <div class="bannerbottom">
             <ul>
 
-              <li class="bannerbottomfirst clearfix"
-                  v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险
-              </li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>
-              <li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>
+              <!--<li class="bannerbottomfirst clearfix"-->
+              <!--v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险-->
+              <!--</li>-->
+              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>-->
+              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>-->
+              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>-->
+              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>-->
               <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
-              <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.OPENAPI_BUY_COUNT}}</li>
+              <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>
             </ul>
           </div>
         </div>
@@ -59,19 +60,19 @@
       <!--</div>-->
       <div class="contenttop">
         <p>交易规则</p>
-        <!--<div class="bannercontent">-->
-        <!--<span class="bannercontenttitle">审核方式</span>-->
-        <!--<span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>-->
-        <!--</div>-->
+        <div class="bannercontent">
+        <span class="bannercontenttitle">审核方式</span>
+        <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
+        </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">起购金额</span>
           <span
             class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
         </div>
-        <div class="bannercontent">
-          <span class="bannercontenttitle">递增金额</span>
-          <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
-        </div>
+        <!--<div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">-->
+          <!--<span class="bannercontenttitle">递增金额</span>-->
+          <!--<span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>-->
+        <!--</div>-->
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
           <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER}}</span>
@@ -199,9 +200,10 @@
         defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
+        IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin,Mixins.CheckAccountMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, Mixins.CheckAccountMixin],
     computed: {
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
@@ -218,7 +220,7 @@
 
     created() {
       this.title = this.$route.query.title;
-      this.proID = this.$route.query.id;
+      this.proID = this.$route.query.PRO_ID;
       this.getData(this.proID);
     },
     directives: {
@@ -236,7 +238,7 @@
             str = '货币基金'
             break;
           case 2:
-            str = '理财 '
+            str = '理财'
             break;
           case 3:
             str = '纯债'
@@ -363,10 +365,17 @@
         API.bicai.getPrdInfo(data, res => {
           this.productDetail = res;
           this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
+          this.title = res.PRD_NAME
           // 判断起购金额是否大于默认金额
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
+          // IS_REALTIME_DATA_PRD
+          // 1是，走无密码登录带红色提示（亿联）
+          // 0否，走无密码的登录页（郑州，众邦
+          // todo
+          this.IS_REALTIME_DATA_PRD = res.IS_REALTIME_DATA_PRD
+          this.setComState({type: 'IS_REALTIME_DATA_PRD', value: ''})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;
           if (this.productDetail.PRD_TYPE == 2) {
             if (invest > '3000') {
@@ -394,18 +403,10 @@
       },
 
       goNext() {
+
+
         console.log(this.proID);
         this.removeComState('ProDuctData')
-        // let target = this.$route.fullPath;
-        // 判断登录
-        // let data = {
-        //   // 跳转购买需要的参数
-        //   PRD_NAME: this.productDetail.PRD_NAME,
-        //   MIN_AMOUNT: this.productDetail.MIN_AMOUNT,
-        //   REMAIN_AMT: this.productDetail.REMAIN_AMT,
-        //   INCRE_AMOUNT: this.productDetail.INCRE_AMOUNT,
-        //   ORG_NAME: this.productDetail.ORG_NAME
-        // };
         let goBuyData = {
           id: this.proID,
           logo: this.productDetail.LOGO_URL,
@@ -414,12 +415,13 @@
         this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        if(TOKEN){
+        if (TOKEN) {
           // 判断是否注册改银行
           // 判断该用户在本行的开户状态
           this.getBankStatus(PageName.Buying)
-        }else {
-          this.$router.push({name: PageName.Buying})
+        } else {
+
+          this.$router.push({name: PageName.Login})
         }
       }
     }
@@ -494,23 +496,23 @@
   }
 
   .banner .bannercontent .bannerbottom {
-    margin-top: 0.2rem;
     width: 97%;
-    height: 20%;
-  }
+    height: px2rem(25);
 
-  .banner .bannercontent .bannerbottom ul {
-    width: 100%;
-    height: 100%;
-    color: #fff;
-  }
-
-  .banner .bannercontent .bannerbottom ul li {
-    text-align: center;
-    line-height: 1rem;
-    font-size: 0.3rem;
-    float: left;
-    height: 100%;
+    ul {
+      width: 100%;
+      height: px2rem(25);
+      margin-top: px2rem(10);
+      color: #fff;
+      li {
+        margin-right: px2rem(10);
+        text-align: left;
+        line-height: px2rem(25);
+        font-size:px2rem(13);
+        float: left;
+        height: px2rem(25);
+      }
+    }
   }
 
   .banner .bannercontent .bannerbottom .bannerbottomfirst {

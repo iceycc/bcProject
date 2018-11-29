@@ -1,4 +1,6 @@
 import http from '../http/http.common'
+import httpZZH from '../http/http.ZHENGZHOU'
+
 import {HOST} from "@/Constant";
 
 /**
@@ -30,16 +32,16 @@ export default {
         },
         NO_ORG_ID: true
       }
-      return http.post(options, Config.config, success, error)
+      return httpZZH.post(options, Config.config, success, error)
 
     },
     ZBH(params, success, error) {
       let options = {
-        url: '/openapi/ZBH/biz/apiQryAsset',
+        url: '/openapi/zbh/biz/apiQryAsset',
         params,
         NO_ORG_ID: true
       }
-      return http.post(options, Config.config, success, error)
+      return httpZZH.post(options, Config.config, success, error)
     },
 
 

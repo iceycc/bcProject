@@ -2,21 +2,24 @@
   <div v-if="typeShow">
     <div class="r-type-popup">
       <div class="title">
-        选择付款方式
-        <i @click="typeShow = false">&times;</i>
+        选择绑定银行卡
+        <span @click="typeShow = false">&times;</span>
       </div>
-      <ul class="r-type-list" v-for="bank in BankList" :key="bank.id">
-        <li :class="cur === bank.id ? 'active' : ''" @click="chooseType(bank.id,$event)">
-          <img :src="imgSrc + bank.logo" class="logo-img" alt="">
+      <ul class="r-type-list" v-for="bank,index in BankList" :key="index">
+        <li :class="cur === bank.id ? 'active' : ''" @click="chooseType(index,bank,$event)">
+          <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
           <section>
-            <p class="name">{{bank.name}}</p>
-            <p>尾号{{bank.footNum}}</p>
-          </section>
-          <section class="money">
-            余额：1.000.00
+            <p class="name">{{bank.OPEN_BANK}} {{bank.CARD_NO| noFilter}}</p>
+            <p class="money">单笔充值上限{{bank.SINGLE_QUOTA}}，单日充值上限{{bank.DAY_QUOTA}}</p>
           </section>
         </li>
       </ul>
+      <div class="add_bank" @click="addBankList">
+        <div class="left">
+          <span class="add">+</span>
+        </div>
+        <span class="right">添加银行卡</span>
+      </div>
     </div>
     <div class="grey-mask"></div>
   </div>
@@ -24,6 +27,7 @@
 
 <script>
   import {imgSrc} from "@/Constant";
+
   export default {
     name: "UpSelect",
     props: {
@@ -31,19 +35,26 @@
         type: null,
         default: false
       },
-      BankList:{
-        type:null,
-        default(){
-          return[
+      BankList: {
+        type: null,
+        default() {
+          return [
             {
-              logo:'',
-              name:'民生银行',
-              footNum:'0014',
-              money:'100',
-              id:1
+              logo: '',
+              name: '民生银行',
+              footNum: '0014',
+              money: '100',
+              id: 1,
+              bankno: '1111111'
             }
           ]
         }
+      }
+    },
+    filters: {
+      noFilter(str) {
+        if (!str) return '****'
+        return str.substr(str.length - 4)
       }
     },
     watch: {
@@ -55,14 +66,19 @@
       return {
         cur: 1,
         typeShow: false,
-        imgSrc:imgSrc
+        imgSrc: imgSrc
       }
     },
     methods: {
-      chooseType(val, e) {
-        this.cur = val;
+      addBankList(){
+        this.typeShow = false
+        this.$emit('clickBankList', name)
+      },
+      chooseType(index,bank, e) {
+        this.$emit('chooseBank', bank)
+        this.cur = index;
         this.typeShow = false;
-        this.typeText = e.target.innerText;
+        // this.typeText = e.target.innerText;
       }
     }
   }
@@ -70,13 +86,38 @@
 
 <style scoped lang="scss">
   @import "~@/assets/px2rem";
-
+  .add_bank {
+    display: flex;
+    height: px2rem(40);
+    line-height: px2rem(40);
+    .left {
+      width:px2rem(130);
+      padding-left: px2rem(30);
+      height: px2rem(30);
+      .add{
+        display: inline-block;
+        width: px2rem(22);
+        height: px2rem(22);
+        border-radius: px2rem(11);
+        border: 1px solid #508CEE;
+        font-size: px2rem(18);
+        color: #508CEE;
+        text-align: center;
+        line-height: px2rem(20);
+      }
+    }
+    .right {
+      flex: 1;
+      font-size: px2rem(16);
+    }
+  }
   .r-type-popup {
     width: 100%;
     position: fixed;
     bottom: 0;
     z-index: 99;
     background-color: #fff;
+
     .title {
       text-align: center;
       height: px2rem(45);
@@ -85,7 +126,7 @@
       font-size: px2rem(18);
       color: #444;
       border-bottom: 1px solid #EEEEF0;
-      i {
+      span{
         position: absolute;
         top: 0;
         right: px2rem(25);
@@ -99,27 +140,27 @@
         display: flex;
         padding: px2rem(22);
         border-bottom: 1px solid #EEEEF0;
-        .logo-img{
+        .logo-img {
           width: px2rem(40);
           height: px2rem(40);
         }
-        .name{
+        .name {
+          text-align: left;
           color: #000;
         }
-        .money{
-          padding-left: px2rem(50);
+        .money {
           line-height: px2rem(40);
           font-size: px2rem(14);
           color: #000;
         }
-        section{
+        section {
           padding-left: px2rem(30);
           text-align: center;
           font-size: px2rem(14);
-          color:#666
+          color: #666
         }
       }
-      li.active:after{
+      li.active:after {
         content: '';
         position: absolute;
         top: px2rem(30);

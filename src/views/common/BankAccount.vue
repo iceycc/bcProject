@@ -36,7 +36,7 @@
     <!--</section>-->
 
     <section class="m-bank-box" v-if="ISLoginBankList.length >0">
-      <p class="m-title">已登录</p>
+      <p class="m-title">{{TITLE_TEPY[0]}}</p>
       <section class="m-bank-card"
                v-for="bank,index in ISLoginBankList" :key="index"
                @click.stop="goPage('BankDetail',bank)"
@@ -69,7 +69,7 @@
       </section>
     </section>
     <section class="m-bank-box" v-if="NOLoginBankList.length >0">
-      <p class="m-title">未登录</p>
+      <p class="m-title">{{TITLE_TEPY[1]}}</p>
       <section class="m-bank-card" v-for="bank,index in NOLoginBankList" :key="index">
         <div class="m-top">
           <div class="m-logo">
@@ -116,6 +116,7 @@
     name: "SafeLogin",
     data() {
       return {
+        TITLE_TEPY: ['已登录', '未登录'],
         title: '我的资产',
         cur: '2',
         Bshow: true,
@@ -151,10 +152,9 @@
     },
     created() {
       this.reLoadToLogin()
-
     },
     methods: {
-      ...mapActions(['SET_BANK_INFO']),
+
       tap(val) {
         if (val == 1) {
           this.$router.push({name: PageName.ProductList})
@@ -184,7 +184,7 @@
             }
           })
         } else {
-          this.getOpenBankList()
+          this.getBankListByChannelId()
         }
       },
       goPage(page, bank) {
@@ -195,8 +195,17 @@
         }
         // util.storage.session.set(LsName.ORG_ID, bank.ORG_ID)
         // this.$store.dispatch('SET_BANK_INFO',...)
-        this.SET_BANK_INFO({
-          ...bank
+        this.setBankState({
+          type: 'ORG_ID',
+          value: bank.ORG_ID
+        })
+        this.setBankState({
+          type: 'ORG_NAME',
+          value: bank.ORG_NAME
+        })
+        this.setBankState({
+          type: 'BANK_CARD_NAME',
+          value: bank.BANK_CARD_NAME
         })
         if (page == 'Login') {
           this.setComState(
@@ -230,31 +239,40 @@
       },
       //
       // get
+      getBankListByChannelId() {
+        let token = this.$store.getters.GET_ACCOUNT_STATE.TOKEN
+        console.log('token', token);
+        if (token) {
+          // this.TITLE_TEPY = ['已开户', '未开户']
+          this.TITLE_TEPY = ['已登录', '未登录']
+          this.getOpenBankList()
+          this.getNoOpenBankList()
+        } else {
+          this.TITLE_TEPY = ['已登录', '未登录']
+          this.getNoOpenBankList()
+        }
+      },
+      getNoOpenBankList() {
+        // 未开户
+        API.bicai.getBankListByChannelId({OPEN_TYPE: '0'}, '', (res) => {
+          let list = res.BANK_LIST
+          this.NOLoginBankList = list
+        }, (err) => {
+          console.log(err);
+        })
+      },
       getOpenBankList() {
         //  已开户
-        API.bicai.getBankList({OPEN_TYPE: '1'}, (res) => {
+        API.bicai.getBankListByChannelId({OPEN_TYPE: '1'}, '', (res) => {
           let list = res.BANK_LIST
-          if(res.OPEN_STATUS==0){
-            list=[]
-          }
           this.ISLoginBankList = list
           for (let i = 0; i < this.ISLoginBankList.length; i++) {
             this.getOneBankInfo(this.ISLoginBankList[i].ORG_ID, i)
           }
-          // this.BankList = this.BankList.concat(list)
+        }, (err) => {
+          console.log(err);
+        })
 
-        }, (err) => {
-          console.log(err);
-        })
-        // 未开户
-        API.bicai.getBankList({OPEN_TYPE: '0'}, (res) => {
-          let list = res.BANK_LIST
-          this.NOLoginBankList = list
-          // this.BankList = this.BankList.concat(list)
-          // this.filterBankList(this.BankList)
-        }, (err) => {
-          console.log(err);
-        })
       },
       filterBankList(list) {
         this.ISLoginBankList = list.filter((item, index) => {
@@ -270,18 +288,14 @@
       // 对已经登陆的银行获取资产
       getOneBankInfo(ORG_ID, i) {
         let data = {
-          ORG_ID
+          ORG_ID,
+          TYPE: "API_QRY_ASSET"
         }
         let info = {};
-        if(ORG_ID=='49'){
+        if (ORG_ID == '49') {
           API.commonApi.getBankBalance.ZZH(data, res => {
-            // API.bank.apiQryAsset(data, res => {
             info = res
-            // ACC_REST: "400.00"
-            // CUST_SERVICE_HOTLINE: "95097"
-            // TOTAL_ASSET: "600.06"
-            // TOTAL_INCOME: "0.06"
-            // YSD_INCOME: "0.06"
+
             let arr = this.ISLoginBankList[i]
             this.$set(this.ISLoginBankList, i, {
               ...arr,
@@ -289,15 +303,10 @@
             })
           })
         }
-        if(ORG_ID=='227'){
+        if (ORG_ID == '227') {
           API.commonApi.getBankBalance.ZBH(data, res => {
-            // API.bank.apiQryAsset(data, res => {
             info = res
-            // ACC_REST: "400.00"
-            // CUST_SERVICE_HOTLINE: "95097"
-            // TOTAL_ASSET: "600.06"
-            // TOTAL_INCOME: "0.06"
-            // YSD_INCOME: "0.06"
+
             let arr = this.ISLoginBankList[i]
             this.$set(this.ISLoginBankList, i, {
               ...arr,

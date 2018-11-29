@@ -1,14 +1,14 @@
 <template>
   <div class="app">
-    <app-bar title="赎回成功"></app-bar>
+    <app-bar title="支取"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>赎回成功</h2>
+      <h2>支取成功</h2>
     </div>
     <section class="m-card">
-      <p><span>赎回金额</span><span>{{money}}</span></p>
+      <p><span>支取金额</span><span>{{money}}</span></p>
       <p><span>收款账户</span><span>{{account}}</span></p>
-      <p><span>资金预计到账日期</span><span>{{date}}</span></p>
+      <p><span>交易时间</span><span>{{date}}</span></p>
     </section>
     <button class="begain" @click="goNext">完成</button>
   </div>
@@ -19,15 +19,16 @@
       return {
         money: '',
         num: '',
-        BESHARP_CASH_SEQ: '',
-        date: '2020-10-11',
-        account: ''
+        BESHARP_SEQ: '',
+        date: '',
+        account: '电子账户'
       }
     },
     created() {
-      let preData = this.$route.query
-      this.BESHARP_CASH_SEQ = preData.BESHARP_CASH_SEQ
-      this.money = preData.money
+      let preData = this.getComState.pollResult
+      this.BESHARP_SEQ = preData.BESHARP_SEQ
+      this.money = preData.PAY_AMOUT || preData.money
+      this.date = preData.OPERA_DATE
     },
     methods: {
       goNext() {

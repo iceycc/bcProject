@@ -122,7 +122,7 @@
           BIZ_TYPE: '10', //
         }
         API.open.getMsgCode(data, res => {
-          Bus.$emit(BusName.showToast, '验证码发送成功')
+          Bus.$emit(BusName.showSendMsg, this.tel)
           this.params.MESSAGE_TOKEN = res.MESSAGE_TOKEN
         }, err => {
           clearInterval(timer)

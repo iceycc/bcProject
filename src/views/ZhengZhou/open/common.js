@@ -38,7 +38,7 @@ export default {
         }
         if (step == 3) {
           // todo登陆成功后判断拿来的去哪里
-          // this.$router.push({name:PageName.Opening3})
+          this.$router.push({name:PageName.Login})
         }
 
       })

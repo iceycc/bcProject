@@ -216,7 +216,7 @@
     },
     created() {
       this.title = this.$route.query.title;
-      this.proID = this.$route.query.id;
+      this.proID = this.$route.query.PRO_ID;
       this.getData(this.proID);
     },
     directives: {

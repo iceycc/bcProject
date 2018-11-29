@@ -38,8 +38,7 @@ export default {
     if (JSON.stringify(ORG_ID) == '{}' || NO_ORG_ID) {
       ORG_ID = ''
     }
-
-    let {DEVICE_ID, CHANNEL_ID, TOKEN = token} = store.getters.GET_ACCOUNT_STATE
+    let {APP_FLAG, DEVICE_ID, CHANNEL_ID, TOKEN = token, SESSION_ID} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -47,19 +46,21 @@ export default {
           CHANNEL_TYPE: 'H5',
           VERSION: "",
           IMSI: "460026325010440",
-          SESSION_ID: "",
-          SYSTEM_TYPE: "h5",
+          SESSION_ID,
           TYPE,
           TOKEN: TOKEN,
-          DEVICE_ID: DEVICE_ID + ''
+          DEVICE_ID: DEVICE_ID + '',
+
+          SYSTEM_TYPE: "h5",
+          CHANNEL_ID: CHANNEL_ID + '',
+          APP_FLAG: APP_FLAG || 'BC'
         },
         param: {
           ORG_ID: ORG_ID + '', // 70
           ...params
         },
       },
-      // channel_id: CHANNEL_ID + ''
-      channel_id: params.channel_id || '3'
+      channel_id: CHANNEL_ID + ''
     }
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)
@@ -67,28 +68,6 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
-      // console.log('res >>>', result.data);
-      // console.log('code >>>', result.head.CODE);
-      // store.commit('REMOVE_COMMON_STATE','LAST_STEP_NUM')
-      // store.commit('REMOVE_COMMON_STATE','REQ_SERIAL')
-      // // util.storage.session.remove(LsName.LAST_STEP_NUM)
-      // // util.storage.session.remove(LsName.REQ_SERIAL)
-      // if (result.head.TOKEN) { // 接口有返回token就更新token
-      //   store.commit('SET_TOKEN', result.head.TOKEN)
-      // }
-      // if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
-      //   // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
-      //   store.commit('SET_COMMON_STATE',{
-      //     type:'LAST_STEP_NUM',
-      //     value:result.data.LAST_STEP_NUM
-      //   })
-      //   store.commit('SET_COMMON_STATE',{
-      //     type:'REQ_SERIAL',
-      //     value:result.data.REQ_SERIAL
-      //   })
-      //   // util.storage.session.set(LsName.LAST_STEP_NUM, result.data.LAST_STEP_NUM) // 序列号
-      //   // util.storage.session.set(LsName.REQ_SERIAL, result.data.REQ_SERIAL) //
-      // }
       // 根据状态码 做业务状态校验 分流
       if (result.head.CODE == 0) {
         let msg = result.head.MSG || '成功'
@@ -99,7 +78,7 @@ export default {
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
         Bus.$emit(BusName.showToast, result.head.MSG)
         // util.storage.session.remove(LsName.token)
-        store.commit('SET_TOKEN', null)
+        store.commit('SET_TOKEN', '')
         Router.push({
           name: PageName.Login,
           query: {
@@ -109,7 +88,7 @@ export default {
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
-        store.commit('SET_TOKEN', null)
+        store.commit('SET_TOKEN', '')
         // util.storage.session.remove(LsName.token)
         Router.push({
           name: PageName.Login,

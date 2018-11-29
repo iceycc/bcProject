@@ -23,122 +23,47 @@
       </section>
     </section>
     <div class="login_box">
-      <section class="input-box" v-if="showLoginPass">
-        <transition name="fade">
-          <p class="label" v-if="loginShow">登录密码</p>
-        </transition>
-        <!--name="text1" :placeholder="telPaceholder" v-model="s_loginPass"-->
-        <span class="input"
-              @click="showBox"
-        >{{telPaceholder}}</span>
-      </section>
+      <!--<section class="input-box" v-if="showLoginPass">-->
+      <!--<transition name="fade">-->
+      <!--<p class="label" v-if="loginShow">登录密码</p>-->
+      <!--</transition>-->
+      <!--&lt;!&ndash;name="text1" :placeholder="telPaceholder" v-model="s_loginPass"&ndash;&gt;-->
+      <!--<input class="input" type="password" :placeholder="telPaceholder" v-model="s_loginPass">-->
+      <!--&lt;!&ndash;<span class="input"&ndash;&gt;-->
+      <!--&lt;!&ndash;@click="showBox"&ndash;&gt;-->
+      <!--&lt;!&ndash;&gt;{{telPaceholder}}</span>&ndash;&gt;-->
+      <!--</section>-->
       <section class="input-box" v-if="showPayPass">
         <transition name="fade">
-          <p class="label" v-if="loginShow">交易密码</p>
+          <p class="label" v-if="!disabled">交易密码</p>
         </transition>
-        <!--name="text1" :placeholder="payPaceholder" v-model="s_payPass"-->
-        <span class="input"
-              @click="showBox"
-        >{{payPaceholder}}</span>
+        <input class="input" type="password" :placeholder="payPaceholder" v-model="payPass">
       </section>
     </div>
     <div class="Tips" v-if="errMsg">
       <span>{{errMsg}}</span>
     </div>
     <button
-        :class="{'tijiao':true, 'agree':!disabled}"
-        :disabled="disabled">开户
+      :class="{'tijiao':true, 'agree':!disabled}"
+      :disabled="disabled"
+    @click="doNext"
+    >开户
     </button>
-    <div v-if="ifShow" class="bgbox">
-      <!--晋商-->
-      <div v-if="ORG_ID=='70'" class="passbox">
-        <div class="top">
-          <p class="title">
-            <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-            由晋商银行提供技术保障</p>
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              登录密码
-            </p>
-            <div class="field_row_value">
-              <pass-input
-                  inputID="loginPass"
-                  :doGetData="ifGet"
-              ></pass-input>
-            </div>
-            <p class="info">密码由大写，小写英文字母以及数字组成</p>
-            <p class="info">密码位数大于等于8位，小于等于20位</p>
-          </div>
-
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              交易密码
-            </p>
-            <div class="field_row_value">
-              <pass-input
-                  inputID="payPass"
-                  :doGetData="ifGet"
-              ></pass-input>
-            </div>
-
-            <p class="info">密码由数字组成，必须为6位</p>
-          </div>
-
-        </div>
-        <div class="btn">
-          <button @click="cancel">取消</button>
-          <button @click="subumit">提交</button>
-        </div>
-      </div>
-      <!--郑州-->
-      <div v-if="ORG_ID=='49'" class="passbox">
-        <div class="top">
-          <p class="title">
-            <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-            由郑州银行提供技术保障</p>
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              交易密码
-            </p>
-            <div class="field_row_value">
-              <pass-word-zhengzhou
-                  BankCardPass="pay-pass"
-              ></pass-word-zhengzhou>
-            </div>
-
-            <p class="info">密码由数字组成，必须为6位</p>
-          </div>
-
-        </div>
-        <div class="btn">
-          <button @click="cancel">取消</button>
-          <button @click="subumit">提交</button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
 
-  import PassInput from '@/components/password/PassInput'
   import {BusName, LsName, PageName} from "@/Constant";
-  import util from "libs/util";
-  // import {HandleMixin, Opening3Mixins,} from '@/mixins'
-  import Mixins from "@/mixins";
-  import Opening3Mixins from './Opening3'
-  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
-
+  import API from "@/service";
+  import Bus from '@/plugin/bus'
 
   export default {
     data() {
       return {
-        loginShow: false,
+        showPayPass: true,
+        payPass:'',
         telPaceholder: '登录密码',
         payPaceholder: '交易密码',
-        disabled: true,
-        reGet: true,
-        s_loginPass: '',
-        s_payPass: '',
         REQ_SERIAL: '',
         LAST_STEP_NUM: '',
         ifShow: false,
@@ -155,19 +80,33 @@
 
       }
     },
-    components: {
-      PassInput,
-      PassWordZhengzhou
-    },
-    mixins: [Mixins.HandleMixin,Opening3Mixins],
     created() {
       this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
       this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
-      this.getErrMsg((beforeInfo)=>{
-        this.errMsg = beforeInfo.msg
-      })
+    },
+    computed:{
+      disabled(){
+        if(this.payPass){
+          return false
+        }else {
+          return true
+        }
+      }
     },
     methods: {
+      doNext(){
+        let data = {
+          onePassword:this.payPass,
+          twoPassword:this.payPass,
+        }
+        API.bicai.getPayPassword(data,res=>{
+          Bus.$emit(BusName.showToast,res.message)
+          if(res.status == 1) {
+            this.$router.push({name:PageName.Login})
+
+          }
+        })
+      },
       cancel() {
         this.ifShow = false
       },

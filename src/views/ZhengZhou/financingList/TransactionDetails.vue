@@ -36,14 +36,14 @@
                 <li v-for="(item,index) in pageList" :key="index">
                   <h5 style="display: flex">
                     <span style="flex: 1">{{PRD_NAME}}</span>
-                    <span style="width: 40%;text-align: right" v-if="cur==1">收益</span>
-                    <span style="width: 40%;text-align: right" v-if="cur==2 && item.TYPE==1">买入</span>
-                    <span style="width: 40%;text-align: right" v-if="cur==2 && item.TYPE==2">卖出</span>
+                    <span style="width: 40%;text-align: right;color: #E62224" v-if="cur==1">收益</span>
+                    <span style="width: 40%;text-align: right;color: #E62224" v-if="cur==2 && item.TYPE==1">买入</span>
+                    <span style="width: 40%;text-align: right;color: #E62224" v-if="cur==2 && item.TYPE==2">赎回</span>
                   </h5>
                   <p>
-                    <span>{{item.OPERA_DATE }}</span>
-                    <!--1:买入 2:卖出-->
-                    <em>{{item.TYPE==2?'-':'+'}}  {{item.TRANS_AMT}}</em>
+                    <span>{{item.OPERA_TIME }}</span>
+                    <!--1:买入 2:赎回-->
+                    <em>{{item.TYPE==2?'-':'+'}} {{item.TRANS_AMT}}</em>
                   </p>
                 </li>
 
@@ -67,14 +67,14 @@
   export default {
     data() {
       return {
-        cur:1,
-        pageList1:[{
-          TRANS_TYPE_NAME:'百度',
-          TRANS_TIEM:'AAA',
-          TRANS_AMT:'11'
+        cur: 1,
+        pageList1: [{
+          TRANS_TYPE_NAME: '百度',
+          TRANS_TIEM: 'AAA',
+          TRANS_AMT: '11'
 
         }],
-        PRD_NAME:'',
+        PRD_NAME: '',
         // 1月分页
         searchCondition: {
           //分页属性
@@ -85,7 +85,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["1个月", "2个月", "3个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近二个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
@@ -94,12 +94,12 @@
           large: {}
         },
 
-        FUND_NO:'',
-        PRD_INDEX_ID:''
+        FUND_NO: '',
+        PRD_INDEX_ID: ''
       };
     },
-    watch:{
-      cur(){
+    watch: {
+      cur() {
         this.loadPageList(); //初次访问查  询列表
         this.setEleSize()
       }
@@ -120,15 +120,15 @@
 
     },
     methods: {
-      getData(){
-        if(this.cur==1){
+      getData() {
+        if (this.cur == 1) {
 
         }
-        if(this.cur==2){
+        if (this.cur == 2) {
 
         }
       },
-      tap(index){
+      tap(index) {
         this.cur = index
       },
       setEleSize() {
@@ -177,25 +177,27 @@
           QRY_TYPE: '0',
           PRD_TYPE: '1',
           FUND_NO: this.FUND_NO,
-          PRD_INDEX_ID:this.PRD_INDEX_ID,
+          PRD_INDEX_ID: this.PRD_INDEX_ID,
           currentPage: this.searchCondition.pageNo,
           START_DATE: this.startDate,
           END_DATE: this.endDate
         };
 
-        if(this.cur==1){
+        if (this.cur == 1) {
           API.bank.apiQryIncomHis(data, res => {
+
             this.pageList = this.pageList.concat(res.PAGE.retList);
-            if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
           });
         }
-        if(this.cur==2){
+        if (this.cur == 2) {
           API.bank.apiQryBuyHis(data, res => {
+
             this.pageList = this.pageList.concat(res.PAGE.retList);
-            if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
@@ -211,13 +213,13 @@
           QRY_TYPE: '0',
           PRD_TYPE: '1',
           FUND_NO: this.FUND_NO,
-          PRD_INDEX_ID:'',
+          PRD_INDEX_ID: '',
           // PRD_INDEX_ID:'',
           START_DATE: start,
           END_DATE: end
         };
 
-        if(this.cur==1){
+        if (this.cur == 1) {
           API.bank.apiQryIncomHis(data, res => {
             this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -235,7 +237,7 @@
 
           });
         }
-        if(this.cur==2){
+        if (this.cur == 2) {
           API.bank.apiQryBuyHis(data, res => {
             this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -631,16 +633,18 @@
     box-sizing: border-box;
     padding-bottom: px2rem(50);
   }
-  .w-tap{
+
+  .w-tap {
     display: flex;
-    li{
+    li {
+      font-size: px2rem(16);
       flex: 1;
       height: px2rem(30);
       line-height: px2rem(30);
       text-align: center;
       margin: px2rem(10) 0;
       background: #fff;
-      &.actvie{
+      &.actvie {
         color: #007aff;
       }
     }

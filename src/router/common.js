@@ -8,6 +8,15 @@ export default [
     }
   },
   /**
+   * LoginByBicai
+   */
+  {
+    path: '/' + PageName.LoginByBicai,
+    name: PageName.LoginByBicai,
+    component: resolve => require(['views/common/login/LoginByBicai/Login.vue'], resolve),
+    meta: {keepAlive: false, title: '登录', needLogin: false}
+  },
+  /**
    * 电子账户
    */
   {
@@ -25,6 +34,12 @@ export default [
     component: resolve => require(['views/common/product/ProductList.vue'], resolve),
     meta: {keepAlive: false, title: '产品列表', needLogin: false}
   },
+  // {
+  //   path: '/' + PageName.ProductReservation,
+  //   name: PageName.ProductReservation,
+  //   component: resolve => require(['views/ZhengZhou/product/ProductReservation.vue'], resolve),
+  //   meta: {keepAlive: false, needLogin: false}
+  // },
 
   /**
    * 比财登陆
@@ -57,12 +72,12 @@ export default [
     path: '/' + PageName.PasswordThreeForZhengZhou,
     name: PageName.PasswordThreeForZhengZhou,
     component: resolve => require(['views/ForApp/PasswordThreeForZhengZhou.vue'], resolve),
-    meta: {keepAlive: false, title: '密码', needLogin: false}
+    meta: {keepAlive: false, title: '更换支付密码', needLogin: false}
   },
   {
     path: '/' + PageName.PasswordTowForZhengZhou,
     name: PageName.PasswordTowForZhengZhou,
     component: resolve => require(['views/ForApp/PasswordTowForZhengZhou.vue'], resolve),
-    meta: {keepAlive: false, title: '密码', needLogin: false}
+    meta: {keepAlive: false, title: '重置支付密码', needLogin: false}
   }
 ]

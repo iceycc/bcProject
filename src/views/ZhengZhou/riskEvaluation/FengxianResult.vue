@@ -33,7 +33,7 @@
     },
     mixins: [Mixins.UtilMixin],
     created() {
-      let data = this.getComState.RiskResult || this.$route.query
+      let data = this.getComState.RiskResult
       console.log(data);
       this.RISK_LEVEL = data.RISK_LEVEL
       // 20分以下:保守型,1级; 21~44   稳健型 2级 46~70  平衡性3级 71~85   成长性 4级 86分以上进取型  5级
@@ -48,19 +48,19 @@
             break;
 
           case '2':
-            return '谨慎型'
-            break;
-
-          case '3':
             return '稳健型'
             break;
 
+          case '3':
+            return '平衡性'
+            break;
+
           case '4':
-            return '积极型'
+            return '成长性'
             break;
 
           case '5':
-            return '激进型'
+            return '进取型'
             break;
         }
       }

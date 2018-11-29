@@ -7,29 +7,29 @@ import {imgSrc} from "@/Constant";
 import commons from './common'
 
 let time = 60
-
- export default {
-   mixins:[commons],
+let timer;
+export default {
+  mixins: [commons],
   data() {
     return {
       telDisabled: false,
       ZhengZhouPass: false, // 实体卡密码，可空，本行卡和村镇卡必输
       ACC_FLAG: '0',  // 本行
 
-      pwd:'',
-      pwdLen:'',
-      pwCode:''
+      pwd: '',
+      pwdLen: '',
+      pwCode: ''
     }
   },
   created() {
     console.log('ZhengZhou');
 
   },
-  filters:{
-    CARD_NO_Fliter(n){
-      if(n){
-        return n.substr(n.length-4)
-      }else{
+  filters: {
+    CARD_NO_Fliter(n) {
+      if (n) {
+        return n.substr(n.length - 4)
+      } else {
         return n
       }
     }
@@ -39,7 +39,7 @@ let time = 60
     timeDown() {
       let sTime = time
       this.disable = true
-      let timer = setInterval(() => {
+      timer = setInterval(() => {
         if (sTime == 0) {
           this.codeText = '重新发送'
           this.disable = false
@@ -64,7 +64,7 @@ let time = 60
       console.log(this.pwd);
       console.log(this.pwdLen);
       console.log(this.pwCode);
-      if (util.Check.payPassLen(this.pwdLen,true)) return;
+      if (util.Check.payPassLen(this.pwdLen, true)) return;
       this.ZhengZhouPass = false
       this.doApiOpenging2()
     },
@@ -103,14 +103,14 @@ let time = 60
         ACCT_NO: this.data.CARD_NO
       }
       API.common.apiSendPhoneCode(data, res => {
-        Bus.$emit(BusName.showToast, '验证码发送成功')
+        Bus.$emit(BusName.showSendMsg, PHONE)
         this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
       }, err => {
         this.codeText = '重新发送'
         this.disable = false
         try {
-            clearInterval(timer)
-        }catch (e) {
+          clearInterval(timer)
+        } catch (e) {
 
         }
         console.log(err);
@@ -131,7 +131,7 @@ let time = 60
       }
 
     },
-    doApiOpenging2(){
+    doApiOpenging2() {
       this.data.PRE_PHONE_NUM = this.tel
       console.log(this.data.PRE_PHONE_NUM);
       if (this.bankText == '请选择银行') {
@@ -157,10 +157,6 @@ let time = 60
         Bus.$emit(BusName.showToast, '短信验证码不能为空')
         return
       }
-      if (this.data.MESSAGE_TOKEN == '') {
-        Bus.$emit(BusName.showToast, '短信验证码异常')
-        return
-      }
 
       let delMsg = true
 
@@ -172,24 +168,21 @@ let time = 60
         // 密码
         ACC_FLAG: this.ACC_FLAG, // 账户类型 0：他行；1：本行；2：村镇
         PREFIX: this.pwCode || null, // todo 密码控件调用时返回，密码必传时该字段必填
-        PASSWD:this.pwd || null, //
+        PASSWD: this.pwd || null, //
 
-        COMMON_USER_ID:this.callbackInfos.COMMON_USER_ID, // 用户中心ID
+        COMMON_USER_ID: this.callbackInfos.COMMON_USER_ID, // 用户中心ID
         // 短信
-        SND_MSG_TYPE:'11' , // 短信类型
-        SND_MSG:this.data.PHONE_CODE,
-        HAS_BAND:(this.callbackInfos.hasCardList&&this.callbackInfos.hasCardList.length>0)?'1':'0',// 是否已经绑定过卡
+        SND_MSG_TYPE: '11', // 短信类型
+        SND_MSG: this.data.PHONE_CODE,
+        HAS_BAND: (this.callbackInfos.hasCardList && this.callbackInfos.hasCardList.length > 0) ? '1' : '0',// 是否已经绑定过卡
 
         // 身份证相关
-        CARD_FRONT_URL:this.callbackInfos.CARD_FRONT_URL.replace(/\+/g, '%2B'), //证件电子照正面批次号
-        CARD_BACK_URL:this.callbackInfos.CARD_BACK_URL.replace(/\+/g, '%2B'), //证件电子照反面批次号
-        USER_NAME:this.callbackInfos.USER_NAME, // 卡所属姓名
-        USER_DUTY:this.callbackInfos.USER_DUTY, // 职业
-
-
-        PHONE_NUM:this.callbackInfos.PHONE_NUM, // 银行预留手机号(绑卡行)
-        BESHARP_REGISTER_VALI_USER_SEQ:this.callbackInfos.BESHARP_REGISTER_VALI_USER_SEQ, //实名认证流水号
-
+        CARD_FRONT_URL: this.callbackInfos.CARD_FRONT_URL.replace(/\+/g, '%2B'), //证件电子照正面批次号
+        CARD_BACK_URL: this.callbackInfos.CARD_BACK_URL.replace(/\+/g, '%2B'), //证件电子照反面批次号
+        USER_NAME: this.callbackInfos.USER_NAME, // 卡所属姓名
+        USER_DUTY: this.callbackInfos.USER_DUTY, // 职业
+        PHONE_NUM: this.tel, // 银行预留手机号(绑卡行)
+        BESHARP_REGISTER_VALI_USER_SEQ: this.callbackInfos.BESHARP_REGISTER_VALI_USER_SEQ, //实名认证流水号
       }
       let OTHER = true  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
       console.log('params');
@@ -210,7 +203,7 @@ let time = 60
           if (res.CODE != 0) { // 不是0的话返回
             return
           }
-          this.setComState({type:'openingData',value:res})
+          this.setComState({type: 'openingData', value: res})
           this.$router.push({
             name: PageName.Opening3,
           })
@@ -220,19 +213,20 @@ let time = 60
             FUNCTION_ID: 'ptb0A004', // 点位
             REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
           })
+          this.codeText = '重新发送'
+          this.disable = false
           this.errMsg = err
           setTimeout(() => {
             this.errMsg = ''
           }, 2000)
           console.log(err);
-          this.disable = false
         })
       // this.pollHandle()
     },
     // 注册第一次返回失败 需要轮询 查询 是否成功
     pollHandle() {
       let conut = 0
-      let timer = setInterval(() => {
+      timer = setInterval(() => {
         conut++
         console.log(conut);
         if (conut == 6) {
@@ -248,9 +242,7 @@ let time = 60
      * 获取支持的银行列表
      */
     getBankList() {
-      API.common.apiGetBankCardList({
-
-      }, res => {
+      API.common.apiGetBankCardList({}, res => {
         let obj = {}
         res.BAND_CARD_LIST.forEach(item => {
           obj[item.BANK_CARD_BIN] = item.BANK_NAME

@@ -2,7 +2,7 @@ import {STORE_PREFIX} from '../../../Constant'
 export default {
     set(key, value) {
         if (!key) return false
-        window.sessionStorage.setItem(STORE_PREFIX + key, JSON.stringify(value || {}))
+        window.sessionStorage.setItem(STORE_PREFIX + key, JSON.stringify(value || null))
     },
     get(key) {
         if (!key) return null
