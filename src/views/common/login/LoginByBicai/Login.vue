@@ -4,7 +4,7 @@
     <!--不同银行展示不同的logo和名称,以后抽离组件 专门用于管理-->
     <!--<img class="logo" src="@/assets/images/logoaaa_03.png" alt="">-->
     <div class="logo-box">
-      <img src="@/assets/images/common/logo@2x.png" alt="">
+      <img src="@/assets/images/common/logo@2x.png" alt="" @click="goBicaiOpen">
       <span>比财平台{{BANK_NAME}}</span>
     </div>
     <div class="login_box">
@@ -12,23 +12,18 @@
         <transition name="fade">
           <p class="label" v-show="telShow">开户手机号</p>
         </transition>
-        <input class="input" type="input"
+        <input class="input" type="tel"
                name="text1" :placeholder="telPaceholder" v-model="tel">
       </section>
       <section class="input-box">
         <transition name="fade">
           <p class="label" v-show="cmsShow">短信验证码</p>
         </transition>
-        <input class="input" type="tel"
+        <input class="input" type="input"
                name="text1" :placeholder="cmsholder" v-model="cms">
         <button class="get-msg" @click="clickMsgCodeHandle" :disabled="msgDisabled">{{codeText}}</button>
       </section>
-      <!--<button :disabled="disabled" :class="{'tijiao':true, 'agree':!disabled}" @click="loginFactory(ORG_ID)">-->
-      <!--登录-->
-      <!--</button>-->
-      <button class="tijiao" @click="loginFactory(ORG_ID)">
-        登录
-      </button>
+      <button :class="{tijiao:true,active:canClick}" @click="loginFactory()" :disabled="!canClick">登录</button>
       <p class="infos">
         温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意《用户服务协议》和《比财隐私政策》
       </p>
@@ -36,15 +31,21 @@
     </div>
     <section class="safe-code" v-show="showSafeCode">
       <div>
-        <img :src="safeCodeUrl+ SESSION_ID" alt="" @click="reImg">
-        <input type="tel" placeholder="请输入图形验证码" v-model="safeCode">
-        <button @click="getSafeCode">确定</button>
+        <p>请填写图形验证码</p>
+        <section class="middle">
+          <input type="tel" placeholder="请输入图形验证码" v-model="safeCode">
+          <img :src="safeCodeUrl+ SESSION_ID" alt="" @click="reImg">
+        </section>
+        <section class="btn">
+          <button @click="showSafeCode=false">取消</button>
+          <button @click="getSafeCode">确定</button>
+        </section>
       </div>
     </section>
     <section class="bottomcontent">
       <p>
         <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-        {{BANK_NAME}}已与比财实现安全直连</p>
+        {{BANK_NAME}}银行已与比财实现安全直连</p>
     </section>
   </div>
 </template>
@@ -54,13 +55,13 @@
   import Bus from '@/plugin/bus'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Mixins from "@/mixins";
-  import util from "libs/util";
+  import LoginMixins from './login'
+  import util from "@/libs/util";
   import {HOST} from "@/Constant";
 
   const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
   let time = 60
   let timer;
-
   export default {
     data() {
       return {
@@ -83,38 +84,46 @@
         codeText: '获取验证码',
         passPluginText: '',
         currentTel: '',
-        ORG_ID: '', //
-        BANK_NAME: '',
         LOGO_URL: '',
         safeCode: '',
-        showSafeCode: false
+        showSafeCode: false,
+        getMsgCodeSuccess: false,
+
+        BANK_NAME: '',
+        href: '',
+        ORG_ID: '',
+        OPEN_H5_STATUS: ''
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
     components: {
       PassWordZhengzhou
     },
-    inject: ['reload'],
     created() {
-      this.ORG_ID = util.storage.session.get('ORG_ID') || ''
-      this.BANK_NAME = this.getBankState.ORG_NAME
-
-      let preInfo = this.getComState.loginInfo;
-      if (preInfo) {
-        this.tel = preInfo.PHONE_NUM
-        Bus.$emit(BusName.showToast, preInfo.msg)
-        this.removeComState('loginInfo')
-      }
+      let query = this.$route.query
+      console.log(query);
+      this.BANK_NAME = query.ORG_NAME
+      this.OPEN_H5_STATUS = query.OPEN_H5_STATUS
+      this.ORG_ID = query.ORG_ID
+      this.href = query.href
     },
     computed: {
       disabled() {
-        if (this.tel.length == 11 && this.cms.length > 0) {
+        if (this.tel.length == 11 && this.cms.length > 0 && this.getMsgCodeSuccess) {
           return false
         } else {
           return true
         }
+      },
+      canClick() {
+        if (this.tel && this.cms && this.getMsgCodeSuccess) {
+          return true
+        } else {
+          return false
+        }
       }
     },
+
     watch: {
       tel(n, o) {
         if (n == '') {
@@ -155,44 +164,13 @@
         }
       }
     },
-    methods: {
-      reImg() {
-      },
-      getSafeCode() {
-        if (this.safeCode == '') {
-          Bus.$emit(BusName.showToast, '请填写图形验证码')
-        }
-        this.getMsg(true)
-        this.showSafeCode = false
-      },
-      isValueNumber(value) {
-        return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
-      },
 
-      getMsg(canLogin = false) {
-        let data = {
-          PHONE_NUM: this.tel + '',
-          SAFT_CODE: this.safeCode
+    methods: {
+      goBicaiOpen() {
+        let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+        if (TOKEN) {
+          this.checkAuthStatus()
         }
-        this.safeCode = ''
-        this.SESSION_ID = ''
-        API.bicai.sendSMS(data, (res, SESSION_ID) => {
-          let data = res
-          let mark = data.mark // 0 未满5次，1满五次
-          this.SESSION_ID = SESSION_ID
-          if (mark == 0) {
-            Bus.$emit(BusName.showToast, '验证码发送成功')
-            this.timeDown()
-          } else {
-            console.log(canLogin);
-            if (canLogin) { // 用于拦截第一次
-              this.timeDown()
-            } else {
-              this.showSafeCode = true
-            }
-          }
-        }, err => {
-        })
       },
       loginFactory() {
         if (util.Check.tel(this.tel, true)) return
@@ -211,120 +189,93 @@
           })
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          this.setComState({type:'OPEN_H5_HREF',value:this.href})
           // todo 登陆比财 首先判断比财开户的状态 暂时注释。
-          // this.checkAuthStatus()
+          if (this.OPEN_H5_STATUS == 0) {
+            if (this.href) {
+              window.open(this.href);
+            } else {
+              Bus.$emit(BusName.showToast, '跳转链接异常')
+            }
+          }
+          else if (this.OPEN_H5_STATUS == 1) {
+            this.checkAuthStatus()
+          } else {
+            //
+          }
           // 跳过校验比财开户状态 直接判断郑州银行回显
-          this.checkBankStatus()
+          // this.checkBankStatus()
         }, err => {
           API.watchApi({
             FUNCTION_ID: 'ptb0A007', // 点位
             REMARK_DATA: '异业合作-登录', // 中文备注
           })
+          this.getMsgCodeSuccess = false
+          this.codeText = '重新发送'
+          this.msgDisabled = false
+          clearInterval(timer)
+          this.$store.commit('SET_SESSION_ID', '')
           // util.storage.session.remove(LsName.token)
-          this.$store.commit('SET_TOKEN', null)
-          this.setComState({
-            type: 'loginInfo',
-            value: {
-              PHONE_NUM: this.tel,
-              msg: err
+          this.$store.commit('SET_TOKEN', '')
+        })
+      },
+
+      reImg() {
+        // let data = {
+        //   PHONE_NUM: this.tel + '',
+        //   SAFT_CODE: this.safeCode,
+        // }
+        // API.bicai.sendSMS(data, (res, SESSION_ID) => {
+        //   this.SESSION_ID = SESSION_ID
+        // }, err => {
+        //   this.SESSION_ID = ''
+        // })
+      },
+      getSafeCode() {
+        if (this.safeCode === '') {
+          Bus.$emit(BusName.showToast, '请输入图形验证码')
+          return
+        }
+        this.getMsg(true)
+        this.showSafeCode = false
+      },
+      isValueNumber(value) {
+        return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
+      },
+
+      getMsg(canLogin = false) {
+        this.getMsgCodeSuccess = false
+        let data = {
+          PHONE_NUM: this.tel + '',
+          SAFT_CODE: this.safeCode
+        }
+        this.safeCode = ''
+        API.bicai.sendSMS(data, (res, SESSION_ID) => {
+          let data = res
+          let mark = data.mark // 0 未满5次，1满五次
+          this.SESSION_ID = SESSION_ID
+          if (mark == 0) {
+            // Bus.$emit(BusName.showSendMsg, this.tel)
+            this.getMsgCodeSuccess = true
+            this.timeDown()
+          } else {
+            console.log(canLogin);
+            if (canLogin) { // 用于拦截第一次
+              // 成功！
+              this.getMsgCodeSuccess = true
+              // Bus.$emit(BusName.showSendMsg, this.tel)
+              this.timeDown()
+            } else {
+              this.showSafeCode = true
             }
-          })
-
-        })
-      },
-      // 判断该用户在比财的实名认证状态
-      checkAuthStatus() {
-        API.bicai.getAuthStatus({}, res => {
-          let {AUTH_STATUS, isOldMember} = res
-          //  AUTH_STATUS 返回码：
-          // 0:未认证，
-          // 1:身份证认证，
-          // 2:银行卡认证，
-          // 3:密码设置，
-          // 4:认证完成，
-          // 5:身份证过期
-          console.log(AUTH_STATUS);
-          switch (Number(AUTH_STATUS)) {
-            case 0:
-            case 1:
-              this.$router.push(PageName.BcOpening1)
-              break;
-            case 2:
-              this.$router.push(PageName.BcOpening2)
-              break;
-            case 3:
-              this.$router.push(PageName.BcOpening3)
-              break;
-            case 4:
-              this.checkBankStatus()
-              // todo 再判断对应的直销银行有没有开户
-              break;
-            case 5:
-              //
-              this.$router.push(PageName.BcOpening1)
-              break;
           }
         }, err => {
-          this.codeText = '重新发送'
-          this.msgDisabled = false
-          clearInterval(timer)
+          this.SESSION_ID = ''
+          // this.$store.commit('SET_SESSION_ID', null)
+          // this.reImg()
         })
       },
-      // 判断该用户在本行的开户状态
-      checkBankStatus() {
-        // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
-        let data = {}
-        API.common.apiRegisterBackShow(data, res => {
-          let step = res.LAST_STEP_NUM
-          // （0未提交，1提交第一步，2提交第二步，3提交第三步）
-          util.storage.session.set('USERINFO', res)
-          if (step == 0) {
-            // this.$store.commit('SET_OPENING_DATA', 1)
-            this.setComState({type: 'openingData', value: res})
-            this.$router.push({name: PageName.Opening1})
-          }
-          if (step == 1) {
-            this.setComState({type: 'openingData', value: res})
-            // this.$store.commit('SET_OPENING_DATA', 1)
-            this.$router.push({name: PageName.Opening2})
-          }
-          if (step == 2) {
-            this.setComState({type: 'openingData', value: res})
-            // this.$store.commit('SET_OPENING_DATA', 1)
-            this.$router.push({name: PageName.Opening3})
-          }
-          if (step == 3) {
-            // todo登陆成功后判断拿来的去哪里
-            this.setComState({type: 'Infos', value: res})
-            this.checkIfPinggu(res)
-          }
-        }, err => {
-          this.codeText = '重新发送'
-          this.msgDisabled = false
-          clearInterval(timer)
-        })
-      },
-      // 判断是否评估
-      checkIfPinggu(res) {
-        // this.$router.push({name:PageName.Opening3})
-        this.removeComState('loginInfo')
-        let type = res.HAS_GRADE
-        this.setComState({type: 'HAS_GRADE', value: type})
-        // util.storage.session.set(LsName.HAS_GRADE, type)
-        if (type == 1) {
-          Bus.$emit(BusName.showToast, '请先进行评估')
-          this.$router.push({
-            name: PageName.VerificationSuccess,
-          })
-        }
-        else if (type == 2) { // 评估过
-          // 2的话
-          this.toPreProduct() // 评估过判断是否去哪里
 
-        } else {
-          this.toPreProduct() // 评估过判断是否去哪里
-        }
-      },
       //
       focusHandle() {
         this.telShow = true
@@ -334,6 +285,7 @@
         })
       },
       clickMsgCodeHandle() {
+        this.SESSION_ID = ''
         let PHONE = this.tel
         PHONE = PHONE + ''
         console.log(PHONE);
@@ -402,7 +354,15 @@
     font-size: 0.5rem;
   }
 
-
+  .bottomcontent p {
+    margin-top: 10px;
+    font-size: 0.4rem;
+    color: #808080;
+    background-repeat: no-repeat;
+    background-size: 0.4rem 0.4rem;
+    padding-left: 0.5rem;
+    background-position: 20%;
+  }
 
   .titlecontent {
     padding-left: px2rem(20);
@@ -421,32 +381,53 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.3);
     z-index: 10;
+
     div {
+      display: flex;
+      flex-direction: column;
       box-sizing: border-box;
       margin: px2rem(200) auto 0;
       background: #fff;
       padding-top: px2rem(10);
       text-align: center;
-      width: px2rem(250);
+      width: px2rem(280);
       height: px2rem(150);
+      border-radius: px2rem(6);
     }
-    img {
+    p {
+      flex: 1;
+      font-size: px2rem(18);
+    }
+    .btn {
+      flex: 2;
+      display: flex;
+      button {
+        flex: 1;
+        border-top: 1px solid #ccc;
+        color: #007aff;
+        &:first-child {
+          border-right: 1px solid #ccc;
+        }
+      }
 
     }
-    button {
-      width: px2rem(80);
-      height: px2rem(30);
-      background: #2f74ff;
-      color: #fff;
+
+    .middle {
+      display: flex;
+      padding: px2rem(15);
+      flex: 2;
+      img {
+        width: px2rem(80);
+        height: px2rem(40);
+      }
+      input {
+        flex: 1;
+        padding-left: px2rem(10);
+        height: px2rem(40);
+        border: 1px solid #ccc;
+      }
     }
-    input {
-      margin: px2rem(10) auto px2rem(10);
-      padding-left: px2rem(10);
-      display: block;
-      width: px2rem(150);
-      height: px2rem(40);
-      border: 1px solid #ccc;
-    }
+
   }
 
   .login_box {
@@ -494,8 +475,8 @@
 
   .tijiao {
     background: #fff;
-    color: #508CEE;
-    border: 1px solid #508CEE;
+    color: #cccccc;
+    border: 1px solid #cccccc;
     font-size: px2rem(18);
     border-radius: px2rem(6);
     width: px2rem(255);
@@ -503,9 +484,10 @@
     margin: px2rem(66) auto 0;
     text-align: center;
     display: block;
-    /*&.agree {*/
-    /*background: #508CEE;*/
-    /*}*/
+    &.active {
+      color: #508CEE;
+      border: 1px solid #508CEE;
+    }
   }
 
   .infos {
@@ -535,14 +517,13 @@
     opacity: 0;
   }
 
-
   .bottomcontent {
     /*position: absolute;*/
-    color: #808080;
     margin-top: px2rem(100);
     width: 100%;
     text-align: center;
-    font-size: px2rem(14);
+    font-size: 0;
+    color: #333;
     img {
       vertical-align: top;
       width: .5rem;

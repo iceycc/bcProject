@@ -2,7 +2,7 @@
   <div style="background: #f6f6f9;height: 100%">
     <app-bar title="更多服务"></app-bar>
     <section class="m-main">
-      <section v-if="DOM_SHOW.fenxiang" class="more" @click="goPage(toPageName.fenxian)">
+      <section v-if="DOM_SHOW.fenxiang" class="more" @click="goFengxian(toPageName.fenxian)">
              <span class="more-left">
                         风险测评</span>
         <span class="more-right">
@@ -78,6 +78,7 @@
         },
         PHONE_NUM: '',
         fenxianQuery: {},
+        IF_CEPING: false
       }
     },
     created() {
@@ -105,6 +106,8 @@
           case '5':
             return '进取型'
             break;
+          default:
+            return '您还未测评'
         }
       }
     },
@@ -119,7 +122,7 @@
           // 1 判断是否提交过查询申请
           let IS_RESET = res.IS_RESET
           let STATUS = res.STATUS
-
+          this.IF_CEPING = true
           this.setComState({type: 'resetPasswordStatus', value: res})
           if (IS_RESET == 1 || STATUS == '') {
             this.$router.push({name: PageName.ResetPayPasswordApply})
@@ -146,20 +149,27 @@
           // 电子账户
         })
       },
+      goFengxian() {
+        this.setComState({type: "loginType", value: PageName.MoreService})
+        // util.storage.session.set(LsName.loginType,PageName.MoreService) // 用于跳转风险测评返回判断
+        let data = this.fenxianQuery
+        if (this.IF_CEPING) {
+          // 测评过
+          this.$router.push({
+            name: PageName.FengxianResult,
+            query: data
+          })
+        } else {
+          // 没测评
+          this.$router.push({
+            name: PageName.VerificationSuccess,
+            query: data
+          })
+        }
+      },
       goPage(pageName) {
-        let data = {}
-        console.log(pageName);
-        if (pageName == PageName.FengxianResult) {
-          this.setComState({type: "loginType", value: PageName.MoreService})
-          // util.storage.session.set(LsName.loginType,PageName.MoreService) // 用于跳转风险测评返回判断
-          data = this.fenxianQuery
-        }
-        else {
-          data = {}
-        }
         this.$router.push({
           name: pageName,
-          query: data
         })
       },
       getInfos() {
@@ -171,6 +181,11 @@
       getRiskGrade() {
         API.risk.apiGetRiskEvalRes({}, res => {
           this.RISK_LEVEL = res.RISK_LEVEL
+          if (this.RISK_LEVEL == '') {
+            this.IF_CEPING = false
+          } else {
+            this.IF_CEPING = true
+          }
           this.setComState({type: 'RiskResult', value: res})
         })
       },

@@ -76,13 +76,16 @@
         stepImg: require('@/assets/images/account_icon_green2@2x.png'),
         stepImg2: require('@/assets/images/step2@2x.png'),
         stepImg3: require('@/assets/images/step3.png'),
-        errMsg: ''
-
+        errMsg: '',
+        OPEN_H5_HREF:''
       }
     },
     created() {
       this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
       this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
+      // this.setComSate
+      this.OPEN_H5_HREF  = this.getComState.OPEN_H5_HREF || false
+
     },
     computed:{
       disabled(){
@@ -102,8 +105,12 @@
         API.bicai.getPayPassword(data,res=>{
           Bus.$emit(BusName.showToast,res.message)
           if(res.status == 1) {
-            this.$router.push({name:PageName.Login})
-
+            if(this.OPEN_H5_HREF){
+              window.open(this.OPEN_H5_HREF)
+              this.$router.push({name:PageName.LoginByBicai})
+            }else {
+              this.$router.push({name:PageName.Login})
+            }
           }
         })
       },

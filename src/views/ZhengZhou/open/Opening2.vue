@@ -205,9 +205,9 @@
       }
     },
     created() {
-      this.checkBankStatus(() => {
-
-      })
+      // this.checkBankStatus(() => {
+      //
+      // })
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
       if (this.callbackInfos.hasCardList.length > 0) {

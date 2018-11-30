@@ -1,7 +1,7 @@
 import API from "@/service"
 import {LsName, BusName, PageName} from "@/Constant";
 import Bus from '@/plugin/bus'
-import util from "../../../libs/util";
+import util from "@/libs/util";
 
 
 export default {
@@ -28,11 +28,16 @@ export default {
             break;
           case 3:
           case 4:
-            this.checkBankStatus()
+            // this.checkBankStatus()
+            if(this.href){
+              window.open(this.href);
+            }else {
+              Bus.$emit(BusName.showToast,'跳转链接异常')
+            }
             // todo 再判断对应的直销银行有没有开户
             break;
           case 5:
-            //
+            // 身份证过期
             this.$router.push(PageName.BcOpening1)
             break;
         }
@@ -67,7 +72,6 @@ export default {
         }
         if (step == 3) {
           // todo登陆成功后判断拿来的去哪里
-          this.setComState({type:'ISLogin',value:true})
           this.setComState({type:'Infos',value:res})
 
           // this.$router.push({name:PageName.Opening3})

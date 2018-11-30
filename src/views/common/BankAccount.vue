@@ -241,8 +241,10 @@
       // get
       getBankListByChannelId() {
         let token = this.$store.getters.GET_ACCOUNT_STATE.TOKEN
+        // this.setComState({type:'ISLogin',value:true})
+        let ISLogin = this.getComState.ISLogin
         console.log('token', token);
-        if (token) {
+        if (token && ISLogin) {
           // this.TITLE_TEPY = ['已开户', '未开户']
           this.TITLE_TEPY = ['已登录', '未登录']
           this.getOpenBankList()

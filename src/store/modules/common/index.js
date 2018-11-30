@@ -37,6 +37,8 @@ export default {
     redeemSuccessData:{},
     openingData:{},
 
+    ISLogin:'false' // 前端记录是否登录成功 ，包括实名成功
+
 
   },
   //

@@ -165,6 +165,8 @@
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
+  import Register from '../login/login'
+
 
   export default {
     data() {
@@ -197,7 +199,7 @@
         invest: "", // 计算传人
       };
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin,Mixins.CheckAccountMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     computed: {
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
@@ -414,8 +416,10 @@
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
         if(TOKEN){
           // 判断是否注册改银行
+          // 判断比财实名流程
           // 判断该用户在本行的开户状态
-          this.getBankStatus(PageName.Buying)
+          // this.getBankStatus(PageName.Buying)
+          this.checkAuthStatus()
         }else {
           this.$router.push({name: PageName.Login})
         }

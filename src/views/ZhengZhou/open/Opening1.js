@@ -149,7 +149,7 @@ export default {
       API.open.apiRegisterValiUser(params, (res) => {
         // todo
         // 保存第一步的数据
-        this.setComState({type: 'openingState', value: {...res, ...params}})
+        this.setComState({type: 'openingData', value: {...this.suerinfo,BESHARP_REGISTER_VALI_USER_SEQ:res.BESHARP_REGISTER_VALI_USER_SEQ}})
         // 回显是否实名成功
         // this.checkBankStatus() //
         this.$router.push({name:PageName.Opening2})

@@ -29,6 +29,7 @@
           <div class="cameraphotoimg">
             <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
             <input type="file" capture="camera" accept="image/*" class="inputBox"
+                   disabled
                    @change="imgToBaseZheng($event)">
           </div>
         </div>
@@ -37,6 +38,7 @@
           <div class="cameraphotoimg">
             <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
             <input type="file" capture="camera" accept="image/*" class="inputBox"
+                   disabled
                    @change="imgToBaseFan($event)">
           </div>
         </div>
@@ -45,31 +47,37 @@
       <section v-if="DOMShow.USER_NAME">
         <span>姓名</span>
         <input class="inputBox2" type="text" placeholder="请输入您的姓名"
+               disabled
                v-model="data.USER_NAME">
       </section>
       <section v-if="DOMShow.USER_CARD_ID">
         <span>身份证号</span>
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
+               disabled
                v-model="data.USER_CARD_ID" @bulr="checkID">
       </section>
       <section v-if="DOMShow.USER_CARD_ID_DATA">
         <span>身份证有效期</span>
         <input class="inputBox2" type="text" placeholder=""
+               disabled
                v-model="data.USER_CARD_ID_DATA">
       </section>
       <section v-if="DOMShow.PHONE">
         <span>手机号码</span>
         <input class="inputBox2" type="tel" placeholder="请输入手机号"
+               disabled
                v-model="data.PHONE">
       </section>
       <section v-if="DOMShow.NATION">
         <span>民族</span>
         <input class="inputBox2" type="text" placeholder=""
+               disabled
                v-model="data.NATION">
       </section>
       <section v-if="DOMShow.ADDRESS">
         <span>地址</span>
         <input class="inputBox2" type="text" placeholder=""
+               disabled
                v-model="data.ADDRESS">
       </section>
       <section v-if="DOMShow.USER_DUTY">
@@ -172,26 +180,33 @@
     mixins: [Opening1Mixins],
     created() {
       // 1-获取回显数据
-      // let suerinfo = this.$store.getters.GET_OPEN_STATE.opening
-      let suerinfo = this.getComState.openingData
-      console.log("suerinfo>>", suerinfo);
-      // this.setComState({type: 'openingData', value: suerinfo})
-      // this.$store.commit('SET_OPENING_DATA', suerinfo)
-      if (suerinfo && suerinfo.CARD_FRONT_URL) {
-        this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL
-        this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL
-        this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
-        this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
-        // this.data.USER_NAME = suerinfo.USER_NAME
-        // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-        this.data.PHONE = suerinfo.PHONE_NUM
-        this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
-        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
-        this.idCardFanOcr()
-        this.idCardZhengOcr()
-      }
+      // this.checkBankStatus(this.getInfos)
+      //
+      this.getInfos()
     },
     methods: {
+      getInfos(data){
+        // let suerinfo = data
+        this.suerinfo = this.getComState.openingData
+        let suerinfo = this.suerinfo
+        console.log("suerinfo>>", this.suerinfo);
+        // this.setComState({type: 'openingData', value: suerinfo})
+        // this.$store.commit('SET_OPENING_DATA', suerinfo)
+        if (suerinfo && suerinfo.PHONE_NUM) {
+          this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL
+          this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL
+          this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
+          this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
+          this.data.USER_NAME = suerinfo.USER_NAME
+          this.data.USER_CARD_ID_DATA = suerinfo.VALIDITY_PERIOD
+          this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
+          this.data.PHONE = suerinfo.PHONE_NUM
+          this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
+          this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
+          // this.idCardFanOcr()
+          // this.idCardZhengOcr()
+        }
+      },
       //获取学历
       getEduction(val) {
         this.educationText = val.name

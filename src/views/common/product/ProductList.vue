@@ -8,6 +8,9 @@
     <div class="banner">
       <img src="@/assets/images/banner.png" alt="">
     </div>
+    <div class="info">
+      温馨提示：为方便资产统一管理，请您注册购买时使用同一银行卡预留手机号。
+    </div>
     <!-- 九宫格 -->
     <div class="ProductList" v-if="!show">
       <ul class="ul-li">
@@ -172,20 +175,31 @@
         }
       }
       ,
-      goDetail({ID, PRD_NAME, ORG_ID, PRD_DOCKING_TYPE, H5_URL_ANDRIOD, H5_URL_IOS}) {
+      goDetail({ID, ORG_NAME, PRD_NAME, ORG_ID, OPENAPI_STATUS, OPEN_H5_STATUS, H5_URL_ANDRIOD, H5_URL_IOS}) {
         API.watchApi({
           FUNCTION_ID: 'ptb0A001', // 点位
           REMARK_DATA: '异业合作-落地页产品列表', // 中文备
           FROM_ID: ID
         })
-        console.log(PRD_DOCKING_TYPE);
-        if (PRD_DOCKING_TYPE == '2') {
-          // h5直联银行
+        console.log('OPENAPI_STATUS>>', OPENAPI_STATUS);
+        if (OPENAPI_STATUS == '1') {
+          console.log('OPEN_H5_STATUS>>', OPEN_H5_STATUS);
           let href = H5_URL_ANDRIOD || H5_URL_IOS
-          window.open(href);
+          console.log(href);
+          // util.storage.session.set('H5href',href)
+          //  未打通openApi
+          //  判断银行是否打通H5直连
+          if (OPEN_H5_STATUS == '0') {
+            // 未打通 跳转比财登录 然后跳转银行的h5链接  不实名
+            this.$router.push({name: PageName.LoginByBicai, query: {ORG_NAME, href, ORG_ID, OPEN_H5_STATUS}})
+          } else if (OPEN_H5_STATUS == '1') {
+            // 已打通  跳转比财登录 然后实名 再跳转银行的h5链接
+            this.$router.push({name: PageName.LoginByBicai, query: {ORG_NAME, href, ORG_ID, OPEN_H5_STATUS}})
+          }
+          // window.open(href);
         }
-        else if (PRD_DOCKING_TYPE == '1') {
-          //
+        else if (OPENAPI_STATUS == '0') {
+          // 打通openAPI
           ORG_ID = ORG_ID + ''
           util.storage.session.set('ORG_ID', ORG_ID)
           util.storage.session.set('id', ID)
@@ -194,13 +208,15 @@
           window.location.reload()
         }
         else {
-          if(ORG_ID==49 || ORG_ID == 227){
+          if (ORG_ID == 49 || ORG_ID == 227) {
             ORG_ID = ORG_ID + ''
             util.storage.session.set('ORG_ID', ORG_ID)
             util.storage.session.set('id', ID)
             util.storage.session.set('title', PRD_NAME)
             util.storage.session.set('reload', true)
             window.location.reload()
+          } else {
+              Bus.$emit(BusName.showToast,'暂不支持改产品，请下载比财APP')
           }
         }
       }
@@ -364,5 +380,10 @@
         color: #007aff;
       }
     }
+  }
+  .info{
+    padding: px2rem(5) px2rem(10);
+    font-size: px2rem(12);
+    color: red;
   }
 </style>

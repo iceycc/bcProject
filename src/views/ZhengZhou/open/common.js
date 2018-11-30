@@ -16,6 +16,8 @@ export default {
     checkBankStatus(fn) {
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
+        fn(res)
+        return
         let step = res.LAST_STEP_NUM
         console.log('step',step);
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）

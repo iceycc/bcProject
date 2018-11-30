@@ -69,6 +69,8 @@ export default {
          this.$router.push({name: PageName.Opening3})
        }
        if (step == 3) {
+         //
+         this.setComState({type:'ISLogin',value:true})
          // todo登陆成功后判断拿来的去哪里
          this.setComState({type: 'Infos', value: res})
          this.checkIfPinggu(res)
