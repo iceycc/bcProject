@@ -204,21 +204,21 @@
           //  未打通openApi
           // 直接跳转 比财登录
           let ProData = {
-            ID: '',// 产品id
-            ORG_NAME: '',//机构名称
-            PRD_NAME: '', // 产品名称
-            ORG_ID: '', // 机构id
-            IS_SYNC_FLAG: '', // '是否由openAPI同步产品, 0：否, 1：是',
-            IS_REALTIME_DATA_PRD: '', // 'H5实时数据对接标识： 0不是  1是',
-            IS_RZ_FLAG: '', // '是否实名认证, 0：否, 1：是',
-            H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
-            H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
+            ID,// 产品id
+            ORG_NAME,//机构名称
+            PRD_NAME, // 产品名称
+            ORG_ID, // 机构id
+            IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS // 非打通openApi 跳转链接 ios
           }
           this.setComState({
             type: 'ProAndOrgType', value: ProData
           })
           this.$router.push({
-            name: PageName.LoginByBicai,
+            name: PageName.Login,
             query: ProData
           })
 
