@@ -170,7 +170,8 @@ export const LsName = {
 export const ORG_ID_NUM = {
   JinShang: '70',
   ZhengZhou: '49',
-  ZhongBang: '227'
+  ZhongBang: '227',
+  KeShang: '66'
 }
 
 export const CheckBank = function (val) {

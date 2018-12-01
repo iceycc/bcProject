@@ -3,6 +3,7 @@ import {ORG_ID_NUM} from '@/Constant'
 import JinShang from './bank/router-jinshang'
 import ZhengZhou from './bank/router-zhengzhou'
 import ZhongBang from './bank/router-zhongbang'
+import KeShang from './bank/router-keshang'
 import Common from './common'
 import util from '../libs/util'
 // util.storage.session.set('ORG_ID',bank.ORG_ID)
@@ -18,6 +19,9 @@ switch (ORG_ID) {
     break;
   case ORG_ID_NUM.ZhongBang:
     frameIn = ZhongBang;
+    break;
+  case ORG_ID_NUM.KeShang:
+    frameIn = KeShang;
     break;
 }
 

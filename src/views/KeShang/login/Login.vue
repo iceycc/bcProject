@@ -1,0 +1,526 @@
+<template>
+  <div class="hello">
+    <app-bar title="安全登录"></app-bar>
+    <!--不同银行展示不同的logo和名称,以后抽离组件 专门用于管理-->
+    <!--<img class="logo" src="@/assets/images/logoaaa_03.png" alt="">-->
+    <div class="logo-box">
+      <img src="@/assets/images/common/logo@2x.png" alt="" @click="goBicaiOpen">
+      <span>比财平台{{BANK_NAME}}直销银行</span>
+    </div>
+    <div class="login_box">
+      <section class="input-box">
+        <transition name="fade">
+          <p class="label" v-show="telShow">开户手机号</p>
+        </transition>
+        <input class="input" type="tel"
+               name="text1" :placeholder="telPaceholder" v-model="tel">
+      </section>
+      <section class="input-box">
+        <transition name="fade">
+          <p class="label" v-show="cmsShow">短信验证码</p>
+        </transition>
+        <input class="input" type="input"
+               name="text1" :placeholder="cmsholder" v-model="cms">
+        <button class="get-msg" @click="clickMsgCodeHandle" :disabled="msgDisabled">{{codeText}}</button>
+      </section>
+      <button :class="{tijiao:true,active:canClick}" @click="loginFactory(ORG_ID)" :disabled="!canClick">登录</button>
+      <p class="infos">
+        温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意《用户服务协议》和《比财隐私政策》
+      </p>
+
+    </div>
+    <section class="safe-code" v-show="showSafeCode">
+      <div>
+        <p>请填写图形验证码</p>
+        <section class="middle">
+          <input type="tel" placeholder="请输入图形验证码" v-model="safeCode">
+          <img :src="safeCodeUrl+ SESSION_ID" alt="" @click="reImg">
+        </section>
+        <section class="btn">
+          <button @click="showSafeCode=false">取消</button>
+          <button @click="getSafeCode">确定</button>
+        </section>
+      </div>
+    </section>
+    <section class="bottomcontent">
+      <p>
+        <img src="@/assets/images/icon_dunpai@2x.png" alt="">
+        {{BANK_NAME}}银行已与比财实现安全直连</p>
+    </section>
+  </div>
+</template>
+<script>
+  import API from "@/service"
+  import {LsName, BusName, PageName} from "@/Constant";
+  import Bus from '@/plugin/bus'
+  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
+  import Mixins from "@/mixins";
+  import LoginMixins from './login'
+  import util from "../../../libs/util";
+  import {HOST} from "@/Constant";
+
+  const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
+  let time = 60
+  let timer;
+  export default {
+    data() {
+      return {
+        SESSION_ID: '',
+        safeCodeUrl,
+        msgDisabled: false,
+        tel: '',
+        cms: '',
+        pass: '',
+        passLay: '',
+        toUrl: "",
+        loginPass: 'loginPass',
+        num: 1,
+        ifGet: false,
+        refur: false,
+        telShow: false,
+        cmsShow: false,
+        telPaceholder: '开户手机号',
+        cmsholder: '短信验证码',
+        codeText: '获取验证码',
+        passPluginText: '',
+        currentTel: '',
+        ORG_ID: '', //
+        BANK_NAME: '',
+        LOGO_URL: '',
+        safeCode: '',
+        showSafeCode: false,
+        getMsgCodeSuccess: false
+      }
+    },
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
+    components: {
+      PassWordZhengzhou
+    },
+    inject: ['reload'],
+    created() {
+      this.ORG_ID = util.storage.session.get('ORG_ID') || ''
+      // this.ORG_ID = this.$store.getters.GET_BANK_INFO.ORG_ID
+      if(this.ORG_ID =='227'){
+        this.BANK_NAME = '众邦'
+      }
+      if(this.ORG_ID =='49'){
+        this.BANK_NAME = '郑州'
+      }
+      let preInfo = this.getComState.loginInfo;
+      if (preInfo) {
+        this.tel = preInfo.PHONE_NUM
+        Bus.$emit(BusName.showToast, preInfo.msg)
+        this.removeComState('loginInfo')
+      }
+    },
+    computed: {
+      disabled() {
+        if (this.tel.length == 11 && this.cms.length > 0 && this.getMsgCodeSuccess) {
+          return false
+        } else {
+          return true
+        }
+      },
+      canClick() {
+        if (this.tel && this.cms && this.getMsgCodeSuccess) {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
+
+    watch: {
+      tel(n, o) {
+        if (n == '') {
+          return
+        }
+        if (!this.isValueNumber(n)) {
+          this.tel = this.currentTel
+          return
+        }
+        if (n.length > 11) { // >11截取
+          this.tel = this.tel.toString().substr(0, 11)
+        }
+        this.currentTel = n
+        if (n.length > 1) { // >1时不必校验
+          return
+        }
+        if (!n) { // 删除到 '' 是触发
+          this.telShow = false
+          this.telPaceholder = '开户手机号'
+        } else {
+          this.telPaceholder = ''
+          this.telShow = true
+        }
+      },
+      cms(n, o) {
+        if (n == '') {
+          return
+        }
+        if (n.length > 1) { // >1时不必校验
+          return
+        }
+        if (!n) { // 删除到 '' 是触发
+          this.cmsShow = false
+          this.cmsholder = '短信验证码'
+        } else {
+          this.cmsholder = ''
+          this.cmsShow = true
+        }
+      }
+    },
+
+    methods: {
+      goBicaiOpen(){
+        let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+        if(TOKEN){
+          this.checkAuthStatus()
+        }
+      },
+      loginFactory() {
+        if (util.Check.tel(this.tel, true)) return
+        let data = {
+          PHONE_NUM: this.tel + '',
+          PHONE_CODE: this.cms,
+          SAFT_CODE: this.safeCode
+        }
+        let SOURCE_URL = this.$store.getters.GET_COMMON_STATE.loginType
+        this.$store.commit('SET_TOKEN', null)
+        API.bicai.login(data, (res) => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+            SOURCE_URL: SOURCE_URL
+          })
+          this.$store.commit('SET_BICAI_USER', res)
+          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          // todo 登陆比财 首先判断比财开户的状态 暂时注释。
+          this.checkAuthStatus()
+          // 跳过校验比财开户状态 直接判断郑州银行回显
+          // this.checkBankStatus()
+        }, err => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+          })
+          this.getMsgCodeSuccess = false
+          this.codeText = '重新发送'
+          this.msgDisabled = false
+          clearInterval(timer)
+          this.$store.commit('SET_SESSION_ID', '')
+          // util.storage.session.remove(LsName.token)
+          this.$store.commit('SET_TOKEN', '')
+        })
+      },
+
+      reImg() {
+        // let data = {
+        //   PHONE_NUM: this.tel + '',
+        //   SAFT_CODE: this.safeCode,
+        // }
+        // API.bicai.sendSMS(data, (res, SESSION_ID) => {
+        //   this.SESSION_ID = SESSION_ID
+        // }, err => {
+        //   this.SESSION_ID = ''
+        // })
+      },
+      getSafeCode() {
+        if (this.safeCode === '') {
+          Bus.$emit(BusName.showToast, '请输入图形验证码')
+          return
+        }
+        this.getMsg(true)
+        this.showSafeCode = false
+      },
+      isValueNumber(value) {
+        return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
+      },
+
+      getMsg(canLogin = false) {
+        this.getMsgCodeSuccess = false
+        let data = {
+          PHONE_NUM: this.tel + '',
+          SAFT_CODE: this.safeCode
+        }
+        this.safeCode = ''
+        API.bicai.sendSMS(data, (res, SESSION_ID) => {
+          let data = res
+          let mark = data.mark // 0 未满5次，1满五次
+          this.SESSION_ID = SESSION_ID
+          if (mark == 0) {
+            // Bus.$emit(BusName.showSendMsg, this.tel)
+            this.getMsgCodeSuccess = true
+            this.timeDown()
+          } else {
+            console.log(canLogin);
+            if (canLogin) { // 用于拦截第一次
+              // 成功！
+              this.getMsgCodeSuccess = true
+              // Bus.$emit(BusName.showSendMsg, this.tel)
+              this.timeDown()
+            } else {
+              this.showSafeCode = true
+            }
+          }
+        }, err => {
+          this.SESSION_ID = ''
+          // this.$store.commit('SET_SESSION_ID', null)
+          // this.reImg()
+        })
+      },
+
+      //
+      focusHandle() {
+        this.telShow = true
+        this.telPaceholder = ''
+        $('.input').css({
+          fontSize: '.5rem'
+        })
+      },
+      clickMsgCodeHandle() {
+        this.SESSION_ID = ''
+        let PHONE = this.tel
+        PHONE = PHONE + ''
+        console.log(PHONE);
+        if (util.Check.tel(PHONE, true)) return;
+        this.getMsg()
+      },
+      // msg倒计时
+      timeDown() {
+        let sTime = time
+        this.msgDisabled = true
+        timer = setInterval(() => {
+          if (sTime == 0) {
+            this.codeText = '重新发送'
+            this.msgDisabled = false
+            clearInterval(timer)
+            return
+          }
+          sTime--
+          this.codeText = `${sTime}s`
+        }, 1000)
+      },
+    }
+  }
+</script>
+<style lang="scss" scoped>
+  @import "~@/assets/px2rem";
+
+  .logo-box {
+    font-size: 0;
+    width: 100%;
+    padding-top: px2rem(40);
+    box-sizing: border-box;
+    padding-left: px2rem(20);
+    span {
+      padding-top: px2rem(10);
+      padding-left: px2rem(20);
+      font-size: px2rem(20);
+      color: #49546C;
+      vertical-align: top;
+    }
+    img {
+      vertical-align: top;
+      width: px2rem(50);
+      height: px2rem(46);
+    }
+  }
+
+  .hello {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: px2rem(600);
+    position: relative;
+  }
+
+  .header {
+    background-color: #fff;
+    height: 1.3rem;
+    line-height: 1.3rem;
+    font-size: 0.4rem;
+    border-bottom: 1px solid #e6e6e6;
+  }
+
+  .header p {
+    text-align: center;
+    font-size: 0.5rem;
+  }
+
+  .bottomcontent p {
+    margin-top: 10px;
+    font-size: 0.4rem;
+    color: #808080;
+    background-repeat: no-repeat;
+    background-size: 0.4rem 0.4rem;
+    padding-left: 0.5rem;
+    background-position: 20%;
+  }
+
+  .titlecontent {
+    padding-left: px2rem(20);
+    padding-top: px2rem(24);
+    font-size: px2rem(18);
+    img {
+      width: .6rem;
+      vertical-align: top;
+    }
+  }
+
+  .safe-code {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      margin: px2rem(200) auto 0;
+      background: #fff;
+      padding-top: px2rem(10);
+      text-align: center;
+      width: px2rem(280);
+      height: px2rem(150);
+      border-radius: px2rem(6);
+    }
+    p {
+      flex: 1;
+      font-size: px2rem(18);
+    }
+    .btn {
+      flex: 2;
+      display: flex;
+      button {
+        flex: 1;
+        border-top: 1px solid #ccc;
+        color: #007aff;
+        &:first-child {
+          border-right: 1px solid #ccc;
+        }
+      }
+
+    }
+
+    .middle {
+      display: flex;
+      padding: px2rem(15);
+      flex: 2;
+      img {
+        width: px2rem(80);
+        height: px2rem(40);
+      }
+      input {
+        flex: 1;
+        padding-left: px2rem(10);
+        height: px2rem(40);
+        border: 1px solid #ccc;
+      }
+    }
+
+  }
+
+  .login_box {
+    position: relative;
+    .input-box {
+      position: relative;
+      margin-left: px2rem(20);
+      width: 90%;
+      height: px2rem(65);
+      background-size: 0.7rem 0.7rem;
+      border-bottom: 1px #E5E5E5 solid;
+      padding-top: px2rem(20);
+    }
+    .label {
+      padding: 0;
+      font-size: px2rem(17);
+      color: #858E9F;
+    }
+    .get-msg {
+      position: absolute;
+      right: 0;
+      top: px2rem(46);
+      font-size: px2rem(12);
+      height: px2rem(30);
+      width: px2rem(90);
+      color: #508CEE;
+      border: 1px solid #508CEE;
+      border-radius: px2rem(6)
+    }
+    .input {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      @include placeholder(#dedede);
+      height: px2rem(24) !important;
+      margin: px2rem(10) 0;
+      width: 50%;
+      border: none;
+      box-sizing: border-box;
+      font-size: px2rem(16);
+      color: #333;
+      outline: none;
+    }
+  }
+
+  .tijiao {
+    background: #fff;
+    color: #cccccc;
+    border: 1px solid #cccccc;
+    font-size: px2rem(18);
+    border-radius: px2rem(6);
+    width: px2rem(255);
+    height: px2rem(44);
+    margin: px2rem(66) auto 0;
+    text-align: center;
+    display: block;
+    &.active {
+      color: #508CEE;
+      border: 1px solid #508CEE;
+    }
+  }
+
+  .infos {
+    margin: px2rem(60) auto 0;
+    width: px2rem(315);
+    height: px2rem(34);
+    color: #B3B3B3;
+  }
+
+  .login_box .forget {
+    margin-top: 0.2rem;
+    color: #1badff;
+    position: absolute;
+    right: 5%;
+  }
+
+  .login_box .forget2 {
+    color: #333;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .6s;
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
+    opacity: 0;
+  }
+
+  .bottomcontent {
+    /*position: absolute;*/
+    margin-top: px2rem(100);
+    width: 100%;
+    text-align: center;
+    font-size: 0;
+    color: #333;
+    img {
+      vertical-align: top;
+      width: .5rem;
+    }
+  }
+</style>
