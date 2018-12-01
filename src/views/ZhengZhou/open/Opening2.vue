@@ -91,7 +91,7 @@
 
         </div>
         <div class="btn">
-          <button @click="cancel">取消</button>
+          <button @click="cancel">取消1</button>
           <button @click="subumit">提交</button>
         </div>
       </div>
