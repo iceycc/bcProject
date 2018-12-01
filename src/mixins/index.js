@@ -103,7 +103,7 @@ const UtilMixin = {
         // 其他的话  正常 跳转购买页
         this.$router.push({
           name: PageName.Buying,
-          query: goBuyData
+          // query: goBuyData
         })
       }
       else {

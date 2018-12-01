@@ -52,7 +52,7 @@
     <button
       :class="{'tijiao':true, 'agree':!disabled}"
       :disabled="disabled"
-    @click="doNext"
+      @click="doNext"
     >开户
     </button>
   </div>
@@ -67,7 +67,7 @@
     data() {
       return {
         showPayPass: true,
-        payPass:'',
+        payPass: '',
         telPaceholder: '登录密码',
         payPaceholder: '交易密码',
         REQ_SERIAL: '',
@@ -83,45 +83,56 @@
         stepImg2: require('@/assets/images/step2@2x.png'),
         stepImg3: require('@/assets/images/step3.png'),
         errMsg: '',
-        OPEN_H5_HREF:''
+        OPEN_H5_HREF: ''
       }
     },
     created() {
       this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
       this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
       // this.setComSate
-      this.OPEN_H5_HREF  = this.getComState.OPEN_H5_HREF || false
+      this.OPEN_H5_HREF = this.getComState.OPEN_H5_HREF || false
 
     },
-    computed:{
-      disabled(){
-        if(this.payPass){
+    computed: {
+      disabled() {
+        if (this.payPass) {
           return false
-        }else {
+        } else {
           return true
         }
       }
     },
     methods: {
-      doNext(){
+      doNext() {
         let data = {
-          onePassword:this.payPass,
-          twoPassword:this.payPass,
+          onePassword: this.payPass,
+          twoPassword: this.payPass,
         }
-        API.bicai.getPayPassword(data,res=>{
-          Bus.$emit(BusName.showToast,res.message)
-          if(res.status == 1) {
-            if(this.OPEN_H5_HREF){// 有h5链接
-              // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
-              //   `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
-              //   `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
-              window.open(this.OPEN_H5_HREF)
-              // this.$router.push({name:PageName.LoginByBicai})
-            }else {
+        // let
+        let ProAndOrgType = this.getComState.ProAndOrgType
 
-              // this.$router.push({name:PageName.Login})
-              this.$router.push({name:PageName.Opening1})
+        API.bicai.getPayPassword(data, res => {
+          Bus.$emit(BusName.showToast, res.message)
+          if (res.status == 1) {
+            // 判断产品类型 区分openAPI
+            let ProAndOrgType = this.getComState.ProAndOrgType
+            if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 1) {
+              // 打通openAOPI的
+              this.$router.push({name: PageName.Opening1})
             }
+            else if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 0) {
+              // 非打通openAPI的
+              // 直接跳转 银行h5链接
+              let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
+              if (href) {
+                window.open(href)
+              } else {
+                alert('跳转第三方链接获取异常')
+              }
+            } else {
+              this.$router.push({name: PageName.Opening1})
+            }
+            // this.$router.push({name:PageName.Login})
           }
         })
       },

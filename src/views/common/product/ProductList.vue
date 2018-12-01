@@ -70,7 +70,18 @@
         Bshow: true,
         show: false,
         dataList: [],
-        imgSrc
+        imgSrc,
+        testData:{
+          ID:'3451',// 产品id
+          ORG_NAME:'',//机构名称
+          PRD_NAME:'', // 产品名称
+          ORG_ID:'49', // 机构id
+          IS_SYNC_FLAG:'0', // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD:'0', // 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG:'0', // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD:'http://baidu.com',// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS:'' // 非打通openApi 跳转链接 ios
+        }
       }
     },
     created() {
@@ -178,52 +189,53 @@
         }
       }
       ,
-      goDetail({
-                 ID,// 产品id
-                 ORG_NAME,//机构名称
-                 PRD_NAME, // 产品名称
-                 ORG_ID, // 机构id
-                 IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
-                 IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
-                 IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
-                 H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
-                 H5_URL_IOS // 非打通openApi 跳转链接 ios
-               }) {
+      goDetail(bank) {
         API.watchApi({
           FUNCTION_ID: 'ptb0A001', // 点位
           REMARK_DATA: '异业合作-落地页产品列表', // 中文备
           FROM_ID: ID
         })
-
+        let {
+          ID,// 产品id
+          ORG_NAME,//机构名称
+          PRD_NAME, // 产品名称
+          ORG_ID, // 机构id
+          IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS // 非打通openApi 跳转链接 ios
+        } = bank
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
         // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
         console.log('IS_SYNC_FLAG>>', IS_SYNC_FLAG);
         // set
+        let ProData = {
+          ID,// 产品id
+          ORG_NAME,//机构名称
+          PRD_NAME, // 产品名称
+          ORG_ID, // 机构id
+          IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS // 非打通openApi 跳转链接 ios
+        }
+        this.setComState({
+          type: 'ProAndOrgType', value: ProData
+        })
         if (IS_SYNC_FLAG == '0') {
           //  未打通openApi
           // 直接跳转 比财登录
-          let ProData = {
-            ID: '',// 产品id
-            ORG_NAME: '',//机构名称
-            PRD_NAME: '', // 产品名称
-            ORG_ID: '', // 机构id
-            IS_SYNC_FLAG: '', // '是否由openAPI同步产品, 0：否, 1：是',
-            IS_REALTIME_DATA_PRD: '', // 'H5实时数据对接标识： 0不是  1是',
-            IS_RZ_FLAG: '', // '是否实名认证, 0：否, 1：是',
-            H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
-            H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
-          }
-          this.setComState({
-            type: 'ProAndOrgType', value: ProData
-          })
+
           this.$router.push({
-            name: PageName.LoginByBicai,
+            name: PageName.Login,
             query: ProData
           })
 
         }
-        else if (IS_REALTIME_DATA_PRD == '1') {
+        else if (IS_SYNC_FLAG == '1') {
           // 打通openAPI 刷新重置 ORG_ID 跳转产品详情页
           ORG_ID = ORG_ID + ''
           util.storage.session.set('ORG_ID', ORG_ID)
