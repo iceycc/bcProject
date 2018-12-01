@@ -45,7 +45,7 @@
     <section class="bottomcontent">
       <p>
         <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-        {{BANK_NAME}}银行已与比财实现安全直连</p>
+        {{BANK_NAME}}已与比财实现安全直连</p>
     </section>
   </div>
 </template>
@@ -100,12 +100,7 @@
       PassWordZhengzhou
     },
     created() {
-      let query = this.$route.query
-      console.log(query);
-      this.BANK_NAME = query.ORG_NAME
-      this.OPEN_H5_STATUS = query.OPEN_H5_STATUS
-      this.ORG_ID = query.ORG_ID
-      this.href = query.href
+
     },
     computed: {
       disabled() {
@@ -166,60 +161,14 @@
     },
 
     methods: {
+      // 测试
       goBicaiOpen() {
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
         if (TOKEN) {
           this.checkAuthStatus()
         }
       },
-      loginFactory() {
-        if (util.Check.tel(this.tel, true)) return
-        let data = {
-          PHONE_NUM: this.tel + '',
-          PHONE_CODE: this.cms,
-          SAFT_CODE: this.safeCode
-        }
-        let SOURCE_URL = this.$store.getters.GET_COMMON_STATE.loginType
-        this.$store.commit('SET_TOKEN', null)
-        API.bicai.login(data, (res) => {
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A007', // 点位
-            REMARK_DATA: '异业合作-登录', // 中文备注
-            SOURCE_URL: SOURCE_URL
-          })
-          this.$store.commit('SET_BICAI_USER', res)
-          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
-          this.setComState({type:'OPEN_H5_HREF',value:this.href})
-          // todo 登陆比财 首先判断比财开户的状态 暂时注释。
-          if (this.OPEN_H5_STATUS == 0) {
-            if (this.href) {
-              window.open(this.href);
-            } else {
-              Bus.$emit(BusName.showToast, '跳转链接异常')
-            }
-          }
-          else if (this.OPEN_H5_STATUS == 1) {
-            this.checkAuthStatus()
-          } else {
-            //
-          }
-          // 跳过校验比财开户状态 直接判断郑州银行回显
-          // this.checkBankStatus()
-        }, err => {
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A007', // 点位
-            REMARK_DATA: '异业合作-登录', // 中文备注
-          })
-          this.getMsgCodeSuccess = false
-          this.codeText = '重新发送'
-          this.msgDisabled = false
-          clearInterval(timer)
-          this.$store.commit('SET_SESSION_ID', '')
-          // util.storage.session.remove(LsName.token)
-          this.$store.commit('SET_TOKEN', '')
-        })
-      },
-
+      // 刷新图片
       reImg() {
         // let data = {
         //   PHONE_NUM: this.tel + '',
@@ -231,6 +180,7 @@
         //   this.SESSION_ID = ''
         // })
       },
+      // 点击获取验证码
       getSafeCode() {
         if (this.safeCode === '') {
           Bus.$emit(BusName.showToast, '请输入图形验证码')
@@ -239,10 +189,11 @@
         this.getMsg(true)
         this.showSafeCode = false
       },
+      // 数字校验
       isValueNumber(value) {
         return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
       },
-
+      // 获取验证码 注意次数判断 session的更新
       getMsg(canLogin = false) {
         this.getMsgCodeSuccess = false
         let data = {
@@ -275,8 +226,7 @@
           // this.reImg()
         })
       },
-
-      //
+      // 焦点
       focusHandle() {
         this.telShow = true
         this.telPaceholder = ''
@@ -284,6 +234,7 @@
           fontSize: '.5rem'
         })
       },
+      //
       clickMsgCodeHandle() {
         this.SESSION_ID = ''
         let PHONE = this.tel
@@ -306,6 +257,42 @@
           sTime--
           this.codeText = `${sTime}s`
         }, 1000)
+      },
+      // 登录
+      loginFactory() {
+        if (util.Check.tel(this.tel, true)) return
+        let data = {
+          PHONE_NUM: this.tel + '',
+          PHONE_CODE: this.cms,
+          SAFT_CODE: this.safeCode
+        }
+        let SOURCE_URL = this.$store.getters.GET_COMMON_STATE.loginType
+        this.$store.commit('SET_TOKEN', null)
+        API.bicai.login(data, (res) => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+            SOURCE_URL: SOURCE_URL
+          })
+          this.$store.commit('SET_BICAI_USER', res)
+          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          // todo 登陆比财 首先判断比财开户的状态
+          this.checkAuthStatus()
+          // 跳过校验比财开户状态 直接判断郑州银行回显
+          // this.checkBankStatus()
+        }, err => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+          })
+          this.getMsgCodeSuccess = false
+          this.codeText = '重新发送'
+          this.msgDisabled = false
+          clearInterval(timer)
+          this.$store.commit('SET_SESSION_ID', '')
+          // util.storage.session.remove(LsName.token)
+          this.$store.commit('SET_TOKEN', '')
+        })
       },
     }
   }

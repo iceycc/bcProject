@@ -68,6 +68,7 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
+      console.log('bicai - res>>>',result);
       // 根据状态码 做业务状态校验 分流
       if (result.head.CODE == 0) {
         let msg = result.head.MSG || '成功'
@@ -79,6 +80,8 @@ export default {
         Bus.$emit(BusName.showToast, result.head.MSG)
         // util.storage.session.remove(LsName.token)
         store.commit('SET_TOKEN', '')
+        store.commit('SET_SESSION_ID', '')
+
         Router.push({
           name: PageName.Login,
           query: {
@@ -89,6 +92,8 @@ export default {
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
+        store.commit('SET_SESSION_ID', '')
+
         // util.storage.session.remove(LsName.token)
         Router.push({
           name: PageName.Login,

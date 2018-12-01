@@ -69,7 +69,7 @@ export const CheckAccountMixin ={
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
-        util.storage.session.set('USERINFO', res)
+        // util.storage.session.set('USERINFO', res)
         if (step == 0) {
           // this.$store.commit('SET_OPENING_DATA', 1)
           this.setComState({type:'openingData',value:res})
@@ -115,5 +115,12 @@ export const CheckAccountMixin ={
         this.toPreProduct() // 评估过判断是否去哪里
       }
     },
+  }
+}
+
+
+export const FromPCMixin = {
+  methods:{
+
   }
 }

@@ -437,7 +437,6 @@
               res => {
                 this.$router.push({name:PageName.OrderNextSuccess,query:{
                     PRD_NAME: this.productDetail.PRD_NAME
-
                   }})
               },
               err => {

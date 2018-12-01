@@ -91,13 +91,13 @@
         window.sessionStorage.setItem("store", JSON.stringify(this.$store.state))
       })
       // console.log('设备userAgent>>' + navigator.userAgent);
-      Bus.$on(BusName.showToast, (val) => {
+      Bus.$on(BusName.showToast, (val,time = 2000) => {
         if (!val) return
         this.showToast = true
         this.msg = val
         setTimeout(() => {
           this.showToast = false
-        }, 2000)
+        }, time)
       })
       Bus.$on(BusName.showSendMsg, (val) => {
         if (!val) {
@@ -141,12 +141,12 @@
     bottom: 0;
     position: fixed;
     width: 100%;
-    height: 1.3rem;
+    box-sizing: border-box;
+    padding: px2rem(5);
     background: rgba(0, 0, 0, 0.9);
     z-index: 9999;
     text-align: center;
     font-size: 0.4rem;
-    line-height: 1.3rem;
   }
 
   .msg-toast {

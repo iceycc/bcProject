@@ -46,13 +46,13 @@ export default [
   /**
    * login
    */
-  {
-    path: '/' + PageName.Login,
-    name: PageName.Login,
-    // component: resolve => require(['views/common/login/LoginByBicai/Login.vue'], resolve),
-    component: resolve => require(['views/ZhengZhou/login/Login.vue'], resolve),
-    meta: {keepAlive: false, title: '安全登录', needLogin: false}
-  },
+  // {
+  //   path: '/' + PageName.Login,
+  //   name: PageName.Login,
+  //   component: resolve => require(['views/common/login/LoginByBicai/Login.vue'], resolve),
+  //   // component: resolve => require(['views/ZhengZhou/login/Login.vue'], resolve),
+  //   meta: {keepAlive: false, title: '安全登录', needLogin: false}
+  // },
   /**
    * open 开户
    */

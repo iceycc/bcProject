@@ -69,6 +69,7 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
+      console.log('jinshang - res>>>',result);
       console.log('res >>>', result.data);
       console.log('code >>>', result.head.CODE);
       store.commit('REMOVE_COMMON_STATE','LAST_STEP_NUM')

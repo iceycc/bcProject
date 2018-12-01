@@ -211,7 +211,7 @@
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
       if (this.callbackInfos.hasCardList.length > 0) {
-        this.data.CARD_NO = this.callbackInfos.hasCardList[0].USER_CARD_ID
+        this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
         this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
         this.mainBankList = this.callbackInfos.hasCardList
       }

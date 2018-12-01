@@ -28,12 +28,12 @@ export default {
         this.setComState({type: 'openingData', value: res})
         if (step == 0) {
           // this.$store.commit('SET_OPENING_DATA', res)
-          util.storage.session.set('USERINFO', res)
+          // util.storage.session.set('USERINFO', res)
           this.$router.push({name: PageName.Opening1})
         }
         else if (step == 1) {
           // this.$store.commit('SET_OPENING_DATA', res)
-          util.storage.session.set('USERINFO', res)
+          // util.storage.session.set('USERINFO', res)
           this.$router.push({name: PageName.Opening2})
         }
         else {

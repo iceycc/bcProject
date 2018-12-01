@@ -68,10 +68,9 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
-      // console.log('res >>>', result.data);
-      console.log('code >>>', result.head.CODE);
-      store.commit('REMOVE_COMMON_STATE', 'LAST_STEP_NUM')
-      store.commit('REMOVE_COMMON_STATE', 'REQ_SERIAL')
+      console.log('zhengzhou - res>>>',result);
+      // store.commit('REMOVE_COMMON_STATE', 'LAST_STEP_NUM')
+      // store.commit('REMOVE_COMMON_STATE', 'REQ_SERIAL')
       // util.storage.session.remove(LsName.LAST_STEP_NUM)
       // util.storage.session.remove(LsName.REQ_SERIAL)
       if (!TOKEN && result.head.TOKEN) { //
@@ -80,17 +79,17 @@ export default {
       // if (result.head.TOKEN) { // 接口有返回token就更新token
       //   store.commit('SET_TOKEN', result.head.TOKEN)
       // }
-      if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
-        // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
-        store.commit('SET_COMMON_STATE', {
-          type: 'LAST_STEP_NUM',
-          value: result.data.LAST_STEP_NUM
-        })
-        store.commit('SET_COMMON_STATE', {
-          type: 'REQ_SERIAL',
-          value: result.data.REQ_SERIAL
-        })
-      }
+      // if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
+      //   // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
+      //   store.commit('SET_COMMON_STATE', {
+      //     type: 'LAST_STEP_NUM',
+      //     value: result.data.LAST_STEP_NUM
+      //   })
+      //   store.commit('SET_COMMON_STATE', {
+      //     type: 'REQ_SERIAL',
+      //     value: result.data.REQ_SERIAL
+      //   })
+      // }
       // 根据状态码 做业务状态校验 分流
       if (result.head.CODE == 0) {
         let msg = result.head.MSG || '成功'
@@ -99,15 +98,16 @@ export default {
         return Promise.resolve(result.data)
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
+        // 登录超时
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
         goLogin()
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
+        // 其他登录
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
         goLogin()
-
       }
       else {
         if (!delMsg) {

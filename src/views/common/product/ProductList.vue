@@ -45,7 +45,11 @@
             <img class="logoy" v-if="item.IS_ENABLED == 2" src="@/assets/images/yuyue.png" alt="">
             <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.1rem">
               {{item.PRD_NAME}}</p>
-            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem">理财期限{{item.PERIOD}}天</p>
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-if="item.PRD_TYPE_ID==4">期限 随时支取</p>
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-else>理财期限 {{item.PERIOD}}天</p>
+
           </div>
         </li>
       </ul>
@@ -58,7 +62,6 @@
   import util from 'libs/util'
   import {BusName} from "../../../Constant";
   import Bus from '@/plugin/bus/index'
-
 
   export default {
     data() {
@@ -175,31 +178,53 @@
         }
       }
       ,
-      goDetail({ID, ORG_NAME, PRD_NAME, ORG_ID, OPENAPI_STATUS, OPEN_H5_STATUS, H5_URL_ANDRIOD, H5_URL_IOS}) {
+      goDetail({
+                 ID,// 产品id
+                 ORG_NAME,//机构名称
+                 PRD_NAME, // 产品名称
+                 ORG_ID, // 机构id
+                 IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+                 IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+                 IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+                 H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+                 H5_URL_IOS // 非打通openApi 跳转链接 ios
+               }) {
         API.watchApi({
           FUNCTION_ID: 'ptb0A001', // 点位
           REMARK_DATA: '异业合作-落地页产品列表', // 中文备
           FROM_ID: ID
         })
-        console.log('OPENAPI_STATUS>>', OPENAPI_STATUS);
-        if (OPENAPI_STATUS == '1') {
-          console.log('OPEN_H5_STATUS>>', OPEN_H5_STATUS);
-          let href = H5_URL_ANDRIOD || H5_URL_IOS
-          console.log(href);
-          // util.storage.session.set('H5href',href)
+
+        // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
+        // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+        // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
+        console.log('IS_SYNC_FLAG>>', IS_SYNC_FLAG);
+        // set
+        if (IS_SYNC_FLAG == '0') {
           //  未打通openApi
-          //  判断银行是否打通H5直连
-          if (OPEN_H5_STATUS == '0') {
-            // 未打通 跳转比财登录 然后跳转银行的h5链接  不实名
-            this.$router.push({name: PageName.LoginByBicai, query: {ORG_NAME, href, ORG_ID, OPEN_H5_STATUS}})
-          } else if (OPEN_H5_STATUS == '1') {
-            // 已打通  跳转比财登录 然后实名 再跳转银行的h5链接
-            this.$router.push({name: PageName.LoginByBicai, query: {ORG_NAME, href, ORG_ID, OPEN_H5_STATUS}})
+          // 直接跳转 比财登录
+          let ProData = {
+            ID: '',// 产品id
+            ORG_NAME: '',//机构名称
+            PRD_NAME: '', // 产品名称
+            ORG_ID: '', // 机构id
+            IS_SYNC_FLAG: '', // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD: '', // 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG: '', // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
           }
-          // window.open(href);
+          this.setComState({
+            type: 'ProAndOrgType', value: ProData
+          })
+          this.$router.push({
+            name: PageName.LoginByBicai,
+            query: ProData
+          })
+
         }
-        else if (OPENAPI_STATUS == '0') {
-          // 打通openAPI
+        else if (IS_REALTIME_DATA_PRD == '1') {
+          // 打通openAPI 刷新重置 ORG_ID 跳转产品详情页
           ORG_ID = ORG_ID + ''
           util.storage.session.set('ORG_ID', ORG_ID)
           util.storage.session.set('id', ID)
@@ -216,7 +241,7 @@
             util.storage.session.set('reload', true)
             window.location.reload()
           } else {
-              Bus.$emit(BusName.showToast,'暂不支持改产品，请下载比财APP')
+            Bus.$emit(BusName.showToast, '暂不支持改产品，请下载比财APP')
           }
         }
       }
@@ -381,7 +406,8 @@
       }
     }
   }
-  .info{
+
+  .info {
     padding: px2rem(5) px2rem(10);
     font-size: px2rem(12);
     color: red;

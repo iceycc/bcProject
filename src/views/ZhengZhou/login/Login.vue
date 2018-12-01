@@ -106,12 +106,7 @@
       if(this.ORG_ID =='49'){
         this.BANK_NAME = '郑州'
       }
-      let preInfo = this.getComState.loginInfo;
-      if (preInfo) {
-        this.tel = preInfo.PHONE_NUM
-        Bus.$emit(BusName.showToast, preInfo.msg)
-        this.removeComState('loginInfo')
-      }
+
     },
     computed: {
       disabled() {
@@ -195,7 +190,7 @@
           })
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
-          // todo 登陆比财 首先判断比财开户的状态 暂时注释。
+          // todo 登陆比财 首先判断比财开户的状态
           this.checkAuthStatus()
           // 跳过校验比财开户状态 直接判断郑州银行回显
           // this.checkBankStatus()

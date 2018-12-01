@@ -2,6 +2,8 @@ import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName, LsName} from "@/Constant";
 import util from "libs/util";
+import Mixins from "@/mixins";
+
 
 export default {
   data() {
@@ -10,9 +12,10 @@ export default {
       showPayPass: true,
       pwd: '',
       pwdLen: '',
-      pwdCode:''
+      pwdCode: ''
     }
   },
+  mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
   created() {
     console.log('ZhengZhou');
   },
@@ -20,15 +23,6 @@ export default {
     setPassWord() {
       let opening3 = this.getComState.openingData
       this.REQ_SERIAL = opening3.BESHARP_REGISTER_VALI_USER_SEQ
-      // if (!this.REQ_SERIAL) {
-      //   Bus.$emit(BusName.showToast, '实名认证异常，请重新注册')
-      //   setTimeout(() => {
-      //     this.$router.push({
-      //       name: PageName.opening
-      //     }, 1000)
-      //   })
-      //   return
-      // }
 
       let CUST_NO = opening3.CUST_NO || null
       let data = {
@@ -40,19 +34,10 @@ export default {
       }
       console.log(data);
       API.open.apiRegisterSetPsw(data, res => {
-        // todo 是否要判断预约来的还是购买来的
-
-        Bus.$emit(BusName.showToast, '注册成功,即将跳转登录页')
-        this.$store.commit('SET_TOKEN', '')
-        this.Londing.open({
-          text: '即将跳转登录页'
-        })
-        setTimeout(() => {
-          this.Londing.close()
-          this.$router.replace({
-            name: PageName.Login
-          })
-        }, 1500)
+        // Bus.$emit(BusName.showToast, '注册成功,即将跳转登录页')
+        // this.$store.commit('SET_TOKEN', '')
+        this.setComState({type:'ISLogin',value:true})
+        this.toPreProduct()
       }, err => {
         this.ifShow = false
         this.setErrMsg({

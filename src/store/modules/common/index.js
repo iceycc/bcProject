@@ -9,7 +9,7 @@ export default {
     loginType: '', //  用于测评完成后跳转功能（购买，预约，电子账户，更多服务）
     goBuy: { // 去购买需要的参数
       PRD_NAME: ' 民生xx产品',
-      TXT_MIN_AMOUNT:'200', // 起购金额
+      TXT_MIN_AMOUNT: '200', // 起购金额
       REMAIN_AMT: '10000', // 可投金额
       INCRE_AMOUNT: '10', // 最小递增
       ORG_NAME: '民生银行', // 银行名称
@@ -18,28 +18,38 @@ export default {
     },
     Infos: '', // 存储个人信息
 
-    RechargeQuery:{} , // 充值页需要的参数
+    RechargeQuery: {}, // 充值页需要的参数
     PRD_TYPE: '', // 产品类型
     OriginPage: '', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
     ErrMsg: '', // 用于保存返回的错误信息 刷新时可以展示
     loginInfo: '',// 登录刷新需要的信息
     buyNextData: '',
     buyData: { // 购买成功后跳转页面需要展示的参数
-      PRD_NAME:'民生xx基金',
-      ORG_NAME:'郑州银行',
-      money:'1000',
-      OPERA_DATE:'2011-10-1',
-      EXPECT_PROFIT_DATE:'2020-10-1',
-      BESHARP_BUY_SEQ:'2111211111211111'
+      PRD_NAME: '民生xx基金',
+      ORG_NAME: '郑州银行',
+      money: '1000',
+      OPERA_DATE: '2011-10-1',
+      EXPECT_PROFIT_DATE: '2020-10-1',
+      BESHARP_BUY_SEQ: '2111211111211111'
     }, //
-    availableBalance:'' ,// 可用余额
-    redeemData:{},
-    redeemSuccessData:{},
-    openingData:{},
+    availableBalance: '',// 可用余额
+    redeemData: {},
+    redeemSuccessData: {},
+    openingData: {},
 
-    ISLogin:'false' // 前端记录是否登录成功 ，包括实名成功
+    ISLogin: false,// 前端记录是否登录成功 ，包括实名成功
 
-
+    ProAndOrgType: {
+      ID:'',// 产品id
+      ORG_NAME:'',//机构名称
+      PRD_NAME:'', // 产品名称
+      ORG_ID:'', // 机构id
+      IS_SYNC_FLAG:'', // '是否由openAPI同步产品, 0：否, 1：是',
+      IS_REALTIME_DATA_PRD:'', // 'H5实时数据对接标识： 0不是  1是',
+      IS_RZ_FLAG:'', // '是否实名认证, 0：否, 1：是',
+      H5_URL_ANDRIOD:'',// 非打通openApi 跳转链接 安卓
+      H5_URL_IOS:'' // 非打通openApi 跳转链接 ios
+    }
   },
   //
   actions: {},

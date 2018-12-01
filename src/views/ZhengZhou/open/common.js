@@ -16,33 +16,33 @@ export default {
     checkBankStatus(fn) {
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
-        fn(res)
-        return
-        let step = res.LAST_STEP_NUM
-        console.log('step',step);
-        // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         this.setComState({type:'openingData',value:res})
-
-        if (step == 0) {
-          // this.$store.commit('SET_OPENING_DATA', res)
-          util.storage.session.set('USERINFO',res)
-          this.$router.push({name: PageName.Opening1})
+        if(fn){
+           fn(res)
+        }else {
+          let step = res.LAST_STEP_NUM
+          console.log('step',step);
+          // （0未提交，1提交第一步，2提交第二步，3提交第三步）
+          if (step == 0) {
+            // this.$store.commit('SET_OPENING_DATA', res)
+            util.storage.session.set('USERINFO',res)
+            this.$router.push({name: PageName.Opening1})
+          }
+          if (step == 1) {
+            // this.$store.commit('SET_OPENING_DATA', res)
+            util.storage.session.set('USERINFO',res)
+            this.$router.push({name: PageName.Opening2})
+          }
+          if (step == 2) {
+            // this.$store.commit('SET_OPENING_DATA', res)
+            util.storage.session.set('USERINFO',res)
+            this.$router.push({name: PageName.Opening3})
+          }
+          if (step == 3) {
+            // todo登陆成功后判断拿来的去哪里
+            this.$router.push({name:PageName.Login})
+          }
         }
-        if (step == 1) {
-          // this.$store.commit('SET_OPENING_DATA', res)
-          util.storage.session.set('USERINFO',res)
-          this.$router.push({name: PageName.Opening2})
-        }
-        if (step == 2) {
-          // this.$store.commit('SET_OPENING_DATA', res)
-          util.storage.session.set('USERINFO',res)
-          this.$router.push({name: PageName.Opening3})
-        }
-        if (step == 3) {
-          // todo登陆成功后判断拿来的去哪里
-          this.$router.push({name:PageName.Login})
-        }
-
       })
     },
     /**

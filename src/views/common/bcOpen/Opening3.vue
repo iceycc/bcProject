@@ -39,6 +39,12 @@
         </transition>
         <input class="input" type="password" :placeholder="payPaceholder" v-model="payPass">
       </section>
+      <section class="input-box" v-if="showPayPass">
+        <transition name="fade">
+          <p class="label" v-if="!disabled">重复交易密码</p>
+        </transition>
+        <input class="input" type="password" :placeholder="payPaceholder" v-model="payPass">
+      </section>
     </div>
     <div class="Tips" v-if="errMsg">
       <span>{{errMsg}}</span>
@@ -105,11 +111,16 @@
         API.bicai.getPayPassword(data,res=>{
           Bus.$emit(BusName.showToast,res.message)
           if(res.status == 1) {
-            if(this.OPEN_H5_HREF){
+            if(this.OPEN_H5_HREF){// 有h5链接
+              // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
+              //   `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+              //   `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
               window.open(this.OPEN_H5_HREF)
-              this.$router.push({name:PageName.LoginByBicai})
+              // this.$router.push({name:PageName.LoginByBicai})
             }else {
-              this.$router.push({name:PageName.Login})
+
+              // this.$router.push({name:PageName.Login})
+              this.$router.push({name:PageName.Opening1})
             }
           }
         })

@@ -108,10 +108,9 @@ export default class Http {
       url,
       method
     }).then(res => {
-      console.log('res>>>',res);
+      console.log('bicai - res>>>',res);
       if (res.head.CODE == 0) {
         let SESSION_ID = res.head.SESSION_ID
-        console.log('success>>', res);
         store.commit('SET_SESSION_ID', SESSION_ID)
         success && success(res.data, SESSION_ID)
         return Promise.resolve(res.data)
@@ -122,6 +121,8 @@ export default class Http {
         return Promise.reject(res.head.MSG)
       }
       else if (res.head.CODE == '-3') {
+        // 其他设备登录
+        store.commit('SET_TOKEN', '')
         store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
       }

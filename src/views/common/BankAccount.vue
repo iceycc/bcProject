@@ -108,7 +108,6 @@
   import API from "@/service";
   import {PageName, LsName, imgSrc} from "@/Constant";
   import util from "libs/util";
-  import {mapActions} from 'vuex'
   import {BusName, CheckBank} from "../../Constant";
   import Bus from '@/plugin/bus/index'
 
@@ -242,7 +241,8 @@
       getBankListByChannelId() {
         let token = this.$store.getters.GET_ACCOUNT_STATE.TOKEN
         // this.setComState({type:'ISLogin',value:true})
-        let ISLogin = this.getComState.ISLogin
+        let ISLogin = this.getComState.ISLogin || false
+        console.log('ISLogin',ISLogin);
         console.log('token', token);
         if (token && ISLogin) {
           // this.TITLE_TEPY = ['已开户', '未开户']

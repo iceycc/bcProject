@@ -8,13 +8,13 @@ export default [
     }
   },
   /**
-   * LoginByBicai
+   *  BicaiLogin
    */
   {
-    path: '/' + PageName.LoginByBicai,
-    name: PageName.LoginByBicai,
+    path: '/' + PageName.Login,
+    name: PageName.Login,
     component: resolve => require(['views/common/login/LoginByBicai/Login.vue'], resolve),
-    meta: {keepAlive: false, title: '登录', needLogin: false}
+    meta: {keepAlive: false, title: '安全登录', needLogin: false}
   },
   /**
    * 电子账户

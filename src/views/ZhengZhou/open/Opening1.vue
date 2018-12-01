@@ -180,14 +180,14 @@
     mixins: [Opening1Mixins],
     created() {
       // 1-获取回显数据
-      // this.checkBankStatus(this.getInfos)
+      this.checkBankStatus(this.getInfos)
       //
-      this.getInfos()
+      // this.getInfos()
     },
     methods: {
       getInfos(data){
-        // let suerinfo = data
-        this.suerinfo = this.getComState.openingData
+        this.suerinfo = data
+        // this.suerinfo = this.getComState.openingData
         let suerinfo = this.suerinfo
         console.log("suerinfo>>", this.suerinfo);
         // this.setComState({type: 'openingData', value: suerinfo})

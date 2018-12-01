@@ -414,13 +414,20 @@
         this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        if(TOKEN){
+        let ISLogin = this.getComState.ISLogin || false
+        if (TOKEN && ISLogin) {
           // 判断是否注册改银行
           // 判断比财实名流程
           // 判断该用户在本行的开户状态
           // this.getBankStatus(PageName.Buying)
-          this.checkAuthStatus()
-        }else {
+          // if(ISLogin){
+          //   this.$router.push({name: PageName.Login})
+          // }else {
+          //
+          // }
+          this.toPreProduct()
+          // this.checkAuthStatus()
+        } else {
           this.$router.push({name: PageName.Login})
         }
       }

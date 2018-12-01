@@ -2,12 +2,14 @@ import API from "@/service"
 import {LsName, BusName, PageName} from "@/Constant";
 import Bus from '@/plugin/bus'
 import util from "../../../libs/util";
+let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 
 
 export default {
   methods:{
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
+      this.setComState({type:'ISLogin',value:false})
       API.bicai.getAuthStatus({}, res => {
         let {AUTH_STATUS, isOldMember} = res
         //  AUTH_STATUS 返回码：
@@ -21,9 +23,13 @@ export default {
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
+            Bus.$emit(BusName.showToast,MsgText,3000)
+
             this.$router.push(PageName.BcOpening1)
             break;
           case 2:
+            Bus.$emit(BusName.showToast,MsgText,3000)
+
             this.$router.push(PageName.BcOpening2)
             break;
           case 3:
@@ -33,6 +39,8 @@ export default {
             break;
           case 5:
             //
+            Bus.$emit(BusName.showToast,MsgText,3000)
+
             this.$router.push(PageName.BcOpening1)
             break;
         }
@@ -47,15 +55,15 @@ export default {
         this.setComState({type: 'TEL', value: this.tel})
 
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
-        util.storage.session.set('USERINFO', res)
+        // util.storage.session.set('USERINFO', res)
         if (step == 0) {
-          // this.$store.commit('SET_OPENING_DATA', 1)
+          Bus.$emit(BusName.showToast,MsgText,3000)
           this.setComState({type:'openingData',value:res})
           this.$router.push({name: PageName.Opening1})
         }
         if (step == 1) {
+          Bus.$emit(BusName.showToast,MsgText,3000)
           this.setComState({type:'openingData',value:res})
-          // this.$store.commit('SET_OPENING_DATA', 1)
           this.$router.push({name: PageName.Opening2})
         }
         if (step == 2) {

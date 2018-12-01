@@ -24,7 +24,7 @@ axios.interceptors.response.use(
     if (typeof data == 'string') {
       data = JSON.parse(data)
     }
-    console.log('response>', data);
+    console.log('interceptors - response>', data);
     Indicator.close();
     // todo http code校验
     return data;
