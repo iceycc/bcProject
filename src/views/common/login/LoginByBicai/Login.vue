@@ -258,42 +258,7 @@
           this.codeText = `${sTime}s`
         }, 1000)
       },
-      // 登录
-      loginFactory() {
-        if (util.Check.tel(this.tel, true)) return
-        let data = {
-          PHONE_NUM: this.tel + '',
-          PHONE_CODE: this.cms,
-          SAFT_CODE: this.safeCode
-        }
-        let SOURCE_URL = this.$store.getters.GET_COMMON_STATE.loginType
-        this.$store.commit('SET_TOKEN', null)
-        API.bicai.login(data, (res) => {
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A007', // 点位
-            REMARK_DATA: '异业合作-登录', // 中文备注
-            SOURCE_URL: SOURCE_URL
-          })
-          this.$store.commit('SET_BICAI_USER', res)
-          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
-          // todo 登陆比财 首先判断比财开户的状态
-          this.checkAuthStatus()
-          // 跳过校验比财开户状态 直接判断郑州银行回显
-          // this.checkBankStatus()
-        }, err => {
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A007', // 点位
-            REMARK_DATA: '异业合作-登录', // 中文备注
-          })
-          this.getMsgCodeSuccess = false
-          this.codeText = '重新发送'
-          this.msgDisabled = false
-          clearInterval(timer)
-          this.$store.commit('SET_SESSION_ID', '')
-          // util.storage.session.remove(LsName.token)
-          this.$store.commit('SET_TOKEN', '')
-        })
-      },
+
     }
   }
 </script>

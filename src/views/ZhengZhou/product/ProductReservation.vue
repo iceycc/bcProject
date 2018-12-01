@@ -419,15 +419,6 @@
         let ISLogin = this.getComState.ISLogin || false
 
         if (TOKEN && ISLogin) {
-          // 判断是否注册改银行
-          // 判断比财实名流程
-          // 判断该用户在本行的开户状态
-          // this.getBankStatus(PageName.Buying)
-          // if(ISLogin){
-          //   this.$router.push({name: PageName.Login})
-          // }else {
-          //
-          // }
           this.toPreProduct()
           // this.checkAuthStatus()
         } else {
