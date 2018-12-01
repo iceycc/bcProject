@@ -291,7 +291,6 @@
 
       }
     }
-    
     .line2 {
       &:after {
         left: 0;
