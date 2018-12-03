@@ -6,7 +6,10 @@
     </div>
     <div class="fenxiangcontent">
       <h2>很抱歉，充值失败!</h2>
-      <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
+      <div>
+        <img src="@/assets/images/error_tips.png" alt="">
+        <span style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</span>
+      </div>
     </div>
     <span @click="reCharge" class="btn">重新充值</span>
     <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->

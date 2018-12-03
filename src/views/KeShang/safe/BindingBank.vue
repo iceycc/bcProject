@@ -19,20 +19,35 @@
         </section>
       </section>
     </section>
+    <div class="add-card" @click="sheetVisible = true">添加银行卡</div>
+    <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import API from '@/service'
   import {imgSrc} from "@/Constant";
-
+  import { Actionsheet } from 'mint-ui';
+  Vue.component(Actionsheet.name, Actionsheet);
   export default {
     name: "BindingBank",
     data() {
       return {
         bg_IMG: '',
         imgSrc,
-        logo: ''
+        logo: '',
+        sheetVisible: false,
+        actions:[
+          {
+            name: '设为默认卡',
+            method: this.setDefaultCard
+          },
+          {
+            name: '解绑银行卡',
+            method: this.unBindingCard
+          }
+        ]
       }
     },
     created() {
@@ -45,6 +60,12 @@
           this.bg_IMG = res.LOGO_BACKGROUND_URL
           this.logo = res.CARD_BANK_URL
         })
+      },
+      setDefaultCard(){
+        console.log(1)
+      },
+      unBindingCard(){
+        console.log(2)
       }
     }
   }
@@ -101,5 +122,16 @@
         padding-left: px2rem(50);
       }
     }
+  }
+  .add-card {
+    width: px2rem(255);
+    height: px2rem(44);
+    line-height: px2rem(44);
+    text-align: center;
+    background-color: #518BEE;
+    color: #fff;
+    font-size: px2rem(18);
+    border-radius: px2rem(6);
+    margin: px2rem(60) auto 0;
   }
 </style>

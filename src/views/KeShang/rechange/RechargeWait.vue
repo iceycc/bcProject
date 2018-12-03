@@ -4,7 +4,7 @@
     <div class="chattuimg">
       <img src="@/assets/images/applying@2x.png" alt="">
       <h2>银行已经受理，预计两小时到账。</h2>
-      <p class="msg">处理时间以众邦银行时间为准。</p>
+      <p class="msg">处理时间以客商银行时间为准。</p>
       <p class="msg second">处理结果可在充值处理中页面查询。</p>
     </div>
     <span @click="reWithdraw" class="btn">确定</span>
