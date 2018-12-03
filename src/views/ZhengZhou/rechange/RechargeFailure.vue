@@ -14,6 +14,8 @@
 </template>
 <script>
 
+  import {PageName} from "../../../Constant";
+
   export default {
     created() {
       this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
@@ -29,7 +31,7 @@
       },
       goBank(){
         this.$router.push({
-          name:''
+          name:PageName.BankAccount
         })
       }
     }

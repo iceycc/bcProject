@@ -112,7 +112,7 @@ export default class Http {
       if (res.head.CODE == 0) {
         let SESSION_ID = res.head.SESSION_ID
         store.commit('SET_SESSION_ID', SESSION_ID)
-        success && success(res.data, SESSION_ID)
+        success && success(res.data)
         return Promise.resolve(res.data)
       }
       else if(res.head.CODE=='-2'){

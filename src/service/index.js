@@ -1,6 +1,5 @@
-import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
-
+import ajax from 'axios'
 import JINSHANG from './api/api.JINSHANG'
 import ZHENGZHOU from './api/api.ZHENGZHOU'
 import ZHONGBANG from './api/api.ZHONGBANG'
@@ -22,6 +21,11 @@ switch (ORG_ID) {
     API = ZHONGBANG;
     break;
 }
+
+function getImgCode() {
+  return ajax.post('')
+}
+
 export default {
   bicai,
   commonApi,

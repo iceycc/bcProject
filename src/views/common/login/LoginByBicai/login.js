@@ -44,17 +44,25 @@ export default {
       }
       this.ProAndOrgType = this.getComState.ProAndOrgType
       console.log('ProAndOrgType', this.ProAndOrgType);
-      this.ORG_ID = query.ORG_ID || util.storage.session.get('ORG_ID')
+      this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
       if (this.ORG_ID == '227') {
         this.BANK_NAME = '众邦直销银行'
       }
-      if (this.ORG_ID == '49') {
+      else if (this.ORG_ID == '49') {
         this.BANK_NAME = '郑州直销银行'
+      }else {
+        this.BANK_NAME =this.ProAndOrgType.ORG_NAME
       }
+      // 控制底部提示
+      // if(this.ProAndOrgType.IS_SYNC_FLAG == 1){
+      //   this.ifOpenApi = true
+      // }else {
+      //   this.ifOpenApi = false
+      // }
       console.log(this.ORG_ID);
       if (this.ProAndOrgType.ID && this.ProAndOrgType.IS_SYNC_FLAG == 1) {
         // 说明链接有产品id是外链过来买东西的
-        this.getProData()
+        this.getProData(this.ProAndOrgType.ID)
       }
       this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
 
@@ -63,6 +71,7 @@ export default {
       let data = {
         ID: id + ""
       };
+
       // API.commonApi.apiGetChannelPrdInfo(data, res => {
       API.bicai.getPrdInfo(data, res => {
 
@@ -78,70 +87,7 @@ export default {
         this.setComState({type: 'loginType', value: '安全购买'})
       });
     },
-    // 登录
-    loginFactory() {
-      if (util.Check.tel(this.tel, true)) return
-      let data = {
-        PHONE_NUM: this.tel + '',
-        PHONE_CODE: this.cms,
-        SAFT_CODE: this.safeCode
-      }
-      let SOURCE_URL = this.$store.getters.GET_COMMON_STATE.loginType
-      this.$store.commit('SET_TOKEN', null)
-      API.bicai.login(data, (res) => {
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A007', // 点位
-          REMARK_DATA: '异业合作-登录', // 中文备注
-          SOURCE_URL: SOURCE_URL
-        })
-        this.$store.commit('SET_BICAI_USER', res)
-        this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
-        // 判断openApi
-        if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
-          // 不是 openApi
-          if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
-            // 不是h5直联
-            // 直接跳转
-            if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
 
-              // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-              if (this.href) {
-                window.open(this.href)
-              } else {
-                alert('跳转第三方链接获取异常')
-              }
-            } else {
-              this.checkAuthStatus()
-            }
-          }
-          else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
-            // h5直联
-            this.checkAuthStatus()
-          } else {
-            this.checkAuthStatus()
-          }
-        }
-        else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
-          // 是 openApi
-          this.checkAuthStatus()
-        }
-        else {
-          this.checkAuthStatus()
-        }
-      }, err => {
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A007', // 点位
-          REMARK_DATA: '异业合作-登录', // 中文备注
-        })
-        this.getMsgCodeSuccess = false
-        this.codeText = '重新发送'
-        this.msgDisabled = false
-        clearInterval(timer)
-        this.$store.commit('SET_SESSION_ID', '')
-        // util.storage.session.remove(LsName.token)
-        this.$store.commit('SET_TOKEN', '')
-      })
-    },
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
       this.setComState({type: 'ISLogin', value: false})

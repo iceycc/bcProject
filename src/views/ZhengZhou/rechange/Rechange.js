@@ -142,7 +142,7 @@ export default {
       // })
     },
     clickBank() {
-      this.upseletShow = !this.upseletShow
+      // this.upseletShow = !this.upseletShow
     },
   }
 }
