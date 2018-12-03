@@ -10,7 +10,6 @@
         <img src="@/assets/images/error_tips.png" alt="">
         <span>{{errMsg}}</span>
       </div>
-      
     </div>
     <div class="btn">
       <span @click="goMyAssets" class="begain">重新购买</span>
