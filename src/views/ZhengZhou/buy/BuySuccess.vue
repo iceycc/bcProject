@@ -38,7 +38,9 @@
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
-    <div v-if="FromH5Active" class="share" @click="share">获得不错，分享好友吧</div>
+    <div v-if="FromH5Active" class="share" @click="share">获得不错，分享好友吧
+      <img src="../../../assets/images/share1.png" alt="">
+    </div>
   </div>
 </template>
 <script>
@@ -52,12 +54,12 @@
       return {
         datas: {},
         downUrl: 'http://www.baidu.com',
-        FromH5Active:false
+        FromH5Active: false
       }
     },
     created() {
       this.datas = this.getComState.buyData || {}
-      // this.FromH5Active= this.getComState.FromH5Active || true
+      this.FromH5Active = this.getComState.FromH5Active || true
 
       console.log(this.datas);
     },
@@ -189,5 +191,9 @@
     text-align: center;
     font-size: px2rem(13);
     color: #508CEE;
+    img {
+      width: px2rem(30);
+      height: px2rem(30);
+    }
   }
 </style>
