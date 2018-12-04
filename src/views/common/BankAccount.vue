@@ -188,9 +188,9 @@
     // 1 已登陆
     // 2 未登陆
     created() {
-      this.setComState({
-        type: 'ProAndOrgType', value: {}
-      })
+      // this.setComState({
+      //   type: 'ProAndOrgType', value: {}
+      // })
       this.reLoadToLogin()
     },
     methods: {
@@ -255,7 +255,6 @@
           type: 'ProAndOrgType', value: ProData
         })
         console.log(ProData);
-
         // util.storage.session.set(LsName.ORG_ID, bank.ORG_ID)
         // this.$store.dispatch('SET_BANK_INFO',...)
         this.setBankState({
