@@ -64,8 +64,8 @@
   export default {
     data() {
       return {
-        ifOpenApi:true,
-        IMG:'',
+        ifOpenApi: true,
+        IMG: '',
         msgDisabled: false,
         tel: '',
         cms: '',
@@ -99,7 +99,7 @@
       PassWordZhengzhou
     },
     created() {
-      // this.getImgCode()
+      this.getImgCode()
     },
     computed: {
       disabled() {
@@ -110,7 +110,7 @@
         }
       },
       canClick() {
-        if (this.tel && this.cms && this.getMsgCodeSuccess) {
+        if (this.tel && this.cms) {
           return true
         } else {
           return false
@@ -184,32 +184,40 @@
             REMARK_DATA: '异业合作-登录', // 中文备注
             SOURCE_URL: SOURCE_URL
           })
+          // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
+          if (this.isfinancial == '1') {
+            window.location.href = 'https://adv.bicai365.com/nay/#/myInvestment?members_id=' + res.ID
+            return
+          }
+
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
             // 不是 openApi
-            if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
-              // 不是h5直联
-              // 直接跳转
-              if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
-
-                // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-                if (this.href) {
-                  window.open(this.href)
-                } else {
-                  alert('跳转第三方链接获取异常')
-                }
+            // if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
+            // 不是h5直联
+            if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
+              // 不需要实名
+              // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
+              if (this.href) {
+                window.location.href = this.href;
+                // let tempwindow = window.open('_blank'); // 先打开页面
+                // tempwindow.location = this.href; // 后更改页面地址
               } else {
-                this.checkAuthStatus()
+                alert('跳转第三方链接获取异常')
               }
-            }
-            else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
-              // h5直联
-              this.checkAuthStatus()
             } else {
+              // 需要实名
               this.checkAuthStatus()
             }
+            // }
+            // else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
+            // h5直联
+            // this.checkAuthStatus()
+            // } else {
+            //   this.checkAuthStatus()
+            // }
           }
           else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
             // 是 openApi
@@ -223,20 +231,20 @@
             FUNCTION_ID: 'ptb0A007', // 点位
             REMARK_DATA: '异业合作-登录', // 中文备注
           })
-          this.getMsgCodeSuccess = false
-          this.codeText = '重新发送'
-          this.msgDisabled = false
-          clearInterval(timer)
+          // this.getMsgCodeSuccess = false
+          // this.codeText = '重新发送'
+          // this.msgDisabled = false
+          // clearInterval(timer)
           // util.storage.session.remove(LsName.token)
-          this.getImgCode()
+          // this.getImgCode()
           this.$store.commit('SET_TOKEN', '')
         })
       },
       // 刷新图片
-      getImgCode(){
-        API.commonApi.getImgCode({},res=>{
+      getImgCode() {
+        API.commonApi.getImgCode({}, res => {
           this.IMG = res
-        },err=>{
+        }, err => {
         })
       },
       // 点击获取验证码
@@ -253,25 +261,24 @@
       },
       // 获取验证码
       getMsg(canLogin = false) {
-        this.getMsgCodeSuccess = false
+        // this.getMsgCodeSuccess = false
         let data = {
           PHONE_NUM: this.tel + '',
           SAFT_CODE: this.safeCode
         }
-        this.getImgCode()
         this.safeCode = ''
         API.bicai.sendSMS(data, (res) => {
           let data = res
           let mark = data.mark // 0 未满5次，1满五次
           if (mark == 0) {
             // Bus.$emit(BusName.showSendMsg, this.tel)
-            this.getMsgCodeSuccess = true
+            // this.getMsgCodeSuccess = true
             this.timeDown()
           } else {
             console.log(canLogin);
             if (canLogin) { // 用于拦截第一次
               // 成功！
-              this.getMsgCodeSuccess = true
+              // this.getMsgCodeSuccess = true
               // Bus.$emit(BusName.showSendMsg, this.tel)
               this.timeDown()
             } else {
@@ -281,7 +288,7 @@
           }
         }, err => {
           this.getImgCode()
-          this.getMsgCodeSuccess = false
+          // this.getMsgCodeSuccess = false
           this.codeText = '重新发送'
           this.msgDisabled = false
           clearInterval(timer)

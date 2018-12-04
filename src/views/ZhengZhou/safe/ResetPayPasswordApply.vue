@@ -90,7 +90,7 @@
         FILE_NAME: '',
 
         IS_RESET: '',
-        ResetShow:{}
+        ResetShow: {}
       }
     },
     watch: {
@@ -106,10 +106,12 @@
       this.getShowData(this.ResetShow)
     },
     methods: {
-      getShowData(res){
+      getShowData(res) {
         this.IS_RESET = res.IS_RESET
-        this.imgFont = 'data:image/jpeg;base64,' + res.CARD_FRONT_URL.replace(/\s/g, "+")
-        this.imgBack = 'data:image/jpeg;base64,' + res.CARD_BACK_URL.replace(/\s/g, "+")
+        // this.imgFont = 'data:image/jpeg;base64,' + res.CARD_FRONT_URL.replace(/\s/g, "+")
+        this.imgFont = 'data:image/jpeg;base64,' + encodeURIComponent(res.CARD_FRONT_URL.replace(/\s/g, '%2B'))
+        // this.imgBack = 'data:image/jpeg;base64,' + res.CARD_BACK_URL.replace(/\s/g, "+")
+        this.imgBack = 'data:image/jpeg;base64,' + encodeURIComponent(res.CARD_BACK_URL.replace(/\s/g, '%2B'))
         this.USER_NAME = res.USER_NAME
         this.IDCardNum = res.ID_CARD_NO
         this.tel = res.PHONE_NUM
@@ -126,7 +128,7 @@
       upLoadImg() {
         let data = {
           FILE_NAME: this.FILE_NAME,
-          IMAGE_64: this.IMAGE_64
+          IMAGE_64: encodeURIComponent(this.IMAGE_64)
         }
         API.safe.apiBankUserFileUpload(data, res => {
           this.formData.PHOTO = res.PATH
@@ -143,8 +145,16 @@
 
           LIFE_IMAGE: this.formData.PHOTO,
           APPY_TYPE: '1', // 1：重置密码,2：修改手机号，3：注销变更卡
-          ID_POSITIVE_IMAGE: this.formData.CARD_FRONT_FILE,
-          ID_DREVERSE_IMAGE: this.formData.CARD_BACK_FILE
+          ID_POSITIVE_IMAGE: encodeURIComponent(this.formData.CARD_FRONT_FILE),
+          ID_DREVERSE_IMAGE: encodeURIComponent(this.formData.CARD_BACK_FILE)
+        }
+        // this.IS_RESET  =1 直接申请  为空 ''的话 判断this.STATUS
+        // this.STATUS = 1 或 2  return
+        console.log(data);
+        if(!this.IS_RESET){
+          if(this.STATUS==1 || this.STATUS ==2){
+            return
+          }
         }
         API.safe.apiTransactionPasswordAudit(data, res => {
           this.$router.push({name: PageName.MoreService})
@@ -157,7 +167,8 @@
         this.imgFont = newsrc
         util.imgScale(newsrc, file, 4).then((data) => {
           console.log(data);
-          this.formData.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+          // this.formData.CARD_FRONT_FILE = data.split(',')[1].replace(/\+|\s/g, '%2B')
+          this.formData.CARD_FRONT_FILE = data.split(',')[1].replace(/\s/g, '%2B')
           this.idCardZhengOcr()
         })
       },
@@ -168,7 +179,8 @@
         this.imgBack = newsrc
         util.imgScale(newsrc, file, 4).then((data) => {
           console.log(data);
-          this.formData.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+          // this.formData.CARD_BACK_FILE = data.split(',')[1].replace(/\+|\s/g, '%2B')
+          this.formData.CARD_BACK_FILE = data.split(',')[1].replace(/\s/g, '%2B')
           // this.idCardFanOcr(data)
         })
       },
@@ -179,7 +191,8 @@
         let newsrc = this.getObjectURL(file);
         this.preSrc1 = newsrc
         util.imgScale(newsrc, file, 4).then((data) => {
-          this.IMAGE_64 = data.split(',')[1].replace(/\+/g, '%2B')
+          // this.IMAGE_64 = data.split(',')[1].replace(/\+|\s/g, '%2B')
+          this.IMAGE_64 = data.split(',')[1].replace(/\s/g, '%2B')
           // this.idCardFanOcr(data)
           this.upLoadImg()
         })
@@ -191,7 +204,8 @@
         let params = {
           TYPE: 'ID_CARD_FRONT_PHONE_OCR',
           ISFRONT: 'true',
-          CARD_BASE: this.formData.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+          // CARD_BASE: this.formData.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+          CARD_BASE: encodeURIComponent(this.formData.CARD_FRONT_FILE.replace(/\s/g, '%2B')),
         }
         API.open.IdCardFrontPhoneOcr(params, (res) => {
           console.log(res);

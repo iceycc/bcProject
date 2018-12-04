@@ -64,6 +64,7 @@ const UtilMixin = {
      * 用于登陆和测评结束后判断 源头是购买还是预约  还是电子账户来源
      */
     toPreProduct() {
+      this.setComState({type:'ISLogin',value:true})
       let SOURCE_URL = this.getComState.loginType
       // let SOURCE_URL = util.storage.session.get(LsName.loginType)
       if (SOURCE_URL == '预约下期') { // 判断是从预约产品过来的 ， 直接预约

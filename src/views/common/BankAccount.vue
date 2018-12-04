@@ -149,7 +149,13 @@
         ]
       }
     },
+    // 0 不需要登录
+    // 1 已登陆
+    // 2 未登陆
     created() {
+      this.setComState({
+        type: 'ProAndOrgType', value: {}
+      })
       this.reLoadToLogin()
     },
     methods: {
@@ -186,25 +192,44 @@
           this.getBankListByChannelId()
         }
       },
-      goPage(page, bank) {
-        let ORG_ID = bank.ORG_ID
+      goPage(page, {
+        ORG_ID,
+        H5_URL_IOS,
+        H5_URL_ANDRIOD,
+        ORG_NAME,
+        IS_SYNC_FLAG,
+        IS_REALTIME_DATA_PRD,
+        OPENAPI_STATUS,
+        BANK_LOGO_URL,
+      }) {
         if (!CheckBank(ORG_ID)) {
           Bus.$emit(BusName.showToast, '暂不支持该银行，请下载比财App')
           return
         }
+        let ProData = {
+          ID: null,// 产品id
+          ORG_NAME,//机构名称
+          ORG_ID, // 机构id
+          IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG: '0', // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS // 非打通openApi 跳转链接 ios
+        }
+        this.setComState({
+          type: 'ProAndOrgType', value: ProData
+        })
+        console.log(ProData);
+
         // util.storage.session.set(LsName.ORG_ID, bank.ORG_ID)
         // this.$store.dispatch('SET_BANK_INFO',...)
         this.setBankState({
           type: 'ORG_ID',
-          value: bank.ORG_ID
+          value: ORG_ID
         })
         this.setBankState({
           type: 'ORG_NAME',
-          value: bank.ORG_NAME
-        })
-        this.setBankState({
-          type: 'BANK_CARD_NAME',
-          value: bank.BANK_CARD_NAME
+          value: ORG_NAME
         })
         if (page == 'Login') {
           this.setComState(
@@ -213,7 +238,7 @@
               value: PageName.BankAccount
             }
           )
-          util.storage.session.set('ORG_ID', bank.ORG_ID)
+          util.storage.session.set('ORG_ID', ORG_ID)
           util.storage.session.set('flag', PageName.Login)
           util.storage.session.set('reload', true)
           window.location.reload()
@@ -223,7 +248,7 @@
           // })
         }
         if (page == 'BankDetail') {
-          util.storage.session.set('ORG_ID', bank.ORG_ID)
+          util.storage.session.set('ORG_ID', ORG_ID)
           util.storage.session.set('flag', PageName.BankDetail)
           util.storage.session.set('reload', true)
           window.location.reload()
@@ -242,13 +267,13 @@
         let token = this.$store.getters.GET_ACCOUNT_STATE.TOKEN
         // this.setComState({type:'ISLogin',value:true})
         let ISLogin = this.getComState.ISLogin || false
-        console.log('ISLogin',ISLogin);
+        console.log('ISLogin', ISLogin);
         console.log('token', token);
         if (token && ISLogin) {
-          // this.TITLE_TEPY = ['已开户', '未开户']
-          this.TITLE_TEPY = ['已登录', '未登录']
+          this.TITLE_TEPY = ['已开户', '未开户']
+          // this.TITLE_TEPY = ['已登录', '未登录']
           this.getOpenBankList()
-          this.getNoOpenBankList()
+          // this.getNoOpenBankList()
         } else {
           this.TITLE_TEPY = ['已登录', '未登录']
           this.getNoOpenBankList()
@@ -257,6 +282,9 @@
       getNoOpenBankList() {
         // 未开户
         API.bicai.getBankListByChannelId({OPEN_TYPE: '0'}, '', (res) => {
+          // if (res.OPEN_STATUS != 0) {
+          //   return
+          // }
           let list = res.BANK_LIST
           this.NOLoginBankList = list
         }, (err) => {
@@ -266,6 +294,9 @@
       getOpenBankList() {
         //  已开户
         API.bicai.getBankListByChannelId({OPEN_TYPE: '1'}, '', (res) => {
+          if (res.OPEN_STATUS == 1) {
+            this.getNoOpenBankList()
+          }
           let list = res.BANK_LIST
           this.ISLoginBankList = list
           for (let i = 0; i < this.ISLoginBankList.length; i++) {

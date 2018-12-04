@@ -79,7 +79,7 @@
           IS_SYNC_FLAG:'0', // '是否由openAPI同步产品, 0：否, 1：是',
           IS_REALTIME_DATA_PRD:'0', // 'H5实时数据对接标识： 0不是  1是',
           IS_RZ_FLAG:'0', // '是否实名认证, 0：否, 1：是',
-          H5_URL_ANDRIOD:'http://baidu.com',// 非打通openApi 跳转链接 安卓
+          H5_URL_ANDRIOD:'',// 非打通openApi 跳转链接 安卓
           H5_URL_IOS:'' // 非打通openApi 跳转链接 ios
         }
       }
@@ -88,6 +88,9 @@
       API.watchApi({
         REMARK_DATA: '异业合作-落地页',
         FUNCTION_ID: 'ptp0A000'
+      })
+      this.setComState({
+        type: 'ProAndOrgType', value:{}
       })
       this.reLoadToLogin()
 
@@ -178,7 +181,7 @@
           util.storage.session.remove('title')
           util.storage.session.set('reload', null)
           this.$router.push({
-            name: 'ProductReservation',
+            name: PageName.ProductReservation,
             query: {
               PRO_ID: id, title
             }
@@ -228,10 +231,8 @@
         if (IS_SYNC_FLAG == '0') {
           //  未打通openApi
           // 直接跳转 比财登录
-
           this.$router.push({
             name: PageName.Login,
-            query: ProData
           })
 
         }
@@ -253,7 +254,7 @@
             util.storage.session.set('reload', true)
             window.location.reload()
           } else {
-            Bus.$emit(BusName.showToast, '暂不支持改产品，请下载比财APP')
+            Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
           }
         }
       }

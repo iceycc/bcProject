@@ -6,12 +6,12 @@ import {version} from '../package'
  */
 let Configs = {
   // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
-  // DEV_HOST: 'https://finsuitdev.udomedia.com.cn/finsuit', // dev开发环境
+  // DEV_HOST: 'https://finsuitdev.bicai365.com/finsuit', // dev开发环境
   // DEV_HOST: 'http://192.168.100.109:8080', // 个人
-  DEV_HOST: 'https://adv.udomedia.com.cn/finsuit', // adv测试
+  DEV_HOST: 'https://adv.bicai365.com/finsuit', // adv测试
   // DEV_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度测试
-  // PRO_HOST: 'https://adv.udomedia.com.cn/finsuit',// adv
-  // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit' ,// 生产/**/
+  // PRO_HOST: 'https://adv.bicai365.com/finsuit',// adv
+  // PRO_HOST:'https://finsuit.bicai365.com/finsuit' ,// 生产/**/
   PRO_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度生产
   APP_DOWN_URL: '',
 }

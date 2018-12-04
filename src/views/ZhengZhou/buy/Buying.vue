@@ -82,10 +82,10 @@
         agree: true,
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
-        show:false,
+        show: false,
       }
     },
-    components:{
+    components: {
       PassWordZhengzhou
     },
     computed: {
@@ -99,10 +99,10 @@
           return false
         }
       },
-      ifCheckMoneyEmpty(){
-        if(this.moneyNum){
+      ifCheckMoneyEmpty() {
+        if (this.moneyNum) {
           return false
-        }else {
+        } else {
           return true
         }
       }
@@ -123,7 +123,7 @@
       console.log(proData);
     },
     methods: {
-      clearNumHandle(){
+      clearNumHandle() {
         this.moneyNum = ''
       },
       getInfo() {
@@ -225,14 +225,25 @@
         let len = $("#payPasscc").getLenKBD(); //获取密码长度
         let lenCode = $("#payPasscc").getBDCode(); //获取密码长度
         console.log(pass);
+        let {
+          COUPON_ID = '',
+          COUPON_DETAIL_ID = '',
+          TEAM_ID = '',
+          INVEST_ID = ''
+        } = this.getComState.ProAndOrgType
         let data = {
-          TYPE:'API_BUY',
-          PRD_ID: this.proDetail.id+ '',
+          TYPE: 'API_BUY',
+          PRD_ID: this.proDetail.id + '',
           APPLY_AMOUNT: util.fromatMoney(this.moneyNum),
           BANK_PAY_PW: pass + '',
-          PREFIX:lenCode,
-          FUN_TYPE:'1', // 基金种类 基金种类 1:货币 2:非货币
-          ORDER_TYPE:'1'
+          PREFIX: lenCode,
+          FUN_TYPE: '1', // 基金种类 基金种类 1:货币 2:非货币
+          ORDER_TYPE: '1',
+
+          COUPON_ID, // 优惠券ID	非必填  字符型
+          COUPON_DETAIL_ID, // 会员领券记录ID
+          TEAM_ID, //活动ID
+          INVEST_ID // 	投资ID
         }
 
         if (util.Check.payPassLen(len, true)) return;
@@ -352,7 +363,7 @@
   }
 
   .buydetails {
-    position:relative;
+    position: relative;
     padding: 0 0.4rem;
     height: 2.2rem;
     font-size: 0.4rem;

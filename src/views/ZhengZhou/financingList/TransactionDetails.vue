@@ -41,7 +41,7 @@
                     <span style="width: 40%;text-align: right;color: #E62224" v-if="cur==2 && item.TYPE==2">赎回</span>
                   </h5>
                   <p>
-                    <span>{{item.OPERA_TIME }}</span>
+                    <span>{{item.OPERA_DATE }}</span>
                     <!--1:买入 2:赎回-->
                     <em>{{item.TYPE==2?'-':'+'}} {{item.TRANS_AMT}}</em>
                   </p>

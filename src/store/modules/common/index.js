@@ -49,7 +49,9 @@ export default {
       IS_RZ_FLAG:'', // '是否实名认证, 0：否, 1：是',
       H5_URL_ANDRIOD:'',// 非打通openApi 跳转链接 安卓
       H5_URL_IOS:'' // 非打通openApi 跳转链接 ios
-    }
+    },
+
+    FromH5Active:false // h5活动页面来的
   },
   //
   actions: {},

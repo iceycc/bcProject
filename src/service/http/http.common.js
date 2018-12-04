@@ -80,7 +80,6 @@ export default {
         Bus.$emit(BusName.showToast, result.head.MSG)
         // util.storage.session.remove(LsName.token)
         store.commit('SET_TOKEN', '')
-        store.commit('SET_SESSION_ID', '')
 
         Router.push({
           name: PageName.Login,
@@ -92,7 +91,6 @@ export default {
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
-        store.commit('SET_SESSION_ID', '')
 
         // util.storage.session.remove(LsName.token)
         Router.push({

@@ -22,7 +22,9 @@ export default {
         H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
         H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
       },
-      href: ''
+      href: '',
+
+      isfinancial:'0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
   mixins: [checkOpenApiAndH5],
@@ -37,10 +39,18 @@ export default {
     checkProductType() {
       let query = this.$route.query
       console.log('logon-query>>>', query);
-      if (query.IS_REALTIME_DATA_PRD) {
+      if (query.IS_REALTIME_DATA_PRD && query.ORG_ID) {
+        // 外链过来的
+        this.setComState({
+          type: 'FromH5Active', value: true
+        })
         this.setComState({
           type: 'ProAndOrgType', value: query
         })
+      }
+      if (query.isfinancial==1) {
+        // 外链过来的
+        this.isfinancial = 1
       }
       this.ProAndOrgType = this.getComState.ProAndOrgType
       console.log('ProAndOrgType', this.ProAndOrgType);
@@ -74,7 +84,6 @@ export default {
 
       // API.commonApi.apiGetChannelPrdInfo(data, res => {
       API.bicai.getPrdInfo(data, res => {
-
         this.productDetail = res;
         this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
         this.removeComState('ProDuctData')
@@ -131,9 +140,12 @@ export default {
               // 直接跳转
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
               if (this.href) {
-                window.open(this.href)
+                window.location.href = this.href;
+
+                // let tempwindow=window.open('_blank'); // 先打开页面
+                // tempwindow.location=this.href; // 后更改页面地址
               } else {
-                alert('跳转第三方链接获取异常')
+                alert('跳转h5链接获取异常')
               }
             } else {
               this.checkBankStatus()
@@ -205,7 +217,10 @@ export default {
           // 直接跳转
           // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
           if (this.href) {
-            window.open(this.href)
+            window.location.href = this.href;
+
+            // let tempwindow=window.open('_blank'); // 先打开页面
+            // tempwindow.location=this.href; // 后更改页面地址
           } else {
             alert('跳转第三方链接获取异常')
           }

@@ -55,7 +55,8 @@ export default {
       this.imgStyle2 = 'width:100%;max-height:100%'
       util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
         this.preSrc2 = data
-        this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+        // this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+        this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\s/g, '%2B')
         this.idCardFanOcr(data)
       })
     },
@@ -65,7 +66,8 @@ export default {
       this.imgStyle1 = 'width:100%;max-height:100%'
       util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
         this.preSrc1 = data
-        this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+        // this.data.CARD_FRONT_FILE = encodeURIComponent(data.split(',')[1])
+        this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\s/g, '%2B')
         this.idCardZhengOcr(data)
       })
     },
@@ -90,7 +92,8 @@ export default {
         TYPE: 'ID_CARD_FRONT_PHONE_OCR',
         MEMBER_ID: this.data.MEMBER_ID || '',
         ISFRONT: 'true',
-        CARD_BASE: this.data.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+        // CARD_BASE: this.data.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+        CARD_BASE: encodeURIComponent(this.data.CARD_FRONT_FILE),
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
         this.data.USER_NAME = res.NAME
@@ -98,7 +101,7 @@ export default {
         this.data.ADDRESS = res.ADDRESS
         this.data.MEMBER_ID = res.MEMBER_ID
         this.data.PHONE_NUM = res.PHONE_NUM
-        if(res.PERIOD){
+        if (res.PERIOD) {
           this.data.USER_CARD_ID_DATA = res.PERIOD
         }
         // this.checkID()
@@ -110,7 +113,8 @@ export default {
         TYPE: 'ID_CARD_BACK_PHONE_OCR',
         MEMBER_ID: this.data.MEMBER_ID || '',
         ISFRONT: 'false',
-        CARD_BASE: this.data.CARD_BACK_FILE.replace(/\+/g, '%2B'),
+        CARD_BASE: encodeURIComponent(this.data.CARD_BACK_FILE),
+        // CARD_BASE: this.data.CARD_BACK_FILE.replace(/\+/g, '%2B'),
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
         this.data.USER_CARD_ID_DATA = res.PERIOD
@@ -124,12 +128,12 @@ export default {
     // 1 实名认证
     doOpengingFirst() {
       // todo 校验
-      if(!this.agree){
-        Bus.$emit(BusName.showToast,'请同意相关协议')
+      if (!this.agree) {
+        Bus.$emit(BusName.showToast, '请同意相关协议')
         return
       }
-      if(!this.data.USER_DUTY){
-        Bus.$emit(BusName.showToast,'请选择职业')
+      if (!this.data.USER_DUTY) {
+        Bus.$emit(BusName.showToast, '请选择职业')
         return
       }
       let params = {
@@ -139,8 +143,8 @@ export default {
         PASSWORD: 'aaaaaa',
         USER_NAME: this.data.USER_NAME + '',
         USER_CARD_ID: this.data.USER_CARD_ID + '',
-        CARD_FRONT_FILE: this.data.CARD_FRONT_FILE,
-        CARD_BACK_FILE: this.data.CARD_BACK_FILE,
+        CARD_FRONT_FILE: encodeURIComponent(this.data.CARD_FRONT_FILE),
+        CARD_BACK_FILE: encodeURIComponent(this.data.CARD_BACK_FILE),
         USER_DUTY: this.data.USER_DUTY + '',
         CREDENTIAL_POV: this.data.USER_CARD_ID_DATA + ''
       }
@@ -149,14 +153,17 @@ export default {
       API.open.apiRegisterValiUser(params, (res) => {
         // todo
         // 保存第一步的数据
-        this.setComState({type: 'openingData', value: {...this.suerinfo,BESHARP_REGISTER_VALI_USER_SEQ:res.BESHARP_REGISTER_VALI_USER_SEQ}})
+        this.setComState({
+          type: 'openingData',
+          value: {...this.suerinfo, BESHARP_REGISTER_VALI_USER_SEQ: res.BESHARP_REGISTER_VALI_USER_SEQ}
+        })
         // 回显是否实名成功
         // this.checkBankStatus() //
-        this.$router.push({name:PageName.Opening2})
+        this.$router.push({name: PageName.Opening2})
       }, err => {
         setTimeout(() => {
           this.checkBankStatus() //
-        },1000)
+        }, 1000)
       })
     },
   }

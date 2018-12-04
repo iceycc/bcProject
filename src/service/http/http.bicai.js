@@ -110,24 +110,24 @@ export default class Http {
     }).then(res => {
       console.log('bicai - res>>>',res);
       if (res.head.CODE == 0) {
-        let SESSION_ID = res.head.SESSION_ID
-        store.commit('SET_SESSION_ID', SESSION_ID)
+        // let SESSION_ID = res.head.SESSION_ID
+        // store.commit('SET_SESSION_ID', SESSION_ID)
         success && success(res.data)
         return Promise.resolve(res.data)
       }
       else if(res.head.CODE=='-2'){
-        store.commit('SET_SESSION_ID', '')
+        // store.commit('SET_SESSION_ID', '')
         store.commit('SET_TOKEN', '')
         return Promise.reject(res.head.MSG)
       }
       else if (res.head.CODE == '-3') {
         // 其他设备登录
         store.commit('SET_TOKEN', '')
-        store.commit('SET_SESSION_ID', '')
+        // store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
       }
       else {
-        store.commit('SET_SESSION_ID', '')
+        // store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
       }
     }, err => {

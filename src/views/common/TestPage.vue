@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p class="msg">你请求的地址去旅行了，正在返回产品页</p>
   </div>
 </template>
 <script>
@@ -8,21 +9,19 @@
   export default {
     name: "testPage",
     created() {
-      let reload = util.storage.session.get('reload') || null
-      let flag = util.storage.session.get('flag') || null
-      console.log(reload);
-      if (reload) {
-        util.storage.session.remove('reload')
-        window.location.reload()
-      } else {
-        let data = this.$route.query
-        util.storage.session.remove('flag')
-        this.$router.push({
-          name: flag,
-          query: data
-        })
-      }
+      setTimeout(()=>{
+        this.$router.push({name:PageName.ProductList})
+      },1000)
     },
 
   }
 </script>
+<style lang="scss" scoped>
+  @import "~@/assets/px2rem";
+  .msg{
+    width: 100%;
+    margin-top: px2rem(40);
+    font-size: px2rem(18);
+    text-align: center;
+  }
+</style>

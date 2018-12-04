@@ -178,9 +178,9 @@ export default {
 
         // 身份证相关 .replace(/\s/g, "+")
         // CARD_FRONT_URL: this.callbackInfos.CARD_FRONT_URL.replace(/\+/g, '%2B'), //证件电子照正面批次号
-        CARD_FRONT_URL: this.callbackInfos.CARD_FRONT_URL.replace(/\s/g, '%2B'), //证件电子照正面批次号
+        CARD_FRONT_URL: encodeURIComponent(this.callbackInfos.CARD_FRONT_URL.replace(/\s/g, '%2B')), //证件电子照正面批次号
         // CARD_BACK_URL: this.callbackInfos.CARD_BACK_URL.replace(/\+/g, '%2B'), //证件电子照反面批次号
-        CARD_BACK_URL: this.callbackInfos.CARD_BACK_URL.replace(/\s/g, '%2B'), //证件电子照反面批次号
+        CARD_BACK_URL: encodeURIComponent(this.callbackInfos.CARD_BACK_URL.replace(/\s/g, '%2B'),), //证件电子照反面批次号
         USER_NAME: this.callbackInfos.USER_NAME, // 卡所属姓名
         USER_DUTY: this.callbackInfos.USER_DUTY, // 职业
         PHONE_NUM: this.tel, // 银行预留手机号(绑卡行)

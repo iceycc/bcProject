@@ -23,8 +23,7 @@ switch (ORG_ID) {
 
 let testPage = [
   {
-    path: '/' + PageName.TestPage,
-    name: PageName.TestPage,
+    path: '*',
     component: resolve => require(['views/common/TestPage.vue'], resolve),
   }
 ]

@@ -29,7 +29,16 @@
       </section>
       <section class="submit-box" v-if="canClick">
         <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
-        <button :disabled="!canClick" :class="{active:canClick}" class="submit-btn" @click="goNext">重置密码</button>
+        <button v-if="showState == 2" :disabled="!canClick" :class="{active:canClick}" class="submit-btn"
+                @click="goNext">重置密码
+        </button>
+        <button v-if="showState == 3" :disabled="!canClick" :class="{active:canClick}" class="submit-btn"
+                @click="goReApply">重新申请
+        </button>
+      </section>
+
+      <section>
+
       </section>
     </section>
 
@@ -52,6 +61,7 @@
     },
     data() {
       return {
+        showState: '1',
         USER_NAME: "",
         STATUS: "0",
         ID_CARD_NO: "",
@@ -86,10 +96,36 @@
       }
     },
     computed: {
+      // 审核状态
+      //   1审批中，2审批通过，3审核拒绝，4验证码超时拒绝,5其它待重新申请
+
       canClick() {
-        if (this.STATUS == 2) {
+        if (this.STATUS == 1) {
+          // 1审批中
+          this.showState = 1
+          return false
+        }
+        else if (this.STATUS == 2) {
+          // 2审批通过
+          this.showState = 2
           return true
-        } else {
+        }
+        else if (this.STATUS == 3) {
+          // 3审核拒绝
+          this.showState = 3
+          return true
+        }
+        else if (this.STATUS == 4) {
+          // 4验证码超时拒绝
+          this.showState = 3
+          return true
+        }
+        else if (this.STATUS == 5) {
+          // 5其它待重新申请
+          this.showState = 3
+          return true
+        }
+        else {
           return false
         }
       }
@@ -109,6 +145,9 @@
       goNext() {
         this.$router.push({name: PageName.ResetPayPassword})
       },
+      goReApply() {
+        this.$router.push({name: PageName.ResetPayPasswordApply})
+      }
     },
 
   }
