@@ -178,7 +178,7 @@
         this.imgStyle2 = 'width:100%;max-height:100%'
         util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
           this.preSrc2 = data
-          this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+          this.data.CARD_BACK_FILE = data.split(',')[1]
           this.idCardFanOcr(data)
         })
       },
@@ -188,7 +188,7 @@
         this.imgStyle1 = 'width:100%;max-height:100%'
         util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
           this.preSrc1 = data
-          this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+          this.data.CARD_FRONT_FILE = data.split(',')[1]
           this.idCardZhengOcr(data)
         })
       },
@@ -210,7 +210,7 @@
        */
       idCardZhengOcr() {
         let params = {
-          idcardFrontPhoto: this.data.CARD_FRONT_FILE
+          idcardFrontPhoto: encodeURIComponent(this.data.CARD_FRONT_FILE)
         }
         API.bicai.postFrontIDCard(params, (res) => {
           this.data.USER_NAME = res.idName
@@ -222,7 +222,8 @@
       },
       idCardFanOcr() {
         let params = {
-          idcardBackPhoto: this.data.CARD_BACK_FILE
+          // idcardBackPhoto: this.data.CARD_BACK_FILE
+          idcardBackPhoto: encodeURIComponent(this.data.CARD_BACK_FILE)
         }
         API.bicai.postBackIDCard(params, (res) => {
           this.data.USER_CARD_ID_DATA = res.validityPeriod
@@ -249,8 +250,8 @@
           PASSWORD: '',
           USER_NAME: this.data.USER_NAME + '',
           USER_CARD_ID: this.data.USER_CARD_ID + '',
-          CARD_FRONT_FILE: this.data.CARD_FRONT_FILE,
-          CARD_BACK_FILE: this.data.CARD_BACK_FILE,
+          CARD_FRONT_FILE: encodeURIComponent(this.data.CARD_FRONT_FILE),
+          CARD_BACK_FILE: encodeURIComponent(this.data.CARD_BACK_FILE) ,
           USER_DUTY: this.data.USER_DUTY + '',
           CREDENTIAL_POV: this.data.USER_CARD_ID_DATA + ''
         }

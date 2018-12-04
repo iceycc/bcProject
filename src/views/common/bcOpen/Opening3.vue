@@ -125,7 +125,9 @@
               // 直接跳转 银行h5链接
               let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
               if (href) {
-                window.open(href)
+                window.location.href = href;
+                // let tempwindow=window.open('_blank'); // 先打开页面
+                // tempwindow.location=href; // 后更改页面地址
               } else {
                 alert('跳转第三方链接获取异常')
               }

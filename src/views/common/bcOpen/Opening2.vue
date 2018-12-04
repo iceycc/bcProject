@@ -70,7 +70,7 @@
         <p>请填写图形验证码</p>
         <section class="middle">
           <input type="tel" placeholder="请输入图形验证码" v-model="safeCode">
-          <img :src="safeCodeUrl+ SESSION_ID" alt="">
+          <img :src="'data:image/png;base64,'+IMG" alt="" @click="getImgCode()">
         </section>
         <section class="btn">
           <button @click="showSafeCode=false">取消</button>
@@ -96,6 +96,7 @@
   export default {
     data() {
       return {
+        IMG:'',
         // 图形验证码相关
         safeCode: '',
         safeCodeUrl,
@@ -177,6 +178,13 @@
       this.getBankList()
     },
     methods: {
+      // 刷新图片
+      getImgCode(){
+        API.commonApi.getImgCode({},res=>{
+          this.IMG = res
+        },err=>{
+        })
+      },
       // msg倒计时
       timeDown() {
         let sTime = time
@@ -198,9 +206,11 @@
         PHONE = PHONE + ''
         console.log(PHONE);
         if (util.Check.tel(PHONE, true)) return;
-        this.SESSION_ID = this.$store.getters.GET_ACCOUNT_STATE.SESSION_ID + Math.random()
+        this.getImgCode()
+        // this.SESSION_ID = this.$store.getters.GET_ACCOUNT_STATE.SESSION_ID + Math.random()
         this.showSafeCode = true
       },
+      //
       // 获取短信验证码
       getMsgCode() {
         let data = {
@@ -208,7 +218,6 @@
           SAFT_CODE: this.safeCode, // 图片验证码
           BANK_CARD: this.data.CARD_NO
         }
-        this.$store.commit('SET_SESSION_ID',this.SESSION_ID)
         this.safeCode = ''
         API.bicai.sendSMSCodeToBindCard(data, res => {
           // 0发送成功
@@ -216,16 +225,16 @@
           // 2手机号码错误
           // 3.停止短信服务
           // 4.用户短信验证码输入错误达到三次，24小时内不能再次绑卡
-          if(res.STATUS==0){
+          if (res.STATUS == 0) {
             this.timeDown()
           }
           Bus.$emit(BusName.showToast, res.MESSAGE)
           this.showSafeCode = false
         }, err => {
-          this.SESSION_ID = ''
-          this.codeText = '重新发送'
-          this.disable = false
-          this.showSafeCode = false
+          this.getImgCode()
+          // this.codeText = '重新发送'
+          // this.disable = false
+          // this.showSafeCode = false
           console.log(err);
         })
       },
@@ -289,8 +298,8 @@
       },
       // 点击图形验证吗
       getSafeCode() {
-        if(!this.safeCode){
-          Bus.$emit(BusName.showToast,'图形验证码不能为空')
+        if (!this.safeCode) {
+          Bus.$emit(BusName.showToast, '图形验证码不能为空')
           return
         }
         this.getMsgCode()

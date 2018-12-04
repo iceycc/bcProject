@@ -3,7 +3,9 @@
     <app-bar title="购买"></app-bar>
     <div class="buysuccessimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
-      <p>购买成功</p>
+      <p class="p-first">购买成功</p>
+      <!--todo-->
+      <p v-if="false" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>
     </div>
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">
@@ -36,30 +38,44 @@
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
+    <!--<div v-if="FromH5Active" class="share" @click="share">-->
+      <!--<p>获得不错，分享好友吧</p>-->
+      <!--<img src="@/assets/images/share1.png" alt="">-->
+    <!--</div>-->
+    <!--<div class="copy-box">-->
+      <!--<img src="@/assets/images/close.png" alt="">-->
+    <!--</div>-->
   </div>
 </template>
 <script>
   import {WatchApi} from "@/service";
-  import {BusName,PageName} from "@/Constant";
+  import {BusName, PageName} from "@/Constant";
   import Mixins from "@/mixins";
+
   export default {
-    mixins:[Mixins.StoreMixin],
+    mixins: [Mixins.StoreMixin],
     data() {
       return {
         datas: {},
-        downUrl: 'http://www.baidu.com'
+        downUrl: 'http://www.baidu.com',
+        FromH5Active: false
       }
     },
     created() {
       this.datas = this.getComState.buyData || {}
+      this.FromH5Active = this.getComState.FromH5Active || true
+
       console.log(this.datas);
     },
     methods: {
-      goMyAssets(){
-        this.$router.push({name:PageName.BankDetail})
+      share() {
+
       },
-      goBuyOther(){
-        this.$router.push({name:PageName.ProductList})
+      goMyAssets() {
+        this.$router.push({name: PageName.BankDetail})
+      },
+      goBuyOther() {
+        this.$router.push({name: PageName.ProductList})
       }
     }
   }
@@ -67,6 +83,7 @@
 
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
+
   .buytitle {
     width: 92%;
     height: 1.7rem;
@@ -105,15 +122,18 @@
       width: 2.5rem;
       height: 2.5rem;
     }
-  }
-
-  .buysuccessimg p {
-    margin: 0.5rem 0;
-    padding-bottom: 0.5rem;
-    font-size: 0.5rem;
-    color: #2B74FE;
-    border-bottom: 1px solid #EEEEF0;
-
+    p.p-first {
+      margin: px2rem(18) 0;
+      font-size: px2rem(18);
+      color: #2B74FE;
+    }
+    p.p-second {
+      margin: 0.5rem 0;
+      padding-bottom: 0.5rem;
+      font-size: px2rem(13);
+      color: #9199A1;
+      border-bottom: 1px solid #EEEEF0;
+    }
   }
 
   .buysuccessdetail {
@@ -122,9 +142,9 @@
   }
 
   .buysuccessdetails {
-    line-height: 1.5rem;
-    height: 1.5rem;
-    font-size: 0.4rem;
+    line-height: px2rem(44);
+    height: px2rem(44);
+    font-size: px2rem(14);
     border-bottom: 1px solid #EEEEF0;
   }
 
@@ -151,7 +171,7 @@
     outline: none;
   }
 
-  .btn{
+  .btn {
     margin-top: px2rem(20);
     text-align: center;
     .begain {
@@ -167,6 +187,30 @@
       text-align: center;
       border: 0px;
       outline: none;
+    }
+  }
+  .copy-box{
+    /*background: #007aff;*/
+    position: absolute;
+    top:px2rem(100);
+    left: px2rem(0);
+    z-index: 100;
+    width: px2rem(150);
+    height: px2rem(50);
+    background: url(~@/assets/images/copy.png) no-repeat center center;
+    background-size: contain;
+  }
+  .share {
+    padding-top: px2rem(20);
+    text-align: center;
+    font-size: px2rem(13);
+    color: #508CEE;
+    img {
+      display: inline-block;
+      width: px2rem(50);
+      height: px2rem(50);
+      z-index: 100;
+      /*background: #007aff;*/
     }
   }
 </style>

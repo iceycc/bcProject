@@ -34,7 +34,7 @@
         <p>请填写图形验证码</p>
         <section class="middle">
           <input type="tel" placeholder="请输入图形验证码" v-model="safeCode">
-          <img :src="safeCodeUrl+ SESSION_ID" alt="" @click="reImg">
+          <img :src="'data:image/png;base64,'+IMG" alt="" @click="getImgCode()">
         </section>
         <section class="btn">
           <button @click="showSafeCode=false">取消</button>
@@ -42,7 +42,7 @@
         </section>
       </div>
     </section>
-    <section class="bottomcontent">
+    <section class="bottomcontent" v-if="ifOpenApi">
       <p>
         <img src="@/assets/images/icon_dunpai@2x.png" alt="">
         {{BANK_NAME}}已与比财实现安全直连</p>
@@ -59,14 +59,13 @@
   import util from "@/libs/util";
   import {HOST} from "@/Constant";
 
-  const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
   let time = 60
   let timer;
   export default {
     data() {
       return {
-        SESSION_ID: '',
-        safeCodeUrl,
+        ifOpenApi: true,
+        IMG: '',
         msgDisabled: false,
         tel: '',
         cms: '',
@@ -100,7 +99,7 @@
       PassWordZhengzhou
     },
     created() {
-
+      this.getImgCode()
     },
     computed: {
       disabled() {
@@ -111,7 +110,7 @@
         }
       },
       canClick() {
-        if (this.tel && this.cms && this.getMsgCodeSuccess) {
+        if (this.tel && this.cms) {
           return true
         } else {
           return false
@@ -168,17 +167,86 @@
           this.checkAuthStatus()
         }
       },
+      // 登录
+      loginFactory() {
+        if (util.Check.tel(this.tel, true)) return
+        let data = {
+          PHONE_NUM: this.tel + '',
+          PHONE_CODE: this.cms,
+          SAFT_CODE: this.safeCode
+        }
+        let SOURCE_URL = this.getComState.loginType
+        console.log(SOURCE_URL);
+        this.$store.commit('SET_TOKEN', null)
+        API.bicai.login(data, (res) => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+            SOURCE_URL: SOURCE_URL
+          })
+          // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
+          if (this.isfinancial == '1') {
+            window.location.href = 'https://adv.bicai365.com/nay/#/myInvestment?members_id=' + res.ID
+            return
+          }
+
+          this.$store.commit('SET_BICAI_USER', res)
+          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          // 判断openApi
+          if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
+            // 不是 openApi
+            // if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
+            // 不是h5直联
+            if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
+              // 不需要实名
+              // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
+              if (this.href) {
+                window.location.href = this.href;
+                // let tempwindow = window.open('_blank'); // 先打开页面
+                // tempwindow.location = this.href; // 后更改页面地址
+              } else {
+                alert('跳转第三方链接获取异常')
+              }
+            } else {
+              // 需要实名
+              this.checkAuthStatus()
+            }
+            // }
+            // else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
+            // h5直联
+            // this.checkAuthStatus()
+            // } else {
+            //   this.checkAuthStatus()
+            // }
+          }
+          else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+            // 是 openApi
+            this.checkAuthStatus()
+          }
+          else {
+            this.checkAuthStatus()
+          }
+        }, err => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+          })
+          this.cms = ''
+          // this.getMsgCodeSuccess = false
+          // this.codeText = '重新发送'
+          // this.msgDisabled = false
+          // clearInterval(timer)
+          // util.storage.session.remove(LsName.token)
+          // this.getImgCode()
+          this.$store.commit('SET_TOKEN', '')
+        })
+      },
       // 刷新图片
-      reImg() {
-        // let data = {
-        //   PHONE_NUM: this.tel + '',
-        //   SAFT_CODE: this.safeCode,
-        // }
-        // API.bicai.sendSMS(data, (res, SESSION_ID) => {
-        //   this.SESSION_ID = SESSION_ID
-        // }, err => {
-        //   this.SESSION_ID = ''
-        // })
+      getImgCode() {
+        API.commonApi.getImgCode({}, res => {
+          this.IMG = res
+        }, err => {
+        })
       },
       // 点击获取验证码
       getSafeCode() {
@@ -187,43 +255,45 @@
           return
         }
         this.getMsg(true)
-        this.showSafeCode = false
       },
       // 数字校验
       isValueNumber(value) {
         return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value);
       },
-      // 获取验证码 注意次数判断 session的更新
+      // 获取验证码
       getMsg(canLogin = false) {
-        this.getMsgCodeSuccess = false
+        // this.getMsgCodeSuccess = false
         let data = {
           PHONE_NUM: this.tel + '',
           SAFT_CODE: this.safeCode
         }
         this.safeCode = ''
-        API.bicai.sendSMS(data, (res, SESSION_ID) => {
+        API.bicai.sendSMS(data, (res) => {
           let data = res
           let mark = data.mark // 0 未满5次，1满五次
-          this.SESSION_ID = SESSION_ID
           if (mark == 0) {
             // Bus.$emit(BusName.showSendMsg, this.tel)
-            this.getMsgCodeSuccess = true
+            // this.getMsgCodeSuccess = true
             this.timeDown()
           } else {
             console.log(canLogin);
             if (canLogin) { // 用于拦截第一次
               // 成功！
-              this.getMsgCodeSuccess = true
+              // this.getMsgCodeSuccess = true
               // Bus.$emit(BusName.showSendMsg, this.tel)
               this.timeDown()
             } else {
+              this.getImgCode()
               this.showSafeCode = true
             }
           }
         }, err => {
-          this.SESSION_ID = ''
-          // this.$store.commit('SET_SESSION_ID', null)
-          // this.reImg()
+          this.getImgCode()
+          // this.getMsgCodeSuccess = false
+          this.codeText = '重新发送'
+          this.msgDisabled = false
+          clearInterval(timer)
+          this.$store.commit('SET_TOKEN', '')
         })
       },
       // 焦点
@@ -236,15 +306,15 @@
       },
       //
       clickMsgCodeHandle() {
-        this.SESSION_ID = ''
         let PHONE = this.tel
         PHONE = PHONE + ''
-        console.log(PHONE);
         if (util.Check.tel(PHONE, true)) return;
+        this.getImgCode()
         this.getMsg()
       },
       // msg倒计时
       timeDown() {
+        this.showSafeCode = false
         let sTime = time
         this.msgDisabled = true
         timer = setInterval(() => {

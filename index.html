@@ -64,6 +64,7 @@
     return theRequest;
   }
   console.log('FirstLoad', GetRequest());
+  window.sessionStorage.setItem('_MX_FirstLoad',JSON.stringify(GetRequest()))
   if( GetRequest()&& GetRequest().ORG_ID){
     let ORG_ID = GetRequest().ORG_ID
     window.sessionStorage.setItem('_MX_ORG_ID',JSON.stringify(ORG_ID))

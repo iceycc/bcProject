@@ -2,15 +2,16 @@ import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName} from "@/Constant";
 import util from "libs/util";
+import Mixins from "@/mixins";
 
 export default {
   data() {
     return {
-
     }
   },
   created() {
   },
+  mixins: [Mixins.HandleMixin],
   methods: {
     // 通过token + orgID 检查在本行开户状态
     checkBankStatus(fn) {
@@ -40,7 +41,9 @@ export default {
           }
           if (step == 3) {
             // todo登陆成功后判断拿来的去哪里
-            this.$router.push({name:PageName.Login})
+            this.setComState({type:'ISLogin',value:true})
+            this.toPreProduct()
+            // this.$router.push({name:PageName.Login})
           }
         }
       })

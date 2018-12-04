@@ -64,10 +64,9 @@ const UtilMixin = {
      * 用于登陆和测评结束后判断 源头是购买还是预约  还是电子账户来源
      */
     toPreProduct() {
-      let SOURCE_URL = store.getters.GET_COMMON_STATE.loginType
+      this.setComState({type:'ISLogin',value:true})
+      let SOURCE_URL = this.getComState.loginType
       // let SOURCE_URL = util.storage.session.get(LsName.loginType)
-      let goBuyData = store.getters.GET_COMMON_STATE.goBuy
-      // let goBuyData = util.storage.session.get(LsName.goBuy)
       if (SOURCE_URL == '预约下期') { // 判断是从预约产品过来的 ， 直接预约
         let ProDuctData = store.getters.GET_COMMON_STATE.ProDuctData
         // let ProDuctData = util.storage.session.get(LsName.ProDuctData)
@@ -103,7 +102,6 @@ const UtilMixin = {
         // 其他的话  正常 跳转购买页
         this.$router.push({
           name: PageName.Buying,
-          // query: goBuyData
         })
       }
       else {

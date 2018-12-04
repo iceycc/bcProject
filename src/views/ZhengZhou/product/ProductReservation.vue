@@ -404,8 +404,6 @@
       },
 
       goNext() {
-
-
         console.log(this.proID);
         this.removeComState('ProDuctData')
         let goBuyData = {
