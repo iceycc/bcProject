@@ -5,35 +5,35 @@
       <li :class="{actvie:cur==1}" @click="tap(1)">产品列表</li>
       <li :class="{actvie:cur==2}" @click="tap(2)">我的资产</li>
     </ul>
-    <!--<section class="m-bank-box">-->
-    <!--<p class="m-title">测试</p>-->
-    <!--<section class="m-bank-card" v-for="bank,index in textBankList" :key="index">-->
-    <!--<div class="m-top">-->
-    <!--<div class="m-logo">-->
-    <!--<img :src="imgSrc + bank.LOGO_URL" alt="">-->
-    <!--</div>-->
-    <!--<div class="m-name">-->
-    <!--<div>{{bank.ORG_NAME}}</div>-->
-    <!--<p>{{bank.DESCRIPT}}</p>-->
-    <!--</div>-->
-    <!--<div class="m-btn" @click="goPage('Login',bank)">安全登录</div>-->
-    <!--</div>-->
-    <!--<ul class="m-bottom">-->
-    <!--<li>-->
-    <!--<P>总资产</P>-->
-    <!--<P>- -</P>-->
-    <!--</li>-->
-    <!--<li>-->
-    <!--<P>昨日收益</P>-->
-    <!--<P>- -</P>-->
-    <!--</li>-->
-    <!--<li>-->
-    <!--<P>累计收益</P>-->
-    <!--<P>- -</P>-->
-    <!--</li>-->
-    <!--</ul>-->
-    <!--</section>-->
-    <!--</section>-->
+    <section class="m-bank-box">
+      <p class="m-title">测试</p>
+      <section class="m-bank-card" v-for="bank,index in textBankList" :key="index">
+        <div class="m-top">
+          <div class="m-logo">
+            <img :src="imgSrc + bank.LOGO_URL" alt="">
+          </div>
+          <div class="m-name">
+            <div>{{bank.ORG_NAME}}</div>
+            <p>{{bank.DESCRIPT}}</p>
+          </div>
+          <div class="m-btn" @click="goPage('Login',bank)">安全登录</div>
+        </div>
+        <ul class="m-bottom">
+          <li>
+            <P>总资产</P>
+            <P>- -</P>
+          </li>
+          <li>
+            <P>昨日收益</P>
+            <P>- -</P>
+          </li>
+          <li>
+            <P>累计收益</P>
+            <P>- -</P>
+          </li>
+        </ul>
+      </section>
+    </section>
 
     <section class="m-bank-box" v-if="ISLoginBankList.length >0">
       <p class="m-title">{{TITLE_TEPY[0]}}</p>
@@ -96,32 +96,6 @@
           </li>
         </ul>
       </section>
-      <section class="m-bank-card">
-        <div class="m-top">
-          <div class="m-logo">
-            <img src="" alt="">
-          </div>
-          <div class="m-name">
-            <div>客商银行</div>
-            <p></p>
-          </div>
-          <div class="m-btn" @click="goPage('Login',{ORG_ID: '248',ORG_NAME: '客商银行',IS_SYNC_FLAG:'1',IS_REALTIME_DATA_PRD:'1',IS_RZ_FLAG:'1'})">安全登录</div>
-        </div>
-        <ul class="m-bottom">
-          <li>
-            <P>总资产</P>
-            <P>- -</P>
-          </li>
-          <li>
-            <P>昨日收益</P>
-            <P>- -</P>
-          </li>
-          <li>
-            <P>累计收益</P>
-            <P>- -</P>
-          </li>
-        </ul>
-      </section>
     </section>
     <!--<div class="footer-btn">-->
     <!--<button>产品列表</button>-->
@@ -151,26 +125,61 @@
         ISLoginBankList2: [],
         NOLoginBankList: [],
         textBankList: [
+          // ORG_NAME,//机构名称
+          // PRD_NAME, // 产品名称
+          // ORG_ID, // 机构id
+          // IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+          // IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+          // IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+          // H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+          // H5_URL_IOS // 非打通openApi 跳转链接 ios
           {
             ORG_ID: '49',
             ORG_NAME: '郑州银行',
             LOGO_URL: '',
             DESCRIPT: '隶属于郑州银行',
-            BANK_NAME: '郑州银行'
+            BANK_NAME: '郑州银行',
+            IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
           },
           {
             ORG_ID: '70',
             ORG_NAME: '晋商银行',
             LOGO_URL: '',
             DESCRIPT: '隶属于晋商银行',
-            BANK_NAME: '晋商银行'
+            BANK_NAME: '晋商银行',
+            IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
           },
           {
             ORG_ID: '227',
             ORG_NAME: '众邦银行',
             LOGO_URL: '',
             DESCRIPT: '隶属于郑州银行',
-            BANK_NAME: '众邦银行'
+            BANK_NAME: '众邦银行',
+            IS_SYNC_FLAG:'0', // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
+          },
+          {
+            ORG_ID: '248',
+            ORG_NAME: '客商银行',
+            LOGO_URL: '',
+            DESCRIPT: '隶属于客商银行',
+            BANK_NAME: '客商银行',
+            IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
           },
         ]
       }
@@ -268,7 +277,7 @@
         let token = this.$store.getters.GET_ACCOUNT_STATE.TOKEN
         // this.setComState({type:'ISLogin',value:true})
         let ISLogin = this.getComState.ISLogin || false
-        console.log('ISLogin',ISLogin);
+        console.log('ISLogin', ISLogin);
         console.log('token', token);
         if (token && ISLogin) {
           // this.TITLE_TEPY = ['已开户', '未开户']
