@@ -123,7 +123,7 @@
         return this.AllBankListObj[pin]
       },
       getBankList() {
-        API.list.apiGetBankCardList({}, res => {
+        API.common.apiGetBankCardList({}, res => {
           let obj = {}
           res.BAND_CARD_LIST.forEach(item => {
             obj[item.BANK_CARD_BIN] = item.BANK_NAME

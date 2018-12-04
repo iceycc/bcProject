@@ -105,7 +105,7 @@
             <div>客商银行</div>
             <p></p>
           </div>
-          <div class="m-btn" @click="goPage('Login',{ORG_ID: '66',ORG_NAME: '客商银行'})">安全登录</div>
+          <div class="m-btn" @click="goPage('Login',{ORG_ID: '248',ORG_NAME: '客商银行',IS_SYNC_FLAG:'1',IS_REALTIME_DATA_PRD:'1',IS_RZ_FLAG:'1'})">安全登录</div>
         </div>
         <ul class="m-bottom">
           <li>

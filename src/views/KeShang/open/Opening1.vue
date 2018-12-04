@@ -45,10 +45,10 @@
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
                v-model="data.USER_CARD_ID" @bulr="checkID">
       </section>
-      <section v-if="DOMShow.USER_CARD_ID_DATA">
+      <section v-if="DOMShow.CARD_INDATE">
         <span>身份证有效期</span>
         <input class="inputBox2" type="text" placeholder=""
-               v-model="data.USER_CARD_ID_DATA">
+               v-model="data.CARD_INDATE">
       </section>
       <section v-if="DOMShow.PHONE">
         <span>手机号码</span>
@@ -92,7 +92,8 @@
       :class="{'bang':true,'no':agree == false}"
       @click="doAgree">
       <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage" style=" color:#0096FE;">《众邦银行直销银行电子账户服务协议》</a>
+      <a href="javascript:;" @click.stop="showPage" style=" color:#0096FE;">《客商银行客户服务协议》</a>
+      <a href="javascript:;" @click.stop="showPage" style=" color:#0096FE;">《隐私政策》</a>
     </p>
   </div>
 </template>
@@ -169,18 +170,22 @@
         this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
         this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
         this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
+        //新增
+        this.data.USER_NAME = suerinfo.USER_NAME
+        this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
+        this.data.CARD_INDATE = suerinfo.CARD_INDATE
         // this.data.USER_NAME = suerinfo.USER_NAME
         // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
         this.data.PHONE = suerinfo.PHONE_NUM  || suerinfo.BANK_CARD_PHONE
         // this.data.PHONE = ''
         this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
         this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
-        if (this.data.CARD_BACK_FILE) {
-          this.idCardFanOcr()
-        }
-        if (this.data.CARD_FRONT_FILE) {
-          this.idCardZhengOcr()
-        }
+        // if (this.data.CARD_BACK_FILE) {
+        //   this.idCardFanOcr()
+        // }
+        // if (this.data.CARD_FRONT_FILE) {
+        //   this.idCardZhengOcr()
+        // }
       }
     },
     methods: {

@@ -17,7 +17,7 @@ export default {
         ADDRESS: false, // 地址
         NATION: false, // 民族
         PHONE: false, // 手机号
-        USER_CARD_ID_DATA: true, //身份证有效期
+        CARD_INDATE: true, //身份证有效期
       },
       DOCS: 'ZhengZhou',
       job: [

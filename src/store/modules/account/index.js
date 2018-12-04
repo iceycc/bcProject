@@ -6,7 +6,7 @@ export default {
     // 设备id
     DEVICE_ID: '3213111',
     // 渠道id
-    CHANNEL_ID: '88',
+    CHANNEL_ID: '91',
     //
     APP_FLAG: 'BC',
     // TODO 保存登录过银行的凭证信息
