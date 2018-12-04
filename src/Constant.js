@@ -10,9 +10,9 @@ let Configs = {
   // DEV_HOST: 'http://192.168.100.109:8080', // 个人
   DEV_HOST: 'https://adv.bicai365.com/finsuit', // adv测试
   // DEV_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度测试
-  PRO_HOST: 'https://adv.bicai365.com/finsuit',// adv
+  // PRO_HOST: 'https://adv.bicai365.com/finsuit',// adv
   // PRO_HOST:'https://finsuit.bicai365.com/finsuit' ,// 生产/**/
-  // PRO_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度生产
+  PRO_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度生产
   APP_DOWN_URL: '',
 }
 export const HOST = process.env.NODE_ENV == 'development'

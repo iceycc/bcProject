@@ -38,9 +38,13 @@
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
-    <div v-if="FromH5Active" class="share" @click="share">获得不错，分享好友吧
-      <img src="../../../assets/images/share1.png" alt="">
-    </div>
+    <!--<div v-if="FromH5Active" class="share" @click="share">-->
+      <!--<p>获得不错，分享好友吧</p>-->
+      <!--<img src="@/assets/images/share1.png" alt="">-->
+    <!--</div>-->
+    <!--<div class="copy-box">-->
+      <!--<img src="@/assets/images/close.png" alt="">-->
+    <!--</div>-->
   </div>
 </template>
 <script>
@@ -185,15 +189,28 @@
       outline: none;
     }
   }
-
+  .copy-box{
+    /*background: #007aff;*/
+    position: absolute;
+    top:px2rem(100);
+    left: px2rem(0);
+    z-index: 100;
+    width: px2rem(150);
+    height: px2rem(50);
+    background: url(~@/assets/images/copy.png) no-repeat center center;
+    background-size: contain;
+  }
   .share {
     padding-top: px2rem(20);
     text-align: center;
     font-size: px2rem(13);
     color: #508CEE;
     img {
-      width: px2rem(30);
-      height: px2rem(30);
+      display: inline-block;
+      width: px2rem(50);
+      height: px2rem(50);
+      z-index: 100;
+      /*background: #007aff;*/
     }
   }
 </style>

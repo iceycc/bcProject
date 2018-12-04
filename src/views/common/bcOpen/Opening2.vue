@@ -232,8 +232,8 @@
           this.showSafeCode = false
         }, err => {
           this.getImgCode()
-          this.codeText = '重新发送'
-          this.disable = false
+          // this.codeText = '重新发送'
+          // this.disable = false
           // this.showSafeCode = false
           console.log(err);
         })
