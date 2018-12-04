@@ -231,6 +231,7 @@
             FUNCTION_ID: 'ptb0A007', // 点位
             REMARK_DATA: '异业合作-登录', // 中文备注
           })
+          this.cms = ''
           // this.getMsgCodeSuccess = false
           // this.codeText = '重新发送'
           // this.msgDisabled = false

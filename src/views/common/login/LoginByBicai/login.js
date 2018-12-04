@@ -37,9 +37,11 @@ export default {
     // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
     // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
     checkProductType() {
-      let query = this.$route.query
-      console.log('logon-query>>>', query);
-      if (query.IS_REALTIME_DATA_PRD && query.ORG_ID) {
+      // let query = this.$route.query
+      let query = util.storage.session.get('FirstLoad') || {}
+
+      console.log('login-query>>>', query);
+      if (query.IS_SYNC_FLAG && query.ORG_ID) {
         // 外链过来的
         this.setComState({
           type: 'FromH5Active', value: true

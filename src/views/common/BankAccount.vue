@@ -270,8 +270,8 @@
         console.log('ISLogin', ISLogin);
         console.log('token', token);
         if (token && ISLogin) {
-          this.TITLE_TEPY = ['已开户', '未开户']
-          // this.TITLE_TEPY = ['已登录', '未登录']
+          // this.TITLE_TEPY = ['已开户', '未开户']
+          this.TITLE_TEPY = ['已登录', '未登录']
           this.getOpenBankList()
           // this.getNoOpenBankList()
         } else {

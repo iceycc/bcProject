@@ -57,7 +57,7 @@
     },
     created() {
       this.datas = this.getComState.buyData || {}
-      this.FromH5Active= this.getComState.FromH5Active || true
+      // this.FromH5Active= this.getComState.FromH5Active || true
 
       console.log(this.datas);
     },

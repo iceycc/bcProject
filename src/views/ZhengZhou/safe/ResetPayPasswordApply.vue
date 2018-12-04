@@ -148,11 +148,17 @@
           ID_POSITIVE_IMAGE: encodeURIComponent(this.formData.CARD_FRONT_FILE),
           ID_DREVERSE_IMAGE: encodeURIComponent(this.formData.CARD_BACK_FILE)
         }
+        if(!data.LIFE_IMAGE){
+          Bus.$emit(BusName.showToast,'请上传申请人手持照片')
+          return
+        }
         // this.IS_RESET  =1 直接申请  为空 ''的话 判断this.STATUS
         // this.STATUS = 1 或 2  return
         console.log(data);
-        if(!this.IS_RESET){
-          if(this.STATUS==1 || this.STATUS ==2){
+        if (!this.IS_RESET) {
+          if (this.STATUS == 1 || this.STATUS == 2) {
+            Bus.$emit(BusName.showToast,'你已经提交过申请')
+            this.$router.push({name: PageName.ResetPayPasswordStatus})
             return
           }
         }

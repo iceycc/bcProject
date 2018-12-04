@@ -2,8 +2,8 @@
   <div>
     <app-bar title="重置支付密码申请"></app-bar>
     <section class="chattuimg">
-      <img v-if="STATUS==2" src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <img v-if="STATUS==1" src="@/assets/images/applying@2x.png" class="img" alt="">
+      <img v-if="showState==2" src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
+      <img v-if="showState!=2" src="@/assets/images/applying@2x.png" class="img" alt="">
       <h2>{{STATUS | statusFilter}}</h2>
     </section>
     <section class="m-form">
@@ -134,6 +134,7 @@
       let preData = this.getComState.resetPasswordStatus
       this.USER_NAME = preData.USER_NAME
       this.STATUS = preData.STATUS
+      // this.STATUS = 5
       console.log(this.STATUS);
       this.ID_CARD_NO = preData.ID_CARD_NO
       this.ELECTRONIC_ACCOUNT = preData.ELECTRONIC_ACCOUNT
