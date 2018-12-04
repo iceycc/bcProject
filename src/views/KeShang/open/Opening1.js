@@ -123,7 +123,7 @@ export default {
         console.log('aaaaaaaaaaaaaa');
         console.log(res.VALIDITY_PERIOD);
         this.data.USER_CARD_ID_DATA = res.VALIDITY_PERIOD,
-        this.data.IDENT_VLD_DT =this.transformDATA(res.VALIDITY_PERIOD).END
+        this.data.IDENT_VLD_DT = this.transformDATA(res.VALIDITY_PERIOD).END
         this.data.IDENT_LSS_DT = this.transformDATA(res.VALIDITY_PERIOD).STA
         this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
 
@@ -148,16 +148,16 @@ export default {
       // CARD_BACK_FILE // 身份证反面图像
 
       // IDENT_LSS_DT	证件签发日期
-      // IDENT_VLD_DT	证件有效期
+      // PERIOD	证件有效期
       let params = {
         TYPE: 'API_REGISTER_VALI_USER',
         PHONE_NUM: this.data.PHONE + '',
         USER_NAME: this.data.USER_NAME + '',
         USER_CARD_ID: this.data.USER_CARD_ID + '',
-        CARD_FRONT_FILE: this.data.CARD_FRONT_FILE,
-        CARD_BACK_FILE: this.data.CARD_BACK_FILE,
-        IDENT_LSS_DT:this.data.IDENT_LSS_DT,
-        IDENT_VLD_DT:this.data.IDENT_VLD_DT,
+        CARD_FRONT_FILE: encodeURIComponent(this.data.CARD_FRONT_FILE),
+        CARD_BACK_FILE: encodeURIComponent(this.data.CARD_BACK_FILE),
+        PERIOD: this.data.CARD_INDATE,
+        BUYER_CERT_TYPE: '0'
       }
       console.log('open1Params>>', params);
 
@@ -169,9 +169,9 @@ export default {
         // this.checkBankStatus() //
         this.$router.push({name:PageName.Opening2})
       },err=>{
-        setTimeout(()=>{
-          this.checkBankStatus() //
-        })
+        // setTimeout(()=>{
+        //   this.checkBankStatus() //
+        // })
       })
     },
 

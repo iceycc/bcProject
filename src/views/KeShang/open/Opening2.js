@@ -95,7 +95,7 @@ export default {
       let data = {
         TYPE: 'API_SEND_PHONE_CODE',
         PHONE_NUM: PHONE,
-        BIZ_TYPE: '11',// 开户第二步
+        BIZ_TYPE: '8',// 开户第二步
         ACCT_NO: this.data.CARD_NO
       }
       API.common.apiSendPhoneCode(data, res => {
