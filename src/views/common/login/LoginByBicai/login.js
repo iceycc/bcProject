@@ -132,7 +132,8 @@ export default {
             // 判断产品类型 区分openAPI
             if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
-              this.checkBankStatus()
+              // this.checkBankStatus()
+              this.checkBankOpenAndLogin()
             } else if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
@@ -148,7 +149,8 @@ export default {
                 alert('跳转h5链接获取异常')
               }
             } else {
-              this.checkBankStatus()
+              this.checkBankOpenAndLogin()
+              // this.checkBankStatus()
             }
             break;
           case 5:
