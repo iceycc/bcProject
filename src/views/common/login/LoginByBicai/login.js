@@ -168,14 +168,12 @@ export default {
     // 判断该用户在本行的开户状态
     checkBankStatus() {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
-      let data = {
-        PHONE_NUM:'15965473704'
-      }
+      let data = {}
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         this.setComState({type: 'TEL', value: this.tel})
-        if (step == 0 || step == null) {
+        if (step == 0) {
           // 未提交
           Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
@@ -191,13 +189,17 @@ export default {
           // 提交第二步
           Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
-          // 郑州银行
+          // 众邦银行
           if (this.ORG_ID == '227') {
             this.loginSuccess(res)
           }
-          // 众邦银行
+          // 郑州银行
           if (this.ORG_ID == '49') {
             this.$router.push({name: PageName.Opening3})
+          }
+          // 客商银行
+          if (this.ORG_ID == '248') {
+            this.loginSuccess(res)
           }
         }
         if (step == 3) {

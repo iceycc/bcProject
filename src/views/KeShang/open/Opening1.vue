@@ -153,7 +153,8 @@
         work: '请选择职业',
         agree: true,
         page: false,
-        errMsg: ''
+        errMsg: '',
+        suerinfo: ''
       }
     },
     components: {
@@ -164,6 +165,7 @@
       // 1-获取回显数据
       // this.checkBankStatus()
       let suerinfo = this.getComState.openingData
+      this.suerinfo = suerinfo
       console.log("suerinfo>>", suerinfo);
       if (suerinfo&&suerinfo.CARD_FRONT_URL) {
         this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
