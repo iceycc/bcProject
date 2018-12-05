@@ -45,7 +45,7 @@
                 <p>利率
                   <span>{{item.RATE}}%</span>
                 </p>
-                <p>存入天数
+                <p>购买天数
                   <span>{{item.ACTUAL_DATE_NUM}}天</span>
                 </p>
                 <!-- 新加赎回追加按钮 -->
@@ -54,7 +54,7 @@
                     <span @click="goRedeem(item)">支取</span>
                   </div>
                   <div>
-                    <span @click="goBuy(item)">继续存入</span>
+                    <span @click="goBuy(item)">继续购买</span>
                   </div>
                 </div>
               </div>

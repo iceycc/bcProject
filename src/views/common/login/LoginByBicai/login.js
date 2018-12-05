@@ -165,11 +165,29 @@ export default {
       })
     },
 
-    // 判断该用户在本行的开户状态
+    // 判断该用户在本行的状态
+    checkBankOpenAndLogin(){
+      let data ={
+        IS_RET_GRADE:'2'
+      }
+      API.common.apiQryLoginStatus(data,res=>{
+        let HAS_OPEN_BANK = res.HAS_OPEN_BANK
+        let HAS_LOGIN = res.HAS_LOGIN
+        if(HAS_OPEN_BANK ==1){
+          // 开户成功
+          this.loginSuccess(res)
+          // this.checkBankStatus()
+        }
+        else if(HAS_OPEN_BANK ==2){
+          this.checkBankStatus()
+        }
+      })
+    },
+    // 判断该用户在本行的回显状态
     checkBankStatus() {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
       let data = {
-        PHONE_NUM:'15965473704'
+        PHONE_NUM:this.tel
       }
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
