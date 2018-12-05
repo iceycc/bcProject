@@ -214,7 +214,7 @@
       // 获取短信验证码
       getMsgCode() {
         let data = {
-          PHONE_NUM: this.tel,
+          MOBILE: this.tel,
           SAFT_CODE: this.safeCode, // 图片验证码
           BANK_CARD: this.data.CARD_NO
         }
@@ -386,10 +386,11 @@
             }, 2000)
             let status = res.status
             console.log('status>>>', status);
-            if (status == 0) {
+            Bus.$emit(BusName.showToast,res.message)
+            if (status == 1) {
               this.$router.push({name: PageName.BcOpening3})
             } else {
-              this.pollHandle()
+              // this.pollHandle()
             }
             API.watchApi({
               FUNCTION_ID: 'ptb0A004', // 点位
@@ -402,7 +403,7 @@
               FUNCTION_ID: 'ptb0A004', // 点位
               REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
             })
-            this.pollHandle()
+            // this.pollHandle()
             this.errMsg = err
             setTimeout(() => {
               this.errMsg = ''

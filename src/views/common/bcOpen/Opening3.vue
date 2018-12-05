@@ -39,19 +39,19 @@
         </transition>
         <input class="input" type="password" :placeholder="payPaceholder" v-model="payPass">
       </section>
-      <section class="input-box" v-if="showPayPass">
+      <section class="input-box" v-if="showRePayPass">
         <transition name="fade">
-          <p class="label" v-if="!disabled">重复交易密码</p>
+          <p class="label" v-if="!reDisabled">重复交易密码</p>
         </transition>
-        <input class="input" type="password" :placeholder="payPaceholder" v-model="payPass">
+        <input class="input" type="password" :placeholder="rePayPaceholder" v-model="rePayPass">
       </section>
     </div>
     <div class="Tips" v-if="errMsg">
       <span>{{errMsg}}</span>
     </div>
     <button
-      :class="{'tijiao':true, 'agree':!disabled}"
-      :disabled="disabled"
+      :class="{'tijiao':true, 'agree':!candisabled}"
+      :disabled="candisabled"
       @click="doNext"
     >开户
     </button>
@@ -67,8 +67,10 @@
     data() {
       return {
         showPayPass: true,
+        showRePayPass: true,
         payPass: '',
-        telPaceholder: '登录密码',
+        rePayPass: '',
+        rePayPaceholder: '重复交易密码',
         payPaceholder: '交易密码',
         REQ_SERIAL: '',
         LAST_STEP_NUM: '',
@@ -94,19 +96,33 @@
 
     },
     computed: {
+      candisabled() {
+        if (this.payPass && this.rePayPass) {
+          return false
+        } else {
+          return true
+        }
+      },
       disabled() {
         if (this.payPass) {
           return false
         } else {
           return true
         }
-      }
+      },
+      reDisabled() {
+        if (this.rePayPass) {
+          return false
+        } else {
+          return true
+        }
+      },
     },
     methods: {
       doNext() {
         let data = {
           onePassword: this.payPass,
-          twoPassword: this.payPass,
+          twoPassword: this.rePayPass,
         }
         // let
         let ProAndOrgType = this.getComState.ProAndOrgType
@@ -115,12 +131,10 @@
           Bus.$emit(BusName.showToast, res.message)
           if (res.status == 1) {
             // 判断产品类型 区分openAPI
-            let ProAndOrgType = this.getComState.ProAndOrgType
             if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
               this.$router.push({name: PageName.Opening1})
-            }
-            else if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 0) {
+            } else if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
               let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
@@ -129,7 +143,7 @@
                 // let tempwindow=window.open('_blank'); // 先打开页面
                 // tempwindow.location=href; // 后更改页面地址
               } else {
-                alert('跳转第三方链接获取异常')
+                alert('跳转银行h5链接获取异常')
               }
             } else {
               this.$router.push({name: PageName.Opening1})
@@ -164,18 +178,22 @@
     padding-top: 0.7rem;
     top: 0;
     left: 0;
+
     .passbox {
       background: #fff;
       width: 80%;
       margin: 0 auto;
       box-sizing: border-box;
     }
+
     .top {
       padding: 0.4rem;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -183,14 +201,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: px2rem(4);
       border: 1px solid #DDD;
@@ -199,15 +220,18 @@
       padding-left: px2rem(3);
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       border-top: 1px solid #efefef;
       padding: px2rem(14) 0;
       display: flex;
+
       button {
         color: #108EE9;
         font-size: px2rem(17);
@@ -280,6 +304,7 @@
     margin: px2rem(50) auto 0;
     text-align: center;
     display: block;
+
     &.agree {
       background: #0072ff;
     }
@@ -288,6 +313,7 @@
   .Tips {
     margin: px2rem(17) auto 0;
     text-align: center;
+
     span {
       box-sizing: border-box;
       display: inline-block;
@@ -308,9 +334,11 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+
     .step-text {
       padding-top: px2rem(7);
     }
+
     .circle {
       flex: 1;
       display: flex;
@@ -319,9 +347,11 @@
 
     .line1, .line2, .line3 {
       position: relative;
+
       img {
         width: .5rem;
       }
+
       &:after {
         display: block;
         position: absolute;
@@ -336,17 +366,20 @@
 
       }
     }
+
     .hui {
       &:after, &.line2:before {
         background: #dee1e3 !important;
       }
 
     }
+
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
+
       &:before {
         display: block;
         position: absolute;
@@ -360,6 +393,7 @@
         overflow: hidden;
       }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -372,15 +406,18 @@
   .login_box {
     position: relative;
     padding-top: px2rem(20);
+
     .input-box {
       margin-left: px2rem(20);
       width: 90%;
       background-size: 0.7rem 0.7rem;
       border-bottom: 1px #E5E5E5 solid;
+
       input {
         @include placeholder(#333)
       }
     }
+
     .label {
       padding: 0;
       margin-top: px2rem(30);
