@@ -36,7 +36,7 @@ export default {
       API.open.apiRegisterSetPsw(data, res => {
         // Bus.$emit(BusName.showToast, '注册成功,即将跳转登录页')
         // this.$store.commit('SET_TOKEN', '')
-        this.setComState({type:'ISLogin',value:true})
+        this.setComState({type: 'ISLogin', value: true})
         this.toPreProduct()
       }, err => {
         this.ifShow = false
