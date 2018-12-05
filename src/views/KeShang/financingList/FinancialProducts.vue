@@ -6,7 +6,7 @@
       <div class="f-box">
         <div class="profit">
           <div>
-            <p>{{financialData.TOTAL_ASSET -financialData.ACC_REST | formatNum}}</p>
+            <p>{{financialData.TOTAL_ASSET - financialData.ACC_REST | formatNum}}</p>
             <p>总资产</p>
           </div>
           <span class="line"></span>
@@ -42,19 +42,19 @@
                 <p>本金
                   <span>{{item.INVEST_AMOUNT}}</span>
                 </p>
-                <p>利率
+                <p>存款利率
                   <span>{{item.RATE}}%</span>
                 </p>
-                <p>存入天数
+                <!-- <p>存入天数
                   <span>{{item.ACTUAL_DATE_NUM}}天</span>
-                </p>
+                </p> -->
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
                   <div>
-                    <span @click="goRedeem(item)">支取</span>
+                    <span @click="goRedeem(item)">提前支取</span>
                   </div>
                   <div>
-                    <span @click="goBuy(item)">继续存入</span>
+                    <span @click="goBuy(item)">再次存入</span>
                   </div>
                 </div>
               </div>
@@ -112,15 +112,15 @@
           pageSize: "10"
         },
         pageList: [
-          // {
-          //   PRD_NAME:'测试产品1',
-          //   ORG_NAME:'郑州银行22',
-          //   INVEST_AMOUNT:'0.00',
-          //   RATE:'0',
-          //   YQ_INCOME_AMOUNT:'0.00',
-          //   OVER_DATE:'0',
-          //   PRD_INDEX_ID:'0'
-          // }
+          {
+            PRD_NAME:'测试产品1',
+            ORG_NAME:'郑州银行22',
+            INVEST_AMOUNT:'0.00',
+            RATE:'0',
+            YQ_INCOME_AMOUNT:'0.00',
+            OVER_DATE:'0',
+            PRD_INDEX_ID:'0'
+          }
         ],
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
@@ -130,17 +130,6 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList: [
-          // {
-          //   PRD_NAME:'测试产品1',
-          //   ORG_NAME:'郑州银行',
-          //   INVEST_AMOUNT:'0.00',
-          //   RATE:'0',
-          //   YQ_INCOME_AMOUNT:'0.00',
-          //   OVER_DATE:'0',
-          //   PRD_INDEX_ID:'0'
-          // }
-        ],
         tabsParam: ["持有中", "已结束"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
@@ -159,7 +148,7 @@
       // this.total = this.$route.query.total
     },
     mounted() {
-      this.loadPageList(); //初次访问查询列表
+      // this.loadPageList(); //初次访问查询列表
       let winHeigt = util.getWinSize().winHeight
       let wTopHeight = util.getDivSize('.w-top').height
       let tabsHeight = util.getDivSize('.tabs').height

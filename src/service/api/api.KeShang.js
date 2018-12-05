@@ -406,7 +406,7 @@ export default {
     //  42.	获取我的投资持有中数据/openapi/zbh/biz/apiQryHoldInfo
     apiQryHoldInfo(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/apiQryHoldInfo',
+        url: '/openapi/bank/apiQryHoldInfo',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -416,7 +416,7 @@ export default {
     // /openapi/zbh/biz/apiQryAsset
     apiQryAsset(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/apiQryAsset',
+        url: '/openapi/bank/apiMyAssetByOrg',
         params
       }
       return http.post(options, Config.config, success, error)
