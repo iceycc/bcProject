@@ -5,11 +5,11 @@ import util from "libs/util";
 import {ORG_ID_NUM} from '@/Constant'
 import {imgSrc} from "@/Constant";
 import commons from './common'
-
+import Mixins from '@/mixins'
 let time = 60
 let pollTimer;
 export default {
-  mixins: [commons],
+  mixins: [commons,Mixins.HandleMixin,Mixins.UtilMixin],
   data() {
     return {
       telDisabled: false,
@@ -95,7 +95,7 @@ export default {
       let data = {
         TYPE: 'API_SEND_PHONE_CODE',
         PHONE_NUM: PHONE,
-        BIZ_TYPE: '8',// 开户第二步
+        BIZ_TYPE: '3',// 开户第二步
         ACCT_NO: this.data.CARD_NO
       }
       API.common.apiSendPhoneCode(data, res => {
@@ -116,17 +116,9 @@ export default {
     doOpengingSecond() {
       // 判断银行类型 是否调用密码控件
       // 实体卡密码，可空，本行卡和村镇卡必输
-      if (this.ACC_FLAG == 0) {
-        this.doApiOpenging2()
-        // this.ZhengZhouPass = true
-        // 其他行
-      } else {
-        // 本地 或者村镇银行 要调取密码控件
-        $('#PWDKBD').remove();
-        this.ZhengZhouPass = true
-        return
-      }
-
+      this.doApiOpenging2()
+      // this.ZhengZhouPass = true
+      // 其他行
     },
     doApiOpenging2() {
       this.data.PRE_PHONE_NUM = this.tel
@@ -156,15 +148,17 @@ export default {
       }
       let delMsg = true
       let params = {
-        REGISTER_PHONE: this.callbackInfos.PHONE_NUM || this.tel,// todo 注册手机号
-        PHONE_NUM: this.callbackInfos.PHONE_NUM || this.tel, // 银行预留手机号(绑卡行)
-        IDENT_LSS_DT: this.transformDATA(this.callbackInfos.CARD_INDATE).STA,	//证件签发日期
-        IDENT_VLD_DT: this.transformDATA(this.callbackInfos.CARD_INDATE).END,	// 证件有效期
-        BANK_NO: this.data.CARD_NO, // 绑定银行卡银行行号
+        PHONE_NUM: this.tel, // 银行预留手机号(绑卡行)
+        REQ_SERIAL: this.callbackInfos.BESHARP_REGISTER_VALI_USER_SEQ || '', //比财开户请求ID
+        PERIOD: this.transformDATA(this.callbackInfos.CARD_INDATE).END,	// 证件有效期
         BANK_NUM: this.data.CARD_NO, // 绑定银行卡卡号
+        MESSAGE_TOKEN: this.data.MESSAGE_TOKEN, //短信验证码Token
         SHORT_CODE: this.data.PHONE_CODE, // 短信验证码
-        CARD_BIN: this.data.CARD_NO.substring(0, 6), // 银行卡号前6位
-        BANK_INNER: '0', // 绑定银行卡标识
+        USER_CARD_ID: this.callbackInfos.USER_CARD_ID, //证件号码
+        CARD_FRONT_FILE: this.callbackInfos.CARD_FRONT_URL, //身份证正面信息
+        CARD_BACK_FILE: this.callbackInfos.CARD_BACK_URL, //身份证反面信息
+        USER_NAME: this.callbackInfos.USER_NAME, //姓名
+        HAS_BAND: this.callbackInfos.hasCardList.length > 0 ? '0' : '1', //是否已经绑定过卡 0:已在比财绑卡；1:未在比财绑过卡
         OPEN_BANK: this.bankText, //// 银行卡所属银行名
         TYPE: 'API_REGISTER_BAND_CARD',
       }
@@ -187,9 +181,8 @@ export default {
           if (res.CODE != 0) { // 不是0的话返回
             return
           }
-          this.$router.push({
-            name: PageName.Login,
-          })
+          this.setComState({type:'ISLogin',value:true})
+          this.toPreProduct()
         },
         err => {
           API.watchApi({

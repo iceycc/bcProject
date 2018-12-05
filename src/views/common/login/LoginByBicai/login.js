@@ -24,7 +24,7 @@ export default {
       },
       href: '',
 
-      isfinancial:'0' // h5活动页外链过来的 登录一下携带 members_id 跳走
+      isfinancial: '0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
   mixins: [checkOpenApiAndH5],
@@ -50,7 +50,7 @@ export default {
           type: 'ProAndOrgType', value: query
         })
       }
-      if (query.isfinancial==1) {
+      if (query.isfinancial == 1) {
         // 外链过来的
         this.isfinancial = 1
       }
@@ -59,11 +59,10 @@ export default {
       this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
       if (this.ORG_ID == '227') {
         this.BANK_NAME = '众邦直销银行'
-      }
-      else if (this.ORG_ID == '49') {
+      } else if (this.ORG_ID == '49') {
         this.BANK_NAME = '郑州直销银行'
-      }else {
-        this.BANK_NAME =this.ProAndOrgType.ORG_NAME
+      } else {
+        this.BANK_NAME = this.ProAndOrgType.ORG_NAME
       }
       // 控制底部提示
       // if(this.ProAndOrgType.IS_SYNC_FLAG == 1){
@@ -134,8 +133,7 @@ export default {
             if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
               this.checkBankStatus()
-            }
-            else if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
+            } else if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
               // 不是h5直联
@@ -166,19 +164,18 @@ export default {
     },
 
     // 判断该用户在本行的状态
-    checkBankOpenAndLogin(){
-      let data ={
-        IS_RET_GRADE:'2'
+    checkBankOpenAndLogin() {
+      let data = {
+        IS_RET_GRADE: '2'
       }
-      API.common.apiQryLoginStatus(data,res=>{
+      API.common.apiQryLoginStatus(data, res => {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
         let HAS_LOGIN = res.HAS_LOGIN
-        if(HAS_OPEN_BANK ==1){
+        if (HAS_OPEN_BANK == 1) {
           // 开户成功
           this.loginSuccess(res)
           // this.checkBankStatus()
-        }
-        else if(HAS_OPEN_BANK ==2){
+        } else if (HAS_OPEN_BANK == 2) {
           this.checkBankStatus()
         }
       })
@@ -187,13 +184,13 @@ export default {
     checkBankStatus() {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
       let data = {
-        PHONE_NUM:this.tel
+        PHONE_NUM: this.tel
       }
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         this.setComState({type: 'TEL', value: this.tel})
-        if (step == 0 || step == null) {
+        if (step == 0) {
           // 未提交
           Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
@@ -209,13 +206,17 @@ export default {
           // 提交第二步
           Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
-          // 郑州银行
+          // 众邦银行
           if (this.ORG_ID == '227') {
             this.loginSuccess(res)
           }
-          // 众邦银行
+          // 郑州银行
           if (this.ORG_ID == '49') {
             this.$router.push({name: PageName.Opening3})
+          }
+          // 客商银行
+          if (this.ORG_ID == '248') {
+            this.loginSuccess(res)
           }
         }
         if (step == 3) {
@@ -246,20 +247,17 @@ export default {
           } else {
             alert('跳转第三方链接获取异常')
           }
-        }
-        else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
+        } else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
           // h5直联
           this.toPreProduct()
         } else {
           this.toPreProduct()
 
         }
-      }
-      else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+      } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
         // 是 openApi
         this.toPreProduct()
-      }
-      else {
+      } else {
         this.toPreProduct()
       }
     }

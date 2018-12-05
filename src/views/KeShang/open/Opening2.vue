@@ -120,7 +120,11 @@
       // }
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
-      this.tel = this.callbackInfos.PHONE_NUM || ''
+      if(this.callbackInfos.hasCardList.length > 0){
+        this.tel = this.callbackInfos.hasCardList[0].PHONE_NUM
+        this.bankText = this.callbackInfos.hasCardList[0].BANK_NAME
+        this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
+      }
       this.getBankList()
     },
     methods: {
