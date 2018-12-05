@@ -11,8 +11,8 @@
           </div>
           <span class="line"></span>
           <div>
-            <p>{{financialData.TOTAL_INCOME>=0 ? '+':''}}{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p>昨日收益</p>
+            <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+            <p>预计收益</p>
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@
           pageNo: "1",
           pageSize: "10"
         },
-        tabsParam: ["持有中", "已结束"], //（这个也可以用对象key，value来实现）
+        tabsParam: ["持有中", "已支取"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
           ACC_REST: '0.00',
