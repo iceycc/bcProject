@@ -221,9 +221,9 @@
           }
           else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
             // 是 openApi
-            this.checkBankStatus()
-
-            // this.checkAuthStatus()
+            // this.checkBankStatus()
+            // this.checkBankOpenAndLogin()
+            this.checkAuthStatus()
           }
           else {
             this.checkAuthStatus()

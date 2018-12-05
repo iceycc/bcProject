@@ -97,7 +97,8 @@
       <div class="IDphotoback"></div>
     </div>
     <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
-    <button class="tijiao" @click="doOpeningFirstFactory">下一步</button>
+    <button :class="{tijiao:true,active:canClick}" @click="doOpeningFirstFactory" :disabled="!canClick">下一步</button>
+    <!--<button class="tijiao" @click="doOpeningFirstFactory">下一步</button>-->
   </div>
 </template>
 <script>
@@ -129,9 +130,8 @@
         stepImg3: require('@/assets/images/step3.png'),
         test1: '',
         test2: '',
-
-        preSrc1: require('@/assets/images/common/zheng@2x.png'),
-        preSrc2: require('@/assets/images/common/fan@2x.png'),
+        preSrc1: require('@/assets/images/common/fan@2x.png'),
+        preSrc2: require('@/assets/images/common/zheng@2x.png'),
         picZheng: require('@/assets/images/id-zheng.jpg'),
         picFan: require('@/assets/images/id-fan.jpg'),
 
@@ -147,29 +147,52 @@
           PHONE: true, // 手机号
           USER_CARD_ID_DATA: true, //身份证有效期
         },
+        validityPeriod:'',
+        frontSessionId:'',
+        idNumber:'',
+        idName:''
       }
     },
+
     components: {
       JsSelect,
       IconFont
     },
-    created(){
+    computed: {
+      // USER_NAME: '',
+      // USER_CARD_ID: '',// 身份证号码  612601198509174013
+      // CARD_FRONT_FILE: '',
+      // CARD_BACK_FILE: '',
+      // USER_CARD_ID_DATA: '', //身份证有效期
+      // frontSessionId: null,
+      canClick() {
+        if (this.data.USER_NAME
+          && this.data.CARD_BACK_FILE
+          && this.data.CARD_FRONT_FILE
+          && this.data.USER_CARD_ID_DATA
+          && this.data.USER_CARD_ID
+        ) {
+          return true
+        } else {
+          return false
+        }
+      },
+    },
+    created() {
       // let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
       // Bus.$emit(BusName.showToast,MsgText)
     },
     methods: {
       doOpeningFirstFactory() {
         this.checkID()
-        return
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A003', // 点位
-          REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
-        })
-        this.$store.commit('SET_OPENING1_DATA', this.data)
-        // this.ORG_ID = this.$store.getters.GET_ORG_ID
-        this.ORG_ID = util.storage.session.get('ORG_ID') || ''
-
-        this.doOpengingFirst()
+        // API.watchApi({
+        //   FUNCTION_ID: 'ptb0A003', // 点位
+        //   REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
+        // })
+        // this.$store.commit('SET_OPENING1_DATA', this.data)
+        // // this.ORG_ID = this.$store.getters.GET_ORG_ID
+        // this.ORG_ID = util.storage.session.get('ORG_ID') || ''
+        // this.doOpengingFirst()
 
       },
       imgToBaseFan(e) {
@@ -213,11 +236,24 @@
           idcardFrontPhoto: encodeURIComponent(this.data.CARD_FRONT_FILE)
         }
         API.bicai.postFrontIDCard(params, (res) => {
+          Bus.$emit(BusName.showToast, res.message)
+          if (res.status == 1) {
+            // fan zheng
+            this.preSrc1 = require('@/assets/images/common/fan@2x.png')
+            this.data.CARD_BACK_FILE = ''
+          }
           this.data.USER_NAME = res.idName
           this.data.USER_CARD_ID = res.idNumber
           this.data.frontSessionId = res.frontSessionId
+
+          this.idName = res.idName
+          this.idNumber = res.idNumber
+          this.frontSessionId = res.frontSessionId
           // this.checkID()
           // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
+        }, err => {
+          this.preSrc1 = require('@/assets/images/common/fan@2x.png')
+          this.data.CARD_BACK_FILE = ''
         })
       },
       idCardFanOcr() {
@@ -226,9 +262,18 @@
           idcardBackPhoto: encodeURIComponent(this.data.CARD_BACK_FILE)
         }
         API.bicai.postBackIDCard(params, (res) => {
+          Bus.$emit(BusName.showToast, res.message)
+          if (res.status == 1) {
+            this.preSrc2 = require('@/assets/images/common/zheng@2x.png')
+            this.data.CARD_BACK_FILE = ''
+          }
           this.data.USER_CARD_ID_DATA = res.validityPeriod
+          this.validityPeriod = res.validityPeriod
           // this.data.frontSessionId = res.frontSessionId
           // this.data.CREDENTIAL_BURL = res.SUN_ECM_CONTENT_ID
+        }, err => {
+          this.preSrc2 = require('@/assets/images/common/zheng@2x.png')
+          this.data.CARD_BACK_FILE = ''
         })
       },
       /**
@@ -241,7 +286,6 @@
         let params = {
           // IDFA:'aaa',
           // APP_MARKET_CODE:'111',
-
           ORG_ID: '',
           MEMBER_ID: this.data.MEMBER_ID,
           TYPE: 'API_REGISTER_VALI_USER',
@@ -251,7 +295,7 @@
           USER_NAME: this.data.USER_NAME + '',
           USER_CARD_ID: this.data.USER_CARD_ID + '',
           CARD_FRONT_FILE: encodeURIComponent(this.data.CARD_FRONT_FILE),
-          CARD_BACK_FILE: encodeURIComponent(this.data.CARD_BACK_FILE) ,
+          CARD_BACK_FILE: encodeURIComponent(this.data.CARD_BACK_FILE),
           USER_DUTY: this.data.USER_DUTY + '',
           CREDENTIAL_POV: this.data.USER_CARD_ID_DATA + ''
         }
@@ -270,6 +314,22 @@
        * 身份证验证接口 点击下一步
        */
       checkID() {
+        // validityPeriod:'',
+          // frontSessionId:'',
+          // idNumber:'',
+          // idName:''
+        if(this.data.USER_NAME !=this.idName){
+          Bus.$emit(BusName.showToast,'姓名不一致')
+          return
+        }
+        if(this.data.USER_CARD_ID !=this.idNumber){
+          Bus.$emit(BusName.showToast,'身份证不一致')
+          return
+        }
+        if(this.data.USER_CARD_ID_DATA !=this.validityPeriod){
+          Bus.$emit(BusName.showToast,'身份证有效期不一致')
+          return
+        }
         let data = {
           idName: this.data.USER_NAME,
           idNumber: this.data.USER_CARD_ID,
@@ -313,9 +373,11 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+
     .step-text {
       padding-top: px2rem(7);
     }
+
     .circle {
       flex: 1;
       display: flex;
@@ -324,9 +386,11 @@
 
     .line1, .line2, .line3 {
       position: relative;
+
       img {
         width: .5rem;
       }
+
       &:after {
         display: block;
         position: absolute;
@@ -341,17 +405,20 @@
 
       }
     }
+
     .hui {
       &:after, &.line2:before {
         background: #dee1e3 !important;
       }
 
     }
+
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
+
       &:before {
         display: block;
         position: absolute;
@@ -365,6 +432,7 @@
         overflow: hidden;
       }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -379,32 +447,38 @@
       font-size: px2rem(12);
       color: #9DCE81;
     }
+
     .cuohao {
       font-size: px2rem(12);
       color: #FF2A00;
     }
+
     img {
       width: px2rem(70);
       height: px2rem(44);
       display: inline-block;
       background: #ccc;
     }
+
     .title {
       padding-left: px2rem(20);
       margin: px2rem(16) 0;
       color: #666;
       font-size: px2rem(14);
     }
+
     ul {
       text-align: center;
       font-size: 0;
       margin: 0 auto;
       width: 90%;
+
       p {
         margin: px2rem(5) 0;
         color: #666;
         font-size: px2rem(12);
       }
+
       li {
         display: inline-block;
         width: 25%;
@@ -427,12 +501,14 @@
       background-size: 0.7rem 0.7rem;
       background-position: .2rem .2rem;
       display: flex;
+
       .words {
         padding-left: px2rem(20);
         font-size: px2rem(12);
         color: #A3DBFF;
       }
     }
+
     section {
       display: flex;
       margin-left: 0.6rem;
@@ -440,6 +516,7 @@
       width: 90%;
       border-bottom: 1px #E5E5E5 solid;
     }
+
     input, select {
       border: none;
       box-sizing: border-box;
@@ -449,6 +526,7 @@
       background: #fff;
       height: 1rem;
     }
+
     span {
       font-family: PingFangSC-Regular;
       color: #444444;
@@ -456,10 +534,12 @@
       display: inline-block;
       width: px2rem(130);
     }
+
     .limit {
       color: #0096FE;
       font-family: PingFangSC-Regular;
     }
+
     .getpassword {
       display: inline-block;
       text-align: center;
@@ -485,6 +565,7 @@
     width: px2rem(126);
     height: px2rem(80);
     border: 1px dotted #eaeaea;
+
     &:after {
       display: inline-block;
       content: '';
@@ -495,18 +576,21 @@
   }
 
   .tijiao {
-    display: block;
-    font-size: px2rem(16);
+    font-size: px2rem(18);
     color: #fff;
-    background-color: #508CEE;
-    border-radius: px2rem(4);
-    line-height: 1rem;
+    background: #ccc;
+    border-radius: px2rem(6);
+    line-height: 1.2rem;
     width: px2rem(255);
-    height: px2rem(44);
-    margin: px2rem(55) auto px2rem(20);
+    margin: px2rem(30) auto px2rem(10);
     text-align: center;
-    border: none;
+    border: 0px;
     outline: none;
+    display: block;
+
+    &.active {
+      background: #508CEE;
+    }
   }
 
   .Tips {
@@ -559,6 +643,7 @@
     height: 100%;
     background: #fff;
     z-index: 100;
+
     .docs {
       box-sizing: border-box;
       border: none;
@@ -568,6 +653,7 @@
       -webkit-overflow-scrolling: touch;
       padding: 0 .2rem;
     }
+
     .docsself {
       box-sizing: border-box;
       border: none;
@@ -582,6 +668,7 @@
         font-size: px2rem(11) !important;
         color: #000 !important;
       }
+
       p {
         font-size: px2rem(9) !important;
         color: #000 !important;
@@ -589,6 +676,7 @@
       }
 
     }
+
     .indocs {
       border: none;
       width: 100%;
@@ -598,6 +686,7 @@
     .btn {
       padding: 0 1rem;
       text-align: center;
+
       button {
         width: 3.5rem;
         margin-right: .4rem;

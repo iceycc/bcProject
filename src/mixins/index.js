@@ -6,7 +6,6 @@ import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
 import * as Common from './common'
 
-
 // 展开开户需要的store方法
 // 展开公共的store方法
 const StoreMixin = {
@@ -149,7 +148,6 @@ const UtilMixin = {
         }
       }, 2000)
     }
-
   }
 }
 

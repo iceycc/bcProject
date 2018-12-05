@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <app-bar title="存入"></app-bar>
+    <app-bar title="购买"></app-bar>
     <div class="buytitle">
       <div class="buytitleleft">
         <div class="buytitleleftimg">
@@ -22,7 +22,7 @@
       <div class="buysuccessdetailright" @click="goReChang">充值</div>
     </div>
     <div class="buydetails">
-      <p style="margin-top: 0.3rem">存入金额</p>
+      <p style="margin-top: 0.3rem">购买金额</p>
       <span class="buydetailsmoney">￥</span>
       <!--<input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="APPLY_AMOUNT">-->
       <input type="number" :placeholder="placeholder" v-model="APPLY_AMOUNT">
@@ -42,7 +42,7 @@
         class="button">{{codeText}}
       </button>
     </section>
-    <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">存入</button>
+    <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">购买</button>
     <p @click="agree =!agree"
        :class="{'bang':true,'no':agree == false}">我已阅读并同意
       <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《众邦宝产品服务协议（个人活期版）》</a>
@@ -96,10 +96,33 @@
     mixins: [Mixins.StoreMixin],
     created() {
       this.getInfo()
-      this.proDetail = this.getComState.goBuy // 数据
-      console.log(this.proDetail);
+      this.getProData(17878)
+      // todo测试用
+      // this.proDetail = this.getComState.goBuy // 数据
+      // console.log(this.proDetail);
     },
     methods: {
+      getProData(id) {
+        let data = {
+          ID: id + ""
+        };
+
+        // API.commonApi.apiGetChannelPrdInfo(data, res => {
+        API.bicai.getPrdInfo(data, res => {
+          this.productDetail = res;
+          this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
+          this.removeComState('ProDuctData')
+          let goBuyData = {
+            id: id,
+            logo: this.productDetail.LOGO_URL,
+            ...this.productDetail
+          };
+          this.setComState({type: 'goBuy', value: goBuyData})
+          this.setComState({type: 'loginType', value: '安全购买'})
+          this.proDetail = goBuyData // 数据
+          console.log(this.proDetail);
+        });
+      },
       clearNumHandle() {
         this.APPLY_AMOUNT = ''
       },
