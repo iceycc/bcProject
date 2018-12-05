@@ -124,17 +124,16 @@
           onePassword: this.payPass,
           twoPassword: this.rePayPass,
         }
-        // let
-        let ProAndOrgType = this.getComState.ProAndOrgType
-
+        //
+        let ProAndOrgType = this.getComState.ProAndOrgType || {}
         API.bicai.getPayPassword(data, res => {
           Bus.$emit(BusName.showToast, res.message)
           if (res.status == 1) {
             // 判断产品类型 区分openAPI
-            if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 1) {
+            if (ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
               this.$router.push({name: PageName.Opening1})
-            } else if (ProAndOrgType.ProAndOrgType.IS_SYNC_FLAG == 0) {
+            } else if (ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
               let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
