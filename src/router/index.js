@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
   }
   if (to.name == PageName.ProductReservation) {
     window.document.title = to.query.title;
-    util.IOSTitileUpdat()
+    // util.IOSTitileUpdat()
   }
   if (to.meta && to.meta.needLogin) {
     let {TOKEN} = store.getters.GET_ACCOUNT_STATE
