@@ -12,7 +12,7 @@
     <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
     <!--<div class="begain">下载比财app</div>-->
     <!--<button class="begain" @click="goBalance">查看余额</button>-->
-    <button class="begain" @click="">查看余额</button>
+    <button class="begain" @click="goBalance">查看余额</button>
   </div>
 </template>
 <script>

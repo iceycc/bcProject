@@ -112,15 +112,15 @@
           pageSize: "10"
         },
         pageList: [
-          {
-            PRD_NAME:'测试产品1',
-            ORG_NAME:'郑州银行22',
-            INVEST_AMOUNT:'0.00',
-            RATE:'0',
-            YQ_INCOME_AMOUNT:'0.00',
-            OVER_DATE:'0',
-            PRD_INDEX_ID:'0'
-          }
+          // {
+          //   PRD_NAME:'测试产品1',
+          //   ORG_NAME:'郑州银行22',
+          //   INVEST_AMOUNT:'0.00',
+          //   RATE:'0',
+          //   YQ_INCOME_AMOUNT:'0.00',
+          //   OVER_DATE:'0',
+          //   PRD_INDEX_ID:'0'
+          // }
         ],
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "touch", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
@@ -148,7 +148,7 @@
       // this.total = this.$route.query.total
     },
     mounted() {
-      // this.loadPageList(); //初次访问查询列表
+      this.loadPageList(); //初次访问查询列表
       let winHeigt = util.getWinSize().winHeight
       let wTopHeight = util.getDivSize('.w-top').height
       let tabsHeight = util.getDivSize('.tabs').height
@@ -239,16 +239,18 @@
           });
         } else {
           // //持有数据
-          // let data = {
-          //   currentPage: this.searchCondition.pageNo - 1,
-          //   PRD_TYPE: "4"
-          // };
+          let data = {
+            currentPage: this.searchCondition.pageNo - 1 + '',
+            PRD_TYPE: "4",
+            DEPOSIT_TYPE_ID: "4"
+          };
           API.bank.apiQryHoldInfo(data, res => {
             if (!res.PAGE) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
               return
             }
+            console.log(res)
             this.pageList = res.PAGE.retList;
             // this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -293,8 +295,9 @@
           this.searchCondition.pageNo =
             "" + (parseInt(this.searchCondition.pageNo) + 1);
           let data = {
-            currentPage: this.searchCondition.pageNo,
-            PRD_TYPE: "2"
+            currentPage: this.searchCondition.pageNo - 1 + '',
+            PRD_TYPE: "4",
+            DEPOSIT_TYPE_ID: "4"
           };
           API.bank.apiQryHoldInfo(data, res => {
             if (!res.PAGE) {

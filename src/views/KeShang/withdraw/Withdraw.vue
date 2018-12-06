@@ -3,9 +3,13 @@
     <app-bar title="提现"></app-bar>
     <div class="rechargetitle">提现到{{CARD_BANK_NAME}}</div>
     <div class="minshengbank">
-            <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
-                                                alt=""></span>
-      {{CARD_BANK_NAME}}
+      <span class="minshengbankLogo">
+        <img :src="imgSrc + logo" style="width:75%" alt="">
+      </span>
+      <div class="new-add">
+        <p>{{CARD_BANK_NAME}}</p>
+        <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
+      </div>
     </div>
     <div class="crow-line"></div>
     <section class="inputAmount">
@@ -29,6 +33,7 @@
     </section>
     <p class="info1">
       本卡当前余额{{ACC_REST | formatNum}}元
+      <!-- 全部提现UI图变位置了 -->
       <span class="span" style="color:#389CFF" @click="APPLY_AMOUNT = ACC_REST">全部提现</span>
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
@@ -72,6 +77,9 @@
 
         ACC_REST: '200',
         DAY_REST: '10000', // todo取每日限额
+        CARD_NUM: '', //一类户卡号
+        BANK_USER_CODE: '', //二类户卡号
+        BANK_USER_ID: '', //银行用户ID
       }
     },
     components: {
@@ -130,10 +138,13 @@
         let TEL = this.getComState.TEL
         let data = {
           PHONE_NUM: TEL,
-          BIZ_TYPE: '1005', // 提现
-          AMOUNT: this.APPLY_AMOUNT
+          BIZ_TYPE: '2', // 提现
+          BANK_USER_ID: this.BANK_USER_ID,
+          BANK_ACCT_NO: this.BANK_USER_CODE
         }
         API.common.apiSendPhoneCode(data, res => {
+          this.MESAGE_TOKEN = res.MESSAGE_TOKEN
+          //这里的提示信息没成功
           Bus.$emit(BusName.showSendMsg, TEL)
         })
       },
@@ -142,8 +153,12 @@
       },
       getUserInfos() {
         API.safe.apiBandCard({}, (res) => {
-          this.CARD_BANK_NAME = res.CARD_BANK_NAME
-          this.logo = res.CARD_BANK_URL
+          console.log(res)
+          this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME
+          this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
+          this.logo = res.CARD_LIST[0].CARD_BANK_URL
+          this.BANK_USER_ID = res.BANK_USER_ID
+          this.BANK_USER_CODE = res.BANK_USER_CODE
         })
       },
       doWithdraw() {
@@ -156,17 +171,19 @@
 
         let data = {
           PHONE_CODE: this.msgCode,
-          EITHDRAW_All: "1",// 0 全部提现
           APPLY_AMOUNT: this.APPLY_AMOUNT, //
-          VRFY_FLAG: '00',
-          EITH_DRAW_ALL: '0'
+          EITH_DRAW_ALL: '0',
+          MESAGE_TOKEN: this.MESAGE_TOKEN,
+          BANK_ACCOUNT_NO: this.CARD_NUM,
+          BANK_NAME: this.CARD_BANK_NAME
         }
         this.show = false
         API.withdraw.apiCash(data, res => {
           let params = {
             BIZ_TYPE: '4', // 提现
-            BESHARP_SEQ: res.TXN_REF_NO
+            BESHARP_SEQ: res.BESHARP_CASH_SEQ
           }
+          // 轮询还没弄
           // 轮询 查寻交易状态
           this.queryStatus(
             {
@@ -257,14 +274,19 @@
     color: #444444;
     font-size: px2rem(14);
   }
-
-  .minshengbank {
-    padding-left: px2rem(20);
+ .minshengbank {
+    padding-left: 0.5rem;
     height: px2rem(65);
-    line-height: px2rem(65);
-    font-size: px2rem(16)
+    font-size: px2rem(16);
+    display: flex;
+    align-items: center;
+    .new-add {
+      font-size: px2rem(16);
+      p:last-child {
+        color: #9199A1;
+      }
+    }
   }
-
   .crow-line {
     height: px2rem(10);
     background: #f9f9f6;
@@ -335,12 +357,7 @@
   }
 
   .minshengbankLogo {
-    line-height: 100%;
-    display: inline-block;
-    height: 60%;
-    width: 50px;
-    float: left;
-    padding-top: 0.4rem;
+    width: px2rem(50);
   }
 
   .info1 {

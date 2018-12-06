@@ -70,7 +70,9 @@
         msgCode: '',
         msgdisable: false,
         codeText: '获取验证码',
-
+        MESAGE_TOKEN: '',
+        BANK_ACCT_NO: '', //电子账户
+        BANK_USER_ID: '' //银行用户ID
       }
     },
     computed: {
@@ -96,7 +98,7 @@
     mixins: [Mixins.StoreMixin],
     created() {
       this.getInfo()
-      this.getProData(17878)
+      this.getProData(17897)
       // todo测试用
       // this.proDetail = this.getComState.goBuy // 数据
       // console.log(this.proDetail);
@@ -129,9 +131,12 @@
       getInfo() {
         // 查询账户余额
         API.bank.apiQryEleAccount({}, res => {
-          console.log(res);
           this.payNum = res.ACC_REST || 1000// 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
+        })
+        API.safe.apiBandCard({}, res => {
+          this.BANK_ACCT_NO = res.CARD_LIST[0].CARD_NUM
+          this.BANK_USER_ID = res.BANK_USER_ID
         })
       },
       goReChang() {
@@ -158,9 +163,9 @@
         if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
-        } else if (num % a != 0) {
-          Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
-          return true
+        // } else if (num % a != 0) {
+          // Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
+          // return true
         } else {
           return false
         }
@@ -216,10 +221,12 @@
         let TEL = this.getComState.TEL
         let data = {
           PHONE_NUM: TEL,
-          BIZ_TYPE: '1008', // 购买众邦需要
-          AMOUNT: this.APPLY_AMOUNT
+          BIZ_TYPE: '4', // 购买众邦需要
+          BANK_ACCT_NO: this.BANK_ACCT_NO,
+          BANK_USER_ID: this.BANK_USER_ID
         }
         API.common.apiSendPhoneCode(data, res => {
+          this.MESAGE_TOKEN = res.MESSAGE_TOKEN
           Bus.$emit(BusName.showSendMsg, TEL)
         })
       },
@@ -241,7 +248,7 @@
       polling(res) {
         let data = {
           BIZ_TYPE: '6', // 购买
-          BESHARP_SEQ: res.BESHARP_ORDER_NO
+          BESHARP_SEQ: res.BESHARP_BUY_SEQ
         }
         // 交易轮询
         this.Londing.open({
@@ -304,7 +311,8 @@
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
           PHONE_CODE: this.msgCode,
-          ACCEPT_RISK: '1'
+          PRD_TYPE: this.proDetail.PRD_TYPE_ID + '',
+          MESAGE_TOKEN: this.MESAGE_TOKEN
         }
         console.log(data);
         API.buy.apiBuy(data, (res) => {
@@ -360,6 +368,9 @@
     .buytitleright {
       float: right;
       text-align: right;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       font-size: 0.35rem;
       color: #666;
     }

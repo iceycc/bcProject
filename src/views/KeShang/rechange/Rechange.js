@@ -13,10 +13,13 @@ export default {
     getCode() { // 充值短信
       let data = {
         PHONE_NUM: this.PHONE_NUM,
-        BIZ_TYPE: '1004', // 充值需要
-        AMOUNT: this.APPLY_AMOUNT
+        BIZ_TYPE: '1', // 充值需要
+        BANK_USER_ID: this.BANK_USER_ID,
+        BANK_ACCT_NO: this.BANK_USER_CODE
       }
       API.common.apiSendPhoneCode(data, res => {
+        console.log(res)
+        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
         Bus.$emit(BusName.showSendMsg, this.PHONE_NUM)
       })
     },
@@ -28,9 +31,11 @@ export default {
       // PHONE_CODE	短信验证码
       let data = {
         TYPE: 'API_RECHARGE',
-        PHONE_CODE: this.msgCode,
         APPLY_AMOUNT: this.APPLY_AMOUNT,
-        VRFY_FLAG: '00',// 使用标志位进行判断，1-校验，0不校验： 第1位是否校验短信验证码 第2位是否校验密码。例：00-不校验；10-校验短信；01-校验密码；11-短信和密码都校验
+        PHONE_CODE: this.msgCode,
+        MESAGE_TOKEN: this.MESAGE_TOKEN,
+        BANK_ACCOUNT_NO: this.CARD_NUM,
+        BANK_NAME: this.CARD_BANK_NAME
       }
       API.reChange.apiRecharge(data, res => {
         let params = {
@@ -109,15 +114,17 @@ export default {
     getInfos() {
       // 获取机构名称  机构logo 用于充值提现
       API.safe.apiBandCard({}, res => {
+        console.log(res)
         this.logo = res.BANK_BG_URL
         this.ORG_NAME = res.ORG_NAME
-        this.ACCT_NO = res.CARD_NUM
         this.PHONE_NUM = res.PHONE_NUM
-        this.CARD_BANK_NAME = res.CARD_BANK_NAME;
-        this.CARD_BANK_URL = res.CARD_BANK_URL
-        this.SINGLE_QUOTA = res.SINGLE_QUOTA
-        this.DAY_QUOTA = res.DAY_QUOTA
-        let cardNum = res.CARD_NUM
+        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME;
+        this.BANK_USER_CODE = res.BANK_USER_CODE
+        this.CARD_BANK_URL = res.CARD_LIST[0].CARD_BANK_URL
+        this.DAY_QUOTA = res.CARD_LIST[0].DAY_QUOTA
+        this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
+        this.BANK_USER_ID = res.BANK_USER_ID
+        let cardNum = res.CARD_LIST[0].CARD_NUM
         this.mainBankList.push({
           logo: res.CARD_BANK_URL,
           name: res.CARD_BANK_NAME,
