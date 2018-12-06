@@ -32,8 +32,10 @@ export default {
     // this.checkProductType()
   },
   mounted() {
-    console.log('mounted');
-    this.checkProductType()
+   setTimeout(()=>{
+     console.log('mounted');
+     this.checkProductType()
+   },100)
   },
   methods: {
     //  需要判断

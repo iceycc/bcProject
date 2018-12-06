@@ -151,6 +151,10 @@
       return theRequest;
     }
     ;(function (window) {
+      // let _MX_ORG_ID = window.localStorage.getItem('_MX_ORG_ID')
+      // if (!_MX_ORG_ID) {
+      //   window.location.reload()
+      // }
       // base64编码
       let nBase64 = new MyBase64()
       // url
@@ -161,16 +165,19 @@
       if (GetRequestA && GetRequestA.ORG_ID) {
         let ORG_ID = GetRequestA.ORG_ID
         window.sessionStorage.setItem('_MX_ORG_ID', JSON.stringify(ORG_ID))
+      } else if (GetRequestA && GetRequestA.H5URL) {
+        let url = nBase64.decode(GetRequestA.H5URL)
+        setTimeout(() => {
+          H5URL = JSON.parse(url)
+          let ORG_ID = H5URL.ORG_ID + ''
+          FirstLoad = H5URL
+          window.sessionStorage.setItem('_MX_ORG_ID', JSON.stringify(ORG_ID))
+          window.sessionStorage.setItem('_MX_FirstLoad', JSON.stringify(FirstLoad))
+        }, 100)
+      } else {
+        window.sessionStorage.setItem('_MX_FirstLoad', JSON.stringify(FirstLoad))
+        console.log('FirstLoad', FirstLoad);
       }
-
-      if (GetRequestA && GetRequestA.H5URL) {
-        H5URL = JSON.parse(nBase64.decode(GetRequestA.H5URL))
-        let ORG_ID = H5URL.ORG_ID + ''
-        FirstLoad = H5URL
-        window.sessionStorage.setItem('_MX_ORG_ID', JSON.stringify(ORG_ID))
-      }
-      console.log('FirstLoad', FirstLoad);
-      window.sessionStorage.setItem('_MX_FirstLoad', JSON.stringify(FirstLoad))
       window.onload = function () {
         document.documentElement.addEventListener('touchstart', function (event) {
           if (event.touches.length > 1) {
