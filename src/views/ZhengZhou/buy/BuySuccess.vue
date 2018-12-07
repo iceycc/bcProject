@@ -63,6 +63,8 @@
   import Mixins from "@/mixins";
   import Clipboard from 'clipboard'
   import Bus from '@/plugin/bus'
+  // import {WatchApi} from "@/service";
+  import API from "@/service";
 
   export default {
     mixins: [Mixins.StoreMixin],
@@ -77,11 +79,20 @@
     },
     created() {
       this.datas = this.getComState.buyData || {}
+
       this.FromH5Active = this.getComState.FromH5Active
       this.shareHref = this.getComState.ProAndOrgType.H5HREF
     },
     methods: {
       copyHandle() {
+        let porId = this.getComState.goBuy.ID
+        API.watchApi({
+          FUNCTION_ID: 'ACB0G019', // 点位
+          REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
+          FROM_ID: porId,
+          FROM_PR1:3
+        })
+
         let clipboard = new Clipboard('#copybtn')
         clipboard.on('success', (e) => {
           Bus.$emit(BusName.showToast, '复制活动链接成功')
