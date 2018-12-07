@@ -66,7 +66,9 @@
       <span>{{errMsg}}</span>
     </div>
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
-    <button class="tijiao" @click="goNext">下一步</button>
+    <!--<button class="tijiao" @click="goNext">下一步</button>-->
+    <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
+
     <up-select
       @clickBankList="addBankHandle"
       :show="upseletShow"
@@ -79,7 +81,7 @@
         <div class="top">
           <div class="field_row_wrap">
             <p class="field_row_key">
-              请输入郑州银行（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
+              请输入银行卡（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
             </p>
             <div class="field_row_value">
               <pass-word-zhengzhou
@@ -217,6 +219,17 @@
       }
       this.tel = this.callbackInfos.PHONE_NUM || ''
       this.getBankList()
+    },
+    computed: {
+      // data.PHONE_CODE
+       // tel
+      cantNext() {
+        if (this.tel.length ==11 && this.data.CARD_NO && this.data.PHONE_CODE) {
+          return false
+        } else {
+          return true
+        }
+      }
     },
     methods: {
       chooseBankHandle(bank) {
@@ -394,12 +407,17 @@
     background-color: #508CEE;
     border-radius: px2rem(4);
     line-height: 1rem;
-    width: px2rem(255);
+    width: px2rem(335);
     height: px2rem(44);
     margin: px2rem(55) auto px2rem(20);
     text-align: center;
     border: none;
     outline: none;
+
+    &.cantNext {
+      background: #ccc;
+      color: #fff;
+    }
   }
 
   .bank-box {

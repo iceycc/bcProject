@@ -100,7 +100,8 @@
       <div class="IDphotoback"></div>
     </div>
     <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
-    <button class="tijiao" @click="doOpeningFirstFactory">下一步</button>
+    <!--<button class="tijiao" @click="doOpeningFirstFactory">下一步</button>-->
+    <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="doOpeningFirstFactory">下一步</button>
 
     <!--todo 抽离开户页面的文档组件-->
     <p
@@ -133,7 +134,6 @@
           ADDRESS: '', // 地址
           NATION: '', // 民族
           PHONE: '',
-
           memberId: null, // 郑州回显需要的
           phoneNum: null, // 郑州回显需要的
           MEMBER_ID: null,
@@ -177,6 +177,16 @@
     components: {
       JsSelect
     },
+    computed: {
+      // data.PHONE_CODE
+      cantNext() {
+        if (this.data.USER_DUTY) {
+          return false
+        } else {
+          return true
+        }
+      }
+    },
     mixins: [Opening1Mixins],
     created() {
       // 1-获取回显数据
@@ -185,7 +195,7 @@
       // this.getInfos()
     },
     methods: {
-      getInfos(data){
+      getInfos(data) {
         this.suerinfo = data
         // this.suerinfo = this.getComState.openingData
         let suerinfo = this.suerinfo
@@ -203,8 +213,6 @@
           this.data.PHONE = suerinfo.PHONE_NUM
           this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
           this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
-          // this.idCardFanOcr()
-          // this.idCardZhengOcr()
         }
       },
       //获取学历
@@ -254,9 +262,11 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+
     .step-text {
       padding-top: px2rem(7);
     }
+
     .circle {
       flex: 1;
       display: flex;
@@ -265,9 +275,11 @@
 
     .line1, .line2, .line3 {
       position: relative;
+
       img {
         width: .5rem;
       }
+
       &:after {
         display: block;
         position: absolute;
@@ -282,17 +294,20 @@
 
       }
     }
+
     .hui {
       &:after, &.line2:before {
         background: #dee1e3 !important;
       }
 
     }
+
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
+
       &:before {
         display: block;
         position: absolute;
@@ -306,6 +321,7 @@
         overflow: hidden;
       }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -376,6 +392,7 @@
     background-position: .2rem .2rem;
     border-bottom: 1px #E5E5E5 solid;
     display: flex;
+
     .words {
       padding-left: px2rem(20);
     }
@@ -393,6 +410,7 @@
     width: px2rem(126);
     height: px2rem(80);
     border: 1px dotted #eaeaea;
+
     &:after {
       display: inline-block;
       content: '';
@@ -409,12 +427,17 @@
     background-color: #508CEE;
     border-radius: px2rem(4);
     line-height: 1rem;
-    width: px2rem(255);
+    width: px2rem(335);
     height: px2rem(44);
-    margin: px2rem(75) auto px2rem(20);
+    margin: px2rem(55) auto px2rem(20);
     text-align: center;
     border: none;
     outline: none;
+
+    &.cantNext {
+      background: #ccc;
+      color: #fff;
+    }
   }
 
   .Tips {
@@ -467,6 +490,7 @@
     height: 100%;
     background: #fff;
     z-index: 100;
+
     .docs {
       box-sizing: border-box;
       border: none;
@@ -476,6 +500,7 @@
       -webkit-overflow-scrolling: touch;
       padding: 0 .2rem;
     }
+
     .docsself {
       box-sizing: border-box;
       border: none;
@@ -490,6 +515,7 @@
         font-size: px2rem(11) !important;
         color: #000 !important;
       }
+
       p {
         font-size: px2rem(9) !important;
         color: #000 !important;
@@ -497,6 +523,7 @@
       }
 
     }
+
     .indocs {
       border: none;
       width: 100%;
@@ -506,6 +533,7 @@
     .btn {
       padding: 0 1rem;
       text-align: center;
+
       button {
         width: 3.5rem;
         margin-right: .4rem;
