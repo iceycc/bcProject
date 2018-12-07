@@ -206,12 +206,13 @@ export default {
           setTimeout(() => {
             this.errMsg = ''
           }, 2000)
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A004', // 点位
-            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          })
+          // API.watchApi({
+          //   FUNCTION_ID: 'ptb0A004', // 点位
+          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          // })
           // Bus.$emit(BusName.showToast, res.MSG)
           if (res.CODE != 0) { // 不是0的话返回
+            this.checkBankStatus()// 如果网络超时
             return
           }
           this.setComState({type: 'openingData', value: res})
@@ -220,17 +221,17 @@ export default {
           })
         },
         err => {
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A004', // 点位
-            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          })
+          // API.watchApi({
+          //   FUNCTION_ID: 'ptb0A004', // 点位
+          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          // })
           this.codeText = '重新发送'
           this.disable = false
           this.errMsg = err
+          this.checkBankStatus()// 如果网络超时
           setTimeout(() => {
             this.errMsg = ''
           }, 2000)
-          console.log(err);
         })
       // this.pollHandle()
     },

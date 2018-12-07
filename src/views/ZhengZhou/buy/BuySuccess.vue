@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-  import {WatchApi} from "@/service";
+  // import {WatchApi} from "@/service";
   import {BusName, PageName} from "@/Constant";
   import Mixins from "@/mixins";
   import Clipboard from 'clipboard'

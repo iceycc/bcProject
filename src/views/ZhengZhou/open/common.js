@@ -3,6 +3,7 @@ import Bus from "@/plugin/bus"
 import {PageName, BusName} from "@/Constant";
 import util from "libs/util";
 import Mixins from "@/mixins";
+let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 
 export default {
   data() {
@@ -13,6 +14,7 @@ export default {
   },
   mixins: [Mixins.HandleMixin],
   methods: {
+    // 判断该用户在本行的开户状态
     // 通过token + orgID 检查在本行开户状态
     checkBankStatus(fn) {
       let data = {}
@@ -26,17 +28,16 @@ export default {
           // （0未提交，1提交第一步，2提交第二步，3提交第三步）
           if (step == 0) {
             // this.$store.commit('SET_OPENING_DATA', res)
-            util.storage.session.set('USERINFO',res)
+            Bus.$emit(BusName.showToast, MsgText, 3000)
             this.$router.push({name: PageName.Opening1})
           }
           if (step == 1) {
+            Bus.$emit(BusName.showToast, '银行实名成功')
             // this.$store.commit('SET_OPENING_DATA', res)
-            util.storage.session.set('USERINFO',res)
             this.$router.push({name: PageName.Opening2})
           }
           if (step == 2) {
             // this.$store.commit('SET_OPENING_DATA', res)
-            util.storage.session.set('USERINFO',res)
             this.$router.push({name: PageName.Opening3})
           }
           if (step == 3) {
@@ -51,10 +52,9 @@ export default {
     /**
      * 通过身份证  注册回显是否成功
      */
-    checkID(fn) {
+    checkID(idCard) {
       // let data = {
-      //   ORG_ID:'49',
-      //   ID_NUMBER:this.data.USER_CARD_ID,
+      //   ID_NUMBER:idCard,
       // }
       // API.open.apiGetUserLastCompleteStep(data,res=>{
       //   let step = res.LAST_STEP_NUM
@@ -63,43 +63,15 @@ export default {
       //   console.log('步数 >>>', step);
       //   if (step == 0) {
       //     // Bus.$emit(BusName.showToast,"欢迎注册")
-      //     fn && fn(REQ_SERIAL, step)
       //   }
       //   if (step == 1) { //
       //     // fn && fn(REQ_SERIAL, step, PHONE_NUM)
-      //     this.$router.push({
-      //       name: PageName.Opening2,
-      //       query: {
-      //         REQ_SERIAL: REQ_SERIAL,
-      //         LAST_STEP_NUM: step,
-      //         PHONE_NUM: PHONE_NUM
-      //       },
-      //       params: {
-      //         data: this.data,
-      //       }
-      //     })
       //   }
       //   if (step == 2) { // 跳转设置密码页
-      //     Bus.$emit(BusName.showToast, "您已经实名成功")
-      //     setTimeout(() => {
-      //       this.$router.push({
-      //         name: PageName.Opening3,
-      //         params: {
-      //           step
-      //         },
-      //         query: {
-      //           REQ_SERIAL: REQ_SERIAL
-      //         }
-      //       })
-      //     }, 600)
+      //
       //   }
       //   if (step == 3) {
-      //     Bus.$emit(BusName.showToast, "您已经开户成功")
-      //     setTimeout(() => {
-      //       this.$router.push({
-      //         name: PageName.Login,
-      //       })
-      //     }, 1000)
+      //
       //   }
       // })
     },

@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-  import {WatchApi} from "@/service";
+  // import {WatchApi} from "@/service";
   import Clipboard from 'clipboard'
   import Bus from '@/plugin/bus'
   import {BusName, PageName} from "@/Constant";
