@@ -211,10 +211,6 @@ export default {
           //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
           // })
           // Bus.$emit(BusName.showToast, res.MSG)
-          if (res.CODE != 0) { // 不是0的话返回
-            this.checkBankStatus()// 如果网络超时
-            return
-          }
           this.setComState({type: 'openingData', value: res})
           this.$router.push({
             name: PageName.Opening3,
