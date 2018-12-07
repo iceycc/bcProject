@@ -180,7 +180,6 @@ export default {
     // 判断该用户在本行的状态
     checkBankOpenAndLogin() {
       let data = {
-        IS_RET_GRADE: '2'
       }
       API.common.apiQryLoginStatus(data, res => {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK

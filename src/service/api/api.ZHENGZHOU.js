@@ -28,7 +28,10 @@ export default {
     apiQryLoginStatus(params, success, error) {
       let options = {
         url: '/openapi/comm/apiQryLoginStatus',
-        params ,
+        params: {
+          IS_RET_GRADE: '2',
+            ...params
+        },
       }
       return http.post(options, Config.config, success, error)
     },
