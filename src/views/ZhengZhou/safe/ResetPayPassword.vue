@@ -195,7 +195,7 @@
       color: #858E9F;
     }
     .field_row_wrap {
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid #e5e5e5;
       .field_row_key {
         display: flex;
         height: px2rem(56);
@@ -213,10 +213,10 @@
         }
       }
     }
-
   }
 
   .btn {
+    margin-top: px2rem(40);
     text-align: center;
     button {
       width: px2rem(255);
