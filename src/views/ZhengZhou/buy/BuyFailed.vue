@@ -32,11 +32,12 @@
   </div>
 </template>
 <script>
-  import {WatchApi} from "@/service";
+  // import {WatchApi} from "@/service";
   import Clipboard from 'clipboard'
   import Bus from '@/plugin/bus'
   import {BusName, PageName} from "@/Constant";
   // import util from "libs/util";
+  import API from "@/service";
 
 
   export default {
@@ -44,17 +45,24 @@
       this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
       this.FromH5Active = this.getComState.FromH5Active || false
       this.shareHref = this.getComState.ProAndOrgType.H5HREF
+
     },
     data() {
       return {
         errMsg: '',
-        FromH5Active:false,
-        shareHref:'',
-        copyShow:false
+        FromH5Active: false,
+        shareHref: '',
+        copyShow: false
       }
     },
     methods: {
       copyHandle() {
+        // let porId = this.getComState.goBuy.ID
+        // API.watchApi({
+        //   FUNCTION_ID: 'ACB0G019', // 点位
+        //   REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
+        //   FROM_ID: porId
+        // })
         let clipboard = new Clipboard('#copybtn')
         clipboard.on('success', (e) => {
           Bus.$emit(BusName.showToast, '复制活动链接成功')
@@ -64,17 +72,17 @@
           Bus.$emit(BusName.showToast, '浏览器不支持自动复制，请手动复制')
         })
       },
-      share(){
+      share() {
         this.copyShow = true
       },
-      goMyAssets(){
-        this.$router.push({name:PageName.FinancialProducts})
+      goMyAssets() {
+        this.$router.push({name: PageName.FinancialProducts})
       },
-      goBuyOther(){
-        if(this.FromH5Active){
+      goBuyOther() {
+        if (this.FromH5Active) {
           let href = this.getComState.ProAndOrgType.H5HREF
           window.location.href = href
-        }else {
+        } else {
           this.$router.push({name: PageName.ProductList})
         }
       }
@@ -84,6 +92,7 @@
 
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
+
   .app {
     width: 100%;
     margin: 0 auto;
@@ -102,9 +111,10 @@
     margin-top: 1rem;
   }
 
-  .btn{
+  .btn {
     margin-top: px2rem(60);
     text-align: center;
+
     .begain {
       margin: 0 px2rem(5);
       display: inline-block;
@@ -120,6 +130,7 @@
       outline: none;
     }
   }
+
   .share {
     padding-top: px2rem(20);
     text-align: center;
@@ -163,6 +174,7 @@
       line-height: px2rem(30);
       text-align: center;
     }
+
     input {
       height: px2rem(40);
       overflow-x: scroll;

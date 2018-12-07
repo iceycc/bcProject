@@ -23,7 +23,10 @@
           <div class="t-query" @click="query">查询</div>
         </div>
         <p class="t-text" v-show="3==nowIndex">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
-
+        <div class="no-data" v-if="listdata.length == 0">
+          <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
+          <p class="infos">暂时没数据</p>
+        </div>
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">
@@ -330,6 +333,17 @@
 
   .t-tab {
     position: relative;
+    .no-data{
+      width: 100%;
+      img{
+        width: 100%;
+      }
+    }
+    .infos{
+      text-align: center;
+      font-size: px2rem(16);
+      color: #1badff;
+    }
     ul.tabs {
       position: relative;
       display: flex;
