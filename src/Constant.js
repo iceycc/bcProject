@@ -172,6 +172,18 @@ export const ORG_ID_NUM = {
   ZhengZhou: '49',
   ZhongBang: '227'
 }
+/**
+ *  外部参数默认设置
+ */
+export const PRO_PARAMS = {
+  DEVICE_ID:'001002003',
+  CHANNEL_ID: '91',
+  APP_FLAG: 'BC'
+}
+
+
+
+
 
 export const CheckBank = function (val) {
   let arr = []
