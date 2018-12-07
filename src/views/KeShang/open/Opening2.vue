@@ -10,7 +10,7 @@
       </section>
       <section class="circle right">
                  <span class="line2 hui">
-                    <img :src='stepImg' alt="">
+                    <img :src='stepImg2' alt="">
                 </span>
         <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
       </section>
@@ -19,15 +19,25 @@
     <div class="opening_box">
 
       <section class="bank">
-        <span style="padding-right: 0px" class="left-p">选择银行</span>
+        <!--<span style="padding-right: 0px" class="left-p">选择银行</span>-->
         <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
-        <!-- <span  class="limit">银行限额</span>  -->
-        <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
-                     title="银行列表"></Bank-select>
-
+        <!--<span  class="limit">银行限额</span>-->
+        <!--<Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"-->
+        <!--title="银行列表" xiane="false"></Bank-select>-->
+      </section>
+      <section class="input-box">
+        <p class="left-p"> 选择银行</p>
+        <!--@input="checkBankName(data.CARD_NO)"-->
+        <span class="input">
+          {{bankText}}
+        </span>
+        <img @click="showBindBankList" src="@/assets/images/GroupCopy14@2x.png" alt="" class="img">
+        <!--<input type="number"-->
+        <!--name="backname"  v-model="bankText">-->
       </section>
       <section class="input-box">
         <p class="left-p"> 绑定卡卡号</p>
+        <!--@input="checkBankName(data.CARD_NO)"-->
         <input type="number"
                @blur="checkBankName(data.CARD_NO)"
                name="backname" placeholder="请输入储蓄卡卡号" v-model="data.CARD_NO">
@@ -50,7 +60,63 @@
       <span>{{errMsg}}</span>
     </div>
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
-    <button class="tijiao" @click="goNext">下一步</button>
+    <!--<button class="tijiao" @click="goNext">下一步</button>-->
+    <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
+
+    <up-select
+      @clickBankList="addBankHandle"
+      :show="upseletShow"
+      :BankList="mainBankList"
+      @chooseBank="chooseBankHandle"
+    ></up-select>
+    <div v-if="ZhengZhouPass" class="bgbox">
+      <!--郑州-->
+      <div class="passbox">
+        <div class="top">
+          <div class="field_row_wrap">
+            <p class="field_row_key">
+              请输入银行卡（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
+            </p>
+            <div class="field_row_value">
+              <pass-word-zhengzhou
+                BankCardPass="bank-passCCCC"
+              ></pass-word-zhengzhou>
+            </div>
+            <p class="info">密码为6位数字</p>
+          </div>
+
+        </div>
+        <div class="btn">
+          <button @click="cancel">取消</button>
+          <button @click="subumit">提交</button>
+        </div>
+      </div>
+    </div>
+    <div class="jsSelect" v-show="show">
+      <section class="select-box">
+        <i class="close" @click="show=false"><img :src="closeImg" alt=""></i>
+        <p class="title">{{title}}</p>
+        <section class="scroll-view">
+          <section :id="key" class="bank-class" v-for="bankIndex,key,index in IndexObj" :key="index">
+            <p class="bank-index">{{key}}</p>
+            <ul class="select">
+              <li
+                @click="select(item.name,item)"
+                :class="{'option':true,'active':item.name==selectValue}"
+                v-for="item,index in bankIndex"
+                :key="index">
+                <img :src="item.src" alt="" class="banklogo">
+                <span class="text">{{item.name}}</span>
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section class="right-index">
+                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr"
+                          :key="index"> {{item}}</span>
+        </section>
+      </section>
+    </div>
   </div>
 </template>
 <script>
@@ -59,12 +125,27 @@
   import BankSelect from '@/components/commons/BankSelect'
   import Opening2Mixins from './Opening2'
   import util from "../../../libs/util";
-
+  import UpSelect from '@/components/commons/UpSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
 
+  const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
   export default {
     data() {
       return {
+        show: false,
+        upseletShow: false,
+        title: '选择银行卡',
+        mainBankList: [
+          {
+            logo: '',
+            name: '民生银行',
+            dayNum: '100',
+            oneNum: '100',
+            id: 1,
+            bankNo: "6217710708484514"
+          }
+        ],
         data: {
           CARD_NO: '', // 银行卡号 6214830182284272  6217730711297810
           HAS_BAND: '0', // 是否绑定过
@@ -88,12 +169,20 @@
         AllBankListObj: {},
         errMsg: '',
         checkBankName1: false,
-        callbackInfos: {}
+        callbackInfos: {},
+
+        closeImg: require('@/assets/images/icon_ask_close.svg'),
+        titleSelect: false,
+        selectValue: 1,
+        IndexObj: {},
+        indexArr: Letter,
+        backShow: false
       }
     },
     mixins: [Opening2Mixins],
     components: {
       BankSelect,
+      UpSelect,
       PassWordZhengzhou
     },
     watch: {
@@ -103,9 +192,6 @@
           this.tel = n.toString().substr(0, 11)
         }
       },
-      bankText(n, o) {
-        this.checkBankName(this.data.CARD_NO)
-      }
     },
     filters: {
       telFlter(n) {
@@ -115,49 +201,81 @@
       }
     },
     created() {
-      // if (this.$route.name !== PageName.Opening1) {
-      //   this.checkBankStatus()
-      // }
+      // this.checkBankStatus(() => {
+      //
+      // })
+      this.getBankList()
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
-      if(this.callbackInfos.hasCardList.length > 0){
-        this.tel = this.callbackInfos.hasCardList[0].PHONE_NUM
-        this.bankText = this.callbackInfos.hasCardList[0].BANK_NAME
+      if (this.callbackInfos.hasCardList.length > 0) {
         this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
+        this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
+        this.mainBankList = this.callbackInfos.hasCardList
+        this.tel =  this.callbackInfos.hasCardList[0].PHONE_NUM
       }
-      this.getBankList()
+    },
+    computed: {
+      // data.PHONE_CODE
+      // tel
+      cantNext() {
+        if (this.tel.length == 11 && this.data.CARD_NO && this.data.PHONE_CODE) {
+          return false
+        } else {
+          return true
+        }
+      }
     },
     methods: {
+      chooseBankHandle(bank) {
+        this.bankText = bank.OPEN_BANK
+        this.data.CARD_NO = bank.CARD_NO
+      },
+      showBindBankList() {
+        this.upseletShow = !this.upseletShow
+        Bus.$emit('showBankList', true)
+      },
+      addBankHandle() {
+        // this.showBindBankList()
+        this.showBankList()
+      },
       checkBankName(val) {
         this.checkBankName1 = false
         // this.checkBankType()
         val = val.replace(/\s+/g, "")
         let bankName
-        for (var i = 3; i < 8; i++) {
+        for (let i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
             this.bankText = bankName
             console.log('bankName', bankName);
             break
           }
         }
+        console.log(this.bankText);
       },
       checkBankNo(val) {
         // 查询银行账户类型
         // this.checkBankType && this.checkBankType()
         val = val.toString()
-        let reg = /\d{15}|\d{19}/
-        console.log(!reg.test(val));
+        // let reg = /\d{15}|\d{19}/
+        // console.log(!reg.test(val));
         if (val == '') {
           Bus.$emit(BusName.showToast, '银行卡号不能为空')
           return true
-        }
-        else if (val.length < 15 || val.length > 19) {
+        } else if (val.length < 15 || val.length > 19) {
           Bus.$emit(BusName.showToast, '银行卡号格式不正确')
           return true
         } else {
           return false
         }
 
+      },
+      toBank(val) {
+        if (document.getElementById(val)) {
+          document.getElementById(val).scrollIntoView()
+
+        } else {
+          Bus.$emit(BusName.showToast, `没有${val}开头的银行`)
+        }
       },
       machBankName(pin) {
         return this.AllBankListObj[pin]
@@ -170,6 +288,49 @@
       // 下一步
       goNext() {
         this.doOpengingSecond()
+      },
+
+
+      showBankList() {
+        console.log(this.bankList);
+        if (!this.canClick) {
+          return
+        }
+        if (JSON.stringify(this.IndexObj) == '{}') {
+          this.show = true
+          this.IndexObj = this.filterOptions(this.bankList)
+        } else {
+          this.show = true
+        }
+      },
+      filterOptions(arr) {
+        let obj = {}
+        arr.forEach(bank => {
+          if (!obj[bank.Index]) {
+            obj[bank.Index] = [bank]
+          } else {
+            obj[bank.Index].push(bank)
+          }
+        })
+        return obj
+      },
+      select(index, name) {
+        this.titleSelect = true
+        this.show = false
+        this.bankText = name.name
+        // this.$emit('getValue', name)
+        this.selectValue = index
+      },
+      toBank(val) {
+        if (document.getElementById(val)) {
+          document.getElementById(val).scrollIntoView()
+
+        } else {
+          Bus.$emit(BusName.showToast, `没有${val}开头的银行`)
+        }
+      },
+      bankShowHandle() {
+        this.backShow = true
       }
     }
 
@@ -195,11 +356,13 @@
       display: flex;
       font-size: px2rem(14);
     }
+
     .input-box {
       margin: 0 auto;
       width: px2rem(330);
       border-bottom: 1px #E5E5E5 solid;
       display: flex;
+
       .left-p {
         width: px2rem(80) !important;
         box-sizing: border-box;
@@ -208,12 +371,30 @@
         color: #444;
         padding: px2rem(15) 0;
       }
-      input {
+
+      .img {
+        padding-top: px2rem(15);
+        width: px2rem(20);
+        height: px2rem(15);
+      }
+
+      input, .input {
         text-align: left;
         font-size: px2rem(14);
         flex: 1;
         color: #333
       }
+
+      .img {
+        padding-top: px2rem(15);
+        width: px2rem(20);
+        height: px2rem(15);
+      }
+
+      .input {
+        padding-top: px2rem(15);
+      }
+
       button {
         margin-top: px2rem(12);
       }
@@ -227,12 +408,17 @@
     background-color: #508CEE;
     border-radius: px2rem(4);
     line-height: 1rem;
-    width: px2rem(255);
+    width: px2rem(335);
     height: px2rem(44);
     margin: px2rem(55) auto px2rem(20);
     text-align: center;
     border: none;
     outline: none;
+
+    &.cantNext {
+      background: #ccc;
+      color: #fff;
+    }
   }
 
   .bank-box {
@@ -258,29 +444,34 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+
     .step-text {
       padding-top: px2rem(7);
     }
+
     .circle {
       flex: 1;
       display: flex;
       flex-direction: column;
-      &.left{
+
+      &.left {
         text-align: left;
-        padding-left:px2rem(30) ;
+        padding-left: px2rem(30);
       }
 
-      &.right{
+      &.right {
         text-align: right;
-        padding-right:px2rem(30) ;
+        padding-right: px2rem(30);
       }
     }
 
     .line1, .line2, .line3 {
       position: relative;
+
       img {
         width: .5rem;
       }
+
       &:after {
         display: block;
         position: absolute;
@@ -295,12 +486,34 @@
 
       }
     }
+
+    .hui {
+      &:after, &.line2:before {
+        background: #dee1e3 !important;
+      }
+
+    }
+
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
+
+      &:before {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: px2rem(10);
+        transform: translateY(-100%);
+        content: '';
+        width: 45%;
+        background: #92d048;
+        height: .1rem;
+        overflow: hidden;
+      }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -313,6 +526,7 @@
   .msg-err {
     text-align: center;
     margin: px2rem(20) auto 0;
+
     span {
       display: inline-block;
       min-width: px2rem(200);
@@ -326,5 +540,204 @@
     }
   }
 
+  .bgbox {
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, .7);
+    position: absolute;
+    padding-top: px2rem(100);
+    top: 0;
+    left: 0;
 
+    .passbox {
+      background: #fff;
+      width: 80%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    .top {
+      padding: 0.4rem;
+    }
+
+    .field_row_key {
+      font-size: 0.4rem;
+    }
+
+    .title {
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-size: 0.4rem;
+      color: #666;
+      height: .6rem;
+      line-height: .6rem;
+
+      img {
+        vertical-align: top;
+        width: .5rem;
+      }
+    }
+
+    .field_row_wrap {
+      margin-bottom: 0.2rem;
+    }
+
+    .field_row_value {
+      border-radius: px2rem(4);
+      border: 1px solid #DDD;
+      height: px2rem(34);
+      line-height: px2rem(34);
+      padding-left: px2rem(3);
+      margin: 0.2rem 0;
+    }
+
+    .info {
+      font-size: 0.3rem;
+      line-height: 0.6rem;
+      color: #aeaeae;
+    }
+
+    .btn {
+      border-top: 1px solid #efefef;
+      padding: px2rem(14) 0;
+      display: flex;
+
+      button {
+        color: #108EE9;
+        font-size: px2rem(17);
+        margin: 0 .3rem;
+        text-align: center;
+        flex: 1;
+      }
+    }
+  }
+
+  .add-back {
+    /*z-index: 10;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*position: fixed;*/
+    /*width: px2rem(300);*/
+    /*height: px2rem(300);*/
+    /*background: #fff;*/
+    /*.box {*/
+
+    /*}*/
+  }
+
+  .jsSelect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, 0.3);
+    padding: 1rem 0.6rem;
+    box-sizing: border-box;
+    z-index: 3;
+    color: #333
+  }
+
+  .select-box {
+    position: relative;
+    border-radius: 10px;
+    background: #fff;
+    height: 90%;
+    padding: .3rem 0 .6rem;
+
+    .right-index {
+      position: absolute;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+      max-height: 91%;
+      width: 1rem;
+      right: .4rem;
+      top: px2rem(45);
+      text-align: center;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .letter {
+        color: #89afe6;
+        display: block;
+        font-size: px2rem(16);
+        line-height: 1.4;
+      }
+    }
+
+    .title {
+      text-align: center;
+      font-size: .5rem;
+      margin: 0 px2rem(20);
+      border-bottom: 1px solid #dedede;
+    }
+
+    .scroll-view {
+      max-height: 90%;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .option {
+      border-bottom: 1px solid #dedede;
+      font-size: 0;
+      line-height: px2rem(30);
+      height: px2rem(30);
+
+      .text {
+        font-size: .4rem;
+        vertical-align: middle;
+        margin-left: .2rem;
+      }
+
+      .banklogo {
+        width: .6rem;
+        vertical-align: middle;
+      }
+    }
+
+    .active {
+      color: #5db0f9;
+    }
+
+    .close {
+      font-style: normal;
+      position: absolute;
+      top: -0.1rem;
+      right: .3rem;
+      font-weight: bold;
+      color: #ccc;
+      font-size: .6rem;
+      width: px2rem(20);
+      height: px2rem(20);
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+    }
+
+  }
+
+  .activeTitle {
+    color: #333;
+  }
+
+  .bank-class {
+    padding: 0 px2rem(20);
+
+    .bank-index {
+      font-size: .4rem;
+      line-height: 0;
+      padding: px2rem(20) 0 px2rem(10);
+
+    }
+  }
 </style>

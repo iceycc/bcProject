@@ -217,13 +217,11 @@ export default {
      * 获取支持的银行列表
      */
     getBankList() {
-      API.common.apiGetBankCardList({
-      }, res => {
+      API.common.apiGetBankCardList({}, res => {
         let obj = {}
         res.BAND_CARD_LIST.forEach(item => {
           obj[item.BANK_CARD_BIN] = item.BANK_NAME
         })
-        // console.log('bankObj>>>',obj);
         this.AllBankListObj = obj
         this.bankList = res.SUPPORT_BANK_LIST.map((item) => {
           return {
