@@ -43,6 +43,9 @@
         if (type == 'redeem') {
           this.getRedeemAgreementByAjax()
         }
+        if(type == 'privacy') {
+          this.getPrivacyAgreementByAjax()
+        }
       },
       getRedeemAgreementByAjax() {
         // TODO
@@ -73,6 +76,16 @@
         API.doc.electronicAccountAgreement(data, res => {
           this.title = res.AGREEMENT
           this.agreeMentSrc = HOST + res.URL
+        })
+      },
+      getPrivacyAgreementByAjax(){
+        let data = {
+          InterfaceType: "1"
+        }
+        API.bicai.privacyAgreement(data,res => {
+          this.docs = res[0].HTML_TEXT;
+        },err => {
+          console.log(err)
         })
       },
       // getReCha
