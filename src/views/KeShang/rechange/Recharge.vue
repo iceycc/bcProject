@@ -3,21 +3,27 @@
     <app-bar title="充值"></app-bar>
     <div class="rechargetitle">充值到{{ORG_NAME}}</div>
     <div class="minshengbank">
-            <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
-                                                alt=""></span>
-      {{ORG_NAME}}
+      <span class="minshengbankLogo">
+        <img :src="imgSrc + logo" style="width:75%" alt="">
+      </span>
+      <div class="new-add">
+        <p>{{ORG_NAME}}</p>
+        <p>**** **** **** {{BANK_USER_CODE.substr(BANK_USER_CODE.length - 4)}}</p>
+      </div>
+      
     </div>
     <div class="rechargetitle">银行卡</div>
-    <div class="minshengbank"
-         @click="clickBank"
-         style="border-bottom:1px solid #EEEEF0">
-            <span class="minshengbankLogo" style=" padding-top: 10px;">
-              <img :src="imgSrc + CARD_BANK_URL" style="width:75%" alt="">
-            </span>
-      {{CARD_BANK_NAME}}
+    <div class="minshengbank" @click="clickBank" style="border-bottom:1px solid #EEEEF0">
+      <span class="minshengbankLogo">
+        <img :src="imgSrc + CARD_BANK_URL" style="width:75%" alt="">
+      </span>
+      <div class="new-add">
+        <p>{{CARD_BANK_NAME}}</p>
+        <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
+      </div>
     </div>
     <div class="money">
-      <p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p>
+      <!-- <p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p> -->
       <p>每日限额：{{DAY_QUOTA | formatNum}}元</p>
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
@@ -76,12 +82,15 @@
         agree1: true, // 是否获取短信
         agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
         ORG_NAME: '',
+        CARD_NUM: '', //一类户卡号
+        BANK_USER_CODE: '', //二类户卡号
+        BANK_USER_ID: '', //银行用户ID
+        MESAGE_TOKEN: '', //短信验证码标识
         imgSrc: imgSrc,
         logo: '',
         CARD_BANK_NAME: '',
         CARD_BANK_URL: '',
         DAY_QUOTA: '0.00', // 单日限额
-        SINGLE_QUOTA: '0.00',// 单笔限额
         msgCode: '',
         codeText: '获取验证码',
         disable: false,
@@ -123,8 +132,8 @@
       },
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
+          Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }
         if (!this.agree) {
@@ -156,15 +165,15 @@
         this.page = false
       },
       checkMoney() {
-        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
+          Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
         }
       },
       doNext() {
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每笔限额规定，请调整充值金额')
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
+          Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }
         this.doReCange()
@@ -194,8 +203,15 @@
   .minshengbank {
     padding-left: 0.5rem;
     height: 1.8rem;
-    line-height: 60px;
     font-size: 0.5rem;
+    display: flex;
+    align-items: center;
+    .new-add {
+      font-size: px2rem(16);
+      p:last-child {
+        color: #9199A1;
+      }
+    }
   }
 
   .money {
@@ -282,12 +298,7 @@
   }
 
   .minshengbankLogo {
-    line-height: 100%;
-    display: inline-block;
-    height: 60%;
-    width: 50px;
-    float: left;
-    padding-top: 0.4rem;
+    width: px2rem(50);
   }
 
   .page {

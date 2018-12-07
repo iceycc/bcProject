@@ -2,7 +2,7 @@
   <div>
     <app-bar title="支取"></app-bar>
     <div class="r-top">
-      <img :src="imgSrc+redeemData.LOGO_URL" alt="">
+      <img :src="imgSrc + redeemData.LOGO_URL" alt="">
       <div>
         <!--<p>{{redeemData.ORG_NAME}}</p>-->
         <p>{{redeemData.PRD_NAME}}</p>
@@ -74,7 +74,10 @@
         EFFCT_INTEREST_RATE: '',
         passCode: '',
         len: '',
-        pass: ''
+        pass: '',
+        MESSAGE_TOKEN: '',
+        BANK_ACCT_NO: '', //电子账户
+        BANK_USER_ID: '' //银行用户ID
       }
     },
     computed: {
@@ -104,11 +107,18 @@
     },
     created() {
       this.redeemData = this.getComState.redeemData
+      this.getInfo();
     },
     components: {
       PassWordZhengzhou
     },
     methods: {
+      getInfo(){
+        API.safe.apiBandCard({}, res => {
+          this.BANK_ACCT_NO = res.CARD_LIST[0].CARD_NUM
+          this.BANK_USER_ID = res.BANK_USER_ID
+        })
+      },
       clearNumHandle() {
         this.money = ''
       },
@@ -154,6 +164,7 @@
           // TYPE	请求类型
           // ORG_ID	机构ID
           // ORDER_NO	订单单号
+          TYPE: 'API_INTEREST_CALCULATION',
           ORDER_NO: this.redeemData.ORDER_NUM,
           DRAW_AMOUNT: this.money // 	支取金额
 
@@ -190,10 +201,12 @@
         let PHONE_NUM = this.getComState.TEL
         let data = {
           PHONE_NUM: PHONE_NUM,
-          BIZ_TYPE: '1009', // 需要
-          AMOUNT: this.money
+          BIZ_TYPE: '6', // 需要
+          BANK_ACCT_NO: this.BANK_ACCT_NO,
+          BANK_USER_ID: this.BANK_USER_ID
         }
         API.common.apiSendPhoneCode(data, res => {
+          this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
           Bus.$emit(BusName.showSendMsg, PHONE_NUM)
         })
       },
@@ -233,12 +246,14 @@
           return
         }
         let data = {
+          TYPE: 'API_REDEMPTION',
           // PHONE_CODE	短信验证码
           PHONE_CODE: this.PHONE_CODE,
           PRD_ID: this.redeemData.PRD_INDEX_ID,//	产品ID
           APPLY_AMOUNT: this.money, //	金额
           PRD_TYPE: this.redeemData.PRD_TYPE,//产品类型
-          ORDER_NUM: this.redeemData.ORDER_NUM
+          ORDER_NUM: this.redeemData.ORDER_NUM,
+          MESSAGE_TOKEN: this.MESSAGE_TOKEN
         }
         API.redeem.apiRedemption(data, res => {
           let params = {

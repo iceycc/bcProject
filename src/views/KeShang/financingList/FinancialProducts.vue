@@ -6,13 +6,13 @@
       <div class="f-box">
         <div class="profit">
           <div>
-            <p>{{financialData.TOTAL_ASSET -financialData.ACC_REST | formatNum}}</p>
+            <p>{{financialData.TOTAL_ASSET - financialData.ACC_REST | formatNum}}</p>
             <p>总资产</p>
           </div>
           <span class="line"></span>
           <div>
-            <p>{{financialData.TOTAL_INCOME>=0 ? '+':''}}{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p>昨日收益</p>
+            <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+            <p>预计收益</p>
           </div>
         </div>
       </div>
@@ -42,19 +42,19 @@
                 <p>本金
                   <span>{{item.INVEST_AMOUNT}}</span>
                 </p>
-                <p>利率
+                <p>存款利率
                   <span>{{item.RATE}}%</span>
                 </p>
-                <p>购买天数
+                <!-- <p>存入天数
                   <span>{{item.ACTUAL_DATE_NUM}}天</span>
-                </p>
+                </p> -->
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
                   <div>
-                    <span @click="goRedeem(item)">支取</span>
+                    <span @click="goRedeem(item)">提前支取</span>
                   </div>
                   <div>
-                    <span @click="goBuy(item)">继续购买</span>
+                    <span @click="goBuy(item)">再次存入</span>
                   </div>
                 </div>
               </div>
@@ -130,18 +130,7 @@
           pageNo: "1",
           pageSize: "10"
         },
-        pageList: [
-          // {
-          //   PRD_NAME:'测试产品1',
-          //   ORG_NAME:'郑州银行',
-          //   INVEST_AMOUNT:'0.00',
-          //   RATE:'0',
-          //   YQ_INCOME_AMOUNT:'0.00',
-          //   OVER_DATE:'0',
-          //   PRD_INDEX_ID:'0'
-          // }
-        ],
-        tabsParam: ["持有中", "已结束"], //（这个也可以用对象key，value来实现）
+        tabsParam: ["持有中", "已支取"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
           ACC_REST: '0.00',
@@ -250,16 +239,18 @@
           });
         } else {
           // //持有数据
-          // let data = {
-          //   currentPage: this.searchCondition.pageNo - 1,
-          //   PRD_TYPE: "4"
-          // };
+          let data = {
+            currentPage: this.searchCondition.pageNo - 1 + '',
+            PRD_TYPE: "4",
+            DEPOSIT_TYPE_ID: "4"
+          };
           API.bank.apiQryHoldInfo(data, res => {
             if (!res.PAGE) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
               return
             }
+            console.log(res)
             this.pageList = res.PAGE.retList;
             // this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -304,8 +295,9 @@
           this.searchCondition.pageNo =
             "" + (parseInt(this.searchCondition.pageNo) + 1);
           let data = {
-            currentPage: this.searchCondition.pageNo,
-            PRD_TYPE: "2"
+            currentPage: this.searchCondition.pageNo - 1 + '',
+            PRD_TYPE: "4",
+            DEPOSIT_TYPE_ID: "4"
           };
           API.bank.apiQryHoldInfo(data, res => {
             if (!res.PAGE) {

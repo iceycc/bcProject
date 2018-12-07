@@ -13,11 +13,10 @@ export default {
       //   this.bankDetail = res
       // })
       let data = {
-        TYPE:'API_QRY_INCOM_HIS',
+        TYPE:'API_QRY_HOLD_INFO',
         currentPage:'1',
         PRD_TYPE:'4',
-        DEPOSIT_TYPE_ID:'1',
-        FUN_NO:'1',
+        DEPOSIT_TYPE_ID:'4',
       };
       //
       API.bank.apiQryHoldInfo(data, res => {
@@ -37,7 +36,7 @@ export default {
     },
     getBankDetail() { // 获取产品列表
       let data = {
-        TYPE:'API_QRY_ASSET'
+        TYPE:'API_MY_ASSET_BY_ORG'
       }
       API.bank.apiQryAsset(data, (res) => {
         this.bankDetail = res
