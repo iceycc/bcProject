@@ -13,7 +13,7 @@
       <!--BindingBank-->
       <section v-if="DOM_SHOW.BindingBank" class="more" @click="goPage(toPageName.BindingBank)">
              <span class="more-left">
-                        银行卡管理</span>
+                        绑定银行卡管理</span>
         <span class="more-right">
                     已绑定{{CARD_BANK_NAME}}
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
@@ -48,9 +48,10 @@
 
 <script>
   import IconFont from '@/components/commons/IconFont'
-  import API from "@/service";
   import {LsName, PageName} from "@/Constant";
-  import util from "libs/util";
+  import {BusName} from "../../../Constant";
+  import Bus from '@/plugin/bus'
+  import API from "@/service";
 
 
   export default {
@@ -113,10 +114,16 @@
     },
     methods: {
       getBankInfo() {
-        let OldBankInfo = this.getComState.Infos.hasCardList[0]
-        this.CARD_BANK_NAME = OldBankInfo.BANK_NAME
+        API.safe.apiBandCard({},res=>{
+          let OldBankInfo = res.CARD_LIST[0]
+          this.CARD_BANK_NAME = OldBankInfo.CARD_BANK_NAME
+        })
+        // let OldBankInfo = this.getComState.Infos.hasCardList[0]
+        // this.CARD_BANK_NAME = OldBankInfo.BANK_NAME
       },
       goPage(pageName) {
+        Bus.$emit(BusName.showToast,'暂不支持')
+        return
         let data = {}
         console.log(pageName);
         if (pageName == PageName.FengxianResult) {

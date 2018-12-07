@@ -33,7 +33,8 @@
     },
     methods: {
       goMyAssets(){
-        this.$router.push({name:PageName.FinancialProducts})
+
+        this.$router.push({name:PageName.Buying})
       },
       goBuyOther(){
         this.$router.push({name:PageName.ProductList})

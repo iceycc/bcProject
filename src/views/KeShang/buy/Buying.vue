@@ -63,7 +63,7 @@
       return {
         proDetail: {},
         APPLY_AMOUNT: null,
-        payNum: '1000',
+        payNum: '0',
         agree: true,
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
@@ -98,8 +98,9 @@
     mixins: [Mixins.StoreMixin],
     created() {
       this.getInfo()
-      // this.getProData(17897)
+
       // todo测试用
+      // this.getProData(17897)
       this.proDetail = this.getComState.goBuy // 数据
       // console.log(this.proDetail);
     },

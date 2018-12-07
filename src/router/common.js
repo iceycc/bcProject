@@ -4,7 +4,7 @@ export default [
   {
     path: '/',
     redirect: {
-      path: PageName.BankAccount
+      path: PageName.ProductList
     }
   },
   /**

@@ -19,7 +19,7 @@
         </section>
       </section>
     </section>
-    <div class="add-card" @click="sheetVisible = true">添加银行卡</div>
+    <div class="add-card" @click="addBank">添加银行卡</div>
     <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
   </div>
 </template>
@@ -29,6 +29,7 @@
   import API from '@/service'
   import {imgSrc} from "@/Constant";
   import { Actionsheet } from 'mint-ui';
+  import {BusName} from "../../../Constant";
   Vue.component(Actionsheet.name, Actionsheet);
   export default {
     name: "BindingBank",
@@ -54,6 +55,10 @@
       this.getBankList()
     },
     methods: {
+      addBank(){
+        // Bus.$emit(BusName.showToast,'')
+        this.sheetVisible = true
+      },
       getBankList() {
         let data = {}
         API.bank.apiBandCard(data, res => {

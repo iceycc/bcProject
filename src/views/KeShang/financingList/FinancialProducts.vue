@@ -171,6 +171,8 @@
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
       },
       goRedeem(data) {
+        Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
+        return
         this.setComState({
           type: 'redeemData',
           value: data
@@ -178,6 +180,10 @@
         this.$router.push({name: PageName.Redeem})
       },
       toggleTabs(index) {
+        // TODO
+        if(index==1){
+          return
+        }
         this.pageList = []
         this.nowIndex = index;
         this.loadPageList();

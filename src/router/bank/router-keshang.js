@@ -289,6 +289,6 @@ export default [
     path: '/' + PageName.BindingBank,
     name: PageName.BindingBank,
     component: resolve => require(['views/KeShang/safe/BindingBank.vue'], resolve),
-    meta: {keepAlive: false, title: '支取', needLogin: false}
+    meta: {keepAlive: false, title: '绑定银行卡', needLogin: false}
   }
 ]

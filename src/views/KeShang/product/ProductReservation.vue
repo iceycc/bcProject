@@ -6,16 +6,16 @@
         <div class="bannercontent">
           <div class="bannertop">
             <div class="bannertopleft">
-              <p class="p-text" style="font-size: 0.4rem;">支取利率</p>
+              <p class="p-text" style="font-size: 0.4rem;">利率</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
+                <strong style="font-size: 1rem"> {{productDetail.RATE | fromatMoneyFilter}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
             <div class="bannertopright">
               <p class="p-text" style="font-size: 0.4rem;text-align: left;padding-left: .3rem">期限</p>
               <p>
-                <strong style="font-size: 0.9rem;text-align: left;padding-left: 0.1rem"> 随时支取 </strong>
+                <strong style="font-size: 0.9rem;text-align: left;padding-left: 0.1rem"> 28天-3年 </strong>
               </p>
             </div>
           </div>
@@ -70,27 +70,31 @@
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">活期存款</span>
+          <span class="bannercontenttitlecontent">智能存款</span>
+        </div>
+        <div class="bannercontent">
+          <span class="bannercontenttitle">锁定期</span>
+          <span class="bannercontenttitlecontent">28天</span>
         </div>
       </div>
-      <!--<div class="wrapicon">-->
-      <!--<div class="circle left">-->
-      <!--<span>{{productDetail.COLLECT_START_DATE}}</span>-->
-      <!--<strong>募集开始</strong>-->
-      <!--</div>-->
-      <!--<div class="circle">-->
-      <!--<span>{{productDetail.COLLECT_END_DATE}}</span>-->
-      <!--<strong>募集结束</strong>-->
-      <!--</div>-->
-      <!--<div class="circle">-->
-      <!--<span>{{productDetail.VALUE_DATE}}</span>-->
-      <!--<strong>起息日</strong>-->
-      <!--</div>-->
-      <!--<div class="circle right">-->
-      <!--<span>{{productDetail.FIN_END_DATE}}</span>-->
-      <!--<strong>到期</strong>-->
-      <!--</div>-->
-      <!--</div>-->
+      <div class="wrapicon">
+        <p>交易步骤</p>
+        <div class="line">
+          <img class="number" src="@/assets/images/1copy13@2x.png" alt="">
+          <img class="arrow" src="@/assets/images/arowcopy13.png" alt="">
+          <img class="number" src="@/assets/images/2copy13@2x.png" alt="">
+          <img class="arrow" src="@/assets/images/arowcopy13.png" alt="">
+          <img class="number" src="@/assets/images/3copy13@2x.png" alt="">
+          <img class="arrow" src="@/assets/images/arowcopy13.png" alt="">
+          <img class="number" src="@/assets/images/4copy13@2x.png" alt="">
+        </div>
+        <div class="text">
+          <span>点击安全购买</span>
+          <span>直销银行开户</span>
+          <span>直销银行购买</span>
+          <span>购买完成</span>
+        </div>
+      </div>
       <div class="contentmain contenttop">
         <div class="contentmaintop">
           直销银行说明
@@ -217,7 +221,8 @@
     created() {
       this.title = this.$route.query.title;
       this.proID = this.$route.query.PRO_ID;
-      this.getData(this.proID);
+      // this.getData(this.proID);
+      this.getData(17897);
     },
     directives: {
       focus: { // 自定义事件
@@ -478,29 +483,28 @@
     height: 85%;
     margin-left: 5%;
     padding-top: 5%;
-
+    .bannertop {
+      box-sizing: border-box;
+      padding-top: 0.6rem;
+      width: 100%;
+      height: 75%;
+      border-bottom: 1px solid rgba(255, 255, 255, .5);
+    }
+     .bannertopleft {
+      display: inline-block;
+      width: 50%;
+      color: #fff;
+    }
+    .bannertopright {
+      display: inline-block;
+      width: 48%;
+      color: #fff;
+      text-align: center;
+    }
   }
 
-  .banner .bannercontent .bannertop {
-    box-sizing: border-box;
-    padding-top: 0.6rem;
-    width: 100%;
-    height: 75%;
-    border-bottom: 1px solid rgba(255, 255, 255, .5);
-  }
 
-  .banner .bannercontent .bannertop .bannertopleft {
-    display: inline-block;
-    width: 50%;
-    color: #fff;
-  }
 
-  .banner .bannercontent .bannertop .bannertopright {
-    display: inline-block;
-    width: 48%;
-    color: #fff;
-    text-align: center;
-  }
 
   .banner .bannercontent .bannerbottom {
     margin-top: 0.2rem;
@@ -671,71 +675,38 @@
     font-size: 0.4rem;
 
   }
-
-  .circle {
-    position: relative;
-    z-index: 2;
-    width: 0.3rem;
-    height: 0.3rem;
-    border-radius: 50%;
-    border: 0.07rem solid #2B74FE;;
-    box-sizing: border-box;
-    background: radial-gradient(#fff 50%, #fff 50%);
-    white-space: nowrap;
-    &.left {
-      margin-left: px2rem(5);
-
-    }
-    &.right {
-      margin-right: px2rem(5);
-
-    }
-  }
-
   .wrapicon {
-    position: relative;
-    margin: 0.8rem auto 1.2rem;
-    display: flex;
-    width: px2rem(335);
-    justify-content: space-between;
-    color: #666;
-
-  }
-
-  .wrapicon:before {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    content: '';
-    display: block;
-    width: 100%;
-    height: px2rem(2);
-    background: #2B74FE;;
-  }
-
-  .circle span {
-    position: absolute;
-    left: px2rem(-30);
-    top: 0.5rem;
-    font-size: px2rem(13);
-  }
-
-  .left span {
-    left: px2rem(-15);
-
-  }
-
-  .right span {
-    left: px2rem(-45);
-
-  }
-
-  .circle strong {
-    position: absolute;
-    left: -0.3rem;
-    top: -0.8rem;
-    font-size: 0.4rem;
-
+    p{
+      color: #666;
+      padding-left: px2rem(20);
+      width: 30%;
+      height: px2rem(40);
+      font-size: 0.4rem;
+    }
+    .text{
+      text-align: center;
+      display: flex;
+      padding-top: px2rem(10);
+      span{
+        flex: 1;
+        font-size: px2rem(13);
+        color: #333;
+      }
+    }
+    .line {
+      text-align: center;
+      line-height: px2rem(20);
+      img{
+        vertical-align: middle;
+      }
+      .number {
+        width: px2rem(20);
+        height: px2rem(20);
+      }
+      .arrow{
+        width: px2rem(66);
+      }
+    }
   }
 
   .start {
@@ -758,6 +729,7 @@
     padding: 0 px2rem(20) px2rem(12);
     margin-bottom: px2rem(9);
     border-bottom: px2rem(9) solid #f9fbff;
+
     .input {
       display: inline-block;
       width: 50%;
@@ -767,6 +739,7 @@
       font-size: px2rem(14);
       text-align: right;
     }
+
     input {
       display: inline-block;
       width: 50%;
@@ -782,6 +755,7 @@
       border-bottom: px2rem(1) solid rgba(220, 220, 220, 0.50);
       padding-right: 19px;
       position: relative;
+
       img {
         width: px2rem(14);
         height: px2rem(14);
@@ -790,6 +764,7 @@
         top: px2rem(20);
       }
     }
+
     .calculation-2 {
       span {
         text-align: right;
@@ -798,6 +773,7 @@
         float: right;
         line-height: px2rem(50);
       }
+
       p {
         color: #B3B3B3;
         font-size: px2rem(12);
@@ -810,18 +786,22 @@
   .bank-info {
     float: right;
     width: 65%;
+
     .info-1 {
       font-size: 0.5rem;
     }
+
     .info-2 {
       padding-top: px2rem(3);
       font-size: 0.4rem;
       color: #999999
     }
+
     .info-3 {
       font-size: 0;
       padding-bottom: px2rem(10)
     }
+
     .info-4 {
       line-height: 1.2;
       font-size: 0.4rem;
