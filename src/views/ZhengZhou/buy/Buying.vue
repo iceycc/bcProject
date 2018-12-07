@@ -119,9 +119,13 @@
       this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
       this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
       this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
-
+      let ProAndOrgType = this.getComState.ProAndOrgType || {}
+      if(ProAndOrgType.AMOUNT){
+          this.moneyNum = ProAndOrgType.AMOUNT
+      }
       console.log(proData);
     },
+
     methods: {
       clearNumHandle() {
         this.moneyNum = ''
@@ -240,10 +244,10 @@
           FUN_TYPE: '1', // 基金种类 基金种类 1:货币 2:非货币
           ORDER_TYPE: '1',
 
-          COUPON_ID, // 优惠券ID	非必填  字符型
-          COUPON_DETAIL_ID, // 会员领券记录ID
-          TEAM_ID, //活动ID
-          INVEST_ID // 	投资ID
+          COUPON_ID: COUPON_ID + '', // 优惠券ID	非必填  字符型
+          COUPON_DETAIL_ID: COUPON_DETAIL_ID + '', // 会员领券记录ID
+          TEAM_ID: TEAM_ID + '', //活动ID
+          INVEST_ID: INVEST_ID + '' // 	投资ID
         }
 
         if (util.Check.payPassLen(len, true)) return;
@@ -284,8 +288,7 @@
                   err: result.RES_MSG
                 }
               })
-            }
-            else if ('0' == result.RES_CODE) { // 成功
+            } else if ('0' == result.RES_CODE) { // 成功
               clearInterval(timer)
               Bus.$emit(BusName.showToast, result.RES_MSG);
               this.Londing.close()
@@ -327,9 +330,11 @@
     border-top: 10px solid #F6F6F9;
     border-bottom: 0.5rem solid #F6F6F9;
     display: flex;
+
     .buytitleleft {
       display: inline-block;
       flex: 1;
+
       .buytitleleftimg {
         vertical-align: middle;
         padding-top: 0.2rem;
@@ -337,6 +342,7 @@
         display: inline-block;
 
       }
+
       .buytitleleftcontent {
         vertical-align: middle;
         padding-top: -0.5rem;
@@ -368,6 +374,7 @@
     height: 2.2rem;
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -434,6 +441,7 @@
     border: 0px;
     outline: none;
     display: block;
+
     &.active {
       background: #508CEE;
     }
@@ -463,6 +471,7 @@
     padding-top: 0.7rem;
     top: 0;
     left: 0;
+
     .passbox {
       background: #fff;
       width: 80%;
@@ -470,9 +479,11 @@
       padding: 0.4rem;
       box-sizing: border-box;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -480,14 +491,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: 4px;
       border: 1px solid #9e9e9e;
@@ -495,13 +509,16 @@
       line-height: 0.9rem;
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       display: flex;
+
       button {
         margin: 0 .3rem;
         text-align: center;

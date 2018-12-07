@@ -30,6 +30,164 @@
       -webkit-user-select: auto; /*webkit浏览器*/
     }
   </style>
+  <script>
+    function MyBase64() {
+      // private property
+      _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+      // public method for encoding
+      this.encode = function (input) {
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
+        input = _utf8_encode(input);
+        while (i < input.length) {
+          chr1 = input.charCodeAt(i++);
+          chr2 = input.charCodeAt(i++);
+          chr3 = input.charCodeAt(i++);
+          enc1 = chr1 >> 2;
+          enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+          enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+          enc4 = chr3 & 63;
+          if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+          } else if (isNaN(chr3)) {
+            enc4 = 64;
+          }
+          output = output +
+            _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+            _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+        }
+        return output;
+      }
+
+      // public method for decoding
+      this.decode = function (input) {
+        var output = "";
+        var chr1, chr2, chr3;
+        var enc1, enc2, enc3, enc4;
+        var i = 0;
+        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+        while (i < input.length) {
+          enc1 = _keyStr.indexOf(input.charAt(i++));
+          enc2 = _keyStr.indexOf(input.charAt(i++));
+          enc3 = _keyStr.indexOf(input.charAt(i++));
+          enc4 = _keyStr.indexOf(input.charAt(i++));
+          chr1 = (enc1 << 2) | (enc2 >> 4);
+          chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+          chr3 = ((enc3 & 3) << 6) | enc4;
+          output = output + String.fromCharCode(chr1);
+          if (enc3 != 64) {
+            output = output + String.fromCharCode(chr2);
+          }
+          if (enc4 != 64) {
+            output = output + String.fromCharCode(chr3);
+          }
+        }
+        output = _utf8_decode(output);
+        return output;
+      }
+
+      // private method for UTF-8 encoding
+      _utf8_encode = function (string) {
+        string = string.replace(/\r\n/g, "\n");
+        var utftext = "";
+        for (var n = 0; n < string.length; n++) {
+          var c = string.charCodeAt(n);
+          if (c < 128) {
+            utftext += String.fromCharCode(c);
+          } else if ((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+          } else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+          }
+
+        }
+        return utftext;
+      }
+
+      // private method for UTF-8 decoding
+      _utf8_decode = function (utftext) {
+        var string = "";
+        var i = 0;
+        var c = c1 = c2 = 0;
+        while (i < utftext.length) {
+          c = utftext.charCodeAt(i);
+          if (c < 128) {
+            string += String.fromCharCode(c);
+            i++;
+          } else if ((c > 191) && (c < 224)) {
+            c2 = utftext.charCodeAt(i + 1);
+            string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+            i += 2;
+          } else {
+            c2 = utftext.charCodeAt(i + 1);
+            c3 = utftext.charCodeAt(i + 2);
+            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+            i += 3;
+          }
+        }
+        return string;
+      }
+    }
+
+    function GetRequest() {
+      var url = location.hash.split('?')[1]; //获取url中"?"符后的字串
+      if (url) {
+        url = '?' + url
+      } else {
+        return null
+      }
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        }
+      }
+      return theRequest;
+    }
+    ;(function (window) {
+      // base64编码
+      let nBase64 = new MyBase64()
+      // url
+      let GetRequestA = GetRequest()
+      //
+      let FirstLoad = GetRequestA
+      let H5URL;
+      if (GetRequestA && GetRequestA.ORG_ID) {
+        let ORG_ID = GetRequestA.ORG_ID
+        window.sessionStorage.setItem('_MX_ORG_ID', JSON.stringify(ORG_ID))
+      }
+
+      if (GetRequestA && GetRequestA.H5URL) {
+        H5URL = JSON.parse(nBase64.decode(GetRequestA.H5URL))
+        let ORG_ID = H5URL.ORG_ID + ''
+        FirstLoad = H5URL
+        window.sessionStorage.setItem('_MX_ORG_ID', JSON.stringify(ORG_ID))
+      }
+      console.log('FirstLoad', FirstLoad);
+      window.sessionStorage.setItem('_MX_FirstLoad', JSON.stringify(FirstLoad))
+      window.onload = function () {
+        document.documentElement.addEventListener('touchstart', function (event) {
+          if (event.touches.length > 1) {
+            event.preventDefault();
+          }
+        }, false);
+        var lastTouchEnd = 0;
+        document.documentElement.addEventListener('touchend', function (event) {
+          var now = Date.now();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        }, false);
+      }
+    })(window)
+  </script>
 </head>
 <body>
 <div id="app"></div>
@@ -41,50 +199,7 @@
   src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/login-password-widget.min.js"></script>
 <script src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/password-widget.min.js"></script>
 <script src="https://finsuit.udomedia.com.cn/finsuit/static/finsuit/js/openapi/js/jquery.base64.js"></script>
-
-
 <script src="static/lib/PassInputZhengzhou/pwd.js"></script>
-<script>
-  // 限制双击缩放吧
-  function GetRequest() {
-    var url = location.hash.split('?')[1]; //获取url中"?"符后的字串
-    if (url) {
-      url = '?' + url
-    } else {
-      return null
-    }
-    var theRequest = new Object();
-    if (url.indexOf("?") != -1) {
-      var str = url.substr(1);
-      strs = str.split("&");
-      for (var i = 0; i < strs.length; i++) {
-        theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
-      }
-    }
-    return theRequest;
-  }
-  console.log('FirstLoad', GetRequest());
-  window.sessionStorage.setItem('_MX_FirstLoad',JSON.stringify(GetRequest()))
-  if( GetRequest()&& GetRequest().ORG_ID){
-    let ORG_ID = GetRequest().ORG_ID
-    window.sessionStorage.setItem('_MX_ORG_ID',JSON.stringify(ORG_ID))
-  }
-  window.onload = function () {
-    document.documentElement.addEventListener('touchstart', function (event) {
-      if (event.touches.length > 1) {
-        event.preventDefault();
-      }
-    }, false);
 
-    var lastTouchEnd = 0;
-    document.documentElement.addEventListener('touchend', function (event) {
-      var now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
-  }
-</script>
 </body>
 </html>

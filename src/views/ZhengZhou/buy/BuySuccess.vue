@@ -34,23 +34,35 @@
       </div>
 
     </div>
-    <div class="btn">
+    <div class="btn" v-if="!FromH5Active">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
-    <!--<div v-if="FromH5Active" class="share" @click="share">-->
-      <!--<p>获得不错，分享好友吧</p>-->
-      <!--<img src="@/assets/images/share1.png" alt="">-->
-    <!--</div>-->
-    <!--<div class="copy-box">-->
+    <div class="btn" v-if="FromH5Active">
+      <span @click="goMyAssets" class="begain">查看我的资产</span>
+    </div>
+    <div v-if="FromH5Active" class="share" @click="share">
+      <p>活动不错，分享好友吧</p>
+      <!--<img src="@/assets/images/share.png" alt="">-->
+    </div>
+
+    <div class="copy-box" v-if="copyShow">
+      <img @click="copyShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
+      <input type="text" class="content" v-model="shareHref" id="codeText">
+      <button id="copybtn"
+              data-clipboard-target="#codeText"
+              @click="copyHandle">点击复制链接
+      </button>
       <!--<img src="@/assets/images/close.png" alt="">-->
-    <!--</div>-->
+    </div>
   </div>
 </template>
 <script>
   import {WatchApi} from "@/service";
   import {BusName, PageName} from "@/Constant";
   import Mixins from "@/mixins";
+  import Clipboard from 'clipboard'
+  import Bus from '@/plugin/bus'
 
   export default {
     mixins: [Mixins.StoreMixin],
@@ -58,24 +70,40 @@
       return {
         datas: {},
         downUrl: 'http://www.baidu.com',
-        FromH5Active: false
+        FromH5Active: false,
+        copyShow: false,
+        shareHref: '',
       }
     },
     created() {
       this.datas = this.getComState.buyData || {}
-      this.FromH5Active = this.getComState.FromH5Active || true
-
-      console.log(this.datas);
+      this.FromH5Active = this.getComState.FromH5Active
+      this.shareHref = this.getComState.ProAndOrgType.H5HREF
     },
     methods: {
+      copyHandle() {
+        let clipboard = new Clipboard('#copybtn')
+        clipboard.on('success', (e) => {
+          Bus.$emit(BusName.showToast, '复制活动链接成功')
+          clipboard.destroy()
+        })
+        clipboard.on('error', () => {
+          Bus.$emit(BusName.showToast, '浏览器不支持自动复制，请手动复制')
+        })
+      },
       share() {
-
+        this.copyShow = true
       },
       goMyAssets() {
         this.$router.push({name: PageName.BankDetail})
       },
       goBuyOther() {
-        this.$router.push({name: PageName.ProductList})
+        if (this.FromH5Active) {
+          let href = this.getComState.ProAndOrgType.H5HREF
+          window.location.href = href
+        } else {
+          this.$router.push({name: PageName.ProductList})
+        }
       }
     }
   }
@@ -118,15 +146,18 @@
   .buysuccessimg {
     text-align: center;
     margin-top: .6rem;
+
     img {
       width: 2.5rem;
       height: 2.5rem;
     }
+
     p.p-first {
       margin: px2rem(18) 0;
       font-size: px2rem(18);
       color: #2B74FE;
     }
+
     p.p-second {
       margin: 0.5rem 0;
       padding-bottom: 0.5rem;
@@ -174,6 +205,7 @@
   .btn {
     margin-top: px2rem(20);
     text-align: center;
+
     .begain {
       margin: 0 px2rem(5);
       display: inline-block;
@@ -189,28 +221,54 @@
       outline: none;
     }
   }
-  .copy-box{
-    /*background: #007aff;*/
-    position: absolute;
-    top:px2rem(100);
-    left: px2rem(0);
-    z-index: 100;
-    width: px2rem(150);
-    height: px2rem(50);
-    background: url(~@/assets/images/copy.png) no-repeat center center;
-    background-size: contain;
-  }
+
   .share {
     padding-top: px2rem(20);
     text-align: center;
     font-size: px2rem(13);
     color: #508CEE;
+
     img {
       display: inline-block;
       width: px2rem(50);
       height: px2rem(50);
       z-index: 100;
       /*background: #007aff;*/
+    }
+  }
+
+  .copy-box {
+    position: absolute;
+    bottom: 40%;
+    box-sizing: border-box;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    width: px2rem(300);
+    padding: px2rem(20);
+    background: #fefefe;
+    border: 1px solid #ccc;
+
+    .close {
+      position: absolute;
+      top: px2rem(10);
+      right: px2rem(10);
+      width: px2rem(14);
+    }
+
+    button {
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto;
+      width: px2rem(100);
+      height: px2rem(30);
+      line-height: px2rem(30);
+      text-align: center;
+    }
+
+    input {
+      height: px2rem(40);
+      overflow-x: scroll;
     }
   }
 </style>

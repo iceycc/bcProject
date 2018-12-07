@@ -77,6 +77,8 @@ export default {
         BIND_AC_NO: this.data.CARD_NO + ''
       }, res => {
         // 0 他行
+        // 1：本行；
+        // 2：村镇
         this.ACC_FLAG = res.ACC_FLAG
       })
     },
@@ -89,8 +91,9 @@ export default {
       let PHONE = this.tel
       PHONE = PHONE + ''
       console.log(PHONE);
+      this.checkBankType()
       if (util.Check.tel(PHONE, true)) return;
-      this.timeDown()
+      // this.timeDown()
       this.getMsgCode(PHONE)
     },
     // 获取短信验证码
@@ -103,6 +106,7 @@ export default {
         ACCT_NO: this.data.CARD_NO
       }
       API.common.apiSendPhoneCode(data, res => {
+        this.timeDown()
         Bus.$emit(BusName.showSendMsg, PHONE)
         this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
       }, err => {
@@ -118,6 +122,7 @@ export default {
     },
     // 注册
     doOpengingSecond() {
+
       // 判断银行类型 是否调用密码控件
       // 实体卡密码，可空，本行卡和村镇卡必输
       if (this.ACC_FLAG == 0) {
@@ -157,6 +162,10 @@ export default {
         Bus.$emit(BusName.showToast, '短信验证码不能为空')
         return
       }
+      // if (!this.data.MESSAGE_TOKEN) {
+      //   Bus.$emit(BusName.showToast, '短信验证码获取不正确')
+      //   return
+      // }
 
       let delMsg = true
 

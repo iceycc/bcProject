@@ -4,6 +4,7 @@ import Bus from '@/plugin/bus'
 import util from "@/libs/util";
 import checkOpenApiAndH5 from './checkOpenApiAndH5'
 
+let Base64 = require('js-base64').Base64;
 let timer;
 let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 
@@ -23,12 +24,15 @@ export default {
         H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
       },
       href: '',
-
       isfinancial: '0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
   mixins: [checkOpenApiAndH5],
   created() {
+    // this.checkProductType()
+  },
+  mounted() {
+    console.log('mounted');
     this.checkProductType()
   },
   methods: {
@@ -37,10 +41,14 @@ export default {
     // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
     // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
     checkProductType() {
-      // let query = this.$route.query
+      let qu = this.$route.query
+      console.log(qu);
       let query = util.storage.session.get('FirstLoad') || {}
-
-      console.log('login-query>>>', query);
+      // let H5URL = query
+      // if (H5URL) {
+      //   query = Base64.decode(H5URL)
+      // }
+      // if(query.)
       if (query.IS_SYNC_FLAG && query.ORG_ID) {
         // 外链过来的
         this.setComState({
@@ -50,11 +58,16 @@ export default {
           type: 'ProAndOrgType', value: query
         })
       }
+      console.log('login-query>>>', query);
       if (query.isfinancial == 1) {
         // 外链过来的
         this.isfinancial = 1
       }
-      this.ProAndOrgType = this.getComState.ProAndOrgType
+      if (this.getComState.ProAndOrgType.ORG_ID) {
+        this.ProAndOrgType = this.getComState.ProAndOrgType || query
+      } else {
+        this.ProAndOrgType = query
+      }
       console.log('ProAndOrgType', this.ProAndOrgType);
       this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
       if (this.ORG_ID == '227') {
@@ -70,7 +83,7 @@ export default {
       // }else {
       //   this.ifOpenApi = false
       // }
-      console.log(this.ORG_ID);
+      console.log('ProAndOrgTypeId>>', this.ProAndOrgType.ID);
       if (this.ProAndOrgType.ID && this.ProAndOrgType.IS_SYNC_FLAG == 1) {
         // 说明链接有产品id是外链过来买东西的
         this.getProData(this.ProAndOrgType.ID)
@@ -82,7 +95,6 @@ export default {
       let data = {
         ID: id + ""
       };
-
       // API.commonApi.apiGetChannelPrdInfo(data, res => {
       API.bicai.getPrdInfo(data, res => {
         this.productDetail = res;
@@ -93,8 +105,8 @@ export default {
           logo: this.productDetail.LOGO_URL,
           ...this.productDetail
         };
-        this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
+        this.setComState({type: 'goBuy', value: goBuyData})
       });
     },
 

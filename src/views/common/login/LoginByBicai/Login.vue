@@ -91,7 +91,8 @@
         BANK_NAME: '',
         href: '',
         ORG_ID: '',
-        OPEN_H5_STATUS: ''
+        OPEN_H5_STATUS: '',
+        isfinancial:''
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
