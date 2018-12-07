@@ -92,8 +92,8 @@
       :class="{'bang':true,'no':agree == false}"
       @click="doAgree">
       <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage" style=" color:#0096FE;">《客商银行客户服务协议》</a> 、
-      <a href="javascript:;" @click.stop="showPage" style=" color:#0096FE;">《隐私政策》</a>
+      <a href="javascript:;" @click.stop="showPage('open')" style=" color:#0096FE;">《客商银行客户服务协议》</a> 、
+      <a href="javascript:;" @click.stop="showPage('privacy')" style=" color:#0096FE;">《隐私政策》</a>
     </p>
   </div>
 </template>
@@ -205,8 +205,8 @@
       doAgree() {
         this.agree = !this.agree
       },
-      showPage() {
-        this.$router.push({name:PageName.DocsPage,query:{type:'open'}})
+      showPage(type) {
+        this.$router.push({name:PageName.DocsPage,query:{type:type}})
       },
     }
 

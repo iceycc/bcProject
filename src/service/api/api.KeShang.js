@@ -73,7 +73,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 24.	众邦充值提现处理中列表 /openapi/comm/apiQueryProcessing
+    // 24.	客商充值提现处理中列表 /openapi/comm/apiQueryProcessing
     apiQueryProcessing(params, success, error) {
       let options = {
         url: '/openapi/comm/apiQueryProcessing',
@@ -431,7 +431,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 14.	赎回众邦宝利息试算接口openapi/zbh/biz/apiInterestCalculation
+    // 14.	赎回客商宝利息试算接口openapi/zbh/biz/apiInterestCalculation
     apiInterestCalculation(params, success, error) {
       let options = {
         url: '/openapi/zbh/biz/apiInterestCalculation',
@@ -508,19 +508,19 @@ export default {
       return http.post(options, Config.config, success, error)
     },
     // /openapi/zbh/biz/personalAccountServiceAgreement
-    // 购买协议： 众邦宝产品服务协议（个人活期版）
+    // 购买协议： 客商宝产品服务协议（个人活期版）
     personalAccountServiceAgreement(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/personalAccountServiceAgreement',
+        url: '/openapi/comm/personalAccountServiceAgreement',
         params
       }
       return http.post(options, Config.config, success, error)
     },
-    // 23.	 开户协议：众邦银行直销银行电子账户服务协议
+    // 23.	 开户协议：银行直销银行电子账户服务协议
     // /openapi/zbh/biz/electronicAccountAgreement
     electronicAccountAgreement(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/electronicAccountAgreement',
+        url: '/openapi/comm/openAnAccountAgreement',
         params
       }
       return http.post(options, Config.config, success, error)

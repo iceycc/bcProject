@@ -173,19 +173,19 @@ export default {
           // setTimeout(() => {
           //   this.errMsg = ''
           // }, 2000)
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A004', // 点位
-            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          })
+          // API.watchApi({
+          //   FUNCTION_ID: 'ptb0A004', // 点位
+          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          // })
           // Bus.$emit(BusName.showToast, res.MSG)
           this.setComState({type:'ISLogin',value:true})
           this.toPreProduct()
         },
         err => {
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A004', // 点位
-            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          })
+          // API.watchApi({
+          //   FUNCTION_ID: 'ptb0A004', // 点位
+          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          // })
           this.errMsg = err
           setTimeout(() => {
             this.errMsg = ''

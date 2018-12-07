@@ -37,8 +37,8 @@
     </section>
     <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">立即支取</button>
     <p @click="agree =!agree"
-       :class="{'bang':true,'no':agree == false}">我已阅读并同意注册
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《定期存款收益权转让协议》</a>
+       :class="{'bang':true,'no':agree == false}">立即赎回代表您已阅读并同意
+      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《“周周利”产品业务服务协议》</a>
     </p>
   </div>
 </template>
