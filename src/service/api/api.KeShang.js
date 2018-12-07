@@ -444,7 +444,7 @@ export default {
     // 理财产品已到期（分页）  /openapi/zbh/biz/getMyInvestOver无
     getMyInvestOver(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/getMyInvestOver',
+        url: '/openapi/bank/getMyInvestOver',
         params
       }
       return http.post(options, Config.config, success, error)

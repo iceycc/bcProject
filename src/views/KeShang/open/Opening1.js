@@ -55,7 +55,7 @@ export default {
       this.imgStyle2 = 'width:100%;max-height:100%'
       util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
         this.preSrc2 = data
-        this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+        this.data.CARD_BACK_FILE = data.split(',')[1]
         this.idCardFanOcr(data)
       })
     },
@@ -65,7 +65,7 @@ export default {
       this.imgStyle1 = 'width:100%;max-height:100%'
       util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
         this.preSrc1 = data
-        this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+        this.data.CARD_FRONT_FILE = data.split(',')[1]
         this.idCardZhengOcr(data)
       })
     },
@@ -91,7 +91,7 @@ export default {
       let params = {
         PHONE_NUM:this.data.PHONE,
         TYPE: 'ID_CARD_FRONT_PHONE_OCR',
-        IDENT_PHOTO:this.data.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+        IDENT_PHOTO:encodeURIComponent(this.data.CARD_FRONT_FILE),
         MARK: '1',
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
@@ -116,11 +116,10 @@ export default {
         PHONE_NUM:this.data.PHONE,
         TYPE: 'ID_CARD_BACK_PHONE_OCR',
         MARK: '2',
-        IDENT_PHOTO: this.data.CARD_BACK_FILE.replace(/\+/g, '%2B'),
+        IDENT_PHOTO:encodeURIComponent(this.data.CARD_BACK_FILE) ,
 
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
-        console.log('aaaaaaaaaaaaaa');
         console.log(res.VALIDITY_PERIOD);
         this.data.USER_CARD_ID_DATA = res.VALIDITY_PERIOD,
         this.data.IDENT_VLD_DT = this.transformDATA(res.VALIDITY_PERIOD).END

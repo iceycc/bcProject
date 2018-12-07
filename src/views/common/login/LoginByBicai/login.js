@@ -72,9 +72,14 @@ export default {
       this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
       if (this.ORG_ID == '227') {
         this.BANK_NAME = '众邦直销银行'
-      } else if (this.ORG_ID == '49') {
+      }
+      else if (this.ORG_ID == '49') {
         this.BANK_NAME = '郑州直销银行'
-      } else {
+      }
+      else if (this.ORG_ID == '248') {
+        this.BANK_NAME = '客商直销银行'
+      }
+      else {
         this.BANK_NAME = this.ProAndOrgType.ORG_NAME
       }
       // 控制底部提示

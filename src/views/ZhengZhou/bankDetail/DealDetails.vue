@@ -9,7 +9,6 @@
       </ul>
     </div>
     <div class="t-tab">
-
       <div class="divTab">
         <div class="t-date" v-show="nowIndex===3">
           <ul>

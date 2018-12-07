@@ -12,12 +12,10 @@
                  <span class="line2 hui">
                     <img :src='stepImg2' alt="">
                 </span>
-        <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
+        <span class="step-text" style=" color:#D3D3D3">绑定银行卡</span>
       </section>
     </section>
-
     <div class="opening_box">
-
       <section class="bank">
         <!--<span style="padding-right: 0px" class="left-p">选择银行</span>-->
         <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
@@ -227,6 +225,12 @@
     },
     methods: {
       chooseBankHandle(bank) {
+        console.log(bank);
+        if(bank.IS_SUPPORT == 0){
+          Bus.$emit(BusName.showToast,'暂不支持改银行')
+          return
+        }
+        // to
         this.bankText = bank.OPEN_BANK
         this.data.CARD_NO = bank.CARD_NO
       },

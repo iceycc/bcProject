@@ -98,9 +98,9 @@
     mixins: [Mixins.StoreMixin],
     created() {
       this.getInfo()
-      this.getProData(17897)
+      // this.getProData(17897)
       // todo测试用
-      // this.proDetail = this.getComState.goBuy // 数据
+      this.proDetail = this.getComState.goBuy // 数据
       // console.log(this.proDetail);
     },
     methods: {
@@ -131,7 +131,7 @@
       getInfo() {
         // 查询账户余额
         API.bank.apiQryEleAccount({}, res => {
-          this.payNum = res.ACC_REST || 1000// 账户余额(可用余额)
+          this.payNum = res.ACC_REST // 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
         })
         API.safe.apiBandCard({}, res => {

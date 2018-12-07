@@ -20,28 +20,34 @@ export default {
     },
     // 通过token + orgID 检查在本行开户状态
     checkBankStatus(fn) {
+
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
-        let step = res.LAST_STEP_NUM
-        console.log('step', step);
-        // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         this.setComState({type: 'openingData', value: res})
-        if (step == 0) {
-          // this.$store.commit('SET_OPENING_DATA', res)
-          // util.storage.session.set('USERINFO', res)
-          this.$router.push({name: PageName.Opening1})
+        if(fn){
+          fn()
+        }else {
+          let step = res.LAST_STEP_NUM
+          console.log('step', step);
+          // （0未提交，1提交第一步，2提交第二步，3提交第三步）
+          if (step == 0) {
+            // this.$store.commit('SET_OPENING_DATA', res)
+            // util.storage.session.set('USERINFO', res)
+            this.$router.push({name: PageName.Opening1})
+          }
+          else if (step == 1) {
+            // this.$store.commit('SET_OPENING_DATA', res)
+            // util.storage.session.set('USERINFO', res)
+            this.$router.push({name: PageName.Opening2})
+          }
+          else {
+            Bus.$emit(BusName.showToast,'你已经开户成功')
+            setTimeout(()=>{
+              this.$router.push({name:PageName.Login})
+            },400)
+          }
         }
-        else if (step == 1) {
-          // this.$store.commit('SET_OPENING_DATA', res)
-          // util.storage.session.set('USERINFO', res)
-          this.$router.push({name: PageName.Opening2})
-        }
-        else {
-          Bus.$emit(BusName.showToast,'你已经开户成功')
-          setTimeout(()=>{
-            this.$router.push({name:PageName.Login})
-          },400)
-        }
+
       })
     },
     /**

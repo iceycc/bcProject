@@ -25,6 +25,10 @@
       </ul>
       <div class="divTab">
         <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
+          <div class="no-data" v-if="pageList.length == 0">
+            <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
+            <p class="infos">暂时没数据</p>
+          </div>
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">
             <div style="padding-bottom: 20px">
@@ -206,17 +210,15 @@
         this.searchCondition1.pageNo = "1";
         this.allLoaded = false;
         // 查询数据
-        let data = {
-          currentPage: this.searchCondition1.pageNo + '',
-          PRD_TYPE: "4"
-        };
+
         //   alert(this.nowIndex);
         if (this.nowIndex == 1) {
           //已到期数据
-          // let data = {
-          //   currentPage: this.searchCondition1.pageNo - 1,
-          //   PRD_TYPE: "4"
-          // };
+          let data = {
+            currentPage: this.searchCondition1.pageNo + '',
+            PRD_TYPE: "4",
+            DEPOSIT_TYPE_ID: "4"
+          };
           API.bank.getMyInvestOver(data, res => {
             if (!res.PAGE) {
               this.allLoaded = true;
@@ -270,12 +272,13 @@
       },
       more: function () {
         if (this.nowIndex == 1) {
-          // 未到期分页查询
+          // 到期分页查询
           this.searchCondition1.pageNo =
             "" + (parseInt(this.searchCondition1.pageNo) + 1);
           let data = {
             currentPage: this.searchCondition1.pageNo,
-            PRD_TYPE: "2"
+            PRD_TYPE: "4",
+            DEPOSIT_TYPE_ID: "4"
           };
           API.bank.getMyInvestOver(data, res => {
             if (!res.PAGE) {
@@ -300,17 +303,21 @@
             DEPOSIT_TYPE_ID: "4"
           };
           API.bank.apiQryHoldInfo(data, res => {
-            if (!res.PAGE) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-              return
-            }
+            // if (!res.PAGE) {
+            //   this.allLoaded = true;
+            //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+            //   return
+            // }
             this.pageList = res.PAGE.retList || [];
             this.pageList = this.pageList.concat(this.pageList);
-            if (this.pageList.length < this.searchCondition.pageSize) {
+            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
+            // if (this.pageList.length < this.searchCondition.pageSize) {
+            //   this.allLoaded = true;
+            //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+            // }
           });
         }
       }
@@ -400,6 +407,18 @@
   .tab-box {
     position: absolute;
     width: 100%;
+    .no-data{
+
+      width: 100%;
+      img{
+        width: 100%;
+      }
+      .infos{
+        text-align: center;
+        font-size: px2rem(16);
+        color: #1badff;
+      }
+    }
     ul {
       background: #fff;
       display: flex;

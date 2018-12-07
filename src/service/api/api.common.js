@@ -61,6 +61,14 @@ export default {
       }
       return httpZZH.post(options, Config.config, success, error)
     },
+    KSH(params, success, error) {
+      let options = {
+        url: '/openapi/bank/apiMyAssetByOrg',
+        params,
+        NO_ORG_ID: true
+      }
+      return httpZZH.post(options, Config.config, success, error)
+    },
 
 
   },
