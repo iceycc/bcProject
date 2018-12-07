@@ -29,11 +29,20 @@
             :class="{active:index==nowIndex}">{{item}}
         </li>
       </ul>
+      <div class="no-data" v-if="nowIndex===0 && pageList1.length == 0">
+        <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
+        <p class="infos">暂时没数据</p>
+      </div>
+      <div class="no-data" v-if="nowIndex===1 && pageList2.length == 0">
+        <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
+        <p class="infos">暂时没数据</p>
+      </div>
       <div class="divTab">
         <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">
             <div style="padding-bottom: 20px">
+
               <div v-if="nowIndex===0" class="divTab-1" v-for="(item,index) in pageList1" :key="index">
                 <!-- 新加明细按钮 -->
                 <span class="detail" @click="geDetails(item)">明细</span>
@@ -341,6 +350,18 @@
   .tab-box {
     position: absolute;
     width: 100%;
+    .no-data{
+
+      width: 100%;
+      img{
+        width: 100%;
+      }
+      .infos{
+        text-align: center;
+        font-size: px2rem(16);
+        color: #1badff;
+      }
+    }
     ul {
       background: #fff;
       display: flex;
@@ -372,6 +393,8 @@
     .divTab {
       background: #f4f4f8;
       padding-bottom: px2rem(10);
+
+
       .divTab-1 {
         background: #fff;
         position: relative;
