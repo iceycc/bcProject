@@ -155,8 +155,8 @@ export default {
         MESSAGE_TOKEN: this.data.MESSAGE_TOKEN, //短信验证码Token
         SHORT_CODE: this.data.PHONE_CODE, // 短信验证码
         USER_CARD_ID: this.callbackInfos.USER_CARD_ID, //证件号码
-        CARD_FRONT_FILE: this.callbackInfos.CARD_FRONT_URL, //身份证正面信息
-        CARD_BACK_FILE: this.callbackInfos.CARD_BACK_URL, //身份证反面信息
+        CARD_FRONT_FILE: encodeURIComponent(this.callbackInfos.CARD_FRONT_URL), //身份证正面信息
+        CARD_BACK_FILE: encodeURIComponent(this.callbackInfos.CARD_BACK_URL), //身份证反面信息
         USER_NAME: this.callbackInfos.USER_NAME, //姓名
         HAS_BAND: this.callbackInfos.hasCardList.length > 0 ? '0' : '1', //是否已经绑定过卡 0:已在比财绑卡；1:未在比财绑过卡
         OPEN_BANK: this.bankText, //// 银行卡所属银行名
