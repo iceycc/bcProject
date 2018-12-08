@@ -27,7 +27,7 @@
           </ul>
           <div class="t-query" @click="query">查询</div>
         </div>
-        <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
+        <!-- <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p> -->
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
@@ -40,14 +40,12 @@
                 <li v-for="(item,index) in pageList" :key="index">
                   <h5 style="display: flex">
                     <span style="flex: 1">{{PRD_NAME}}</span>
-                    <span style="width: 40%;text-align: right" v-if="cur==1">收益</span>
-                    <span style="width: 40%;text-align: right" v-if="cur==2 && item.TYPE==1">买入</span>
-                    <span style="width: 40%;text-align: right" v-if="cur==2 && item.TYPE==2">卖出</span>
+                    <span style="width: 40%;text-align: right;color:#E62224;">{{item.TYPE_NAME}}{{item.COMM_TRANS_STATUS_DESC}}</span>
                   </h5>
                   <p>
-                    <span>{{item.OPERA_DATE }}</span>
+                    <span>{{item.OPERA_DATE}}</span>
                     <!--1:买入 2:卖出-->
-                    <em>{{item.TYPE==2?'-':'+'}}  {{item.TRANS_AMT}}</em>
+                    <em>{{item.TRANS_AMT_DESC}}</em>
                   </p>
                 </li>
 

@@ -10,7 +10,7 @@
       </section>
       <section class="circle right">
                  <span class="line2 hui">
-                    <img :src='stepImg2' alt="">
+                    <img :src='stepImg' alt="">
                 </span>
         <span class="step-text" style=" color:#D3D3D3">绑定银行卡</span>
       </section>
@@ -491,33 +491,12 @@
       }
     }
 
-    .hui {
-      &:after, &.line2:before {
-        background: #dee1e3 !important;
-      }
-
-    }
-
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
-
-      &:before {
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: px2rem(10);
-        transform: translateY(-100%);
-        content: '';
-        width: 45%;
-        background: #92d048;
-        height: .1rem;
-        overflow: hidden;
-      }
     }
-
     .line3 {
       &:after {
         left: 0;

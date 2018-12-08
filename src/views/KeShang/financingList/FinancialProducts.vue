@@ -12,7 +12,7 @@
           <span class="line"></span>
           <div>
             <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p>预计收益</p>
+            <p>昨日收益</p>
           </div>
         </div>
       </div>
@@ -40,26 +40,29 @@
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
                 <p>隶属于{{item.ORG_NAME}}</p>
-                <p>净利息
-                  <span>{{item.ADD_INCOME | formatNum}}</span>
+                <p>持有金额
+                  <span>{{item.HOLD_AMOUNT}}</span>
                 </p>
-                <p>本金
-                  <span>{{item.INVEST_AMOUNT}}</span>
+                <p>购买时间
+                  <span>{{item.TIME_END}}</span>
+                </p>
+                <p>到期时间
+                  <span>{{item.EXPIRE_TIME}}</span>
+                </p>
+                <p>预期收益
+                  <span>{{item.EXPECT_INCOME}}</span>
                 </p>
                 <p>存款利率
                   <span>{{item.RATE}}%</span>
                 </p>
-                <!-- <p>存入天数
-                  <span>{{item.ACTUAL_DATE_NUM}}天</span>
-                </p> -->
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
                   <div>
                     <span @click="goRedeem(item)">提前支取</span>
                   </div>
-                  <div>
+                  <!-- <div>
                     <span @click="goBuy(item)">再次存入</span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList" :key="index">
@@ -134,7 +137,7 @@
           pageNo: "1",
           pageSize: "10"
         },
-        tabsParam: ["持有中", "已支取"], //（这个也可以用对象key，value来实现）
+        tabsParam: ["持有中", "已结束"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
           ACC_REST: '0.00',
@@ -161,23 +164,35 @@
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
     methods: {
-      goBuy(item) {
+      // goBuy(item) {
 
-        this.setComState({type: 'goBuy', value: item})
-        this.$router.push({name: PageName.Buying})
-      },
+      //   this.setComState({type: 'goBuy', value: item})
+      //   this.$router.push({name: PageName.Buying})
+      // },
       geDetails(item) {
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
       },
       goRedeem(data) {
-        Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
-        return
-        this.setComState({
-          type: 'redeemData',
-          value: data
+        // Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
+        // this.setComState({
+        //   type: 'redeemData',
+        //   value: data
+        // })
+        let params = {
+          INVEST_TIME: data.TIME_END,
+          PRD_INDEX_ID: data.PRD_INDEX_ID
+        }
+        API.redeem.apiRedemptionValid(params, res => {
+          console.log(res)
+          if(res.RES_CODE == 1){
+            Bus.$emit(BusName.showToast, res.RES_MSG)
+            this.$router.push({name: PageName.Redeem})
+          } else if(res.RES_CODE == 2){
+            Bus.$emit(BusName.showToast, res.RES_MSG)
+          }
         })
-        this.$router.push({name: PageName.Redeem})
+        
       },
       toggleTabs(index) {
         // TODO

@@ -23,7 +23,7 @@
           </ul>
           <div class="t-query" @click="query">查询</div>
         </div>
-        <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
+        <!-- <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p> -->
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
@@ -45,12 +45,11 @@
                 <!--字符-->
                 <li v-for="(item,index) in pageList" :key="index">
                   <h5 style="display: flex">
-                    <span style="flex: 1">{{item.ABS_INFO}}</span>
-                    <span style="width: 40%;text-align: right">{{item.TYPE_NAME}}</span>
+                    <span style="flex: 1;color:#E62224;">{{item.TYPE_NAME}}{{item.COMM_TRANS_STATUS_DESC}}</span>
                   </h5>
                   <p>
-                    <span>{{item.TRANS_DATE | timerFormat}}</span>
-                    <em>{{item.TRANS_AMT | formatNum}}</em>
+                    <span>{{item.OPERA_DATE}}</span>
+                    <em>{{item.TRANS_AMT_DESC}}</em>
                   </p>
                 </li>
 
@@ -142,7 +141,7 @@
         }
         this.endDate = this.getLastMonthYestdy(0);
         this.startDate = this.getLastMonthYestdy(index + 1);
-        this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
+        this.apiQryTradeHis(); //交易数据
 
       },
       more: function () {
@@ -153,14 +152,14 @@
 
           // PRD_INDEX_ID:'',
           // currentPage: this.searchCondition.pageNo,
-          currentPage: "0",
-          START_DATE: '2020-08-26',
-          END_DATE: '2020-08-27',
+          currentPage: "1",
+          // START_DATE: '2020-08-26',
+          // END_DATE: '2020-08-27',
           // START_DATE: this.startDate,
           // END_DATE: this.endDate,
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
-          pagenum: '10',
-          pageflag: '4'
+          // pagenum: '10',
+          // pageflag: '4'
 
         };
         API.bank.apiQryEleTransDetail(data, res => {
@@ -173,7 +172,7 @@
 
       },
 
-      apiQryTradeHis(start, end) {
+      apiQryTradeHis() {
         // TYPE	请求类型
         // currentPage	当前页
         // QRY_TYPE	查询类型
@@ -184,16 +183,16 @@
         // START_DATE	开始日期
         // END_DATE	结束日期
         let data = {
-          currentPage: "0",
+          currentPage: "1",
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
-          START_DATE: '2020-08-26',
-          END_DATE: '2020-08-27',
+          // START_DATE: '2020-08-26',
+          // END_DATE: '2020-08-27',
           // START_DATE: start,
           // END_DATE: end,
-          pagenum: '10',
-          pageflag: '4'
+          // pagenum: '10',
+          // pageflag: '4'
         };
-        API.bank.apiQryHoldInfo(data, res => {
+        API.bank.apiQryEleTransDetail(data, res => {
           this.pageList = res.PAGE.retList;
           if (this.pageList.length < this.searchCondition.pageSize) {
             this.allLoaded = true;
