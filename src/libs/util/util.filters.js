@@ -1,4 +1,3 @@
-
 export default {
   /**
    * 格式化金额
@@ -23,8 +22,7 @@ export default {
       }
       str = newStr + ".00"; //自动补小数点后两位
       return str
-    }
-    else {
+    } else {
       for (var i = str.indexOf(".") - 1; i >= 0; i--) {
         if (count % 3 == 0 && count != 0) {
           newStr = str.charAt(i) + "," + newStr; //碰到3的倍数则加上“,”号
@@ -43,15 +41,15 @@ export default {
    * @param val
    * @returns {*}
    */
-  timerFormat(val){
+  timerFormat(val) {
     if (!val) return val;
     let date = new Date(parseInt(val));
     let Y = date.getFullYear() + '-',
-        M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-',
-        D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ',
-        h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':',
-        m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : +date.getMinutes() + ':',
-        s = date.getSeconds() < 10 ? '0' + date.getSeconds() : +date.getSeconds();
+      M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-',
+      D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ',
+      h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':',
+      m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : +date.getMinutes() + ':',
+      s = date.getSeconds() < 10 ? '0' + date.getSeconds() : +date.getSeconds();
     return Y + M + D + h + m + s;
   },
 
@@ -61,7 +59,7 @@ export default {
    * @returns {*}
    * @constructor
    */
-  BankNo_Filter(val){
+  BankNo_Filter(val) {
     if (!val) {
       return val
     } else {
@@ -74,13 +72,13 @@ export default {
    * @param no
    * @returns {string}
    */
-  formatBankNo(no){
-    if(!no) return ''
+  formatBankNo(no) {
+    if (!no) return ''
     no = no + ''
-    return '**** **** **** **** ' + no.substr(no.length-4)
+    return '**** **** **** **** ' + no.substr(no.length - 4)
   },
   // 将 0 转换为 0.00
-  fromatMoneyFilter(x){
+  fromatMoneyFilter(x) {
     // if(!num) return '0.00'
     // if(num.indexOf('.')!='-1'){
     //   // 有点

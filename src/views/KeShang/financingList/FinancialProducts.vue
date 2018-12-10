@@ -268,16 +268,12 @@
             DEPOSIT_TYPE_ID: "4"
           };
           API.bank.apiQryHoldInfo(data, res => {
-            if (!res.PAGE) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-              return
-            }
             console.log(res)
             this.pageList = res.PAGE.retList;
             // this.pageList = res.PAGE.retList;
-            if (this.pageList.length < this.searchCondition.pageSize) {
+            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
               this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
             //   if (this.pageList.length <= 0) {
             //     Bus.$emit(BusName.showToast, "暂无数据");
