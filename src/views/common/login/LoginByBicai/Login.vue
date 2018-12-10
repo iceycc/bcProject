@@ -198,6 +198,7 @@
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
           util.storage.session.set("BICAI_TOKEN",res.PHONE_TOKEN) //
+          util.storage.session.set("BICAI_MEBER_ID",res.ID) //
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
             // 不是 openApi
