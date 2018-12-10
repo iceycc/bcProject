@@ -2,7 +2,7 @@
 // import axios from '@/plugin/request/_axios'
 import axios from 'axios'
 import store from '@/store/index'
-import {HOST} from "@/Constant";
+import {HOST_API} from "@/Constant";
 import Bus from '@/plugin/bus/index'
 import {BusName, PageName, LsName} from "@/Constant";
 import {Indicator} from 'mint-ui';
@@ -12,7 +12,7 @@ import {Indicator} from 'mint-ui';
 const config = {
   method: 'post',
   // baseURL: '/api/finsuit/PHONE/deal',
-  baseURL: HOST + '/finsuitPhone/deal',
+  baseURL: HOST_API + '/finsuitPhone/deal',
   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   timeout: 100000,
 }

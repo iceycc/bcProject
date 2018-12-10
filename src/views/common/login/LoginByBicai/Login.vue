@@ -5,7 +5,8 @@
     <!--<img class="logo" src="@/assets/images/logoaaa_03.png" alt="">-->
     <div class="logo-box">
       <img src="@/assets/images/common/logo@2x.png" alt="" @click="goBicaiOpen">
-      <span>比财平台{{BANK_NAME}}</span>
+      <span v-if="hasBank">比财平台{{BANK_NAME}}</span>
+      <span v-if="!hasBank">你好，欢迎来到比财</span>
     </div>
     <div class="login_box">
       <section class="input-box">
@@ -64,6 +65,7 @@
   export default {
     data() {
       return {
+        hasBank: false,
         ifOpenApi: true,
         IMG: '',
         msgDisabled: false,
@@ -92,7 +94,7 @@
         href: '',
         ORG_ID: '',
         OPEN_H5_STATUS: '',
-        isfinancial:''
+        isfinancial: ''
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
@@ -100,7 +102,7 @@
       PassWordZhengzhou
     },
     created() {
-      this.getImgCode()
+      // this.getImgCode()
     },
     computed: {
       disabled() {
@@ -185,9 +187,9 @@
           //   REMARK_DATA: '异业合作-登录', // 中文备注
           //   SOURCE_URL: SOURCE_URL
           // })
-          // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
           if (this.isfinancial == '1') {
-            window.location.href = 'https://adv.bicai365.com/nay/#/myInvestment?members_id=' + res.ID
+            // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
+            window.location.href = HOST+ '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
 
@@ -219,12 +221,10 @@
             // } else {
             //   this.checkAuthStatus()
             // }
-          }
-          else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+          } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
             // 是 openApi
             this.checkAuthStatus()
-          }
-          else {
+          } else {
             this.checkAuthStatus()
           }
         }, err => {
@@ -310,7 +310,6 @@
         let PHONE = this.tel
         PHONE = PHONE + ''
         if (util.Check.tel(PHONE, true)) return;
-        this.getImgCode()
         this.getMsg()
       },
       // msg倒计时
@@ -342,6 +341,7 @@
     padding-top: px2rem(40);
     box-sizing: border-box;
     padding-left: px2rem(20);
+
     span {
       padding-top: px2rem(10);
       padding-left: px2rem(20);
@@ -349,6 +349,7 @@
       color: #49546C;
       vertical-align: top;
     }
+
     img {
       vertical-align: top;
       width: px2rem(50);
@@ -391,6 +392,7 @@
     padding-left: px2rem(20);
     padding-top: px2rem(24);
     font-size: px2rem(18);
+
     img {
       width: .6rem;
       vertical-align: top;
@@ -417,17 +419,21 @@
       height: px2rem(150);
       border-radius: px2rem(6);
     }
+
     p {
       flex: 1;
       font-size: px2rem(18);
     }
+
     .btn {
       flex: 2;
       display: flex;
+
       button {
         flex: 1;
         border-top: 1px solid #ccc;
         color: #007aff;
+
         &:first-child {
           border-right: 1px solid #ccc;
         }
@@ -439,10 +445,12 @@
       display: flex;
       padding: px2rem(15);
       flex: 2;
+
       img {
         width: px2rem(80);
         height: px2rem(40);
       }
+
       input {
         flex: 1;
         padding-left: px2rem(10);
@@ -455,6 +463,7 @@
 
   .login_box {
     position: relative;
+
     .input-box {
       position: relative;
       margin-left: px2rem(20);
@@ -464,11 +473,13 @@
       border-bottom: 1px #E5E5E5 solid;
       padding-top: px2rem(20);
     }
+
     .label {
       padding: 0;
       font-size: px2rem(17);
       color: #858E9F;
     }
+
     .get-msg {
       position: absolute;
       right: 0;
@@ -480,6 +491,7 @@
       border: 1px solid #508CEE;
       border-radius: px2rem(6)
     }
+
     .input {
       position: absolute;
       left: 0;
@@ -507,6 +519,7 @@
     margin: px2rem(66) auto 0;
     text-align: center;
     display: block;
+
     &.active {
       color: #508CEE;
       border: 1px solid #508CEE;
@@ -547,6 +560,7 @@
     text-align: center;
     font-size: 0;
     color: #333;
+
     img {
       vertical-align: top;
       width: .5rem;

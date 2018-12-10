@@ -1,5 +1,5 @@
 import http from '../http/http.JINSHANG'
-import {HOST} from "@/Constant";
+import {HOST_API} from "@/Constant";
 
 /**
  * axios 配置
@@ -7,7 +7,7 @@ import {HOST} from "@/Constant";
 const Config = {
   config: {
     method: 'post',
-    baseURL: HOST,
+    baseURL: HOST_API,
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     timeout: 30000,
   },

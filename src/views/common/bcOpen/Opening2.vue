@@ -84,13 +84,13 @@
   import Bus from '@/plugin/bus'
   import BankSelect from '@/components/commons/BankSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
-  import {HOST} from "@/Constant";
+  import {HOST_API} from "@/Constant";
   import API from "@/service";
   import {imgSrc} from "@/Constant";
   import {PageName, BusName, LsName} from "@/Constant";
   import util from "libs/util";
 
-  const safeCodeUrl = HOST + '/finsuitSafeCode?SESSION_ID='
+  const safeCodeUrl = HOST_API + '/finsuitSafeCode?SESSION_ID='
   let time = 60
 
   export default {
@@ -359,6 +359,7 @@
         //   return
         // }
         if (this.checkBankNo(this.data.CARD_NO)) {
+          // Bus.$emit(BusName.showToast, '手机号不能为空')
           return
         }
         if (this.data.PRE_PHONE_NUM == '') {

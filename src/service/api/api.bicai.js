@@ -185,6 +185,15 @@ export default {
     }
     return http.post(options, success, error)
   },
+  // GET_PROTOCOL_INFO_LIST
+  getDocs(params, success, error) {
+    let options = {
+      type: 'GET_PROTOCOL_INFO_LIST',
+      params,
+    }
+    return http.post(options, success, error)
+  },
+
 }
 
 

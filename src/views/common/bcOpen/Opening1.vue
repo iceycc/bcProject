@@ -102,7 +102,7 @@
   </div>
 </template>
 <script>
-  import {PageName, BusName, HOST} from "@/Constant";
+  import {PageName, BusName, HOST_API} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
   import API from "@/service";
   import Bus from "@/plugin/bus"

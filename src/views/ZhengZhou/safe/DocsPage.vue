@@ -11,7 +11,7 @@
 </template>
 <script>
   import API from "@/service";
-  import {HOST} from "@/Constant";
+  import {HOST_API} from "@/Constant";
 
   export default {
     name: "DocsPage",
@@ -29,13 +29,13 @@
     methods: {
       getAgreement(type) {
         if (type == 'buy') {
-          this.agreeMentSrc = HOST + '/static/finsuit/bank/zzh/kh1.html'
+          this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/kh1.html'
         }
         if (type == 'recharge') {
-          this.agreeMentSrc = HOST + '/static/finsuit/bank/zzh/cz.html'
+          this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/cz.html'
         }
         if (type == 'open') {
-          this.agreeMentSrc = HOST + '/static/finsuit/bank/zzh/kh2.html'
+          this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/kh2.html'
 
         }
       },

@@ -90,6 +90,9 @@ export default {
         // 外链过来的
         this.BANK_NAME = ''
         this.isfinancial = 1
+        this.hasBank = false
+      }else {
+        this.hasBank = true
       }
       // 控制底部提示
       // if(this.ProAndOrgType.IS_SYNC_FLAG == 1){

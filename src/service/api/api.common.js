@@ -1,11 +1,11 @@
 import http from '../http/http.common'
 import httpZZH from '../http/http.ZHENGZHOU'
-import {HOST} from "@/Constant";
+import {HOST_API} from "@/Constant";
 import axios from 'axios'
 import store from "@/store";
 
 let Ajax = axios.create({
-  baseURL: HOST,
+  baseURL: HOST_API,
 })
 /**
  * axios 配置
@@ -13,7 +13,7 @@ let Ajax = axios.create({
 const Config = {
   config: {
     method: 'post',
-    baseURL: HOST,
+    baseURL: HOST_API,
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     timeout: 30000,
   },

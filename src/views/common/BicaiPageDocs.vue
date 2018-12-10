@@ -30,11 +30,11 @@
     },
     methods: {
       getAgreement(type) {
-        if (type == 'buy') {
-          this.getBuyAgreementByAjax()
+        if (type == 'user') {
+          this.getBicaiAgreementByAjax('1','user')
         }
-        if (type == 'recharge') {
-          this.getBuyAgreementByAjax()
+        if (type == 'bicaisafe') {
+          this.getBicaiAgreementByAjax('1','bicaisafe')
           // this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/cz.html'
         }
         if (type == 'open') {
@@ -61,11 +61,20 @@
         }
         API.doc.fixedTimeDepositAgreement(data)
       },
-      getBuyAgreementByAjax() {
-        let data = {}
-        API.doc.personalAccountServiceAgreement(data, res => {
-          this.title = res.AGREEMENT
-          this.agreeMentSrc = HOST_API + res.URL
+      getBicaiAgreementByAjax(type,docs) {
+        let data = {
+          InterfaceType:type
+        }
+        API.bicai.getDocs(data, res => {
+          if(docs=='user'){
+            this.TITLE = res[1].TITLE
+            this.docs = res[1].HTML_TEXT
+          }
+          if(docs == 'bicaisafe'){
+            this.TITLE = res[0].TITLE
+            this.docs = res[0].HTML_TEXT
+          }
+
         })
       },
       getOpenAgreementByAjax() {
