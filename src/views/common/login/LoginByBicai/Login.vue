@@ -183,7 +183,6 @@
         }
         let SOURCE_URL = this.getComState.loginType
         console.log(SOURCE_URL);
-        this.$store.commit('SET_TOKEN', null)
         API.bicai.login(data, (res) => {
           // API.watchApi({
           //   FUNCTION_ID: 'ptb0A007', // 点位
@@ -198,6 +197,7 @@
 
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          util.storage.session.set("BICAI_TOKEN",res.PHONE_TOKEN) //
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
             // 不是 openApi

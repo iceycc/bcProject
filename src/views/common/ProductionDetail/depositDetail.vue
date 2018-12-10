@@ -61,8 +61,8 @@
       <div class="contenttop">
         <p>交易规则</p>
         <div class="bannercontent">
-          <span class="bannercontenttitle">审核方式</span>
-          <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
+          <span class="bannercontenttitle">起存金额</span>
+          <span class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
         </div>
 
         <div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">
@@ -72,11 +72,11 @@
         <div class="bannercontent">
           <span class="bannercontenttitle">支取时间</span>
           <span
-            class="bannercontenttitlecontent">{{productDetail.PERIOD}}天</span>
+            class="bannercontenttitlecontent">随时支取</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER}}</span>
+          <span class="bannercontenttitlecontent">智能存款</span>
         </div>
       </div>
       <div class="wrapicon">
@@ -171,6 +171,11 @@
   import util from "libs/util";
   import Mixins from "@/mixins";
   import Register from './commom'
+  import 'swiper/dist/css/swiper.css'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  // require styles
+  import 'swiper/dist/css/swiper.css'
+
 
   export default {
     data() {
@@ -218,7 +223,10 @@
 
       }
     },
-
+    components: {
+      swiper,
+      swiperSlide
+    },
     created() {
       this.title = this.$route.query.title;
       this.proID = this.$route.query.PRO_ID;
