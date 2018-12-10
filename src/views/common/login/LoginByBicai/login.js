@@ -1,5 +1,5 @@
 import API from "@/service"
-import {LsName, BusName, PageName} from "@/Constant";
+import {LsName, BusName, PageName,PRO_PARAMS} from "@/Constant";
 import Bus from '@/plugin/bus'
 import util from "@/libs/util";
 import checkOpenApiAndH5 from './checkOpenApiAndH5'
@@ -7,8 +7,6 @@ import checkOpenApiAndH5 from './checkOpenApiAndH5'
 let Base64 = require('js-base64').Base64;
 let timer;
 let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
-
-
 export default {
   data() {
     return {
@@ -32,8 +30,10 @@ export default {
     // this.checkProductType()
   },
   mounted() {
-    console.log('mounted');
-    this.checkProductType()
+    setTimeout(() => {
+      console.log('mounted');
+      this.checkProductType()
+    }, 100)
   },
   methods: {
     //  需要判断
@@ -42,12 +42,24 @@ export default {
     // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
     checkProductType() {
       let qu = this.$route.query
-      console.log(qu);
       let query = util.storage.session.get('FirstLoad') || {}
-      // let H5URL = query
-      // if (H5URL) {
-      //   query = Base64.decode(H5URL)
-      // }
+      let H5URL = qu.H5URL  // 和1218活动页约定链接参数
+      let storageH5URL = window.localStorage.getItem('H5URL')
+      if (H5URL) {
+        query = JSON.parse(Base64.decode(H5URL))
+        // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
+      }
+      if (storageH5URL) {
+        query = JSON.parse(storageH5URL)
+      }
+      let {
+        DEVICE_ID = PRO_PARAMS.DEVICE_ID,
+        CHANNEL_ID = PRO_PARAMS.CHANNEL_ID,
+        APP_FLAG = PRO_PARAMS.APP_FLAG
+      } = query
+      this.$store.commit('SET_DEVICE_ID', DEVICE_ID)
+      this.$store.commit('SET_CHANNEL_ID', CHANNEL_ID)
+      this.$store.commit('SET_APP_FLAG', APP_FLAG)
       // if(query.)
       if (query.IS_SYNC_FLAG && query.ORG_ID) {
         // 外链过来的
@@ -58,11 +70,8 @@ export default {
           type: 'ProAndOrgType', value: query
         })
       }
-      console.log('login-query>>>', query);
-      if (query.isfinancial == 1) {
-        // 外链过来的
-        this.isfinancial = 1
-      }
+      // console.log('login-query>>>', query);
+
       if (this.getComState.ProAndOrgType.ORG_ID) {
         this.ProAndOrgType = this.getComState.ProAndOrgType || query
       } else {
@@ -81,6 +90,11 @@ export default {
       }
       else {
         this.BANK_NAME = this.ProAndOrgType.ORG_NAME
+      }
+      if (query.isfinancial == 1) {
+        // 外链过来的
+        this.BANK_NAME = ''
+        this.isfinancial = 1
       }
       // 控制底部提示
       // if(this.ProAndOrgType.IS_SYNC_FLAG == 1){

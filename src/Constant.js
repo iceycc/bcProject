@@ -6,13 +6,13 @@ import {version} from '../package'
  */
 let Configs = {
   // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
-   DEV_HOST: 'http://finsuitdev.bicai365.com/finsuit', // dev开发环境
+  DEV_HOST: 'http://finsuitdev.bicai365.com/finsuit', // dev开发环境
   // DEV_HOST: 'http://192.168.100.109:8080', // 个人
   // DEV_HOST: 'https://adv.bicai365.com/finsuit', // adv测试
   // DEV_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度测试
-  // PRO_HOST: 'https://adv.bicai365.com/finsuit',// adv
-  PRO_HOST: 'https://finsuitdev.bicai365.com/finsuit',
-  // PRO_HOST:'https://finsuit.udomedia.com.cn/finsuit' ,// 生产/**/
+
+  PRO_HOST: 'https://adv.bicai365.com/finsuit',// adv
+  // PRO_HOST:'https://finsuit.bicai365.com/finsuit' ,// 生产/**/
   // PRO_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度生产
   APP_DOWN_URL: '',
 }
@@ -174,6 +174,15 @@ export const ORG_ID_NUM = {
   ZhongBang: '227',
   KeShang: '248'
 }
+/**
+ *  外部参数默认设置
+ */
+export const PRO_PARAMS = {
+  DEVICE_ID: '001002003',
+  CHANNEL_ID: '91',
+  APP_FLAG: 'BC'
+}
+
 
 export const CheckBank = function (val) {
   let arr = []

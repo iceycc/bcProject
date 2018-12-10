@@ -10,7 +10,7 @@ import util from '../libs/util'
 
 let ORG_ID = util.storage.session.get('ORG_ID') || ''
 let frameIn = []
-switch (ORG_ID) {
+switch (ORG_ID + '') {
   case ORG_ID_NUM.JinShang:
     frameIn = JinShang;
     break;
