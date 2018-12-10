@@ -187,7 +187,7 @@ export const ORG_ID_NUM = {
  */
 export const PRO_PARAMS = {
   DEVICE_ID: '001002003ACD',
-  CHANNEL_ID: '91',
+  CHANNEL_ID: '88',
   APP_FLAG: 'BC'
 }
 
