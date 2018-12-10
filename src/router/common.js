@@ -49,7 +49,12 @@ export default [
   //   component: resolve => require(['views/ZhengZhou/product/ProductReservation.vue'], resolve),
   //   meta: {keepAlive: false, needLogin: false}
   // },
-
+  {
+    path: '/' + PageName.depositDetail,
+    name: PageName.depositDetail,
+    component: resolve => require(['views/common/ProductionDetail/depositDetail.vue'], resolve),
+    meta: {keepAlive: false, needLogin: false}
+  },
   /**
    * 比财登陆
    */

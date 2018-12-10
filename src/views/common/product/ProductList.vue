@@ -232,7 +232,10 @@
           //  未打通openApi
           // 直接跳转 比财登录
           this.$router.push({
-            name: PageName.Login,
+            name: PageName.depositDetail,
+            query: {
+              PRO_ID: ID, title:PRD_NAME
+            }
           })
 
         }
