@@ -17,8 +17,8 @@ let Configs = {
    * build
    */
   // PRO_HOST: 'https://adv.bicai365.com',// adv
-  // PRO_HOST:'https://finsuit.bicai365.com' ,// 生产/**/
-  PRO_HOST: 'https://graytest.bicai365.com',// 灰度生产
+  PRO_HOST:'https://finsuitdev.bicai365.com' ,// 生产/**/
+  // PRO_HOST: 'https://graytest.bicai365.com',// 灰度生产
 }
 export const HOST = process.env.NODE_ENV == 'development'
   ? Configs.DEV_HOST : Configs.PRO_HOST
