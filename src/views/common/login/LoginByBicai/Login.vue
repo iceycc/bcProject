@@ -26,9 +26,9 @@
       </section>
       <button :class="{tijiao:true,active:canClick}" @click="loginFactory()" :disabled="!canClick">登录</button>
       <p class="infos">
-        温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意《用户服务协议》和《比财隐私政策》
+        温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意 <a @click="goDocs('user')" class="doc" href="javascript:;">《比财服务协议》</a>和
+        <a @click="goDocs('bicaisafe')" class="doc" href="javascript:;">《比财隐私政策》</a>
       </p>
-
     </div>
     <section class="safe-code" v-show="showSafeCode">
       <div>
@@ -65,7 +65,6 @@
   export default {
     data() {
       return {
-        hasBank: false,
         ifOpenApi: true,
         IMG: '',
         msgDisabled: false,
@@ -94,7 +93,8 @@
         href: '',
         ORG_ID: '',
         OPEN_H5_STATUS: '',
-        isfinancial: ''
+        isfinancial: '',
+        hasBank:false
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
@@ -102,7 +102,7 @@
       PassWordZhengzhou
     },
     created() {
-      // this.getImgCode()
+      this.getImgCode()
     },
     computed: {
       disabled() {
@@ -170,6 +170,9 @@
           this.checkAuthStatus()
         }
       },
+      goDocs(page){
+        this.$router.push({name:PageName.BicaiPageDocs,query:{type:page}})
+      },
       // 登录
       loginFactory() {
         if (util.Check.tel(this.tel, true)) return
@@ -187,9 +190,9 @@
           //   REMARK_DATA: '异业合作-登录', // 中文备注
           //   SOURCE_URL: SOURCE_URL
           // })
+          // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
           if (this.isfinancial == '1') {
-            // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
-            window.location.href = HOST+ '/nay/#/myInvestment?members_id=' + res.ID
+            window.location.href =HOST + '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
 
@@ -531,6 +534,9 @@
     width: px2rem(315);
     height: px2rem(34);
     color: #B3B3B3;
+    .doc {
+      color: #508CEE;
+    }
   }
 
   .login_box .forget {

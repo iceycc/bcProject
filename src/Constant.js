@@ -183,7 +183,7 @@ export const ORG_ID_NUM = {
  *  外部参数默认设置
  */
 export const PRO_PARAMS = {
-  DEVICE_ID: '001002003',
+  DEVICE_ID: '001002003ACD',
   CHANNEL_ID: '91',
   APP_FLAG: 'BC'
 }
