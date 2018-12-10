@@ -29,6 +29,7 @@ function getComParams(to) {
   let URL_CHANNEL_ID = to.query.CHANNEL_ID || ''
   if (URL_CHANNEL_ID) {
     store.commit('SET_CHANNEL_ID', URL_CHANNEL_ID)
+    util.storage.session.set('CHANNEL_ID',URL_CHANNEL_ID)
   }
   //
   let URL_APP_FLAG = to.query.APP_FLAG || ''
