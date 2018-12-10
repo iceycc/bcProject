@@ -100,7 +100,7 @@
       PassWordZhengzhou
     },
     created() {
-      this.getImgCode()
+      // this.getImgCode()
     },
     computed: {
       disabled() {
@@ -312,7 +312,7 @@
         let PHONE = this.tel
         PHONE = PHONE + ''
         if (util.Check.tel(PHONE, true)) return;
-        this.getImgCode()
+        // this.getImgCode()
         this.getMsg()
       },
       // msg倒计时
