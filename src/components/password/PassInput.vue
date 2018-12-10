@@ -9,8 +9,8 @@
 </template>
 <script>
     import Bus from '@/plugin/bus/index'
-    import {HOST, LsName} from "@/Constant";
-    let base_url = HOST + '/openapi/jsBankPsw/getJpPsw'
+    import {HOST_API, LsName} from "@/Constant";
+    let base_url = HOST_API + '/openapi/jsBankPsw/getJpPsw'
     export default {
         name: "PassInput",
         props: {

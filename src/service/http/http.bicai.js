@@ -2,17 +2,17 @@
 // import axios from '@/plugin/request/_axios'
 import axios from 'axios'
 import store from '@/store/index'
-import {HOST} from "@/Constant";
+import {HOST_API} from "@/Constant";
 import Bus from '@/plugin/bus/index'
 import {BusName, PageName, LsName} from "@/Constant";
 import {Indicator} from 'mint-ui';
 
-// let HOST = 'https://finsuitdev.udomedia.com.cn/finsuit/'
-// let HOST = 'http://192.168.100.173:8080/finsuit/'
+// let HOST_API = 'https://finsuitdev.udomedia.com.cn/finsuit/'
+// let HOST_API = 'http://192.168.100.173:8080/finsuit/'
 const config = {
   method: 'post',
   // baseURL: '/api/finsuit/PHONE/deal',
-  baseURL: HOST + '/finsuitPhone/deal',
+  baseURL: HOST_API + '/finsuitPhone/deal',
   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   timeout: 100000,
 }

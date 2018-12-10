@@ -12,7 +12,7 @@
 </template>
 <script>
   import API from "@/service";
-  import {HOST} from "@/Constant";
+  import {HOST_API} from "@/Constant";
 
   export default {
     name: "DocsPage",
@@ -35,7 +35,7 @@
         }
         if (type == 'recharge') {
           this.getBuyAgreementByAjax()
-          // this.agreeMentSrc = HOST + '/static/finsuit/bank/zzh/cz.html'
+          // this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/cz.html'
         }
         if (type == 'open') {
           this.getOpenAgreementByAjax()
@@ -68,14 +68,14 @@
         let data = {}
         API.doc.personalAccountServiceAgreement(data, res => {
           this.title = res.AGREEMENT
-          this.agreeMentSrc = HOST + res.URL
+          this.agreeMentSrc = HOST_API + res.URL
         })
       },
       getOpenAgreementByAjax() {
         let data = {}
         API.doc.electronicAccountAgreement(data, res => {
           this.title = res.AGREEMENT
-          this.agreeMentSrc = HOST + res.URL
+          this.agreeMentSrc = HOST_API + res.URL
         })
       },
       getPrivacyAgreementByAjax(){

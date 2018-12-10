@@ -1,12 +1,12 @@
 import http from '../http/http.ZHENGZHOU'
-import {HOST} from "@/Constant";
+import {HOST_API} from "@/Constant";
 
 /**
  * axios 配置
  */
 const Config = {
   config: {
-    baseURL: HOST,
+    baseURL: HOST_API,
     // baseURL: 'https://finsuitdev.udomedia.com.cn/finsuit/',
     // baseURL:'http://192.168.100.141:8080/',
     method: 'post',

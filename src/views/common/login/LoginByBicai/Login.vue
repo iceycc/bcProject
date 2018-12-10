@@ -5,7 +5,8 @@
     <!--<img class="logo" src="@/assets/images/logoaaa_03.png" alt="">-->
     <div class="logo-box">
       <img src="@/assets/images/common/logo@2x.png" alt="" @click="goBicaiOpen">
-      <span>比财平台{{BANK_NAME}}</span>
+      <span v-if="hasBank">比财平台{{BANK_NAME}}</span>
+      <span v-if="!hasBank">你好，欢迎来到比财</span>
     </div>
     <div class="login_box">
       <section class="input-box">
@@ -25,9 +26,9 @@
       </section>
       <button :class="{tijiao:true,active:canClick}" @click="loginFactory()" :disabled="!canClick">登录</button>
       <p class="infos">
-        温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意《用户服务协议》和《比财隐私政策》
+        温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意 <a @click="goDocs('user')" class="doc" href="javascript:;">《比财服务协议》</a>和
+        <a @click="goDocs('bicaisafe')" class="doc" href="javascript:;">《比财隐私政策》</a>
       </p>
-
     </div>
     <section class="safe-code" v-show="showSafeCode">
       <div>
@@ -57,7 +58,7 @@
   import Mixins from "@/mixins";
   import LoginMixins from './login'
   import util from "@/libs/util";
-  import {HOST} from "@/Constant";
+  import {HOST_API} from "@/Constant";
 
   let time = 60
   let timer;
@@ -92,7 +93,8 @@
         href: '',
         ORG_ID: '',
         OPEN_H5_STATUS: '',
-        isfinancial:''
+        isfinancial: '',
+        hasBank:false
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
@@ -100,7 +102,7 @@
       PassWordZhengzhou
     },
     created() {
-      // this.getImgCode()
+      this.getImgCode()
     },
     computed: {
       disabled() {
@@ -168,6 +170,9 @@
           this.checkAuthStatus()
         }
       },
+      goDocs(page){
+        this.$router.push({name:PageName.BicaiPageDocs,query:{type:page}})
+      },
       // 登录
       loginFactory() {
         if (util.Check.tel(this.tel, true)) return
@@ -187,7 +192,7 @@
           // })
           // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
           if (this.isfinancial == '1') {
-            window.location.href = 'https://adv.bicai365.com/nay/#/myInvestment?members_id=' + res.ID
+            window.location.href =HOST_API + '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
 
@@ -219,14 +224,12 @@
             // } else {
             //   this.checkAuthStatus()
             // }
-          }
-          else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+          } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
             // 是 openApi
             // this.checkBankStatus()
             // this.checkBankOpenAndLogin()
             this.checkAuthStatus()
-          }
-          else {
+          } else {
             this.checkAuthStatus()
           }
         }, err => {
@@ -312,7 +315,6 @@
         let PHONE = this.tel
         PHONE = PHONE + ''
         if (util.Check.tel(PHONE, true)) return;
-        // this.getImgCode()
         this.getMsg()
       },
       // msg倒计时
@@ -344,6 +346,7 @@
     padding-top: px2rem(40);
     box-sizing: border-box;
     padding-left: px2rem(20);
+
     span {
       padding-top: px2rem(10);
       padding-left: px2rem(20);
@@ -351,6 +354,7 @@
       color: #49546C;
       vertical-align: top;
     }
+
     img {
       vertical-align: top;
       width: px2rem(50);
@@ -393,6 +397,7 @@
     padding-left: px2rem(20);
     padding-top: px2rem(24);
     font-size: px2rem(18);
+
     img {
       width: .6rem;
       vertical-align: top;
@@ -419,17 +424,21 @@
       height: px2rem(150);
       border-radius: px2rem(6);
     }
+
     p {
       flex: 1;
       font-size: px2rem(18);
     }
+
     .btn {
       flex: 2;
       display: flex;
+
       button {
         flex: 1;
         border-top: 1px solid #ccc;
         color: #007aff;
+
         &:first-child {
           border-right: 1px solid #ccc;
         }
@@ -441,10 +450,12 @@
       display: flex;
       padding: px2rem(15);
       flex: 2;
+
       img {
         width: px2rem(80);
         height: px2rem(40);
       }
+
       input {
         flex: 1;
         padding-left: px2rem(10);
@@ -457,6 +468,7 @@
 
   .login_box {
     position: relative;
+
     .input-box {
       position: relative;
       margin-left: px2rem(20);
@@ -466,11 +478,13 @@
       border-bottom: 1px #E5E5E5 solid;
       padding-top: px2rem(20);
     }
+
     .label {
       padding: 0;
       font-size: px2rem(17);
       color: #858E9F;
     }
+
     .get-msg {
       position: absolute;
       right: 0;
@@ -482,6 +496,7 @@
       border: 1px solid #508CEE;
       border-radius: px2rem(6)
     }
+
     .input {
       position: absolute;
       left: 0;
@@ -509,6 +524,7 @@
     margin: px2rem(66) auto 0;
     text-align: center;
     display: block;
+
     &.active {
       color: #508CEE;
       border: 1px solid #508CEE;
@@ -520,6 +536,9 @@
     width: px2rem(315);
     height: px2rem(34);
     color: #B3B3B3;
+    .doc {
+      color: #508CEE;
+    }
   }
 
   .login_box .forget {
@@ -549,6 +568,7 @@
     text-align: center;
     font-size: 0;
     color: #333;
+
     img {
       vertical-align: top;
       width: .5rem;

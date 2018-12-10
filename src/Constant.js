@@ -5,19 +5,26 @@ import {version} from '../package'
  *
  */
 let Configs = {
-  // DEV_HOST: 'http://47.94.4.11:8090/finsuit', // 开发环境
-  DEV_HOST: 'http://finsuitdev.bicai365.com/finsuit', // dev开发环境
-  // DEV_HOST: 'http://192.168.100.109:8080', // 个人
-  // DEV_HOST: 'https://adv.bicai365.com/finsuit', // adv测试
-  // DEV_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度测试
 
-  PRO_HOST: 'https://adv.bicai365.com/finsuit',// adv
-  // PRO_HOST:'https://finsuit.bicai365.com/finsuit' ,// 生产/**/
-  // PRO_HOST:'https://graytest.bicai365.com/finsuit' ,// 灰度生产
-  APP_DOWN_URL: '',
+  /**
+   * dev
+   */
+  DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
+  // DEV_HOST: 'https://adv.bicai365.com', // adv测试
+  // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
+
+  /**
+   * build
+   */
+  // PRO_HOST: 'https://adv.bicai365.com',// adv
+  // PRO_HOST:'https://finsuit.bicai365.com' ,// 生产/**/
+  PRO_HOST: 'https://graytest.bicai365.com',// 灰度生产
 }
 export const HOST = process.env.NODE_ENV == 'development'
-  ? Configs.DEV_HOST : Configs.PRO_HOST // api 接口地址
+  ? Configs.DEV_HOST : Configs.PRO_HOST
+
+export const HOST_API = HOST + '/finsuit' // // api 接口地址
+
 /**
  *
  */
@@ -108,6 +115,7 @@ export const PageName = {
   BcOpening3: 'BcOpening3',
   BcOpening2: 'BcOpening2',
   BcOpening1: 'BcOpening1',
+  BicaiPageDocs: 'BicaiPageDocs',
   /**
    * 郑州新增
    */
@@ -178,7 +186,7 @@ export const ORG_ID_NUM = {
  *  外部参数默认设置
  */
 export const PRO_PARAMS = {
-  DEVICE_ID: '001002003',
+  DEVICE_ID: '001002003ACD',
   CHANNEL_ID: '91',
   APP_FLAG: 'BC'
 }

@@ -57,7 +57,7 @@
 </template>
 <script>
   import API from "@/service";
-  import {HOST, LsName} from '@/Constant'
+  import {HOST_API, LsName} from '@/Constant'
   import UpSelect from '@/components/commons/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
@@ -80,7 +80,7 @@
         write: false, // 是否签约
         agree: true, // 是否阅读
         agree1: true, // 是否获取短信
-        agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
+        agreeMentSrc: HOST_API + '/static/finsuit/js/openapi/js/xieyi/cz.html',
         ORG_NAME: '',
         CARD_NUM: '', //一类户卡号
         BANK_USER_CODE: '', //二类户卡号

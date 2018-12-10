@@ -17,6 +17,15 @@ export default [
     meta: {keepAlive: false, title: '安全登录', needLogin: false}
   },
   /**
+   *  BicaiPageDocs
+   */
+  {
+    path: '/' + PageName.BicaiPageDocs,
+    name: PageName.BicaiPageDocs,
+    component: resolve => require(['views/common/BicaiPageDocs.vue'], resolve),
+    meta: {keepAlive: false, title: '协议', needLogin: false}
+  },
+  /**
    * 电子账户
    */
   {

@@ -98,7 +98,7 @@
   </div>
 </template>
 <script>
-  import {PageName, BusName, HOST} from "@/Constant";
+  import {PageName, BusName, HOST_API} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
   import Opening1Mixins from './Opening1'
   import util from "../../../libs/util"
@@ -130,7 +130,7 @@
         stepImg3: require('@/assets/images/step3.png'),
         test1: '',
         test2: '',
-        agreeMentSrc: HOST + '/static/finsuit/js/openapi/js/xieyi/cz.html',
+        agreeMentSrc: HOST_API + '/static/finsuit/js/openapi/js/xieyi/cz.html',
 
         preSrc1: require('@/assets/images/cameracopy@2x.png'),
         preSrc2: require('@/assets/images/cameracopy@2x.png'),
