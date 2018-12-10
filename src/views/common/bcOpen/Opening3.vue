@@ -124,6 +124,7 @@
           onePassword: this.payPass,
           twoPassword: this.rePayPass,
         }
+        let ProAndOrgType = this.getComState.ProAndOrgType || {}
         API.bicai.getPayPassword(data, res => {
           Bus.$emit(BusName.showToast, res.message)
           if (res.status == 1) {

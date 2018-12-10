@@ -133,7 +133,6 @@
         })
       },
       getInfos() {
-
         // this.getRiskGrade()
         this.getBankInfo()
       },

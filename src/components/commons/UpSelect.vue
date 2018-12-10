@@ -6,7 +6,9 @@
         <span @click="typeShow = false">&times;</span>
       </div>
       <ul class="r-type-list" v-for="bank,index in BankList" :key="index">
-        <li :class="cur === bank.id ? 'active' : ''" @click="chooseType(index,bank,$event)">
+        <li
+          :class="{gray:bank.IS_SUPPORT == 0,active:cur === index}"
+          @click="chooseType(index,bank,$event)">
           <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
           <section>
             <p class="name">{{bank.OPEN_BANK}} {{bank.CARD_NO| noFilter}}</p>
@@ -64,19 +66,20 @@
     },
     data() {
       return {
-        cur: 1,
+        cur: '',
         typeShow: false,
         imgSrc: imgSrc
       }
     },
     methods: {
-      addBankList(){
+      addBankList() {
         this.typeShow = false
         this.$emit('clickBankList', name)
       },
-      chooseType(index,bank, e) {
+      chooseType(index, bank, e) {
         this.$emit('chooseBank', bank)
         this.cur = index;
+
         this.typeShow = false;
         // this.typeText = e.target.innerText;
       }
@@ -86,15 +89,18 @@
 
 <style scoped lang="scss">
   @import "~@/assets/px2rem";
+
   .add_bank {
     display: flex;
     height: px2rem(40);
     line-height: px2rem(40);
+
     .left {
-      width:px2rem(130);
+      width: px2rem(130);
       padding-left: px2rem(30);
       height: px2rem(30);
-      .add{
+
+      .add {
         display: inline-block;
         width: px2rem(22);
         height: px2rem(22);
@@ -106,11 +112,13 @@
         line-height: px2rem(20);
       }
     }
+
     .right {
       flex: 1;
       font-size: px2rem(16);
     }
   }
+
   .r-type-popup {
     width: 100%;
     position: fixed;
@@ -126,7 +134,8 @@
       font-size: px2rem(18);
       color: #444;
       border-bottom: 1px solid #EEEEF0;
-      span{
+
+      span {
         position: absolute;
         top: 0;
         right: px2rem(25);
@@ -134,25 +143,31 @@
         color: #858E9F;
       }
     }
+
     .r-type-list {
       position: relative;
+
       li {
         display: flex;
         padding: px2rem(22);
         border-bottom: 1px solid #EEEEF0;
+
         .logo-img {
           width: px2rem(40);
           height: px2rem(40);
         }
+
         .name {
           text-align: left;
           color: #000;
         }
+
         .money {
           line-height: px2rem(40);
           font-size: px2rem(14);
           color: #000;
         }
+
         section {
           padding-left: px2rem(30);
           text-align: center;
@@ -160,6 +175,7 @@
           color: #666
         }
       }
+
       li.active:after {
         content: '';
         position: absolute;
@@ -169,6 +185,16 @@
         width: px2rem(18);
         height: px2rem(18);
         background: url("../../assets/images/check.png") center center no-repeat;
+      }
+
+      .gray {
+        .money {
+          color: #ccc;
+        }
+
+        .name {
+          color: #ccc;
+        }
       }
     }
   }

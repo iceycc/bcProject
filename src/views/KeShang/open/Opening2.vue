@@ -243,16 +243,26 @@
         this.showBankList()
       },
       checkBankName(val) {
+        if(!val){
+          return
+        }
         this.checkBankName1 = false
         // this.checkBankType()
         val = val.replace(/\s+/g, "")
         let bankName
+        let flag = false
         for (let i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
             this.bankText = bankName
+             flag = true
             console.log('bankName', bankName);
             break
           }
+        }
+        if(!flag){
+          this.bankText = '请选择开户银行'
+          this.data.CARD_NO = ''
+          Bus.$emit(BusName.showToast,'暂不支持该银行')
         }
         console.log(this.bankText);
       },

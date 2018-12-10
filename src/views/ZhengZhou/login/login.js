@@ -67,7 +67,6 @@ export default {
           this.$router.push({name: PageName.Opening2})
         }
         if (step == 2) {
-          this.setComState({type:'Infos',value:res})
 
           // this.$store.commit('SET_OPENING_DATA', 1)
           // this.$router.push({name: PageName.Opening3})
@@ -76,7 +75,6 @@ export default {
         if (step == 3) {
           // todo登陆成功后判断拿来的去哪里
           this.setComState({type:'ISLogin',value:true})
-          this.setComState({type:'Infos',value:res})
 
           // this.$router.push({name:PageName.Opening3})
           this.checkIfPinggu(res)

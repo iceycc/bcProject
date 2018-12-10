@@ -170,8 +170,8 @@
       //   this.$router.push({name: PageName.Buying})
       // },
       geDetails(item) {
-        let {FUND_NO, PRD_INDEX_ID, PRD_NAME} = item
-        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
+        let {FUND_NO, PRD_INDEX_ID, PRD_NAME,ORDER_NUM} = item
+        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME,ORDER_NUM}})
       },
       goRedeem(data) {
         // Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
@@ -196,9 +196,9 @@
       },
       toggleTabs(index) {
         // TODO
-        if(index==1){
-          return
-        }
+        // if(index==1){
+        //   return
+        // }
         this.pageList = []
         this.nowIndex = index;
         this.loadPageList();

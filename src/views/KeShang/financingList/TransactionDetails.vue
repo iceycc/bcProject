@@ -3,8 +3,8 @@
     <div class="wrap-top">
       <app-bar title="交易明细"></app-bar>
       <!--<ul class="w-tap">-->
-        <!--<li :class="{actvie:cur==1}" @click="tap(1)">收益明细</li>-->
-        <!--<li :class="{actvie:cur==2}" @click="tap(2)">交易明细</li>-->
+      <!--<li :class="{actvie:cur==1}" @click="tap(1)">收益明细</li>-->
+      <!--<li :class="{actvie:cur==2}" @click="tap(2)">交易明细</li>-->
       <!--</ul>-->
       <ul class="tabs">
         <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
@@ -69,14 +69,14 @@
   export default {
     data() {
       return {
-        cur:1,
-        pageList1:[{
-          TRANS_TYPE_NAME:'百度',
-          TRANS_TIEM:'AAA',
-          TRANS_AMT:'11'
+        cur: 1,
+        pageList1: [{
+          TRANS_TYPE_NAME: '百度',
+          TRANS_TIEM: 'AAA',
+          TRANS_AMT: '11'
 
         }],
-        PRD_NAME:'',
+        PRD_NAME: '',
         // 1月分页
         searchCondition: {
           //分页属性
@@ -87,7 +87,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["近一个月", "近二个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近三个月", "近六个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
@@ -95,12 +95,13 @@
           small: {},
           large: {}
         },
-        FUND_NO:'',
-        PRD_INDEX_ID:''
+        FUND_NO: '',
+        PRD_INDEX_ID: '',
+        ORDER_NUM:''
       };
     },
-    watch:{
-      cur(){
+    watch: {
+      cur() {
         this.loadPageList(); //初次访问查  询列表
         this.setEleSize()
       }
@@ -109,6 +110,7 @@
       this.FUND_NO = this.$route.query.FUND_NO
       this.PRD_INDEX_ID = this.$route.query.PRD_INDEX_ID
       this.PRD_NAME = this.$route.query.PRD_NAME
+      this.ORDER_NUM = this.$route.query.ORDER_NUM
     },
     components: {
       "v-loadmore": Loadmore // 为组件起别名，vue转换template标签时不会区分大小写，例如：loadMore这种标签转换完就会变成loadmore，容易出现一些匹配问题
@@ -121,15 +123,15 @@
 
     },
     methods: {
-      getData(){
-        if(this.cur==1){
+      getData() {
+        if (this.cur == 1) {
 
         }
-        if(this.cur==2){
+        if (this.cur == 2) {
 
         }
       },
-      tap(index){
+      tap(index) {
         this.cur = index
       },
       setEleSize() {
@@ -165,19 +167,18 @@
           index = 0
         }
         this.endDate = this.getLastMonthYestdy(0);
-        this.startDate = this.getLastMonthYestdy(index + 1);
+        this.startDate = this.getLastMonthYestdy(2 * index + 1);
         this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
-
       },
       more: function () {
         // 分页查询
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
         let data = {
+          ORDER_NUM:this.ORDER_NUM,
           TYPE: 'API_QRY_BUY_HIS',
-          QRY_TYPE: '0',
           PRD_TYPE: '4',
-          PRD_INDEX_ID:this.PRD_INDEX_ID + '',
+          PRD_INDEX_ID: this.PRD_INDEX_ID + '',
           currentPage: this.searchCondition.pageNo,
           START_DATE: this.startDate,
           END_DATE: this.endDate
@@ -191,7 +192,7 @@
         // START_DATE	开始日期
         // END_DATE	结束日期
 
-        if(this.cur==1){
+        if (this.cur == 1) {
           API.bank.apiQryBuyHis(data, res => {
             this.pageList = this.pageList.concat(res.PAGE.retList);
             if (res.PAGE.retList.length < this.searchCondition.pageSize) {
@@ -200,7 +201,7 @@
             }
           });
         }
-        if(this.cur==2){
+        if (this.cur == 2) {
           API.bank.apiQryBuyHis(data, res => {
             this.pageList = this.pageList.concat(res.PAGE.retList);
             if (res.PAGE.retList.length < this.searchCondition.pageSize) {
@@ -214,16 +215,16 @@
       apiQryTradeHis(start, end) {
 
         let data = {
+          ORDER_NUM:this.ORDER_NUM,
           TYPE: 'API_QRY_BUY_HIS',
           currentPage: "1",
-          QRY_TYPE: '0',
           PRD_TYPE: '4',
-          PRD_INDEX_ID:this.PRD_INDEX_ID + '',
+          PRD_INDEX_ID: this.PRD_INDEX_ID + '',
           START_DATE: start,
           END_DATE: end
         };
 
-        if(this.cur==1){
+        if (this.cur == 1) {
           API.bank.apiQryBuyHis(data, res => {
             this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -241,7 +242,7 @@
 
           });
         }
-        if(this.cur==2){
+        if (this.cur == 2) {
           API.bank.apiQryBuyHis(data, res => {
             this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
@@ -259,8 +260,6 @@
 
           });
         }
-
-
       },
       toggleTabs(index) {
         this.nowIndex = index;
@@ -428,7 +427,7 @@
         return datastr;
       },
       query() {
-        if(this.checkTime(this.startDate, this.endDate)){
+        if (this.checkTime(this.startDate, this.endDate)) {
           this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
         }
       }
@@ -476,18 +475,21 @@
     position: absolute;
     width: 100%;
     top: 0;
+
     .tabs {
       position: relative;
       display: flex;
       height: px2rem(44);
       line-height: px2rem(44);
       background: #fff;
+
       li {
         flex: 1;
         text-align: center;
         font-size: px2rem(15);
         color: #b3b3b3;
       }
+
       li:last-child {
         position: relative;
         width: px2rem(60);
@@ -495,6 +497,7 @@
         flex: none;
         border-left: px2rem(1) solid #f6f6f9;
       }
+
       li:last-child:after {
         position: absolute;
         content: "";
@@ -509,6 +512,7 @@
         right: 0;
         margin: px2rem(12) auto 0;
       }
+
       li.active:last-child:after {
         position: absolute;
         content: "";
@@ -533,17 +537,21 @@
   .t-tab {
     position: absolute;
     width: 100%;
-    .no-data{
+
+    .no-data {
       width: 100%;
-      img{
+
+      img {
         width: 100%;
       }
-      .infos{
+
+      .infos {
         text-align: center;
         font-size: px2rem(16);
         color: #1badff;
       }
     }
+
     .divTab {
       .t-content {
         h4 {
@@ -553,11 +561,14 @@
           padding: px2rem(16) px2rem(15) px2rem(4);
           font-weight: normal;
         }
+
         div {
           margin-top: px2rem(5);
           overflow: hidden;
+
           ul {
             background: #fff;
+
             li {
               display: block;
               border-bottom: px2rem(1) solid #e7e7e7;
@@ -571,6 +582,7 @@
                 font-weight: normal;
                 padding-bottom: px2rem(4);
               }
+
               p {
                 span {
                   font-size: px2rem(12);
@@ -579,6 +591,7 @@
                   padding-right: px2rem(20);
                   color: #858e9f;
                 }
+
                 em {
                   font-size: px2rem(18);
                   float: right;
@@ -587,15 +600,18 @@
                 }
               }
             }
+
             li:last-child {
               border-bottom: none;
             }
           }
+
           ul:last-child {
             border-bottom: none;
           }
         }
       }
+
       // padding-bottom: px2rem(16);
     }
 
@@ -604,15 +620,18 @@
       background: #efefef;
       line-height: px2rem(44);
       position: relative;
+
       ul {
         margin-right: px2rem(60);
         display: flex;
+
         li {
           flex: 1;
           display: inline-block;
           font-size: px2rem(15);
           color: #666666;
           padding-left: px2rem(20);
+
           span {
             display: inline-block;
             height: 0;
@@ -624,6 +643,7 @@
           }
         }
       }
+
       .t-query {
         width: px2rem(60);
         height: px2rem(44);
@@ -635,6 +655,7 @@
         text-align: center;
       }
     }
+
     .t-text {
       padding: 0 px2rem(15);
       font-size: px2rem(12);
@@ -649,16 +670,19 @@
     box-sizing: border-box;
     padding-bottom: px2rem(50);
   }
-  .w-tap{
+
+  .w-tap {
     display: flex;
-    li{
+
+    li {
       flex: 1;
       height: px2rem(30);
       line-height: px2rem(30);
       text-align: center;
       margin: px2rem(10) 0;
       background: #fff;
-      &.actvie{
+
+      &.actvie {
         color: #007aff;
       }
     }

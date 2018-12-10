@@ -101,10 +101,11 @@
         }, time)
       })
       Bus.$on(BusName.showSendMsg, (val) => {
+        console.log(val);
         if (!val) {
-          let BANK_CARD_PHONE = this.getComState.TEL
-          // let BANK_CARD_PHONE = this.getComState.Infos.BANK_CARD_PHONE
-          val = BANK_CARD_PHONE
+          // let BANK_CARD_PHONE = this.getComState.TEL
+          let PHONE_NUM = this.getComState.Infos.PHONE_NUM
+          val = PHONE_NUM
         }
         val = val + ''
         if(val.length!==11) return

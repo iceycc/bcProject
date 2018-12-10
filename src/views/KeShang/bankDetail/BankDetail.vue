@@ -176,8 +176,8 @@
       }
       ,
       geDetails(item) {
-        let {FUND_NO, PRD_INDEX_ID, PRD_NAME} = item
-        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME}})
+        let {FUND_NO, PRD_INDEX_ID, PRD_NAME,ORDER_NUM} = item
+        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME,ORDER_NUM}})
       },
       // getMyInvesthandle(){
       //     API.common.getMyInvest({})

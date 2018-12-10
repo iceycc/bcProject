@@ -6,7 +6,7 @@ export default {
    * @returns {*} eg:3,000.00
    */
   formatNum(str) {
-    if (!str) return str
+    if (!str) return '0.00'
     str = str + ''
     // if(str == '' || !str) return
     // if (!Number(str)) return str

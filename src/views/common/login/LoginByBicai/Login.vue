@@ -24,7 +24,7 @@
                name="text1" :placeholder="cmsholder" v-model="cms">
         <button class="get-msg" @click="clickMsgCodeHandle" :disabled="msgDisabled">{{codeText}}</button>
       </section>
-      <button :class="{tijiao:true,active:canClick}" @click="loginFactory()" :disabled="!canClick">登录</button>
+      <button :class="{tijiao:true,active:canClick}" @click="loginFactory" :disabled="!canClick">登录</button>
       <p class="infos">
         温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意 <a @click="goDocs('user')" class="doc" href="javascript:;">《比财服务协议》</a>和
         <a @click="goDocs('bicaisafe')" class="doc" href="javascript:;">《比财隐私政策》</a>
@@ -181,6 +181,7 @@
           PHONE_CODE: this.cms,
           SAFT_CODE: this.safeCode
         }
+        this.setComState({type:'userTel',value:this.tel})
         let SOURCE_URL = this.getComState.loginType
         console.log(SOURCE_URL);
         this.$store.commit('SET_TOKEN', null)
@@ -195,8 +196,7 @@
             window.location.href =HOST_API + '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
-
-          this.$store.commit('SET_BICAI_USER', res)
+          this.setComState({type:'Infos',value:res})
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {

@@ -87,7 +87,7 @@ export const CheckAccountMixin ={
         }
         if (step == 3) {
           // todo登陆成功后判断拿来的去哪里
-          this.setComState({type:'Infos',value:res})
+          // this.setComState({type:'Infos',value:res})
           this.checkIfPinggu(res)
         }
       },err=>{

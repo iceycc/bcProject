@@ -17,7 +17,7 @@ export default {
       logo: '', // 直销银行logo
     },
     Infos: '', // 存储个人信息
-
+    userTel:'',
     RechargeQuery: {}, // 充值页需要的参数
     PRD_TYPE: '', // 产品类型
     OriginPage: '', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口

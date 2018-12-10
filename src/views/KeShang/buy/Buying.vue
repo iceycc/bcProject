@@ -38,7 +38,7 @@
       <input type="tel" v-model="msgCode" placeholder="输入验证码">
       <button
         :disabled="msgdisable"
-        @click="getMsg"
+        @click="getCode"
         class="button">{{codeText}}
       </button>
     </section>
@@ -98,7 +98,6 @@
     mixins: [Mixins.StoreMixin],
     created() {
       this.getInfo()
-
       // todo测试用
       // this.getProData(17897)
       this.proDetail = this.getComState.goBuy // 数据
@@ -218,8 +217,8 @@
       },
       // 轮询查询交易状态！！
 
-      getCode() { // 充值短信
-        let TEL = this.getComState.TEL
+      getCode() { // 短信
+        let TEL = this.getComState.Infos.PHONE_NUM
         let data = {
           PHONE_NUM: TEL,
           BIZ_TYPE: '4', // 购买众邦需要
@@ -227,6 +226,7 @@
           BANK_USER_ID: this.BANK_USER_ID
         }
         API.common.apiSendPhoneCode(data, res => {
+          this.getMsg()
           this.MESAGE_TOKEN = res.MESSAGE_TOKEN
           Bus.$emit(BusName.showSendMsg, TEL)
         })
@@ -244,7 +244,6 @@
           times--
           this.codeText = `${times}s`
         }, 1000)
-        this.getCode()
       },
       polling(res) {
         let data = {

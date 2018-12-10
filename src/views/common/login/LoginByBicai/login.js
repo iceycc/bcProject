@@ -266,7 +266,6 @@ export default {
     },
     loginSuccess(res) {
       this.setComState({type: 'ISLogin', value: true})
-      this.setComState({type: 'Infos', value: res})
       // 判断openApi
       // this.checkProTo(this.toPreProduct, this.toPreProduct)
       if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
