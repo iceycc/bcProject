@@ -18,12 +18,16 @@
                 <strong style="font-size: 0.9rem;text-align: left;padding-left: 0.1rem"> 28天-3年 </strong>
               </p>
             </div>
+
           </div>
           <div class="bannerbottom">
             <ul>
-              <li class="bannerbottomtwo clearfix">当日计息</li>
-              <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
-              <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>
+              <li class="bannerbottomone clearfix" @click="showSafeDocs">
+                <img src="~@/assets/images/icon_dunpai@2x.png" alt="">
+                受存款保险保护 >
+              </li>
+              <li class="bannerbottomtwo clearfix">本金保障</li>
+              <li class="bannerbottomthree clearfix">累计申购笔数 {{productDetail.BUY_COUNT}}</li>
             </ul>
           </div>
         </div>
@@ -51,26 +55,23 @@
       <!--</div>-->
       <div class="contenttop">
         <p>交易规则</p>
-        <!--<div class="bannercontent">-->
-        <!--<span class="bannercontenttitle">审核方式</span>-->
-        <!--<span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>-->
-        <!--</div>-->
         <div class="bannercontent">
           <span class="bannercontenttitle">起存金额</span>
-          <span
-            class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
+          <span class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
         </div>
-        <div class="bannercontent">
+
+        <div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">
           <span class="bannercontenttitle">递增金额</span>
           <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">支取时间</span>
-          <span class="bannercontenttitlecontent">随时支取</span>
+          <span
+            class="bannercontenttitlecontent">随时支取</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">智能存款</span>
+          <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER(productDetail.DEPOSIT_TYPE_ID)}}</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">锁定期</span>
@@ -121,7 +122,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_AREA_CONTENT">
+          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_TEXT_AREA">
           </div>
         </div>
       </div>
@@ -161,20 +162,23 @@
     <div class="buttonbottom" @click="goNext(type)">
       <span class="p-icon"></span>{{btnType}}
     </div>
+    <safe-docs v-if="safeShow" @closeHandle="closeSafe"></safe-docs>
   </div>
 </template>
 <script>
   import API from "@/service";
-  import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
-  import Register from '../login/login'
-
+  import Register from './commom'
+  import SafeDocs from '@/components/commons/SafeDocs.vue'
+  // require styles
 
   export default {
     data() {
       return {
+        safeShow:false,
+        NAV_List: [{}, {}],
         productDetail: {
           RATE: "",
           PERIOD: "",
@@ -197,14 +201,17 @@
         title: "",
         PRD_TYPE: "",
         canEdit: false,
-
         defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
+        IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
     computed: {
+      // swiper() {
+      //   return this.$refs.mySwiper.swiper
+      // },
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
@@ -217,12 +224,13 @@
 
       }
     },
-
+    components: {
+      SafeDocs
+    },
     created() {
       this.title = this.$route.query.title;
       this.proID = this.$route.query.PRO_ID;
-      // this.getData(this.proID);
-      this.getData(17897);
+      this.getData(this.proID);
     },
     directives: {
       focus: { // 自定义事件
@@ -232,17 +240,37 @@
       }
     },
     filters: {
-      PRD_TYPE_ID_FILTER(val) {
+      PRD_TYPE_ID_FILTER(val, type) {
         let str = '产品类型';
         switch (val - 0) {
           case 1:
             str = '货币基金'
             break;
           case 2:
-            str = '理财 '
+            str = '理财'
             break;
           case 3:
             str = '纯债'
+            break;
+          case 4:
+            //  1：活期
+            //  2：智能
+            //  3：结构性
+            //  4：
+            str = '存款'
+            if (type == 1) {
+              str = '活期存款'
+            }
+            if (type == 2) {
+              str = '智能存款'
+            }
+            if (type == 3) {
+              str = '结构性存款'
+            }
+            if (type == 4) {
+              str = '定期存款'
+            }
+            break;
         }
         return str
       },
@@ -274,6 +302,14 @@
       next();
     },
     methods: {
+      showSafeDocs() {
+        this.safeShow = true
+      },
+      closeSafe(){
+        this.safeShow = false
+      },
+      callback() {
+      },
       formatNumHandle(cash) {
         this.canEdit = false
         if (!(cash - 0) || !cash) {
@@ -362,16 +398,26 @@
         let data = {
           ID: id + ""
         };
+        // let data = {
+        //   ID: '13661',
+        //   // RATEID:'394'
+        // }
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
           this.productDetail = res;
           this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
-          // 判断起购金额是否大于默认金额
           this.title = res.PRD_NAME
-          document.title = res.PRD_NAME
+          // 判断起购金额是否大于默认金额
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
+          this.NAV_List = res.NAV_List
+          // IS_REALTIME_DATA_PRD
+          // 1是，走无密码登录带红色提示（亿联）
+          // 0否，走无密码的登录页（郑州，众邦
+          // todo
+          this.IS_REALTIME_DATA_PRD = res.IS_REALTIME_DATA_PRD
+          this.setComState({type: 'IS_REALTIME_DATA_PRD', value: ''})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;
           if (this.productDetail.PRD_TYPE == 2) {
             if (invest > '3000') {
@@ -401,16 +447,6 @@
       goNext() {
         console.log(this.proID);
         this.removeComState('ProDuctData')
-        // let target = this.$route.fullPath;
-        // 判断登录
-        // let data = {
-        //   // 跳转购买需要的参数
-        //   PRD_NAME: this.productDetail.PRD_NAME,
-        //   MIN_AMOUNT: this.productDetail.MIN_AMOUNT,
-        //   REMAIN_AMT: this.productDetail.REMAIN_AMT,
-        //   INCRE_AMOUNT: this.productDetail.INCRE_AMOUNT,
-        //   ORG_NAME: this.productDetail.ORG_NAME
-        // };
         let goBuyData = {
           id: this.proID,
           logo: this.productDetail.LOGO_URL,
@@ -420,17 +456,15 @@
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
         let ISLogin = this.getComState.ISLogin || false
-        if (TOKEN && ISLogin) {
-          // 判断是否注册改银行
-          // 判断比财实名流程
-          // 判断该用户在本行的开户状态
-          // this.getBankStatus(PageName.Buying)
-          // if(ISLogin){
-          //   this.$router.push({name: PageName.Login})
-          // }else {
-          //
-          // }
-          this.toPreProduct()
+        let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
+        console.log(TOKEN);
+        if (TOKEN) {
+          if (IS_SYNC_FLAG == 0) {
+            window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+          } else {
+            this.$router.push({name: PageName.Buying})
+            // this.toPreProduct()
+          }
           // this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})
@@ -441,7 +475,7 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
-
+  /*@import "./swiper.scss";*/
   html, body {
     width: 100%;
   }
@@ -483,64 +517,67 @@
     height: 85%;
     margin-left: 5%;
     padding-top: 5%;
-    .bannertop {
-      box-sizing: border-box;
-      padding-top: 0.6rem;
-      width: 100%;
-      height: 75%;
-      border-bottom: 1px solid rgba(255, 255, 255, .5);
-    }
-     .bannertopleft {
-      display: inline-block;
-      width: 50%;
-      color: #fff;
-    }
-    .bannertopright {
-      display: inline-block;
-      width: 48%;
-      color: #fff;
-      text-align: center;
-    }
+
   }
 
-
-
-
-  .banner .bannercontent .bannerbottom {
-    margin-top: 0.2rem;
-    width: 97%;
-    height: 20%;
-  }
-
-  .banner .bannercontent .bannerbottom ul {
+  .banner .bannercontent .bannertop {
+    box-sizing: border-box;
+    padding-top: 0.6rem;
     width: 100%;
-    height: 100%;
+    height: 75%;
+    border-bottom: 1px solid rgba(255, 255, 255, .5);
+  }
+
+  .banner .bannercontent .bannertop .bannertopleft {
+    display: inline-block;
+    width: 50%;
     color: #fff;
   }
 
-  .banner .bannercontent .bannerbottom ul li {
+  .banner .bannercontent .bannertop .bannertopright {
+    display: inline-block;
+    width: 48%;
+    color: #fff;
     text-align: center;
-    line-height: 1rem;
-    font-size: 0.3rem;
-    float: left;
-    height: 100%;
   }
 
-  .banner .bannercontent .bannerbottom .bannerbottomfirst {
-    background-image: url(~@/assets/images/icon@2x.png) no-repeat;
-    background-position: 0.1rem;
-    background-size: 0.5rem;
-    width: 30%;
-    border-right: 1px solid rgba(255, 255, 255, .5);
-  }
+  .banner .bannercontent .bannerbottom {
+    height: px2rem(25);
 
-  .banner .bannercontent .bannerbottom .bannerbottomtwo {
-    width: 30%;
-    border-right: 1px solid rgba(255, 255, 255, .5);
-  }
+    ul {
+      width: 100%;
+      height: px2rem(25);
+      margin-top: px2rem(15);
+      color: #fff;
 
-  .banner .bannercontent .bannerbottom .bannerbottomthree {
-    width: 39%;
+      li {
+        padding-right: px2rem(10);
+        text-align: left;
+        line-height: px2rem(15);
+        font-size: px2rem(12);
+        float: left;
+        height: px2rem(15);
+      }
+    }
+
+    .bannerbottomone {
+      border-right: 1px solid rgba(255, 255, 255, .5);
+
+      img {
+        width: px2rem(13);
+      }
+    }
+
+    .bannerbottomtwo {
+      padding-left: px2rem(5);
+
+      border-right: 1px solid rgba(255, 255, 255, .5);
+    }
+
+    .bannerbottomthree {
+      padding-left: px2rem(5);
+    }
+
   }
 
   .contenttop {
@@ -549,9 +586,8 @@
   }
 
   .contenttop p {
-    font-size: 0.6rem;
+    font-size: px2rem(16);
     margin-top: -.2rem;
-
   }
 
   .contenttop .bannercontent {
@@ -584,7 +620,7 @@
   }
 
   .contentmain .contentmaintop {
-    font-size: 0.6rem;
+    font-size: px2rem(16);
     width: 100%;
     height: 1rem;
     border-bottom: 1px solid #efefef;
@@ -675,38 +711,104 @@
     font-size: 0.4rem;
 
   }
+
+  .circle {
+    position: relative;
+    z-index: 2;
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    border: 0.07rem solid #2B74FE;;
+    box-sizing: border-box;
+    background: radial-gradient(#fff 50%, #fff 50%);
+    white-space: nowrap;
+
+    &.left {
+      margin-left: px2rem(5);
+
+    }
+
+    &.right {
+      margin-right: px2rem(5);
+
+    }
+  }
+
   .wrapicon {
-    p{
-      color: #666;
+    box-sizing: border-box;
+
+    p {
       padding-left: px2rem(20);
       width: 30%;
       height: px2rem(40);
-      font-size: 0.4rem;
+      font-size: px2rem(16);
     }
-    .text{
+
+    .text {
       text-align: center;
       display: flex;
-      padding-top: px2rem(10);
-      span{
+      padding: px2rem(10) px2rem(10) 0;
+
+      span {
         flex: 1;
         font-size: px2rem(13);
         color: #333;
       }
     }
+
     .line {
       text-align: center;
       line-height: px2rem(20);
-      img{
+
+      img {
         vertical-align: middle;
       }
+
       .number {
         width: px2rem(20);
         height: px2rem(20);
       }
-      .arrow{
+
+      .arrow {
         width: px2rem(66);
       }
     }
+  }
+
+  /*.wrapicon:before {*/
+  /*position: absolute;*/
+  /*top: 50%;*/
+  /*left: 0;*/
+  /*content: '';*/
+  /*display: block;*/
+  /*width: 100%;*/
+  /*height: px2rem(2);*/
+  /*background: #2B74FE;;*/
+  /*}*/
+
+  .circle span {
+    position: absolute;
+    left: px2rem(-30);
+    top: 0.5rem;
+    font-size: px2rem(13);
+  }
+
+  .left span {
+    left: px2rem(-15);
+
+  }
+
+  .right span {
+    left: px2rem(-45);
+
+  }
+
+  .circle strong {
+    position: absolute;
+    left: -0.3rem;
+    top: -0.8rem;
+    font-size: 0.4rem;
+
   }
 
   .start {
@@ -816,13 +918,86 @@
   }
 
   .p-icon {
-    width: 22px;
-    height: 22px;
+    width: px2rem(22);
+    height: px2rem(22);
     background: url("~@/assets/images/p-safe@2x.png") no-repeat 0 0;
     background-size: 100%;
     position: relative;
     top: px2rem(6);
     margin-right: px2rem(4)
   }
+
+  .m-swiper {
+    .m-bannerbottom {
+      text-align: center;
+      font-size: px2rem(13);
+      color: #508CEE;
+    }
+
+    .swiper-container {
+      width: 100%;
+      perspective: 1200px
+    }
+
+    .swiper-slide {
+      width: 80%;
+      transform-style: preserve-3d;
+      margin: 0 auto;
+      height: px2rem(170);
+      background: url("~@/assets/images/production/Bankcopy@2x.png") no-repeat center center;
+      background-size: contain;
+    }
+
+    .swiper-slide-next, .swiper-slide-prev {
+      width: 70%;
+    }
+
+    .card {
+      width: 100%;
+      margin: 0 auto;
+      display: block;
+      box-sizing: border-box;
+      padding: px2rem(30) px2rem(30) 0;
+      color: #fff;
+
+      .center {
+        font-size: px2rem(51);
+        height: px2rem(51);
+        text-align: center;
+      }
+
+      .m-bottom {
+        display: flex;
+        padding-top: px2rem(15);
+        height: px2rem(30);
+        font-size: px2rem(11);
+        text-align: center;
+
+        span {
+          flex: 1;
+
+        }
+      }
+
+      .top {
+        vertical-align: top;
+        font-size: 0;
+
+        span {
+          padding-left: px2rem(10);
+          font-size: px2rem(15);
+          line-height: px2rem(15);
+        }
+
+        img {
+          display: inline-block;
+          width: px2rem(17);
+        }
+      }
+
+    }
+  }
+
+
 </style>
 

@@ -59,7 +59,7 @@
       <!--</div>-->
       <!--</div>-->
       <div class="contenttop">
-        <p>交易规则</p>
+        <p>产品详情</p>
         <div class="bannercontent">
           <span class="bannercontenttitle">审核方式</span>
           <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>

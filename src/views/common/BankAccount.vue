@@ -6,7 +6,7 @@
       <li :class="{actvie:cur==2}" @click="tap(2)">我的资产</li>
     </ul>
     <section class="m-bank-box">
-      <p class="m-title">测试</p>
+      <!--<p class="m-title">测试</p>-->
       <section class="m-bank-card" v-for="bank,index in textBankList" :key="index">
         <div class="m-top">
           <div class="m-logo">

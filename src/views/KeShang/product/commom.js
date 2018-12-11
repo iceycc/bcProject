@@ -1,11 +1,15 @@
-import API from '@/service'
-import {PageName, imgSrc, LsName, BusName} from "@/Constant";
-import Bus from "@/plugin/bus";
+import API from "@/service"
+import {LsName, BusName, PageName} from "@/Constant";
+import Bus from '@/plugin/bus'
+import util from "../../../libs/util";
+let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 
-export const CheckAccountMixin ={
+
+export default {
   methods:{
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
+      this.setComState({type:'ISLogin',value:false})
       API.bicai.getAuthStatus({}, res => {
         let {AUTH_STATUS, isOldMember} = res
         //  AUTH_STATUS 返回码：
@@ -19,78 +23,68 @@ export const CheckAccountMixin ={
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
+            Bus.$emit(BusName.showToast,MsgText,3000)
+
             this.$router.push(PageName.BcOpening1)
             break;
           case 2:
+            Bus.$emit(BusName.showToast,MsgText,3000)
+
             this.$router.push(PageName.BcOpening2)
             break;
           case 3:
-            this.$router.push(PageName.BcOpening3)
-            break;
           case 4:
             this.checkBankStatus()
+            // todo 再判断对应的直销银行有没有开户
             break;
           case 5:
             //
+            Bus.$emit(BusName.showToast,MsgText,3000)
+
             this.$router.push(PageName.BcOpening1)
             break;
         }
-      },err=>{
-        this.codeText = '重新发送'
-        this.msgDisabled = false
-        clearInterval(timer)
       })
     },
-    // 获取改比财用户在银行的状态
-    getBankStatus(Page){
-      let data = {
-        IS_RET_GRADE:'1'
-      }
-      API.common.apiQryLoginStatus(data,res=>{
-        let HAS_LOGIN = res.HAS_LOGIN // 是否已经登陆 0：不需要登录 1：已登录 2：未登陆
-        let HAS_OPEN_BANK = res.HAS_OPEN_BANK  //  1：已开户 2：未开户
-        let HAS_GRADE = res.HAS_GRADE // 是否已做风险评估1：未做 2：已做
-        if(HAS_OPEN_BANK==1){
-           // 已经开户
-          this.$router.push({name: Page})
-        }else {
-          // 未开户 去
-          Bus.$emit(BusName.showToast,'您在本行还未开户，请先开户')
-          this.$router.push({name:PageName.Opening1})
-        }
-
-      })
-    },
-    // 回显该用户在本行的开户状态
+    // 判断该用户在本行的开户状态
     checkBankStatus() {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
+        this.setComState({type: 'TEL', value: this.tel})
+
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         // util.storage.session.set('USERINFO', res)
         if (step == 0) {
-          // this.$store.commit('SET_OPENING_DATA', 1)
+          Bus.$emit(BusName.showToast,MsgText,3000)
           this.setComState({type:'openingData',value:res})
           this.$router.push({name: PageName.Opening1})
         }
         if (step == 1) {
+          Bus.$emit(BusName.showToast,MsgText,3000)
           this.setComState({type:'openingData',value:res})
-          // this.$store.commit('SET_OPENING_DATA', 1)
           this.$router.push({name: PageName.Opening2})
         }
         if (step == 2) {
-          this.setComState({type:'openingData',value:res})
+          this.setComState({type:'Infos',value:res})
+
           // this.$store.commit('SET_OPENING_DATA', 1)
-          this.$router.push({name: PageName.Opening3})
+          // this.$router.push({name: PageName.Opening3})
+          this.checkIfPinggu(res)
         }
         if (step == 3) {
           // todo登陆成功后判断拿来的去哪里
-          // this.setComState({type:'Infos',value:res})
+          this.setComState({type:'ISLogin',value:true})
+          this.setComState({type:'Infos',value:res})
+
+          // this.$router.push({name:PageName.Opening3})
           this.checkIfPinggu(res)
         }
-      },err=>{
 
+      },err=>{
+        this.codeText = '重新发送'
+        this.msgDisabled = false
       })
     },
     // 判断是否评估
@@ -114,12 +108,5 @@ export const CheckAccountMixin ={
         this.toPreProduct() // 评估过判断是否去哪里
       }
     },
-  }
-}
-
-
-export const FromPCMixin = {
-  methods:{
-
   }
 }
