@@ -5,8 +5,8 @@
             <span @click="showBankList">{{text}}</span>
             <span class="down" @click="bankShowHandle">
                 <img @click.stop="showBankList" src="@/assets/images/GroupCopy14@2x.png" alt="">
-                <img src="@/assets/images/problom2@2x.png" alt="">
-               <span class="xiane">银行限额</span>
+                <!--<img src="@/assets/images/problom2@2x.png" alt="">-->
+               <!--<span class="xiane">银行限额</span>-->
             </span>
         </section>
         <div class="jsSelect" v-show="show">

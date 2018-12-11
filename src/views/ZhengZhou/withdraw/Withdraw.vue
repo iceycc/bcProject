@@ -7,7 +7,7 @@
                                                 alt=""></span>
       <div class="bank">
         <p>{{CARD_BANK_NAME}}</p>
-        <P>{{BANK_USER_CODE | formatBankNo}}</P>
+        <P>{{CARD_NUM | formatBankNo}}</P>
       </div>
     </div>
     <section class="inputAmount">
@@ -77,7 +77,7 @@
         APPLY_AMOUN: '',
         toUrl: '',
         CARD_BANK_NAME: '',
-        BANK_USER_CODE: '',
+        CARD_NUM: '',
         imgSrc: imgSrc,
 
         pass: '',
@@ -94,7 +94,8 @@
     },
     computed: {
       canClick() {
-        if (this.APPLY_AMOUN) {
+        // this.APPLY_AMOUN <= Number(this.ACC_REST && Number(this.APPLY_AMOUN) != 0)
+        if (Number(this.APPLY_AMOUN) && Number(this.APPLY_AMOUN)<=Number(this.ACC_REST)) {
           return true
         } else {
           return false
@@ -126,7 +127,7 @@
       getUserInfos() {
         API.safe.apiBandCard({}, (res) => {
           this.CARD_BANK_NAME = res.CARD_BANK_NAME
-          this.BANK_USER_CODE = res.BANK_USER_CODE
+          this.CARD_NUM = res.CARD_NUM
           this.logo = res.CARD_BANK_URL
         })
       },
@@ -176,8 +177,7 @@
                       err: result.RES_MSG
                     }
                   })
-                }
-                else if ('0' == result.RES_CODE) {
+                } else if ('0' == result.RES_CODE) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.Londing.close()
@@ -251,12 +251,15 @@
   .minshengbank {
     padding-left: px2rem(20);
     display: flex;
+
     .bank {
       padding-top: px2rem(12);
+
       p:first-child {
         color: #444;
         font-size: px2rem(16);
       }
+
       p:last-child {
         color: #9199A1;
         font-size: px2rem(14);
@@ -278,6 +281,7 @@
     margin-top: px2rem(20);
     border-top: px2rem(20) solid #f6f6f9;
     border-bottom: 1px solid #EEEEF0;
+
     .button {
       vertical-align: middle;
       width: 2.5rem;
@@ -286,6 +290,7 @@
       border: 1px solid #508CEE;
       color: #508CEE
     }
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -296,6 +301,7 @@
       margin-top: px2rem(-15/2);
 
     }
+
     input {
       width: px2rem(200);
       border: none;
@@ -325,6 +331,7 @@
     border: 0px;
     outline: none;
     display: block;
+
     &.active {
       background: #508CEE;
     }
@@ -348,6 +355,7 @@
     padding-top: 1.7rem;
     top: 0;
     left: 0;
+
     .passbox {
       background: #fff;
       width: 80%;
@@ -355,6 +363,7 @@
       padding: 0.4rem;
       box-sizing: border-box;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
@@ -366,14 +375,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: 4px;
       border: 1px solid #9e9e9e;
@@ -384,12 +396,14 @@
 
     .btn {
       display: flex;
+
       button {
         margin: 0 .3rem;
         text-align: center;
         flex: 1;
       }
     }
+
     .info {
       font-size: px2rem(14);
       line-height: 0.6rem;
@@ -404,6 +418,7 @@
     font-size: px2rem(14);
     line-height: 0.6rem;
     color: #9199A1;
+
     span {
       color: #389CFF
     }

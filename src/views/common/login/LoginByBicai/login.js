@@ -143,6 +143,7 @@ export default {
         // 4:认证完成，
         // 5:身份证过期
         console.log(AUTH_STATUS);
+        let H5_URL =  this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -159,7 +160,10 @@ export default {
             break;
           case 4:
             // this.checkProTo(this.checkBankStatus, this.checkBankStatus)
-
+            if(H5_URL){
+              window.location.href = H5_URL
+              return
+            }
             // 判断产品类型 区分openAPI
             if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
@@ -184,6 +188,10 @@ export default {
             break;
           case 5:
             //
+            if(H5_URL){
+              window.location.href = H5_URL
+              return
+            }
             this.$router.push(PageName.BcOpening1)
             break;
         }

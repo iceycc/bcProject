@@ -431,7 +431,7 @@
             this.NAV_List = res.NAV_List
             this.current = this.NAV_List.length
             this.NAV_List.forEach((item, i) => {
-              if (item.RATE = this.RATE) {
+              if (item.RATE == this.RATE) {
                 index = i
               }
             })

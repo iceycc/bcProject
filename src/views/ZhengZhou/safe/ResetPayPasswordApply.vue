@@ -7,6 +7,7 @@
         <div class="img">
           <img :src="imgFont" alt="">
           <input type="file" capture="camera" accept="image/*" class="inputBox"
+                 disabled
                  @change="imgToBaseZheng($event)">
         </div>
       </section>
@@ -15,6 +16,7 @@
         <section class="img">
           <img :src="imgBack" alt="">
           <input type="file" capture="camera" accept="image/*" class="inputBox"
+                 disabled
                  @change="imgToBaseFan($event)">
         </section>
       </section>
@@ -30,8 +32,7 @@
       </section>
       <section class="m-line">
         <span class="n-left">手机号</span>
-        <input class="n-right" type="text" v-model="tel">
-        <!--<span class="n-right">{{tel}}</span>-->
+        <span class="n-right">{{tel}}</span>
       </section>
       <section class="upload-img">
         <p>申请人照片</p>
@@ -148,8 +149,8 @@
           ID_POSITIVE_IMAGE: encodeURIComponent(this.formData.CARD_FRONT_FILE),
           ID_DREVERSE_IMAGE: encodeURIComponent(this.formData.CARD_BACK_FILE)
         }
-        if(!data.LIFE_IMAGE){
-          Bus.$emit(BusName.showToast,'请上传申请人手持照片')
+        if (!data.LIFE_IMAGE) {
+          Bus.$emit(BusName.showToast, '请上传申请人手持照片')
           return
         }
         // this.IS_RESET  =1 直接申请  为空 ''的话 判断this.STATUS
@@ -157,7 +158,7 @@
         console.log(data);
         if (!this.IS_RESET) {
           if (this.STATUS == 1 || this.STATUS == 2) {
-            Bus.$emit(BusName.showToast,'你已经提交过申请')
+            Bus.$emit(BusName.showToast, '你已经提交过申请')
             this.$router.push({name: PageName.ResetPayPasswordStatus})
             return
           }
@@ -255,10 +256,12 @@
       color: #858e9f;
       line-height: px2rem(50);
     }
+
     .img-box {
       position: relative;
       width: px2rem(154);
       height: px2rem(84);
+
       .inputBox {
         opacity: 0;
         display: inline-block;
@@ -269,6 +272,7 @@
         left: 0;
 
       }
+
       img {
         width: 100%;
         height: 100%;
@@ -281,22 +285,27 @@
     font-size: px2rem(12);
     color: #444;
     display: flex;
+
     .left {
       padding-right: px2rem(20);
       text-align: right;
       flex: 1;
+
       p {
         padding-right: px2rem(15);
       }
     }
+
     .right {
       padding-left: px2rem(20);
       text-align: left;
       flex: 1;
+
       p {
         padding-left: px2rem(15);
       }
     }
+
     .img {
       position: relative;
       margin-top: px2rem(20);
@@ -308,6 +317,7 @@
         width: 100%;
         height: 100%;
       }
+
       .inputBox {
         opacity: 0;
         display: inline-block;
@@ -333,13 +343,16 @@
     background-size: 0.7rem 0.7rem;
     border-bottom: 1px #E5E5E5 solid;
     font-size: px2rem(14);
+
     .n-left {
       width: px2rem(100);
     }
+
     .n-right {
       flex: 1;
       display: inline-block;
-      color: #8e8e8e
+      color: #8e8e8e;
+      background: #fff;
     }
   }
 
@@ -398,18 +411,22 @@
     top: 0;
     left: 0;
     z-index: 3;
+
     .passbox {
       background: #fff;
       width: 80%;
       margin: 0 auto;
       box-sizing: border-box;
     }
+
     .top {
       padding: 0.4rem;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -417,14 +434,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: px2rem(4);
       border: 1px solid #DDD;
@@ -433,15 +453,18 @@
       padding-left: px2rem(3);
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       border-top: 1px solid #efefef;
       padding: px2rem(14) 0;
       display: flex;
+
       button {
         color: #108EE9;
         font-size: px2rem(17);

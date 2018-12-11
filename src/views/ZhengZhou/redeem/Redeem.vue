@@ -179,13 +179,18 @@
       sure() {
         this.typeShow = false;
         this.normalShow = false
-        this.show = true
+        // this.show = true
       },
       chooseType(val, e) {
         // 普通赎回需要弹出层
         this.cur = val; // 1 普通赎回  0 快速赎回
-        // this.typeText = e.target.innerText;
-        this.typeShow = false;
+        if (val == 1) {
+          this.typeShow = false;
+          this.normalShow = true
+        } else {
+          // this.typeText = e.target.innerText;
+          this.typeShow = false;
+        }
       },
       selectAll() {
         this.isFocus = true
@@ -198,16 +203,16 @@
           Bus.$emit(BusName.showToast, '赎回金额不足')
           return
         }
-        if (this.cur == 1) { // 普通赎回
-
-          this.normalShow = true
-        } else { // 快速赎回
-          if (this.money - 0 > 10000) {
-            Bus.$emit(BusName.showToast, '每天快速赎回额度为1万元，请调整赎回额度')
-            return
-          }
-          this.show = true
+        // if (this.cur == 1) { // 普通赎回
+        //
+        //   this.normalShow = true
+        // } else { // 快速赎回
+        if (this.money - 0 > 10000) {
+          Bus.$emit(BusName.showToast, '每天快速赎回额度为1万元，请调整赎回额度')
+          return
         }
+        this.show = true
+        // }
       },
       doPay() {
         this.redeemHandle()
@@ -259,8 +264,7 @@
                       err: result.RES_MSG
                     }
                   })
-                }
-                else if ('0' == result.RES_CODE) {
+                } else if ('0' == result.RES_CODE) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.Londing.close()
@@ -305,17 +309,21 @@
     display: flex;
     align-items: center;
     padding: px2rem(15) px2rem(20);
+
     img {
       width: px2rem(32);
       height: px2rem(32);
     }
+
     div {
       padding-left: px2rem(15);
+
       p {
         font-size: px2rem(14);
         color: #444444;
         padding-bottom: px2rem(4);
       }
+
       span {
         color: #666666;
       }
@@ -325,18 +333,22 @@
   .r-cash {
     padding: px2rem(15) px2rem(20);
     border-bottom: 1px solid #EEEEF0;
+
     .title {
       padding-bottom: px2rem(10);
       font-size: px2rem(14);
     }
+
     .money {
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       .number {
         position: relative;
         width: px2rem(250);
         font-size: px2rem(24);
+
         .close-icon {
           position: absolute;
           display: inline-block;
@@ -346,15 +358,18 @@
           transform: translateY(-50%);
           right: px2rem(10);
         }
+
         input {
           width: 80%;
           font-size: px2rem(24);
+
           &::-webkit-input-placeholder {
             font-size: px2rem(14);
             color: #B3B3B3;
           }
         }
       }
+
       .all {
         color: #389CFF;
         font-size: px2rem(14);
@@ -368,11 +383,14 @@
     padding: px2rem(15) px2rem(20);
     font-size: px2rem(14);
     border-bottom: 1px solid #EEEEF0;
+
     .type {
       color: #333;
     }
+
     .choose {
       color: #858E9F;
+
       i {
         font-size: px2rem(14);
       }
@@ -395,6 +413,7 @@
     color: #fff;
     font-size: px2rem(18);
     border-radius: px2rem(6);
+
     &.active {
       background-color: #518BEE;
     }
@@ -403,6 +422,7 @@
   .r-agreement {
     padding: px2rem(20) px2rem(20) px2rem(65);
     color: #9199A1;
+
     span {
       color: #518BEE;
       display: inline;
@@ -430,6 +450,7 @@
     bottom: 0;
     z-index: 99;
     background-color: #fff;
+
     .title {
       text-align: center;
       height: px2rem(45);
@@ -438,6 +459,7 @@
       font-size: px2rem(18);
       color: #444;
       border-bottom: 1px solid #EEEEF0;
+
       i {
         position: absolute;
         top: 0;
@@ -446,21 +468,25 @@
         color: #858E9F;
       }
     }
+
     .r-type-list {
       li {
         padding: px2rem(22);
         border-bottom: 1px solid #EEEEF0;
         display: flex;
         justify-content: space-between;
+
         span {
           font-size: px2rem(14);
           color: #444;
         }
       }
+
       i {
         width: px2rem(18);
         height: px2rem(18);
       }
+
       .active i {
         background: url("~@/assets/images/check.png") center center no-repeat;
       }
@@ -488,6 +514,7 @@
     transform: translate(-50%, -50%);
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .2);
     border-radius: px2rem(6);
+
     .info {
       padding: px2rem(20);
       font-size: px2rem(14);
@@ -495,8 +522,10 @@
       border-bottom: 1px solid #EEEEF0;
       line-height: px2rem(24);
     }
+
     .cofirm-btn {
       display: flex;
+
       div {
         width: 50%;
         box-sizing: border-box;
@@ -504,6 +533,7 @@
         padding: px2rem(10) 0;
         color: #108EE9;
         font-size: px2rem(17);
+
         &:first-child {
           border-right: 1px solid #EEEEF0;
         }
@@ -521,6 +551,7 @@
     padding-top: 0.7rem;
     top: 0;
     left: 0;
+
     .passbox {
       background: #fff;
       width: 80%;
@@ -528,9 +559,11 @@
       padding: 0.4rem;
       box-sizing: border-box;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -538,14 +571,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: 4px;
       border: 1px solid #9e9e9e;
@@ -553,13 +589,16 @@
       line-height: 0.9rem;
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       display: flex;
+
       button {
         margin: 0 .3rem;
         text-align: center;

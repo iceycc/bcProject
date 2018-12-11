@@ -14,7 +14,7 @@
     </div>
     <div class="t-tab">
       <div class="divTab">
-        <div class="t-date" v-show="nowIndex===3">
+        <div class="t-date" v-show="nowIndex===3 && tapShow">
           <ul>
             <li @click="setDate2">
               {{startDate}}
@@ -27,7 +27,7 @@
           </ul>
           <div class="t-query" @click="query">查询</div>
         </div>
-        <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
+        <p class="t-text" v-show="nowIndex===3 && tapShow">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
         <div class="no-data" v-if="pageList.length == 0">
           <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
           <p class="infos">暂时没数据</p>
@@ -71,6 +71,7 @@
   export default {
     data() {
       return {
+        tapShow:true,
         cur: 1,
         pageList1: [{
           TRANS_TYPE_NAME: '百度',
@@ -133,7 +134,9 @@
         }
       },
       tap(index) {
+        this.nowIndex = 0
         this.cur = index
+
       },
       setEleSize() {
         console.log(this.nowIndex);
@@ -263,6 +266,9 @@
 
       },
       toggleTabs(index) {
+        if(index==3){
+          this.tapShow = !this.tapShow
+        }
         this.nowIndex = index;
         this.pageList = []
         this.loadPageList();

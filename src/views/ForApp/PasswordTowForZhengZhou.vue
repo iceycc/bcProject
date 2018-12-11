@@ -3,7 +3,9 @@
     <app-bar title="重置支付密码" class="m-header"></app-bar>
     <div class="top">
       <div class="field_row_wrap">
-        <p class="field_row_key" @click="newPassShow =true" v-if="!newPassShow">
+        <p class="field_row_key"
+           @click="()=>{this.newPassShow =true;this.showBD('payPasscc2')}"
+           v-if="!newPassShow">
           <span class="left">新密码</span>
           <span class="right">密码由6位数字组成</span>
         </p>
@@ -19,7 +21,9 @@
         </div>
       </div>
       <div class="field_row_wrap">
-        <p class="field_row_key" @click="preNewPassShow =true" v-if="!preNewPassShow">
+        <p class="field_row_key"
+           @click="()=>{this.preNewPassShow =true;this.showBD('payPasscc3')}"
+           v-if="!preNewPassShow">
           <span class="left">重复新密码</span>
           <span class="right">密码由6位数字组成</span>
         </p>
@@ -102,6 +106,17 @@
       }
     },
     methods: {
+      showBD(id) {
+        $("#" + id).attr('title', '输入密码');
+        $("#" + id).showKBD({
+          "areaId": id+ '_Pwd_Area',//必须
+          "pageId": id,//非必须
+          "minLen": 0,
+          "maxLen": 6,
+          "cursor": true,
+          "mask": true,
+        });
+      },
       close() {
         var u = navigator.userAgent;
         var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
@@ -173,22 +188,28 @@
       width: 100%;
       height: px2rem(30);
     }
+
     .low {
       font-size: px2rem(12);
       color: #858E9F;
     }
+
     .field_row_wrap {
       border-bottom: 1px solid #e5e5e5;
+
       .field_row_key {
         display: flex;
         height: px2rem(56);
         line-height: px2rem(56);
+
         span {
           flex: 1;
         }
+
         .left {
           font-size: px2rem(16);
         }
+
         .right {
           color: #6e6e6e;
           font-size: px2rem(16);
@@ -202,6 +223,7 @@
   .btn {
     margin-top: px2rem(40);
     text-align: center;
+
     button {
       width: px2rem(255);
       height: px2rem(44);
@@ -210,6 +232,7 @@
       background: #ccc;
       border: 1px solid #ccc;
       border-radius: px2rem(6);
+
       &.active {
         color: #fff;
         background: #007aff;
