@@ -84,7 +84,7 @@
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
         show: false,
-        ProID:''
+        ProID: ''
       }
     },
     components: {
@@ -111,7 +111,9 @@
     },
     mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Check],
     created() {
-      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID
+      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
+      let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
+      util.storage.session.set('moneyNum', moneyNum)
       if (ProID) {
         this.ProID = ProID
         this.getData(ProID)
@@ -162,10 +164,8 @@
           this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
           this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
           this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
-          let ProAndOrgType = this.getComState.ProAndOrgType || {}
-          if (ProAndOrgType.AMOUNT) {
-            this.moneyNum = ProAndOrgType.AMOUNT
-          }
+          let moneyNum = util.storage.session.get('moneyNum')
+          this.moneyNum = moneyNum
           this.setComState({type: 'PRD_TYPE', value: this.proDetail.PRD_TYPE})
           this.removeComState('ProDuctData')
           let goBuyData = {

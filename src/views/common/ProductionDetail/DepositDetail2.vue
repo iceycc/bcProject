@@ -77,7 +77,7 @@
       <!--</div>-->
       <!--</div>-->
       <div class="contenttop">
-        <p>交易规则</p>
+        <p>产品详情</p>
         <div class="bannercontent">
           <span class="bannercontenttitle">起存金额</span>
           <span class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>

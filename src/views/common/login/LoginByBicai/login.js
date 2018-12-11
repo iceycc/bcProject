@@ -108,32 +108,7 @@ export default {
         this.getProData(this.ProAndOrgType.ID)
       }
       this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-      // let token = util.storage.session.get('BICAI_TOKEN')
-      // if (token) {
-      //   this.$store.commit('SET_TOKEN', token)
-      //   // 判断openApi
-      //   if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
-      //     // 不是 openApi
-      //     // 不是h5直联
-      //     if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
-      //       // 不需要实名
-      //       if (this.href) {
-      //         window.location.href = this.href;
-      //       } else {
-      //         alert('跳转第三方链接获取异常')
-      //       }
-      //     } else {
-      //       // 需要实名
-      //       this.checkAuthStatus()
-      //     }
-      //   } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
-      //     // 是 openApi
-      //     this.checkAuthStatus()
-      //   } else {
-      //     this.checkAuthStatus()
-      //   }
-      //   return
-      // }
+
     },
     getProData(id) {
       let data = {

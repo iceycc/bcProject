@@ -31,10 +31,10 @@
     methods: {
       getAgreement(type) {
         if (type == 'user') {
-          this.getBicaiAgreementByAjax('1','user')
+          this.getBicaiAgreementByAjax('1', 'user')
         }
         if (type == 'bicaisafe') {
-          this.getBicaiAgreementByAjax('1','bicaisafe')
+          this.getBicaiAgreementByAjax('1', 'bicaisafe')
           // this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/cz.html'
         }
         if (type == 'open') {
@@ -61,16 +61,16 @@
         }
         API.doc.fixedTimeDepositAgreement(data)
       },
-      getBicaiAgreementByAjax(type,docs) {
+      getBicaiAgreementByAjax(type, docs) {
         let data = {
-          InterfaceType:type
+          InterfaceType: type
         }
         API.bicai.getDocs(data, res => {
-          if(docs=='user'){
+          if (docs == 'user') {
             this.TITLE = res[1].TITLE
             this.docs = res[1].HTML_TEXT
           }
-          if(docs == 'bicaisafe'){
+          if (docs == 'bicaisafe') {
             this.TITLE = res[0].TITLE
             this.docs = res[0].HTML_TEXT
           }
@@ -108,9 +108,11 @@
     background: #fff;
     z-index: 100;
     box-sizing: border-box;
-    h1{
+
+    h1 {
       text-align: center;
     }
+
     .docs {
       box-sizing: border-box;
       padding: 0 px2rem(10);
@@ -119,6 +121,7 @@
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
     }
+
     .iframs-docs {
       box-sizing: border-box;
       padding: 0 px2rem(10);
@@ -126,18 +129,21 @@
       height: 90%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+
       .indocs {
         border: none;
         width: 100%;
         height: 100%;
       }
     }
+
     .btn {
       padding-top: .2rem;
       text-align: center;
+
       button {
         background: #007aff;
-        width: px2rem(80);
+        width: px2rem(100);
         height: px2rem(40);
         color: #fff;
       }
