@@ -60,7 +60,7 @@
   import API from "@/service";
   import {LsName, PageName, imgSrc} from "@/Constant";
   import util from 'libs/util'
-  import {BusName} from "../../../Constant";
+  import {BusName} from "@/Constant";
   import Bus from '@/plugin/bus/index'
 
   export default {
@@ -71,16 +71,16 @@
         show: false,
         dataList: [],
         imgSrc,
-        testData:{
-          ID:'3451',// 产品id
-          ORG_NAME:'',//机构名称
-          PRD_NAME:'', // 产品名称
-          ORG_ID:'49', // 机构id
-          IS_SYNC_FLAG:'0', // '是否由openAPI同步产品, 0：否, 1：是',
-          IS_REALTIME_DATA_PRD:'0', // 'H5实时数据对接标识： 0不是  1是',
-          IS_RZ_FLAG:'0', // '是否实名认证, 0：否, 1：是',
-          H5_URL_ANDRIOD:'',// 非打通openApi 跳转链接 安卓
-          H5_URL_IOS:'' // 非打通openApi 跳转链接 ios
+        testData: {
+          ID: '3451',// 产品id
+          ORG_NAME: '',//机构名称
+          PRD_NAME: '', // 产品名称
+          ORG_ID: '49', // 机构id
+          IS_SYNC_FLAG: '0', // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD: '0', // 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG: '0', // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
         }
       }
     },
@@ -90,7 +90,7 @@
       //   FUNCTION_ID: 'ptp0A000'
       // })
       this.setComState({
-        type: 'ProAndOrgType', value:{}
+        type: 'ProAndOrgType', value: {}
       })
       this.reLoadToLogin()
 
@@ -117,7 +117,8 @@
       typeFilter(val) {
         if (!val) return ''
         let str;
-        // 4.支取利率 1.七日年化收益率 3.近三个月涨幅 2 预期年化收益率
+        // PRD_TYPE_ID
+        //  1.七日年化收益率 2 预期年化收益率  3.近三个月涨幅  4.支取利率
         switch (val - 0) {
           case 1:
             // 货币基金
@@ -134,6 +135,11 @@
           case 4:
             str = '支取利率'
             // 存款
+            // PRD_DOCKING_TYPE
+            //  1：活期
+            //  2：智能
+            //  3：结构性
+            //  4：
             break;
         }
         return str
@@ -207,7 +213,11 @@
           IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
           IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
           H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
-          H5_URL_IOS // 非打通openApi 跳转链接 ios
+          H5_URL_IOS, // 非打通openApi 跳转链接 ios
+
+          PRD_TYPE_ID,//产品类型
+          DEPOSIT_TYPE_ID, //存款类型
+          RATE
         } = bank
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
@@ -230,13 +240,60 @@
         })
         if (IS_SYNC_FLAG == '0') {
           //  未打通openApi
-          // 直接跳转 比财登录
-          this.$router.push({
-            name: PageName.Login,
-          })
-
-        }
-        else if (IS_SYNC_FLAG == '1') {
+          // 判断产品类型
+          //  PRD_TYPE_ID 1 货币基金 2 理财产品 3 纯债 4 存款
+          //  PRD_DOCKING_TYPE  DEPOSIT_TYPE_ID // 1活期，2智能存款 3.结构性 4
+          if (PRD_TYPE_ID == 1) {
+            this.$router.push({
+              name: PageName.MoneyFundDetail,
+              query: {
+                PRO_ID: ID, title: PRD_NAME
+              }
+            })
+          }
+          if (PRD_TYPE_ID == 4) {
+            if (DEPOSIT_TYPE_ID == 1) {
+              this.$router.push({
+                name: PageName.DepositDetail1,
+                query: {
+                  PRO_ID: ID, title: PRD_NAME
+                }
+              })
+            }
+            if (DEPOSIT_TYPE_ID == 2) {
+              // 智能存款
+              this.$router.push({
+                name: PageName.DepositDetail2,
+                query: {
+                  PRO_ID: ID, title: PRD_NAME,RATE
+                }
+              })
+            }
+            if (DEPOSIT_TYPE_ID == 3) {
+              this.$router.push({
+                name: PageName.DepositDetail1,
+                query: {
+                  PRO_ID: ID, title: PRD_NAME
+                }
+              })
+            }
+            if (DEPOSIT_TYPE_ID == 4) {
+              this.$router.push({
+                name: PageName.DepositDetail1,
+                query: {
+                  PRO_ID: ID, title: PRD_NAME
+                }
+              })
+            }
+          } else {
+            this.$router.push({
+              name: PageName.DepositDetail1,
+              query: {
+                PRO_ID: ID, title: PRD_NAME
+              }
+            })
+          }
+        } else if (IS_SYNC_FLAG == '1') {
           // 打通openAPI 刷新重置 ORG_ID 跳转产品详情页
           ORG_ID = ORG_ID + ''
           util.storage.session.set('ORG_ID', ORG_ID)
@@ -244,8 +301,7 @@
           util.storage.session.set('title', PRD_NAME)
           util.storage.session.set('reload', true)
           window.location.reload()
-        }
-        else {
+        } else {
           if (ORG_ID == 49 || ORG_ID == 227) {
             ORG_ID = ORG_ID + ''
             util.storage.session.set('ORG_ID', ORG_ID)
@@ -299,6 +355,7 @@
     width: 100%;
     height: 5.5rem;
     background: #dedede;
+
     img {
       width: 100%;
       height: 100%;
@@ -332,6 +389,7 @@
     p {
       text-align: center;
     }
+
     .ratereturn {
       text-align: center;
     }
@@ -351,6 +409,7 @@
       overflow: hidden;
       padding-bottom: 0.4rem;
     }
+
     .ratereturn {
       float: left;
       width: 35%;
@@ -358,6 +417,7 @@
       border-right: 1px solid #F6F6F9;
       position: relative;
     }
+
     .name {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -371,6 +431,7 @@
       width: 3rem;
 
     }
+
     // .clearfix:after{
     // content:".";
     // display:block;
@@ -383,6 +444,7 @@
       border: none;
       width: 55%;
     }
+
     .yuyue {
       position: absolute;
       top: 0rem;
@@ -407,6 +469,7 @@
 
   .w-tap {
     display: flex;
+
     li {
       flex: 1;
       height: px2rem(40);
@@ -414,6 +477,7 @@
       font-size: px2rem(18);
       text-align: center;
       background: #fff;
+
       &.actvie {
         color: #007aff;
       }

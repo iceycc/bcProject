@@ -69,6 +69,7 @@
   import API from "@/service"
   import Mixins from "@/mixins";
   import util from "libs/util";
+  import Check from './check'
 
   export default {
     data() {
@@ -83,6 +84,7 @@
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
         show: false,
+        ProID:''
       }
     },
     components: {
@@ -107,23 +109,29 @@
         }
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.StoreMixin],
+    mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Check],
     created() {
-      this.getInfo()
-      let proData = this.getComState.goBuy
-      this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
-      this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
-      this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
-      this.proDetail.id = proData.id // 数据
-      this.proDetail.ORG_NAME = proData.ORG_NAME // 数据
-      this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
-      this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
-      this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
-      let ProAndOrgType = this.getComState.ProAndOrgType || {}
-      if(ProAndOrgType.AMOUNT){
+      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID
+      if (ProID) {
+        this.ProID = ProID
+        this.getData(ProID)
+      } else {
+        this.getInfo()
+        let proData = this.getComState.goBuy
+        this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
+        this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
+        this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
+        this.proDetail.id = proData.id // 数据
+        this.proDetail.ORG_NAME = proData.ORG_NAME // 数据
+        this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
+        this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
+        this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
+        let ProAndOrgType = this.getComState.ProAndOrgType || {}
+        if (ProAndOrgType.AMOUNT) {
           this.moneyNum = ProAndOrgType.AMOUNT
+        }
+        console.log(proData);
       }
-      console.log(proData);
     },
 
     methods: {
@@ -137,6 +145,37 @@
           this.payNum = res.ACC_REST // 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
         })
+      },
+      getData(id) {
+        let data = {
+          ID: id + ""
+        };
+        // API.commonApi.apiGetChannelPrdInfo(data, res => {
+        API.bicai.getPrdInfo(data, res => {
+          this.checkAuthStatus()
+          let proData = res
+          this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
+          this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
+          this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
+          this.proDetail.id = proData.id // 数据
+          this.proDetail.ORG_NAME = proData.ORG_NAME // 数据
+          this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
+          this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
+          this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
+          let ProAndOrgType = this.getComState.ProAndOrgType || {}
+          if (ProAndOrgType.AMOUNT) {
+            this.moneyNum = ProAndOrgType.AMOUNT
+          }
+          this.setComState({type: 'PRD_TYPE', value: this.proDetail.PRD_TYPE})
+          this.removeComState('ProDuctData')
+          let goBuyData = {
+            id: id,
+            logo: this.proDetail.LOGO_URL,
+            ...this.proDetail
+          };
+          this.setComState({type: 'loginType', value: '安全购买'})
+          this.setComState({type: 'goBuy', value: goBuyData})
+        });
       },
       goReChang() {
         this.setComState({

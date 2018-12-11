@@ -49,7 +49,30 @@ export default [
   //   component: resolve => require(['views/ZhengZhou/product/ProductReservation.vue'], resolve),
   //   meta: {keepAlive: false, needLogin: false}
   // },
-
+  /**
+   * 货币基金
+   */
+  {
+    path: '/' + PageName.MoneyFundDetail,
+    name: PageName.MoneyFundDetail,
+    component: resolve => require(['views/common/ProductionDetail/MoneyFundDetail.vue'], resolve),
+    meta: {keepAlive: false, title: '产品详情', needLogin: false}
+  },
+  /**
+   * 存款类型
+   */
+  {
+    path: '/' + PageName.DepositDetail1,
+    name: PageName.DepositDetail1,
+    component: resolve => require(['views/common/ProductionDetail/DepositDetail1.vue'], resolve),
+    meta: {keepAlive: false, title: '产品详情', needLogin: false}
+  },
+  {
+    path: '/' + PageName.DepositDetail2,
+    name: PageName.DepositDetail2,
+    component: resolve => require(['views/common/ProductionDetail/DepositDetail2.vue'], resolve),
+    meta: {keepAlive: false, title: '产品详情', needLogin: false}
+  },
   /**
    * 比财登陆
    */

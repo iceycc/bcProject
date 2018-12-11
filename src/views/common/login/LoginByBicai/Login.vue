@@ -94,7 +94,7 @@
         ORG_ID: '',
         OPEN_H5_STATUS: '',
         isfinancial: '',
-        hasBank:false
+        hasBank: false
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
@@ -170,8 +170,8 @@
           this.checkAuthStatus()
         }
       },
-      goDocs(page){
-        this.$router.push({name:PageName.BicaiPageDocs,query:{type:page}})
+      goDocs(page) {
+        this.$router.push({name: PageName.BicaiPageDocs, query: {type: page}})
       },
       // 登录
       loginFactory() {
@@ -181,10 +181,9 @@
           PHONE_CODE: this.cms,
           SAFT_CODE: this.safeCode
         }
-        this.setComState({type:'userTel',value:this.tel})
+        this.setComState({type: 'userTel', value: this.tel})
         let SOURCE_URL = this.getComState.loginType
         console.log(SOURCE_URL);
-        this.$store.commit('SET_TOKEN', null)
         API.bicai.login(data, (res) => {
           // API.watchApi({
           //   FUNCTION_ID: 'ptb0A007', // 点位
@@ -192,12 +191,17 @@
           //   SOURCE_URL: SOURCE_URL
           // })
           // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
+
+
+          this.$store.commit('SET_BICAI_USER', res)
+          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          util.storage.session.set("BICAI_TOKEN", res.PHONE_TOKEN) //
+          util.storage.session.set("BICAI_MEBER_ID", res.ID) //
           if (this.isfinancial == '1') {
-            window.location.href =HOST_API + '/nay/#/myInvestment?members_id=' + res.ID
+            window.location.href = HOST_API + '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
-          this.setComState({type:'Infos',value:res})
-          this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
             // 不是 openApi
@@ -536,6 +540,7 @@
     width: px2rem(315);
     height: px2rem(34);
     color: #B3B3B3;
+
     .doc {
       color: #508CEE;
     }

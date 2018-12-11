@@ -2,41 +2,59 @@
   <div id="app">
     <div class="wrap">
       <app-bar :title="title"></app-bar>
-      <div class="banner">
-        <div class="bannercontent">
-          <div class="bannertop">
-            <div class="bannertopleft">
-              <p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>
-              <p>
-                <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
-                <span style="font-size: .5rem;">%</span>
-              </p>
-            </div>
-            <div class="bannertopright">
-              <p class="p-text" style="font-size: 0.4rem">赎回到账时间</p>
-              <p>
-                <!--<strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>-->
-                <strong style="font-size: 1rem"> T+{{productDetail.PERIOD_ACCOUNT}}</strong>
-                <span style="font-size: .5rem;">天</span>
-              </p>
-            </div>
-          </div>
-          <div class="bannerbottom">
-            <ul>
+      <div class="m-swiper">
+        <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
+          <!-- slides -->
 
-              <!--<li class="bannerbottomfirst clearfix"-->
-              <!--v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险-->
-              <!--</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>-->
-              <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
-              <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>
-            </ul>
-          </div>
+          <swiper-slide v-for="item,index in NAV_List" :key="index">
+            <div class="card">
+              <div class="top"><img src="~@/assets/images/production/rili.png"
+                                    alt=""><span>{{item.PERIOD}}</span></div>
+              <section class="center">{{item.RATE | formatNum}}%</section>
+
+            </div>
+          </swiper-slide>
+
+        </swiper>
+        <div class="m-bannerbottom">
+          <span>累计购买笔数 {{productDetail.BUY_COUNT}}</span>
         </div>
       </div>
+      <!--<div class="banner">-->
+      <!--<div class="bannercontent">-->
+      <!--<div class="bannertop">-->
+      <!--<div class="bannertopleft">-->
+      <!--<p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>-->
+      <!--<p>-->
+      <!--<strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>-->
+      <!--<span style="font-size: .5rem;">%</span>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--<div class="bannertopright">-->
+      <!--<p class="p-text" style="font-size: 0.4rem">赎回到账时间</p>-->
+      <!--<p>-->
+      <!--&lt;!&ndash;<strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>&ndash;&gt;-->
+      <!--<strong style="font-size: 1rem"> T+{{productDetail.PERIOD_ACCOUNT}}</strong>-->
+      <!--<span style="font-size: .5rem;">天</span>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="bannerbottom">-->
+      <!--<ul>-->
+
+      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix"&ndash;&gt;-->
+      <!--&lt;!&ndash;v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险&ndash;&gt;-->
+      <!--&lt;!&ndash;</li>&ndash;&gt;-->
+      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>&ndash;&gt;-->
+      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>&ndash;&gt;-->
+      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>&ndash;&gt;-->
+      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>&ndash;&gt;-->
+      <!--<li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>-->
+      <!--<li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>-->
+      <!--</ul>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
       <!--<div class="calculation">-->
       <!--<div class="calculation-1">-->
       <!--<span class="label">我要投资(元)</span>-->
@@ -61,22 +79,23 @@
       <div class="contenttop">
         <p>交易规则</p>
         <div class="bannercontent">
-          <span class="bannercontenttitle">审核方式</span>
-          <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
+          <span class="bannercontenttitle">起存金额</span>
+          <span class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
+        </div>
+
+        <div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">
+          <span class="bannercontenttitle">递增金额</span>
+          <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
         </div>
         <div class="bannercontent">
-          <span class="bannercontenttitle">锁定期</span>
+          <span class="bannercontenttitle">支取时间</span>
           <span
-            class="bannercontenttitlecontent">{{productDetail.PERIOD}}天</span>
+            class="bannercontenttitlecontent">随时支取</span>
         </div>
-        <!--<div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">-->
-        <!--<span class="bannercontenttitle">递增金额</span>-->
-        <!--<span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>-->
-        <!--</div>-->
-        <!--<div class="bannercontent">-->
-          <!--<span class="bannercontenttitle">产品类型</span>-->
-          <!--<span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER}}</span>-->
-        <!--</div>-->
+        <div class="bannercontent">
+          <span class="bannercontenttitle">产品类型</span>
+          <span class="bannercontenttitlecontent">智能存款</span>
+        </div>
       </div>
       <div class="wrapicon">
         <p>交易步骤</p>
@@ -122,7 +141,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
+          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_TEXT_AREA">
           </div>
         </div>
       </div>
@@ -166,15 +185,33 @@
 </template>
 <script>
   import API from "@/service";
-  import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
-  import Register from '../login/login'
+  import Register from './commom'
+  import {swiper, swiperSlide} from 'vue-awesome-swiper'
+  // require styles
+  import 'swiper/dist/css/swiper.css'
 
   export default {
     data() {
       return {
+        current: '0',
+        NAV_List: [{}, {}],
+        swiperOption: {
+          slidesPerView: "auto",
+          centeredSlides: !0,
+          watchSlidesProgress: !0,
+          pagination: ".swiper-pagination",
+          paginationClickable: !0,
+          // onProgress: function (a) {
+          //   var b, c, d;
+          //   for (b = 0; b < a.slides.length; b++) c = a.slides[b], d = c.progress, scale = 1 - Math.min(Math.abs(.2 * d), 1), es = c.style, es.opacity = 1 - Math.min(Math.abs(d / 2), 1), es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = "translate3d(0px,0," + -Math.abs(150 * d) + "px)"
+          // },
+          // onSetTransition: function (a, b) {
+          //   for (var c = 0; c < a.slides.length; c++) es = a.slides[c].style, es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = b + "ms"
+          // }
+        },
         productDetail: {
           RATE: "",
           PERIOD: "",
@@ -197,7 +234,6 @@
         title: "",
         PRD_TYPE: "",
         canEdit: false,
-
         defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
@@ -206,6 +242,9 @@
     },
     mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
     computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      },
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
@@ -218,11 +257,21 @@
 
       }
     },
+    mounted() {
+      // current swiper instance
+      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
+      // console.log('this is current swiper instance object', this.swiper)
+      this.getData(this.proID);
 
+    },
+    components: {
+      swiper,
+      swiperSlide
+    },
     created() {
       this.title = this.$route.query.title;
+      this.RATE = this.$route.query.RATE
       this.proID = this.$route.query.PRO_ID;
-      this.getData(this.proID);
     },
     directives: {
       focus: { // 自定义事件
@@ -274,6 +323,8 @@
       next();
     },
     methods: {
+      callback() {
+      },
       formatNumHandle(cash) {
         this.canEdit = false
         if (!(cash - 0) || !cash) {
@@ -362,6 +413,10 @@
         let data = {
           ID: id + ""
         };
+        // let data = {
+        //   ID: '13661',
+        //   // RATEID:'394'
+        // }
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
           this.productDetail = res;
@@ -371,6 +426,20 @@
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
+          let index = 0;
+          if (res.NAV_List.length > 0) {
+            this.NAV_List = res.NAV_List
+            this.current = this.NAV_List.length
+            this.NAV_List.forEach((item, i) => {
+              if (item.RATE = this.RATE) {
+                index = i
+              }
+            })
+            console.log(index);
+          }
+          setTimeout(() => {
+            this.swiper.slideTo(index + 1, 1000, false)
+          }, 100)
           // IS_REALTIME_DATA_PRD
           // 1是，走无密码登录带红色提示（亿联）
           // 0否，走无密码的登录页（郑州，众邦
@@ -416,12 +485,15 @@
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
         let ISLogin = this.getComState.ISLogin || false
         let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
+        console.log(TOKEN);
         if (TOKEN) {
           if (IS_SYNC_FLAG == 0) {
             window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
           } else {
-            this.$router.push({name: PageName.Buying,query:{ProID:this.proID}})
+            this.$router.push({name: PageName.Buying})
+            // this.toPreProduct()
           }
+          // this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})
         }
@@ -431,7 +503,7 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
-
+  /*@import "./swiper.scss";*/
   html, body {
     width: 100%;
   }
@@ -506,6 +578,7 @@
       height: px2rem(25);
       margin-top: px2rem(10);
       color: #fff;
+
       li {
         margin-right: px2rem(10);
         text-align: left;
@@ -690,6 +763,7 @@
 
   .wrapicon {
     box-sizing: border-box;
+
     p {
       padding-left: px2rem(20);
       width: 30%;
@@ -729,14 +803,14 @@
   }
 
   /*.wrapicon:before {*/
-    /*position: absolute;*/
-    /*top: 50%;*/
-    /*left: 0;*/
-    /*content: '';*/
-    /*display: block;*/
-    /*width: 100%;*/
-    /*height: px2rem(2);*/
-    /*background: #2B74FE;;*/
+  /*position: absolute;*/
+  /*top: 50%;*/
+  /*left: 0;*/
+  /*content: '';*/
+  /*display: block;*/
+  /*width: 100%;*/
+  /*height: px2rem(2);*/
+  /*background: #2B74FE;;*/
   /*}*/
 
   .circle span {
@@ -871,13 +945,86 @@
   }
 
   .p-icon {
-    width: 22px;
-    height: 22px;
+    width: px2rem(22);
+    height: px2rem(22);
     background: url("~@/assets/images/p-safe@2x.png") no-repeat 0 0;
     background-size: 100%;
     position: relative;
     top: px2rem(6);
     margin-right: px2rem(4)
   }
+
+  .m-swiper {
+    .m-bannerbottom {
+      text-align: center;
+      font-size: px2rem(13);
+      color: #508CEE;
+    }
+
+    .swiper-container {
+      width: 100%;
+      perspective: 1200px
+    }
+
+    .swiper-slide {
+      width: 80%;
+      transform-style: preserve-3d;
+      margin: 0 auto;
+      height: px2rem(170);
+      background: url("~@/assets/images/production/Bankcopy@2x.png") no-repeat center center;
+      background-size: contain;
+    }
+
+    .swiper-slide-next, .swiper-slide-prev {
+      width: 70%;
+    }
+
+    .card {
+      width: 100%;
+      margin: 0 auto;
+      display: block;
+      box-sizing: border-box;
+      padding: px2rem(30) px2rem(30) 0;
+      color: #fff;
+
+      .center {
+        font-size: px2rem(51);
+        height: px2rem(51);
+        text-align: center;
+      }
+
+      .m-bottom {
+        display: flex;
+        padding-top: px2rem(15);
+        height: px2rem(30);
+        font-size: px2rem(11);
+        text-align: center;
+
+        span {
+          flex: 1;
+
+        }
+      }
+
+      .top {
+        vertical-align: top;
+        font-size: 0;
+
+        span {
+          padding-left: px2rem(10);
+          font-size: px2rem(15);
+          line-height: px2rem(15);
+        }
+
+        img {
+          display: inline-block;
+          width: px2rem(17);
+        }
+      }
+
+    }
+  }
+
+
 </style>
 

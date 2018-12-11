@@ -1,5 +1,5 @@
 import API from "@/service"
-import {LsName, BusName, PageName,PRO_PARAMS} from "@/Constant";
+import {LsName, BusName, PageName, PRO_PARAMS} from "@/Constant";
 import Bus from '@/plugin/bus'
 import util from "@/libs/util";
 import checkOpenApiAndH5 from './checkOpenApiAndH5'
@@ -27,6 +27,7 @@ export default {
   },
   mixins: [checkOpenApiAndH5],
   created() {
+
     // this.checkProductType()
   },
   mounted() {
@@ -41,6 +42,7 @@ export default {
     // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
     // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
     checkProductType() {
+
       let qu = this.$route.query
       let query = util.storage.session.get('FirstLoad') || {}
       let H5URL = qu.H5URL  // 和1218活动页约定链接参数
@@ -53,9 +55,9 @@ export default {
         query = JSON.parse(storageH5URL)
       }
       let {
-        DEVICE_ID = PRO_PARAMS.DEVICE_ID,
-        CHANNEL_ID = PRO_PARAMS.CHANNEL_ID,
-        APP_FLAG = PRO_PARAMS.APP_FLAG
+        DEVICE_ID,
+        CHANNEL_ID,
+        APP_FLAG
       } = query
       this.$store.commit('SET_DEVICE_ID', DEVICE_ID)
       this.$store.commit('SET_CHANNEL_ID', CHANNEL_ID)
@@ -96,7 +98,7 @@ export default {
         this.BANK_NAME = ''
         this.isfinancial = 1
         this.hasBank = false
-      }else {
+      } else {
         this.hasBank = true
       }
       // 控制底部提示
@@ -111,7 +113,32 @@ export default {
         this.getProData(this.ProAndOrgType.ID)
       }
       this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-
+      // let token = util.storage.session.get('BICAI_TOKEN')
+      // if (token) {
+      //   this.$store.commit('SET_TOKEN', token)
+      //   // 判断openApi
+      //   if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
+      //     // 不是 openApi
+      //     // 不是h5直联
+      //     if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
+      //       // 不需要实名
+      //       if (this.href) {
+      //         window.location.href = this.href;
+      //       } else {
+      //         alert('跳转第三方链接获取异常')
+      //       }
+      //     } else {
+      //       // 需要实名
+      //       this.checkAuthStatus()
+      //     }
+      //   } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+      //     // 是 openApi
+      //     this.checkAuthStatus()
+      //   } else {
+      //     this.checkAuthStatus()
+      //   }
+      //   return
+      // }
     },
     getProData(id) {
       let data = {

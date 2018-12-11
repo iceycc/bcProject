@@ -112,6 +112,10 @@
         this.copyShow = true
       },
       goMyAssets() {
+        API.watchApi({
+          FUNCTION_ID: 'ACB0G018', // 点位
+          REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-查看我的资产',
+        })
         this.$router.push({name: PageName.BankDetail})
       },
       goBuyOther() {

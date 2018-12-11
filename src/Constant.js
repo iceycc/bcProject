@@ -10,6 +10,7 @@ let Configs = {
    * dev
    */
   DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
+  // DEV_HOST: 'http://192.168.100.13:8080', // 个人
   // DEV_HOST: 'https://adv.bicai365.com', // adv测试
   // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
 
@@ -17,7 +18,7 @@ let Configs = {
    * build
    */
   // PRO_HOST: 'https://adv.bicai365.com',// adv
-  PRO_HOST:'https://finsuitdev.bicai365.com' ,// 生产/**/
+  PRO_HOST: 'https://finsuitdev.bicai365.com',// 生产/**/
   // PRO_HOST: 'https://graytest.bicai365.com',// 灰度生产
 }
 export const HOST = process.env.NODE_ENV == 'development'
@@ -116,6 +117,11 @@ export const PageName = {
   BcOpening2: 'BcOpening2',
   BcOpening1: 'BcOpening1',
   BicaiPageDocs: 'BicaiPageDocs',
+  DepositDetail1: 'DepositDetail1', // 活期存款
+  DepositDetail2: 'DepositDetail2', // 智能存款
+  DepositDetail3: 'DepositDetail3', // 结构性存款
+
+  MoneyFundDetail: 'MoneyFundDetail',//货币基金
   /**
    * 郑州新增
    */
@@ -187,7 +193,7 @@ export const ORG_ID_NUM = {
  */
 export const PRO_PARAMS = {
   DEVICE_ID: '001002003ACD',
-  CHANNEL_ID: '88',
+  CHANNEL_ID: '8',
   APP_FLAG: 'BC'
 }
 
