@@ -190,15 +190,16 @@
           //   SOURCE_URL: SOURCE_URL
           // })
           // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
-          if (this.isfinancial == '1') {
-            window.location.href =HOST + '/nay/#/myInvestment?members_id=' + res.ID
-            return
-          }
+
 
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
           util.storage.session.set("BICAI_TOKEN",res.PHONE_TOKEN) //
           util.storage.session.set("BICAI_MEBER_ID",res.ID) //
+          if (this.isfinancial == '1') {
+            window.location.href =HOST + '/nay/#/myInvestment?members_id=' + res.ID
+            return
+          }
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
             // 不是 openApi

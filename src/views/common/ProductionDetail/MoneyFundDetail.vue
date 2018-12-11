@@ -8,7 +8,7 @@
             <div class="bannertopleft">
               <p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
+                <strong style="font-size: 1rem"> {{productDetail.RATE | formatNum}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
@@ -16,7 +16,7 @@
               <p class="p-text" style="font-size: 0.4rem">赎回到账时间</p>
               <p>
                 <!--<strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>-->
-                <strong style="font-size: 1rem"> T+{{productDetail.PERIOD_ACCOUNT}}</strong>
+                <strong style="font-size: 1rem"> T+{{productDetail.PERIOD_ACCOUNT?productDetail.PERIOD_ACCOUNT:0}}</strong>
                 <span style="font-size: .5rem;">天</span>
               </p>
             </div>
@@ -76,7 +76,7 @@
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">智能存款</span>
+          <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER(productDetail.DEPOSIT_TYPE_ID)}}</span>
         </div>
       </div>
       <div class="wrapicon">
@@ -123,7 +123,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
+          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_TEXT_AREA">
           </div>
         </div>
       </div>
@@ -172,14 +172,28 @@
   import Mixins from "@/mixins";
   import Register from './commom'
   import 'swiper/dist/css/swiper.css'
-  import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import {swiper, swiperSlide} from 'vue-awesome-swiper'
   // require styles
   import 'swiper/dist/css/swiper.css'
-
 
   export default {
     data() {
       return {
+        NAV_List: [{}, {}],
+        swiperOption: {
+          slidesPerView: "auto",
+          centeredSlides: !0,
+          watchSlidesProgress: !0,
+          pagination: ".swiper-pagination",
+          paginationClickable: !0,
+          onProgress: function (a) {
+            var b, c, d;
+            for (b = 0; b < a.slides.length; b++) c = a.slides[b], d = c.progress, scale = 1 - Math.min(Math.abs(.2 * d), 1), es = c.style, es.opacity = 1 - Math.min(Math.abs(d / 2), 1), es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = "translate3d(0px,0," + -Math.abs(150 * d) + "px)"
+          },
+          onSetTransition: function (a, b) {
+            for (var c = 0; c < a.slides.length; c++) es = a.slides[c].style, es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = b + "ms"
+          }
+        },
         productDetail: {
           RATE: "",
           PERIOD: "",
@@ -202,7 +216,6 @@
         title: "",
         PRD_TYPE: "",
         canEdit: false,
-
         defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
@@ -211,6 +224,9 @@
     },
     mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
     computed: {
+      // swiper() {
+      //   return this.$refs.mySwiper.swiper
+      // },
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
@@ -223,9 +239,15 @@
 
       }
     },
+    mounted() {
+      // current swiper instance
+      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
+      // console.log('this is current swiper instance object', this.swiper)
+      // this.swiper.slideTo(1, 1000, false)
+    },
     components: {
-      swiper,
-      swiperSlide
+      // swiper,
+      // swiperSlide
     },
     created() {
       this.title = this.$route.query.title;
@@ -240,7 +262,7 @@
       }
     },
     filters: {
-      PRD_TYPE_ID_FILTER(val) {
+      PRD_TYPE_ID_FILTER(val,type) {
         let str = '产品类型';
         switch (val - 0) {
           case 1:
@@ -251,6 +273,25 @@
             break;
           case 3:
             str = '纯债'
+            break;
+          case 4:
+            //  1：活期
+            //  2：智能
+            //  3：结构性
+            //  4：
+            if(type==1){
+              str = '活期存款'
+            }
+            if(type==2){
+              str = '智能存款'
+            }
+            if(type==3){
+              str = '结构性存款'
+            }
+            if(type==4){
+              str = '存款'
+            }
+            break;
         }
         return str
       },
@@ -282,6 +323,8 @@
       next();
     },
     methods: {
+      callback() {
+      },
       formatNumHandle(cash) {
         this.canEdit = false
         if (!(cash - 0) || !cash) {
@@ -370,6 +413,10 @@
         let data = {
           ID: id + ""
         };
+        // let data = {
+        //   ID: '13661',
+        //   // RATEID:'394'
+        // }
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
           this.productDetail = res;
@@ -379,6 +426,7 @@
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
+          this.NAV_List = res.NAV_List
           // IS_REALTIME_DATA_PRD
           // 1是，走无密码登录带红色提示（亿联）
           // 0否，走无密码的登录页（郑州，众邦
@@ -423,9 +471,15 @@
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
         let ISLogin = this.getComState.ISLogin || false
-
-        if (TOKEN && ISLogin) {
-          this.toPreProduct()
+        let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
+        console.log(TOKEN);
+        if (TOKEN) {
+          if (IS_SYNC_FLAG == 0) {
+            window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+          } else {
+            this.$router.push({name: PageName.Buying})
+            // this.toPreProduct()
+          }
           // this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})
@@ -436,7 +490,7 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
-
+  /*@import "./swiper.scss";*/
   html, body {
     width: 100%;
   }
@@ -878,13 +932,86 @@
   }
 
   .p-icon {
-    width: 22px;
-    height: 22px;
+    width: px2rem(22);
+    height: px2rem(22);
     background: url("~@/assets/images/p-safe@2x.png") no-repeat 0 0;
     background-size: 100%;
     position: relative;
     top: px2rem(6);
     margin-right: px2rem(4)
   }
+
+  .m-swiper {
+    .m-bannerbottom {
+      text-align: center;
+      font-size: px2rem(13);
+      color: #508CEE;
+    }
+
+    .swiper-container {
+      width: 100%;
+      perspective: 1200px
+    }
+
+    .swiper-slide {
+      width: 80%;
+      transform-style: preserve-3d;
+      margin: 0 auto;
+      height: px2rem(170);
+      background: url("~@/assets/images/production/Bankcopy@2x.png") no-repeat center center;
+      background-size: contain;
+    }
+
+    .swiper-slide-next, .swiper-slide-prev {
+      width: 70%;
+    }
+
+    .card {
+      width: 100%;
+      margin: 0 auto;
+      display: block;
+      box-sizing: border-box;
+      padding: px2rem(30) px2rem(30) 0;
+      color: #fff;
+
+      .center {
+        font-size: px2rem(51);
+        height: px2rem(51);
+        text-align: center;
+      }
+
+      .m-bottom {
+        display: flex;
+        padding-top: px2rem(15);
+        height: px2rem(30);
+        font-size: px2rem(11);
+        text-align: center;
+
+        span {
+          flex: 1;
+
+        }
+      }
+
+      .top {
+        vertical-align: top;
+        font-size: 0;
+
+        span {
+          padding-left: px2rem(10);
+          font-size: px2rem(15);
+          line-height: px2rem(15);
+        }
+
+        img {
+          display: inline-block;
+          width: px2rem(17);
+        }
+      }
+
+    }
+  }
+
+
 </style>
 

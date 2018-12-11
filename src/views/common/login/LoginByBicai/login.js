@@ -55,9 +55,9 @@ export default {
         query = JSON.parse(storageH5URL)
       }
       let {
-        DEVICE_ID = PRO_PARAMS.DEVICE_ID,
-        CHANNEL_ID = PRO_PARAMS.CHANNEL_ID,
-        APP_FLAG = PRO_PARAMS.APP_FLAG
+        DEVICE_ID,
+        CHANNEL_ID,
+        APP_FLAG
       } = query
       this.$store.commit('SET_DEVICE_ID', DEVICE_ID)
       this.$store.commit('SET_CHANNEL_ID', CHANNEL_ID)
@@ -107,7 +107,7 @@ export default {
         // 说明链接有产品id是外链过来买东西的
         this.getProData(this.ProAndOrgType.ID)
       }
-      // this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
+      this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
       // let token = util.storage.session.get('BICAI_TOKEN')
       // if (token) {
       //   this.$store.commit('SET_TOKEN', token)
