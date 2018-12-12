@@ -12,7 +12,7 @@
                  <span class="line2 hui">
                     <img :src='stepImg' alt="">
                 </span>
-        <span class="step-text" style=" color:#D3D3D3">绑定银行卡</span>
+        <span class="step-text">绑定银行卡</span>
       </section>
     </section>
     <div class="opening_box">
@@ -60,6 +60,7 @@
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <!--<button class="tijiao" @click="goNext">下一步</button>-->
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
+    <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
 
     <up-select
       @clickBankList="addBankHandle"
@@ -209,7 +210,7 @@
         this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
         this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
         this.mainBankList = this.callbackInfos.hasCardList
-        this.tel =  this.callbackInfos.hasCardList[0].PHONE_NUM
+        this.tel = this.callbackInfos.hasCardList[0].PHONE_NUM
       }
     },
     computed: {
@@ -226,8 +227,8 @@
     methods: {
       chooseBankHandle(bank) {
         console.log(bank);
-        if(bank.IS_SUPPORT == 0){
-          Bus.$emit(BusName.showToast,'暂不支持改银行')
+        if (bank.IS_SUPPORT == 0) {
+          Bus.$emit(BusName.showToast, '暂不支持改银行')
           return
         }
         // to
@@ -243,7 +244,7 @@
         this.showBankList()
       },
       checkBankName(val) {
-        if(!val){
+        if (!val) {
           return
         }
         this.checkBankName1 = false
@@ -254,15 +255,15 @@
         for (let i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
             this.bankText = bankName
-             flag = true
+            flag = true
             console.log('bankName', bankName);
             break
           }
         }
-        if(!flag){
+        if (!flag) {
           this.bankText = '请选择开户银行'
           this.data.CARD_NO = ''
-          Bus.$emit(BusName.showToast,'暂不支持该银行')
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
         }
         console.log(this.bankText);
       },
@@ -507,6 +508,7 @@
         right: auto;
       }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -732,5 +734,15 @@
       padding: px2rem(20) 0 px2rem(10);
 
     }
+  }
+
+  .msg-infos {
+    width: 100%;
+    position: fixed;
+    bottom: px2rem(20);
+    left: 0;
+    text-align: center;
+    color: #508CEE;
+    font-size: px2rem(12);
   }
 </style>

@@ -12,8 +12,8 @@
         </div>
       </div>
       <div class="buytitleright">
-        <p>起购金额{{proDetail.MIN_AMOUNT}}元</p>
-        <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
+        <p>起购金额{{proDetail.MIN_AMOUNT | formatNum}}元</p>
+        <p>最小递增{{proDetail.INCRE_AMOUNT |formatNum}}元</p>
       </div>
     </div>
 
@@ -88,7 +88,7 @@
         }
       },
       canClick() {
-        if (this.APPLY_AMOUNT && this.msgCode && this.agree) {
+        if (Number(this.APPLY_AMOUNT) <= Number(this.payNum) && Number(this.APPLY_AMOUNT) >= this.proDetail.MIN_AMOUNT && this.msgCode && this.agree) {
           return true
         } else {
           return false
@@ -163,7 +163,7 @@
         if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
-        // } else if (num % a != 0) {
+          // } else if (num % a != 0) {
           // Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
           // return true
         } else {
@@ -268,8 +268,7 @@
                   err: result.RES_MSG
                 }
               })
-            }
-            else if ('0' == result.RES_CODE) { // 成功
+            } else if ('0' == result.RES_CODE) { // 成功
               clearInterval(timer)
               Bus.$emit(BusName.showToast, result.RES_MSG);
               this.Londing.close()
@@ -346,9 +345,11 @@
     border-top: 10px solid #F6F6F9;
     border-bottom: 0.5rem solid #F6F6F9;
     display: flex;
+
     .buytitleleft {
       display: inline-block;
       flex: 1;
+
       .buytitleleftimg {
         vertical-align: middle;
         padding-top: 0.2rem;
@@ -356,6 +357,7 @@
         display: inline-block;
 
       }
+
       .buytitleleftcontent {
         vertical-align: middle;
         padding-top: -0.5rem;
@@ -388,6 +390,7 @@
     height: 1.5rem;
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
+
     .buysuccessdetailleft {
       float: left;
     }
@@ -403,6 +406,7 @@
     padding: 0 px2rem(20);
     height: 2.2rem;
     font-size: 0.4rem;
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -411,7 +415,9 @@
       top: 50%;
       right: px2rem(30);
     }
+
     border-bottom: 1px solid #EEEEF0;
+
     .buydetailsmoney {
       width: 1rem;
       margin-top: 0.5rem;
@@ -460,6 +466,7 @@
     border: 0px;
     outline: none;
     display: block;
+
     &.active {
       background: #508CEE;
     }
@@ -486,6 +493,7 @@
     line-height: px2rem(40);
     font-size: px2rem(14);
     border-bottom: 1px solid #EEEEF0;
+
     .button {
       vertical-align: middle;
       font-size: px2rem(14);
@@ -497,6 +505,7 @@
       border-radius: px2rem(6);
       color: #508CEE
     }
+
     input {
       padding-left: px2rem(10);
       width: px2rem(200);

@@ -10,7 +10,7 @@
         <p>{{ORG_NAME}}</p>
         <p>**** **** **** {{BANK_USER_CODE.substr(BANK_USER_CODE.length - 4)}}</p>
       </div>
-      
+
     </div>
     <div class="rechargetitle">银行卡</div>
     <div class="minshengbank" @click="clickBank" style="border-bottom:1px solid #EEEEF0">
@@ -56,7 +56,6 @@
   </div>
 </template>
 <script>
-  import API from "@/service";
   import {HOST_API, LsName} from '@/Constant'
   import UpSelect from '@/components/commons/UpSelect'
   import Bus from '@/plugin/bus'
@@ -111,15 +110,15 @@
       // this.reChangeHandele()
     },
     computed: {
-      ifCheckMoneyEmpty(){
-        if(this.APPLY_AMOUNT){
+      ifCheckMoneyEmpty() {
+        if (this.APPLY_AMOUNT) {
           return false
-        }else {
+        } else {
           return true
         }
       },
       canClick() {
-        if (this.APPLY_AMOUNT && this.msgCode && this.agree) {
+        if (Number(this.APPLY_AMOUNT) && this.msgCode && this.agree) {
           return true
         } else {
           return false
@@ -127,7 +126,7 @@
       }
     },
     methods: {
-      clearNumHandle(){
+      clearNumHandle() {
         this.APPLY_AMOUNT = ''
       },
       getMsg() {
@@ -191,7 +190,7 @@
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
 
- .rechargetitle {
+  .rechargetitle {
     padding-left: 0.5rem;
     height: 0.8rem;
     background: #F6F6F9;
@@ -206,8 +205,10 @@
     font-size: 0.5rem;
     display: flex;
     align-items: center;
+
     .new-add {
       font-size: px2rem(16);
+
       p:last-child {
         color: #9199A1;
       }
@@ -229,15 +230,17 @@
     line-height: 1rem;
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
+
     .close-icon {
       position: absolute;
       display: inline-block;
       width: px2rem(15);
       height: px2rem(15);
       top: 50%;
-      transform:translateY(-50%);
+      transform: translateY(-50%);
       right: px2rem(30);
     }
+
     .button {
       vertical-align: middle;
       width: 2.5rem;
@@ -246,6 +249,7 @@
       border: 1px solid #508CEE;
       color: #508CEE
     }
+
     input {
       width: 50%;
       border: none;
@@ -276,6 +280,7 @@
     border: 0px;
     outline: none;
     display: block;
+
     &.active {
       background: #508CEE;
     }
@@ -309,6 +314,7 @@
     height: 100%;
     background: #fff;
     z-index: 100;
+
     .docs {
       border: none;
       width: 100%;
@@ -317,14 +323,17 @@
       -webkit-overflow-scrolling: touch;
       padding: 0 .2rem;
     }
+
     .indocs {
       border: none;
       width: 100%;
       height: 100%;
     }
+
     .btn {
       padding: 0 1rem;
       text-align: center;
+
       button {
         width: 3.5rem;
         margin-right: .4rem;

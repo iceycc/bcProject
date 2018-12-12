@@ -97,7 +97,7 @@
     },
     computed: {
       canClick() {
-        if (this.APPLY_AMOUNT && this.msgCode) {
+        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
           return true
         } else {
           return false
@@ -200,8 +200,7 @@
                       err: result.RES_MSG
                     }
                   })
-                }
-                else if ('0' == result.RES_CODE) {
+                } else if ('0' == result.RES_CODE) {
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.Londing.close()
@@ -212,8 +211,7 @@
                       ...res
                     }
                   })
-                }
-                else if ('20000' == result.RES_CODE) {
+                } else if ('20000' == result.RES_CODE) {
                   clearInterval(timer)
                   this.Londing.close()
                   this.$router.push({
@@ -222,8 +220,7 @@
                       err: result.RES_MSG
                     }
                   })
-                }
-                else {
+                } else {
                   if (count == 5) {
                     let msg = result.RES_CODE + ':' + result.RES_MSG
                     Bus.$emit(BusName.showToast, msg);
@@ -274,19 +271,23 @@
     color: #444444;
     font-size: px2rem(14);
   }
- .minshengbank {
+
+  .minshengbank {
     padding-left: 0.5rem;
     height: px2rem(65);
     font-size: px2rem(16);
     display: flex;
     align-items: center;
+
     .new-add {
       font-size: px2rem(16);
+
       p:last-child {
         color: #9199A1;
       }
     }
   }
+
   .crow-line {
     height: px2rem(10);
     background: #f9f9f6;
@@ -299,6 +300,7 @@
     line-height: px2rem(50);
     font-size: px2rem(14);
     border-bottom: 1px solid #EEEEF0;
+
     .button {
       vertical-align: middle;
       width: px2rem(80);
@@ -318,6 +320,7 @@
       margin-top: px2rem(-15/2);
 
     }
+
     input {
       width: px2rem(180);
       border: none;
@@ -326,11 +329,13 @@
       color: #333;
       outline: none;
     }
+
     .span {
       display: inline-block;
       text-align: center;
       width: px2rem(80);
     }
+
     .Amount {
       width: px2rem(80);
       display: inline-block;
@@ -351,6 +356,7 @@
     border: 0px;
     outline: none;
     display: block;
+
     &.active {
       background-color: #508CEE;
     }
@@ -365,6 +371,7 @@
     font-size: px2rem(14);
     line-height: 0.6rem;
     color: #9199A1;
+
     span {
       color: #389CFF
     }

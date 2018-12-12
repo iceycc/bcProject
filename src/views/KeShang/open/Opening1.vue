@@ -22,6 +22,7 @@
           <div class="cameraphotoimg">
             <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
             <input type="file" capture="camera" accept="image/*" class="inputBox"
+                   disabled
                    @change="imgToBaseZheng($event)">
           </div>
         </div>
@@ -30,6 +31,7 @@
           <div class="cameraphotoimg">
             <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
             <input type="file" capture="camera" accept="image/*" class="inputBox"
+                   disabled
                    @change="imgToBaseFan($event)">
           </div>
         </div>
@@ -38,26 +40,31 @@
       <section v-if="DOMShow.USER_NAME">
         <span>姓名</span>
         <input class="inputBox2" type="text" placeholder="请输入您的姓名"
+               disabled
                v-model="data.USER_NAME">
       </section>
       <section v-if="DOMShow.USER_CARD_ID">
         <span>身份证号</span>
         <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
+               disabled
                v-model="data.USER_CARD_ID" @bulr="checkID">
       </section>
       <section v-if="DOMShow.CARD_INDATE">
         <span>身份证有效期</span>
         <input class="inputBox2" type="text" placeholder=""
+               disabled
                v-model="data.CARD_INDATE">
       </section>
       <section v-if="DOMShow.PHONE">
         <span>手机号码</span>
         <input class="inputBox2" type="tel" placeholder="请输入手机号"
+               disabled
                v-model="data.PHONE">
       </section>
       <section v-if="DOMShow.NATION">
         <span>民族</span>
         <input class="inputBox2" type="text" placeholder=""
+               disabled
                v-model="data.NATION">
       </section>
       <section v-if="DOMShow.ADDRESS">

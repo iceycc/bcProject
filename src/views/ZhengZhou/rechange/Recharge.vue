@@ -89,10 +89,12 @@
         <div class="btn">
           <button @click="()=>{
             this.go(-1)
-          }">取消</button>
+          }">取消
+          </button>
           <button @click="()=>{
             this.alertShow = false
-          }">确认</button>
+          }">确认
+          </button>
         </div>
       </div>
     </section>
@@ -115,8 +117,8 @@
   export default {
     data() {
       return {
-        alertText:'',
-        alertShow:false,
+        alertText: '',
+        alertShow: false,
         show: false,
         html: '协议',
         page: false,
@@ -145,7 +147,7 @@
         ACCT_NO: '', // TODO
         PHONE_NUM: '',
 
-        msgSuccess:false
+        msgSuccess: false
       }
     },
     computed: {
@@ -157,7 +159,7 @@
         }
       },
       canClick() {
-        if (this.APPLY_AMOUNT >= 100 && this.msgCode && this.agree ) {
+        if (Number(this.APPLY_AMOUNT) >= 100 && this.msgCode && this.agree) {
           return true
         } else {
           return false
@@ -213,9 +215,9 @@
             this.alertText = res.MSG
             Bus.$emit(BusName.showSendMsg, '')
             this.msgSuccess = true
-            setTimeout(()=>{
+            setTimeout(() => {
               this.alertShow = true
-            },1000)
+            }, 1000)
             // Bus.$emit(BusName.showToast, res.MSG)
             return
           }
@@ -308,12 +310,15 @@
     padding-left: 0.5rem;
     height: 1.8rem;
     display: flex;
+
     .bank {
       padding-top: px2rem(12);
+
       p:first-child {
         color: #444;
         font-size: px2rem(16);
       }
+
       p:last-child {
         color: #9199A1;
         font-size: px2rem(14);
@@ -336,6 +341,7 @@
     line-height: 1rem;
     font-size: 0.4rem;
     border-bottom: 1px solid #EEEEF0;
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -345,6 +351,7 @@
       transform: translateY(-50%);
       right: px2rem(30);
     }
+
     .button {
       vertical-align: middle;
       width: 2.5rem;
@@ -384,6 +391,7 @@
     border: 0px;
     outline: none;
     display: block;
+
     &.active {
       background: #508CEE;
     }
@@ -422,6 +430,7 @@
     height: 100%;
     background: #fff;
     z-index: 100;
+
     .docs {
       border: none;
       width: 100%;
@@ -430,14 +439,17 @@
       -webkit-overflow-scrolling: touch;
       padding: 0 .2rem;
     }
+
     .indocs {
       border: none;
       width: 100%;
       height: 100%;
     }
+
     .btn {
       padding: 0 1rem;
       text-align: center;
+
       button {
         width: 3.5rem;
         margin-right: .4rem;
@@ -463,9 +475,11 @@
       padding: 0.4rem;
       box-sizing: border-box;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -473,14 +487,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: 4px;
       border: 1px solid #9e9e9e;
@@ -488,13 +505,16 @@
       line-height: 0.9rem;
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       display: flex;
+
       button {
         margin: 0 .3rem;
         text-align: center;
@@ -502,21 +522,25 @@
       }
     }
   }
-  .w-alert-box{
+
+  .w-alert-box {
     position: absolute;
     width: 100%;
     height: 100%;
-    top:0;
+    top: 0;
     left: 0;
-    background:rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     z-index: 100;
-    p{
+
+    p {
       padding: px2rem(10);
       font-size: px2rem(14);
     }
-    .btn{
+
+    .btn {
       text-align: center;
-      button{
+
+      button {
         margin: 0 px2rem(15);
         /*background: #007aff;*/
         border: 1px solid #ccc;
@@ -527,7 +551,8 @@
         height: px2rem(40);
       }
     }
-    .w-box{
+
+    .w-box {
       margin: px2rem(250) auto;
       width: px2rem(280);
       height: px2rem(150);
