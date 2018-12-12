@@ -160,7 +160,6 @@
         // 上拉加载
         this.more(); // 上拉触发的分页查询
         this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-
       },
       loadPageList: function () {
         this.searchCondition.pageNo = "1";

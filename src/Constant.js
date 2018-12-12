@@ -10,14 +10,14 @@ let Configs = {
    */
   // DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
   // DEV_HOST: 'http://192.168.100.13:8080', // 个人
-  // DEV_HOST: 'https://adv.bicai365.com', // adv测试
-  DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
+  DEV_HOST: 'https://adv.bicai365.com', // adv测试
+  // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
   /**
    * build
    */
   // PRO_HOST: 'https://adv.bicai365.com',// adv
-  // PRO_HOST:'https://finsuit.bicai365.com' ,// 生产/**/
-  PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
+  PRO_HOST:'https://finsuit.bicai365.com' ,// 生产/**/
+  // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
 }
 export const HOST = process.env.NODE_ENV == 'development'
   ? Configs.DEV_HOST : Configs.PRO_HOST
