@@ -62,6 +62,7 @@
   import {BusName, LsName, PageName} from "@/Constant";
   import API from "@/service";
   import Bus from '@/plugin/bus'
+  import Check from '../login/LoginByBicai/login'
 
   export default {
     data() {
@@ -88,6 +89,7 @@
         OPEN_H5_HREF: ''
       }
     },
+    mixins:['Check'],
     created() {
       this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
       this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
@@ -131,6 +133,7 @@
             // 判断产品类型 区分openAPI
             if (ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
+              // this.checkBankStatus()
               this.$router.push({name: PageName.Opening1})
             } else if (ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的

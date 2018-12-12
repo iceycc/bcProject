@@ -163,34 +163,36 @@
     mixins: [Opening1Mixins],
     created() {
       // 1-获取回显数据
-      // this.checkBankStatus()
-      let suerinfo = this.getComState.openingData
-      this.suerinfo = suerinfo
-      console.log("suerinfo>>", suerinfo);
-      if (suerinfo&&suerinfo.CARD_FRONT_URL) {
-        this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
-        this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
-        this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
-        this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
-        //新增
-        this.data.USER_NAME = suerinfo.USER_NAME
-        this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-        this.data.CARD_INDATE = suerinfo.CARD_INDATE
-        // this.data.USER_NAME = suerinfo.USER_NAME
-        // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-        this.data.PHONE = suerinfo.PHONE_NUM  || suerinfo.BANK_CARD_PHONE
-        // this.data.PHONE = ''
-        this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
-        this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
-        // if (this.data.CARD_BACK_FILE) {
-        //   this.idCardFanOcr()
-        // }
-        // if (this.data.CARD_FRONT_FILE) {
-        //   this.idCardZhengOcr()
-        // }
-      }
+      this.checkBankStatus(this.getInfos)
     },
     methods: {
+      getInfos(data) {
+        let suerinfo = data
+        this.suerinfo = suerinfo
+        console.log("suerinfo>>", suerinfo);
+        if (suerinfo && suerinfo.CARD_FRONT_URL) {
+          this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
+          this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
+          this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
+          this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
+          //新增
+          this.data.USER_NAME = suerinfo.USER_NAME
+          this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
+          this.data.CARD_INDATE = suerinfo.CARD_INDATE
+          // this.data.USER_NAME = suerinfo.USER_NAME
+          // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
+          this.data.PHONE = suerinfo.PHONE_NUM || suerinfo.BANK_CARD_PHONE
+          // this.data.PHONE = ''
+          this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
+          this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
+          // if (this.data.CARD_BACK_FILE) {
+          //   this.idCardFanOcr()
+          // }
+          // if (this.data.CARD_FRONT_FILE) {
+          //   this.idCardZhengOcr()
+          // }
+        }
+      },
       //获取学历
       getEduction(val) {
         this.educationText = val.name
@@ -206,7 +208,7 @@
         this.agree = !this.agree
       },
       showPage(type) {
-        this.$router.push({name:PageName.DocsPage,query:{type:type}})
+        this.$router.push({name: PageName.DocsPage, query: {type: type}})
       },
     }
 
@@ -225,13 +227,16 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+
     .step-text {
       padding-top: px2rem(7);
     }
+
     .circle {
       flex: 1;
       display: flex;
       flex-direction: column;
+
       &.left {
         text-align: left;
         padding-left: px2rem(30);
@@ -245,9 +250,11 @@
 
     .line1, .line2, .line3 {
       position: relative;
+
       img {
         width: .5rem;
       }
+
       &:after {
         display: block;
         position: absolute;
@@ -262,17 +269,20 @@
 
       }
     }
+
     .hui {
       &:after, &.line2:before {
         background: #dee1e3 !important;
       }
 
     }
+
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
+
       &:before {
         display: block;
         position: absolute;
@@ -286,6 +296,7 @@
         overflow: hidden;
       }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -356,6 +367,7 @@
     background-position: .2rem .2rem;
     border-bottom: 1px #E5E5E5 solid;
     display: flex;
+
     .words {
       padding-left: px2rem(20);
     }
@@ -373,6 +385,7 @@
     width: px2rem(126);
     height: px2rem(80);
     border: 1px dotted #eaeaea;
+
     &:after {
       display: inline-block;
       content: '';
@@ -447,6 +460,7 @@
     height: 100%;
     background: #fff;
     z-index: 100;
+
     .docs {
       box-sizing: border-box;
       border: none;
@@ -456,6 +470,7 @@
       -webkit-overflow-scrolling: touch;
       padding: 0 .2rem;
     }
+
     .docsself {
       box-sizing: border-box;
       border: none;
@@ -470,6 +485,7 @@
         font-size: px2rem(11) !important;
         color: #000 !important;
       }
+
       p {
         font-size: px2rem(9) !important;
         color: #000 !important;
@@ -477,6 +493,7 @@
       }
 
     }
+
     .indocs {
       border: none;
       width: 100%;
@@ -486,6 +503,7 @@
     .btn {
       padding: 0 1rem;
       text-align: center;
+
       button {
         width: 3.5rem;
         margin-right: .4rem;
