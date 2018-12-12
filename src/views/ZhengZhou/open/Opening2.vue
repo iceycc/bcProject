@@ -103,8 +103,7 @@
         <p class="title">{{title}}</p>
         <section class="scroll-view">
           <section :id="key" class="bank-class" v-for="bankIndex,key,index in IndexObj" :key="index">
-            <p class="bank-index">{{ke    <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
-y}}</p>
+            <p class="bank-index">{{key}}</p>
             <ul class="select">
               <li
                 @click="select(item.name,item)"
@@ -297,7 +296,6 @@ y}}</p>
 
 
       showBankList() {
-        console.log(this.bankList);
         if (!this.canClick) {
           return
         }

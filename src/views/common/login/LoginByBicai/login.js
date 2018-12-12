@@ -226,16 +226,19 @@ export default {
           // 提交第二步
           Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
-          // 郑州银行
+          // 众邦银行
           if (this.ORG_ID == '227') {
+            // 成功
             this.loginSuccess(res)
           }
-          // 众邦银行
+          // 郑州银行
           if (this.ORG_ID == '49') {
+            // 第三步
             this.$router.push({name: PageName.Opening3})
           }
         }
         if (step == 3) {
+          // 成功
           this.loginSuccess(res)
         }
       }, err => {
