@@ -70,8 +70,6 @@
   import API from "@/service"
   import Mixins from "@/mixins";
   import util from "libs/util";
-  import Check from './check'
-
   export default {
     data() {
       return {
@@ -110,25 +108,13 @@
         }
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Check],
+    mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Mixins.ToBuying],
     created() {
-      // ProID=19758&moneyNum=100
-      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
-      let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
-      util.storage.session.set('moneyNum', moneyNum)
-      if (ProID) {
-        this.ProID = ProID
-        this.getData(ProID)
-      } else {
-        this.getInfo()
-        let proData = this.getComState.goBuy
-        this.initData(proData)
-      }
-    },
 
+    },
     methods: {
       // 初始化数据
-      initData(proData){
+      initData(proData) {
         // 页面数据渲染
         this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
         this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0'// 数据
@@ -145,50 +131,30 @@
         }
         // 链接流程来的
         let moneyNum = util.storage.session.get('moneyNum')
-        if(moneyNum){
+        if (moneyNum) {
           this.moneyNum = moneyNum
         }
       },
-      clearNumHandle() {
-        this.moneyNum = ''
-      },
+      // 查询账户余额
       getInfo() {
-        // 查询账户余额
         API.bank.apiQryAsset({}, res => {
           console.log(res);
           this.payNum = res.ACC_REST // 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
         })
       },
-      // 通过产品id主动请求产品数据
-      getData(id) {
-        let data = {
-          ID: id + ""
-        };
-        // API.commonApi.apiGetChannelPrdInfo(data, res => {
-        API.bicai.getPrdInfo(data, res => {
-          this.checkAuthStatus()
-          this.initData(res)
-          this.setComState({type: 'PRD_TYPE', value: res.PRD_TYPE})
-          this.removeComState('ProDuctData')
-          let goBuyData = {
-            id: id,
-            logo: res.LOGO_URL,
-            ...res
-          };
-          this.setComState({type: 'loginType', value: '安全购买'})
-          this.setComState({type: 'goBuy', value: goBuyData})
-        });
-      },
+      //
       goReChang() {
         this.setComState({
           type: 'OriginPage',
           value: this.$route.fullPath
         })
-
         this.$router.push({
           name: PageName.Recharge,
         })
+      },
+      clearNumHandle() {
+        this.moneyNum = ''
       },
       getAgreement(type) {
         this.agree = true
@@ -503,7 +469,6 @@
     background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
     background-size: 0.3rem 0.3rem;
   }
-
 
 
   .bgbox {
