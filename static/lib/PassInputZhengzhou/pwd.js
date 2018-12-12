@@ -1,7 +1,7 @@
 (function(t, e) {
   "use strict";
-  var host = 'https://adv.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
-  // var host = 'https://graytest.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  // var host = 'https://adv.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  var host = 'https://graytest.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
 
   var i = {};
   var reset = {
