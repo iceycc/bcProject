@@ -34,6 +34,7 @@
       // todo 密码控件！！
       console.log('mounted pwd');
       $('#PWDKBD').remove();
+
       $(window).loadKBD();
       let _this = this
       $("#" + this.BankCardPass).on('click', function () {
@@ -68,4 +69,5 @@
     width: 100%;
     height: 100%;
   }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app">
+  <div class="app">
     <app-bar title="购买"></app-bar>
     <div class="buytitle">
       <div class="buytitleleft">
@@ -36,6 +36,7 @@
        :class="{'bang':true,'no':agree == false}">我已阅读并同意
       <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《日添利-博时基金 ”产品业务服务协议》</a>
     </p>
+
     <section v-if="show" class="bgbox">
       <section class="passbox">
         <p class="title">
@@ -95,7 +96,7 @@
         return this.proDetail.MIN_AMOUNT + '元起购'
       },
       canClick() {
-        if (Number(this.moneyNum)>= this.proDetail.MIN_AMOUNT && this.agree) {
+        if (Number(this.moneyNum) >= this.proDetail.MIN_AMOUNT && this.agree) {
           return true
         } else {
           return false
@@ -277,7 +278,7 @@
         } = this.getComState.ProAndOrgType
         let data = {
           TYPE: 'API_BUY',
-          PRD_ID: (this.proDetail.id || this.ProID ) + '',
+          PRD_ID: (this.proDetail.id || this.ProID) + '',
           APPLY_AMOUNT: util.fromatMoney(this.moneyNum),
           BANK_PAY_PW: pass + '',
           PREFIX: lenCode,
@@ -502,15 +503,18 @@
     background-size: 0.3rem 0.3rem;
   }
 
+
+
   .bgbox {
-    z-index: 2;
+    z-index: 10;
     width: 100%;
     height: 100%;
-    background: rgba(1, 1, 1, .7);
-    position: fixed;
-    padding-top: 0.7rem;
+    box-sizing: border-box;
+    position: absolute;
+    padding-top: px2rem(70);
     top: 0;
     left: 0;
+    background: rgba(1, 1, 1, .7);
 
     .passbox {
       background: #fff;

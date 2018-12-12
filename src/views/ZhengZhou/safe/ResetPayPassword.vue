@@ -1,5 +1,8 @@
 <template>
   <div class="bgbox">
+    <div class="bg-box" v-if="show">
+      <div class="bottom"></div>
+    </div>
     <app-bar title="重置支付密码" class="m-header"></app-bar>
     <div class="top">
       <div class="field_row_wrap">
@@ -63,8 +66,6 @@
   import API from "@/service";
   import Bus from '@/plugin/bus'
   import {PageName, BusName, LsName} from "@/Constant";
-  import util from "libs/util";
-  import Mixins from "@/mixins";
   import PassWordZhengzhou from '@/components/password/PassInputZhengZhouForMore'
 
   export default {
@@ -184,6 +185,10 @@
 <style scoped lang="scss">
   @import "~@/assets/px2rem";
 
+  .bgbox{
+    /*background: ;*/
+    background: rgba(1, 1, 1, .7);
+  }
   .top {
     padding: 0 px2rem(20) px2rem(20);
 
@@ -242,5 +247,22 @@
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
   {
     opacity: 0;
+  }
+
+  .bg-box {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
+    .bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: px2rem(50);
+      background: #fff;
+    }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <app-bar title="赎回"></app-bar>
     <div class="r-top">
       <img :src="imgSrc+redeemData.LOGO_URL" alt="">
@@ -543,14 +543,16 @@
   }
 
   .bgbox {
-    z-index: 2;
+    z-index: 10;
     width: 100%;
     height: 100%;
-    background: rgba(1, 1, 1, .7);
-    position: fixed;
-    padding-top: 0.7rem;
+    box-sizing: border-box;
+    position: absolute;
+    padding-top: px2rem(70);
     top: 0;
     left: 0;
+    background: rgba(1, 1, 1, .7);
+
 
     .passbox {
       background: #fff;
