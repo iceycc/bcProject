@@ -4,6 +4,7 @@ import API from "@/service";
 import {mapMutations, mapGetters} from 'vuex'
 import store from '@/store'
 import {ORG_ID_NUM} from '@/Constant'
+import * as FromH5Active from './FromH5Active'
 import * as Common from './common'
 
 // 展开开户需要的store方法
@@ -155,5 +156,6 @@ export default {
   StoreMixin,
   HandleMixin,
   UtilMixin,
+  ...FromH5Active,
   ...Common
 }

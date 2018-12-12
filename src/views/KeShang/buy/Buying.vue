@@ -55,6 +55,8 @@
   import Bus from '@/plugin/bus'
   import API from "@/service"
   import Mixins from "@/mixins";
+  import util from "libs/util";
+
 
   let time = 60
   let timer;
@@ -95,8 +97,11 @@
         }
       }
     },
-    mixins: [Mixins.StoreMixin],
+    mixins: [Mixins.StoreMixin,Mixins.ToBuying],
     created() {
+      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
+      let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
+      util.storage.session.set('moneyNum', moneyNum)
       this.getInfo()
       // todo测试用
       // this.getProData(17897)

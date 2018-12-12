@@ -7,7 +7,7 @@ import util from "libs/util";
 export default {
   data() {
     return {
-      BankType: '1',
+      BankType: '0',
       applyDate: '',
       CARD_NUM: '', // 二类卡
       BANK_USER_CODE: '',// 一类卡

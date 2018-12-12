@@ -50,6 +50,8 @@
       :class="{'tijiao':true, 'agree':!disabled}"
       :disabled="disabled">开户
     </button>
+    <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
+
     <div v-if="ifShow" class="bgbox">
       <!--郑州-->
       <div class="passbox">
@@ -407,5 +409,14 @@ import Common from './common'
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
   {
     opacity: 0;
+  }
+  .msg-infos {
+    width: 100%;
+    position: fixed;
+    bottom: px2rem(20);
+    left: 0;
+    text-align: center;
+    color: #508CEE;
+    font-size: px2rem(12);
   }
 </style>

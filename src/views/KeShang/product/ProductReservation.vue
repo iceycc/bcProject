@@ -395,13 +395,13 @@
       },
 
       getData(id) {
-        // let data = {
-        //   ID: id + ""
-        // };
         let data = {
-          ID: '13661',
-          // RATEID:'394'
-        }
+          ID: id + ""
+        };
+        // let data = {
+        //   ID: '13661',
+        //   // RATEID:'394'
+        // }
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
           this.productDetail = res;

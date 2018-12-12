@@ -112,6 +112,7 @@
     },
     mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Check],
     created() {
+      // ProID=19758&moneyNum=100
       let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
       let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
       util.storage.session.set('moneyNum', moneyNum)
@@ -121,6 +122,14 @@
       } else {
         this.getInfo()
         let proData = this.getComState.goBuy
+        this.initData(proData)
+      }
+    },
+
+    methods: {
+      // 初始化数据
+      initData(proData){
+        // 页面数据渲染
         this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
         this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0'// 数据
         this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
@@ -130,14 +139,16 @@
         this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
         this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
         let ProAndOrgType = this.getComState.ProAndOrgType || {}
+        // 判断是否有外链钱的数据 登录流程来的
         if (ProAndOrgType.AMOUNT) {
           this.moneyNum = ProAndOrgType.AMOUNT
         }
-        console.log(proData);
-      }
-    },
-
-    methods: {
+        // 链接流程来的
+        let moneyNum = util.storage.session.get('moneyNum')
+        if(moneyNum){
+          this.moneyNum = moneyNum
+        }
+      },
       clearNumHandle() {
         this.moneyNum = ''
       },
@@ -149,6 +160,7 @@
           // this.payNum = 1000// 账户余额(可用余额)
         })
       },
+      // 通过产品id主动请求产品数据
       getData(id) {
         let data = {
           ID: id + ""
@@ -156,24 +168,13 @@
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
           this.checkAuthStatus()
-          let proData = res
-
-          this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
-          this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
-          this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
-          this.proDetail.id = proData.id // 数据
-          this.proDetail.ORG_NAME = proData.ORG_NAME // 数据
-          this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
-          this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
-          this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
-          let moneyNum = util.storage.session.get('moneyNum')
-          this.moneyNum = moneyNum
-          this.setComState({type: 'PRD_TYPE', value: this.proDetail.PRD_TYPE})
+          this.initData(res)
+          this.setComState({type: 'PRD_TYPE', value: res.PRD_TYPE})
           this.removeComState('ProDuctData')
           let goBuyData = {
             id: id,
-            logo: this.proDetail.LOGO_URL,
-            ...this.proDetail
+            logo: res.LOGO_URL,
+            ...res
           };
           this.setComState({type: 'loginType', value: '安全购买'})
           this.setComState({type: 'goBuy', value: goBuyData})

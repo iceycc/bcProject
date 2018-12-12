@@ -159,7 +159,8 @@
         }
       },
       canClick() {
-        if (Number(this.APPLY_AMOUNT) >= 100 && this.msgCode && this.agree) {
+
+        if (this.APPLY_AMOUNT >= 100 && this.msgCode && this.agree) {
           return true
         } else {
           return false
@@ -273,11 +274,15 @@
         //   Bus.$emit(BusName.showToast, '请获取手机验证码')
         //   return
         // }
-        this.Londing.open()
-        setTimeout(() => {
-          this.Londing.close()
-          this.show = true
-        }, 1000)
+        if (this.BankType == 0) {
+          this.handleApiRecharge()
+        } else {
+          this.Londing.open()
+          setTimeout(() => {
+            this.Londing.close()
+            this.show = true
+          }, 1000)
+        }
       },
       doAgree() {
         this.agree = !this.agree
