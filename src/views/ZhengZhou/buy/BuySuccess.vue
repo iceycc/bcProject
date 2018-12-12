@@ -34,14 +34,14 @@
       </div>
 
     </div>
-    <div class="btn" v-if="!FromH5Active">
+    <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
-    <div class="btn" v-if="FromH5Active">
+    <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
     </div>
-    <div v-if="FromH5Active" class="share" @click="share">
+    <div v-if="shareHref" class="share" @click="share">
       <p>活动不错，分享好友吧</p>
       <!--<img src="@/assets/images/share.png" alt="">-->
     </div>
@@ -71,16 +71,13 @@
       return {
         datas: {},
         downUrl: 'http://www.baidu.com',
-        FromH5Active: false,
         copyShow: false,
         shareHref: '',
       }
     },
     created() {
       this.datas = this.getComState.buyData || {}
-
-      this.FromH5Active = this.getComState.FromH5Active
-      this.shareHref = this.getComState.ProAndOrgType.H5HREF
+      this.shareHref = window.sessionStorage.getItem('h5_href') || ''
     },
     methods: {
       copyHandle() {
@@ -119,7 +116,7 @@
         this.$router.push({name: PageName.BankDetail})
       },
       goBuyOther() {
-        if (this.FromH5Active) {
+        if (this.shareHref) {
           let href = this.getComState.ProAndOrgType.H5HREF
           window.location.href = href
         } else {

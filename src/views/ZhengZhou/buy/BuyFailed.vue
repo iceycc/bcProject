@@ -8,14 +8,14 @@
       <h2>很抱歉，购买失败!</h2>
       <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
     </div>
-    <div class="btn" v-if="!FromH5Active">
+    <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
-    <div class="btn" v-if="FromH5Active">
+    <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
     </div>
-    <div v-if="FromH5Active" class="share" @click="share">
+    <div v-if="shareHref" class="share" @click="share">
       <p>活动不错，分享好友吧</p>
       <!--<img src="@/assets/images/share.png" alt="">-->
     </div>
@@ -43,14 +43,12 @@
   export default {
     created() {
       this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
-      this.FromH5Active = this.getComState.FromH5Active || false
-      this.shareHref = this.getComState.ProAndOrgType.H5HREF
+      this.shareHref = window.sessionStorage.getItem('h5_href') || ''
 
     },
     data() {
       return {
         errMsg: '',
-        FromH5Active: false,
         shareHref: '',
         copyShow: false
       }
@@ -79,7 +77,7 @@
         this.$router.push({name: PageName.FinancialProducts})
       },
       goBuyOther() {
-        if (this.FromH5Active) {
+        if (this.shareHref) {
           let href = this.getComState.ProAndOrgType.H5HREF
           window.location.href = href
         } else {
