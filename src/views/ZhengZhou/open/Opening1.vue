@@ -212,6 +212,7 @@
           this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
           this.data.PHONE = suerinfo.PHONE_NUM
           this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
+          this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL
           this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL
         }
       },

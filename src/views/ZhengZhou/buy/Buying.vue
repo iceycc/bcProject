@@ -113,7 +113,10 @@
     mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Check],
     created() {
       let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
-      let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
+      let query = this.$route.query // H5活动页外链过来的
+      let moneyNum = query.moneyNum // H5活动页外链过来的
+      let ProAndOrgType = this.getComState.ProAndOrgType
+      this.setComState({type: 'ProAndOrgType', value: {...ProAndOrgType, ...query}})
       util.storage.session.set('moneyNum', moneyNum)
       if (ProID) {
         this.ProID = ProID
@@ -270,6 +273,7 @@
         let len = $("#payPasscc").getLenKBD(); //获取密码长度
         let lenCode = $("#payPasscc").getBDCode(); //获取密码长度
         console.log(pass);
+
         let {
           COUPON_ID = '',
           COUPON_DETAIL_ID = '',
@@ -502,7 +506,6 @@
     background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
     background-size: 0.3rem 0.3rem;
   }
-
 
 
   .bgbox {
