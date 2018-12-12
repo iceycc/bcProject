@@ -68,7 +68,7 @@
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <!--<button class="tijiao" @click="goNext">下一步</button>-->
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
-
+    <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
     <up-select
       @clickBankList="addBankHandle"
       :show="upseletShow"
@@ -222,9 +222,9 @@
     },
     computed: {
       // data.PHONE_CODE
-       // tel
+      // tel
       cantNext() {
-        if (this.tel.length ==11 && this.data.CARD_NO && this.data.PHONE_CODE) {
+        if (this.tel.length == 11 && this.data.CARD_NO && this.data.PHONE_CODE) {
           return false
         } else {
           return true
@@ -266,8 +266,7 @@
         if (val == '') {
           Bus.$emit(BusName.showToast, '银行卡号不能为空')
           return true
-        }
-        else if (val.length < 15 || val.length > 19) {
+        } else if (val.length < 15 || val.length > 19) {
           Bus.$emit(BusName.showToast, '银行卡号格式不正确')
           return true
         } else {
@@ -362,11 +361,13 @@
       display: flex;
       font-size: px2rem(14);
     }
+
     .input-box {
       margin: 0 auto;
       width: px2rem(330);
       border-bottom: 1px #E5E5E5 solid;
       display: flex;
+
       .left-p {
         width: px2rem(80) !important;
         box-sizing: border-box;
@@ -375,25 +376,30 @@
         color: #444;
         padding: px2rem(15) 0;
       }
+
       .img {
         padding-top: px2rem(15);
         width: px2rem(20);
         height: px2rem(15);
       }
+
       input, .input {
         text-align: left;
         font-size: px2rem(14);
         flex: 1;
         color: #333
       }
+
       .img {
         padding-top: px2rem(15);
         width: px2rem(20);
         height: px2rem(15);
       }
+
       .input {
         padding-top: px2rem(15);
       }
+
       button {
         margin-top: px2rem(12);
       }
@@ -444,20 +450,24 @@
     position: relative;
     margin-bottom: .3rem;
     margin-top: px2rem(4);
+
     .circle {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
+
     .step-text {
       padding-top: px2rem(7);
     }
 
     .line1, .line2, .line3 {
       position: relative;
+
       img {
         width: .5rem;
       }
+
       &:after {
         display: block;
         position: absolute;
@@ -472,17 +482,20 @@
 
       }
     }
+
     .hui {
       &:after, &.line2:before {
         background: #dee1e3 !important;
       }
 
     }
+
     .line2 {
       &:after {
         left: 0;
         right: auto;
       }
+
       &:before {
         display: block;
         position: absolute;
@@ -496,6 +509,7 @@
         overflow: hidden;
       }
     }
+
     .line3 {
       &:after {
         left: 0;
@@ -508,6 +522,7 @@
   .msg-err {
     text-align: center;
     margin: px2rem(20) auto 0;
+
     span {
       display: inline-block;
       min-width: px2rem(200);
@@ -538,12 +553,15 @@
       margin: 0 auto;
       box-sizing: border-box;
     }
+
     .top {
       padding: 0.4rem;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -551,14 +569,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: px2rem(4);
       border: 1px solid #DDD;
@@ -567,15 +588,18 @@
       padding-left: px2rem(3);
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       border-top: 1px solid #efefef;
       padding: px2rem(14) 0;
       display: flex;
+
       button {
         color: #108EE9;
         font-size: px2rem(17);
@@ -618,6 +642,7 @@
     background: #fff;
     height: 90%;
     padding: .3rem 0 .6rem;
+
     .right-index {
       position: absolute;
       overflow: scroll;
@@ -627,9 +652,11 @@
       right: .4rem;
       top: px2rem(45);
       text-align: center;
+
       &::-webkit-scrollbar {
         display: none;
       }
+
       .letter {
         color: #89afe6;
         display: block;
@@ -637,38 +664,46 @@
         line-height: 1.4;
       }
     }
+
     .title {
       text-align: center;
       font-size: .5rem;
       margin: 0 px2rem(20);
       border-bottom: 1px solid #dedede;
     }
+
     .scroll-view {
       max-height: 90%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+
       &::-webkit-scrollbar {
         display: none;
       }
     }
+
     .option {
       border-bottom: 1px solid #dedede;
       font-size: 0;
       line-height: px2rem(30);
       height: px2rem(30);
+
       .text {
         font-size: .4rem;
         vertical-align: middle;
         margin-left: .2rem;
       }
+
       .banklogo {
         width: .6rem;
         vertical-align: middle;
       }
     }
+
     .active {
       color: #5db0f9;
     }
+
     .close {
       font-style: normal;
       position: absolute;
@@ -679,6 +714,7 @@
       font-size: .6rem;
       width: px2rem(20);
       height: px2rem(20);
+
       img {
         width: 100%;
         height: 100%;
@@ -694,11 +730,22 @@
 
   .bank-class {
     padding: 0 px2rem(20);
+
     .bank-index {
       font-size: .4rem;
       line-height: 0;
       padding: px2rem(20) 0 px2rem(10);
 
     }
+  }
+
+  .msg-infos {
+    width: 100%;
+    position: fixed;
+    bottom: px2rem(20);
+    left: 0;
+    text-align: center;
+    color: #508CEE;
+    font-size: px2rem(12);
   }
 </style>
