@@ -165,10 +165,7 @@ export default {
             break;
           case 4:
             // this.checkProTo(this.checkBankStatus, this.checkBankStatus)
-            if(H5_URL){
-              window.location.href = H5_URL
-              return
-            }
+
             // 判断产品类型 区分openAPI
             if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
@@ -179,6 +176,10 @@ export default {
               // 直接跳转 银行h5链接
               // 不是h5直联
               // 直接跳转
+              if(H5_URL){
+                window.location.href = H5_URL
+                return
+              }
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
               if (this.href) {
                 window.location.href = this.href;
@@ -286,6 +287,10 @@ export default {
         if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
           // 不是h5直联
           // 直接跳转
+          if(H5_URL){
+            window.location.href = H5_URL
+            return
+          }
           // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
           if (this.href) {
             window.location.href = this.href;

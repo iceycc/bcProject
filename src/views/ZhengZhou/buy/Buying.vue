@@ -116,6 +116,7 @@
       // 初始化数据
       initData(proData) {
         // 页面数据渲染
+
         this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
         this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0'// 数据
         this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
@@ -237,6 +238,7 @@
         let len = $("#payPasscc").getLenKBD(); //获取密码长度
         let lenCode = $("#payPasscc").getBDCode(); //获取密码长度
         console.log(pass);
+
         let {
           COUPON_ID = '',
           COUPON_DETAIL_ID = '',

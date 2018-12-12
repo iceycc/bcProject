@@ -39,7 +39,7 @@ function getComParams(to) {
 }
 
 router.beforeEach((to, from, next) => {
-
+  $('#PWDKBD').remove(); //
   getComParams(to)
   if (to.meta.title) {
     document.title = to.meta.title

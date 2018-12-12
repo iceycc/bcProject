@@ -155,7 +155,13 @@ export default {
         // 保存第一步的数据
         this.setComState({
           type: 'openingData',
-          value: {...this.suerinfo, BESHARP_REGISTER_VALI_USER_SEQ: res.BESHARP_REGISTER_VALI_USER_SEQ,COMMON_USER_ID:res.COMMON_USER_ID}
+          value: {
+            ...this.suerinfo,
+            USER_DUTY: this.data.USER_DUTY + '',
+            ...res,
+            BESHARP_REGISTER_VALI_USER_SEQ: res.BESHARP_REGISTER_VALI_USER_SEQ,
+            COMMON_USER_ID: res.COMMON_USER_ID
+          }
         })
         // 回显是否实名成功
         // this.checkBankStatus() //

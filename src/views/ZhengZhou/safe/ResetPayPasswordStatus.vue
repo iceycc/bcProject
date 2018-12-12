@@ -134,7 +134,7 @@
       let preData = this.getComState.resetPasswordStatus
       this.USER_NAME = preData.USER_NAME
       this.STATUS = preData.STATUS
-      // this.STATUS = 5
+      // this.STATUS = 3
       console.log(this.STATUS);
       this.ID_CARD_NO = preData.ID_CARD_NO
       this.ELECTRONIC_ACCOUNT = preData.ELECTRONIC_ACCOUNT
