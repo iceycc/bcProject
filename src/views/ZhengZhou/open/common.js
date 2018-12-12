@@ -20,6 +20,7 @@ export default {
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
         this.setComState({type:'openingData',value:res})
+        fn && fn(res)
         return
         if(fn){
            fn(res)

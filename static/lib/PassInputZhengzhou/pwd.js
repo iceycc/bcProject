@@ -1,7 +1,7 @@
 (function(t, e) {
   "use strict";
-  // var host = 'https://adv.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
-  var host = 'https://graytest.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  var host = 'https://adv.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  // var host = 'https://graytest.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
 
   var i = {};
   var reset = {
@@ -213,7 +213,7 @@
       $("#PWDKBD").append('<div class="kbd-mask" style="z-index:8999;"></div>');
       $("#PWDKBD").append('<div class="kbd-bar" style="z-index:8999;"></div>');
       $(".kbd-mask").css({
-        position: "fixed",
+        position: "absolute",
         width: "100%",
         height: "100%",
         left: "0",
@@ -224,7 +224,7 @@
         display: "none"
       });
       $(".kbd-bar").css({
-        position: "fixed",
+        position: "absolute",
         width: "100%",
         left: "0",
         bottom: "0",
@@ -240,7 +240,7 @@
           $("div[kbdtype='Graph']").text("").attr("disabled", false);
           var e = $("#GraphKBD");
           e.css({
-            position: "fixed",
+            position: "absolute",
             bottom: 0,
             left: "50%",
             transform: "translateX(-50%)",
@@ -285,7 +285,7 @@
           $("div[kbdtype='Alnum']").text("").attr("disabled", false);
           var e = $("#AlnumKBD");
           e.css({
-            position: "fixed",
+            position: "absolute",
             bottom: 0,
             left: "50%",
             transform: "translateX(-50%)",
@@ -343,7 +343,7 @@
           $("div[kbdtype='Number']").text("").attr("disabled", false);
           var e = $("#NumberKBD");
           e.css({
-            position: "fixed",
+            position: "absolute",
             bottom: 0,
             left: "50%",
             transform: "translateX(-50%)",

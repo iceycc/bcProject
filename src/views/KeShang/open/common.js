@@ -14,12 +14,21 @@ export default {
   },
   mixins: [Mixins.HandleMixin],
   methods: {
+    transformDATA(data = "2016.10.14-2026.10.14") {
+      data = '2016.10.14-2026.10.14'
+      if (!data) return ''
+      return {
+        STA: data.split('-')[0],
+        END: data.split('-')[1]
+      }
+    },
     // 判断该用户在本行的开户状态
     // 通过token + orgID 检查在本行开户状态
     checkBankStatus(fn) {
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
         this.setComState({type:'openingData',value:res})
+        fn && fn(res)
         return
         if(fn){
           fn(res)

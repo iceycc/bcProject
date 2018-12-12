@@ -522,13 +522,16 @@
   }
 
   .bgbox {
+    z-index: 10;
     width: 100%;
     height: 100%;
-    background: rgba(1, 1, 1, .7);
+    box-sizing: border-box;
     position: absolute;
-    padding-top: px2rem(100);
+    padding-top: px2rem(70);
     top: 0;
     left: 0;
+    background: rgba(1, 1, 1, .7);
+
     .passbox {
       background: #fff;
       width: 80%;
