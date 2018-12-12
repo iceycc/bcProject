@@ -133,7 +133,7 @@
                 }
             },
             bankShowHandle() {
-                this.backShow = true
+                // this.backShow = true
             }
         }
     }

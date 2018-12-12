@@ -12,8 +12,8 @@
         </div>
       </div>
       <div class="buytitleright">
-        <p>起购金额{{proDetail.MIN_AMOUNT}}元</p>
-        <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
+        <p>起购金额{{proDetail.MIN_AMOUNT | formatNum}}元</p>
+        <p>最小递增{{proDetail.INCRE_AMOUNT | formatNum}}元</p>
         <!--<p>最小递增0.00元</p>-->
       </div>
     </div>

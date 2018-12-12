@@ -188,7 +188,7 @@ export const ORG_ID_NUM = {
  *  外部参数默认设置
  */
 export const PRO_PARAMS = {
-  DEVICE_ID: '001002003ACD',
+  DEVICE_ID:'H5' + Math.random().toString().substr(6),
   CHANNEL_ID: '8',
   APP_FLAG: 'BC'
 }
