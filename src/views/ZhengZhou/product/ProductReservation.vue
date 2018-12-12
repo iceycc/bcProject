@@ -375,6 +375,7 @@
           // 1是，走无密码登录带红色提示（亿联）
           // 0否，走无密码的登录页（郑州，众邦
           // todo
+
           this.IS_REALTIME_DATA_PRD = res.IS_REALTIME_DATA_PRD
           this.setComState({type: 'IS_REALTIME_DATA_PRD', value: ''})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;

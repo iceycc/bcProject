@@ -7,6 +7,7 @@
         <div class="img">
           <img :src="imgFont" alt="">
           <input type="file" capture="camera" accept="image/*" class="inputBox"
+                 disabled
                  @change="imgToBaseZheng($event)">
         </div>
       </section>
@@ -15,6 +16,7 @@
         <section class="img">
           <img :src="imgBack" alt="">
           <input type="file" capture="camera" accept="image/*" class="inputBox"
+                 disabled
                  @change="imgToBaseFan($event)">
         </section>
       </section>
@@ -30,8 +32,7 @@
       </section>
       <section class="m-line">
         <span class="n-left">手机号</span>
-        <input class="n-right" type="text" v-model="tel">
-        <!--<span class="n-right">{{tel}}</span>-->
+        <span class="n-right">{{tel}}</span>
       </section>
       <section class="upload-img">
         <p>申请人照片</p>
@@ -350,7 +351,8 @@
     .n-right {
       flex: 1;
       display: inline-block;
-      color: #8e8e8e
+      color: #8e8e8e;
+      background: #fff;
     }
   }
 

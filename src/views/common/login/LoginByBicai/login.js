@@ -113,32 +113,7 @@ export default {
         this.getProData(this.ProAndOrgType.ID)
       }
       this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-      // let token = util.storage.session.get('BICAI_TOKEN')
-      // if (token) {
-      //   this.$store.commit('SET_TOKEN', token)
-      //   // 判断openApi
-      //   if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
-      //     // 不是 openApi
-      //     // 不是h5直联
-      //     if (this.ProAndOrgType.IS_RZ_FLAG == 0) {
-      //       // 不需要实名
-      //       if (this.href) {
-      //         window.location.href = this.href;
-      //       } else {
-      //         alert('跳转第三方链接获取异常')
-      //       }
-      //     } else {
-      //       // 需要实名
-      //       this.checkAuthStatus()
-      //     }
-      //   } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
-      //     // 是 openApi
-      //     this.checkAuthStatus()
-      //   } else {
-      //     this.checkAuthStatus()
-      //   }
-      //   return
-      // }
+
     },
     getProData(id) {
       let data = {
@@ -173,6 +148,7 @@ export default {
         // 4:认证完成，
         // 5:身份证过期
         console.log(AUTH_STATUS);
+        let H5_URL =  this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -189,7 +165,10 @@ export default {
             break;
           case 4:
             // this.checkProTo(this.checkBankStatus, this.checkBankStatus)
-
+            if(H5_URL){
+              window.location.href = H5_URL
+              return
+            }
             // 判断产品类型 区分openAPI
             if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
@@ -216,6 +195,10 @@ export default {
             break;
           case 5:
             //
+            if(H5_URL){
+              window.location.href = H5_URL
+              return
+            }
             this.$router.push(PageName.BcOpening1)
             break;
         }

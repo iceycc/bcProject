@@ -1,13 +1,13 @@
 <template>
   <div class="app">
     <app-bar title="充值"></app-bar>
-    <div class="rechargetitle">充值到{{ORG_NAME}}直销银行</div>
+    <div class="rechargetitle">充值到{{ORG_NAME}}</div>
     <div class="minshengbank">
             <span class="minshengbankLogo"><img :src="imgSrc + logo" style="width:75%"
                                                 alt=""></span>
       <div class="bank">
         <p>{{ORG_NAME}}</p>
-        <P>{{CARD_NUM | formatBankNo}}</P>
+        <P>{{BANK_USER_CODE | formatBankNo}}</P>
       </div>
     </div>
     <div class="rechargetitle">银行卡</div>
@@ -19,7 +19,7 @@
             </span>
       <div class="bank">
         <p>{{CARD_BANK_NAME}}</p>
-        <P>{{BANK_USER_CODE | formatBankNo}}</P>
+        <P>{{CARD_NUM | formatBankNo}}</P>
       </div>
     </div>
     <div class="money">
@@ -144,6 +144,8 @@
         passCode: '',
         ACCT_NO: '', // TODO
         PHONE_NUM: '',
+
+        msgSuccess:false
       }
     },
     computed: {
@@ -155,7 +157,7 @@
         }
       },
       canClick() {
-        if (this.APPLY_AMOUNT >= 100 && this.msgCode && this.agree) {
+        if (this.APPLY_AMOUNT >= 100 && this.msgCode && this.agree ) {
           return true
         } else {
           return false
@@ -208,12 +210,16 @@
         API.reChange.rechargeApply(data, res => {
           this.applyDate = res
           if (res.ERROR_CODE == 3) {
-            this.alertShow = true
             this.alertText = res.MSG
             Bus.$emit(BusName.showSendMsg, '')
+            this.msgSuccess = true
+            setTimeout(()=>{
+              this.alertShow = true
+            },1000)
             // Bus.$emit(BusName.showToast, res.MSG)
             return
           }
+          this.msgSuccess = true
           Bus.$emit(BusName.showSendMsg, '')
           // WORKDATE
           // 平台日期

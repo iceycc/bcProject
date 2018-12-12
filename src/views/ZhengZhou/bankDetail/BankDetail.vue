@@ -69,7 +69,9 @@
                     ****
                 </span>
       </section>
-      <ul @click="goPage(toPageName.FinancialProducts)">
+      <ul @click="goPage(toPageName.FinancialProducts)"
+          v-if="proList.TYPE==1"
+      >
         <li class="financing-li" v-for="item,index in proList.retList"
             @click.stop="geDetails(item)" v-if="index<3"
         >
@@ -116,7 +118,7 @@
       return {
         imgSrc,
         proList: {
-          TOTAL_AMT:'0.00'
+          TOTAL_AMT: '0.00'
         },
         pass: true,
         licaiShow: false,
@@ -126,12 +128,12 @@
           FinancialProducts: PageName.FinancialProducts,
         },
         bankDetail: {
-          TOTAL_ASSET:'0.00',
-          TOTAL_INCOME:'0.00',
-          ACC_REST:'0.00',
-          YSD_INCOME:'0.00',
+          TOTAL_ASSET: '0.00',
+          TOTAL_INCOME: '0.00',
+          ACC_REST: '0.00',
+          YSD_INCOME: '0.00',
         },
-        bankObj:{} // 绑定点银行点列表
+        bankObj: {} // 绑定点银行点列表
       }
     },
     filters: {
@@ -150,7 +152,7 @@
       this.scroll()
       this.getProList()
       this.getBankList()
-      document.title ='郑州银行'
+      document.title = '郑州银行'
     }
     ,
     methods: {
@@ -247,40 +249,49 @@
     padding: px2rem(0) px2rem(10);
     color: #fff;
     font-size: 0;
+
     .bk-text1 {
       font-size: px2rem(18);
       opacity: .7;
     }
+
     .bk-text2 {
       font-size: px2rem(10);
       opacity: .7;
 
     }
+
     .eye {
       margin-left: px2rem(19);
       font-size: px2rem(24);
 
     }
+
     .money {
       font-size: px2rem(23);
     }
+
     .income {
       margin-top: px2rem(8);
       display: flex;
       font-size: px2rem(12);
       color: rgba(255, 255, 255, .7);
+
       .left {
         flex: 1;
       }
-      .right{
+
+      .right {
         flex: 1;
         text-align: right;
       }
     }
+
     .left-text {
       color: #FFA054;
 
     }
+
     .right-text {
       color: #fff;
     }
@@ -291,9 +302,11 @@
     display: flex;
     font-size: 0;
     padding: px2rem(30) 0 px2rem(11) px2rem(10);
+
     .ic-left {
       flex: 1;
     }
+
     .ic-right {
       font-size: px2rem(12);
       color: #666;
@@ -301,22 +314,27 @@
       height: px2rem(56);
       line-height: px2rem(56);
     }
+
     .bk-text1 {
       font-size: px2rem(14);
       opacity: .7;
     }
+
     .bk-text2 {
       font-size: px2rem(10);
       opacity: .7;
       margin-left: px2rem(-3);
 
     }
+
     .money {
       font-size: px2rem(24);
     }
+
     .detail {
       font-size: px2rem(12);
     }
+
     margin-bottom: px2rem(10);
   }
 
@@ -324,21 +342,26 @@
     display: flex;
     box-sizing: border-box;
     padding: px2rem(10);
+
     .bank-logo {
       width: px2rem(48);
       height: px2rem(48);
+
       img {
         width: 100%;
         height: 100%;
       }
     }
+
     .card-no {
       color: #999
     }
+
     .bank-test {
       padding-left: px2rem(10);
       font-size: px2rem(16);
     }
+
     margin-bottom: px2rem(10);
   }
 
@@ -346,17 +369,20 @@
     box-sizing: border-box;
     padding: px2rem(10) px2rem(10) px2rem(0) px2rem(20);
     background: #fff;
+
     .top {
       display: flex;
       font-size: px2rem(14);
       height: px2rem(28);
       line-height: px2rem(28);
       color: #000;
+
       .top-left {
         position: relative;
         flex: 1;
         padding-left: px2rem(20);
         box-sizing: border-box;
+
         &:before {
           position: absolute;
           left: px2rem(0);
@@ -369,13 +395,16 @@
           background-size: contain;
         }
       }
+
       .top-right {
         font-size: px2rem(18);
         color: #333;
+
         &.select {
           color: #999;
         }
       }
+
       .small-number {
         font-size: px2rem(14);
       }
@@ -383,6 +412,7 @@
       margin-bottom: px2rem(10);
 
     }
+
     .financing-li {
       position: relative;
       display: flex;
@@ -392,26 +422,31 @@
       height: px2rem(28);
       line-height: px2rem(28);
       color: #333;
+
       .li-yuan {
         position: absolute;
         left: 0;
         font-size: px2rem(4);
         color: #4F96FF;
       }
+
       .li-left {
         position: relative;
         flex: 1;
         padding-left: px2rem(10);
         box-sizing: border-box;
       }
+
       &:last-child {
         border-bottom: none;
       }
 
     }
+
     .small-number2 {
       font-size: px2rem(10);
     }
+
     margin-bottom: px2rem(10);
 
   }
@@ -422,9 +457,11 @@
     padding: px2rem(10) px2rem(10) px2rem(10) px2rem(20);
     box-sizing: border-box;
     display: flex;
+
     .more-left {
       flex: 1;
     }
+
     margin-bottom: px2rem(10);
 
   }
@@ -434,6 +471,7 @@
     text-align: center;
     padding: px2rem(30) 0;
     color: #2B74FE;
+
     a {
       color: #2B74FE;
     }

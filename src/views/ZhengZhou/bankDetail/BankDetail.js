@@ -23,6 +23,8 @@ export default {
       };
       //
       API.bank.apiQryHoldInfo(data, res => {
+        // console.log('res',res);
+        // this.proList = res.retList;
         this.proList = res;
       });
 

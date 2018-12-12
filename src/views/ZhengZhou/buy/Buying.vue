@@ -12,9 +12,9 @@
         </div>
       </div>
       <div class="buytitleright">
-        <p>起购金额{{proDetail.MIN_AMOUNT}}元</p>
-        <!--<p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>-->
-        <p>最小递增0.00元</p>
+        <p>起购金额{{proDetail.MIN_AMOUNT | formatNum}}元</p>
+        <p>最小递增{{proDetail.INCRE_AMOUNT | formatNum}}元</p>
+        <!--<p>最小递增0.00元</p>-->
       </div>
     </div>
 
@@ -84,7 +84,7 @@
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
         show: false,
-        ProID:''
+        ProID: ''
       }
     },
     components: {
@@ -95,7 +95,7 @@
         return this.proDetail.MIN_AMOUNT + '元起购'
       },
       canClick() {
-        if (this.moneyNum && this.agree) {
+        if (Number(this.moneyNum)>= this.proDetail.MIN_AMOUNT && this.agree) {
           return true
         } else {
           return false
@@ -111,7 +111,9 @@
     },
     mixins: [Mixins.HandleMixin, Mixins.StoreMixin, Check],
     created() {
-      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID
+      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
+      let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
+      util.storage.session.set('moneyNum', moneyNum)
       if (ProID) {
         this.ProID = ProID
         this.getData(ProID)
@@ -119,9 +121,9 @@
         this.getInfo()
         let proData = this.getComState.goBuy
         this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
-        this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
+        this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0'// 数据
         this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
-        this.proDetail.id = proData.id // 数据
+        this.proDetail.id = proData.id || proData.ID// 数据
         this.proDetail.ORG_NAME = proData.ORG_NAME // 数据
         this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
         this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
@@ -154,6 +156,7 @@
         API.bicai.getPrdInfo(data, res => {
           this.checkAuthStatus()
           let proData = res
+
           this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
           this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0.01'// 数据
           this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
@@ -162,10 +165,8 @@
           this.proDetail.PRD_NAME = proData.PRD_NAME // 数据
           this.proDetail.REMAIN_AMT = proData.REMAIN_AMT || '10000'// 数据
           this.proDetail.IDENTICAL_PRD_TAG = proData.IDENTICAL_PRD_TAG
-          let ProAndOrgType = this.getComState.ProAndOrgType || {}
-          if (ProAndOrgType.AMOUNT) {
-            this.moneyNum = ProAndOrgType.AMOUNT
-          }
+          let moneyNum = util.storage.session.get('moneyNum')
+          this.moneyNum = moneyNum
           this.setComState({type: 'PRD_TYPE', value: this.proDetail.PRD_TYPE})
           this.removeComState('ProDuctData')
           let goBuyData = {
@@ -276,7 +277,7 @@
         } = this.getComState.ProAndOrgType
         let data = {
           TYPE: 'API_BUY',
-          PRD_ID: this.proDetail.id + '',
+          PRD_ID: (this.proDetail.id || this.ProID ) + '',
           APPLY_AMOUNT: util.fromatMoney(this.moneyNum),
           BANK_PAY_PW: pass + '',
           PREFIX: lenCode,

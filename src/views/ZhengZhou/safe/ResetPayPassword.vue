@@ -3,7 +3,9 @@
     <app-bar title="重置支付密码" class="m-header"></app-bar>
     <div class="top">
       <div class="field_row_wrap">
-        <p class="field_row_key" @click="()=>{this.newPassShow =true;this.showBD('payPasscc2')}" v-if="!newPassShow">
+        <p class="field_row_key"
+           @click="()=>{this.newPassShow =true;this.showBD('payPasscc2')}"
+           v-if="!newPassShow">
           <span class="left">新密码</span>
           <span class="right">密码由6位数字组成</span>
         </p>

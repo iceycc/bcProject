@@ -108,7 +108,7 @@
   import Bus from "@/plugin/bus"
   import util from "../../../libs/util";
   import IconFont from '@/components/commons/IconFont'
-
+  import Check from '../login/LoginByBicai/login'
 
   export default {
     data() {
@@ -153,7 +153,7 @@
         idName:''
       }
     },
-
+    mixins:[Check],
     components: {
       JsSelect,
       IconFont
@@ -179,6 +179,11 @@
       },
     },
     created() {
+      let H5_URL =  this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
+      if(H5_URL){
+        // H5链接过来的
+        this.checkAuthStatus()
+      }
       // let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
       // Bus.$emit(BusName.showToast,MsgText)
     },
