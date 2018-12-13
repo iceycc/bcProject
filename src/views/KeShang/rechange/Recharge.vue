@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="money">
-      <!-- <p>每笔限额：{{SINGLE_QUOTA | formatNum}}元</p> -->
       <p>每日限额：{{DAY_QUOTA | formatNum}}元</p>
+      <p>单笔限额：{{SINGLE_QUOTA | formatNum}}元</p>
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
@@ -216,9 +216,7 @@
   }
 
   .money {
-    padding-left: 0.5rem;
-    margin-top: .2rem;
-    height: 1.7rem;
+    padding: .2rem 0 .2rem 0.5rem;
     color: #9199A1;
     font-size: 0.4rem;
   }
