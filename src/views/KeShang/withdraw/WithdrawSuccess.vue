@@ -6,7 +6,7 @@
       <h2>提现成功</h2>
     </div>
     <section class="m-card">
-      <p><span>提现金额</span>{{money}}</p>
+      <p><span>提现金额</span>{{money | formatNum}}</p>
       <p><span>交易流水号</span>{{BESHARP_CASH_SEQ}}</p>
     </section>
     <button class="begain" @click="goNext">完成</button>

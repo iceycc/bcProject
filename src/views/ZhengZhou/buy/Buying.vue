@@ -131,7 +131,7 @@
           this.moneyNum = ProAndOrgType.AMOUNT
         }
         // 链接流程来的
-        let moneyNum = util.storage.session.get('moneyNum')
+        let moneyNum = this.$route.query.moneyNum || util.storage.session.get('moneyNum')
         if (moneyNum) {
           this.moneyNum = moneyNum
         }

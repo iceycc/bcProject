@@ -23,7 +23,7 @@ const Check = {
         // 3:密码设置，
         // 4:认证完成，
         // 5:身份证过期
-        console.log(AUTH_STATUS);
+        console.log('比财实名步数>>',AUTH_STATUS);
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -56,6 +56,7 @@ const Check = {
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
+        console.log('本行开户步数>>',step);
         this.setComState({type: 'TEL', value: this.tel})
         if (step == 0) {
           // 未提交
@@ -71,16 +72,20 @@ const Check = {
         }
         if (step == 2) {
           // 提交第二步
-          Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
-          // 郑州银行
+          // 众邦银行
           if (this.ORG_ID == '227') {
             this.loginSuccess(res)
           }
-          // 众邦银行
+          // 郑州银行
           if (this.ORG_ID == '49') {
+            Bus.$emit(BusName.showToast, MsgText, 3000)
             this.$router.push({name: PageName.Opening3})
           }
+          if(this.ORG_ID=='248'){
+            this.loginSuccess(res)
+          }
+
         }
         if (step == 3) {
           this.loginSuccess(res)
@@ -109,9 +114,13 @@ export const ToBuying ={
     }
   },
   created() {
-    // ProID=19758&moneyNum=100
+    // ProID=19758&moneyNum=100&INVEST_ID=10001&TEAM_ID=333
     let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
+    let query = this.$route.query // H5活动页外链过来的
     let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
+    let ProAndOrgType = this.getComState.ProAndOrgType
+    this.setComState({type:'ProAndOrgType',value:{...ProAndOrgType,...query}})
+    // ProID=xxx&TEAM_ID=xxx&
     util.storage.session.set('moneyNum', moneyNum)
     if (ProID) {
       this.ProID = ProID

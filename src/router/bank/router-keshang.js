@@ -219,13 +219,13 @@ export default [
     path: '/' + PageName.WithdrawSuccess,
     name: PageName.WithdrawSuccess,
     component: resolve => require(['views/KeShang/withdraw/WithdrawSuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '提现成功', needLogin: false}
+    meta: {keepAlive: false, title: '提现', needLogin: false}
   },
   {
     path: '/' + PageName.WithdrawFaild,
     name: PageName.WithdrawFaild,
     component: resolve => require(['views/KeShang/withdraw/WithdrawFaild.vue'], resolve),
-    meta: {keepAlive: false, title: '提现失败', needLogin: false}
+    meta: {keepAlive: false, title: '提现', needLogin: false}
   },
   {
     path: '/' + PageName.PayDetail,

@@ -97,52 +97,49 @@
         }
       }
     },
-    mixins: [Mixins.StoreMixin,Mixins.ToBuying],
+    mixins: [Mixins.StoreMixin, Mixins.ToBuying],
     created() {
-      let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
-      let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
-      util.storage.session.set('moneyNum', moneyNum)
-      this.getInfo()
+      // let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
+      // let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
+      // util.storage.session.set('moneyNum', moneyNum)
+      // this.getInfo()
       // todo测试用
       // this.getProData(17897)
-      this.proDetail = this.getComState.goBuy // 数据
+      // this.proDetail = this.getComState.goBuy // 数据
       // console.log(this.proDetail);
     },
     methods: {
-      getProData(id) {
-        let data = {
-          ID: id + ""
-        };
+      initData(proData) {
+        this.getInfo() // 用于查询账户余额
+        this.proDetail = proData
+        // 判断是否有外链钱的数据 登录流程来的
+        if (proData.AMOUNT) {
+          this.APPLY_AMOUNT = proData.AMOUNT
+        }
+        // 链接流程来的
+        let moneyNum = this.$route.query.moneyNum || util.storage.session.get('moneyNum')
+        if (moneyNum) {
+          this.APPLY_AMOUNT = moneyNum
+        }
 
-        // API.commonApi.apiGetChannelPrdInfo(data, res => {
-        API.bicai.getPrdInfo(data, res => {
-          this.productDetail = res;
-          this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
-          this.removeComState('ProDuctData')
-          let goBuyData = {
-            id: id,
-            logo: this.productDetail.LOGO_URL,
-            ...this.productDetail
-          };
-          this.setComState({type: 'goBuy', value: goBuyData})
-          this.setComState({type: 'loginType', value: '安全购买'})
-          this.proDetail = goBuyData // 数据
-          console.log(this.proDetail);
-        });
       },
-      clearNumHandle() {
-        this.APPLY_AMOUNT = ''
-      },
+      // 查询账户余额
       getInfo() {
         // 查询账户余额
         API.bank.apiQryEleAccount({}, res => {
           this.payNum = res.ACC_REST // 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
+        },err=>{
+          // this.payNum =1000
         })
         API.safe.apiBandCard({}, res => {
           this.BANK_ACCT_NO = res.CARD_LIST[0].CARD_NUM
           this.BANK_USER_ID = res.BANK_USER_ID
         })
+      },
+
+      clearNumHandle() {
+        this.APPLY_AMOUNT = ''
       },
       goReChang() {
         this.setComState({
@@ -310,13 +307,27 @@
       // PHONE_CODE	短信验证码
       // ACCEPT_RISK	超出客户风险承受力时必填，需要确认  0 或空 表示未确认 1 表示已确认
       doPay() {
+
+        let {
+          COUPON_ID = '',
+          COUPON_DETAIL_ID = '',
+          TEAM_ID = '',
+          INVEST_ID = ''
+        } = this.getComState.ProAndOrgType
+
         let data = {
           PRD_ID: (this.proDetail.ID || this.proDetail.PRD_INDEX_ID) + '',
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
           PHONE_CODE: this.msgCode,
           PRD_TYPE: this.proDetail.PRD_TYPE_ID + '',
-          MESAGE_TOKEN: this.MESAGE_TOKEN
+          MESAGE_TOKEN: this.MESAGE_TOKEN,
+
+
+          COUPON_ID: COUPON_ID + '', // 优惠券ID	非必填  字符型
+          COUPON_DETAIL_ID: COUPON_DETAIL_ID + '', // 会员领券记录ID
+          TEAM_ID: TEAM_ID + '', //活动ID
+          INVEST_ID: INVEST_ID + '' // 	投资ID
         }
         console.log(data);
         API.buy.apiBuy(data, (res) => {

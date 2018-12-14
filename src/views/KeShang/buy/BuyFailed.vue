@@ -2,42 +2,87 @@
   <div class="app">
     <app-bar title="购买"></app-bar>
     <div class="chattuimg">
-      <img src="@/assets/images/buyfail@2x.png" alt="">
+      <img src="@/assets/images/buyfail@2x.png" style="width:25%" alt="">
     </div>
     <div class="fenxiangcontent">
       <h2>很抱歉，购买失败!</h2>
-      <div>
-        <img src="@/assets/images/error_tips.png" alt="">
-        <span>{{errMsg}}</span>
-      </div>
+      <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
     </div>
-    <div class="btn">
-      <span @click="goMyAssets" class="begain">重新购买</span>
+    <div class="btn" v-if="!shareHref">
+      <span @click="goMyAssets" class="begain">查看我的资产</span>
+      <span @click="goBuyOther" class="begain">购买其它产品</span>
+    </div>
+    <div class="btn" v-if="shareHref">
+      <span @click="goMyAssets" class="begain">查看我的资产</span>
+    </div>
+    <div v-if="shareHref" class="share" @click="share">
+      <p>活动不错，分享好友吧</p>
+      <!--<img src="@/assets/images/share.png" alt="">-->
+    </div>
+
+    <div class="copy-box" v-if="copyShow">
+      <img @click="copyShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
+      <input type="text" class="content" v-model="shareHref" id="codeText">
+      <button id="copybtn"
+              data-clipboard-target="#codeText"
+              @click="copyHandle">点击复制链接
+      </button>
+      <!--<img src="@/assets/images/close.png" alt="">-->
     </div>
   </div>
 </template>
 <script>
-  import {PageName } from "@/Constant";
-  import {WatchApi} from "@/service";
+  // import {WatchApi} from "@/service";
+  import Clipboard from 'clipboard'
+  import Bus from '@/plugin/bus'
+  import {BusName, PageName} from "@/Constant";
   // import util from "libs/util";
+  import API from "@/service";
 
 
   export default {
     created() {
       this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
+      this.shareHref = window.sessionStorage.getItem('h5_href') || ''
+
     },
     data() {
       return {
-        errMsg: ''
+        errMsg: '',
+        shareHref: '',
+        copyShow: false
       }
     },
     methods: {
-      goMyAssets(){
-
-        this.$router.push({name:PageName.Buying})
+      copyHandle() {
+        // let porId = this.getComState.goBuy.ID
+        // API.watchApi({
+        //   FUNCTION_ID: 'ACB0G019', // 点位
+        //   REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
+        //   FROM_ID: porId
+        // })
+        let clipboard = new Clipboard('#copybtn')
+        clipboard.on('success', (e) => {
+          Bus.$emit(BusName.showToast, '复制活动链接成功')
+          clipboard.destroy()
+        })
+        clipboard.on('error', () => {
+          Bus.$emit(BusName.showToast, '浏览器不支持自动复制，请手动复制')
+        })
       },
-      goBuyOther(){
-        this.$router.push({name:PageName.ProductList})
+      share() {
+        this.copyShow = true
+      },
+      goMyAssets() {
+        this.$router.push({name: PageName.FinancialProducts})
+      },
+      goBuyOther() {
+        if (this.shareHref) {
+          let href = this.getComState.ProAndOrgType.H5HREF
+          window.location.href = href
+        } else {
+          this.$router.push({name: PageName.ProductList})
+        }
       }
     }
   }
@@ -45,18 +90,15 @@
 
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
+
   .app {
     width: 100%;
     margin: 0 auto;
   }
 
   .chattuimg {
-    margin-top: 1rem;
+    margin-top: 2rem;
     text-align: center;
-    img {
-      width: px2rem(70);
-      height: px2rem(70);
-    }
   }
 
   .fenxiangcontent {
@@ -64,29 +106,13 @@
     padding: 0 .4rem;
     font-size: 0.4rem;
     color: #333;
-    margin-top: .6rem;
-    div {
-      display: flex;
-      align-items: center;
-      padding: 0 px2rem(50);
-    }
-    h2 {
-      padding-bottom: .6rem;
-    }
-    span {
-      color: #F22C17;
-      font-size: px2rem(13);
-      padding-left: px2rem(6);
-    }
-    img {
-      width: px2rem(16);
-      height: px2rem(16);
-    }
+    margin-top: 1rem;
   }
 
-  .btn{
-    margin-top: px2rem(40);
+  .btn {
+    margin-top: px2rem(60);
     text-align: center;
+
     .begain {
       margin: 0 px2rem(5);
       display: inline-block;
@@ -94,7 +120,7 @@
       background: #508CEE;
       border-radius: px2rem(6);
       font-size: px2rem(18);
-      width: px2rem(255);
+      width: px2rem(160);
       height: px2rem(44);
       line-height: px2rem(44);
       text-align: center;
@@ -103,5 +129,54 @@
     }
   }
 
+  .share {
+    padding-top: px2rem(20);
+    text-align: center;
+    font-size: px2rem(13);
+    color: #508CEE;
+
+    img {
+      display: inline-block;
+      width: px2rem(50);
+      height: px2rem(50);
+      z-index: 100;
+      /*background: #007aff;*/
+    }
+  }
+
+  .copy-box {
+    position: absolute;
+    bottom: 40%;
+    box-sizing: border-box;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    width: px2rem(300);
+    padding: px2rem(20);
+    background: #fefefe;
+    border: 1px solid #ccc;
+
+    .close {
+      position: absolute;
+      top: px2rem(10);
+      right: px2rem(10);
+      width: px2rem(14);
+    }
+
+    button {
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto;
+      width: px2rem(100);
+      height: px2rem(30);
+      line-height: px2rem(30);
+      text-align: center;
+    }
+
+    input {
+      height: px2rem(40);
+      overflow-x: scroll;
+    }
+  }
 
 </style>

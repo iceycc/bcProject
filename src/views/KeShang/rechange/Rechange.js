@@ -122,6 +122,7 @@ export default {
         this.BANK_USER_CODE = res.BANK_USER_CODE
         this.CARD_BANK_URL = res.CARD_LIST[0].CARD_BANK_URL
         this.DAY_QUOTA = res.CARD_LIST[0].DAY_QUOTA
+        this.SINGLE_QUOTA = res.CARD_LIST[0].SINGLE_QUOTA
         this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
         this.BANK_USER_ID = res.BANK_USER_ID
         let cardNum = res.CARD_LIST[0].CARD_NUM

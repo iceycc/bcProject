@@ -67,7 +67,7 @@
         <div class="bannercontent">
           <span class="bannercontenttitle">支取时间</span>
           <span
-            class="bannercontenttitlecontent">随时支取</span>
+            class="bannercontenttitlecontent">{{productDetail.DRAW_TIME_TEXT || ''}}</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
@@ -170,7 +170,6 @@
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
-  import Register from './commom'
   import SafeDocs from '@/components/commons/SafeDocs.vue'
   // require styles
 
@@ -207,7 +206,7 @@
         IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [ Mixins.HandleMixin, Mixins.UtilMixin],
     computed: {
       // swiper() {
       //   return this.$refs.mySwiper.swiper
@@ -457,15 +456,12 @@
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
         let ISLogin = this.getComState.ISLogin || false
         let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
-        console.log(TOKEN);
         if (TOKEN) {
           if (IS_SYNC_FLAG == 0) {
             window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
           } else {
-            this.$router.push({name: PageName.Buying})
-            // this.toPreProduct()
+            this.$router.push({name: PageName.Buying,query:{ProID:this.proID}})
           }
-          // this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})
         }
@@ -603,7 +599,7 @@
     width: 30%;
     font-size: 0.4rem;
     line-height: 2rem;
-
+    vertical-align: top;
   }
 
   .contenttop .bannercontent .bannercontenttitlecontent {

@@ -46,7 +46,7 @@
             <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.1rem">
               {{item.PRD_NAME}}</p>
             <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
-               v-if="item.PRD_TYPE_ID==4">期限 随时支取</p>
+               v-if="item.PRD_TYPE_ID==4">期限 {{item.DRAW_TIME_TEXT}}</p>
             <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
                v-else>理财期限 {{item.PERIOD}}天</p>
 
@@ -265,7 +265,7 @@
               this.$router.push({
                 name: PageName.DepositDetail2,
                 query: {
-                  PRO_ID: ID, title: PRD_NAME,RATE
+                  PRO_ID: ID, title: PRD_NAME, RATE
                 }
               })
             }
@@ -302,7 +302,7 @@
           util.storage.session.set('reload', true)
           window.location.reload()
         } else {
-          if (ORG_ID == 49 || ORG_ID == 227) {
+          if (ORG_ID == 49 || ORG_ID == 227 || ORG_ID == 248) {
             ORG_ID = ORG_ID + ''
             util.storage.session.set('ORG_ID', ORG_ID)
             util.storage.session.set('id', ID)

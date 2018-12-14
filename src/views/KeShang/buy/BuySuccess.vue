@@ -3,7 +3,9 @@
     <app-bar title="购买"></app-bar>
     <div class="buysuccessimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
-      <p>购买成功</p>
+      <p class="p-first">购买成功</p>
+      <!--todo-->
+      <p v-if="false" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>
     </div>
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">
@@ -32,34 +34,94 @@
       </div>
 
     </div>
-    <div class="btn">
+    <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其它产品</span>
+    </div>
+    <div class="btn" v-if="shareHref">
+      <span @click="goMyAssets" class="begain">查看我的资产</span>
+    </div>
+    <div v-if="shareHref" class="share" @click="share">
+      <p>活动不错，分享好友吧</p>
+      <!--<img src="@/assets/images/share.png" alt="">-->
+    </div>
+
+    <div class="copy-box" v-if="copyShow">
+      <img @click="copyShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
+      <input type="text" class="content" v-model="shareHref" id="codeText">
+      <button id="copybtn"
+              data-clipboard-target="#codeText"
+              @click="copyHandle">点击复制链接
+      </button>
+      <!--<img src="@/assets/images/close.png" alt="">-->
     </div>
   </div>
 </template>
 <script>
-  import {WatchApi} from "@/service";
-  import {BusName,PageName} from "@/Constant";
+
+  import {BusName, PageName} from "@/Constant";
   import Mixins from "@/mixins";
+  import Clipboard from 'clipboard'
+  import Bus from '@/plugin/bus'
+  import API from "@/service";
+
   export default {
-    mixins:[Mixins.StoreMixin],
+    mixins: [Mixins.StoreMixin],
     data() {
       return {
         datas: {},
-        downUrl: 'http://www.baidu.com'
+        downUrl: 'http://www.baidu.com',
+        copyShow: false,
+        shareHref: '',
       }
     },
     created() {
       this.datas = this.getComState.buyData || {}
-      console.log(this.datas);
+      this.shareHref = window.sessionStorage.getItem('h5_href') || ''
     },
     methods: {
-      goMyAssets(){
-        this.$router.push({name:PageName.BankDetail})
+      copyHandle() {
+        let porId = this.getComState.goBuy.ID
+        API.watchApi({
+          FUNCTION_ID: 'ACB0G019', // 点位
+          REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
+          FROM_ID: porId,
+          FROM_PR1:3
+        })
+
+        let clipboard = new Clipboard('#copybtn')
+        clipboard.on('success', (e) => {
+          let porId = this.getComState.goBuy.ID
+          API.watchApi({
+            FUNCTION_ID: 'ACB0G019', // 点位
+            REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
+            FROM_ID: porId,
+            FROM_PR1:'3'
+          })
+          Bus.$emit(BusName.showToast, '复制活动链接成功')
+          clipboard.destroy()
+        })
+        clipboard.on('error', () => {
+          Bus.$emit(BusName.showToast, '浏览器不支持自动复制，请手动复制')
+        })
       },
-      goBuyOther(){
-        this.$router.push({name:PageName.ProductList})
+      share() {
+        this.copyShow = true
+      },
+      goMyAssets() {
+        API.watchApi({
+          FUNCTION_ID: 'ACB0G018', // 点位
+          REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-查看我的资产',
+        })
+        this.$router.push({name: PageName.BankDetail})
+      },
+      goBuyOther() {
+        if (this.shareHref) {
+          let href = this.getComState.ProAndOrgType.H5HREF
+          window.location.href = href
+        } else {
+          this.$router.push({name: PageName.ProductList})
+        }
       }
     }
   }
@@ -67,6 +129,7 @@
 
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
+
   .buytitle {
     width: 92%;
     height: 1.7rem;
@@ -101,30 +164,36 @@
   .buysuccessimg {
     text-align: center;
     margin-top: .6rem;
+
     img {
-      width: px2rem(70);
-      height: px2rem(70);
+      width: 2.5rem;
+      height: 2.5rem;
     }
-  }
 
-  .buysuccessimg p {
-    margin: 0.5rem 0;
-    padding-bottom: 0.5rem;
-    font-size: px2rem(18);
-    color: #2B74FE;
-    border-bottom: 1px solid #EEEEF0;
+    p.p-first {
+      margin: px2rem(18) 0;
+      font-size: px2rem(18);
+      color: #2B74FE;
+    }
 
+    p.p-second {
+      margin: 0.5rem 0;
+      padding-bottom: 0.5rem;
+      font-size: px2rem(13);
+      color: #9199A1;
+      border-bottom: 1px solid #EEEEF0;
+    }
   }
 
   .buysuccessdetail {
     margin-top: -0.5rem;
+    padding: 0 0.3rem;
   }
 
   .buysuccessdetails {
-    line-height: 1.5rem;
-    height: 1.5rem;
+    line-height: px2rem(44);
+    height: px2rem(44);
     font-size: px2rem(14);
-    padding: 0 px2rem(15);
     border-bottom: 1px solid #EEEEF0;
   }
 
@@ -151,9 +220,10 @@
     outline: none;
   }
 
-  .btn{
+  .btn {
     margin-top: px2rem(20);
     text-align: center;
+
     .begain {
       margin: 0 px2rem(5);
       display: inline-block;
@@ -167,6 +237,56 @@
       text-align: center;
       border: 0px;
       outline: none;
+    }
+  }
+
+  .share {
+    padding-top: px2rem(20);
+    text-align: center;
+    font-size: px2rem(13);
+    color: #508CEE;
+
+    img {
+      display: inline-block;
+      width: px2rem(50);
+      height: px2rem(50);
+      z-index: 100;
+      /*background: #007aff;*/
+    }
+  }
+
+  .copy-box {
+    position: absolute;
+    bottom: 40%;
+    box-sizing: border-box;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    width: px2rem(300);
+    padding: px2rem(20);
+    background: #fefefe;
+    border: 1px solid #ccc;
+
+    .close {
+      position: absolute;
+      top: px2rem(10);
+      right: px2rem(10);
+      width: px2rem(14);
+    }
+
+    button {
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto;
+      width: px2rem(100);
+      height: px2rem(30);
+      line-height: px2rem(30);
+      text-align: center;
+    }
+
+    input {
+      height: px2rem(40);
+      overflow-x: scroll;
     }
   }
 </style>

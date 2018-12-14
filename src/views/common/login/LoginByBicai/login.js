@@ -81,17 +81,12 @@ export default {
       }
       console.log('ProAndOrgType', this.ProAndOrgType);
       this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
-      if (this.ORG_ID == '227') {
-        this.BANK_NAME = '众邦直销银行'
-      }
-      else if (this.ORG_ID == '49') {
+      this.BANK_NAME = this.ProAndOrgType.ORG_NAME
+      if (this.ORG_ID == '49') {
         this.BANK_NAME = '郑州直销银行'
-      }
-      else if (this.ORG_ID == '248') {
-        this.BANK_NAME = '客商直销银行'
-      }
-      else {
-        this.BANK_NAME = this.ProAndOrgType.ORG_NAME
+      } else if (this.ORG_ID == '248') {
+        this.BANK_NAME = '梅州客商银行'
+      } else {
       }
       if (query.isfinancial == 1) {
         // 外链过来的
@@ -148,7 +143,7 @@ export default {
         // 4:认证完成，
         // 5:身份证过期
         console.log(AUTH_STATUS);
-        let H5_URL =  this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
+        let H5_URL = this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -176,7 +171,7 @@ export default {
               // 直接跳转 银行h5链接
               // 不是h5直联
               // 直接跳转
-              if(H5_URL){
+              if (H5_URL) {
                 window.location.href = H5_URL
                 return
               }
@@ -196,7 +191,7 @@ export default {
             break;
           case 5:
             //
-            if(H5_URL){
+            if (H5_URL) {
               window.location.href = H5_URL
               return
             }
@@ -287,7 +282,7 @@ export default {
         if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
           // 不是h5直联
           // 直接跳转
-          if(H5_URL){
+          if (H5_URL) {
             window.location.href = H5_URL
             return
           }

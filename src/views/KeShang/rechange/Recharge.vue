@@ -95,7 +95,7 @@
         disable: false,
         upseletShow: false,
         mainBankList: [],
-
+        SINGLE_QUOTA:'0',
         passCode: '',
         ACCT_NO: '', // TODO
         PHONE_NUM: ''
