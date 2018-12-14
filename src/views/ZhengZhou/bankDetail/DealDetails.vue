@@ -44,7 +44,9 @@
                 <!--BANK_ID  交易流水号  字符-->
                 <!--BANLANCE  余额  Decimal(15,2)-->
                 <!--字符-->
-                <li v-for="(item,index) in pageList" :key="index">
+                <li v-for="(item,index) in pageList" :key="index"
+                @click="goDetail(item)"
+                >
                   <h5 style="display: flex;color: #E62224">
                     <!--<span style="flex: 1">{{item.ABS_INFO}}</span>-->
                     <span style="flex: 1">{{item.TYPE_NAME}}</span>
@@ -72,6 +74,7 @@
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
   import Mixins from "@/mixins";
+  import {PageName} from "../../../Constant";
 
 
   export default {
@@ -111,6 +114,9 @@
 
     },
     methods: {
+      goDetail(item){
+        this.$router.push({name:PageName.PayOneDetail,query:{...item}})
+      },
       setEleSize() {
         console.log(this.nowIndex);
         let winheight = util.getWinSize().winHeight

@@ -36,7 +36,9 @@
                       :auto-fill="false" ref="loadmore">
             <div>
               <ul>
-                <li v-for="(item,index) in pageList" :key="index">
+                <li v-for="(item,index) in pageList" :key="index"
+                  @click="goDetail(item)"
+                >
                   <h5 style="display: flex">
                     <span style="flex: 1">{{PRD_NAME}}</span>
                     <span style="width: 40%;text-align: right;color: #E62224" v-if="cur==1">收益</span>
@@ -65,6 +67,7 @@
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
+  import {PageName} from "../../../Constant";
 
 
   export default {
@@ -131,6 +134,10 @@
         if (this.cur == 2) {
 
         }
+      },
+      goDetail(item){
+        return
+        this.$router.push({name:PageName.ProPayDetail,query:{...item}})
       },
       tap(index) {
         this.nowIndex = 0

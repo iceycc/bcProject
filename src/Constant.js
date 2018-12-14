@@ -9,9 +9,9 @@ let Configs = {
    * dev
    */
   // DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
-  // DEV_HOST: 'https://finsuit.bicai365.com', // dev开发环境
+  DEV_HOST: 'https://finsuit.bicai365.com', // dev开发环境
   // DEV_HOST: 'http://192.168.100.13:8080', // 个人
-  DEV_HOST: 'https://adv.bicai365.com', // adv测试
+  // DEV_HOST: 'https://adv.bicai365.com', // adv测试
   // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
   /**
    * build
@@ -129,6 +129,8 @@ export const PageName = {
   RedeemSuccess: 'RedeemSuccess',
   DealDetails: 'DealDetails',
   ChangePayPassword: 'ChangePayPassword',
+  ProPayDetail: 'ProPayDetail',
+  PayOneDetail: 'PayOneDetail',
 
   /**
    * 银行新增
