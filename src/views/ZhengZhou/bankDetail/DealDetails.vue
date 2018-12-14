@@ -24,7 +24,6 @@
           <div class="t-query" @click="query">查询</div>
         </div>
         <!--<p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>-->
-
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
@@ -44,7 +43,9 @@
                 <!--BANK_ID  交易流水号  字符-->
                 <!--BANLANCE  余额  Decimal(15,2)-->
                 <!--字符-->
-                <li v-for="(item,index) in pageList" :key="index">
+                <li v-for="(item,index) in pageList" :key="index"
+                @click="goDetail(item)"
+                >
                   <h5 style="display: flex;color: #E62224">
                     <!--<span style="flex: 1">{{item.ABS_INFO}}</span>-->
                     <span style="flex: 1">{{item.TYPE_NAME}}</span>
@@ -72,6 +73,7 @@
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
   import Mixins from "@/mixins";
+  import {PageName} from "../../../Constant";
 
 
   export default {
@@ -111,6 +113,9 @@
 
     },
     methods: {
+      goDetail(item){
+        this.$router.push({name:PageName.PayOneDetail,query:{...item}})
+      },
       setEleSize() {
         console.log(this.nowIndex);
         let winheight = util.getWinSize().winHeight

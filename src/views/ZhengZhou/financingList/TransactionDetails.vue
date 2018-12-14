@@ -27,7 +27,6 @@
           </ul>
           <div class="t-query" @click="query">查询</div>
         </div>
-        <!--<p class="t-text" v-show="nowIndex===3 && tapShow">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>-->
         <div class="no-data" v-if="pageList.length == 0">
           <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
           <p class="infos">暂时没数据</p>
@@ -37,7 +36,9 @@
                       :auto-fill="false" ref="loadmore">
             <div>
               <ul>
-                <li v-for="(item,index) in pageList" :key="index">
+                <li v-for="(item,index) in pageList" :key="index"
+                  @click="goDetail(item)"
+                >
                   <h5 style="display: flex">
                     <span style="flex: 1">{{PRD_NAME}}</span>
                     <span style="width: 40%;text-align: right;color: #E62224" v-if="cur==1">收益</span>
@@ -66,6 +67,7 @@
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
+  import {PageName} from "../../../Constant";
 
 
   export default {
@@ -132,6 +134,10 @@
         if (this.cur == 2) {
 
         }
+      },
+      goDetail(item){
+        return
+        this.$router.push({name:PageName.ProPayDetail,query:{...item}})
       },
       tap(index) {
         this.nowIndex = 0

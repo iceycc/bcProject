@@ -217,7 +217,12 @@ export default [
     component: resolve => require(['views/ZhengZhou/bankDetail/DealDetails.vue'], resolve),
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
-
+  {
+    path: '/' + PageName.PayOneDetail,
+    name: PageName.PayOneDetail,
+    component: resolve => require(['views/ZhengZhou/bankDetail/PayOneDetail.vue'], resolve),
+    meta: {keepAlive: false, title: '明细', needLogin: false}
+  },
   /**
    * Withdraw
    */
@@ -265,6 +270,12 @@ export default [
     name: PageName.TransactionDetails,
     component: resolve => require(['views/ZhengZhou/financingList/TransactionDetails.vue'], resolve),
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
+  },
+  {
+    path: '/' + PageName.ProPayDetail,
+    name: PageName.ProPayDetail,
+    component: resolve => require(['views/ZhengZhou/financingList/ProPayDetail.vue'], resolve),
+    meta: {keepAlive: false, title: '明细', needLogin: false}
   },
   /**
    * 郑州新增：赎回

@@ -7,24 +7,24 @@
     <div class="i-main">
       <div class="detail">
         <div class="i-info">
-          <span class="left">支出金额</span>
-          <span class="right">{{detailData.SERIAL_NUMBER}}</span>
+          <span class="left">{{detailData.TYPE_NAME}}金额</span>
+          <span class="right">{{detailData.TRANS_AMT}}</span>
         </div>
         <div class="i-info">
           <span class="left">交易日期</span>
-          <span class="right">{{detailData.OPERA_DATE}}</span>
+          <span class="right">{{detailData.TRANS_DATE}}</span>
         </div>
         <div class="i-info">
           <span class="left">电子账户</span>
-          <span class="right">{{detailData.TRANS_AMOUNT}}</span>
+          <span class="right">{{detailData.BANK_ID}}</span>
         </div>
         <div class="i-info">
           <span class="left">余额</span>
-          <span class="right">{{detailData.BANK_CAR_NO}}</span>
+          <span class="right">{{detailData.BANLANCE}}</span>
         </div>
         <div class="i-info">
           <span class="left">摘要信息</span>
-          <span class="right">{{detailData.PRD_NAME}}</span>
+          <span class="right">{{detailData.ABS_INFO}}</span>
         </div>
       </div>
     </div>
