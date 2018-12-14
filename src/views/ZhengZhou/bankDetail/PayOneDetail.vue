@@ -15,7 +15,7 @@
           <span class="right">{{detailData.TRANS_DATE}}</span>
         </div>
         <div class="i-info">
-          <span class="left">电子账户</span>
+          <span class="left">交易流水号</span>
           <span class="right">{{detailData.BANK_ID}}</span>
         </div>
         <div class="i-info">
