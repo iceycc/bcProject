@@ -61,13 +61,14 @@
   .app {
     width: 100%;
     height: 100%;
-    background: #f6f6f9;
   }
 
   .i-main {
     background: #f6f6f9;
     width: 100%;
+    margin-top: px2rem(5);
     font-size: px2rem(14);
+    /*border-bottom: 1px solid #aeaeae;*/
     .detail {
       margin-bottom: px2rem(10);
     }
