@@ -251,6 +251,22 @@
               }
             })
           }
+          if (PRD_TYPE_ID == 2) {
+            this.$router.push({
+              name: PageName.DepositDetail1,
+              query: {
+                PRO_ID: ID, title: PRD_NAME
+              }
+            })
+          }
+          if (PRD_TYPE_ID == 3) {
+            this.$router.push({
+              name: PageName.DepositDetail1,
+              query: {
+                PRO_ID: ID, title: PRD_NAME
+              }
+            })
+          }
           if (PRD_TYPE_ID == 4) {
             if (DEPOSIT_TYPE_ID == 1) {
               this.$router.push({
@@ -285,14 +301,8 @@
                 }
               })
             }
-          } else {
-            this.$router.push({
-              name: PageName.DepositDetail1,
-              query: {
-                PRO_ID: ID, title: PRD_NAME
-              }
-            })
           }
+
         } else if (IS_SYNC_FLAG == '1') {
           // 打通openAPI 刷新重置 ORG_ID 跳转产品详情页
           ORG_ID = ORG_ID + ''

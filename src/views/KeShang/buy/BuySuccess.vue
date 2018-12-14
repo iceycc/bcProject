@@ -1,15 +1,15 @@
 <template>
   <div>
-    <app-bar title="购买"></app-bar>
+    <app-bar title="存入"></app-bar>
     <div class="buysuccessimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
-      <p class="p-first">购买成功</p>
+      <p class="p-first">存入成功</p>
       <!--todo-->
       <p v-if="false" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>
     </div>
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">理财产品名称</div>
+        <div class="buysuccessdetailleft">存款产品名称</div>
         <div class="buysuccessdetailright">{{datas.PRD_NAME}}</div>
       </div>
       <div class="buysuccessdetails">
@@ -17,11 +17,11 @@
         <div class="buysuccessdetailright">{{datas.ORG_NAME}}</div>
       </div>
       <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">购买金额</div>
+        <div class="buysuccessdetailleft">存入金额</div>
         <div class="buysuccessdetailright">{{datas.PAY_AMOUT}}元</div>
       </div>
       <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">交易申请日期</div>
+        <div class="buysuccessdetailleft">存入日期</div>
         <div class="buysuccessdetailright">{{datas.PAY_DATE}}</div>
       </div>
       <div class="buysuccessdetails">
@@ -36,7 +36,7 @@
     </div>
     <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其它产品</span>
+      <span @click="goBuyOther" class="begain">存入其它产品</span>
     </div>
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>

@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <app-bar title="购买"></app-bar>
+    <app-bar title="存入"></app-bar>
     <div class="buytitle" style=" padding:0 0.4rem">
       <div>
         <div class="buytitleleftimg">
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="buytitlemoney">
-      <p class="buytitlemoneyjine">购买金额</p>
+      <p class="buytitlemoneyjine">存入金额</p>
       <p class="buytitlemoneyshu"> ￥ {{datas.money}}</p>
     </div>
     <div class="jiaoyibank">
@@ -32,7 +32,7 @@
         class="button">{{codeText}}
       </button>
     </section>
-    <mt-button @click="buyHandle" class="tijiao">确认购买</mt-button>
+    <mt-button @click="buyHandle" class="tijiao">确认存入</mt-button>
     <p class="bang">我已阅读并同意注册
       <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('S')">《投融资平台服务协议（投资人版）》</a>
       <a style=" color:#0096FE;" href="javascript:;" @click="getAgreement('B')">《晋商银行直销银行"安鑫富"投融资协议》</a>
@@ -121,7 +121,7 @@
         }
         // 交易轮询
         this.Londing.open({
-          text: '正在购买中'
+          text: '正在存入中'
         })
         let i = 1
         let timer = setInterval(() => {

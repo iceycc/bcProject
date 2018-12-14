@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <app-bar title="购买"></app-bar>
+    <app-bar title="存入"></app-bar>
     <div class="buytitle">
       <div class="buytitleleft">
         <div class="buytitleleftimg">
@@ -22,7 +22,7 @@
       <div class="buysuccessdetailright" @click="goReChang">充值</div>
     </div>
     <div class="buydetails">
-      <p style="margin-top: 0.3rem">购买金额</p>
+      <p style="margin-top: 0.3rem">存入金额</p>
       <span class="buydetailsmoney">￥</span>
       <!--<input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="APPLY_AMOUNT">-->
       <input type="number" :placeholder="placeholder" v-model="APPLY_AMOUNT">
@@ -42,10 +42,10 @@
         class="button">{{codeText}}
       </button>
     </section>
-    <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">购买</button>
+    <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">存入</button>
     <p @click="agree =!agree"
        :class="{'bang':true,'no':agree == false}">我已阅读并同意
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《众邦宝产品服务协议（个人活期版）》</a>
+      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《客商产品服务协议》</a>
     </p>
 
   </div>
@@ -129,7 +129,7 @@
         API.bank.apiQryEleAccount({}, res => {
           this.payNum = res.ACC_REST // 账户余额(可用余额)
           // this.payNum = 1000// 账户余额(可用余额)
-        },err=>{
+        }, err => {
           // this.payNum =1000
         })
         API.safe.apiBandCard({}, res => {
@@ -178,7 +178,7 @@
           return
         }
         if (!this.APPLY_AMOUNT) {
-          Bus.$emit(BusName.showToast, '请输入购买金额')
+          Bus.$emit(BusName.showToast, '请输入存入金额')
           return
         }
         if (typeof (this.APPLY_AMOUNT - 0) != 'number' || isNaN(this.APPLY_AMOUNT - 0)) {
@@ -254,7 +254,7 @@
         }
         // 交易轮询
         this.Londing.open({
-          text: '正在购买中'
+          text: '正在存入中'
         })
         let i = 1
         let timer = setInterval(() => {

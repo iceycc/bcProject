@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="money">
-      <p>每日限额：{{DAY_QUOTA | formatNum}}元</p>
-      <p>单笔限额：{{SINGLE_QUOTA | formatNum}}元</p>
+      <p>每日限额：{{DAY_QUOTA | formatNumKS}}元</p>
+      <p>单笔限额：{{SINGLE_QUOTA | formatNumKS}}元</p>
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
@@ -95,7 +95,7 @@
         disable: false,
         upseletShow: false,
         mainBankList: [],
-        SINGLE_QUOTA:'0',
+        SINGLE_QUOTA: '0',
         passCode: '',
         ACCT_NO: '', // TODO
         PHONE_NUM: ''
@@ -108,6 +108,42 @@
     created() {
       this.getInfos()
       // this.reChangeHandele()
+    },
+    filters: {
+      formatNumKS(str) {
+        if (str == '-1') {
+          return '无限额'
+        }
+        if (!str) return '0.00'
+        str = str + ''
+        // if(str == '' || !str) return
+        // if (!Number(str)) return str
+        var newStr = "";
+        var count = 0;
+        if (str.indexOf(".") == -1) {
+          for (var i = str.length - 1; i >= 0; i--) {
+            if (count % 3 == 0 && count != 0) {
+              newStr = str.charAt(i) + "," + newStr;
+            } else {
+              newStr = str.charAt(i) + newStr;
+            }
+            count++;
+          }
+          str = newStr + ".00"; //自动补小数点后两位
+          return str
+        } else {
+          for (var i = str.indexOf(".") - 1; i >= 0; i--) {
+            if (count % 3 == 0 && count != 0) {
+              newStr = str.charAt(i) + "," + newStr; //碰到3的倍数则加上“,”号
+            } else {
+              newStr = str.charAt(i) + newStr; //逐个字符相接起来
+            }
+            count++;
+          }
+          str = newStr + (str + "00").substr((str + "00").indexOf("."), 3);
+          return str
+        }
+      },
     },
     computed: {
       ifCheckMoneyEmpty() {

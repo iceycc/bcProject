@@ -23,7 +23,7 @@
           </ul>
           <div class="t-query" @click="query">查询</div>
         </div>
-        <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
+        <!--<p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>-->
 
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <div class="no-data" v-if="pageList.length == 0">

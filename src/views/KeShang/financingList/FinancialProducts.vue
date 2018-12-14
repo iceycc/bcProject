@@ -12,7 +12,7 @@
           <span class="line"></span>
           <div>
             <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p>昨日收益</p>
+            <p> 预计收益</p>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
                 <p>持有金额
                   <span>{{item.HOLD_AMOUNT}}</span>
                 </p>
-                <p>购买时间
+                <p>存入时间
                   <span>{{item.TIME_END}}</span>
                 </p>
                 <p>到期时间
@@ -137,7 +137,7 @@
           pageNo: "1",
           pageSize: "10"
         },
-        tabsParam: ["持有中", "已结束"], //（这个也可以用对象key，value来实现）
+        tabsParam: ["持有中", "已支取"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
           ACC_REST: '0.00',

@@ -59,7 +59,7 @@
       <!--</div>-->
       <!--</div>-->
       <div class="contenttop">
-        <p>产品详情</p>
+        <p>交易规则</p>
         <div class="bannercontent">
           <span class="bannercontenttitle">审核方式</span>
           <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
@@ -101,19 +101,19 @@
           直销银行说明
         </div>
         <div class="contentmainbank" style="margin-top:0.5rem;">
-          <div style="display: inline-block;width:25%">
+          <div style="display: inline-block;float: left;width: 25%">
             <img :src="imgurl + productDetail.LOGO_URL" style="width:90%" alt="">
           </div>
           <div class="bank-info">
             <p class="info-1">{{productDetail.ORG_NAME}}</p>
             <p class="info-2">隶属于 {{productDetail.ORG_DES}} </p>
-            <div class="info-3">
-              <img class="start" v-for="i in productDetail.ORG_LEVEL"
-                   src="@/assets/images/account_icon_star1.png" alt="">
-              <img class="start" v-for="i in (5 - productDetail.ORG_LEVEL)"
-                   src="@/assets/images/account_icon_star.png" alt="">
-            </div>
-            <p class="info-4">比财评级依据产品属性和银行运营情况综合评定</p>
+            <!--<div class="info-3">-->
+              <!--<img class="start" v-for="i in productDetail.ORG_LEVEL"-->
+                   <!--src="@/assets/images/account_icon_star1.png" alt="">-->
+              <!--<img class="start" v-for="i in (5 - productDetail.ORG_LEVEL)"-->
+                   <!--src="@/assets/images/account_icon_star.png" alt="">-->
+            <!--</div>-->
+            <!--<p class="info-4">比财评级依据产品属性和银行运营情况综合评定</p>-->
           </div>
         </div>
       </div>
@@ -840,16 +840,16 @@
   }
 
   .bank-info {
-    float: right;
-    width: 65%;
-
+    float: left;
+    padding-left: px2rem(10);
+    /*width: 70%;*/
     .info-1 {
-      font-size: 0.5rem;
+      padding-top: px2rem(15);
+      font-size: px2rem(16);
     }
-
     .info-2 {
-      padding-top: px2rem(3);
-      font-size: 0.4rem;
+      padding-top: px2rem(15);
+      font-size: px2rem(12);
       color: #999999
     }
 
