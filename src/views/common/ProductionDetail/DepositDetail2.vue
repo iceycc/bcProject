@@ -491,9 +491,7 @@
             window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
           } else {
             this.$router.push({name: PageName.Buying})
-            // this.toPreProduct()
           }
-          // this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})
         }
