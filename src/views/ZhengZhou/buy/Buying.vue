@@ -12,8 +12,8 @@
         </div>
       </div>
       <div class="buytitleright">
-        <p>起购金额{{proDetail.MIN_AMOUNT | formatNum}}元</p>
-        <p>最小递增{{proDetail.INCRE_AMOUNT | formatNum}}元</p>
+        <p>起购金额{{proDetail.MIN_AMOUNT }}元</p>
+        <p>最小递增{{proDetail.INCRE_AMOUNT}}元</p>
         <!--<p>最小递增0.00元</p>-->
       </div>
     </div>
@@ -70,12 +70,13 @@
   import API from "@/service"
   import Mixins from "@/mixins";
   import util from "libs/util";
+
   export default {
     data() {
       return {
         proDetail: {
-          MIN_AMOUNT: '200',
-          INCRE_AMOUNT: '10'
+          MIN_AMOUNT: '0',
+          INCRE_AMOUNT: '0'
         },
         moneyNum: null,
         payNum: '',
@@ -116,6 +117,7 @@
       // 初始化数据
       initData(proData) {
         // 页面数据渲染
+        this.getInfo() // 用于查询账户余额
 
         this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
         this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0'// 数据

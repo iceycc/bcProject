@@ -126,7 +126,7 @@
         </div>
         <div class="contentmainbank" style="margin-top:0.5rem;">
           <div style="display: inline-block;float: left;width: 25%">
-          <img :src="imgurl + productDetail.LOGO_URL" style="width:90%" alt="">
+            <img :src="imgurl + productDetail.LOGO_URL" style="width:90%" alt="">
           </div>
           <div class="bank-info">
             <p class="info-1">{{productDetail.ORG_NAME}}</p>
@@ -497,13 +497,13 @@
         let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
         console.log(TOKEN);
         if (TOKEN) {
-          if (IS_SYNC_FLAG == 0) {
-            window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
-          } else {
-            this.$router.push({name: PageName.Buying})
-            // this.toPreProduct()
-          }
-          // this.checkAuthStatus()
+          // if (IS_SYNC_FLAG == 0) {
+          //   window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+          // } else {
+          //   this.$router.push({name: PageName.Buying})
+          //   // this.toPreProduct()
+          // }
+          this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})
         }
@@ -930,6 +930,7 @@
       padding-top: px2rem(15);
       font-size: px2rem(16);
     }
+
     .info-2 {
       padding-top: px2rem(15);
       font-size: px2rem(12);

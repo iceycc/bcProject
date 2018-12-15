@@ -128,7 +128,6 @@ export default {
         this.setComState({type: 'goBuy', value: goBuyData})
       });
     },
-
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
       this.setComState({type: 'ISLogin', value: false})
@@ -204,7 +203,6 @@ export default {
         clearInterval(timer)
       })
     },
-
     // 判断该用户在本行的状态
     checkBankOpenAndLogin() {
       let data = {
@@ -273,7 +271,7 @@ export default {
         clearInterval(timer)
       })
     },
-    loginSuccess(res) {
+    loginSuccess() {
       this.setComState({type: 'ISLogin', value: true})
       // 判断openApi
       // this.checkProTo(this.toPreProduct, this.toPreProduct)

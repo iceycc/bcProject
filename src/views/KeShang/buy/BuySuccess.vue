@@ -18,7 +18,7 @@
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">存入金额</div>
-        <div class="buysuccessdetailright">{{datas.PAY_AMOUT}}元</div>
+        <div class="buysuccessdetailright">{{datas.PAY_AMOUT | formatNum}}元</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">存入日期</div>
@@ -36,7 +36,7 @@
     </div>
     <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">存入其它产品</span>
+      <span @click="goBuyOther" class="begain">购买其它产品</span>
     </div>
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>

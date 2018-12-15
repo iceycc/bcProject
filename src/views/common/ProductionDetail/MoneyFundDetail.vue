@@ -418,11 +418,12 @@
         let ISLogin = this.getComState.ISLogin || false
         let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
         if (TOKEN) {
-          if (IS_SYNC_FLAG == 0) {
-            window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
-          } else {
-            this.$router.push({name: PageName.Buying,query:{ProID:this.proID}})
-          }
+          this.checkAuthStatus()
+          // if (IS_SYNC_FLAG == 0) {
+          //   window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+          // } else {
+          //   this.$router.push({name: PageName.Buying,query:{ProID:this.proID}})
+          // }
         } else {
           this.$router.push({name: PageName.Login})
         }

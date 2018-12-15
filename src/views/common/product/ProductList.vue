@@ -182,16 +182,29 @@
             this.Bshow = true
           }, 1000)
           let id = util.storage.session.get('id')
+          let ORG_ID = util.storage.session.get('ORG_ID')
           let title = util.storage.session.get('title')
           util.storage.session.remove('id')
           util.storage.session.remove('title')
           util.storage.session.set('reload', null)
-          this.$router.push({
-            name: PageName.ProductReservation,
-            query: {
-              PRO_ID: id, title
-            }
-          })
+          if (ORG_ID == 49) {
+            this.$router.push({
+              name: PageName.MoneyFundDetail,
+              query: {
+                PRO_ID: id, title
+              }
+            })
+          }
+          if(ORG_ID == '248'){
+            this.$router.push({
+              name: PageName.DepositDetail1,
+              query: {
+                PRO_ID: id, title
+              }
+            })
+
+          }
+
         } else {
           // this.getListData()
           this.getListDataByChannel()

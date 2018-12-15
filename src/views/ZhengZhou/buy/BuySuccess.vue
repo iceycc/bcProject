@@ -18,7 +18,7 @@
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">购买金额</div>
-        <div class="buysuccessdetailright">{{datas.PAY_AMOUT}}元</div>
+        <div class="buysuccessdetailright">{{datas.PAY_AMOUT | formatNum}}元</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易申请日期</div>

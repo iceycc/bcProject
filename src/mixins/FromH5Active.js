@@ -39,7 +39,7 @@ const Check = {
             this.$router.push(PageName.BcOpening3)
             break;
           case 4:
-            this.checkBankStatus()
+            this.checkBankOpenAndLogin()
             break;
           case 5:
             this.$router.push(PageName.BcOpening1)
@@ -49,7 +49,24 @@ const Check = {
 
       })
     },
-    // 判断该用户在本行的开户状态
+    // 判断该用户在本行的状态
+    checkBankOpenAndLogin() {
+      let data = {
+        IS_RET_GRADE: '2'
+      }
+      API.common.apiQryLoginStatus(data, res => {
+        let HAS_OPEN_BANK = res.HAS_OPEN_BANK
+        let HAS_LOGIN = res.HAS_LOGIN
+        if (HAS_OPEN_BANK == 1) {
+          // 开户成功
+          this.loginSuccess(res)
+          // this.checkBankStatus()
+        } else if (HAS_OPEN_BANK == 2) {
+          this.checkBankStatus()
+        }
+      })
+    },
+    // 判断该用户在本行的回显
     checkBankStatus() {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
       let data = {}
@@ -126,7 +143,7 @@ export const ToBuying ={
       this.ProID = ProID
       this.getData(ProID) // 通过产品id获取产品详情
     } else {
-      this.getInfo() // 用于查询账户余额
+      // this.getInfo() // 用于查询账户余额
       let proData = this.getComState.goBuy
       this.initData(proData) // 初始化数据
     }

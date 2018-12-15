@@ -13,7 +13,7 @@ export default {
     }
   },
   created() {
-    this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
+    this.ORG_ID = util.storage.session.get('ORG_ID')
   },
   methods: {
     // 判断该用户在比财的实名认证状态
@@ -69,7 +69,7 @@ export default {
         }
       })
     },
-    // 判断该用户在本行的开户状态
+    // 判断该用户在本行的回显
     checkBankStatus() {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
       let data = {}
@@ -109,64 +109,23 @@ export default {
           // todo登陆成功后判断拿来的去哪里
           this.setComState({type: 'ISLogin', value: true})
           this.setComState({type: 'Infos', value: res})
-          // this.checkIfPinggu(res)
+          if (this.ORG_ID == '49') {
+            // 第三步
+            this.loginSuccess(res)
+          }
         }
       }, err => {
         this.codeText = '重新发送'
         this.msgDisabled = false
       })
     },
-    loginSuccess(res) {
+    loginSuccess() {
       this.setComState({type: 'ISLogin', value: true})
       let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
-      let H5_URL = window.sessionStorage.getItem('H5_URL')
-      // 判断openApi
-      // this.checkProTo(this.toPreProduct, this.toPreProduct)
       if (IS_SYNC_FLAG == 0) {
-        // 不是 openApi
-        if (IS_REALTIME_DATA_PRD == 0) {
-          // 不是h5直联
-          // 直接跳转
-          if (H5_URL) {
-            window.location.href = H5_URL
-            return
-          }
-          // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-          if (this.href) {
-            window.location.href = this.href;
-            // let tempwindow=window.open('_blank'); // 先打开页面
-            // tempwindow.location=this.href; // 后更改页面地址
-          } else {
-            alert('跳转第三方链接获取异常')
-          }
-        } else if (IS_REALTIME_DATA_PRD == 1) {
-          // h5直联
-          this.toPreProduct()
-        } else {
-          this.toPreProduct()
-
-        }
-      } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
-        // 是 openApi
-        this.toPreProduct()
+        window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
       } else {
-        this.toPreProduct()
-      }
-    },
-    // 判断是否评估
-    checkIfPinggu(res) {
-      let type = res.HAS_GRADE
-      this.setComState({type: 'HAS_GRADE', value: type})
-      if (type == 1) {
-        Bus.$emit(BusName.showToast, '请先进行评估')
-        this.$router.push({
-          name: PageName.VerificationSuccess,
-        })
-      } else if (type == 2) { // 评估过
-        // 2的话
-        this.toPreProduct() // 评估过判断是否去哪里
-      } else {
-        this.toPreProduct() // 评估过判断是否去哪里
+        this.$router.push({name: PageName.Buying})
       }
     },
   }
