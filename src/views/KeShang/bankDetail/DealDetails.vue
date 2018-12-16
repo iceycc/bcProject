@@ -27,7 +27,7 @@
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
-            <p class="infos">暂时没数据</p>
+            <p class="infos">对不起，目前没有数据</p>
           </div>
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">

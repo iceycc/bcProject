@@ -31,11 +31,11 @@
       </ul>
       <div class="no-data" v-if="nowIndex===0 && pageList1.length == 0">
         <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
-        <p class="infos">暂时没数据</p>
+        <p class="infos">对不起，目前没有数据</p>
       </div>
       <div class="no-data" v-if="nowIndex===1 && pageList2.length == 0">
         <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
-        <p class="infos">暂时没数据</p>
+        <p class="infos">对不起，目前没有数据</p>
       </div>
       <div class="divTab">
         <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">

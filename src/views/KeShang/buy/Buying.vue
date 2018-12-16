@@ -76,7 +76,9 @@
         codeText: '获取验证码',
         MESAGE_TOKEN: '',
         BANK_ACCT_NO: '', //电子账户
-        BANK_USER_ID: '' //银行用户ID
+        BANK_USER_ID: '', //银行用户ID
+        INVEST_ID: '',
+        TEAM_ID: ''
       }
     },
     computed: {
@@ -112,11 +114,12 @@
     },
     methods: {
       initData(proData) {
-        this.getInfo() // 用于查询账户余额
+        this.getInfo() // 用于查询账户余额 19801
         this.proDetail = proData
+        let AMOUNT = this.getComState.ProAndOrgType.AMOUNT
         // 判断是否有外链钱的数据 登录流程来的
-        if (proData.AMOUNT) {
-          this.APPLY_AMOUNT = proData.AMOUNT
+        if (AMOUNT) {
+          this.APPLY_AMOUNT = AMOUNT
         }
         // 链接流程来的
         let moneyNum = this.$route.query.moneyNum || util.storage.session.get('moneyNum')
@@ -167,10 +170,12 @@
         if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
-          // } else if (num % a != 0) {
-          // Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
-          // return true
-        } else {
+        }
+        // else if (a != 0 || (num - parseInt(this.proDetail.MIN_AMOUNT)) % a != 0) {
+        //   Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
+        //   return true
+        // }
+        else {
           return false
         }
       },
@@ -199,25 +204,7 @@
           Bus.$emit(BusName.showToast, '可投额度不足')
           return
         }
-
-        this.Londing.open({
-          spinnerType: 'triple-bounce'
-        })
-        setTimeout(() => {
-          this.Londing.close()
-        }, 500)
         this.doPay()
-        // this.$router.push({
-        //   name: PageName.SureBuy,
-        //   query: {
-        //     money: this.APPLY_AMOUNT,
-        //     PRD_NAME: this.proDetail.PRD_NAME,
-        //     id: this.proDetail.id,
-        //     ORG_NAME: this.proDetail.ORG_NAME,
-        //     logo: this.proDetail.logo,
-        //   }
-        // })
-
       },
       // 轮询查询交易状态！！
 
@@ -279,6 +266,7 @@
               this.setComState({type: 'buyData', value: result})
               this.$router.push({
                 name: PageName.BuySuccess,
+                query: {TEAM_ID: this.TEAM_ID, INVEST_ID: this.INVEST_ID}
               })
               return
             } else {
@@ -316,7 +304,8 @@
           TEAM_ID = '',
           INVEST_ID = ''
         } = this.getComState.ProAndOrgType
-
+        this.TEAM_ID = TEAM_ID
+        this.INVEST_ID = INVEST_ID
         let data = {
           PRD_ID: (this.proDetail.ID || this.proDetail.PRD_INDEX_ID) + '',
           TYPE: 'API_BUY',
@@ -335,14 +324,14 @@
         API.buy.apiBuy(data, (res) => {
           this.polling(res)
         }, err => {
-          this.Londing.close()
-          this.setComState({type: "reload", value: true}) // reload-001
-          this.$router.push({
-            name: PageName.BuyFailed,
-            query: {
-              err: err
-            }
-          })
+          // this.Londing.close()
+          // this.setComState({type: "reload", value: true}) // reload-001
+          // this.$router.push({
+          //   name: PageName.BuyFailed,
+          //   query: {
+          //     err: err
+          //   }
+          // })
         })
       }
     }

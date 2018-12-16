@@ -84,7 +84,9 @@
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
         show: false,
-        ProID: ''
+        ProID: '',
+        TEAM_ID: '',
+        INVEST_ID: ''
       }
     },
     components: {
@@ -247,6 +249,8 @@
           TEAM_ID = '',
           INVEST_ID = ''
         } = this.getComState.ProAndOrgType
+        this.TEAM_ID = TEAM_ID
+        this.INVEST_ID = INVEST_ID
         let data = {
           TYPE: 'API_BUY',
           PRD_ID: (this.proDetail.id || this.ProID) + '',
@@ -267,13 +271,12 @@
         API.buy.apiBuy(data, (res) => {
           this.polling(res)
         }, err => {
-          this.Londing.close()
-          this.$router.push({
-            name: PageName.BuyFailed,
-            query: {
-              err: err
-            }
-          })
+          // this.$router.push({
+          //   name: PageName.BuyFailed,
+          //   query: {
+          //     err: err
+          //   }
+          // })
         })
       },
       // 轮询查询交易状态！！
@@ -307,6 +310,7 @@
               this.setComState({type: 'buyData', value: result})
               this.$router.push({
                 name: PageName.BuySuccess,
+                query: {TEAM_ID:this.TEAM_ID,INVEST_ID:this.INVEST_ID}
               })
               return
             } else {

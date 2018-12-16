@@ -15,9 +15,10 @@
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
     </div>
-    <div v-if="shareHref" class="share" @click="share">
-      <p>活动不错，分享好友吧</p>
-      <!--<img src="@/assets/images/share.png" alt="">-->
+    <div v-if="shareHref" class="share">
+      <p @click="share">活动不错，分享好友吧
+        <!--<img src="@/assets/images/share.png" alt="">-->
+      </p>
     </div>
 
     <div class="copy-box" v-if="copyShow">
@@ -134,11 +135,14 @@
     text-align: center;
     font-size: px2rem(13);
     color: #508CEE;
-
-    img {
+    p{
       display: inline-block;
-      width: px2rem(50);
-      height: px2rem(50);
+    }
+    img {
+      margin-left: px2rem(5);
+      display: inline-block;
+      width: px2rem(15);
+      height: px2rem(15);
       z-index: 100;
       /*background: #007aff;*/
     }

@@ -27,7 +27,7 @@
         <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
-            <p class="infos">暂时没数据</p>
+            <p class="infos">对不起，目前没有数据</p>
           </div>
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                       :auto-fill="false" ref="loadmore">
@@ -97,6 +97,10 @@
 
       <!--</div>-->
     </div>
+    <section class="waiting" v-if="infoShow">
+      <p>{{waitingMsg}}</p>
+      <button @click="close">确定</button>
+    </section>
   </div>
 </template>
 <script>
@@ -113,10 +117,12 @@
     mixins: [''],
     data() {
       return {
+        waitingMsg: '暂不支持',
+        infoShow: false,
         searchCondition: {
           //分页属性
           pageNo: "1",
-          pageSize: "10"
+          pageSize: "10",
         },
         pageList: [
           // {
@@ -164,35 +170,49 @@
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
     methods: {
+      close(){
+        this.infoShow = false
+      },
       // goBuy(item) {
 
       //   this.setComState({type: 'goBuy', value: item})
       //   this.$router.push({name: PageName.Buying})
       // },
       geDetails(item) {
-        let {FUND_NO, PRD_INDEX_ID, PRD_NAME,ORDER_NUM} = item
-        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME,ORDER_NUM}})
+        let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
+        this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
       },
-      goRedeem(data) {
+      goRedeem(item) {
         // Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
         // this.setComState({
         //   type: 'redeemData',
         //   value: data
         // })
         let params = {
-          INVEST_TIME: data.TIME_END,
-          PRD_INDEX_ID: data.PRD_INDEX_ID
+          INVEST_TIME: item.TIME_END,
+          PRD_INDEX_ID: item.PRD_INDEX_ID
         }
         API.redeem.apiRedemptionValid(params, res => {
           console.log(res)
-          if(res.RES_CODE == 1){
-            Bus.$emit(BusName.showToast, res.RES_MSG)
+          if (res.RES_CODE == 0) {
+            this.setComState({
+              type: 'redeemData',
+              value: item
+            })
             this.$router.push({name: PageName.Redeem})
-          } else if(res.RES_CODE == 2){
-            Bus.$emit(BusName.showToast, res.RES_MSG)
+          }
+          if (res.RES_CODE == 1) {
+            this.waitingMsg = res.RES_MSG
+            this.infoShow = true
+            // Bus.$emit(BusName.showToast, res.RES_MSG)
+          }
+          if (res.RES_CODE == 2) {
+            this.waitingMsg = res.RES_MSG
+            this.infoShow = true
+            // Bus.$emit(BusName.showToast, res.RES_MSG)
           }
         })
-        
+
       },
       toggleTabs(index) {
         // TODO
@@ -270,11 +290,6 @@
           API.bank.apiQryHoldInfo(data, res => {
             console.log(res)
             this.pageList = res.PAGE.retList;
-            // this.pageList = res.PAGE.retList;
-            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
             //   if (this.pageList.length <= 0) {
             //     Bus.$emit(BusName.showToast, "暂无数据");
             //   }
@@ -327,7 +342,7 @@
             // }
             this.pageList = res.PAGE.retList || [];
             this.pageList = this.pageList.concat(this.pageList);
-            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
+            if (res.PAGE.currentPage == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
@@ -397,20 +412,24 @@
     color: #ffffff;
     text-align: center;
     font-size: px2rem(14);
+
     .profit {
       display: flex;
 
       div {
         padding-top: px2rem(40);
         flex: 1;
+
         p:first-child {
           font-size: px2rem(22);
         }
+
         p:last-child {
           padding-top: px2rem(6);
           font-size: px2rem(18);
         }
       }
+
       .line {
         display: inline-block;
         width: px2rem(2) !important;
@@ -424,22 +443,27 @@
   .tab-box {
     position: absolute;
     width: 100%;
-    .no-data{
+
+    .no-data {
 
       width: 100%;
-      img{
+
+      img {
         width: 100%;
       }
-      .infos{
+
+      .infos {
         text-align: center;
         font-size: px2rem(16);
         color: #1badff;
       }
     }
+
     ul {
       background: #fff;
       display: flex;
       margin-bottom: px2rem(10);
+
       li {
         flex: 1;
         height: px2rem(50);
@@ -447,10 +471,12 @@
         line-height: px2rem(50);
         text-align: center;
       }
+
       li.active {
         color: #508cee;
         position: relative;
       }
+
       li.active:after {
         position: absolute;
         width: px2rem(20);
@@ -464,9 +490,11 @@
         margin: 0 auto;
       }
     }
+
     .divTab {
       background: #f4f4f8;
       padding-bottom: px2rem(10);
+
       .divTab-1 {
         background: #fff;
         position: relative;
@@ -475,23 +503,28 @@
         border-radius: px2rem(12);
         box-sizing: border-box;
         padding: px2rem(15) px2rem(15) 0 px2rem(15);
+
         .detail {
           position: absolute;
           right: px2rem(15);
           top: px2rem(15);
           color: #508CEE;
         }
+
         &:last-child {
           margin-bottom: px2rem(50);
         }
+
         h4 {
           overflow: hidden;
         }
+
         h4 strong {
           color: #333333;
           font-size: px2rem(16);
           line-height: px2rem(12);
         }
+
         h4 a {
           font-size: px2rem(12);
           color: #508cee;
@@ -499,33 +532,39 @@
           float: right;
           font-weight: normal;
         }
+
         p {
           color: #666;
           font-size: px2rem(12);
           line-height: px2rem(17);
           padding-bottom: px2rem(8);
           overflow: hidden;
+
           span {
             float: right;
             color: #999999;
           }
         }
+
         p:first-of-type {
           padding: px2rem(4) 0 px2rem(10);
           border-bottom: px2rem(1) solid #f5f5f5;
           margin-bottom: px2rem(16);
         }
+
         // p:last-of-type{ padding-bottom: 0;}
         .bottom-btn {
           padding: px2rem(4) 0;
           text-align: center;
           display: flex;
           border-top: 1px solid #F5F5F5;
+
           div {
             flex: 1;
             font-size: px2rem(14);
             padding: px2rem(11) 0;
             color: #333333;
+
             &:first-child {
               border-right: 1px solid #F6F6F9;
             }
@@ -539,6 +578,32 @@
     overflow-y: auto;
     box-sizing: border-box;
     /*padding-bottom: px2rem(50);*/
+  }
+
+  .waiting {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    background: #fff;
+    width: px2rem(270);
+    z-index: 100;
+    text-align: center;
+    border: 1px solid #e5e5e5;
+    border-radius: px2rem(12);
+    box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
+    p {
+      padding-top: px2rem(20);
+      font-size: px2rem(16);
+      color: #333;
+    }
+
+    button {
+      padding: px2rem(10) 0 px2rem(10);
+      color: #508CEE;
+      font-size: px2rem(17);
+    }
   }
 
 </style>

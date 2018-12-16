@@ -29,7 +29,7 @@
         </div>
         <div class="no-data" v-if="pageList.length == 0">
           <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
-          <p class="infos">暂时没数据</p>
+          <p class="infos">对不起，目前没有数据</p>
         </div>
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
@@ -237,9 +237,6 @@
             if (this.pageList.length < this.searchCondition.pageSize) {
               this.allLoaded = true;
             }
-            if (this.pageList.length <= 0) {
-              Bus.$emit(BusName.showToast, "暂无数据");
-            }
             this.$nextTick(function () {
               // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
               // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
@@ -254,9 +251,6 @@
             this.pageList = res.PAGE.retList;
             if (this.pageList.length < this.searchCondition.pageSize) {
               this.allLoaded = true;
-            }
-            if (this.pageList.length <= 0) {
-              Bus.$emit(BusName.showToast, "暂无数据");
             }
             this.$nextTick(function () {
               // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，

@@ -5,7 +5,8 @@
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
       <p class="p-first">购买成功</p>
       <!--todo-->
-      <p v-if="false" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>
+      <p v-if="TEAM_ID" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>
+      <p v-if="INVEST_ID" class="p-second">持有30天，返现1%现金红包</p>
     </div>
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">
@@ -41,9 +42,9 @@
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
     </div>
-    <div v-if="shareHref" class="share" @click="share">
-      <p>活动不错，分享好友吧</p>
-      <!--<img src="@/assets/images/share.png" alt="">-->
+    <div v-if="shareHref" class="share">
+      <p @click="share">活动不错，分享好友吧<img src="@/assets/images/share.png" alt=""></p>
+
     </div>
 
     <div class="copy-box" v-if="copyShow">
@@ -73,11 +74,15 @@
         downUrl: 'http://www.baidu.com',
         copyShow: false,
         shareHref: '',
+        TEAM_ID: false,
+        INVEST_ID: false
       }
     },
     created() {
       this.datas = this.getComState.buyData || {}
       this.shareHref = window.sessionStorage.getItem('h5_href') || ''
+      this.INVEST_ID = this.$route.query.INVEST_ID
+      this.TEAM_ID = this.$route.query.TEAM_ID
     },
     methods: {
       copyHandle() {
@@ -86,7 +91,7 @@
           FUNCTION_ID: 'ACB0G019', // 点位
           REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
           FROM_ID: porId,
-          FROM_PR1:3
+          FROM_PR1: 3
         })
 
         let clipboard = new Clipboard('#copybtn')
@@ -96,7 +101,7 @@
             FUNCTION_ID: 'ACB0G019', // 点位
             REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
             FROM_ID: porId,
-            FROM_PR1:'3'
+            FROM_PR1: '3'
           })
           Bus.$emit(BusName.showToast, '复制活动链接成功')
           clipboard.destroy()
@@ -245,11 +250,14 @@
     text-align: center;
     font-size: px2rem(13);
     color: #508CEE;
-
-    img {
+    p{
       display: inline-block;
-      width: px2rem(50);
-      height: px2rem(50);
+    }
+    img {
+      margin-left: px2rem(5);
+      display: inline-block;
+      width: px2rem(15);
+      height: px2rem(15);
       z-index: 100;
       /*background: #007aff;*/
     }
