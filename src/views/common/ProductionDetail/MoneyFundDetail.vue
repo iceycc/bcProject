@@ -8,7 +8,7 @@
             <div class="bannertopleft">
               <p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
+                <strong style="font-size: 1rem"> {{productDetail.RATE | rateFormat}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
@@ -415,15 +415,8 @@
         this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        let ISLogin = this.getComState.ISLogin || false
-        let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
         if (TOKEN) {
           this.checkAuthStatus()
-          // if (IS_SYNC_FLAG == 0) {
-          //   window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
-          // } else {
-          //   this.$router.push({name: PageName.Buying,query:{ProID:this.proID}})
-          // }
         } else {
           this.$router.push({name: PageName.Login})
         }
@@ -508,6 +501,7 @@
       height: px2rem(25);
       margin-top: px2rem(10);
       color: #fff;
+
       li {
         margin-right: px2rem(10);
         text-align: left;
@@ -692,6 +686,7 @@
 
   .wrapicon {
     box-sizing: border-box;
+
     p {
       padding-left: px2rem(20);
       width: 30%;
@@ -848,6 +843,7 @@
       padding-top: px2rem(15);
       font-size: px2rem(16);
     }
+
     .info-2 {
       padding-top: px2rem(15);
       font-size: px2rem(12);

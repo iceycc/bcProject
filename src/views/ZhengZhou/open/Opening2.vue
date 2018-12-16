@@ -51,7 +51,7 @@
       <section class="input-box">
         <p class="left-p">手机号码</p>
         <input
-          :disabled="telDisabled"
+          disabled
           type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
       </section>
       <section class="input-box">

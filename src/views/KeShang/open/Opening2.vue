@@ -43,7 +43,7 @@
       <section class="input-box">
         <p class="left-p">手机号码</p>
         <input
-          :disabled="telDisabled"
+          disabled
           type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
       </section>
       <section class="input-box">
@@ -68,29 +68,6 @@
       :BankList="mainBankList"
       @chooseBank="chooseBankHandle"
     ></up-select>
-    <div v-if="ZhengZhouPass" class="bgbox">
-      <!--郑州-->
-      <div class="passbox">
-        <div class="top">
-          <div class="field_row_wrap">
-            <p class="field_row_key">
-              请输入银行卡（{{data.CARD_NO | CARD_NO_Fliter}}）的密码
-            </p>
-            <div class="field_row_value">
-              <pass-word-zhengzhou
-                BankCardPass="bank-passCCCC"
-              ></pass-word-zhengzhou>
-            </div>
-            <p class="info">密码为6位数字</p>
-          </div>
-
-        </div>
-        <div class="btn">
-          <button @click="cancel">取消</button>
-          <button @click="subumit">提交</button>
-        </div>
-      </div>
-    </div>
     <div class="jsSelect" v-show="show">
       <section class="select-box">
         <i class="close" @click="show=false"><img :src="closeImg" alt=""></i>

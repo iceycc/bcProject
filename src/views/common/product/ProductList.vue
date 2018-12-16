@@ -45,11 +45,27 @@
             <img class="logoy" v-if="item.IS_ENABLED == 2" src="@/assets/images/yuyue.png" alt="">
             <p class="name" style="color: #333333 ;font-size: 0.5rem;margin-top:-0.1rem">
               {{item.PRD_NAME}}</p>
+            <!--活期存款-->
             <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
-               v-if="item.PRD_TYPE_ID==4">期限 {{item.DRAW_TIME_TEXT}}</p>
+               v-if="item.PRD_TYPE_ID==4&&item.DEPOSIT_TYPE_ID==1">期限 随时支取</p>
+            <!--智能存款-->
             <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
-               v-else>理财期限 {{item.PERIOD}}天</p>
-
+               v-if="item.PRD_TYPE_ID==4&&item.DEPOSIT_TYPE_ID==2">期限 {{item.PERIOD_NAME}}</p>
+            <!--长期存款-->
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-if="item.PRD_TYPE_ID==4&&item.DEPOSIT_TYPE_ID==3">期限 {{item.PERIOD_NAME}}</p>
+            <!--长期存款-->
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-if="item.PRD_TYPE_ID==4&&item.DEPOSIT_TYPE_ID==4">期限 {{item.PERIOD_NAME}}</p>
+            <!--纯债-->
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-if="item.PRD_TYPE_ID==3">理财期限 {{item.PERIOD_NAME}}</p>
+            <!--理财-->
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-if="item.PRD_TYPE_ID==2">理财期限 {{item.PERIOD}}天</p>
+            <!--货币基金-->
+            <p style="color: #B4BECC;font-size: 0.4rem;margin-top:0.2rem"
+               v-if="item.PRD_TYPE_ID==1">锁定期 {{item.PERIOD}}天</p>
           </div>
         </li>
       </ul>
@@ -195,9 +211,9 @@
               }
             })
           }
-          if(ORG_ID == '248'){
+          if (ORG_ID == '248') {
             this.$router.push({
-              name: PageName.DepositDetail1,
+              name: PageName.KeShangProDetail,
               query: {
                 PRO_ID: id, title
               }

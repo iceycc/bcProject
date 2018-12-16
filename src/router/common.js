@@ -73,6 +73,13 @@ export default [
     component: resolve => require(['views/common/ProductionDetail/DepositDetail2.vue'], resolve),
     meta: {keepAlive: false, title: '产品详情', needLogin: false}
   },
+  // 客商
+  {
+    path: '/' + PageName.KeShangProDetail,
+    name: PageName.KeShangProDetail,
+    component: resolve => require(['views/common/ProductionDetail/KeShangProDetail.vue'], resolve),
+    meta: {keepAlive: false, title: '产品详情', needLogin: false}
+  },
   /**
    * 比财登陆
    */

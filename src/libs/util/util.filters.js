@@ -37,6 +37,22 @@ export default {
   },
 
   /**
+   * 格式化利率。。最多显示小数点三位，大于四位直接截取。
+   * @param str
+   * @returns {*}
+   */
+  rateFormat(str, len = 3) {
+    if (!str) return '0'
+    str = str + ''
+    if (str.indexOf(".") > -1) {
+      let StrArr = str.split('.');
+      if (StrArr[1].length > 3) {
+        str = StrArr[0] + '.' + StrArr[1].substr(0, len);
+      }
+    }
+    return str
+  },
+  /**
    * 格式化时间
    * @param val
    * @returns {*}

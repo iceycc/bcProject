@@ -234,6 +234,12 @@ export default [
     meta: {keepAlive: false, title: '交易明细', needLogin: false}
   },
   {
+    path: '/' + PageName.PayOneDetail,
+    name: PageName.PayOneDetail,
+    component: resolve => require(['views/KeShang/bankDetail/PayOneDetail.vue'], resolve),
+    meta: {keepAlive: false, title: '明细', needLogin: false}
+  },
+  {
     path: '/' + PageName.WaitForWithdraw,
     name: PageName.WaitForWithdraw,
     component: resolve => require(['views/KeShang/withdraw/WaitForWithdraw.vue'], resolve),

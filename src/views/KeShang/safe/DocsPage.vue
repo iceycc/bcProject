@@ -2,7 +2,7 @@
   <div class="page">
     <div v-html="docs" class="docs" v-if="docs"></div>
     <div class="iframs-docs" v-if="agreeMentSrc">
-      <h1 v-if="title">{{title}}</h1>
+      <!--<h1 v-if="title">{{title}}</h1>-->
       <iframe :src="agreeMentSrc" class="indocs"></iframe>
     </div>
     <div class="btn">
@@ -28,9 +28,11 @@
       this.getAgreement(type)
 
     },
+
     methods: {
       getAgreement(type) {
         if (type == 'buy') {
+          window.document.title = '产品服务协议'
           this.getBuyAgreementByAjax()
         }
         if (type == 'recharge') {

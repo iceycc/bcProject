@@ -43,7 +43,7 @@
                 <!--BANK_ID  交易流水号  字符-->
                 <!--BANLANCE  余额  Decimal(15,2)-->
                 <!--字符-->
-                <li v-for="(item,index) in pageList" :key="index">
+                <li v-for="(item,index) in pageList" :key="index" @click="goDetail(item)">
                   <h5 style="display: flex">
                     <span style="flex: 1;color:#E62224;">{{item.TYPE_NAME}}{{item.COMM_TRANS_STATUS_DESC}}</span>
                   </h5>
@@ -68,6 +68,7 @@
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
+  import {PageName} from "../../../Constant";
 
 
   export default {
@@ -107,6 +108,9 @@
 
     },
     methods: {
+      goDetail(item){
+        this.$router.push({name:PageName.PayOneDetail,query:{...item}})
+      },
       setEleSize() {
         console.log(this.nowIndex);
         let winheight = util.getWinSize().winHeight

@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="money">
-      <p>每日限额：{{DAY_QUOTA | formatNumKS}}元</p>
-      <p>单笔限额：{{SINGLE_QUOTA | formatNumKS}}元</p>
+      <p>每日限额：{{DAY_QUOTA | formatNumKS}}</p>
+      <p>单笔限额：{{SINGLE_QUOTA | formatNumKS}}</p>
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
@@ -89,13 +89,13 @@
         logo: '',
         CARD_BANK_NAME: '',
         CARD_BANK_URL: '',
-        DAY_QUOTA: '0.00', // 单日限额
+        DAY_QUOTA: '-1', // 单日限额
+        SINGLE_QUOTA: '-1',
         msgCode: '',
         codeText: '获取验证码',
         disable: false,
         upseletShow: false,
         mainBankList: [],
-        SINGLE_QUOTA: '0',
         passCode: '',
         ACCT_NO: '', // TODO
         PHONE_NUM: ''
@@ -130,7 +130,7 @@
             count++;
           }
           str = newStr + ".00"; //自动补小数点后两位
-          return str
+          return str + '元'
         } else {
           for (var i = str.indexOf(".") - 1; i >= 0; i--) {
             if (count % 3 == 0 && count != 0) {
@@ -141,7 +141,7 @@
             count++;
           }
           str = newStr + (str + "00").substr((str + "00").indexOf("."), 3);
-          return str
+          return str + '元'
         }
       },
     },
@@ -167,8 +167,12 @@
       },
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
+          return
+        }
+        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0 && this.SINGLE_QUOTA != '-1') {
+          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }
         if (!this.agree) {
@@ -200,15 +204,24 @@
         this.page = false
       },
       checkMoney() {
-        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
+          return
+        }
+        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0 && this.SINGLE_QUOTA != '-1') {
+          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
+          return
         }
       },
       doNext() {
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
+          return
+        }
+        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0 && this.SINGLE_QUOTA != '-1') {
+          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }
         this.doReCange()

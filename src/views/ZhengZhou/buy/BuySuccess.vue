@@ -36,7 +36,7 @@
     </div>
     <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其它产品</span>
+      <span @click="goBuyOther" class="begain">购买其他产品</span>
     </div>
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>

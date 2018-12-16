@@ -33,3 +33,6 @@ export const formatBankNo = util.formatBankNo
 
 
 export const fromatMoneyFilter = util.fromatMoneyFilter
+
+//
+export const rateFormat = util.rateFormat

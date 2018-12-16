@@ -7,8 +7,10 @@
           <img :src="imgSrc+proDetail.LOGO_URL" style="width:100%" alt="">
         </div>
         <div class="buytitleleftcontent">
-          <p>{{proDetail.ORG_NAME}}</p>
-          <p style="color:#666">{{proDetail.PRD_NAME}}</p>
+          <!--<p>{{proDetail.ORG_NAME}}</p>-->
+          <!--<p style="color:#666">{{proDetail.PRD_NAME}}</p>    -->
+          <p>{{proDetail.PRD_NAME}}</p>
+          <p style="color:#666">{{proDetail.DEPOSIT_CATEGORY}}</p>
         </div>
       </div>
       <div class="buytitleright">

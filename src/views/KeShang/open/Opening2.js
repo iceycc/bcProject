@@ -12,8 +12,6 @@ export default {
   mixins: [commons,Mixins.HandleMixin,Mixins.UtilMixin],
   data() {
     return {
-      telDisabled: false,
-      ZhengZhouPass: false, // 实体卡密码，可空，本行卡和村镇卡必输
       ACC_FLAG: '0',
       pwd: '',
       pwdLen: '',
@@ -51,22 +49,7 @@ export default {
     },
     //
 
-    cancel() {
-      $('#PWDKBD').remove();
-      this.ZhengZhouPass = false
-    },
-    subumit() {
-      $('#PWDKBD').remove();
-      this.pwd = $("#bank-passCCCC").getKBD(); //获取密码
-      this.pwdLen = $("#bank-passCCCC").getLenKBD(); //获取密码长度
-      this.pwCode = $("#bank-passCCCC").getBDCode();
-      console.log(this.pwd);
-      console.log(this.pwdLen);
-      console.log(this.pwCode);
-      if (util.Check.payPassLen(this.pwdLen, true)) return;
-      this.ZhengZhouPass = false
-      this.doApiOpenging2()
-    },
+
     /**
      * 银行账户属性查询
      */

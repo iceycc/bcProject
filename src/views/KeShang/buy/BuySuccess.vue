@@ -36,7 +36,7 @@
     </div>
     <div class="btn" v-if="!shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其它产品</span>
+      <span @click="goBuyOther" class="begain">购买其他产品</span>
     </div>
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
@@ -86,7 +86,7 @@
           FUNCTION_ID: 'ACB0G019', // 点位
           REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
           FROM_ID: porId,
-          FROM_PR1:3
+          FROM_PR1: 3
         })
 
         let clipboard = new Clipboard('#copybtn')
@@ -96,7 +96,7 @@
             FUNCTION_ID: 'ACB0G019', // 点位
             REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
             FROM_ID: porId,
-            FROM_PR1:'3'
+            FROM_PR1: '3'
           })
           Bus.$emit(BusName.showToast, '复制活动链接成功')
           clipboard.destroy()

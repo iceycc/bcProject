@@ -30,7 +30,7 @@
             <div class="bannertopleft">
               <p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.RATE | formatNum}} </strong>
+                <strong style="font-size: 1rem"> {{productDetail.RATE | rateFormat}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
@@ -493,16 +493,8 @@
         this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        let ISLogin = this.getComState.ISLogin || false
-        let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
         console.log(TOKEN);
         if (TOKEN) {
-          // if (IS_SYNC_FLAG == 0) {
-          //   window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
-          // } else {
-          //   this.$router.push({name: PageName.Buying})
-          //   // this.toPreProduct()
-          // }
           this.checkAuthStatus()
         } else {
           this.$router.push({name: PageName.Login})

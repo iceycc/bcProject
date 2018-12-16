@@ -2,59 +2,36 @@
   <div id="app">
     <div class="wrap">
       <app-bar :title="title"></app-bar>
-      <div class="m-swiper">
-        <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
-          <!-- slides -->
-
-          <swiper-slide v-for="item,index in NAV_List" :key="index">
-            <div class="card">
-              <div class="top"><img src="~@/assets/images/production/rili.png"
-                                    alt=""><span>{{item.PERIOD}}</span></div>
-              <section class="center">{{item.RATE | rateFormat}}%</section>
-
+      <div class="banner">
+        <div class="bannercontent">
+          <div class="bannertop">
+            <div class="bannertopleft">
+              <p class="p-text" style="font-size: 0.4rem;">利率</p>
+              <p>
+                <strong style="font-size: 1rem"> {{productDetail.RATE | fromatMoneyFilter}} </strong>
+                <span style="font-size: .5rem;">%</span>
+              </p>
             </div>
-          </swiper-slide>
+            <div class="bannertopright">
+              <p class="p-text" style="font-size: 0.4rem;text-align: left;padding-left: .3rem">期限</p>
+              <p>
+                <strong style="font-size: 0.9rem;text-align: left;padding-left: 0.1rem"> 28天-3年 </strong>
+              </p>
+            </div>
 
-        </swiper>
-        <div class="m-bannerbottom">
-          <span>累计购买笔数 {{productDetail.BUY_COUNT}}</span>
+          </div>
+          <div class="bannerbottom">
+            <ul>
+              <li class="bannerbottomone clearfix" @click="showSafeDocs">
+                <img src="~@/assets/images/icon_dunpai@2x.png" alt="">
+                受存款保险保护 >
+              </li>
+              <li class="bannerbottomtwo clearfix">本金保障</li>
+              <li class="bannerbottomthree clearfix">累计申购笔数 {{productDetail.BUY_COUNT}}</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <!--<div class="banner">-->
-      <!--<div class="bannercontent">-->
-      <!--<div class="bannertop">-->
-      <!--<div class="bannertopleft">-->
-      <!--<p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>-->
-      <!--<p>-->
-      <!--<strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>-->
-      <!--<span style="font-size: .5rem;">%</span>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--<div class="bannertopright">-->
-      <!--<p class="p-text" style="font-size: 0.4rem">赎回到账时间</p>-->
-      <!--<p>-->
-      <!--&lt;!&ndash;<strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>&ndash;&gt;-->
-      <!--<strong style="font-size: 1rem"> T+{{productDetail.PERIOD_ACCOUNT}}</strong>-->
-      <!--<span style="font-size: .5rem;">天</span>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="bannerbottom">-->
-      <!--<ul>-->
-
-      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix"&ndash;&gt;-->
-      <!--&lt;!&ndash;v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险&ndash;&gt;-->
-      <!--&lt;!&ndash;</li>&ndash;&gt;-->
-      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>&ndash;&gt;-->
-      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>&ndash;&gt;-->
-      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>&ndash;&gt;-->
-      <!--&lt;!&ndash;<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>&ndash;&gt;-->
-      <!--<li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>-->
-      <!--<li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>-->
-      <!--</ul>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
       <!--<div class="calculation">-->
       <!--<div class="calculation-1">-->
       <!--<span class="label">我要投资(元)</span>-->
@@ -77,7 +54,7 @@
       <!--</div>-->
       <!--</div>-->
       <div class="contenttop">
-        <p>产品详情</p>
+        <p>交易规则</p>
         <div class="bannercontent">
           <span class="bannercontenttitle">起存金额</span>
           <span class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
@@ -90,11 +67,16 @@
         <div class="bannercontent">
           <span class="bannercontenttitle">支取时间</span>
           <span
-            class="bannercontenttitlecontent">随时支取</span>
+            class="bannercontenttitlecontent">{{productDetail.DRAW_TIME_TEXT || ''}}</span>
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">智能存款</span>
+          <!--<span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER(productDetail.DEPOSIT_TYPE_ID)}}</span>-->
+          <span class="bannercontenttitlecontent">{{productDetail.DEPOSIT_CATEGORY}}</span>
+        </div>
+        <div class="bannercontent">
+          <span class="bannercontenttitle">锁定期</span>
+          <span class="bannercontenttitlecontent">28天</span>
         </div>
       </div>
       <div class="wrapicon">
@@ -181,6 +163,7 @@
     <div class="buttonbottom" @click="goNext(type)">
       <span class="p-icon"></span>{{btnType}}
     </div>
+    <safe-docs v-if="safeShow" @closeHandle="closeSafe"></safe-docs>
   </div>
 </template>
 <script>
@@ -188,30 +171,15 @@
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
+  import SafeDocs from '@/components/commons/SafeDocs.vue'
   import Register from './commom'
-  import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  // require styles
-  import 'swiper/dist/css/swiper.css'
+
 
   export default {
     data() {
       return {
-        current: '0',
+        safeShow: false,
         NAV_List: [{}, {}],
-        swiperOption: {
-          slidesPerView: "auto",
-          centeredSlides: !0,
-          watchSlidesProgress: !0,
-          pagination: ".swiper-pagination",
-          paginationClickable: !0,
-          // onProgress: function (a) {
-          //   var b, c, d;
-          //   for (b = 0; b < a.slides.length; b++) c = a.slides[b], d = c.progress, scale = 1 - Math.min(Math.abs(.2 * d), 1), es = c.style, es.opacity = 1 - Math.min(Math.abs(d / 2), 1), es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = "translate3d(0px,0," + -Math.abs(150 * d) + "px)"
-          // },
-          // onSetTransition: function (a, b) {
-          //   for (var c = 0; c < a.slides.length; c++) es = a.slides[c].style, es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = b + "ms"
-          // }
-        },
         productDetail: {
           RATE: "",
           PERIOD: "",
@@ -240,11 +208,11 @@
         IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, Register],
     computed: {
-      swiper() {
-        return this.$refs.mySwiper.swiper
-      },
+      // swiper() {
+      //   return this.$refs.mySwiper.swiper
+      // },
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
@@ -257,22 +225,13 @@
 
       }
     },
-    mounted() {
-      // current swiper instance
-      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-      // console.log('this is current swiper instance object', this.swiper)
-      this.getData(this.proID);
-
-    },
-
     components: {
-      swiper,
-      swiperSlide
+      SafeDocs
     },
     created() {
       this.title = this.$route.query.title;
-      this.RATE = this.$route.query.RATE
       this.proID = this.$route.query.PRO_ID;
+      this.getData(this.proID);
     },
     directives: {
       focus: { // 自定义事件
@@ -282,8 +241,7 @@
       }
     },
     filters: {
-
-      PRD_TYPE_ID_FILTER(val) {
+      PRD_TYPE_ID_FILTER(val, type) {
         let str = '产品类型';
         switch (val - 0) {
           case 1:
@@ -294,6 +252,26 @@
             break;
           case 3:
             str = '纯债'
+            break;
+          case 4:
+            //  1：活期
+            //  2：智能
+            //  3：结构性
+            //  4：
+            str = '存款'
+            if (type == 1) {
+              str = '活期存款'
+            }
+            if (type == 2) {
+              str = '智能存款'
+            }
+            if (type == 3) {
+              str = '结构性存款'
+            }
+            if (type == 4) {
+              str = '定期存款'
+            }
+            break;
         }
         return str
       },
@@ -325,6 +303,12 @@
       next();
     },
     methods: {
+      showSafeDocs() {
+        this.safeShow = true
+      },
+      closeSafe() {
+        this.safeShow = false
+      },
       callback() {
       },
       formatNumHandle(cash) {
@@ -428,20 +412,7 @@
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
-          let index = 0;
-          if (res.NAV_List.length > 0) {
-            this.NAV_List = res.NAV_List
-            this.current = this.NAV_List.length
-            this.NAV_List.forEach((item, i) => {
-              if (item.RATE == this.RATE) {
-                index = i
-              }
-            })
-            console.log(index);
-          }
-          setTimeout(() => {
-            this.swiper.slideTo(index + 1, 1000, false)
-          }, 100)
+          this.NAV_List = res.NAV_List
           // IS_REALTIME_DATA_PRD
           // 1是，走无密码登录带红色提示（亿联）
           // 0否，走无密码的登录页（郑州，众邦
@@ -485,7 +456,6 @@
         this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        console.log(TOKEN);
         if (TOKEN) {
           this.checkAuthStatus()
         } else {
@@ -564,41 +534,42 @@
   }
 
   .banner .bannercontent .bannerbottom {
-    width: 97%;
     height: px2rem(25);
 
     ul {
       width: 100%;
       height: px2rem(25);
-      margin-top: px2rem(10);
+      margin-top: px2rem(15);
       color: #fff;
 
       li {
-        margin-right: px2rem(10);
+        padding-right: px2rem(10);
         text-align: left;
-        line-height: px2rem(19);
+        line-height: px2rem(15);
         font-size: px2rem(12);
         float: left;
-        height: px2rem(19);
+        height: px2rem(15);
       }
     }
-  }
 
-  .banner .bannercontent .bannerbottom .bannerbottomfirst {
-    background-image: url(~@/assets/images/icon@2x.png) no-repeat;
-    background-position: 0.1rem;
-    background-size: 0.5rem;
-    width: 30%;
-    border-right: 1px solid rgba(255, 255, 255, .5);
-  }
+    .bannerbottomone {
+      border-right: 1px solid rgba(255, 255, 255, .5);
 
-  .banner .bannercontent .bannerbottom .bannerbottomtwo {
-    padding-right: px2rem(20);
-    border-right: 1px solid rgba(255, 255, 255, .5);
-  }
+      img {
+        width: px2rem(13);
+      }
+    }
 
-  .banner .bannercontent .bannerbottom .bannerbottomthree {
-    padding-right: px2rem(20);
+    .bannerbottomtwo {
+      padding-left: px2rem(5);
+
+      border-right: 1px solid rgba(255, 255, 255, .5);
+    }
+
+    .bannerbottomthree {
+      padding-left: px2rem(5);
+    }
+
   }
 
   .contenttop {
@@ -624,7 +595,7 @@
     width: 30%;
     font-size: 0.4rem;
     line-height: 2rem;
-
+    vertical-align: top;
   }
 
   .contenttop .bannercontent .bannercontenttitlecontent {
@@ -1016,10 +987,7 @@
           width: px2rem(17);
         }
       }
-
     }
   }
-
-
 </style>
 
