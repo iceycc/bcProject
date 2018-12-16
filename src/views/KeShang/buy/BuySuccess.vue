@@ -79,7 +79,7 @@
     },
     created() {
       this.datas = this.getComState.buyData || {}
-      this.shareHref = window.sessionStorage.getItem('h5_href') || '11'
+      this.shareHref = window.sessionStorage.getItem('h5_href') || ''
       this.INVEST_ID = this.$route.query.INVEST_ID
       this.TEAM_ID = this.$route.query.TEAM_ID
     },
