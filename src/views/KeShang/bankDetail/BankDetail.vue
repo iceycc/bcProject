@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!--<app-bar :title="bankObj.ORG_NAME"></app-bar>-->
-    <app-bar title="客商直销银行"></app-bar>
+    <app-bar title="梅州客商银行"></app-bar>
     <section class="container" style="padding-top: 7px">
       <section class="banner">
         <section>
@@ -151,7 +151,6 @@
     },
 
     created() {
-      document.title = '客商直销银行'
       this.getBankDetail()
       this.scroll()
       this.getProList()

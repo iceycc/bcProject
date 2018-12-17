@@ -12,7 +12,7 @@
           <span class="line"></span>
           <div>
             <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p> 预计收益</p>
+            <p> 累计到账收益</p>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
                 <p>到期时间
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
-                <p>预期收益
+                <p>预计收益
                   <span>{{item.EXPECT_INCOME}}</span>
                 </p>
                 <p>存款利率
@@ -60,9 +60,9 @@
                   <div>
                     <span @click="goRedeem(item)">提前支取</span>
                   </div>
-                  <!-- <div>
+                  <div>
                     <span @click="goBuy(item)">再次存入</span>
-                  </div> -->
+                  </div>
                 </div>
               </div>
               <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList" :key="index">
@@ -173,11 +173,11 @@
       close(){
         this.infoShow = false
       },
-      // goBuy(item) {
+      goBuy(item) {
 
-      //   this.setComState({type: 'goBuy', value: item})
-      //   this.$router.push({name: PageName.Buying})
-      // },
+        this.setComState({type: 'goBuy', value: item})
+        this.$router.push({name: PageName.Buying})
+      },
       geDetails(item) {
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
@@ -426,7 +426,7 @@
 
         p:last-child {
           padding-top: px2rem(6);
-          font-size: px2rem(18);
+          font-size: px2rem(12);
         }
       }
 

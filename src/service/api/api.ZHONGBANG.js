@@ -330,7 +330,7 @@ export default {
    * list相关
    */
   list: {
-    //   查询产品/机构支持的绑卡行/
+    //   查询产品/机构支持的绑卡行
     apiGetBankCardList(params, success, error) {
       let options = {
         url: '/openapi/comm/apiGetBankCardList',

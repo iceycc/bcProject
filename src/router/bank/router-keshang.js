@@ -185,7 +185,7 @@ export default [
     path: '/' + PageName.BankDetail,
     name: PageName.BankDetail,
     component: resolve => require(['views/KeShang/bankDetail/BankDetail.vue'], resolve),
-    meta: {keepAlive: false, title: '我的银行', needLogin: false}
+    meta: {keepAlive: false, title: '梅州客商银行', needLogin: false}
   },
   {
     path: '/' + PageName.BankBalance,

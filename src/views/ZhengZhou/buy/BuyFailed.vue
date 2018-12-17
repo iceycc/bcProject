@@ -15,11 +15,11 @@
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
     </div>
-    <div v-if="shareHref" class="share">
-      <p @click="share">活动不错，分享好友吧
+    <!--<div v-if="shareHref" class="share">-->
+      <!--<p @click="share">活动不错，分享好友吧-->
         <!--<img src="@/assets/images/share.png" alt="">-->
-      </p>
-    </div>
+      <!--</p>-->
+    <!--</div>-->
 
     <div class="copy-box" v-if="copyShow">
       <img @click="copyShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
@@ -44,7 +44,7 @@
   export default {
     created() {
       this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
-      this.shareHref = window.sessionStorage.getItem('h5_href') || ''
+      // this.shareHref = window.sessionStorage.getItem('h5_href') || ''
 
     },
     data() {
