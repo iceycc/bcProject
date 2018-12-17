@@ -5,8 +5,8 @@
       <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
       <p class="p-first">存入成功</p>
       <!--todo-->
-      <p v-if="TEAM_ID" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>
-      <p v-if="INVEST_ID" class="p-second">持有30天，返现1%现金红包</p>
+      <!--<p v-if="TEAM_ID" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>-->
+      <!--<p v-if="INVEST_ID" class="p-second">持有30天，返现1%现金红包</p>-->
     </div>
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">

@@ -58,7 +58,7 @@
   import Mixins from "@/mixins";
   import LoginMixins from './login'
   import util from "@/libs/util";
-  import {HOST_API} from "@/Constant";
+  import {HOST} from "@/Constant";
 
   let time = 60
   let timer;
@@ -198,7 +198,7 @@
           util.storage.session.set("BICAI_TOKEN", res.PHONE_TOKEN) //
           util.storage.session.set("BICAI_MEBER_ID", res.ID) //
           if (this.isfinancial == '1') {
-            window.location.href = HOST_API + '/nay/#/myInvestment?members_id=' + res.ID
+            window.location.href = HOST + '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
 
