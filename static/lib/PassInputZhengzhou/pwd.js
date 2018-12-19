@@ -1,9 +1,6 @@
 (function(t, e) {
   "use strict";
-  // var host = 'https://adv.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
-  // var host = 'https://demo1.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
-  // var host = 'https://graytest.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
-  var host = 'https://finsuit.bicai365.com/finsuit/openapi/zzh/biz/apiPasswordKeyboard'
+  // var host =
   var i = {};
   var reset = {
     scrollTop : 0
@@ -235,7 +232,7 @@
       });
       if ($("div[kbdtype='Graph']").length > 0) {
         $("div[kbdtype='Graph']").text("").attr("disabled", true);
-        $.get(host+"?style=Graph&shuffle=2", function(t) {
+        $.get(window.hostApi + '/openapi/zzh/biz/apiPasswordKeyboard'+"?style=Graph&shuffle=2", function(t) {
           $("#PWDKBD").append(t.biz_data.data.kbdhtml);
           window.sessionStorage.setItem('KEY_T',t.biz_data.data.prefix);
           $("div[kbdtype='Graph']").text("").attr("disabled", false);
@@ -280,7 +277,7 @@
       }
       if ($("div[kbdtype='Alnum']").length > 0) {
         $("div[kbdtype='Alnum']").text("").attr("disabled", true);
-        $.get(host+"?style=Alnum&shuffle=2", function(t) {
+        $.get(window.hostApi + '/openapi/zzh/biz/apiPasswordKeyboard'+"?style=Alnum&shuffle=2", function(t) {
           $("#PWDKBD").append(t.biz_data.data.kbdhtml);
           window.sessionStorage.setItem('KEY_T',t.biz_data.data.prefix);
           $("div[kbdtype='Alnum']").text("").attr("disabled", false);
@@ -336,7 +333,7 @@
       }
       if ($("div[kbdtype='Number']").length > 0) {
         $("div[kbdtype='Number']").text("").attr("disabled", true);
-        $.get(host+"?type=Number", function(t) {
+        $.get(window.hostApi + '/openapi/zzh/biz/apiPasswordKeyboard'+"?type=Number", function(t) {
           console.log(t);
           $("#PWDKBD").append(t.biz_data.data.kbdhtml);
           // $("#PWDKBD").append(t.data.kbdhtml);

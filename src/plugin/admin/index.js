@@ -5,7 +5,6 @@ import {
   Button,
   Cell,
   Radio,
-  MessageBox,
   Indicator
 } from 'mint-ui'
 
@@ -21,6 +20,7 @@ import AppBar from '@/components/header/AppBar'
  */
 import filters from '@/plugin/filters';
 import Mixins from "@/mixins";
+import globalValue from '@/plugin/setGlobalValue'
 /**
  * 自定义样式引入
  */
@@ -29,14 +29,18 @@ import '@/assets/css/common.css'
 
 export default {
   async install(Vue, option) {
+    // 全局注册vuex全局设置和获取方法
     Vue.mixin(Mixins.StoreMixin)
+    //
     Vue.prototype.Londing = Indicator
-    Vue.prototype.Meg = MessageBox
     Vue.component(Button.name, Button)
     Vue.component(Cell.name, Cell)
     Vue.component(Radio.name, Radio)
     Vue.component('app-bar', AppBar);
     Vue.use(Calendar);
+    // 设置全局filters
     Vue.use(filters);
+    // 设置window全局变量,用于static内插件获取vue实例的属性
+    Vue.use(globalValue);
   }
 }

@@ -13,23 +13,31 @@ let Configs = {
   // DEV_HOST: 'https://adv.bicai365.com', // adv测试
   // DEV_HOST: 'https://demo1.bicai365.com', // adv测试
   // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
+
   /**
-   * build打包
+   * build打包  现在阶段注意 static/lib/PassInputZhengzhou/pwd.js也要同步改
    */
   // PRO_HOST: 'https://demo1.bicai365.com', // demo1
   // PRO_HOST: 'https://adv.bicai365.com', // adv
   PRO_HOST: 'https://finsuit.bicai365.com',// 生产
   // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
 }
+/**
+ * host根据生产和开发分别暴露
+ * @type {string}
+ */
 export const HOST = process.env.NODE_ENV == 'development'
   ? Configs.DEV_HOST : Configs.PRO_HOST
-
+/**
+ * api接口
+ * @type {string}
+ */
 export const HOST_API = HOST + '/finsuit' // // api 接口地址
 
 /**
- *
+ *  app下载地址
  */
-export const AppUrl = { // app下载地址
+export const AppUrl = {
   Android: '',
   Ios: ''
 }
@@ -38,10 +46,10 @@ export const AppUrl = { // app下载地址
  * 项目前缀
  */
 export const PROJECT_PREFIX = 'YIDU' + version
-export const STORE_PREFIX = '_MX_'
+export const STORE_PREFIX = '_MX_' // 存储库的命名前缀
 
 /**
- * logo图片地址
+ * logo图片地址  图片地址/ 用于图片的拼接
  */
 let imgSrcHost = {
   dev: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
@@ -160,7 +168,7 @@ export const BusName = {
 }
 
 /**
- * storage的名字
+ * storage的名字  大多迁移到了vuex
  */
 export const LsName = {
   token: 'token',
@@ -196,10 +204,10 @@ export const ORG_ID_NUM = {
  */
 export const PRO_PARAMS = {
   DEVICE_ID: 'H5' + Math.random().toString().substr(6),
-  CHANNEL_ID: '8',
+  CHANNEL_ID: '1', //  默认渠道id
   APP_FLAG: 'BC'
 }
-
+//
 export const CheckBank = function (val) {
   let arr = []
   Object.keys(ORG_ID_NUM).forEach(function (key) {
