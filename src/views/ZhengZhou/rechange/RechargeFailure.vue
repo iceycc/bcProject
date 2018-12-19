@@ -18,7 +18,7 @@
 
   export default {
     created() {
-      this.errMsg = this.$route.query.err || '系统繁忙，请稍后再试'
+      this.errMsg = this.$route.query.err || ''
     },
     data() {
       return {
