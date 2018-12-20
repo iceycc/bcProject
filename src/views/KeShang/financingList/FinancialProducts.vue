@@ -170,7 +170,7 @@
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
     methods: {
-      close(){
+      close() {
         this.infoShow = false
       },
       goBuy(item) {
@@ -251,24 +251,25 @@
         this.searchCondition1.pageNo = "1";
         this.allLoaded = false;
         // 查询数据
-
         //   alert(this.nowIndex);
         if (this.nowIndex == 1) {
           //已到期数据
           let data = {
-            currentPage: this.searchCondition1.pageNo + '',
+            // currentPage: this.searchCondition1.pageNo - 1 + '',
+            currentPage: '1',
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
           API.bank.getMyInvestOver(data, res => {
+
+            this.pageList = res.PAGE.retList || [];
+            if (this.pageList.length == 0) {
+              // this.allLoaded = true;
+            }
             if (!res.PAGE) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
               return
-            }
-            this.pageList = res.PAGE.retList || [];
-            if (this.pageList.length == 0) {
-              // this.allLoaded = true;
             }
             //    if (this.pageList.length <= 0) {
             //     Bus.$emit(BusName.showToast, "暂无数据");
@@ -283,16 +284,18 @@
         } else {
           // //持有数据
           let data = {
-            currentPage: this.searchCondition.pageNo - 1 + '',
+            // currentPage: this.searchCondition.pageNo - 1 + '',
+            currentPage: '1',
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
           API.bank.apiQryHoldInfo(data, res => {
             console.log(res)
             this.pageList = res.PAGE.retList;
-            //   if (this.pageList.length <= 0) {
-            //     Bus.$emit(BusName.showToast, "暂无数据");
-            //   }
+            if (this.pageList.length <= 0) {
+              this.allLoaded = true;
+              // Bus.$emit(BusName.showToast, "暂无数据");
+            }
             this.$nextTick(function () {
               // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
               // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
@@ -308,21 +311,22 @@
           this.searchCondition1.pageNo =
             "" + (parseInt(this.searchCondition1.pageNo) + 1);
           let data = {
-            currentPage: this.searchCondition1.pageNo,
+            currentPage: this.searchCondition1.pageNo + '',
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
           API.bank.getMyInvestOver(data, res => {
+
+            let pageList = res.PAGE.retList || [];
+            this.pageList = this.pageList.concat(pageList);
+            if (this.pageList.length < this.searchCondition1.pageSize) {
+              this.allLoaded = true;
+              Bus.$emit(BusName.showToast, "数据全部加载完成");
+            }
             if (!res.PAGE) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
               return
-            }
-            this.pageList = res.PAGE.retList || [];
-            this.pageList = this.pageList.concat(this.pageList);
-            if (this.pageList.length < this.searchCondition1.pageSize) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
           });
         } else {
@@ -330,7 +334,7 @@
           this.searchCondition.pageNo =
             "" + (parseInt(this.searchCondition.pageNo) + 1);
           let data = {
-            currentPage: this.searchCondition.pageNo - 1 + '',
+            currentPage: this.searchCondition.pageNo + '',
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
@@ -340,8 +344,8 @@
             //   Bus.$emit(BusName.showToast, "数据全部加载完成");
             //   return
             // }
-            this.pageList = res.PAGE.retList || [];
-            this.pageList = this.pageList.concat(this.pageList);
+            let pageList = res.PAGE.retList || [];
+            this.pageList = this.pageList.concat(pageList);
             if (res.PAGE.currentPage == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
@@ -593,6 +597,7 @@
     border: 1px solid #e5e5e5;
     border-radius: px2rem(12);
     box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
+
     p {
       padding-top: px2rem(20);
       font-size: px2rem(16);

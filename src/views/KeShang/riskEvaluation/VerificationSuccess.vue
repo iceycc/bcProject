@@ -24,10 +24,10 @@
     mixins:[''],
     methods: {
       goNext() {
-        // API.watchApi({
-        //   FUNCTION_ID: 'ptb0A006', // 点位
-        //   REMARK_DATA: '异业合作-风险评测', // 中文备注
-        // })
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A006', // 点位
+          REMARK_DATA: '异业合作-风险评测', // 中文备注
+        })
         this.$router.push({
           name: PageName.Riskproblom
         })

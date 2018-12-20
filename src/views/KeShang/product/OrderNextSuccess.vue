@@ -28,10 +28,10 @@
         },
         methods:{
             goApp(){
-                // API.watchApi({
-                //     FUNCTION_ID: 'ptb0A009', // 点位
-                //     REMARK_DATA: '异异业合作-预约成功-下载比财', // 中文备注
-                // })
+                API.watchApi({
+                    FUNCTION_ID: 'ptb0A009', // 点位
+                    REMARK_DATA: '异异业合作-预约成功-下载比财', // 中文备注
+                })
                 util.downLoad(()=>{
                     Bus.$emit(BusName,'请在浏览器中下载')
                 })

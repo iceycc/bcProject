@@ -128,10 +128,10 @@
         })
       },
       goOpen() { // 去开户
-        // API.watchApi({
-        //   FUNCTION_ID: 'ptb0A008', // 点位
-        //   REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
-        // })
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A008', // 点位
+          REMARK_DATA: '异业合作-还未开户，立即注册', // 中文备注
+        })
         this.setComState({type: 'reload', value: true})
         // this.setComState({type:"reload",value:true}) // reload-001
         this.$router.push({name: PageName.Opening1})

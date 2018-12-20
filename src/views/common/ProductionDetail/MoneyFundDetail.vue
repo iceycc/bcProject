@@ -364,6 +364,7 @@
         };
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
+          this.setProType(res,data)
           this.productDetail = res;
           this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
           this.title = res.PRD_NAME
@@ -561,6 +562,7 @@
     width: 50%;
     font-size: 0.4rem;
     line-height: 2rem;
+    vertical-align: middle;
   }
 
   .contentmain {

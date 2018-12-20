@@ -55,12 +55,12 @@
     },
     methods: {
       copyHandle() {
-        // let porId = this.getComState.goBuy.ID
-        // API.watchApi({
-        //   FUNCTION_ID: 'ACB0G019', // 点位
-        //   REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
-        //   FROM_ID: porId
-        // })
+        let porId = this.getComState.goBuy.ID
+        API.watchApi({
+          FUNCTION_ID: 'ACB0G019', // 点位
+          REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备
+          FROM_ID: porId
+        })
         let clipboard = new Clipboard('#copybtn')
         clipboard.on('success', (e) => {
           Bus.$emit(BusName.showToast, '复制活动链接成功')

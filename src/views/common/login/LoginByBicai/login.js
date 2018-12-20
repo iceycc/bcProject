@@ -170,14 +170,15 @@ export default {
               // 直接跳转 银行h5链接
               // 不是h5直联
               // 直接跳转
+
               if (H5_URL) {
+                // h5活动页跳转进来时判断是否有链接
                 window.location.href = H5_URL
                 return
               }
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
               if (this.href) {
                 window.location.href = this.href;
-
                 // let tempwindow=window.open('_blank'); // 先打开页面
                 // tempwindow.location=this.href; // 后更改页面地址
               } else {
@@ -275,32 +276,38 @@ export default {
       this.setComState({type: 'ISLogin', value: true})
       // 判断openApi
       // this.checkProTo(this.toPreProduct, this.toPreProduct)
-      if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
+      let {IS_SYNC_FLAG, IS_REALTIME_DATA_PRD, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG = '0'} = this.ProAndOrgType
+      if (IS_SYNC_FLAG == 0) {
         // 不是 openApi
-        if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 0) {
+        if (IS_REALTIME_DATA_PRD == 0) {
           // 不是h5直联
           // 直接跳转
-          if (H5_URL) {
-            window.location.href = H5_URL
-            return
-          }
-          // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-          if (this.href) {
-            window.location.href = this.href;
-
-            // let tempwindow=window.open('_blank'); // 先打开页面
-            // tempwindow.location=this.href; // 后更改页面地址
+          if (AUTH_URL_FLAG == 1) {
+            // 1：实名认证后，调用免登接口 返回H5直联的面登录路径
+            API.bicai.getAuthUrl({}, res => {
+              if (res.STATUS == 1) {
+                Bus.$emit(BusName.showToast, res.MESSAGE)
+              } else {
+                window.location.href = res.AUTH_URL
+              }
+            })
           } else {
-            alert('跳转第三方链接获取异常')
+            if (H5_URL_ANDRIOD || H5_URL_IOS) {
+              window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
+              // let tempwindow=window.open('_blank'); // 先打开页面
+              // tempwindow.location=this.href; // 后更改页面地址
+            } else {
+              alert('跳转第三方链接获取异常')
+            }
           }
-        } else if (this.ProAndOrgType.IS_REALTIME_DATA_PRD == 1) {
+        } else if (IS_REALTIME_DATA_PRD == 1) {
           // h5直联
           this.toPreProduct()
         } else {
           this.toPreProduct()
 
         }
-      } else if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+      } else if (IS_SYNC_FLAG == 1) {
         // 是 openApi
         this.toPreProduct()
       } else {

@@ -65,10 +65,10 @@ export default {
       })
     },
     subumit() {
-      // API.watchApi({
-      //   FUNCTION_ID: 'ptb0A005', // 点位
-      //   REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
-      // })
+      API.watchApi({
+        FUNCTION_ID: 'ptb0A005', // 点位
+        REMARK_DATA: '异业合作-开户-设置密码', // 中文备注
+      })
       this.pwd = $("#pay-pass").getKBD(); //获取密码
       this.pwdLen = $("#pay-pass").getLenKBD(); //获取密码长度
       this.pwdCode = $("#pay-pass").getBDCode(); //获取密码长度

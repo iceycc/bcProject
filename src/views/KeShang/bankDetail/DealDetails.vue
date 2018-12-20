@@ -155,8 +155,8 @@
         let data = {
 
           // PRD_INDEX_ID:'',
-          // currentPage: this.searchCondition.pageNo,
-          currentPage: "1",
+          currentPage: this.searchCondition.pageNo,
+          // currentPage: "0",
           // START_DATE: '2020-08-26',
           // END_DATE: '2020-08-27',
           // START_DATE: this.startDate,
@@ -202,6 +202,7 @@
             this.allLoaded = true;
           }
           if (this.pageList.length <= 0) {
+            this.allLoaded = true;
             Bus.$emit(BusName.showToast, "暂无数据");
           }
           this.$nextTick(function () {

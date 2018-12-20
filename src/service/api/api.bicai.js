@@ -177,6 +177,24 @@ export default {
     }
     return http.post(options, success, error)
   },
+  // 获取产品(货基，理财)详细信息
+  getPrdFootInfo(params, success, error) {
+    let options = {
+      type: 'GET_PRD_FOOT_DATA',
+      params,
+
+    }
+    return http.post(options, success, error)
+  },
+  // 获取产品(货基，理财)详细信息
+  getAuthUrl(params, success, error) {
+    let options = {
+      type: 'GET_AUTH_URL',
+      params,
+
+    }
+    return http.post(options, success, error)
+  },
   // GET_BANK_II_LIST
   // 获取产品(货基，理财)详细信息
   getBankList(params, success, error) {

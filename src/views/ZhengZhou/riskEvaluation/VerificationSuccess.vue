@@ -14,20 +14,18 @@
   import {PageName} from "@/Constant";
   import AppBar from '@/components/header/AppBar'
   import API from "@/service";
-  import Mixins from "@/mixins";
 
 
   export default {
     components: {
       AppBar
     },
-    mixins:[''],
     methods: {
       goNext() {
-        // API.watchApi({
-        //   FUNCTION_ID: 'ptb0A006', // 点位
-        //   REMARK_DATA: '异业合作-风险评测', // 中文备注
-        // })
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A006', // 点位
+          REMARK_DATA: '异业合作-风险评测', // 中文备注
+        })
         this.$router.push({
           name: PageName.Riskproblom
         })

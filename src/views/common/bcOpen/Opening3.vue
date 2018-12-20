@@ -89,7 +89,7 @@
         OPEN_H5_HREF: ''
       }
     },
-    mixins:['Check'],
+    mixins: ['Check'],
     created() {
       this.REQ_SERIAL = this.$route.query.REQ_SERIAL || this.$route.params.seq
       this.LAST_STEP_NUM = this.$route.query.LAST_STEP_NUM + ''
@@ -138,13 +138,21 @@
             } else if (ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
-              let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
-              if (href) {
-                window.location.href = href;
-                // let tempwindow=window.open('_blank'); // 先打开页面
-                // tempwindow.location=href; // 后更改页面地址
+              if (ProAndOrgType.AUTH_URL_FLAG == 1) {
+                API.bicai.getAuthUrl({}, res => {
+                  if (res.STATUS == 1) {
+                    Bus.$emit(BusName.showToast, res.MESSAGE)
+                  } else {
+                    window.location.href = res.AUTH_URL
+                  }
+                })
               } else {
-                alert('跳转银行h5链接获取异常')
+                let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
+                if (href) {
+                  window.location.href = href;
+                } else {
+                  alert('跳转银行h5链接获取异常')
+                }
               }
             } else {
               this.$router.push({name: PageName.Opening1})

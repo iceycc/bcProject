@@ -16,6 +16,45 @@ export default {
     this.ORG_ID = util.storage.session.get('ORG_ID')
   },
   methods: {
+    setProType(res, data) {
+      API.bicai.getPrdFootInfo(data, res => {
+        // 新增 平安银行 这种登录授权的 0：使用之前的逻辑 1：实名认证后，调用免登接口
+        this.AUTH_URL_FLAG = res.AUTH_URL_FLAG || '0'
+        let {
+          AUTH_URL_FLAG = '0',
+          ID,// 产品id
+          ORG_NAME,//机构名称
+          PRD_NAME, // 产品名称
+          ORG_ID, // 机构id
+          IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS, // 非打通openApi 跳转链接 ios
+        } = res
+        // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
+        // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+        // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
+        // set
+        let ProData = {
+          AUTH_URL_FLAG,
+          ID,// 产品id
+          ORG_NAME,//机构名称
+          PRD_NAME, // 产品名称
+          ORG_ID, // 机构id
+          IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
+          IS_REALTIME_DATA_PRD, // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+          IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
+          H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
+          H5_URL_IOS // 非打通openApi 跳转链接 ios
+        }
+        console.log(ProData);
+        this.setComState({
+          type: 'ProAndOrgType', value: ProData
+        })
+      })
+
+    },
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
       this.setComState({type: 'ISLogin', value: false})
@@ -121,9 +160,21 @@ export default {
     },
     loginSuccess() {
       this.setComState({type: 'ISLogin', value: true})
-      let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS} = this.getComState.ProAndOrgType
+      let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG = '0'} = this.getComState.ProAndOrgType
       if (IS_SYNC_FLAG == 0) {
-        window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+        if (AUTH_URL_FLAG == 1) {
+          // 1：实名认证后，调用免登接口 返回H5直联的面登录路径
+          API.bicai.getAuthUrl({}, res => {
+            if (res.STATUS == 1) {
+              Bus.$emit(BusName.showToast, res.MESSAGE)
+            } else {
+              window.location.href = res.AUTH_URL
+            }
+          })
+        } else {
+          // 0：使用之前的逻辑
+          window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+        }
       } else {
         this.$router.push({name: PageName.Buying})
       }

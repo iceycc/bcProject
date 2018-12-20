@@ -105,7 +105,11 @@ export default {
     },
     doApiOpenging2() {
       this.data.PRE_PHONE_NUM = this.tel
-      console.log(this.data.PRE_PHONE_NUM);
+      console.log(this.checkBankName(this.data.CARD_NO));
+      if (!this.checkBankName(this.data.CARD_NO)) {
+        Bus.$emit(BusName.showToast, '暂不支持该银行卡号')
+        return
+      }
       if (this.bankText == '请选择银行') {
         Bus.$emit(BusName.showToast, '请选择银行')
         return
@@ -114,9 +118,7 @@ export default {
         Bus.$emit(BusName.showToast, '银行卡号不能为空')
         return
       }
-      if (this.checkBankNo(this.data.CARD_NO)) {
-        return
-      }
+
       if (this.data.PRE_PHONE_NUM == '') {
         Bus.$emit(BusName.showToast, '手机号不能为空')
         return
@@ -156,19 +158,19 @@ export default {
           // setTimeout(() => {
           //   this.errMsg = ''
           // }, 2000)
-          // API.watchApi({
-          //   FUNCTION_ID: 'ptb0A004', // 点位
-          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          // })
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A004', // 点位
+            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          })
           // Bus.$emit(BusName.showToast, res.MSG)
           this.setComState({type:'ISLogin',value:true})
           this.toPreProduct()
         },
         err => {
-          // API.watchApi({
-          //   FUNCTION_ID: 'ptb0A004', // 点位
-          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          // })
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A004', // 点位
+            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          })
           this.errMsg = err
           setTimeout(() => {
             this.errMsg = ''

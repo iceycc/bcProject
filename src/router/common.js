@@ -80,6 +80,13 @@ export default [
     component: resolve => require(['views/common/ProductionDetail/KeShangProDetail.vue'], resolve),
     meta: {keepAlive: false, title: '产品详情', needLogin: false}
   },
+  //
+  {
+    path: '/' + PageName.FinancingProduct,
+    name: PageName.FinancingProduct,
+    component: resolve => require(['views/common/ProductionDetail/FinancingProduct.vue'], resolve),
+    meta: {keepAlive: false, title: '产品详情', needLogin: false}
+  },
   /**
    * 比财登陆
    */

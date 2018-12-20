@@ -222,7 +222,7 @@
       },
       checkBankName(val) {
         if (!val) {
-          return
+          return false
         }
         this.checkBankName1 = false
         // this.checkBankType()
@@ -243,6 +243,7 @@
           Bus.$emit(BusName.showToast, '暂不支持该银行')
         }
         console.log(this.bankText);
+        return flag
       },
       checkBankNo(val) {
         // 查询银行账户类型

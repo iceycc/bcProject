@@ -185,11 +185,11 @@
         let SOURCE_URL = this.getComState.loginType
         console.log(SOURCE_URL);
         API.bicai.login(data, (res) => {
-          // API.watchApi({
-          //   FUNCTION_ID: 'ptb0A007', // 点位
-          //   REMARK_DATA: '异业合作-登录', // 中文备注
-          //   SOURCE_URL: SOURCE_URL
-          // })
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+            SOURCE_URL: SOURCE_URL
+          })
           // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
 
 
@@ -237,10 +237,10 @@
             this.checkAuthStatus()
           }
         }, err => {
-          // API.watchApi({
-          //   FUNCTION_ID: 'ptb0A007', // 点位
-          //   REMARK_DATA: '异业合作-登录', // 中文备注
-          // })
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A007', // 点位
+            REMARK_DATA: '异业合作-登录', // 中文备注
+          })
           this.cms = ''
           // this.getMsgCodeSuccess = false
           // this.codeText = '重新发送'

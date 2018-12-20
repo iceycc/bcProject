@@ -2,28 +2,6 @@
   <div id="app">
     <div class="wrap">
       <app-bar :title="title"></app-bar>
-      <!--<div class="m-swiper">-->
-      <!--<swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">-->
-      <!--&lt;!&ndash; slides &ndash;&gt;-->
-
-      <!--<swiper-slide v-for="item,index in NAV_List" :key="index">-->
-      <!--<div class="card">-->
-      <!--<div class="top"><img src="~@/assets/images/production/rili.png"-->
-      <!--alt=""><span>{{item.PERIOD_DAY_TXT}}</span></div>-->
-      <!--<section class="center">{{item.RATE | formatNum}}%</section>-->
-      <!--<section class="m-bottom">-->
-      <!--<span>随时支取</span>-->
-      <!--<span>{{item.MIN_AMOUNT}}元起存</span>-->
-      <!--<span>保本</span>-->
-      <!--</section>-->
-      <!--</div>-->
-      <!--</swiper-slide>-->
-
-      <!--</swiper>-->
-      <!--<div class="m-bannerbottom">-->
-      <!--<span>累计购买笔数 {{productDetail.BUY_COUNT}}</span>-->
-      <!--</div>-->
-      <!--</div>-->
       <div class="banner">
         <div class="bannercontent">
           <div class="bannertop">
@@ -35,11 +13,9 @@
               </p>
             </div>
             <div class="bannertopright">
-              <p class="p-text" style="font-size: 0.4rem">赎回到账时间</p>
+              <p class="p-text" style="font-size: 0.4rem">理财期限</p>
               <p>
-                <!--<strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>-->
-                <strong style="font-size: 1rem">
-                  T+{{productDetail.PERIOD_ACCOUNT?productDetail.PERIOD_ACCOUNT:0}}</strong>
+                <strong style="font-size: 1rem"> {{productDetail.PERIOD}} </strong>
                 <span style="font-size: .5rem;">天</span>
               </p>
             </div>
@@ -47,13 +23,10 @@
           <div class="bannerbottom">
             <ul>
 
-              <!--<li class="bannerbottomfirst clearfix"-->
-              <!--v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险-->
-              <!--</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>-->
+              <li class="bannerbottomfirst clearfix">
+                <img src="@/assets/images/icon@2x.png" alt="">
+                <span>{{productDetail.RISK_LEVEL | RISK_LEVEL_filter}}</span>
+              </li>
               <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
               <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>
             </ul>
@@ -82,24 +55,41 @@
       <!--</div>-->
       <!--</div>-->
       <div class="contenttop">
-        <p>产品详情</p>
+        <p>交易规则</p>
         <div class="bannercontent">
-          <span class="bannercontenttitle">起存金额</span>
-          <span class="bannercontenttitlecontent">{{productDetail.MIN_AMOUNT}}元</span>
+          <span class="bannercontenttitle">审核方式</span>
+          <span class="bannercontenttitlecontent">{{productDetail.IS_INTERVIEW | IS_INTERVIEW_filter}}</span>
         </div>
-
-        <div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">
+        <div class="bannercontent">
+          <span class="bannercontenttitle">起购金额</span>
+          <!--<span class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT | TXT_MIN_AMOUNT_Filter | formatNum}}元</span>-->
+          <span class="bannercontenttitlecontent">{{productDetail.TXT_MIN_AMOUNT}}</span>
+        </div>
+        <div class="bannercontent">
           <span class="bannercontenttitle">递增金额</span>
           <span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>
         </div>
         <div class="bannercontent">
-          <span class="bannercontenttitle">支取时间</span>
-          <span
-            class="bannercontenttitlecontent">随时支取</span>
+          <span class="bannercontenttitle">剩余额度</span>
+          <span class="bannercontenttitlecontent">{{productDetail.REMAIN_AMT | formatNum}} 元</span>
         </div>
-        <div class="bannercontent">
-          <span class="bannercontenttitle">产品类型</span>
-          <span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER(productDetail.DEPOSIT_TYPE_ID)}}</span>
+        <div class="progress_bar">
+          <div class="circle left">
+            <span>{{productDetail.COLLECT_START_DATE}}</span>
+            <strong>募集开始</strong>
+          </div>
+          <div class="circle">
+            <span>{{productDetail.COLLECT_END_DATE}}</span>
+            <strong>募集结束</strong>
+          </div>
+          <div class="circle">
+            <span>{{productDetail.VALUE_DATE}}</span>
+            <strong>起息日</strong>
+          </div>
+          <div class="circle right">
+            <span>{{productDetail.FIN_END_DATE}}</span>
+            <strong>到期</strong>
+          </div>
         </div>
       </div>
       <div class="wrapicon">
@@ -146,7 +136,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_TEXT_AREA">
+          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
           </div>
         </div>
       </div>
@@ -190,33 +180,15 @@
 </template>
 <script>
   import API from "@/service";
+  import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
   import Register from './commom'
-  import 'swiper/dist/css/swiper.css'
-  import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  // require styles
-  import 'swiper/dist/css/swiper.css'
 
   export default {
     data() {
       return {
-        NAV_List: [{}, {}],
-        swiperOption: {
-          slidesPerView: "auto",
-          centeredSlides: 0,
-          watchSlidesProgress: 0,
-          pagination: ".swiper-pagination",
-          paginationClickable: 0,
-          onProgress: function (a) {
-            var b, c, d;
-            for (b = 0; b < a.slides.length; b++) c = a.slides[b], d = c.progress, scale = 1 - Math.min(Math.abs(.2 * d), 1), es = c.style, es.opacity = 1 - Math.min(Math.abs(d / 2), 1), es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = "translate3d(0px,0," + -Math.abs(150 * d) + "px)"
-          },
-          onSetTransition: function (a, b) {
-            for (var c = 0; c < a.slides.length; c++) es = a.slides[c].style, es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = b + "ms"
-          }
-        },
         productDetail: {
           RATE: "",
           PERIOD: "",
@@ -239,6 +211,7 @@
         title: "",
         PRD_TYPE: "",
         canEdit: false,
+
         defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
@@ -247,9 +220,6 @@
     },
     mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
     computed: {
-      // swiper() {
-      //   return this.$refs.mySwiper.swiper
-      // },
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
@@ -262,16 +232,7 @@
 
       }
     },
-    mounted() {
-      // current swiper instance
-      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-      // console.log('this is current swiper instance object', this.swiper)
-      // this.swiper.slideTo(1, 1000, false)
-    },
-    components: {
-      // swiper,
-      // swiperSlide
-    },
+
     created() {
       this.title = this.$route.query.title;
       this.proID = this.$route.query.PRO_ID;
@@ -285,7 +246,29 @@
       }
     },
     filters: {
-      PRD_TYPE_ID_FILTER(val, type) {
+      RISK_LEVEL_filter(val) {
+        let str = ''
+        switch (val - 0) {
+          case -1:
+          case 1:
+            str = '低风险'
+            break;
+          case 2:
+            str = '中低风险'
+            break
+          case 3:
+            str = '中风险'
+            break
+          case 4:
+            str = '中高风险'
+            break
+          case 5:
+            str = '高风险'
+            break
+        }
+         return str
+      },
+      PRD_TYPE_ID_FILTER(val) {
         let str = '产品类型';
         switch (val - 0) {
           case 1:
@@ -296,25 +279,6 @@
             break;
           case 3:
             str = '纯债'
-            break;
-          case 4:
-            //  1：活期
-            //  2：智能
-            //  3：结构性
-            //  4：
-            if (type == 1) {
-              str = '活期存款'
-            }
-            if (type == 2) {
-              str = '智能存款'
-            }
-            if (type == 3) {
-              str = '结构性存款'
-            }
-            if (type == 4) {
-              str = '存款'
-            }
-            break;
         }
         return str
       },
@@ -346,8 +310,6 @@
       next();
     },
     methods: {
-      callback() {
-      },
       formatNumHandle(cash) {
         this.canEdit = false
         if (!(cash - 0) || !cash) {
@@ -436,10 +398,6 @@
         let data = {
           ID: id + ""
         };
-        // let data = {
-        //   ID: '13661',
-        //   // RATEID:'394'
-        // }
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
           this.setProType(res,data)
@@ -450,11 +408,11 @@
           let str = this.productDetail.TXT_MIN_AMOUNT;
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
-          this.NAV_List = res.NAV_List
           // IS_REALTIME_DATA_PRD
           // 1是，走无密码登录带红色提示（亿联）
           // 0否，走无密码的登录页（郑州，众邦
           // todo
+
           this.IS_REALTIME_DATA_PRD = res.IS_REALTIME_DATA_PRD
           this.setComState({type: 'IS_REALTIME_DATA_PRD', value: ''})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;
@@ -478,7 +436,6 @@
             }
           }
 
-
           this.type = res.IS_ENABLED;
           this.btnType = this.type == 1 ? "安全购买" : "预约下期";
         });
@@ -495,9 +452,6 @@
         this.setComState({type: 'goBuy', value: goBuyData})
         this.setComState({type: 'loginType', value: '安全购买'})
         let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        console.log(TOKEN);
-        // 新增一个登录授权的情况
-
         if (TOKEN) {
           this.checkAuthStatus()
         } else {
@@ -509,7 +463,7 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
-  /*@import "./swiper.scss";*/
+
   html, body {
     width: 100%;
   }
@@ -597,11 +551,19 @@
   }
 
   .banner .bannercontent .bannerbottom .bannerbottomfirst {
-    background-image: url(~@/assets/images/icon@2x.png) no-repeat;
-    background-position: 0.1rem;
-    background-size: 0.5rem;
-    width: 30%;
+    padding-right: px2rem(20);
     border-right: 1px solid rgba(255, 255, 255, .5);
+
+    img {
+      width: px2rem(16);
+      height: px2rem(16);
+      vertical-align: top;
+    }
+
+    span {
+      vertical-align: top;
+      font-size: px2rem(12);
+    }
   }
 
   .banner .bannercontent .bannerbottom .bannerbottomtwo {
@@ -628,7 +590,6 @@
     height: 2rem;
     border-bottom: 1px solid #DCDCDC;
     color: #666;
-
   }
 
   .contenttop .bannercontent .bannercontenttitle {
@@ -746,27 +707,70 @@
 
   }
 
-  .circle {
+  .progress_bar {
     position: relative;
-    z-index: 2;
-    width: 0.3rem;
-    height: 0.3rem;
-    border-radius: 50%;
-    border: 0.07rem solid #2B74FE;;
-    box-sizing: border-box;
-    background: radial-gradient(#fff 50%, #fff 50%);
-    white-space: nowrap;
+    margin: px2rem(50) auto px2rem(10);
+    display: flex;
+    width: px2rem(335);
+    justify-content: space-between;
+    color: #666;
 
-    &.left {
-      margin-left: px2rem(5);
+    &:before {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      content: '';
+      display: block;
+      width: 100%;
+      height: px2rem(2);
+      background: #2B74FE;;
+    }
+
+    .circle {
+      position: relative;
+      z-index: 2;
+      width: 0.3rem;
+      height: 0.3rem;
+      border-radius: 50%;
+      border: 0.07rem solid #2B74FE;;
+      box-sizing: border-box;
+      background: radial-gradient(#fff 50%, #fff 50%);
+      white-space: nowrap;
+
+      &.left {
+        margin-left: px2rem(5);
+      }
+
+      &.right {
+        margin-right: px2rem(5);
+      }
+    }
+
+    .circle strong {
+      position: absolute;
+      left: px2rem(-12);
+      top: px2rem(-26);
+      font-size: px2rem(12);
+    }
+
+    .circle span {
+      position: absolute;
+      left: px2rem(-30);
+      top: 0.5rem;
+      font-size: px2rem(13);
+    }
+
+    .left span {
+      left: px2rem(-15);
+    }
+
+    .right span {
+      left: px2rem(-45);
 
     }
 
-    &.right {
-      margin-right: px2rem(5);
-
-    }
   }
+
 
   .wrapicon {
     box-sizing: border-box;
@@ -820,30 +824,6 @@
   /*background: #2B74FE;;*/
   /*}*/
 
-  .circle span {
-    position: absolute;
-    left: px2rem(-30);
-    top: 0.5rem;
-    font-size: px2rem(13);
-  }
-
-  .left span {
-    left: px2rem(-15);
-
-  }
-
-  .right span {
-    left: px2rem(-45);
-
-  }
-
-  .circle strong {
-    position: absolute;
-    left: -0.3rem;
-    top: -0.8rem;
-    font-size: 0.4rem;
-
-  }
 
   .start {
     width: px2rem(12);
@@ -953,86 +933,13 @@
   }
 
   .p-icon {
-    width: px2rem(22);
-    height: px2rem(22);
+    width: 22px;
+    height: 22px;
     background: url("~@/assets/images/p-safe@2x.png") no-repeat 0 0;
     background-size: 100%;
     position: relative;
     top: px2rem(6);
     margin-right: px2rem(4)
   }
-
-  .m-swiper {
-    .m-bannerbottom {
-      text-align: center;
-      font-size: px2rem(13);
-      color: #508CEE;
-    }
-
-    .swiper-container {
-      width: 100%;
-      perspective: 1200px
-    }
-
-    .swiper-slide {
-      width: 80%;
-      transform-style: preserve-3d;
-      margin: 0 auto;
-      height: px2rem(170);
-      background: url("~@/assets/images/production/Bankcopy@2x.png") no-repeat center center;
-      background-size: contain;
-    }
-
-    .swiper-slide-next, .swiper-slide-prev {
-      width: 70%;
-    }
-
-    .card {
-      width: 100%;
-      margin: 0 auto;
-      display: block;
-      box-sizing: border-box;
-      padding: px2rem(30) px2rem(30) 0;
-      color: #fff;
-
-      .center {
-        font-size: px2rem(51);
-        height: px2rem(51);
-        text-align: center;
-      }
-
-      .m-bottom {
-        display: flex;
-        padding-top: px2rem(15);
-        height: px2rem(30);
-        font-size: px2rem(11);
-        text-align: center;
-
-        span {
-          flex: 1;
-
-        }
-      }
-
-      .top {
-        vertical-align: top;
-        font-size: 0;
-
-        span {
-          padding-left: px2rem(10);
-          font-size: px2rem(15);
-          line-height: px2rem(15);
-        }
-
-        img {
-          display: inline-block;
-          width: px2rem(17);
-        }
-      }
-
-    }
-  }
-
-
 </style>
 

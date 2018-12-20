@@ -161,7 +161,7 @@
 
           // PRD_INDEX_ID:'',
           // currentPage: this.searchCondition.pageNo,
-          currentPage: "0",
+          currentPage: "1",
           // START_DATE: '2020-08-26',
           // END_DATE: '2020-08-27',
           // START_DATE: this.startDate,
@@ -192,7 +192,7 @@
         // START_DATE	开始日期
         // END_DATE	结束日期
         let data = {
-          currentPage: "0",
+          currentPage: "1",
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
           // START_DATE: '2020-08-26',
           // END_DATE: '2020-08-27',

@@ -393,17 +393,17 @@
             } else {
               // this.pollHandle()
             }
-            // API.watchApi({
-            //   FUNCTION_ID: 'ptb0A004', // 点位
-            //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-            // })
+            API.watchApi({
+              FUNCTION_ID: 'ptb0A004', // 点位
+              REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+            })
 
           },
           err => {
-            // API.watchApi({
-            //   FUNCTION_ID: 'ptb0A004', // 点位
-            //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-            // })
+            API.watchApi({
+              FUNCTION_ID: 'ptb0A004', // 点位
+              REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+            })
             // this.pollHandle()
             this.errMsg = err
             setTimeout(() => {

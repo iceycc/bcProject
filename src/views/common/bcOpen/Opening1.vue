@@ -190,10 +190,10 @@
     methods: {
       doOpeningFirstFactory() {
         this.checkID()
-        // API.watchApi({
-        //   FUNCTION_ID: 'ptb0A003', // 点位
-        //   REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
-        // })
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A003', // 点位
+          REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
+        })
         // this.$store.commit('SET_OPENING1_DATA', this.data)
         // // this.ORG_ID = this.$store.getters.GET_ORG_ID
         // this.ORG_ID = util.storage.session.get('ORG_ID') || ''

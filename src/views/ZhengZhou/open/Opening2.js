@@ -206,10 +206,10 @@ export default {
           setTimeout(() => {
             this.errMsg = ''
           }, 2000)
-          // API.watchApi({
-          //   FUNCTION_ID: 'ptb0A004', // 点位
-          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          // })
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A004', // 点位
+            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          })
           // Bus.$emit(BusName.showToast, res.MSG)
           this.setComState({type: 'openingData', value: res})
           this.$router.push({
@@ -217,10 +217,10 @@ export default {
           })
         },
         err => {
-          // API.watchApi({
-          //   FUNCTION_ID: 'ptb0A004', // 点位
-          //   REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          // })
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A004', // 点位
+            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+          })
           this.codeText = '重新发送'
           this.disable = false
           this.errMsg = err
