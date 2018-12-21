@@ -364,8 +364,10 @@
         };
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
+          // 获取产品属性用于后续的判断跳转操作
           this.setProType(res,data)
           this.productDetail = res;
+          // 产品
           this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
           this.title = res.PRD_NAME
           // 判断起购金额是否大于默认金额
@@ -375,8 +377,7 @@
           // IS_REALTIME_DATA_PRD
           // 1是，走无密码登录带红色提示（亿联）
           // 0否，走无密码的登录页（郑州，众邦
-          // todo
-
+          //
           this.IS_REALTIME_DATA_PRD = res.IS_REALTIME_DATA_PRD
           this.setComState({type: 'IS_REALTIME_DATA_PRD', value: ''})
           this.PRD_TYPE = this.productDetail.PRD_TYPE;

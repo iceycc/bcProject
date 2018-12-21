@@ -2,13 +2,12 @@
   <div>
     <app-bar title="绑定银行卡"></app-bar>
     <section class="card-list">
-      <section class="bank-card">
-        <!--<img :src="imgSrc + bg_IMG" alt="" class="bgimg">-->
+      <section class="bank-card" v-for="card,index in CARD_LIST" :key="index">
         <section class="top">
-          <img :src="imgSrc + logo" alt="" class="logo">
+          <img :src="imgSrc + card.CARD_BANK_URL" alt="" class="logo">
           <section class="bank">
-            <p class="bank-name">中信直销银行</p>
-            <p class="bank-info">隶属于廊坊直销银行</p>
+            <p class="bank-name">{{card.CARD_BANK_NAME}}</p>
+            <p class="bank-info">隶属于{{card.CARD_BANK_NAME}}</p>
           </section>
           <section>
             默认卡
@@ -17,6 +16,7 @@
         <section class="card-no">
             <p>**** **** **** **** ****</p>
         </section>
+        <!--<img :src="imgSrc + card.CARD_BANK_URL" alt="" class="bgimg" :style="'background:url ">-->
       </section>
     </section>
     <div class="add-card" @click="addBank">添加银行卡</div>
@@ -39,6 +39,7 @@
         imgSrc,
         logo: '',
         sheetVisible: false,
+        CARD_LIST:[],
         actions:[
           {
             name: '设为默认卡',
@@ -62,6 +63,7 @@
       getBankList() {
         let data = {}
         API.bank.apiBandCard(data, res => {
+          this.CARD_LIST = res.CARD_LIST
           this.bg_IMG = res.LOGO_BACKGROUND_URL
           this.logo = res.CARD_BANK_URL
         })
@@ -83,6 +85,7 @@
     padding-top:px2rem(30);
   }
   .bank-card {
+    position: relative;
     margin: 0 auto;
     width: px2rem(342);
     height: px2rem(135);
@@ -91,6 +94,9 @@
     box-sizing: border-box;
     padding: px2rem(20);
     .bgimg {
+      position: absolute;
+      top:0;
+      left: 0;
       width: 100%;
       height: 100%;
     }
