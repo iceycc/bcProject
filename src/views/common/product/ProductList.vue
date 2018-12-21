@@ -228,11 +228,7 @@
       }
       ,
       goDetail(bank) {
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A001', // 点位
-          REMARK_DATA: '异业合作-落地页产品列表', // 中文备
-          FROM_ID: ID
-        })
+
         let {
           ID,// 产品id
           PRD_NAME, // 产品名称
@@ -242,6 +238,11 @@
           DEPOSIT_TYPE_ID, //存款类型
           RATE
         } = bank
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A001', // 点位
+          REMARK_DATA: '异业合作-落地页产品列表', // 中文备
+          FROM_ID: ID
+        })
         util.storage.session.set('ORG_ID', ORG_ID)
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',

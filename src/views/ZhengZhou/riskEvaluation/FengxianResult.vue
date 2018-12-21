@@ -33,6 +33,7 @@
     },
     mixins: [Mixins.UtilMixin],
     created() {
+      this.setComState({type: 'HAS_GRADE', value: '0'})
       let data = this.getComState.RiskResult
       console.log(data);
       this.RISK_LEVEL = data.RISK_LEVEL
@@ -104,11 +105,14 @@
     color: #333;
     margin-top: px2rem(40);
     padding: 0 1rem;
+
     .fenxiantitle {
       text-align: center;
+
       .info {
         font-size: px2rem(18);
       }
+
       .code {
         font-size: px2rem(38);
         color: #7396e4;
@@ -121,6 +125,7 @@
     display: flex;
     padding: 0 px2rem(25);
     margin-top: px2rem(40);
+
     .begain {
       flex: 1;
       text-align: center;

@@ -49,7 +49,8 @@ export const CheckAccountMixin ={
       API.common.apiQryLoginStatus(data,res=>{
         let HAS_LOGIN = res.HAS_LOGIN // 是否已经登陆 0：不需要登录 1：已登录 2：未登陆
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK  //  1：已开户 2：未开户
-        let HAS_GRADE = res.HAS_GRADE // 是否已做风险评估1：未做 2：已做
+        let HAS_GRADE = res.HAS_GRADE
+        this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
         if(HAS_OPEN_BANK==1){
            // 已经开户
           this.$router.push({name: Page})

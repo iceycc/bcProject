@@ -119,8 +119,15 @@
       // 初始化数据
       initData(proData) {
         // 页面数据渲染
+        // 判断
+        let HAS_GRADE = this.getComState.HAS_GRADE || '0'
+        if (HAS_GRADE == 1) {
+          // 去评测
+          this.setComState({type: 'loginType', value: '安全购买'})
+          this.$router.push({name: PageName.VerificationSuccess})
+          return
+        }
         this.getInfo() // 用于查询账户余额
-
         this.proDetail.MIN_AMOUNT = proData.MIN_AMOUNT // 数据
         this.proDetail.INCRE_AMOUNT = proData.INCRE_AMOUNT || '0'// 数据
         this.proDetail.logo = proData.logo || proData.LOGO_URL// 数据
@@ -310,7 +317,7 @@
               this.setComState({type: 'buyData', value: result})
               this.$router.push({
                 name: PageName.BuySuccess,
-                query: {TEAM_ID:this.TEAM_ID,INVEST_ID:this.INVEST_ID}
+                query: {TEAM_ID: this.TEAM_ID, INVEST_ID: this.INVEST_ID}
               })
               return
             } else {

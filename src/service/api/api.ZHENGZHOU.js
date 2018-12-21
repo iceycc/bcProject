@@ -29,7 +29,7 @@ export default {
       let options = {
         url: '/openapi/comm/apiQryLoginStatus',
         params: {
-          IS_RET_GRADE: '2',
+          IS_RET_GRADE: '1',
             ...params
         },
       }

@@ -1,7 +1,7 @@
 export default {
   state: {
     reload: false, // 用于强制刷新 密码控件暂时只能强制刷新重载 否则不行
-    HAS_GRADE: '', // 是否评估 1 否  2 是
+    HAS_GRADE: '0', // 是否评估 1 否  2 是
     LoginTarget: '', // 其他页面跳转登录页进行跳转的页面  主要跳转后情况
     ProDuctData: '', // 其他页面跳转登录页进行跳转的页面  主要跳转后情况
     LAST_STEP_NUM: '', // 开户步数

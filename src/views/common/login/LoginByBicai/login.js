@@ -219,11 +219,13 @@ export default {
     // 判断该用户在本行的状态
     checkBankOpenAndLogin() {
       let data = {
-        IS_RET_GRADE: '2'
+        IS_RET_GRADE: '1'
       }
       API.common.apiQryLoginStatus(data, res => {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
         let HAS_LOGIN = res.HAS_LOGIN
+        let HAS_GRADE = res.HAS_GRADE
+        this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
           this.loginSuccess(res)

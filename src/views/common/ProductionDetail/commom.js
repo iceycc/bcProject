@@ -9,7 +9,8 @@ let MsgText = '应银行监管要求，需先开通银行二类户，通过二�
 export default {
   data() {
     return {
-      ORG_ID: ''
+      ORG_ID: '',
+      HAS_GRADE: ''// 是否风险测评
     }
   },
   created() {
@@ -29,20 +30,19 @@ export default {
         API.watchApi({
           FUNCTION_ID: 'ptb0A002',
           REMARK_DATA: '异业合作-产品详情页-购买-安全购买', // 中文备注
-          FROM_ID: this.proID, // 产品ID、机构ID
+          FROM_ID: this.proID + '', // 产品ID、机构ID
         })
       } else {
         // 此处一下的逻辑没有判断预约的逻辑。如有添加以后再添加
         API.watchApi({
           FUNCTION_ID: 'ptb0A002',
           REMARK_DATA: '异业合作-产品详情页-购买-预约下期', // 中文备注
-          FROM_ID: this.proID, // 产品ID、机构ID
+          FROM_ID: this.proID + '', // 产品ID、机构ID
         })
       }
       this.setComState({type: 'goBuy', value: goBuyData})
       this.setComState({type: 'loginType', value: '安全购买'})
       let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-      console.log(TOKEN);
       if (TOKEN) {
         this.checkAuthStatus()
       } else {
@@ -152,11 +152,13 @@ export default {
     // 判断该用户在本行的状态
     checkBankOpenAndLogin() {
       let data = {
-        IS_RET_GRADE: '2'
+        IS_RET_GRADE: '1'
       }
       API.common.apiQryLoginStatus(data, res => {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
         let HAS_LOGIN = res.HAS_LOGIN
+        let HAS_GRADE = res.HAS_GRADE
+        this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
           this.loginSuccess(res)
