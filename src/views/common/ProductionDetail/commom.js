@@ -16,6 +16,42 @@ export default {
     this.ORG_ID = util.storage.session.get('ORG_ID')
   },
   methods: {
+
+
+    goNext() {
+      console.log(this.proID);
+      this.removeComState('ProDuctData')
+      let goBuyData = {
+        id: this.proID,
+        logo: this.productDetail.LOGO_URL,
+        ...this.productDetail
+      };
+      if (this.type == 1) {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A002',
+          REMARK_DATA: '异业合作-产品详情页-购买-安全购买', // 中文备注
+          FROM_ID: this.proID, // 产品ID、机构ID
+        })
+      } else {
+        // 此处一下的逻辑没有判断预约的逻辑。如有添加以后再添加
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A002',
+          REMARK_DATA: '异业合作-产品详情页-购买-预约下期', // 中文备注
+          FROM_ID: this.proID, // 产品ID、机构ID
+        })
+      }
+      this.setComState({type: 'goBuy', value: goBuyData})
+      this.setComState({type: 'loginType', value: '安全购买'})
+      let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+      console.log(TOKEN);
+      if (TOKEN) {
+        this.checkAuthStatus()
+      } else {
+        this.$router.push({name: PageName.Login})
+      }
+    },
+
+
     setProType(res, data) {
       API.bicai.getPrdFootInfo(data, res => {
         // 新增 平安银行 这种登录授权的 0：使用之前的逻辑 1：实名认证后，调用免登接口

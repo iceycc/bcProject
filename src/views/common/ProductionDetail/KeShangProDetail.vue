@@ -446,23 +446,6 @@
         });
       },
 
-      goNext() {
-        console.log(this.proID);
-        this.removeComState('ProDuctData')
-        let goBuyData = {
-          id: this.proID,
-          logo: this.productDetail.LOGO_URL,
-          ...this.productDetail
-        };
-        this.setComState({type: 'goBuy', value: goBuyData})
-        this.setComState({type: 'loginType', value: '安全购买'})
-        let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
-        if (TOKEN) {
-          this.checkAuthStatus()
-        } else {
-          this.$router.push({name: PageName.Login})
-        }
-      }
     }
   };
 </script>
