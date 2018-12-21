@@ -143,6 +143,8 @@ export default {
         // 5:身份证过期
         console.log(AUTH_STATUS);
         let H5_URL = this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
+        let AUTH_URL_FLAG = this.$route.query.AUTH_URL_FLAG || '0'
+
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -158,11 +160,19 @@ export default {
             this.$router.push(PageName.BcOpening3)
             break;
           case 4:
-            // this.checkProTo(this.checkBankStatus, this.checkBankStatus)
-
-            // 判断产品类型 区分openAPI
+            if (AUTH_URL_FLAG == 1) {
+              // h5活动页直接跳转来的 判断AUTH_URL_FLAG唯一 获取免登录地址
+              API.bicai.getAuthUrl({}, res => {
+                if (res.STATUS == 1) {
+                  Bus.$emit(BusName.showToast, res.MESSAGE)
+                } else {
+                  window.location.href = res.AUTH_URL
+                }
+              })
+              return
+            }
             if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
-              // 打通openAOPI的
+              // 判断产品类型 区分openAPI
               // this.checkBankStatus()
               this.checkBankOpenAndLogin()
             } else if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {

@@ -147,13 +147,13 @@
           PHONE: true, // 手机号
           USER_CARD_ID_DATA: true, //身份证有效期
         },
-        validityPeriod:'',
-        frontSessionId:'',
-        idNumber:'',
-        idName:''
+        validityPeriod: '',
+        frontSessionId: '',
+        idNumber: '',
+        idName: ''
       }
     },
-    mixins:[Check],
+    mixins: [Check],
     components: {
       JsSelect,
       IconFont
@@ -179,8 +179,9 @@
       },
     },
     created() {
-      let H5_URL =  this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
-      if(H5_URL){
+      let H5_URL = this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
+      let AUTH_URL_FLAG = this.$route.query.AUTH_URL_FLAG || '0'
+      if (H5_URL || AUTH_URL_FLAG) {
         // H5链接过来的
         this.checkAuthStatus()
       }
@@ -320,19 +321,19 @@
        */
       checkID() {
         // validityPeriod:'',
-          // frontSessionId:'',
-          // idNumber:'',
-          // idName:''
-        if(this.data.USER_NAME !=this.idName){
-          Bus.$emit(BusName.showToast,'姓名不一致')
+        // frontSessionId:'',
+        // idNumber:'',
+        // idName:''
+        if (this.data.USER_NAME != this.idName) {
+          Bus.$emit(BusName.showToast, '姓名不一致')
           return
         }
-        if(this.data.USER_CARD_ID !=this.idNumber){
-          Bus.$emit(BusName.showToast,'身份证不一致')
+        if (this.data.USER_CARD_ID != this.idNumber) {
+          Bus.$emit(BusName.showToast, '身份证不一致')
           return
         }
-        if(this.data.USER_CARD_ID_DATA !=this.validityPeriod){
-          Bus.$emit(BusName.showToast,'身份证有效期不一致')
+        if (this.data.USER_CARD_ID_DATA != this.validityPeriod) {
+          Bus.$emit(BusName.showToast, '身份证有效期不一致')
           return
         }
         let data = {

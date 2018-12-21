@@ -152,7 +152,7 @@ export default {
     }
     return http.post(options, success, error)
   },
-  // GET_AUTH_STATUS 登录后判断是否实名
+  // GET_AUTH_STATUS  登录后判断是比财否实名
   getAuthStatus(params, success, error) {
     let options = {
       type: 'GET_AUTH_STATUS',

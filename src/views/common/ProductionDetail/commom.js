@@ -13,6 +13,7 @@ export default {
     }
   },
   created() {
+
     this.ORG_ID = util.storage.session.get('ORG_ID')
   },
   methods: {
@@ -52,7 +53,7 @@ export default {
     },
 
 
-    setProType(res, data) {
+    setProType(data) {
       API.bicai.getPrdFootInfo(data, res => {
         // 新增 平安银行 这种登录授权的 0：使用之前的逻辑 1：实名认证后，调用免登接口
         this.AUTH_URL_FLAG = res.AUTH_URL_FLAG || '0'

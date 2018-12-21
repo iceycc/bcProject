@@ -400,7 +400,7 @@
         };
         // API.commonApi.apiGetChannelPrdInfo(data, res => {
         API.bicai.getPrdInfo(data, res => {
-          this.setProType(res,data)
+          this.setProType(data)
           this.productDetail = res;
           this.productDetail.ORG_LEVEL = Math.floor(this.productDetail.ORG_LEVEL)
           this.title = res.PRD_NAME
