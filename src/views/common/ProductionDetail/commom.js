@@ -119,7 +119,6 @@ export default {
           case 3:
           case 4:
             this.checkBankOpenAndLogin()
-            // todo 再判断对应的直销银行有没有开户
             break;
           case 5:
             Bus.$emit(BusName.showToast, MsgText, 3000)

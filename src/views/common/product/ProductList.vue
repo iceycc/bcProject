@@ -242,6 +242,7 @@
           DEPOSIT_TYPE_ID, //存款类型
           RATE
         } = bank
+        util.storage.session.set('ORG_ID', ORG_ID)
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
         // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
