@@ -141,9 +141,9 @@
               if (ProAndOrgType.AUTH_URL_FLAG == 1) {
                 API.bicai.getAuthUrl({}, res => {
                   if (res.STATUS == 1) {
-                    Bus.$emit(BusName.showToast, res.MESSAGE)
-                  } else {
                     window.location.href = res.AUTH_URL
+                  } else {
+                    Bus.$emit(BusName.showToast, res.MESSAGE)
                   }
                 })
               } else {

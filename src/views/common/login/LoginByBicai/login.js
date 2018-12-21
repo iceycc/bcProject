@@ -3,6 +3,7 @@ import {LsName, BusName, PageName, PRO_PARAMS} from "@/Constant";
 import Bus from '@/plugin/bus'
 import util from "@/libs/util";
 import checkOpenApiAndH5 from './checkOpenApiAndH5'
+import Mixins from '@/mixins'
 
 let Base64 = require('js-base64').Base64;
 let timer;
@@ -25,9 +26,8 @@ export default {
       isfinancial: '0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
-  mixins: [checkOpenApiAndH5],
+  mixins: [checkOpenApiAndH5,Mixins.HandleMixin],
   created() {
-
     // this.checkProductType()
   },
   mounted() {
@@ -143,8 +143,8 @@ export default {
         // 5:身份证过期
         console.log(AUTH_STATUS);
         let H5_URL = this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
-        let AUTH_URL_FLAG = this.$route.query.AUTH_URL_FLAG || '0'
-
+        let FLAG = this.$route.query.AUTH_URL_FLAG || '0'
+        let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG = FLAG} = this.ProAndOrgType
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -160,43 +160,40 @@ export default {
             this.$router.push(PageName.BcOpening3)
             break;
           case 4:
+
             if (AUTH_URL_FLAG == 1) {
               // h5活动页直接跳转来的 判断AUTH_URL_FLAG唯一 获取免登录地址
               API.bicai.getAuthUrl({}, res => {
                 if (res.STATUS == 1) {
-                  Bus.$emit(BusName.showToast, res.MESSAGE)
-                } else {
                   window.location.href = res.AUTH_URL
+                } else {
+                  Bus.$emit(BusName.showToast, res.MESSAGE)
                 }
               })
               return
             }
-            if (this.ProAndOrgType.IS_SYNC_FLAG == 1) {
+            if (IS_SYNC_FLAG == 1) {
               // 判断产品类型 区分openAPI
               // this.checkBankStatus()
               this.checkBankOpenAndLogin()
-            } else if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
+            } else if (IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
               // 不是h5直联
               // 直接跳转
-
               if (H5_URL) {
                 // h5活动页跳转进来时判断是否有链接
                 window.location.href = H5_URL
                 return
               }
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-              if (this.href) {
-                window.location.href = this.href;
-                // let tempwindow=window.open('_blank'); // 先打开页面
-                // tempwindow.location=this.href; // 后更改页面地址
+              if (H5_URL_ANDRIOD || H5_URL_IOS) {
+                window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
               } else {
                 alert('跳转h5链接获取异常')
               }
             } else {
               this.checkBankOpenAndLogin()
-              // this.checkBankStatus()
             }
             break;
           case 5:
@@ -204,6 +201,11 @@ export default {
             if (H5_URL) {
               window.location.href = H5_URL
               return
+            }
+            if (H5_URL_ANDRIOD || H5_URL_IOS) {
+              window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
+            } else {
+              alert('跳转h5链接获取异常')
             }
             this.$router.push(PageName.BcOpening1)
             break;
@@ -258,10 +260,10 @@ export default {
           Bus.$emit(BusName.showToast, MsgText, 3000)
           this.setComState({type: 'openingData', value: res})
           // 众邦银行
-          if (this.ORG_ID == '227') {
-            // 成功
-            this.loginSuccess(res)
-          }
+          // if (this.ORG_ID == '227') {
+          //   // 成功
+          //   this.loginSuccess(res)
+          // }
           // 郑州银行
           if (this.ORG_ID == '49') {
             // 第三步
@@ -284,45 +286,7 @@ export default {
     },
     loginSuccess() {
       this.setComState({type: 'ISLogin', value: true})
-      // 判断openApi
-      // this.checkProTo(this.toPreProduct, this.toPreProduct)
-      let {IS_SYNC_FLAG, IS_REALTIME_DATA_PRD, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG = '0'} = this.ProAndOrgType
-      if (IS_SYNC_FLAG == 0) {
-        // 不是 openApi
-        if (IS_REALTIME_DATA_PRD == 0) {
-          // 不是h5直联
-          // 直接跳转
-          if (AUTH_URL_FLAG == 1) {
-            // 1：实名认证后，调用免登接口 返回H5直联的面登录路径
-            API.bicai.getAuthUrl({}, res => {
-              if (res.STATUS == 1) {
-                Bus.$emit(BusName.showToast, res.MESSAGE)
-              } else {
-                window.location.href = res.AUTH_URL
-              }
-            })
-          } else {
-            if (H5_URL_ANDRIOD || H5_URL_IOS) {
-              window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
-              // let tempwindow=window.open('_blank'); // 先打开页面
-              // tempwindow.location=this.href; // 后更改页面地址
-            } else {
-              alert('跳转第三方链接获取异常')
-            }
-          }
-        } else if (IS_REALTIME_DATA_PRD == 1) {
-          // h5直联
-          this.toPreProduct()
-        } else {
-          this.toPreProduct()
-
-        }
-      } else if (IS_SYNC_FLAG == 1) {
-        // 是 openApi
-        this.toPreProduct()
-      } else {
-        this.toPreProduct()
-      }
+      this.toPreProduct()
     }
   },
 

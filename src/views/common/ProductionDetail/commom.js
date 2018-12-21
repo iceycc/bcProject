@@ -1,10 +1,10 @@
 import API from "@/service"
 import {LsName, BusName, PageName} from "@/Constant";
 import Bus from '@/plugin/bus'
-import util from "../../../libs/util";
+import util from "@/libs/util";
+import Mixins from '@/mixins'
 
 let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
-
 
 export default {
   data() {
@@ -13,12 +13,10 @@ export default {
     }
   },
   created() {
-
     this.ORG_ID = util.storage.session.get('ORG_ID')
   },
+  mixins: [Mixins.HandleMixin],
   methods: {
-
-
     goNext() {
       console.log(this.proID);
       this.removeComState('ProDuctData')
@@ -113,12 +111,36 @@ export default {
             break;
           case 2:
             Bus.$emit(BusName.showToast, MsgText, 3000)
-
             this.$router.push(PageName.BcOpening2)
             break;
           case 3:
           case 4:
-            this.checkBankOpenAndLogin()
+            let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG} = this.getComState.ProAndOrgType
+            console.log('this.getComState.ProAndOrgType', this.getComState.ProAndOrgType);
+            if (IS_SYNC_FLAG == 0) {
+              // 非打通openApi
+              if (AUTH_URL_FLAG == 1) {
+                // 1：实名认证后，调用免登接口 返回H5直联的面登录路径
+                API.bicai.getAuthUrl({}, res => {
+                  if (res.STATUS == 1) {
+                    console.log(res.AUTH_URL);
+                    window.location.href = res.AUTH_URL
+                  } else {
+                    Bus.$emit(BusName.showToast, res.MESSAGE)
+                  }
+                })
+              } else {
+                // 0：使用之前的逻辑
+                if (H5_URL_ANDRIOD || H5_URL_IOS) {
+                  window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+                } else {
+                  alert('跳转h5链接获取异常')
+                }
+              }
+            } else {
+              // 打通openApi
+              this.checkBankOpenAndLogin()
+            }
             break;
           case 5:
             Bus.$emit(BusName.showToast, MsgText, 3000)
@@ -196,24 +218,7 @@ export default {
     },
     loginSuccess() {
       this.setComState({type: 'ISLogin', value: true})
-      let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG = '0'} = this.getComState.ProAndOrgType
-      if (IS_SYNC_FLAG == 0) {
-        if (AUTH_URL_FLAG == 1) {
-          // 1：实名认证后，调用免登接口 返回H5直联的面登录路径
-          API.bicai.getAuthUrl({}, res => {
-            if (res.STATUS == 1) {
-              Bus.$emit(BusName.showToast, res.MESSAGE)
-            } else {
-              window.location.href = res.AUTH_URL
-            }
-          })
-        } else {
-          // 0：使用之前的逻辑
-          window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
-        }
-      } else {
-        this.$router.push({name: PageName.Buying})
-      }
+      this.$router.push({name: PageName.Buying})
     },
   }
 }

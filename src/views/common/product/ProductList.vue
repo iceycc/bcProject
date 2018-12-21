@@ -228,11 +228,11 @@
       }
       ,
       goDetail(bank) {
-        // API.watchApi({
-        //   FUNCTION_ID: 'ptb0A001', // 点位
-        //   REMARK_DATA: '异业合作-落地页产品列表', // 中文备
-        //   FROM_ID: ID
-        // })
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A001', // 点位
+          REMARK_DATA: '异业合作-落地页产品列表', // 中文备
+          FROM_ID: ID
+        })
         let {
           ID,// 产品id
           PRD_NAME, // 产品名称

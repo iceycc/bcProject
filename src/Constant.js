@@ -9,6 +9,7 @@ let Configs = {
    * dev开发
    */
   DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
+  // DEV_HOST: 'http://192.168.100.126:8080/', // dev开发环境
   // DEV_HOST: 'https://finsuit.bicai365.com', // 生产
   // DEV_HOST: 'https://adv.bicai365.com', // adv测试
   // DEV_HOST: 'https://demo1.bicai365.com', // adv测试
@@ -33,6 +34,7 @@ export const HOST = process.env.NODE_ENV == 'development'
  * @type {string}
  */
 export const HOST_API = HOST + '/finsuit' // // api 接口地址
+// export const HOST_API = HOST  // // api 接口地址
 
 /**
  *  app下载地址

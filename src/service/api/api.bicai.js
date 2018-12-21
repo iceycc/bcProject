@@ -1,4 +1,5 @@
 import Http from "../http/http.bicai";
+import util from 'libs/util'
 
 let http = new Http()
 export default {
@@ -188,9 +189,14 @@ export default {
   },
   // 获取产品(货基，理财)详细信息
   getAuthUrl(params, success, error) {
+    let ORG_ID = util.storage.session.get('ORG_ID')
+
     let options = {
       type: 'GET_AUTH_URL',
-      params,
+      params: {
+        ORG_ID,
+        ...params
+      },
 
     }
     return http.post(options, success, error)
