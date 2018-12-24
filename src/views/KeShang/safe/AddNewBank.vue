@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-bar title="更换银行卡"></app-bar>
+    <app-bar title="添加新银行卡"></app-bar>
     <section class="m-form">
       <section class="bank">
         <span class="n-left">选择银行</span>
@@ -11,15 +11,20 @@
 
       </section>
       <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20"></active-input>
+      <active-input check-type="number" valuePlaceholder="验证码" v-model="msgCode" max="6">
+        <template slot="btn">
+          <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
+        </template>
+      </active-input>
       <section class="submit-box">
         <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
         <button class="submit-btn" @click="goNext">下一步</button>
       </section>
-      <section class="foot-text">
-        <p>温馨提示：</p>
-        <p>1.请您确认新绑定银行卡在银行绑定的手机号与旧卡 绑定手机号相同。</p>
-        <p>2.更换绑定银行卡前，请转出所有的投资资金并提现</p>
-      </section>
+      <!--<section class="foot-text">-->
+      <!--<p>温馨提示：</p>-->
+      <!--<p>1.请您确认新绑定银行卡在银行绑定的手机号与旧卡 绑定手机号相同。</p>-->
+      <!--<p>2.更换绑定银行卡前，请转出所有的投资资金并提现</p>-->
+      <!--</section>-->
     </section>
   </div>
 </template>
@@ -34,8 +39,7 @@
   import util from "libs/util";
   // import {HandleMixin,} from '@/mixins'
   import Mixins from "@/mixins";
-
-
+  let timer;
   export default {
     name: "changeBank",
     components: {
@@ -50,20 +54,19 @@
         AllBankListObj: {},
         errMsg: '',
         bankNo: '',
+        msgCode: '',
+        codeText: '获取验证码',
+        disable: false,
+
         bankNameToNo: false,
         params: {},
         ifGet: false,
-
-        OldBankInfo: {}
-
+        OldBankInfo: {},
+        time: 60
       }
     },
     mixins: [Mixins.HandleMixin],
     created() {
-      this.getErrMsg((beforeInfo) => {
-        this.errMsg = beforeInfo.msg
-      })
-
       this.getBankList()
       this.getOldBankInfo()
       // this.params = util.storage.session.get(LsName.Infos)
@@ -78,9 +81,23 @@
       }
     },
     methods: {
+      getMsgCode() {
+        let sTime = this.time
+        this.disable = true
+        timer = setInterval(() => {
+          if (sTime == 0) {
+            this.codeText = '重新发送'
+            this.disable = false
+            clearInterval(timer)
+            return
+          }
+          sTime--
+          this.codeText = `${sTime}s`
+        }, 1000)
+      },
       getOldBankInfo() {
-        this.OldBankInfo = this.getComState.Infos.hasCardList[0]
-        console.log(this.OldBankInfo);
+        this.OldBankInfo = this.getComState.hasCardList[0]
+        // console.log(this.OldBankInfo);
       },
       getBank(val) {
         this.bankText = val.name
@@ -108,12 +125,10 @@
         if (val == '') {
           this.showErrMsg('银行卡号不能为空')
           return true
-        }
-        else if (val.length < 15 || val.length > 19) {
+        } else if (val.length < 15 || val.length > 19) {
           this.showErrMsg('银行卡号有误，请确认后再次输入')
           return true
-        }
-        else {
+        } else {
           this.checkBankName(val)
           return false
         }
@@ -148,7 +163,7 @@
           this.errMsg = '';
         }, 4000)
       },
-      checkBankType(){
+      checkBankType() {
 
       },
       subumit() {
@@ -164,9 +179,9 @@
           // BANK_INNER  本行卡还是他行卡
           // OPEN_BANK  开户行名称
           PHONE_NUM: this.OldBankInfo.PHONE_NUM,
-          OLD_ACCOUNT_NO:this.OldBankInfo.CARD_NO,
+          OLD_ACCOUNT_NO: this.OldBankInfo.CARD_NO,
           NEW_ACCOUNT_NO: this.bankNo,
-          BANK_NO:''
+          BANK_NO: ''
         }
         let delMsg = true
 
@@ -220,10 +235,12 @@
     line-height: px2rem(42);
     background-size: 0.7rem 0.7rem;
     border-bottom: 1px #E5E5E5 solid;
+
     .n-left {
       font-size: px2rem(14);
       width: px2rem(60);
     }
+
     .bank-box {
       width: px2rem(150);
       box-sizing: border-box;
@@ -263,6 +280,19 @@
     padding-top: px2rem(20);
   }
 
+  .slot {
+    position: absolute;
+    display: inline-block;
+    z-index: -1;
+    bottom: px2rem(8);
+    right: 0;
+    border: 1px solid #2B74FE;
+    color: #2B74FE;
+    width: px2rem(80);
+    height: px2rem(25);
+    border-radius: px2rem(6);
+  }
+
   .bgbox {
     width: 100%;
     height: 100%;
@@ -272,18 +302,22 @@
     top: 0;
     left: 0;
     z-index: 3;
+
     .passbox {
       background: #fff;
       width: 80%;
       margin: 0 auto;
       box-sizing: border-box;
     }
+
     .top {
       padding: 0.4rem;
     }
+
     .field_row_key {
       font-size: 0.4rem;
     }
+
     .title {
       margin-bottom: 0.5rem;
       text-align: center;
@@ -291,14 +325,17 @@
       color: #666;
       height: .6rem;
       line-height: .6rem;
+
       img {
         vertical-align: top;
         width: .5rem;
       }
     }
+
     .field_row_wrap {
       margin-bottom: 0.2rem;
     }
+
     .field_row_value {
       border-radius: px2rem(4);
       border: 1px solid #DDD;
@@ -307,15 +344,18 @@
       padding-left: px2rem(3);
       margin: 0.2rem 0;
     }
+
     .info {
       font-size: 0.3rem;
       line-height: 0.6rem;
       color: #aeaeae;
     }
+
     .btn {
       border-top: 1px solid #efefef;
       padding: px2rem(14) 0;
       display: flex;
+
       button {
         color: #108EE9;
         font-size: px2rem(17);

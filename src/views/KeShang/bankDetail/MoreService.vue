@@ -2,14 +2,6 @@
   <div style="background: #f6f6f9;height: 100%;position:relative">
     <app-bar title="更多服务"></app-bar>
     <section class="m-main">
-      <section v-if="DOM_SHOW.fenxiang" class="more" @click="goPage(toPageName.fenxian)">
-             <span class="more-left">
-                        风险测评</span>
-        <span class="more-right">
-                    {{RISK_TOLERANCE_LEVEL | RISK_TOLERANCE_LEVEL_Filter}}
-                <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
-                    </span>
-      </section>
       <!--BindingBank-->
       <section v-if="DOM_SHOW.BindingBank" class="more" @click="goPage(toPageName.BindingBank)">
              <span class="more-left">
@@ -19,29 +11,6 @@
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
-      <section v-if="DOM_SHOW.ChangeBank" class="more" @click="goPage(toPageName.ChangeBank)">
-             <span class="more-left">
-                        更换银行卡</span>
-        <span class="more-right">
-                    已绑定{{CARD_BANK_NAME}}
-                <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
-                    </span>
-      </section>
-      <section v-if="DOM_SHOW.ResetPhone" class="more" @click="goPage(toPageName.ResetPhone)">
-             <span class="more-left">
-                        更换绑定手机号</span>
-        <span class="more-right">
-                <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
-                    </span>
-      </section>
-      <section v-if="DOM_SHOW.ResetPayPassword" class="more" @click="goPage(toPageName.ResetPayPassword)">
-             <span class="more-left">
-                        更换支付密码</span>
-        <span class="more-right">
-                <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
-                    </span>
-      </section>
-
     </section>
     <section class="waiting" v-if="infoShow">
       <p>暂不支持</p>
@@ -69,20 +38,12 @@
         infoShow: false,
         // 功能展示
         DOM_SHOW: {
-          fenxiang: false,
-          ChangeBank: false,
           BindingBank: true,
-          ResetPhone: false,
-          ResetPayPassword: false
         },
         RISK_TOLERANCE_LEVEL: '',
         CARD_BANK_NAME: '',
         toPageName: {
-          fenxian: PageName.FengxianResult,
-          ChangeBank: PageName.ChangeBank,
           BindingBank: PageName.BindingBank,
-          ResetPhone: PageName.ResetPhone,
-          ResetPayPassword: PageName.ResetPayPassword,
         },
         PHONE_NUM: '',
         fenxianQuery: {},
@@ -131,8 +92,8 @@
       },
       goPage(pageName) {
         // Bus.$emit(BusName.showToast,'暂不支持')
-        this.infoShow = true
-        return
+        // this.infoShow = true
+        // return
         let data = {}
         console.log(pageName);
         if (pageName == PageName.FengxianResult) {

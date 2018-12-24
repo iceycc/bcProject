@@ -144,10 +144,10 @@ export default [
     meta: {keepAlive: false, title: '用户授权服务协议', needLogin: false}
   },
   {
-    path: '/' + PageName.ChangeBank,
-    name: PageName.ChangeBank,
-    component: resolve => require(['views/KeShang/safe/ChangeBank.vue'], resolve),
-    meta: {keepAlive: false, title: '更换银行卡', needLogin: false}
+    path: '/' + PageName.AddNewBank,
+    name: PageName.AddNewBank,
+    component: resolve => require(['views/KeShang/safe/AddNewBank.vue'], resolve),
+    meta: {keepAlive: false, title: '添加新银行卡', needLogin: false}
   },
   {
     path: '/' + PageName.ResetPayPassword,

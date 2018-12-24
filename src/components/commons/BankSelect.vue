@@ -45,8 +45,6 @@
     // const Letter = [A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
     import {BusName, LsName} from "@/Constant";
     import Bus from '@/plugin/bus'
-
-
     const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     export default {
@@ -151,7 +149,7 @@
         background: rgba(1, 1, 1, 0.3);
         padding: 1rem 0.6rem;
         box-sizing: border-box;
-        z-index: 3;
+        z-index: 5;
         color: #333
     }
 

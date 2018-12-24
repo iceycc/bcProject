@@ -2,21 +2,21 @@
   <div>
     <app-bar title="绑定银行卡"></app-bar>
     <section class="card-list">
-      <section class="bank-card">
-        <!--<img :src="imgSrc + bg_IMG" alt="" class="bgimg">-->
+      <section class="bank-card" v-for="card,index in CARD_LIST" :key="index" @click="managerCard(card)">
         <section class="top">
-          <img :src="imgSrc + logo" alt="" class="logo">
+          <img :src="imgSrc + card.CARD_BANK_URL" alt="" class="logo">
           <section class="bank">
-            <p class="bank-name">中信直销银行</p>
-            <p class="bank-info">隶属于廊坊直销银行</p>
+            <p class="bank-name">{{card.CARD_BANK_NAME}}</p>
+            <p class="bank-info">隶属于{{card.CARD_BANK_NAME}}</p>
           </section>
           <section>
             默认卡
           </section>
         </section>
         <section class="card-no">
-            <p>**** **** **** **** ****</p>
+          <p>{{card.CARD_NUM |formatBankNo}}</p>
         </section>
+        <!--<img :src="imgSrc + card.CARD_BANK_URL" alt="" class="bgimg" :style="'background:url ">-->
       </section>
     </section>
     <div class="add-card" @click="addBank">添加银行卡</div>
@@ -28,18 +28,18 @@
   import Vue from 'vue'
   import API from '@/service'
   import {imgSrc} from "@/Constant";
-  import { Actionsheet } from 'mint-ui';
-  import {BusName} from "../../../Constant";
+  import {Actionsheet} from 'mint-ui';
+  import {BusName, PageName} from "../../../Constant";
+
   Vue.component(Actionsheet.name, Actionsheet);
   export default {
     name: "BindingBank",
     data() {
       return {
-        bg_IMG: '',
         imgSrc,
-        logo: '',
         sheetVisible: false,
-        actions:[
+        CARD_LIST: [],
+        actions: [
           {
             name: '设为默认卡',
             method: this.setDefaultCard
@@ -55,21 +55,26 @@
       this.getBankList()
     },
     methods: {
-      addBank(){
+      addBank() {
+        this.$router.push({name:PageName.AddNewBank})
+      },
+      // 点击弹出银行卡管理
+      managerCard(){
         // Bus.$emit(BusName.showToast,'')
         this.sheetVisible = true
       },
       getBankList() {
         let data = {}
         API.bank.apiBandCard(data, res => {
-          this.bg_IMG = res.LOGO_BACKGROUND_URL
-          this.logo = res.CARD_BANK_URL
+          this.CARD_LIST = res.CARD_LIST
+          // 保存绑定的银行卡列表
+          this.setComState({type:'hasCardList',value:res.CARD_LIST})
         })
       },
-      setDefaultCard(){
+      setDefaultCard() {
         console.log(1)
       },
-      unBindingCard(){
+      unBindingCard() {
         console.log(2)
       }
     }
@@ -79,10 +84,12 @@
 <style scoped lang="scss">
   @import "~@/assets/px2rem";
 
-  .card-list{
-    padding-top:px2rem(30);
+  .card-list {
+    padding-top: px2rem(30);
   }
+
   .bank-card {
+    position: relative;
     margin: 0 auto;
     width: px2rem(342);
     height: px2rem(135);
@@ -90,29 +97,38 @@
     background: linear-gradient(#FF8572, #FD5861); /* 标准的语法（必须放在最后） */
     box-sizing: border-box;
     padding: px2rem(20);
+
     .bgimg {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
     }
+
     .top {
       width: 100%;
       height: px2rem(50);
       display: flex;
       color: #fff;
+
       .logo {
         display: inline-block;
         margin-top: px2rem(4);
         width: px2rem(34);
         height: px2rem(34);
       }
-      .bank{
+
+      .bank {
         width: px2rem(190);
         padding-left: px2rem(10);
       }
+
       .bank-name {
         font-size: px2rem(18);
       }
-      .bank-info{
+
+      .bank-info {
         font-size: px2rem(12);
       }
     }
@@ -121,13 +137,15 @@
       width: 100%;
       box-sizing: border-box;
       padding-top: px2rem(20);
-      p{
+
+      p {
         font-size: px2rem(18);
         color: #fff;
         padding-left: px2rem(50);
       }
     }
   }
+
   .add-card {
     width: px2rem(255);
     height: px2rem(44);

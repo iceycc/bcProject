@@ -31,8 +31,8 @@ export const BankNo_Filter = util.BankNo_Filter
  */
 export const formatBankNo = util.formatBankNo
 
-
+// 将 0 转换为 0.00
 export const fromatMoneyFilter = util.fromatMoneyFilter
 
-//
+// 格式化利率。。最多显示小数点三位，大于四位直接截取。
 export const rateFormat = util.rateFormat
