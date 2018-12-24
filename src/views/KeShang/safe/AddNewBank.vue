@@ -30,14 +30,13 @@
 </template>
 
 <script>
-  import BankSelect from '@/components/commons/BankSelect'
+  import BankSelect from '@/components/keshang/KshBankSelect'
   import ActiveInput from '@/components/commons/ActiveInput'
   import ErrMsg from '@/components/commons/ErrMsg'
   import API from "@/service";
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import util from "libs/util";
-  // import {HandleMixin,} from '@/mixins'
   import Mixins from "@/mixins";
   let timer;
   export default {

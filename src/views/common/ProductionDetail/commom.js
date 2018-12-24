@@ -20,7 +20,7 @@ export default {
   methods: {
     goNext() {
       console.log(this.proID);
-      this.removeComState('ProDuctData')
+      // this.removeComState('ProDuctData')
       let goBuyData = {
         id: this.proID,
         logo: this.productDetail.LOGO_URL,
