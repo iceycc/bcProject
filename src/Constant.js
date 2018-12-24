@@ -169,6 +169,7 @@ export const BusName = {
   showLoading: 'showLoading',
   Indicator: 'Indicator',
   showSendMsg: 'showSendMsg',
+  showBankLonding: 'showBankLonding',
 }
 
 /**

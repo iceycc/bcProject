@@ -17,13 +17,23 @@
         <p>短信已发送至{{TEL}}请注意查收</p>
       </div>
     </transition>
-
+    <!--<transition name="fade">-->
+      <div class="banklonding" v-if="banklonding">
+        <div class="londingBox">
+          <div>
+            <img :src="imgSrc+ORG_URL" alt="" class="orgLogo">
+            <span class="orgName">{{ORG_NAME}}</span>
+          </div>
+          <p>正在跳转至{{ORG_NAME}}页面…</p>
+        </div>
+      </div>
+    <!--</transition>-->
   </div>
 </template>
 
 <script>
   import Bus from './plugin/bus'
-  import {BusName} from './Constant'
+  import {BusName,imgSrc} from './Constant'
   import util from "libs/util";
 
   export default {
@@ -34,11 +44,15 @@
     },
     data() {
       return {
+        imgSrc,
         msg: '',
         showToast: false,
         isRouterAlive: true,
         TEL: '',
-        showMsgToast: false
+        showMsgToast: false,
+        banklonding: false,
+        ORG_URL: '',
+        ORG_NAME: ''
       }
     },
 
@@ -54,7 +68,7 @@
           this.isRouterAlive = true
         })
       },
-      getComParams(){
+      getComParams() {
         // let {DEVICE_ID, CHANNEL_ID, APP_FLAG} = this.$store.getters.GET_ACCOUNT_STATE
         //
         // let urlQuery = this.$route
@@ -92,12 +106,27 @@
         util.storage.session.set("store", JSON.stringify(this.$store.state))
       })
       // console.log('设备userAgent>>' + navigator.userAgent);
-      Bus.$on(BusName.showToast, (val,time = 2000) => {
+      Bus.$on(BusName.showToast, (val, time = 2000) => {
         if (!val) return
         this.showToast = true
         this.msg = val
         setTimeout(() => {
           this.showToast = false
+        }, time)
+      })
+      Bus.$on(BusName.showBankLonding, ({LOGO_URL = '',ORG_NAME = ''},time=2000) => {
+        // todo
+        return
+        if (!LOGO_URL) return
+        if (!ORG_NAME) return
+        // if(ORG_NAME=='鼎融易'){
+        //   ORG_NAME = '郑州银行'
+        // }
+        this.banklonding = true
+        this.ORG_URL = LOGO_URL
+        this.ORG_NAME = ORG_NAME
+        setTimeout(() => {
+          this.banklonding = false
         }, time)
       })
       Bus.$on(BusName.showSendMsg, (val) => {
@@ -108,9 +137,9 @@
           val = PHONE_NUM
         }
         val = val + ''
-        if(val.length!==11) return
+        if (val.length !== 11) return
         this.showMsgToast = true
-        let msg = val.substr(0,3) + '***' + val.substr(7)
+        let msg = val.substr(0, 3) + '***' + val.substr(7)
         this.TEL = msg
         setTimeout(() => {
           this.showMsgToast = false
@@ -148,6 +177,44 @@
     z-index: 9999;
     text-align: center;
     font-size: 0.4rem;
+  }
+
+  .banklonding {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    text-align: center;
+
+    .londingBox {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .orgLogo {
+      height: px2rem(36);
+      width: px2rem(36);
+      margin-right: px2rem(6);
+      vertical-align: top;
+
+    }
+
+    .orgName {
+      vertical-align: top;
+      display: inline-block;
+      height: px2rem(36);
+      line-height: px2rem(36);
+      font-size: px2rem(22);
+    }
+
+    p {
+      font-size: px2rem(12);
+    }
   }
 
   .msg-toast {

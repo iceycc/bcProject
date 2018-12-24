@@ -5,8 +5,8 @@
     <!--<img class="logo" src="@/assets/images/logoaaa_03.png" alt="">-->
     <div class="logo-box">
       <img src="@/assets/images/common/logo@2x.png" alt="" @click="goBicaiOpen">
-      <span v-if="hasBank">比财平台{{BANK_NAME}}</span>
-      <span v-if="!hasBank">你好，欢迎来到比财</span>
+      <span v-if="hasBank">{{APP_FLAG_TEXT}}平台{{BANK_NAME}}</span>
+      <span v-if="!hasBank">你好，欢迎来到{{APP_FLAG_TEXT}}</span>
     </div>
     <div class="login_box">
       <section class="input-box">
@@ -26,8 +26,8 @@
       </section>
       <button :class="{tijiao:true,active:canClick}" @click="loginFactory" :disabled="!canClick">登录</button>
       <p class="infos">
-        温馨提示：未注册比财账号的手机号，登录时将自动注册，且代表您已同意 <a @click="goDocs('user')" class="doc" href="javascript:;">《比财服务协议》</a>和
-        <a @click="goDocs('bicaisafe')" class="doc" href="javascript:;">《比财隐私政策》</a>
+        温馨提示：未注册{{APP_FLAG_TEXT}}账号的手机号，登录时将自动注册，且代表您已同意 <a @click="goDocs('user')" class="doc" href="javascript:;">《{{APP_FLAG_TEXT}}服务协议》</a>和
+        <a @click="goDocs('bicaisafe')" class="doc" href="javascript:;">《{{APP_FLAG_TEXT}}隐私政策》</a>
       </p>
     </div>
     <section class="safe-code" v-show="showSafeCode">
@@ -46,7 +46,7 @@
     <section class="bottomcontent" v-if="ifOpenApi">
       <p>
         <img src="@/assets/images/icon_dunpai@2x.png" alt="">
-        {{BANK_NAME}}已与比财实现安全直连</p>
+        {{BANK_NAME}}已与{{APP_FLAG_TEXT}}实现安全直连</p>
     </section>
   </div>
 </template>
@@ -94,7 +94,8 @@
         ORG_ID: '',
         OPEN_H5_STATUS: '',
         isfinancial: '',
-        hasBank: false
+        hasBank: false,
+        APP_FLAG_TEXT:'比财'
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],

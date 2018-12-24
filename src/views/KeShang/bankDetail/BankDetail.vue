@@ -68,6 +68,10 @@
         <span class="top-right" v-if="!pass">
                     ****
                 </span>
+        <!--<span class="ic-right" @click="goPage(toPageName.BankBalance)">-->
+                    <!--明细-->
+                    <!--<icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>-->
+                <!--</span>-->
       </section>
       <ul v-if="licaiShow">
         <!-- @click="geDetails(item)"-->
@@ -370,6 +374,15 @@
           height: px2rem(15);
           background: url("~@/assets/images/property_icon_financing.png") no-repeat center;
           background-size: contain;
+        }
+      }
+      .ic-right{
+        padding-left: px2rem(15);
+        font-size: px2rem(12);
+        color: #666;
+        display: inline-block;
+        .detail {
+          font-size: px2rem(12);
         }
       }
       .top-right {

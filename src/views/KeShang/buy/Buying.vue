@@ -81,6 +81,7 @@
         TEAM_ID: ''
       }
     },
+
     computed: {
       placeholder() {
         let num = this.proDetail.MIN_AMOUNT || '0'
