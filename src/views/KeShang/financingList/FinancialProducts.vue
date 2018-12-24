@@ -41,7 +41,7 @@
                 </h4>
                 <p>隶属于{{item.ORG_NAME}}</p>
                 <p>持有金额
-                  <span>{{item.HOLD_AMOUNT}}</span>
+                  <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
                 <p>存入时间
                   <span>{{item.TIME_END}}</span>
@@ -50,7 +50,7 @@
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
                 <p>预计收益
-                  <span>{{item.EXPECT_INCOME}}</span>
+                  <span>{{item.EXPECT_INCOME | formatNum}}</span>
                 </p>
                 <p>存款利率
                   <span>{{item.RATE}}%</span>
@@ -174,8 +174,7 @@
         this.infoShow = false
       },
       goBuy(item) {
-
-        this.setComState({type: 'goBuy', value: item})
+        this.setComState({type: 'goBuy', value: {...item,ID:item.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {

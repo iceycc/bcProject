@@ -187,7 +187,7 @@
     },
     methods: {
       goAdd(val) {
-        this.setComState({type: 'goBuy', value: val})
+        this.setComState({type: 'goBuy', value: {...val,ID:val.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {
