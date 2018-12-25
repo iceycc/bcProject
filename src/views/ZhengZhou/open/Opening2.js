@@ -138,13 +138,18 @@ export default {
     },
     doApiOpenging2() {
       this.data.PRE_PHONE_NUM = this.tel
-      console.log(this.data.PRE_PHONE_NUM);
+      console.log(this.checkBankName(this.data.CARD_NO));
+
       if (this.bankText == '请选择银行') {
         Bus.$emit(BusName.showToast, '请选择银行')
         return
       }
       if (this.data.CARD_NO == '') {
         Bus.$emit(BusName.showToast, '银行卡号不能为空')
+        return
+      }
+      if (!this.checkBankName(this.data.CARD_NO)) {
+        Bus.$emit(BusName.showToast, '暂不支持该银行卡号')
         return
       }
       // if (this.checkBankName1) {

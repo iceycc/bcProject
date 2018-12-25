@@ -26,7 +26,7 @@ export default {
       isfinancial: '0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
-  mixins: [checkOpenApiAndH5,Mixins.HandleMixin],
+  mixins: [checkOpenApiAndH5, Mixins.HandleMixin],
   created() {
     // this.checkProductType()
   },
@@ -46,8 +46,8 @@ export default {
       let qu = this.$route.query
       let query = util.storage.session.get('FirstLoad') || {}
       let H5URL = qu.H5URL  // 和1218活动页约定链接参数
-      let storageH5URL = window.localStorage.getItem('H5URL')
-      if (H5URL) {
+      let storageH5URL = window.localStorage.getItem('H5URLS')
+      if (H5URL) { // 取url
         query = JSON.parse(Base64.decode(H5URL))
         // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
       }
@@ -79,6 +79,18 @@ export default {
       } else {
         this.ProAndOrgType = query
       }
+      //  判断什么平台的 展示不同平台的登录
+      let APP_FLAG_CODE = this.$store.getters.GET_ACCOUNT_STATE.APP_FLAG
+      switch (APP_FLAG_CODE) {
+        case 'BC':
+          this.APP_FLAG_TEXT = '比财'
+          break;
+        case 'PC':
+          this.APP_FLAG_TEXT = '拼财'
+          break;
+        default:
+          this.APP_FLAG_TEXT = '比财'
+      }
       console.log('ProAndOrgType', this.ProAndOrgType);
       this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
       this.BANK_NAME = this.ProAndOrgType.ORG_NAME
@@ -88,6 +100,7 @@ export default {
         this.BANK_NAME = '梅州客商银行'
       } else {
       }
+
       if (query.isfinancial == 1) {
         // 外链过来的
         this.BANK_NAME = ''
@@ -225,7 +238,7 @@ export default {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
         let HAS_LOGIN = res.HAS_LOGIN
         let HAS_GRADE = res.HAS_GRADE
-        this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
+        this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
           this.loginSuccess(res)

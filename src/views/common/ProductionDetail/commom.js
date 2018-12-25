@@ -20,7 +20,7 @@ export default {
   methods: {
     goNext() {
       console.log(this.proID);
-      this.removeComState('ProDuctData')
+      // this.removeComState('ProDuctData')
       let goBuyData = {
         id: this.proID,
         logo: this.productDetail.LOGO_URL,
@@ -42,10 +42,13 @@ export default {
       }
       this.setComState({type: 'goBuy', value: goBuyData})
       this.setComState({type: 'loginType', value: '安全购买'})
+      let {LOGO_URL, ORG_NAME} = this.productDetail
       let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
       if (TOKEN) {
         this.checkAuthStatus()
       } else {
+
+        Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
         this.$router.push({name: PageName.Login})
       }
     },
@@ -93,6 +96,7 @@ export default {
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
       this.setComState({type: 'ISLogin', value: false})
+      let {LOGO_URL, ORG_NAME} = this.productDetail
       API.bicai.getAuthStatus({}, res => {
         let {AUTH_STATUS, isOldMember} = res
         //  AUTH_STATUS 返回码：
@@ -124,7 +128,10 @@ export default {
                 API.bicai.getAuthUrl({}, res => {
                   if (res.STATUS == 1) {
                     console.log(res.AUTH_URL);
-                    window.location.href = res.AUTH_URL
+                    Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                    setTimeout(() => {
+                      window.location.href = res.AUTH_URL
+                    }, 2000)
                   } else {
                     Bus.$emit(BusName.showToast, res.MESSAGE)
                   }
@@ -132,7 +139,10 @@ export default {
               } else {
                 // 0：使用之前的逻辑
                 if (H5_URL_ANDRIOD || H5_URL_IOS) {
-                  window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                  setTimeout(() => {
+                    window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+                  }, 2000)
                 } else {
                   alert('跳转h5链接获取异常')
                 }
@@ -151,6 +161,8 @@ export default {
     },
     // 判断该用户在本行的状态
     checkBankOpenAndLogin() {
+      let {LOGO_URL, ORG_NAME} = this.productDetail
+      Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
       let data = {
         IS_RET_GRADE: '1'
       }
@@ -158,7 +170,7 @@ export default {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
         let HAS_LOGIN = res.HAS_LOGIN
         let HAS_GRADE = res.HAS_GRADE
-        this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
+        this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
           this.loginSuccess(res)

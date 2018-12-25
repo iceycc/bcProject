@@ -19,8 +19,8 @@ let Configs = {
    * build打包  现在阶段注意 static/lib/PassInputZhengzhou/pwd.js也要同步改
    */
   // PRO_HOST: 'https://demo1.bicai365.com', // demo1
-  PRO_HOST: 'https://adv.bicai365.com', // adv
-  // PRO_HOST: 'https://finsuit.bicai365.com',// 生产
+  // PRO_HOST: 'https://adv.bicai365.com', // adv
+  PRO_HOST: 'https://finsuit.bicai365.com',// 生产
   // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
 }
 /**
@@ -109,6 +109,7 @@ export const PageName = {
   BankDetail: 'BankDetail', // 银行详情
   BankBalance: 'BankBalance', // 可用余额
   ChangeBank: 'ChangeBank', // 更改银行
+  AddNewBank: 'AddNewBank', // 添加新银行卡
   ResetPayPassword: 'ResetPayPassword', // 重制密码
   ResetPayPasswordApply: 'ResetPayPasswordApply', // 重制密码申请
   ResetPayPasswordStatus: 'ResetPayPasswordStatus', // 重制密码申请结果
@@ -168,6 +169,7 @@ export const BusName = {
   showLoading: 'showLoading',
   Indicator: 'Indicator',
   showSendMsg: 'showSendMsg',
+  showBankLonding: 'showBankLonding',
 }
 
 /**

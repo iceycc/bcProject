@@ -244,17 +244,28 @@
         this.showBankList()
       },
       checkBankName(val) {
+        if (!val) {
+          return false
+        }
         this.checkBankName1 = false
-        this.checkBankType()
+        this.checkBankType() // 查询银行的属性 他行。本行。还是村镇
         val = val.replace(/\s+/g, "")
         let bankName
+        let flag = false
         for (var i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
             this.bankText = bankName
+            flag = true
             console.log('bankName', bankName);
             break
           }
         }
+        if (!flag) {
+          this.bankText = '请选择开户银行'
+          this.data.CARD_NO = ''
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
+        }
+        return flag
       },
       checkBankNo(val) {
         // 查询银行账户类型

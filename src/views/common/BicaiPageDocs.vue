@@ -474,10 +474,12 @@
       return {
         docs: '',
         agreeMentSrc: '',
-        title: ''
+        title: '',
+        APP_FLAG: 'BC'
       }
     },
     created() {
+      this.APP_FLAG = this.$store.getters.GET_ACCOUNT_STATE.APP_FLAG
       let type = this.$route.query.type
       this.getAgreement(type)
 
@@ -610,10 +612,12 @@
 
     padding: px2rem(20);
     font-size: px2rem(16);
-    h2,h3,h4,h5{
+
+    h2, h3, h4, h5 {
       margin: px2rem(10) 0;
     }
-    h1{
+
+    h1 {
       font-size: px2rem(20);
     }
   }

@@ -97,11 +97,7 @@ export default {
     },
     // 注册
     doOpengingSecond() {
-      // 判断银行类型 是否调用密码控件
-      // 实体卡密码，可空，本行卡和村镇卡必输
       this.doApiOpenging2()
-      // this.ZhengZhouPass = true
-      // 其他行
     },
     doApiOpenging2() {
       this.data.PRE_PHONE_NUM = this.tel
@@ -118,7 +114,10 @@ export default {
         Bus.$emit(BusName.showToast, '银行卡号不能为空')
         return
       }
-
+      if (!this.checkBankName(this.data.CARD_NO)) {
+        Bus.$emit(BusName.showToast, '暂不支持该银行卡号')
+        return
+      }
       if (this.data.PRE_PHONE_NUM == '') {
         Bus.$emit(BusName.showToast, '手机号不能为空')
         return
