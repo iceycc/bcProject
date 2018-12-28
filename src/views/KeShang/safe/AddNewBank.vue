@@ -10,8 +10,9 @@
                      title="银行列表"></Bank-select>
 
       </section>
-      <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20"></active-input>
-      <active-input check-type="number" valuePlaceholder="验证码" v-model="msgCode" max="6">
+      <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20" @changeHandle="changeHandle"></active-input>
+      <active-input check-type="number" valuePlaceholder="手机号" v-model="bankTel" max="11"></active-input>
+      <active-input check-type="number" valuePlaceholder="验证码" v-model="msgCode" max="6" onautocomplete="false">
         <template slot="btn">
           <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
         </template>
@@ -25,6 +26,7 @@
       <!--<p>1.请您确认新绑定银行卡在银行绑定的手机号与旧卡 绑定手机号相同。</p>-->
       <!--<p>2.更换绑定银行卡前，请转出所有的投资资金并提现</p>-->
       <!--</section>-->
+      <bank-card-limit></bank-card-limit>
     </section>
   </div>
 </template>
@@ -36,8 +38,8 @@
   import API from "@/service";
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
-  import util from "libs/util";
   import Mixins from "@/mixins";
+  import BankCardLimit from '@/components/keshang/BankCardLimit'
   let timer;
   export default {
     name: "changeBank",
@@ -45,6 +47,7 @@
       BankSelect,
       ActiveInput,
       ErrMsg,
+      BankCardLimit
     },
     data() {
       return {
@@ -56,7 +59,8 @@
         msgCode: '',
         codeText: '获取验证码',
         disable: false,
-
+        bankTel:'',
+        MESAGE_TOKEN:'',
         bankNameToNo: false,
         params: {},
         ifGet: false,
@@ -80,6 +84,9 @@
       }
     },
     methods: {
+      changeHandle(val){
+        this.checkBankNo(val)
+      },
       getMsgCode() {
         let sTime = this.time
         this.disable = true
@@ -93,6 +100,7 @@
           sTime--
           this.codeText = `${sTime}s`
         }, 1000)
+        this.getCode()
       },
       getOldBankInfo() {
         this.OldBankInfo = this.getComState.hasCardList[0]
@@ -100,20 +108,31 @@
       },
       getBank(val) {
         this.bankText = val.name
-      },
-      checkBankName(val, fn) {
+      }, // bankNameToNo
+      checkBankName(val) {
+        if (!val) {
+          return false
+        }
         this.bankNameToNo = false
+        // this.checkBankType()
         val = val.replace(/\s+/g, "")
         let bankName
-        for (var i = 3; i < 10; i++) {
+        let flag = false
+        for (let i = 3; i < 8; i++) {
           if (bankName = this.machBankName((val + '').slice(0, i))) {
-            if (bankName != this.bankText) {
-              return
-            }
+            this.bankText = bankName
             this.bankNameToNo = true
+            flag = true
             break
           }
         }
+        if (!flag) {
+          this.bankText = '请选择开户银行'
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
+         this.showErrMsg('暂不支持该银行')
+        }
+        console.log(this.bankText);
+        return flag
       },
       checkBankNo(val) {
         val = val.toString()
@@ -145,6 +164,7 @@
           // console.log('bankObj>>>',obj);
           // 全部银行
           this.AllBankListObj = obj
+          console.log(this.AllBankListObj);
           // 支持的银行
           this.bankList = res.SUPPORT_BANK_LIST.map((item) => {
             return {
@@ -165,52 +185,50 @@
       checkBankType() {
 
       },
-      subumit() {
-
+      getCode() { //
+        let query = this.$route.query
         let data = {
-          // TYPE	请求类型
-          // ORG_ID	机构ID
-          // PHONE_NUM	银行卡预留手机号码
-          // OLD_ACCOUNT_NO	旧银行卡号
-          // NEW_ACCOUNT_NO	新银行卡号
-          // BANK_NO  绑定银行卡银行行号
-          // CARD_BIN  新卡卡bin
-          // BANK_INNER  本行卡还是他行卡
-          // OPEN_BANK  开户行名称
-          PHONE_NUM: this.OldBankInfo.PHONE_NUM,
-          OLD_ACCOUNT_NO: this.OldBankInfo.CARD_NO,
-          NEW_ACCOUNT_NO: this.bankNo,
-          BANK_NO: ''
+          BIZ_TYPE: '8', // 绑卡需要
+          BANK_USER_ID: query.BANK_USER_ID,// 银行用户ID
+          BANK_ACCT_NO: query.BANK_ACCT_NO,// 电子账户
         }
-        let delMsg = true
-
-        API.safe.apiChangeBingCard(data, delMsg, res => {
-          Bus.$emit(BusName.showToast, '更换银行卡成功')
-          this.$router.push({
-            name: PageName.MoreService
-          })
-        }, err => {
-          console.log('err>>>>>>>>1111', err);
-          this.errMsg = err
-          this.ifShow = false
-          this.setErrMsg({
-            msg: err
-          })
-          // util.storage.session.set('ChangeBankInfo', {
-          //     msg: err
-          // })
-          setTimeout(() => {
-            window.location.reload()
-          }, 500)
+        API.common.apiSendPhoneCode(data, res => {
+          this.MESAGE_TOKEN = res.MESSAGE_TOKEN
+          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         })
       },
+      BindingCardAPI() {
+        // 解绑银行卡
+        let data = {
+          BANK_NAME: this.bankText,//银行名称
+          BANK_ACCOUNT_NO: this.bankNo,//银行账号
+          BANK_INNER: '0',// 行内外标识 暂时默认全传他行
+          DEFAULT_MARK: '1',//是否默认卡
+          PHONE_NUM: this.bankTel,//银行卡开户行手机号
+          BIND_FLG: '1',// 绑定标志 1-绑定，2-解绑
+          MESSAGE_TOKEN: this.MESAGE_TOKEN,
+          VALIDATE_CODE: this.msgCode,// 短信验证码
+
+          BANK_CARD_TYPE: '',//
+          BANK_NO: '',  //银行行号
+          CARD_BIN: '', //卡Bin
+          CLEAR_BANK: '',// 清算银行
+          CLEAR_BANK_NO: '',// 清算银行行号
+        }
+        API.safe.apiChangeBingCard(data,res=>{
+          this.$router.push({name:PageName.BindingBank})
+        },err=>{
+        })
+      },
+
       goNext() {
         if (this.checkBankNo(this.bankNo)) return
         console.log('goNext>>', this.bankNameToNo);
         if (!this.bankNameToNo) {
-          this.showErrMsg('银行卡和银行名称不匹配')
+          // this.showErrMsg('暂不支持该银行')
+
         } else {
-          this.subumit()
+          this.BindingCardAPI()
         }
 
       }

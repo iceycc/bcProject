@@ -198,16 +198,14 @@
         this.getCode()
       },
       getCode() { // 短信
-        let PHONE_NUM = this.getComState.TEL
         let data = {
-          PHONE_NUM: PHONE_NUM,
           BIZ_TYPE: '6', // 需要
           BANK_ACCT_NO: this.BANK_ACCT_NO,
           BANK_USER_ID: this.BANK_USER_ID
         }
         API.common.apiSendPhoneCode(data, res => {
           this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
-          Bus.$emit(BusName.showSendMsg, PHONE_NUM)
+          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         })
       },
       focus() {

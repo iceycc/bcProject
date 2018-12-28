@@ -210,9 +210,7 @@
       // 轮询查询交易状态！！
 
       getCode() { // 短信
-        let TEL = this.getComState.Infos.PHONE_NUM || this.$store.getters.GET_ACCOUNT_STATE.BICAI_USER.PHONE_NUM
         let data = {
-          PHONE_NUM: TEL,
           BIZ_TYPE: '4', // 购买众邦需要
           BANK_ACCT_NO: this.BANK_ACCT_NO,
           BANK_USER_ID: this.BANK_USER_ID
@@ -220,7 +218,7 @@
         API.common.apiSendPhoneCode(data, res => {
           this.getMsg()
           this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-          Bus.$emit(BusName.showSendMsg, TEL)
+          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         })
       },
       getMsg() {

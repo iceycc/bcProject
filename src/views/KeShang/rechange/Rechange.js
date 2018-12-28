@@ -12,7 +12,6 @@ export default {
   methods: {
     getCode() { // 充值短信
       let data = {
-        PHONE_NUM: this.PHONE_NUM,
         BIZ_TYPE: '1', // 充值需要
         BANK_USER_ID: this.BANK_USER_ID,
         BANK_ACCT_NO: this.BANK_USER_CODE
@@ -20,7 +19,8 @@ export default {
       API.common.apiSendPhoneCode(data, res => {
         console.log(res)
         this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-        Bus.$emit(BusName.showSendMsg, this.PHONE_NUM)
+        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
+
       })
     },
     handleApiRecharge() {

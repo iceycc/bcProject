@@ -141,9 +141,7 @@
         this.getCode()
       },
       getCode() {
-        let TEL = this.getComState.TEL
         let data = {
-          PHONE_NUM: TEL,
           BIZ_TYPE: '2', // 提现
           BANK_USER_ID: this.BANK_USER_ID,
           BANK_ACCT_NO: this.BANK_USER_CODE

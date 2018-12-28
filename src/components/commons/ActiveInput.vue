@@ -78,6 +78,7 @@
 
     methods: {
       handleChange(val) {
+        this.$emit('changeHandle',val)
       },
       isValueNumber(value) {
         let reg;

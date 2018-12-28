@@ -48,6 +48,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+
     // 账户属性查询 ifHave=y
     apiUserAccountProperties(params, success, error) {
       let options = {
@@ -81,6 +82,14 @@ export default {
       }
       return http.post(options, Config.config, success, error)
 
+    },
+    // 查询银行卡限额列表 /openapi/comm/apiGetBankCardLimit
+    apiGetBankCardLimit(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiGetBankCardLimit',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
     },
   },
   /**

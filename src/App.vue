@@ -132,14 +132,14 @@
       Bus.$on(BusName.showSendMsg, (val) => {
         console.log(val);
         if (!val) {
-          // let BANK_CARD_PHONE = this.getComState.TEL
-          let PHONE_NUM = this.getComState.Infos.PHONE_NUM || this.$store.getters.BICAI_USER.PHONE_NUM
+          let PHONE_NUM = this.$store.getters.GET_ACCOUNT_STATE.BICAI_USER.PHONE_NUM || this.getComState.Infos.PHONE_NUM
           val = PHONE_NUM
         }
         val = val + ''
-        if (val.length !== 11) return
+        // if (val.length !== 11) return
         this.showMsgToast = true
-        let msg = val.substr(0, 3) + '***' + val.substr(7)
+        let len = val.length
+        let msg = '+86 ' + val.substr(len - 11, 3) + '***' + val.substr(len - 4)
         this.TEL = msg
         setTimeout(() => {
           this.showMsgToast = false
