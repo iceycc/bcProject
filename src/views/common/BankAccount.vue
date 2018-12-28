@@ -236,11 +236,18 @@
         OPENAPI_STATUS,
         BANK_LOGO_URL,
       }) {
+
         if (!CheckBank(ORG_ID)) {
           Bus.$emit(BusName.showToast, '暂不支持该银行，请下载比财App')
           return
         }
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A011', // 点位
+          REMARK_DATA: '异业合作-我的资产未登录状态-安全登录', // 中文备
+          FROM_PR1:ORG_ID
+        })
         let ProData = {
+          LOGO_URL:BANK_LOGO_URL,
           ID: null,// 产品id
           ORG_NAME,//机构名称
           ORG_ID, // 机构id
@@ -281,10 +288,14 @@
           // })
         }
         if (page == 'BankDetail') {
-          util.storage.session.set('ORG_ID', ORG_ID)
-          util.storage.session.set('flag', PageName.BankDetail)
-          util.storage.session.set('reload', true)
-          window.location.reload()
+          Bus.$emit(BusName.showBankLonding, {LOGO_URL:BANK_LOGO_URL, ORG_NAME})
+          setTimeout(() => {
+            util.storage.session.set('ORG_ID', ORG_ID)
+            util.storage.session.set('flag', PageName.BankDetail)
+            util.storage.session.set('reload', true)
+            window.location.reload()
+          }, 1800)
+
 
           // this.$router.push({
           //   name: PageName.TestPage,
@@ -370,6 +381,7 @@
           })
         }
         if (ORG_ID == '227') {
+          return
           API.commonApi.getBankBalance.ZBH(data, res => {
             info = res
 

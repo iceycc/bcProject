@@ -40,6 +40,7 @@
     data() {
       return {
         ACC_REST: '0.00',
+        WITH_DRAWABLE_CASH:''
       }
     },
     mixins: [Mixins.HandleMixin,BankBalanceMixins],
@@ -62,7 +63,8 @@
         this.setComState({type: 'OriginPage', value: this.$route.fullPath})
         if (page == 'Withdraw') {
           query = {
-            ACC_REST: this.ACC_REST // 可用余额
+            ACC_REST: this.ACC_REST,// 可用余额
+            WITH_DRAWABLE_CASH: this.WITH_DRAWABLE_CASH,// 可用余额
           }
         }
         console.log(page);

@@ -9,8 +9,9 @@
       <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
     </div>
     <div class="btn" v-if="!shareHref">
-      <span @click="goMyAssets" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其他产品</span>
+      <!--<span @click="goMyAssets" class="begain">查看我的资产</span>-->
+      <!--<span @click="goBuyOther" class="begain">购买其他产品</span>-->
+      <span @click="reBuy" class="begain">重新存入</span>
     </div>
     <div class="btn" v-if="shareHref">
       <span @click="goMyAssets" class="begain">查看我的资产</span>
@@ -69,6 +70,13 @@
         clipboard.on('error', () => {
           Bus.$emit(BusName.showToast, '浏览器不支持自动复制，请手动复制')
         })
+      },
+      reBuy(){
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A010', // 点位
+          REMARK_DATA: '异业合作-交易失败-重新购买', // 中文备
+        })
+        this.$router.go(-1)
       },
       share() {
         this.copyShow = true

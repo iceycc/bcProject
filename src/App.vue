@@ -18,22 +18,22 @@
       </div>
     </transition>
     <!--<transition name="fade">-->
-      <div class="banklonding" v-if="banklonding">
-        <div class="londingBox">
-          <div>
-            <img :src="imgSrc+ORG_URL" alt="" class="orgLogo">
-            <span class="orgName">{{ORG_NAME}}</span>
-          </div>
-          <p>正在跳转至{{ORG_NAME}}页面…</p>
+    <div class="banklonding" v-if="banklonding">
+      <div class="londingBox">
+        <div>
+          <img :src="imgSrc+ORG_URL" alt="" class="orgLogo">
+          <span class="orgName">{{ORG_NAME}}</span>
         </div>
+        <p>正在跳转至{{ORG_NAME}}页面…</p>
       </div>
+    </div>
     <!--</transition>-->
   </div>
 </template>
 
 <script>
   import Bus from './plugin/bus'
-  import {BusName,imgSrc} from './Constant'
+  import {BusName, imgSrc} from './Constant'
   import util from "libs/util";
 
   export default {
@@ -114,9 +114,9 @@
           this.showToast = false
         }, time)
       })
-      Bus.$on(BusName.showBankLonding, ({LOGO_URL = '',ORG_NAME = ''},time=2000) => {
+      Bus.$on(BusName.showBankLonding, ({LOGO_URL = '', ORG_NAME = ''}, time = 2000) => {
         // todo
-        return
+        // return
         if (!LOGO_URL) return
         if (!ORG_NAME) return
         // if(ORG_NAME=='鼎融易'){
@@ -133,7 +133,7 @@
         console.log(val);
         if (!val) {
           // let BANK_CARD_PHONE = this.getComState.TEL
-          let PHONE_NUM = this.getComState.Infos.PHONE_NUM
+          let PHONE_NUM = this.getComState.Infos.PHONE_NUM || this.$store.getters.BICAI_USER.PHONE_NUM
           val = PHONE_NUM
         }
         val = val + ''

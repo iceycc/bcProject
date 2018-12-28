@@ -126,7 +126,8 @@
           onePassword: this.payPass,
           twoPassword: this.rePayPass,
         }
-        let ProAndOrgType = this.getComState.ProAndOrgType || {}
+        let ProAndOrgType = JSON.parse(window.sessionStorage.getItem('H5URLS')) || this.getComState.ProAndOrgType
+        let {LOGO_URL, ORG_NAME} = ProAndOrgType
         API.bicai.getPayPassword(data, res => {
           Bus.$emit(BusName.showToast, res.message)
           if (res.status == 1) {
@@ -134,14 +135,20 @@
             if (ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
               // this.checkBankStatus()
-              this.$router.push({name: PageName.Opening1})
+              Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+              setTimeout(() => {
+                this.$router.push({name: PageName.Opening1})
+              }, 2000)
             } else if (ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
               if (ProAndOrgType.AUTH_URL_FLAG == 1) {
                 API.bicai.getAuthUrl({}, res => {
                   if (res.STATUS == 1) {
-                    window.location.href = res.AUTH_URL
+                    Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                    setTimeout(() => {
+                      window.location.href = res.AUTH_URL
+                    }, 2000)
                   } else {
                     Bus.$emit(BusName.showToast, res.MESSAGE)
                   }
@@ -149,13 +156,19 @@
               } else {
                 let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
                 if (href) {
-                  window.location.href = href;
+                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                  setTimeout(() => {
+                    window.location.href = href;
+                  }, 2000)
                 } else {
                   alert('跳转银行h5链接获取异常')
                 }
               }
             } else {
-              this.$router.push({name: PageName.Opening1})
+              Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+              setTimeout(() => {
+                this.$router.push({name: PageName.Opening1})
+              }, 2000)
             }
             // this.$router.push({name:PageName.Login})
           }

@@ -3,15 +3,26 @@
  */
 
 import API from '@/service'
-import {PageName, imgSrc, LsName, BusName,PRO_PARAMS} from "@/Constant";
+import {PageName, imgSrc, LsName, BusName, PRO_PARAMS} from "@/Constant";
 import Bus from "@/plugin/bus";
 import util from "libs/util";
+
 let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 
 const Check = {
+  data() {
+    return {
+      ProAndOrgType: ''
+    }
+  },
   methods: {
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
+      // 只有h5活动页过来会有这个
+      let H5URLS = JSON.parse(window.sessionStorage.getItem('H5URLS'))
+      console.log('H5URLS>>>>>', H5URLS);
+      let {LOGO_URL, ORG_NAME} = H5URLS
+
       this.setComState({type: 'ISLogin', value: false})
       //
       API.bicai.getAuthStatus({}, res => {
@@ -23,7 +34,7 @@ const Check = {
         // 3:密码设置，
         // 4:认证完成，
         // 5:身份证过期
-        console.log('比财实名步数>>',AUTH_STATUS);
+        console.log('比财实名步数>>', AUTH_STATUS);
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
@@ -39,7 +50,13 @@ const Check = {
             this.$router.push(PageName.BcOpening3)
             break;
           case 4:
-            this.checkBankOpenAndLogin()
+            console.log('aaa', LOGO_URL);
+            console.log('aaa', ORG_NAME);
+            Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+            setTimeout(() => {
+
+              this.checkBankOpenAndLogin()
+            }, 1500)
             break;
           case 5:
             this.$router.push(PageName.BcOpening1)
@@ -58,7 +75,7 @@ const Check = {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
         let HAS_LOGIN = res.HAS_LOGIN
         let HAS_GRADE = res.HAS_GRADE
-        this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
+        this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
           this.loginSuccess(res)
@@ -75,7 +92,7 @@ const Check = {
       API.common.apiRegisterBackShow(data, res => {
         let step = res.LAST_STEP_NUM
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
-        console.log('本行开户步数>>',step);
+        console.log('本行开户步数>>', step);
         this.setComState({type: 'TEL', value: this.tel})
         if (step == 0) {
           // 未提交
@@ -101,7 +118,7 @@ const Check = {
             Bus.$emit(BusName.showToast, MsgText, 3000)
             this.$router.push({name: PageName.Opening3})
           }
-          if(this.ORG_ID=='248'){
+          if (this.ORG_ID == '248') {
             this.loginSuccess(res)
           }
 
@@ -125,11 +142,11 @@ const Check = {
  * 外链跳转购买
  * @type {{methods: {}}}
  */
-export const ToBuying ={
-  mixins:[Check],
-  data(){
-    return{
-      ProID:''
+export const ToBuying = {
+  mixins: [Check],
+  data() {
+    return {
+      ProID: '',
     }
   },
   created() {
@@ -138,7 +155,7 @@ export const ToBuying ={
     let query = this.$route.query // H5活动页外链过来的
     let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
     let ProAndOrgType = this.getComState.ProAndOrgType
-    this.setComState({type:'ProAndOrgType',value:{...ProAndOrgType,...query}})
+    this.setComState({type: 'ProAndOrgType', value: {...ProAndOrgType, ...query}})
     // ProID=xxx&TEAM_ID=xxx&
     util.storage.session.set('moneyNum', moneyNum)
     if (ProID) {
@@ -150,7 +167,7 @@ export const ToBuying ={
       this.initData(proData) // 初始化数据
     }
   },
-  methods:{
+  methods: {
     // 通过产品id主动请求产品数据
     getData(id) {
       let data = {
@@ -171,8 +188,6 @@ export const ToBuying ={
     },
   }
 }
-
-
 
 
 export const CheckOfH5 = Check

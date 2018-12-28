@@ -6,16 +6,15 @@
         <div class="bannercontent">
           <div class="bannertop">
             <div class="bannertopleft">
-              <p class="p-text" style="font-size: 0.4rem;">利率</p>
+              <p class="p-text" style="font-size: 0.4rem">利率</p>
               <p>
-                <strong style="font-size: 1rem"> {{productDetail.RATE | fromatMoneyFilter}} </strong>
+                <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
                 <span style="font-size: .5rem;">%</span>
               </p>
             </div>
             <div class="bannertopright">
               <p class="p-text" style="font-size: 0.4rem;text-align: left;padding-left: .3rem">期限</p>
-              <p>
-                <strong style="font-size: 0.9rem;text-align: left;padding-left: 0.1rem"> 28天-3年 </strong>
+              <p style="font-size: 0.9rem;text-align: left;padding-left: 0.2rem"> {{productDetail.LOCKUP_PERIOD_TEXT}}
               </p>
             </div>
 
@@ -26,7 +25,7 @@
                 <img src="~@/assets/images/icon_dunpai@2x.png" alt="">
                 受存款保险保护 >
               </li>
-              <li class="bannerbottomtwo clearfix">本金保障</li>
+              <!--<li class="bannerbottomtwo clearfix">本金保障</li>-->
               <li class="bannerbottomthree clearfix">累计申购笔数 {{productDetail.BUY_COUNT}}</li>
             </ul>
           </div>
@@ -76,7 +75,7 @@
         </div>
         <div class="bannercontent">
           <span class="bannercontenttitle">锁定期</span>
-          <span class="bannercontenttitlecontent">28天</span>
+          <span class="bannercontenttitlecontent">{{productDetail.LOCKUP_PERIOD}}</span>
         </div>
       </div>
       <div class="wrapicon">
@@ -123,7 +122,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="productDetail.DEPICT_TEXT_AREA">
+          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="DEPICT">
           </div>
         </div>
       </div>
@@ -205,7 +204,8 @@
         defaultManey: '',
         currentVal: '',
         invest: "", // 计算传人
-        IS_REALTIME_DATA_PRD: ''
+        IS_REALTIME_DATA_PRD: '',
+
       };
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, Register],

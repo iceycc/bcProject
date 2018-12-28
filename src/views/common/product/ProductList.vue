@@ -22,7 +22,7 @@
           <p class="name2">{{item.PRD_NAME}}</p>
           <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
           <div class="ratereturn">
-            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | fromatMoneyFilter}}%</p>
+            <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | rateFormat(2)}}%</p>
             <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">{{item.PRD_TYPE_ID |
               typeFilter}}</p>
           </div>
@@ -236,7 +236,8 @@
           IS_SYNC_FLAG, // '是否由openAPI同步产品, 0：否, 1：是',
           PRD_TYPE_ID,//产品类型
           DEPOSIT_TYPE_ID, //存款类型
-          RATE
+          RATE,
+
         } = bank
         API.watchApi({
           FUNCTION_ID: 'ptb0A001', // 点位

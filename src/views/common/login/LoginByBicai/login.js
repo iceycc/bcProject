@@ -42,11 +42,10 @@ export default {
     // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
     // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
     checkProductType() {
-
       let qu = this.$route.query
       let query = util.storage.session.get('FirstLoad') || {}
       let H5URL = qu.H5URL  // 和1218活动页约定链接参数
-      let storageH5URL = window.localStorage.getItem('H5URLS')
+      let storageH5URL = window.sessionStorage.getItem('H5URLS')
       if (H5URL) { // 取url
         query = JSON.parse(Base64.decode(H5URL))
         // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
@@ -101,7 +100,7 @@ export default {
       } else {
       }
 
-      if (query.isfinancial == 1) {
+      if (this.ProAndOrgType.isfinancial == 1) {
         // 外链过来的
         this.BANK_NAME = ''
         this.isfinancial = 1
@@ -144,6 +143,7 @@ export default {
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
       this.setComState({type: 'ISLogin', value: false})
+      let {LOGO_URL, ORG_NAME} = this.ProAndOrgType
       //
       API.bicai.getAuthStatus({}, res => {
         let {AUTH_STATUS, isOldMember} = res
@@ -173,12 +173,14 @@ export default {
             this.$router.push(PageName.BcOpening3)
             break;
           case 4:
-
             if (AUTH_URL_FLAG == 1) {
               // h5活动页直接跳转来的 判断AUTH_URL_FLAG唯一 获取免登录地址
               API.bicai.getAuthUrl({}, res => {
                 if (res.STATUS == 1) {
-                  window.location.href = res.AUTH_URL
+                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                  setTimeout(() => {
+                    window.location.href = res.AUTH_URL
+                  }, 2000)
                 } else {
                   Bus.$emit(BusName.showToast, res.MESSAGE)
                 }
@@ -195,13 +197,19 @@ export default {
               // 不是h5直联
               // 直接跳转
               if (H5_URL) {
+                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
                 // h5活动页跳转进来时判断是否有链接
-                window.location.href = H5_URL
+                setTimeout(() => {
+                  window.location.href = H5_URL
+                }, 2000)
                 return
               }
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
               if (H5_URL_ANDRIOD || H5_URL_IOS) {
-                window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
+                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                setTimeout(() => {
+                  window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
+                }, 2000)
               } else {
                 alert('跳转h5链接获取异常')
               }
@@ -211,16 +219,19 @@ export default {
             break;
           case 5:
             //
-            if (H5_URL) {
-              window.location.href = H5_URL
-              return
-            }
-            if (H5_URL_ANDRIOD || H5_URL_IOS) {
-              window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
-            } else {
-              alert('跳转h5链接获取异常')
-            }
-            this.$router.push(PageName.BcOpening1)
+            Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+            setTimeout(() => {
+              if (H5_URL) {
+                window.location.href = H5_URL
+                return
+              }
+              if (H5_URL_ANDRIOD || H5_URL_IOS) {
+                window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
+              } else {
+                alert('跳转h5链接获取异常')
+              }
+              this.$router.push(PageName.BcOpening1)
+            }, 2000)
             break;
         }
       }, err => {
@@ -231,6 +242,8 @@ export default {
     },
     // 判断该用户在本行的状态
     checkBankOpenAndLogin() {
+      let {LOGO_URL, ORG_NAME} = this.ProAndOrgType
+      Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
       let data = {
         IS_RET_GRADE: '1'
       }
