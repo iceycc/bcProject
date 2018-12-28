@@ -91,8 +91,8 @@
         // this.CARD_BANK_NAME = OldBankInfo.BANK_NAME
       },
       goPage(pageName) {
-        this.infoShow = true
-        return
+        // this.infoShow = true
+        // return
         let data = {}
         console.log(pageName);
         if (pageName == PageName.FengxianResult) {

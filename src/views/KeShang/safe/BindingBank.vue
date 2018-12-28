@@ -9,7 +9,7 @@
             <p class="bank-name">{{card.CARD_BANK_NAME}}</p>
             <p class="bank-info">隶属于{{card.CARD_BANK_NAME}}</p>
           </section>
-          <section>
+          <section v-if="index==0">
             默认卡
           </section>
         </section>
@@ -39,6 +39,7 @@
         imgSrc,
         sheetVisible: false,
         CARD_LIST: [],
+        clickBankCard: {},
         actions: [
           {
             name: '设为默认卡',
@@ -56,11 +57,13 @@
     },
     methods: {
       addBank() {
-        this.$router.push({name:PageName.AddNewBank})
+        this.$router.push({name: PageName.AddNewBank})
       },
       // 点击弹出银行卡管理
-      managerCard(){
+      managerCard(card) {
+        console.log(card);
         // Bus.$emit(BusName.showToast,'')
+        this.clickBankCard = card
         this.sheetVisible = true
       },
       getBankList() {
@@ -68,14 +71,38 @@
         API.bank.apiBandCard(data, res => {
           this.CARD_LIST = res.CARD_LIST
           // 保存绑定的银行卡列表
-          this.setComState({type:'hasCardList',value:res.CARD_LIST})
+          this.setComState({type: 'hasCardList', value: res.CARD_LIST})
         })
       },
       setDefaultCard() {
         console.log(1)
+        // 设置默认卡
+        let data = {
+          ACCOUNT_NO: this.clickBankCard.CARD_NUM
+        }
+        API.safe.apiDefaultBankCard(data)
       },
       unBindingCard() {
         console.log(2)
+        // 解绑银行卡
+
+        let data = {
+          BANK_NAME: '',//银行名称
+          BANK_ACCOUNT_NO: '',//银行账号
+          BANK_INNER: '',//行内外标识
+          DEFAULT_MARK: '',//是否默认卡
+          PHONE_NUM: '',//银行卡开户行手机号
+          BIND_FLG: '2',// 绑定标志 1-绑定，2-解绑
+          MESSAGE_TOKEN: '',
+          VALIDATE_CODE: '',// 短信验证码
+
+          BANK_CARD_TYPE: '',//
+          BANK_NO: '',  //银行行号
+          CARD_BIN: '', //卡Bin
+          CLEAR_BANK: '',// 清算银行
+          CLEAR_BANK_NO: '',// 清算银行行号
+        }
+        API.safe.apiChangeBingCard(data)
       }
     }
   }

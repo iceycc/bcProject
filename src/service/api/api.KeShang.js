@@ -285,12 +285,20 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换银行卡：openapi/comm/apiChangeBingCard todo 无需求
-    apiChangeBingCard(params, delMsg, success, error) {
+    // 设置默认卡 /openapi/comm/apiDefaultBankCard
+    apiDefaultBankCard(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiDefaultBankCard',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+
+    },
+    // 21.	用户解绑卡 /openapi/comm/apiChangeBingCard
+    apiChangeBingCard(params, success, error) {
       let options = {
         url: '/openapi/comm/apiChangeBingCard',
         params,
-        delMsg
       }
       return http.post(options, Config.config, success, error)
 

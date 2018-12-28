@@ -151,7 +151,7 @@
         API.common.apiSendPhoneCode(data, res => {
           this.MESAGE_TOKEN = res.MESSAGE_TOKEN
           //这里的提示信息没成功
-          Bus.$emit(BusName.showSendMsg, TEL)
+          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         })
       },
       checkMoney() {
