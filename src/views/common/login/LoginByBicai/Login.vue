@@ -95,7 +95,7 @@
         OPEN_H5_STATUS: '',
         isfinancial: '',
         hasBank: false,
-        APP_FLAG_TEXT:'比财'
+        APP_FLAG_TEXT: '比财'
       }
     },
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
@@ -182,6 +182,7 @@
           PHONE_CODE: this.cms,
           SAFT_CODE: this.safeCode
         }
+        let {LOGO_URL, ORG_NAME} = this.ProAndOrgType
         this.setComState({type: 'userTel', value: this.tel})
         let SOURCE_URL = this.getComState.loginType
         console.log(SOURCE_URL);
@@ -189,7 +190,8 @@
           API.watchApi({
             FUNCTION_ID: 'ptb0A007', // 点位
             REMARK_DATA: '异业合作-登录', // 中文备注
-            SOURCE_URL: SOURCE_URL
+            SOURCE_URL: SOURCE_URL,
+            MEMBER_ID: res.ID + ''
           })
           // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
 
@@ -212,6 +214,10 @@
               // 不需要实名
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
               if (this.href) {
+                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                setTimeout(() => {
+                  window.location.href = res.AUTH_URL
+                }, 2000)
                 window.location.href = this.href;
                 // let tempwindow = window.open('_blank'); // 先打开页面
                 // tempwindow.location = this.href; // 后更改页面地址

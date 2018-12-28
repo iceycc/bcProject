@@ -136,7 +136,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
+          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="DEPICT">
           </div>
         </div>
       </div>

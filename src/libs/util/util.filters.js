@@ -46,12 +46,13 @@ export default {
     str = str + ''
     if (str.indexOf(".") > -1) {
       let StrArr = str.split('.');
-      if (StrArr[1].length > 3) {
+      if (StrArr[1].length > len) {
         str = StrArr[0] + '.' + StrArr[1].substr(0, len);
       }
     }
     return str
   },
+
   /**
    * 格式化时间
    * @param val

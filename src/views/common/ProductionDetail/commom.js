@@ -10,7 +10,8 @@ export default {
   data() {
     return {
       ORG_ID: '',
-      HAS_GRADE: ''// 是否风险测评
+      HAS_GRADE: '',// 是否风险测评
+      DEPICT:''
     }
   },
   created() {
@@ -42,13 +43,13 @@ export default {
       }
       this.setComState({type: 'goBuy', value: goBuyData})
       this.setComState({type: 'loginType', value: '安全购买'})
-      let {LOGO_URL, ORG_NAME} = this.productDetail
+      // let {LOGO_URL, ORG_NAME} = this.productDetail
       let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
       if (TOKEN) {
         this.checkAuthStatus()
       } else {
 
-        Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+        // Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
         this.$router.push({name: PageName.Login})
       }
     },
@@ -57,6 +58,7 @@ export default {
     setProType(data) {
       API.bicai.getPrdFootInfo(data, res => {
         // 新增 平安银行 这种登录授权的 0：使用之前的逻辑 1：实名认证后，调用免登接口
+        this.DEPICT = res.DEPICT
         this.AUTH_URL_FLAG = res.AUTH_URL_FLAG || '0'
         let {
           AUTH_URL_FLAG = '0',
@@ -69,12 +71,14 @@ export default {
           IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
           H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
           H5_URL_IOS, // 非打通openApi 跳转链接 ios
+          LOGO_URL
         } = res
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
         // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
         // set
         let ProData = {
+          LOGO_URL,
           AUTH_URL_FLAG,
           ID,// 产品id
           ORG_NAME,//机构名称

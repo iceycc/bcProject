@@ -1,11 +1,9 @@
 import API from "@/service"
 import {LsName, BusName, PageName, PRO_PARAMS} from "@/Constant";
-import Bus from '@/plugin/bus'
-import util from "@/libs/util";
-import checkOpenApiAndH5 from './checkOpenApiAndH5'
 import Mixins from '@/mixins'
+import util from "@/libs/util";
+import Bus from '@/plugin/bus'
 
-let Base64 = require('js-base64').Base64;
 let timer;
 let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 export default {
@@ -26,15 +24,9 @@ export default {
       isfinancial: '0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
-  mixins: [checkOpenApiAndH5, Mixins.HandleMixin],
+  mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
   created() {
-    // this.checkProductType()
-  },
-  mounted() {
-    setTimeout(() => {
-      console.log('mounted');
-      this.checkProductType()
-    }, 100)
+    this.checkProductType()
   },
   methods: {
     //  需要判断
@@ -42,27 +34,28 @@ export default {
     // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
     // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
     checkProductType() {
-      let qu = this.$route.query
-      let query = util.storage.session.get('FirstLoad') || {}
-      let H5URL = qu.H5URL  // 和1218活动页约定链接参数
+      let query
       let storageH5URL = window.sessionStorage.getItem('H5URLS')
-      if (H5URL) { // 取url
-        query = JSON.parse(Base64.decode(H5URL))
-        // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
-      }
-      if (storageH5URL) {
+      // if (H5URL) { // 取url
+      //   // query = JSON.parse(Base64.decode(H5URL))
+      //   // 注意：外部通过url  DEVICE_ID=xxx   和  CHANNEL_ID=x
+      // }
+
+      // console.log(H5URL);
+      if (storageH5URL) { // h5外链
         query = JSON.parse(storageH5URL)
-      }
-      let {
-        DEVICE_ID,
-        CHANNEL_ID,
-        APP_FLAG
-      } = query
-      this.$store.commit('SET_DEVICE_ID', DEVICE_ID)
-      this.$store.commit('SET_CHANNEL_ID', CHANNEL_ID)
-      this.$store.commit('SET_APP_FLAG', APP_FLAG)
-      // if(query.)
-      if (query.IS_SYNC_FLAG && query.ORG_ID) {
+        console.log(query);
+        let {
+          DEVICE_ID,
+          CHANNEL_ID,
+          APP_FLAG,
+          LOGO_URL
+        } = query
+
+        // Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+        this.$store.commit('SET_DEVICE_ID', DEVICE_ID)
+        this.$store.commit('SET_CHANNEL_ID', CHANNEL_ID)
+        this.$store.commit('SET_APP_FLAG', APP_FLAG)
         // 外链过来的
         this.setComState({
           type: 'FromH5Active', value: true
@@ -70,81 +63,25 @@ export default {
         this.setComState({
           type: 'ProAndOrgType', value: query
         })
-      }
-      // console.log('login-query>>>', query);
-
-      if (this.getComState.ProAndOrgType.ORG_ID) {
-        this.ProAndOrgType = this.getComState.ProAndOrgType || query
-      } else {
+        // console.log('login-query>>>', query);
+        // if (this.getComState.ProAndOrgType.ORG_ID) {
+        //   this.ProAndOrgType = this.getComState.ProAndOrgType || query
+        // } else {
         this.ProAndOrgType = query
+        // }
+        console.log('ProAndOrgType', this.ProAndOrgType);
+        // H5链接过来的
+        this.checkAuthStatus()
       }
-      //  判断什么平台的 展示不同平台的登录
-      let APP_FLAG_CODE = this.$store.getters.GET_ACCOUNT_STATE.APP_FLAG
-      switch (APP_FLAG_CODE) {
-        case 'BC':
-          this.APP_FLAG_TEXT = '比财'
-          break;
-        case 'PC':
-          this.APP_FLAG_TEXT = '拼财'
-          break;
-        default:
-          this.APP_FLAG_TEXT = '比财'
-      }
-      console.log('ProAndOrgType', this.ProAndOrgType);
-      this.ORG_ID = this.ProAndOrgType.ORG_ID || util.storage.session.get('ORG_ID')
-      this.BANK_NAME = this.ProAndOrgType.ORG_NAME
-      if (this.ORG_ID == '49') {
-        this.BANK_NAME = '郑州直销银行'
-      } else if (this.ORG_ID == '248') {
-        this.BANK_NAME = '梅州客商银行'
-      } else {
-      }
-
-      if (this.ProAndOrgType.isfinancial == 1) {
-        // 外链过来的
-        this.BANK_NAME = ''
-        this.isfinancial = 1
-        this.hasBank = false
-      } else {
-        this.hasBank = true
-      }
-      // 控制底部提示
-      // if(this.ProAndOrgType.IS_SYNC_FLAG == 1){
-      //   this.ifOpenApi = true
-      // }else {
-      //   this.ifOpenApi = false
-      // }
-      console.log('ProAndOrgTypeId>>', this.ProAndOrgType.ID);
-      if (this.ProAndOrgType.ID && this.ProAndOrgType.IS_SYNC_FLAG == 1) {
-        // 说明链接有产品id是外链过来买东西的
-        this.getProData(this.ProAndOrgType.ID)
-      }
-      this.href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
-
-    },
-    getProData(id) {
-      let data = {
-        ID: id + ""
-      };
-      // API.commonApi.apiGetChannelPrdInfo(data, res => {
-      API.bicai.getPrdInfo(data, res => {
-        this.productDetail = res;
-        this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
-        this.removeComState('ProDuctData')
-        let goBuyData = {
-          id: id,
-          logo: this.productDetail.LOGO_URL,
-          ...this.productDetail
-        };
-        this.setComState({type: 'loginType', value: '安全购买'})
-        this.setComState({type: 'goBuy', value: goBuyData})
-      });
+      // let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
+      // Bus.$emit(BusName.showToast,MsgText)
     },
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
       this.setComState({type: 'ISLogin', value: false})
-      let {LOGO_URL, ORG_NAME} = this.ProAndOrgType
       //
+      let {LOGO_URL, ORG_NAME} = this.ProAndOrgType
+
       API.bicai.getAuthStatus({}, res => {
         let {AUTH_STATUS, isOldMember} = res
         //  AUTH_STATUS 返回码：
@@ -173,6 +110,7 @@ export default {
             this.$router.push(PageName.BcOpening3)
             break;
           case 4:
+
             if (AUTH_URL_FLAG == 1) {
               // h5活动页直接跳转来的 判断AUTH_URL_FLAG唯一 获取免登录地址
               API.bicai.getAuthUrl({}, res => {
@@ -197,6 +135,7 @@ export default {
               // 不是h5直联
               // 直接跳转
               if (H5_URL) {
+                // h5活动页跳转进来时判断是否有链接
                 Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
                 // h5活动页跳转进来时判断是否有链接
                 setTimeout(() => {
@@ -317,6 +256,4 @@ export default {
       this.toPreProduct()
     }
   },
-
-
 }

@@ -73,7 +73,8 @@ export default {
         API.watchApi({
           FUNCTION_ID: 'ptb0A007', // 点位
           REMARK_DATA: '异业合作-登录', // 中文备注
-          SOURCE_URL: SOURCE_URL
+          SOURCE_URL: SOURCE_URL,
+          MEMBER_ID: res.ID + ''
         })
 
         this.setComState({type: "reload", value: true})// reload-001  // 每次在调用密码框时进行植入标签，下次碰到密码框页面时进行校验刷新
@@ -96,10 +97,6 @@ export default {
         }
 
       }, err => {
-        API.watchApi({
-          FUNCTION_ID: 'ptb0A007', // 点位
-          REMARK_DATA: '异业合作-登录', // 中文备注
-        })
         // util.storage.session.remove(LsName.token)
         this.$store.commit('SET_TOKEN', null)
         this.setComState({

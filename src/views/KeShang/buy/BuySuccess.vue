@@ -36,11 +36,11 @@
 
     </div>
     <div class="btn" v-if="!shareHref">
-      <span @click="goMyAssets" class="begain">查看我的资产</span>
+      <span @click="goMyAssets('0')" class="begain">查看我的资产</span>
       <span @click="goBuyOther" class="begain">购买其他产品</span>
     </div>
     <div class="btn" v-if="shareHref">
-      <span @click="goMyAssets" class="begain">查看我的资产</span>
+      <span @click="goMyAssets('1')" class="begain">查看我的资产</span>
     </div>
     <div v-if="shareHref" class="share">
       <p @click="share">活动不错，分享好友吧<img src="@/assets/images/share.png" alt=""></p>
@@ -112,14 +112,28 @@
       share() {
         this.copyShow = true
       },
-      goMyAssets() {
-        API.watchApi({
-          FUNCTION_ID: 'ACB0G018', // 点位
-          REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-查看我的资产',
-        })
+      goMyAssets(type) {
+        if(type==0){
+          // 正常购买
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A008', // 点位
+            REMARK_DATA: '异业合作-购买成功-查看我的资产',
+          })
+        }
+        if(type==1){
+          // 活动购买
+          API.watchApi({
+            FUNCTION_ID: 'ACB0G018', // 点位
+            REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-查看我的资产',
+          })
+        }
         this.$router.push({name: PageName.BankDetail})
       },
       goBuyOther() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A009', // 点位
+          REMARK_DATA: '异业合作-购买成功-购买其他产品',
+        })
         if (this.shareHref) {
           let href = this.getComState.ProAndOrgType.H5HREF
           window.location.href = href

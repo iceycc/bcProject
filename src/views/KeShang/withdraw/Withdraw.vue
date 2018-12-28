@@ -19,6 +19,7 @@
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
+      <span class="span" style="color:#389CFF" @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
     </section>
     <section class="inputAmount">
             <span class="Amount">
@@ -34,7 +35,9 @@
     <p class="info1">
       本卡当前余额{{ACC_REST | formatNum}}元
       <!-- 全部提现UI图变位置了 -->
-      <span class="span" style="color:#389CFF" @click="APPLY_AMOUNT = ACC_REST">全部提现</span>
+    </p>
+    <p class="info1">
+      当前可提现金额{{WITH_DRAWABLE_CASH | formatNum}}元
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
 
@@ -75,8 +78,9 @@
         ifCheckMoneyEmpty: true,
 
 
-        ACC_REST: '200',
-        DAY_REST: '10000', // todo取每日限额
+        ACC_REST: '0',
+        WITH_DRAWABLE_CASH:'0',
+        DAY_REST: '0', // todo取每日限额
         CARD_NUM: '', //一类户卡号
         BANK_USER_CODE: '', //二类户卡号
         BANK_USER_ID: '', //银行用户ID
@@ -97,7 +101,7 @@
     },
     computed: {
       canClick() {
-        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
+        if (Number(this.APPLY_AMOUNT) > 0&&Number(this.APPLY_AMOUNT)  <= Number(this.WITH_DRAWABLE_CASH)  && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
           return true
         } else {
           return false
@@ -107,7 +111,9 @@
     mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
     created() {
       this.getUserInfos()
-      this.ACC_REST = this.$route.query.ACC_REST || '200'
+      this.ACC_REST = this.$route.query.ACC_REST || '0'
+      this.WITH_DRAWABLE_CASH = this.$route.query.WITH_DRAWABLE_CASH || '0'
+      // this.WITH_DRAWABLE_CASH = '111'
     },
     methods: {
 
@@ -316,7 +322,7 @@
       width: px2rem(15);
       height: px2rem(15);
       top: 50%;
-      right: px2rem(10);
+      right: px2rem(100);
       margin-top: px2rem(-15/2);
 
     }
