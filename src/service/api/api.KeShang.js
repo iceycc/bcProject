@@ -294,30 +294,20 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 21.	用户解绑卡 /openapi/comm/apiChangeBingCard
+    // .	用户解绑卡 /openapi/comm/apiChangeBingCard
     apiChangeBingCard(params, success, error) {
       let options = {
         url: '/openapi/comm/apiChangeBingCard',
         params,
       }
       return http.post(options, Config.config, success, error)
-
     },
+
     // 更换手机号
     // openapi/comm/apiChangePhoneNum todo 无需求
     apiChangePhoneNum(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiChangePhoneNum',
-        params,
-        delMsg
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-    // 更换支付密码：todo 无
-    apiUserResetPayPass(params, delMsg, success, error) {
-      let options = {
-        url: '/openapi/comm/apiUserResetPayPass',
         params,
         delMsg
       }

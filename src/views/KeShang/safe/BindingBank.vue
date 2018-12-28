@@ -84,14 +84,20 @@
       },
       unBindingCard() {
         console.log(2)
-        // 解绑银行卡
+        // 先发生短信验证码
+        let data = {}
+        API.common.apiSendPhoneCode(data)
 
+      },
+      unBindingCardAPI(){
+        // 解绑银行卡
+        let card = this.clickBankCard
         let data = {
-          BANK_NAME: '',//银行名称
-          BANK_ACCOUNT_NO: '',//银行账号
-          BANK_INNER: '',//行内外标识
-          DEFAULT_MARK: '',//是否默认卡
-          PHONE_NUM: '',//银行卡开户行手机号
+          BANK_NAME: card.CARD_BANK_NAME,//银行名称
+          BANK_ACCOUNT_NO: card.CARD_NUM,//银行账号
+          BANK_INNER: '0',// 行内外标识 暂时默认全传他行
+          DEFAULT_MARK: card.DEFAULT_MARK == 'true' ? '1' : '0',//是否默认卡
+          PHONE_NUM: card.BANK_CARD_PHONE,//银行卡开户行手机号
           BIND_FLG: '2',// 绑定标志 1-绑定，2-解绑
           MESSAGE_TOKEN: '',
           VALIDATE_CODE: '',// 短信验证码
