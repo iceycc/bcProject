@@ -9,6 +9,8 @@ input,select,option,textarea{
     border: none;
     box-sizing: border-box;
 }
+nput[disabled]{
+  background-color: #fff;color:#000;opacity:1}
 
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
