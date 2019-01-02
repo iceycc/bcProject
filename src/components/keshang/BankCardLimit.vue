@@ -22,6 +22,7 @@
           *农业银行，民生银行，华夏银行，招商银行不支持直接通过直销银行发起转入，如果转账需要通过网上银行、手机银行等渠道向直销银行电子账户汇款，汇款时汇款银行卡户名与卡号，必须与直销银行绑定银行卡信息一致
         </p>
       </div>
+      <img src="~@/assets/images/production/close@2x.png" alt="" class="close-icon" @click="clickHideHandle">
     </div>
   </div>
 </template>
@@ -40,6 +41,9 @@
       this.getBankLimitList()
     },
     methods: {
+      clickHideHandle(){
+        this.$emit('hideHandle')
+      },
       getBankLimitList() {
         let data = {}
         API.common.apiGetBankCardLimit(data, res => {
@@ -65,6 +69,7 @@
     padding-top: px2rem(50);
     z-index: 10;
 
+
     .foot-dec {
       color: #FF5B05;
       font-size: px2rem(12);
@@ -72,10 +77,20 @@
     }
 
     .inner {
+      position: relative;
       margin: 0 auto;
       width: px2rem(335);
       background: #fff;
       border-radius: px2rem(10);
+
+      .close-icon {
+        position: absolute;
+        top: px2rem(10);
+        right: px2rem(10);
+        width: px2rem(20);
+        height: px2rem(20);
+        z-index: 10;
+      }
 
       .limit-box {
         width: 100%;
@@ -103,7 +118,6 @@
         display: flex;
         border-bottom: 1px solid #E5E5E5;
         padding: px2rem(10) 0;
-
         span {
           flex: 1;
         }
@@ -111,6 +125,7 @@
 
       .line1, .line4 {
         color: #444444;
+        line-height: 1.2;
       }
 
       .line1 {
@@ -118,6 +133,7 @@
       }
 
       .line2, .line3 {
+        line-height: 1.2;
         color: #858E9F;
       }
     }

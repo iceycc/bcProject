@@ -26,7 +26,7 @@
       <!--<p>1.请您确认新绑定银行卡在银行绑定的手机号与旧卡 绑定手机号相同。</p>-->
       <!--<p>2.更换绑定银行卡前，请转出所有的投资资金并提现</p>-->
       <!--</section>-->
-      <bank-card-limit></bank-card-limit>
+      <!--<bank-card-limit v-if="bankLimitShow"></bank-card-limit>-->
     </section>
   </div>
 </template>
@@ -39,7 +39,7 @@
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import Mixins from "@/mixins";
-  import BankCardLimit from '@/components/keshang/BankCardLimit'
+  // import BankCardLimit from '@/components/keshang/BankCardLimit'
   let timer;
   export default {
     name: "changeBank",
@@ -47,13 +47,14 @@
       BankSelect,
       ActiveInput,
       ErrMsg,
-      BankCardLimit
+      // BankCardLimit
     },
     data() {
       return {
         bankText: '请选择银行',
         bankList: [],
         AllBankListObj: {},
+        bankLimitShow:false,
         errMsg: '',
         bankNo: '',
         msgCode: '',

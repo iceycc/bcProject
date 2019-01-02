@@ -118,21 +118,23 @@ export default {
         this.logo = res.BANK_BG_URL
         this.ORG_NAME = res.ORG_NAME
         this.PHONE_NUM = res.PHONE_NUM
-        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME;
-        this.BANK_USER_CODE = res.BANK_USER_CODE
+        this.BANK_USER_CODE = res.BANK_USER_CODE // 二类户卡号
+
+        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME;// 银行名称
         this.CARD_BANK_URL = res.CARD_LIST[0].CARD_BANK_URL
         this.DAY_QUOTA = res.CARD_LIST[0].DAY_QUOTA
         this.SINGLE_QUOTA = res.CARD_LIST[0].SINGLE_QUOTA
         this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
+
         this.BANK_USER_ID = res.BANK_USER_ID
-        let cardNum = res.CARD_LIST[0].CARD_NUM
-        this.mainBankList.push({
-          logo: res.CARD_BANK_URL,
-          name: res.CARD_BANK_NAME,
-          footNum: cardNum.substr(cardNum.length - 4),
-          money: '100',
-          id: this.mainBankList.length + 1
-        })
+        this.mainBankList = res.CARD_LIST
+        // this.mainBankList.push({
+        //   logo: res.CARD_BANK_URL,
+        //   name: res.CARD_BANK_NAME,
+        //   footNum: cardNum.substr(cardNum.length - 4),
+        //   money: '100',
+        //   id: this.mainBankList.length + 1
+        // })
       })
     },
     reChangeHandele() { // 查询用户是否已签约充值协议
@@ -152,7 +154,7 @@ export default {
       })
     },
     clickBank() {
-      // this.upseletShow = !this.upseletShow
+      this.upseletShow = !this.upseletShow
     },
   }
 }

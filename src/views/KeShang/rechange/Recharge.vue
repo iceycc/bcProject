@@ -21,6 +21,7 @@
         <p>{{CARD_BANK_NAME}}</p>
         <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
       </div>
+      <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="money">
       <p>每日限额：{{DAY_QUOTA | formatNumKS}}</p>
@@ -52,17 +53,19 @@
     <up-select
       :show="upseletShow"
       :BankList="mainBankList"
+      @chooseBank="chooseBank"
     ></up-select>
   </div>
 </template>
 <script>
   import {HOST_API, LsName} from '@/Constant'
-  import UpSelect from '@/components/commons/UpSelect'
+  import UpSelect from '@/components/keshang/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
+  import IconFont from '@/components/commons/IconFont'
 
 
   let time = 60
@@ -103,6 +106,7 @@
     },
     components: {
       UpSelect,
+      IconFont
     },
     mixins: [Mixins.UtilMixin, RechangeMixins],
     created() {
@@ -162,6 +166,13 @@
       }
     },
     methods: {
+      chooseBank(bank) {
+        this.CARD_BANK_NAME = bank.CARD_BANK_NAME;// 银行名称
+        this.CARD_BANK_URL = bank.CARD_BANK_URL
+        this.DAY_QUOTA = bank.DAY_QUOTA
+        this.SINGLE_QUOTA = bank.SINGLE_QUOTA
+        this.CARD_NUM = bank.CARD_NUM
+      },
       clearNumHandle() {
         this.APPLY_AMOUNT = ''
       },
@@ -249,6 +260,7 @@
   }
 
   .minshengbank {
+    position: relative;
     padding-left: 0.5rem;
     height: 1.8rem;
     font-size: 0.5rem;
@@ -261,6 +273,12 @@
       p:last-child {
         color: #9199A1;
       }
+    }
+    .detail{
+      right: px2rem(20);
+      top: px2rem(15);
+      color: #999999;
+      position: absolute;
     }
   }
 

@@ -68,10 +68,10 @@
         <span class="top-right" v-if="!pass">
                     ****
                 </span>
-        <!--<span class="ic-right" @click="goPage(toPageName.BankBalance)">-->
-                    <!--明细-->
-                    <!--<icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>-->
-                <!--</span>-->
+        <span class="ic-right" @click="goPage(toPageName.BankBalance)">
+                    明细
+                    <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
+                </span>
       </section>
       <ul v-if="licaiShow">
         <!-- @click="geDetails(item)"-->

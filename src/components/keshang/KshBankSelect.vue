@@ -34,10 +34,13 @@
         </section>
       </section>
     </div>
-    <div class="bank-xiane" v-if="backShow">
-      <img @click="backShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
-      <img src="@/assets/images/bank@2x.png" alt="">
-    </div>
+
+    <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
+
+    <!--<div class="bank-xiane" v-if="backShow">-->
+      <!--<img @click="backShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">-->
+      <!--<img src="@/assets/images/bank@2x.png" alt="">-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -45,6 +48,7 @@
   // const Letter = [A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
   import {BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
+  import BankCardLimit from '@/components/keshang/BankCardLimit'
 
   const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -65,6 +69,9 @@
         type: null,
         default: true
       }
+    },
+    components:{
+      BankCardLimit
     },
     watch: {
       // options(n,o){

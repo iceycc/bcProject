@@ -2,7 +2,7 @@
   <div class="app">
     <app-bar title="提现"></app-bar>
     <div class="rechargetitle">提现到{{CARD_BANK_NAME}}</div>
-    <div class="minshengbank">
+    <div class="minshengbank" @click="clickBank">
       <span class="minshengbankLogo">
         <img :src="imgSrc + logo" style="width:75%" alt="">
       </span>
@@ -10,6 +10,7 @@
         <p>{{CARD_BANK_NAME}}</p>
         <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
       </div>
+      <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="crow-line"></div>
     <section class="inputAmount">
@@ -40,7 +41,11 @@
       当前可提现金额{{WITH_DRAWABLE_CASH | formatNum}}元
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
-
+    <up-select
+      :show="upseletShow"
+      :BankList="mainBankList"
+      @chooseBank="chooseBank"
+    ></up-select>
   </div>
 </template>
 <script>
@@ -52,6 +57,8 @@
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from '@/mixins'
+  import IconFont from '@/components/commons/IconFont'
+  import UpSelect from '@/components/keshang/UpSelect'
 
   let time = 60
   let timer;
@@ -62,6 +69,9 @@
         msgdisable: false,
         msgCode: '',
 
+        // 银行选择卡
+        upseletShow:false,
+        mainBankList:[],
 
         html: '协议',
         page: false,
@@ -88,7 +98,9 @@
     },
     components: {
       AppBar,
-      PassWordZhengzhou
+      PassWordZhengzhou,
+      IconFont,
+      UpSelect
     },
     watch: {
       APPLY_AMOUNT(n) {
@@ -155,6 +167,11 @@
       checkMoney() {
 
       },
+      chooseBank(bank) {
+        this.CARD_BANK_NAME = bank.CARD_BANK_NAME
+        this.CARD_NUM = bank.CARD_NUM
+        this.logo = bank.CARD_BANK_URL
+      },
       getUserInfos() {
         API.safe.apiBandCard({}, (res) => {
           console.log(res)
@@ -163,6 +180,9 @@
           this.logo = res.CARD_LIST[0].CARD_BANK_URL
           this.BANK_USER_ID = res.BANK_USER_ID
           this.BANK_USER_CODE = res.BANK_USER_CODE
+
+          this.mainBankList = res.CARD_LIST
+
         })
       },
       doWithdraw() {
@@ -255,6 +275,9 @@
         this.doWithdraw()
 
       },
+      clickBank() {
+        this.upseletShow = !this.upseletShow
+      },
       clearNumHandle() {
         //
         this.APPLY_AMOUNT = ''
@@ -277,6 +300,7 @@
   }
 
   .minshengbank {
+    position: relative;
     padding-left: 0.5rem;
     height: px2rem(65);
     font-size: px2rem(16);
@@ -289,6 +313,12 @@
       p:last-child {
         color: #9199A1;
       }
+    }
+    .detail{
+      right: px2rem(20);
+      top: px2rem(15);
+      color: #999999;
+      position: absolute;
     }
   }
 
