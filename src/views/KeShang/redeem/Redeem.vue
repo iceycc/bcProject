@@ -69,7 +69,7 @@
         redeemData: {
           INVEST_AMOUNT: '',
           FUND_NO: '',
-          PRD_TYPE: '1',
+          PRD_TYPE: '4',
         },
         EFFCT_INTEREST_RATE: '',
         passCode: '',
@@ -156,7 +156,7 @@
         // this.debounce(()=>{
         //   console.log(3213)
         // },1000)()
-        this.getPreCalculation()
+        // this.getPreCalculation()
       },
       getPreCalculation() {
         console.log(1);
@@ -212,6 +212,7 @@
         this.isFocus = true;
       },
       blur() {
+
       },
       sure() {
         this.typeShow = false;
@@ -249,8 +250,9 @@
           PHONE_CODE: this.PHONE_CODE,
           PRD_ID: this.redeemData.PRD_INDEX_ID,//	产品ID
           APPLY_AMOUNT: this.money, //	金额
-          PRD_TYPE: this.redeemData.PRD_TYPE,//产品类型
-          ORDER_NUM: this.redeemData.ORDER_NUM,
+          // PRD_TYPE: this.redeemData.PRD_TYPE,//产品类型
+          PRD_TYPE: '4',//产品类型 （4存款）
+          ORDER_NUM: this.redeemData.ORDER_NUM, // 订单编号
           MESSAGE_TOKEN: this.MESSAGE_TOKEN
         }
         API.redeem.apiRedemption(data, res => {

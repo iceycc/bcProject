@@ -194,11 +194,12 @@
         }
         API.redeem.apiRedemptionValid(params, res => {
           console.log(res)
+          this.setComState({
+            type: 'redeemData',
+            value: item
+          })
           if (res.RES_CODE == 0) {
-            this.setComState({
-              type: 'redeemData',
-              value: item
-            })
+
             this.$router.push({name: PageName.Redeem})
           }
           if (res.RES_CODE == 1) {
