@@ -71,7 +71,8 @@ export const PageName = {
   /**
    * test
    */
-  TestPage: 'TestPage',
+  TestPage: 'TestPage',// 现在用于404
+  test: 'test',
   /**
    * 登陆
    */
