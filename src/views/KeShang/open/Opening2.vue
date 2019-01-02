@@ -30,6 +30,9 @@
           {{bankText}}
         </span>
         <img @click="showBindBankList" src="@/assets/images/GroupCopy14@2x.png" alt="" class="img">
+        <span class="xiane" @click="showXiane">
+           <img src="@/assets/images/problom2@2x.png" alt="">
+          银行限额</span>
         <!--<input type="number"-->
         <!--name="backname"  v-model="bankText">-->
       </section>
@@ -43,7 +46,6 @@
       <section class="input-box">
         <p class="left-p">手机号码</p>
         <input
-          disabled
           type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
       </section>
       <section class="input-box">
@@ -93,6 +95,7 @@
         </section>
       </section>
     </div>
+    <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
   </div>
 </template>
 <script>
@@ -103,12 +106,14 @@
   import util from "../../../libs/util";
   import UpSelect from '@/components/commons/UpSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
+  import BankCardLimit from '@/components/keshang/BankCardLimit'
 
   const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
   export default {
     data() {
       return {
+        backShow:false,// 限额显示
         show: false,
         upseletShow: false,
         title: '选择银行卡',
@@ -159,7 +164,8 @@
     components: {
       BankSelect,
       UpSelect,
-      PassWordZhengzhou
+      PassWordZhengzhou,
+      BankCardLimit
     },
     watch: {
       tel(n, o) {
@@ -211,6 +217,10 @@
         // to
         this.bankText = bank.OPEN_BANK
         this.data.CARD_NO = bank.CARD_NO
+      },
+      showXiane(){
+        this.backShow = true
+
       },
       showBindBankList() {
         this.upseletShow = !this.upseletShow
@@ -348,6 +358,20 @@
       border-bottom: 1px #E5E5E5 solid;
       display: flex;
       font-size: px2rem(14);
+    }
+
+    .xiane {
+      padding-left: px2rem(10);
+      padding-top: px2rem(12);
+
+      img {
+        vertical-align: top;
+        width: px2rem(18);
+        height: px2rem(18);
+      }
+
+      color: #0096FE;
+      font-size: px2rem(14)
     }
 
     .input-box {

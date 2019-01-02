@@ -40,21 +40,25 @@
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
                 <p>隶属于{{item.ORG_NAME}}</p>
-                <p>持有金额
+                <p>持有金额（元）
                   <span>{{item.HOLD_AMOUNT}}</span>
                 </p>
                 <p>存入时间
                   <span>{{item.TIME_END}}</span>
                 </p>
-                <p>到期时间
+                <p>最长期限
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
-                <p>预计收益
-                  <span>{{item.EXPECT_INCOME}}</span>
+                <p>锁定期
+                  <span>{{item.LOCKUP_PERIOD}}</span>
                 </p>
                 <p>存款利率
                   <span>{{item.RATE}}%</span>
                 </p>
+                <p>预计收益
+                  <span>{{item.EXPECT_INCOME}}</span>
+                </p>
+
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
                   <div>

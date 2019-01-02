@@ -36,7 +36,8 @@
           this.getBuyAgreementByAjax()
         }
         if (type == 'recharge') {
-          this.getBuyAgreementByAjax()
+          this.getRechargeAgreementByAjax()
+
           // this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/cz.html'
         }
         if (type == 'open') {
@@ -45,9 +46,25 @@
         if (type == 'redeem') {
           this.getRedeemAgreementByAjax()
         }
-        if(type == 'privacy') {
+        if (type == 'privacy') {
           this.getPrivacyAgreementByAjax()
         }
+      },
+      getRechargeAgreementByAjax() {
+        // TYPE
+        // ORG_ID
+        // USER_NAME
+        // USER_CARD_ID
+        let rechargeData = this.getComState.rechargeData
+        console.log(rechargeData);
+        let data = {
+          USER_NAME: rechargeData.USER_NAME,
+          USER_CARD_ID: rechargeData.USER_CARD_ID,
+        }
+        API.doc.rechargeAgreement(data, res => {
+          this.title = res.AGREEMENT
+          this.agreeMentSrc = HOST_API + res.URL
+        })
       },
       getRedeemAgreementByAjax() {
         // TODO
@@ -80,13 +97,13 @@
           this.agreeMentSrc = HOST_API + res.URL
         })
       },
-      getPrivacyAgreementByAjax(){
+      getPrivacyAgreementByAjax() {
         let data = {
           InterfaceType: "1"
         }
-        API.bicai.privacyAgreement(data,res => {
+        API.bicai.privacyAgreement(data, res => {
           this.docs = res[0].HTML_TEXT;
-        },err => {
+        }, err => {
           console.log(err)
         })
       },
@@ -114,9 +131,11 @@
     background: #fff;
     z-index: 100;
     box-sizing: border-box;
-    h1{
+
+    h1 {
       text-align: center;
     }
+
     .docs {
       box-sizing: border-box;
       padding: 0 px2rem(10);
@@ -125,6 +144,7 @@
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
     }
+
     .iframs-docs {
       box-sizing: border-box;
       padding: 0 px2rem(10);
@@ -132,15 +152,18 @@
       height: 90%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+
       .indocs {
         border: none;
         width: 100%;
         height: 100%;
       }
     }
+
     .btn {
       padding-top: .2rem;
       text-align: center;
+
       button {
         background: #007aff;
         width: px2rem(80);

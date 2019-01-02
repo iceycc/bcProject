@@ -10,17 +10,20 @@
           :class="{gray:bank.IS_SUPPORT == 0,active:cur === index}"
           @click="chooseType(index,bank,$event)">
           <img :src="imgSrc + bank.CARD_BANK_URL" class="logo-img" alt="">
-          <section>
+          <section v-if="type=='recharge'">
             <p class="name">{{bank.CARD_BANK_NAME}} ({{bank.CARD_NUM| noFilter}})</p>
             <p class="money">单笔充值上限{{bank.SINGLE_QUOTA}},单日充值上限{{bank.DAY_QUOTA}}</p>
+          </section>
+          <section v-if="type=='withdraw'">
+            <p class="name name1">{{bank.CARD_BANK_NAME}} ({{bank.CARD_NUM| noFilter}})</p>
           </section>
         </li>
       </ul>
       <!--<div class="add_bank" @click="addBankList">-->
-        <!--<div class="left">-->
-          <!--<span class="add">+</span>-->
-        <!--</div>-->
-        <!--<span class="right">添加银行卡</span>-->
+      <!--<div class="left">-->
+      <!--<span class="add">+</span>-->
+      <!--</div>-->
+      <!--<span class="right">添加银行卡</span>-->
       <!--</div>-->
     </div>
     <div class="grey-mask"></div>
@@ -36,6 +39,10 @@
       show: {
         type: null,
         default: false
+      },
+      type: {
+        type: null,
+        default: 'recharge'
       },
       BankList: {
         type: null,
@@ -149,10 +156,11 @@
 
       li {
         display: flex;
-        padding: px2rem(22);
+        padding: px2rem(10) px2rem(22);
         border-bottom: 1px solid #EEEEF0;
 
         .logo-img {
+          margin-top: px2rem(10);
           width: px2rem(30);
           height: px2rem(30);
         }
@@ -162,9 +170,11 @@
           font-size: px2rem(15);
           color: #121B32;
         }
-
+        .name1{
+          margin-top: px2rem(10);
+        }
         .money {
-          line-height: px2rem(40);
+          line-height: px2rem(30);
           font-size: px2rem(12);
           color: #858E9F;
         }

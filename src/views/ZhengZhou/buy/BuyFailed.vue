@@ -118,10 +118,10 @@
       margin: 0 px2rem(5);
       display: inline-block;
       color: #fff;
-      background: #508CEE;
+      background: #518BEE;
       border-radius: px2rem(6);
       font-size: px2rem(18);
-      width: px2rem(160);
+      width: px2rem(255);
       height: px2rem(44);
       line-height: px2rem(44);
       text-align: center;

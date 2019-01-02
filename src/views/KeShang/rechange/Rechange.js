@@ -4,7 +4,9 @@ import Bus from '@/plugin/bus'
 
 export default {
   data() {
-    return {}
+    return {
+      rechargeData:{}
+    }
   },
   created() {
     console.log('JinShang');
@@ -128,6 +130,12 @@ export default {
 
         this.BANK_USER_ID = res.BANK_USER_ID
         this.mainBankList = res.CARD_LIST
+
+        let rechargeData = {
+          USER_NAME:res.USER_NAME,
+          USER_CARD_ID:res.USER_CARD_ID
+        }
+        this.setComState({type:'rechargeData',value:rechargeData})
         // this.mainBankList.push({
         //   logo: res.CARD_BANK_URL,
         //   name: res.CARD_BANK_NAME,
@@ -140,7 +148,6 @@ export default {
     reChangeHandele() { // 查询用户是否已签约充值协议
       let data = {}
       API.reChange.apiRechargeProtoQuery(data, (res) => {
-        console.log(res);
         if (res.SIGN_STATE == 'N') {
           // 没写
           this.write = false

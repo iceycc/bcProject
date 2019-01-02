@@ -540,6 +540,15 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+
+    // 充值代扣协议
+    rechargeAgreement(params, success, error) {
+      let options = {
+        url: '/openapi/comm/rechargeAgreement',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
   }
 }
 

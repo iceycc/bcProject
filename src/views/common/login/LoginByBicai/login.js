@@ -312,8 +312,9 @@ export default {
         clearInterval(timer)
       })
     },
-    loginSuccess() {
+    loginSuccess(res) {
       this.setComState({type: 'ISLogin', value: true})
+      this.setComState({type: 'Infos', value: res})
       this.toPreProduct()
     }
   },

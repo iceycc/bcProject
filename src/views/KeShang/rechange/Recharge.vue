@@ -47,8 +47,8 @@
       </button>
     </section>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认充值</button>
-    <!-- <p :class="{'bang':true,'no':agree == false}" v-if="!write"
-       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值协议》</span></p> -->
+    <p :class="{'bang':true,'no':agree == false}" v-if="!write"
+       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值委托代扣协议》</span></p>
 
     <up-select
       :show="upseletShow"

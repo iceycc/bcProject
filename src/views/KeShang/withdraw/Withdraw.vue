@@ -45,6 +45,7 @@
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBank"
+      type="withdraw"
     ></up-select>
   </div>
 </template>

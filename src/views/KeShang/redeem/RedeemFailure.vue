@@ -72,7 +72,7 @@
   .btn {
     font-size: px2rem(18);
     color: #fff;
-    background: #0096FE;
+    background: #518BEE;
     border-radius: px2rem(6);
     height: px2rem(44);
     line-height: px2rem(44);
