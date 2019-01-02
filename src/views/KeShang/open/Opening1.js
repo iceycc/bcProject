@@ -38,6 +38,10 @@ export default {
   },
   methods: {
     doOpeningFirstFactory() {
+      if(this.agree==false){
+        Bus.$emit(BusName.showToast,'您还未同意相关协议')
+        return
+      }
       API.watchApi({
         FUNCTION_ID: 'ptb0A003', // 点位
         REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注

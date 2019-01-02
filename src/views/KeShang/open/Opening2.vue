@@ -43,6 +43,7 @@
       <section class="input-box">
         <p class="left-p">手机号码</p>
         <input
+          style="background: #fff"
           disabled
           type="text" name="tel" placeholder="银行预留手机号" v-model="tel">
       </section>
