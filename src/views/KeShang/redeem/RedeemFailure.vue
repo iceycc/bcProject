@@ -4,7 +4,9 @@
     <div class="chattuimg">
       <img src="@/assets/images/buyfail@2x.png" alt="">
       <h2>很抱歉，支取失败!</h2>
-      <p class="err-msg">{{errMsg}}</p>
+      <p class="err-msg">
+        <img class="err-img" src="@/assets/images/error_tips.png" alt="">
+        {{errMsg}}</p>
     </div>
     <span @click="reWithdraw" class="btn">重新支取</span>
     <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
@@ -52,8 +54,15 @@
       font-size: px2rem(18);
       margin: px2rem(20) 0;
     }
+
     .err-msg{
-      font-size: px2rem(16);
+      .err-img{
+        width:px2rem(16);
+        height:px2rem(16);
+        vertical-align: top;
+      }
+      font-size: px2rem(12);
+      line-height: px2rem(16);
       text-align: center;
       color:#F22C17
     }

@@ -4,10 +4,10 @@
     <div class="r-top">
       <img :src="imgSrc + redeemData.LOGO_URL" alt="">
       <div>
-        <!--<p>{{redeemData.ORG_NAME}}</p>-->
-        <p>{{redeemData.PRD_NAME}}</p>
+        <p>{{redeemData.ORG_NAME}}</p>
+        <span>{{redeemData.PRD_NAME}}</span>
         <!--<span>{{redeemData.PRD_NAME}}</span>-->
-        <span>活期存款</span>
+        <!--<span>活期存款</span>-->
       </div>
     </div>
     <div class="r-cash">
@@ -35,11 +35,12 @@
         class="button">{{codeText}}
       </button>
     </section>
+    <p class="msg-infomation">不支持部分支取,当日存入的需第二日才能支取</p>
     <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">立即支取</button>
-    <p @click="agree =!agree"
-       :class="{'bang':true,'no':agree == false}">立即赎回代表您已阅读并同意
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《“周周利”产品业务服务协议》</a>
-    </p>
+    <!--<p @click="agree =!agree"-->
+       <!--:class="{'bang':true,'no':agree == false}">立即赎回代表您已阅读并同意-->
+      <!--<a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《“周周利”产品业务服务协议》</a>-->
+    <!--</p>-->
   </div>
 </template>
 <script>
@@ -387,11 +388,11 @@
   }
 
   .r-btn {
-    width: px2rem(322);
+    width: px2rem(255);
     height: px2rem(44);
     line-height: px2rem(44);
     display: block;
-    margin: px2rem(40) auto px2rem(20);
+    margin: px2rem(50) auto px2rem(20);
     text-align: center;
     background-color: #e4e4e4;
     color: #fff;
@@ -464,6 +465,12 @@
   .no {
     background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
     background-size: 0.3rem 0.3rem;
+  }
+  .msg-infomation{
+    padding-top:px2rem(10);
+    padding-left: px2rem(20);
+    color: #B3B3B3;
+    font-size:px2rem(12)
   }
 </style>
 

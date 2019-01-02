@@ -6,7 +6,9 @@
     </div>
     <div class="fenxiangcontent">
       <h2>很抱歉，存入失败!</h2>
-      <p style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</p>
+      <p class="err-msg">
+        <img class="err-img" src="@/assets/images/error_tips.png" alt="">
+        {{errMsg}}</p>
     </div>
     <div class="btn" v-if="!shareHref">
       <!--<span @click="goMyAssets" class="begain">查看我的资产</span>-->
@@ -98,7 +100,6 @@
 
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
-
   .app {
     width: 100%;
     margin: 0 auto;
@@ -185,6 +186,18 @@
       height: px2rem(40);
       overflow-x: scroll;
     }
+  }
+  .err-msg{
+    .err-img{
+      width:px2rem(16);
+      height:px2rem(16);
+      vertical-align: top;
+    }
+    margin-top: px2rem(20);
+    font-size: px2rem(12);
+    line-height: px2rem(16);
+    text-align: center;
+    color:#F22C17
   }
 
 </style>
