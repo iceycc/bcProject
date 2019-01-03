@@ -145,21 +145,6 @@ export default {
         // })
       })
     },
-    reChangeHandele() { // 查询用户是否已签约充值协议
-      let data = {}
-      API.reChange.apiRechargeProtoQuery(data, (res) => {
-        if (res.SIGN_STATE == 'N') {
-          // 没写
-          this.write = false
-          this.page = false
-          this.agree1 = false
-        } else {
-          // 填写了
-          this.write = true
-          this.agree1 = true
-        }
-      })
-    },
     clickBank() {
       this.upseletShow = !this.upseletShow
     },

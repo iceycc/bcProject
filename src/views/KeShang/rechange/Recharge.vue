@@ -111,7 +111,6 @@
     mixins: [Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
-      // this.reChangeHandele()
     },
     filters: {
       formatNumKS(str) {
