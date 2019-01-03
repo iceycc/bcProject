@@ -155,6 +155,9 @@
 
         this.$router.push({
           name: PageName.Recharge,
+          query:{
+            ORIGIN_PAGE: 'buying' // 用于成功后 按钮的展示判断 .购买流程充值页面完成后只有继续购买按钮；
+          }
         })
       },
       getAgreement(type) {
@@ -265,7 +268,10 @@
               this.setComState({type: 'buyData', value: result})
               this.$router.push({
                 name: PageName.BuySuccess,
-                query: {TEAM_ID: this.TEAM_ID, INVEST_ID: this.INVEST_ID}
+                query: {
+                  TEAM_ID: this.TEAM_ID,
+                  INVEST_ID: this.INVEST_ID,
+                }
               })
               return
             } else {

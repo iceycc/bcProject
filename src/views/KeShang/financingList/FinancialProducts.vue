@@ -50,7 +50,7 @@
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
                 <p>锁定期
-                  <span>{{item.LOCKUP_PERIOD}}</span>
+                  <span>{{item.LOCKUP_PERIOD}}天</span>
 
                 </p>
                 <p>存款利率
@@ -77,16 +77,22 @@
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>隶属于{{item.ORG_NAME}}</p>
+                <p>{{item.ORG_NAME}}</p>
                 <p>本金金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
-                <p>实际收益金额
+                <p>投资收益
                   <span>{{item.ADD_INCOME | formatNum}}</span>
                 </p>
-                <p>支取时间
-                  <span>{{item.OVER_DATE}}</span>
-                </p>
+                <!--<p>支取时间-->
+                  <!--<span>{{item.OVER_DATE}}</span>-->
+                <!--</p>-->
+                <!-- 新加赎回追加按钮 -->
+                <div class="bottom-btn">
+                  <div>
+                    <span @click="goBuy(item)">再次存入</span>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -104,7 +110,13 @@
     </div>
     <section class="waiting" v-if="infoShow">
       <p>{{waitingMsg}}</p>
-      <button @click="close">确定</button>
+      <div class="btn" v-if="canRedeem">
+        <div @click="close" class="cancel">取消</div>
+        <div @click="sureRedeem" class="sure">继续支取</div>
+      </div>
+      <div class="btn" v-else>
+        <div @click="close" class="cancel">确定</div>
+      </div>
     </section>
   </div>
 </template>
@@ -155,7 +167,8 @@
           YSD_INCOME: '0.00',
           TOTAL_INCOME: '0.00',
         },
-        total: ''
+        total: '',
+        canRedeem:false ,// 是否可以支取
       };
     },
     components: {
@@ -179,19 +192,17 @@
         this.infoShow = false
       },
       goBuy(item) {
-        this.setComState({type: 'goBuy', value: {...item,ID:item.PRD_INDEX_ID}})
+        this.setComState({type: 'goBuy', value: {...item, ID: item.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
       },
+      sureRedeem(){
+        this.$router.push({name: PageName.Redeem})
+      },
       goRedeem(item) {
-        // Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
-        // this.setComState({
-        //   type: 'redeemData',
-        //   value: data
-        // })
         let params = {
           INVEST_TIME: item.TIME_END,
           PRD_INDEX_ID: item.PRD_INDEX_ID
@@ -203,16 +214,19 @@
             value: item
           })
           if (res.RES_CODE == 0) {
-
-            this.$router.push({name: PageName.Redeem})
-          }
-          if (res.RES_CODE == 1) {
             this.waitingMsg = res.RES_MSG
+            this.canRedeem = true // 可支取
+            this.infoShow = true
+          }
+          if (res.RES_CODE == 1) { // 可支取
+            this.waitingMsg = res.RES_MSG
+            this.canRedeem = true // 可支取
             this.infoShow = true
             // Bus.$emit(BusName.showToast, res.RES_MSG)
           }
-          if (res.RES_CODE == 2) {
+          if (res.RES_CODE == 2) { // 不可支取
             this.waitingMsg = res.RES_MSG
+            this.canRedeem = false
             this.infoShow = true
             // Bus.$emit(BusName.showToast, res.RES_MSG)
           }
@@ -598,21 +612,34 @@
     background: #fff;
     width: px2rem(270);
     z-index: 100;
-    text-align: center;
     border: 1px solid #e5e5e5;
     border-radius: px2rem(12);
     box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
 
     p {
+      text-align: center;
       padding-top: px2rem(20);
       font-size: px2rem(16);
       color: #333;
     }
 
-    button {
+    .btn {
+      margin-top: px2rem(20);
+      border-top: 1px solid #fafafa;
+      display: flex;
+    }
+
+    .cancel,.sure{
+      text-align: center;
+      flex: 1;
       padding: px2rem(10) 0 px2rem(10);
-      color: #508CEE;
       font-size: px2rem(17);
+    }
+    .cancel{
+      color: #508CEE;
+    }
+    .sure {
+      color: #000;
     }
   }
 

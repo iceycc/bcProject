@@ -6,13 +6,15 @@
       <h2>充值成功</h2>
     </div>
     <section class="m-card">
-      <p><span>充值金额</span>{{data.money}}</p>
+      <p><span>充值金额</span>{{data.money | formatNum}}</p>
       <p><span>交易流水号</span>{{data.BESHARP_RECHARGE_SEQ}}</p>
     </section>
     <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
     <!--<div class="begain">下载比财app</div>-->
     <!--<button class="begain" @click="goBalance">查看余额</button>-->
-    <button class="begain" @click="goBalance">查看余额</button>
+    <button v-if="ORIGIN_PAGE=='buying'" class="begain" @click="goBuyNext">继续购买</button>
+    <button v-if="!ORIGIN_PAGE  " class="begain" @click="goProList">购买产品</button>
+    <button v-if="!ORIGIN_PAGE" class="begain write" @click="goBalance">查看余额</button>
   </div>
 </template>
 <script>
@@ -27,16 +29,25 @@
       return {
         data: {
           money: '',
-          BESHARP_RECHARGE_SEQ: ''
+          BESHARP_RECHARGE_SEQ: '',
+          ORIGIN_PAGE:''
         }
       }
     },
     created() {
       this.data = this.$route.query
+      this.ORIGIN_PAGE = this.data.ORIGIN_PAGE
+      // this.ORIGIN_PAGE = ''
     },
     methods: {
+      goBuyNext(){
+        this.$router.go(-2)
+      },
       goBank(){
         this.$router.go(-2)
+      },
+      goProList(){
+        this.$router.push({name:PageName.ProductList})
       },
       goBalance() {
         this.$router.push({
@@ -97,5 +108,10 @@
     color: #fff;
     text-align: center;
     margin: px2rem(30) auto;
+    &.write{
+      border: 1px solid #518BEE;
+      background: #fff;
+      color: #518BEE;
+    }
   }
 </style>

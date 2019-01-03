@@ -301,7 +301,7 @@
   .slot {
     position: absolute;
     display: inline-block;
-    z-index: -1;
+    z-index: 0;
     bottom: px2rem(8);
     right: 0;
     border: 1px solid #2B74FE;

@@ -178,9 +178,12 @@
         }
         API.safe.apiChangeBingCard(data, res => {
           this.BC_PHONE = ''
+          this.msgCode = ''
           this.getBankList()
         }, err => {
           this.BC_PHONE = ''
+          this.msgCode = ''
+
         })
       }
     }

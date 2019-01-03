@@ -101,7 +101,8 @@
         mainBankList: [],
         passCode: '',
         ACCT_NO: '', // TODO
-        PHONE_NUM: ''
+        PHONE_NUM: '',
+        ORIGIN_PAGE:''// 来源页面
       }
     },
     components: {
@@ -111,6 +112,7 @@
     mixins: [Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
+      this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
     },
     filters: {
       formatNumKS(str) {

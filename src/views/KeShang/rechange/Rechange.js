@@ -67,6 +67,7 @@ export default {
               this.$router.push({
                 name: PageName.RechargeSuccess,
                 query: {
+                  ORIGIN_PAGE:this.ORIGIN_PAGE,
                   money: this.APPLY_AMOUNT,
                   ...res
                 }
