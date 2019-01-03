@@ -6,7 +6,9 @@
         <div class="bannercontent">
           <div class="bannertop">
             <div class="bannertopleft">
-              <p class="p-text" style="font-size: 0.4rem;">七日年化收益率</p>
+              <p class="p-text" style="font-size: 0.4rem;">
+                <!--1.03新增需求369 判断小鱼bank-->
+                {{productDetail.IS_XIAOYU_BANK==1?productDetail.RATE_DESC:'七日年化收益率'}}</p>
               <p>
                 <strong style="font-size: 1rem"> {{productDetail.RATE}} </strong>
                 <span style="font-size: .5rem;">%</span>
@@ -123,7 +125,7 @@
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
           <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
-          <!--<div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="DEPICT">-->
+            <!--<div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="DEPICT">-->
           </div>
         </div>
       </div>
