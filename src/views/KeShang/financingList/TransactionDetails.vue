@@ -45,7 +45,7 @@
                   <p>
                     <span>{{item.OPERA_DATE}}</span>
                     <!--1:买入 2:卖出-->
-                    <em>{{item.TRANS_AMT_DESC}}</em>
+                    <em>{{item.TRANS_AMT_DESC | formatNum}}</em>
                   </p>
                 </li>
 

@@ -49,7 +49,7 @@
                   </h5>
                   <p>
                     <span>{{item.OPERA_DATE}}</span>
-                    <em>{{item.TRANS_AMT_DESC}}</em>
+                    <em>{{item.TRANS_AMT_DESC | formatNum}}</em>
                   </p>
                 </li>
 

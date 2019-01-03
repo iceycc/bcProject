@@ -37,7 +37,7 @@
             <div>
               <ul>
                 <li v-for="(item,index) in pageList" :key="index"
-                  @click="goDetail(item)"
+                    @click="goDetail(item)"
                 >
                   <h5 style="display: flex">
                     <span style="flex: 1">{{PRD_NAME}}</span>
@@ -48,7 +48,7 @@
                   <p>
                     <span>{{item.OPERA_DATE }}</span>
                     <!--1:买入 2:赎回-->
-                    <em>{{item.TYPE==2?'-':'+'}} {{item.TRANS_AMT}}</em>
+                    <em>{{item.TYPE==2?'-':'+'}} {{item.TRANS_AMT | formatNum}}</em>
                   </p>
                 </li>
 
@@ -73,7 +73,7 @@
   export default {
     data() {
       return {
-        tapShow:true,
+        tapShow: true,
         cur: 1,
         pageList1: [{
           TRANS_TYPE_NAME: '百度',
@@ -135,9 +135,9 @@
 
         }
       },
-      goDetail(item){
+      goDetail(item) {
         return
-        this.$router.push({name:PageName.ProPayDetail,query:{...item}})
+        this.$router.push({name: PageName.ProPayDetail, query: {...item}})
       },
       tap(index) {
         this.nowIndex = 0
@@ -199,7 +199,7 @@
           API.bank.apiQryIncomHis(data, res => {
 
             this.pageList = this.pageList.concat(res.PAGE.retList);
-            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
+            if (res.PAGE.currentPage == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
@@ -209,7 +209,7 @@
           API.bank.apiQryBuyHis(data, res => {
 
             this.pageList = this.pageList.concat(res.PAGE.retList);
-            if (res.PAGE.currentPage  == res.PAGE.totalPage) {
+            if (res.PAGE.currentPage == res.PAGE.totalPage) {
               this.allLoaded = true;
               Bus.$emit(BusName.showToast, "数据全部加载完成");
             }
@@ -265,7 +265,7 @@
 
       },
       toggleTabs(index) {
-        if(index==3){
+        if (index == 3) {
           this.tapShow = !this.tapShow
         }
         this.nowIndex = index;
@@ -480,18 +480,21 @@
     position: absolute;
     width: 100%;
     top: 0;
+
     .tabs {
       position: relative;
       display: flex;
       height: px2rem(44);
       line-height: px2rem(44);
       background: #fff;
+
       li {
         flex: 1;
         text-align: center;
         font-size: px2rem(15);
         color: #b3b3b3;
       }
+
       li:last-child {
         position: relative;
         width: px2rem(60);
@@ -499,6 +502,7 @@
         flex: none;
         border-left: px2rem(1) solid #f6f6f9;
       }
+
       li:last-child:after {
         position: absolute;
         content: "";
@@ -513,6 +517,7 @@
         right: 0;
         margin: px2rem(12) auto 0;
       }
+
       li.active:last-child:after {
         position: absolute;
         content: "";
@@ -537,17 +542,21 @@
   .t-tab {
     position: absolute;
     width: 100%;
-    .no-data{
+
+    .no-data {
       width: 100%;
-      img{
+
+      img {
         width: 100%;
       }
     }
-    .infos{
+
+    .infos {
       text-align: center;
       font-size: px2rem(16);
       color: #1badff;
     }
+
     .divTab {
       .t-content {
         h4 {
@@ -557,11 +566,14 @@
           padding: px2rem(16) px2rem(15) px2rem(4);
           font-weight: normal;
         }
+
         div {
           margin-top: px2rem(5);
           overflow: hidden;
+
           ul {
             background: #fff;
+
             li {
               display: block;
               border-bottom: px2rem(1) solid #e7e7e7;
@@ -575,6 +587,7 @@
                 font-weight: normal;
                 padding-bottom: px2rem(4);
               }
+
               p {
                 span {
                   font-size: px2rem(12);
@@ -583,6 +596,7 @@
                   padding-right: px2rem(20);
                   color: #858e9f;
                 }
+
                 em {
                   font-size: px2rem(18);
                   float: right;
@@ -591,15 +605,18 @@
                 }
               }
             }
+
             li:last-child {
               border-bottom: none;
             }
           }
+
           ul:last-child {
             border-bottom: none;
           }
         }
       }
+
       // padding-bottom: px2rem(16);
     }
 
@@ -608,15 +625,18 @@
       background: #efefef;
       line-height: px2rem(44);
       position: relative;
+
       ul {
         margin-right: px2rem(60);
         display: flex;
+
         li {
           flex: 1;
           display: inline-block;
           font-size: px2rem(15);
           color: #666666;
           padding-left: px2rem(20);
+
           span {
             display: inline-block;
             height: 0;
@@ -628,6 +648,7 @@
           }
         }
       }
+
       .t-query {
         width: px2rem(60);
         height: px2rem(44);
@@ -639,6 +660,7 @@
         text-align: center;
       }
     }
+
     .t-text {
       padding: 0 px2rem(15);
       font-size: px2rem(12);
@@ -656,6 +678,7 @@
 
   .w-tap {
     display: flex;
+
     li {
       font-size: px2rem(16);
       flex: 1;
@@ -664,6 +687,7 @@
       text-align: center;
       margin: px2rem(10) 0;
       background: #fff;
+
       &.actvie {
         color: #007aff;
       }

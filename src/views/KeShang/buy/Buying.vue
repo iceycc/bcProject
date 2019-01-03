@@ -306,7 +306,7 @@
         this.TEAM_ID = TEAM_ID
         this.INVEST_ID = INVEST_ID
         let data = {
-          PRD_ID: (this.proDetail.ID || this.proDetail.PRD_INDEX_ID) + '',
+          PRD_ID: this.proDetail.ID + '',
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
           PHONE_CODE: this.msgCode,

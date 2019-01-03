@@ -1,16 +1,23 @@
-body,html{
-    background: #fff;
+body, html {
+  background: #fff;
 }
 
-input,select,option,textarea{
-    display: inline-block;
-    outline: none;
-    width: 100%;
-    border: none;
-    box-sizing: border-box;
+input, select, option, textarea {
+  display: inline-block;
+  outline: none;
+  width: 100%;
+  border: none;
+  box-sizing: border-box;
 }
+
 
 * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    　　　　　　-webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  　　　　　　-webkit-user-select: none;
+}
+
+input[disabled], input:disabled, input.disabled {
+  -webkit-opacity: 1;
+  opacity: 1;
+  background: rgba(0,0,0,0);
 }

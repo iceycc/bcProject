@@ -51,6 +51,7 @@
                 </p>
                 <p>锁定期
                   <span>{{item.LOCKUP_PERIOD}}</span>
+
                 </p>
                 <p>存款利率
                   <span>{{item.RATE}}%</span>
@@ -178,8 +179,7 @@
         this.infoShow = false
       },
       goBuy(item) {
-
-        this.setComState({type: 'goBuy', value: item})
+        this.setComState({type: 'goBuy', value: {...item,ID:item.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {

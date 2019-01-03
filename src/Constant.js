@@ -8,11 +8,12 @@ let Configs = {
   /**
    * dev开发
    */
-  // DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
+  DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
   // DEV_HOST: 'http://192.168.100.126:8080/', //
   // DEV_HOST: 'https://finsuit.bicai365.com', // 生产
-  DEV_HOST: 'https://adv.bicai365.com', // adv测试
+  // DEV_HOST: 'https://adv.bicai365.com', // adv测试
   // DEV_HOST: 'https://demo1.bicai365.com', // adv1测试
+
   // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
 
   /**
@@ -22,6 +23,7 @@ let Configs = {
   PRO_HOST: 'https://adv.bicai365.com', // adv
   // PRO_HOST: 'https://finsuit.bicai365.com',// 生产
   // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
+
 }
 /**
  * host根据生产和开发分别暴露
@@ -70,7 +72,8 @@ export const PageName = {
   /**
    * test
    */
-  TestPage: 'TestPage',
+  TestPage: 'TestPage',// 现在用于404
+  test: 'test',
   /**
    * 登陆
    */

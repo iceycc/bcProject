@@ -217,6 +217,7 @@
               fn: (result, timer, count) => {
                 this.setComState({type: "reload", value: true}) // reload-001
                 if ('1' == result.RES_CODE) {
+                  // 提现失败
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.$router.push({ // todo是否要跳转
@@ -226,6 +227,7 @@
                     }
                   })
                 } else if ('0' == result.RES_CODE) {
+                  // 提现成功
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.Londing.close()
@@ -237,12 +239,14 @@
                     }
                   })
                 } else if ('20000' == result.RES_CODE) {
+                  // 等待中
                   clearInterval(timer)
                   this.Londing.close()
                   this.$router.push({
                     name: PageName.WaitForWithdraw,
                     query: {
-                      err: result.RES_MSG
+                      err1: result.RES_MSG,
+                      err2:result.RES_MSG2
                     }
                   })
                 } else {

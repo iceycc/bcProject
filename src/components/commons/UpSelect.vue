@@ -12,7 +12,7 @@
           <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
           <section>
             <p class="name">{{bank.OPEN_BANK}} {{bank.CARD_NO| noFilter}}</p>
-            <p class="money">单笔充值上限{{bank.SINGLE_QUOTA}}，单日充值上限{{bank.DAY_QUOTA}}</p>
+            <p class="money">{{bank.MSG_QUOTA}}</p>
           </section>
         </li>
       </ul>
