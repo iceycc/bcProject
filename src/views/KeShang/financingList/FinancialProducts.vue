@@ -72,7 +72,7 @@
               </div>
               <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList" :key="index">
                 <!-- 新加明细按钮 -->
-                <span class="detail">明细</span>
+                <span class="detail" @click="geDetails(item)">明细</span>
                 <h4>
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
@@ -85,7 +85,7 @@
                   <span>{{item.ADD_INCOME | formatNum}}</span>
                 </p>
                 <!--<p>支取时间-->
-                  <!--<span>{{item.OVER_DATE}}</span>-->
+                <!--<span>{{item.OVER_DATE}}</span>-->
                 <!--</p>-->
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
@@ -168,7 +168,7 @@
           TOTAL_INCOME: '0.00',
         },
         total: '',
-        canRedeem:false ,// 是否可以支取
+        canRedeem: false,// 是否可以支取
       };
     },
     components: {
@@ -199,7 +199,7 @@
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
       },
-      sureRedeem(){
+      sureRedeem() {
         this.$router.push({name: PageName.Redeem})
       },
       goRedeem(item) {
@@ -629,15 +629,17 @@
       display: flex;
     }
 
-    .cancel,.sure{
+    .cancel, .sure {
       text-align: center;
       flex: 1;
       padding: px2rem(10) 0 px2rem(10);
       font-size: px2rem(17);
     }
-    .cancel{
+
+    .cancel {
       color: #508CEE;
     }
+
     .sure {
       color: #000;
     }

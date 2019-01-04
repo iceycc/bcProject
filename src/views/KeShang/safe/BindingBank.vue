@@ -4,11 +4,12 @@
     <section class="card-list">
       <section class="bank-card" v-for="card,index in CARD_LIST" :key="index" @click="managerCard(card)">
         <img :src="imgSrc + card.CARD_BANK_IMAGE_URL" alt="" class="bgimg">
+        <!--<img  alt="" class="bgimg">-->
         <section class="top">
           <img :src="imgSrc + card.CARD_BANK_URL" alt="" class="logo">
           <section class="bank">
             <p class="bank-name">{{card.CARD_BANK_NAME}}</p>
-            <p class="bank-info">隶属于{{card.CARD_BANK_NAME}}</p>
+            <!--<p class="bank-info">隶属于{{card.CARD_BANK_NAME}}</p>-->
           </section>
           <section v-if="card.DEFAULT_MARK=='1'">
             默认卡
@@ -19,12 +20,12 @@
         </section>
       </section>
     </section>
-    <div class="add-card" @click="addBank">添加银行卡</div>
+    <div class="add-card" @click="addBank">添加新银行卡</div>
     <section class="msg-code" v-if="BC_PHONE">
       <section class="inner-box">
         <p class="line-1">输入验证码</p>
-        <p class="line-2">已发送6位数验证码</p>
-        <p class="line-3">{{BC_PHONE | BC_PHONE_Filter}}</p>
+        <p class="line-2">已发送6位数验证码至</p>
+        <p class="line-3">{{BC_PHONE | BC_PHONE_Filter}}，请注意查收</p>
         <label class="input-box" for="bc-msg" @click="clickLabel">
           <span class="box box1">{{code[0]}}</span>
           <span class="box box2">{{code[1]}}</span>
@@ -211,6 +212,8 @@
 
     .bgimg {
       position: absolute;
+      /*background: linear-gradient(#FF8572, #FD5861); !* 标准的语法（必须放在最后） *!*/
+      background: #a3dbff;
       top: 0;
       left: 0;
       width: 100%;
@@ -226,6 +229,8 @@
       color: #fff;
 
       .logo {
+        border-radius: 50%;
+        border: px2rem(3) solid #fff;
         display: inline-block;
         margin-top: px2rem(4);
         width: px2rem(34);
@@ -238,6 +243,7 @@
       }
 
       .bank-name {
+        padding-top: px2rem(8);
         font-size: px2rem(18);
       }
 

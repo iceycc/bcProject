@@ -262,6 +262,7 @@
         }
       },
       toggleTabs(index) {
+        console.log(index);
         this.nowIndex = index;
         this.pageList = []
         this.loadPageList();

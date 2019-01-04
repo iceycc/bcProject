@@ -3,11 +3,11 @@
     <app-bar title="支取"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>支取成功</h2>
+      <h2>恭喜你，支取成功</h2>
     </div>
     <section class="m-card">
       <p><span>支取金额</span><span>{{money}}</span></p>
-      <p><span>收款账户</span><span>{{account}}</span></p>
+      <p><span>收款账户</span><span>{{BANK_USER_CODE}}</span></p>
       <p><span>交易时间</span><span>{{date}}</span></p>
     </section>
     <button class="begain" @click="goNext">完成</button>
@@ -21,12 +21,13 @@
         num: '',
         BESHARP_SEQ: '',
         date: '',
-        account: '电子账户'
+        BANK_USER_CODE: ''
       }
     },
     created() {
       let preData = this.getComState.pollResult
       this.BESHARP_SEQ = preData.BESHARP_SEQ
+      this.BANK_USER_CODE = preData.BANK_USER_CODE
       this.money = preData.PAY_AMOUT || preData.money
       this.date = preData.OPERA_DATE
     },

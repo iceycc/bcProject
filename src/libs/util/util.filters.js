@@ -92,7 +92,7 @@ export default {
   formatBankNo(no) {
     if (!no) return ''
     no = no + ''
-    return '**** **** **** **** ' + no.substr(no.length - 4)
+    return `****  ****  ****  ****  ` + no.substr(no.length - 4)
   },
   // 将 0 转换为 0.00
   fromatMoneyFilter(x) {
