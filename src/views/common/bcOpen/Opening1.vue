@@ -332,10 +332,19 @@
           frontSessionId: this.data.frontSessionId
         }
         API.bicai.checkIDCard(data, res => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A012', // 点位
+            REMARK_DATA: '异业合作-实名认证-身份证认证的下一步按钮', // 中文备注
+          })
           Bus.$emit(BusName.showToast, res.message)
           if (res.verifyStatus == 0 || res.verifyStatus == 1) {
             this.$router.push(PageName.BcOpening2)
           }
+        }, err => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A012', // 点位
+            REMARK_DATA: '异业合作-实名认证-身份证认证的下一步按钮', // 中文备注
+          })
         })
       },
       /**

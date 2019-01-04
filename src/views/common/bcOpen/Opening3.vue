@@ -129,6 +129,10 @@
         let ProAndOrgType = JSON.parse(window.sessionStorage.getItem('H5URLS')) || this.getComState.ProAndOrgType
         let {LOGO_URL, ORG_NAME} = ProAndOrgType
         API.bicai.getPayPassword(data, res => {
+          API.watchApi({
+            FUNCTION_ID: 'ptb0A014', // 点位
+            REMARK_DATA: '异业合作-实名认证-设置密码完成', // 中文备注
+          })
           Bus.$emit(BusName.showToast, res.message)
           if (res.status == 1) {
             // 判断产品类型 区分openAPI
@@ -165,6 +169,10 @@
                 }
               }
             } else {
+              API.watchApi({
+                FUNCTION_ID: 'ptb0A014', // 点位
+                REMARK_DATA: '异业合作-实名认证-设置密码完成', // 中文备注
+              })
               Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
               setTimeout(() => {
                 this.$router.push({name: PageName.Opening1})

@@ -20,8 +20,8 @@ let Configs = {
    */
   // PRO_HOST: 'https://demo1.bicai365.com', // demo1
   // PRO_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
-  PRO_HOST: 'https://adv.bicai365.com', // adv/**/
-  // PRO_HOST: 'https://finsuit.bicai365.com',// 生产
+  // PRO_HOST: 'https://adv.bicai365.com', // adv/**/
+  PRO_HOST: 'https://finsuit.bicai365.com',// 生产
   // // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
 }
 /**

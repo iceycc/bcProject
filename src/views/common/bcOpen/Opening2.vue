@@ -238,21 +238,7 @@
           console.log(err);
         })
       },
-      // 注册第一次返回失败 需要轮询 查询 是否成功
-      pollHandle() {
-        let conut = 0
-        let timer = setInterval(() => {
-          conut++
-          console.log(conut);
-          if (conut == 6) {
-            this.Londing.close()
-            clearInterval(timer)
-            return
-          }
-          this.Londing.open()
-          this.checkID()
-        }, 5000)
-      },
+
       checkID() {
         API.bicai.getMerberAuthStatusInfo({}, res => {
           let {status} = res
@@ -381,7 +367,11 @@
         }
         API.bicai.bindCardFourELement(params,
           res => {
-            this.Londing.close()
+            API.watchApi({
+              FUNCTION_ID: 'ptb0A013', // 点位
+              REMARK_DATA: '异业合作-实名认证-银行卡认证的下一步按钮', // 中文备注
+            })
+            // this.Londing.close()
             setTimeout(() => {
               this.errMsg = ''
             }, 2000)
@@ -393,16 +383,11 @@
             } else {
               // this.pollHandle()
             }
-            API.watchApi({
-              FUNCTION_ID: 'ptb0A004', // 点位
-              REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-            })
-
           },
           err => {
             API.watchApi({
-              FUNCTION_ID: 'ptb0A004', // 点位
-              REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
+              FUNCTION_ID: 'ptb0A013', // 点位
+              REMARK_DATA: '异业合作-实名认证-银行卡认证的下一步按钮', // 中文备注
             })
             // this.pollHandle()
             this.errMsg = err
