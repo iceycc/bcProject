@@ -278,7 +278,7 @@
           //一、解决闰年平年的二月份天数   //平年28天、闰年29天//能被4整除且不能被100整除的为闰年
           daysInMonth[2] = 29;
         }
-        if (strMonth - n == 0) {
+        if (strMonth - n <= 0) {
           //二、解决跨年问题
           strYear -= 1;
           strMonth = 12;

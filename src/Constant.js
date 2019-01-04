@@ -14,6 +14,7 @@ let Configs = {
   DEV_HOST: 'https://adv.bicai365.com', // adv测试
   // DEV_HOST: 'https://demo1.bicai365.com', // adv1测试
 
+
   // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
 
   /**

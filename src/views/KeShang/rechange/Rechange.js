@@ -1,7 +1,6 @@
 import API from "@/service";
 import {PageName, BusName} from "@/Constant";
 import Bus from '@/plugin/bus'
-
 export default {
   data() {
     return {
@@ -23,6 +22,10 @@ export default {
         this.MESAGE_TOKEN = res.MESSAGE_TOKEN
         Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
 
+      },err=>{
+        this.codeText = '重新发送'
+        this.disable = false
+        clearInterval(this.timer)
       })
     },
     handleApiRecharge() {
@@ -105,13 +108,7 @@ export default {
           }
         })
       }, err => {
-        this.setComState({type: "reload", value: true}) // reload-001
-        this.$router.push({
-          name: PageName.RechargeFailure,
-          query: {
-            err: err.RES_MSG
-          }
-        })
+        Bus.$emit(BusName.showToast,err.RES_MSG)
       })
     },
     getInfos() {

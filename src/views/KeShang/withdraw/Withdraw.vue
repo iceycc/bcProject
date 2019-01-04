@@ -20,7 +20,8 @@
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
-      <span class="span" style="color:#389CFF" @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
+      <span class="span" style="color:#389CFF"
+            @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
     </section>
     <section class="inputAmount">
             <span class="Amount">
@@ -71,8 +72,8 @@
         msgCode: '',
 
         // 银行选择卡
-        upseletShow:false,
-        mainBankList:[],
+        upseletShow: false,
+        mainBankList: [],
 
         html: '协议',
         page: false,
@@ -90,7 +91,7 @@
 
 
         ACC_REST: '0',
-        WITH_DRAWABLE_CASH:'0',
+        WITH_DRAWABLE_CASH: '0',
         DAY_REST: '0', // todo取每日限额
         CARD_NUM: '', //一类户卡号
         BANK_USER_CODE: '', //二类户卡号
@@ -114,7 +115,7 @@
     },
     computed: {
       canClick() {
-        if (Number(this.APPLY_AMOUNT) > 0&&Number(this.APPLY_AMOUNT)  <= Number(this.WITH_DRAWABLE_CASH)  && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
+        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.WITH_DRAWABLE_CASH) && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
           return true
         } else {
           return false
@@ -235,6 +236,7 @@
                     name: PageName.WithdrawSuccess,
                     query: {
                       money: this.APPLY_AMOUNT,
+                      RES_MSG2:result.RES_MSG2,
                       ...res
                     }
                   })
@@ -246,7 +248,7 @@
                     name: PageName.WaitForWithdraw,
                     query: {
                       err1: result.RES_MSG,
-                      err2:result.RES_MSG2
+                      err2: result.RES_MSG2
                     }
                   })
                 } else {
@@ -319,7 +321,8 @@
         color: #9199A1;
       }
     }
-    .detail{
+
+    .detail {
       right: px2rem(20);
       top: px2rem(15);
       color: #999999;

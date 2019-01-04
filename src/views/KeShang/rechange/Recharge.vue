@@ -69,10 +69,10 @@
 
 
   let time = 60
-  let timer;
   export default {
     data() {
       return {
+        timer:null,
         html: '协议',
         page: false,
         PIN: '',
@@ -193,11 +193,11 @@
         }
         let times = time
         this.disable = true
-        timer = setInterval(() => {
+        this.timer = setInterval(() => {
           if (times == 0) {
             this.codeText = '重新发送'
             this.disable = false
-            clearInterval(timer)
+            clearInterval(this.timer)
             return
           }
           times--

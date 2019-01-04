@@ -4,6 +4,7 @@
     <div class="chattuimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
       <h2>提现成功</h2>
+      <p class="result">{{RES_MSG2}}</p>
     </div>
     <section class="m-card">
       <p><span>提现金额</span>{{money | formatNum}}</p>
@@ -52,7 +53,12 @@
     text-align: center;
     h2 {
       font-size: px2rem(18);
-      margin: px2rem(20) 0;
+      margin: px2rem(20) 0 px2rem(10);
+    }
+    .result{
+      color: #444444;
+      font-size: px2rem(14);
+      margin-bottom: px2rem(20);
     }
   }
 
