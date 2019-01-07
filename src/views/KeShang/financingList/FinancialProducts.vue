@@ -205,7 +205,8 @@
       goRedeem(item) {
         let params = {
           INVEST_TIME: item.TIME_END,
-          PRD_INDEX_ID: item.PRD_INDEX_ID
+          PRD_INDEX_ID: item.PRD_INDEX_ID,
+          EXPIRE_TIME: item.EXPIRE_TIME
         }
         API.redeem.apiRedemptionValid(params, res => {
           console.log(res)
@@ -213,25 +214,29 @@
             type: 'redeemData',
             value: item
           })
-          if (res.RES_CODE == 0) {
-            this.waitingMsg = res.RES_MSG
-            this.canRedeem = true // 可支取
-            this.infoShow = true
-          }
-          if (res.RES_CODE == 1) { // 可支取
-            this.waitingMsg = res.RES_MSG
-            this.canRedeem = true // 可支取
-            this.infoShow = true
-            // Bus.$emit(BusName.showToast, res.RES_MSG)
-          }
-          if (res.RES_CODE == 2) { // 不可支取
+          if (res.RES_CODE == 2) {
+            // 2.不可支取
             this.waitingMsg = res.RES_MSG
             this.canRedeem = false
             this.infoShow = true
+          } else if (res.RES_CODE == 3) {
+            // 3：未满收益周期的天数将按照该行活期利率计算，收益周期请在产品详情查看，是否继续支取
+            this.waitingMsg = res.RES_MSG
+            this.canRedeem = true // 可支取
+            this.infoShow = true
             // Bus.$emit(BusName.showToast, res.RES_MSG)
+          } else if (res.RES_CODE == 4) {
+            // 4：若现在支取，将无法享受活动额外奖励，仅可获得产品正常收益
+            this.waitingMsg = res.RES_MSG
+            this.canRedeem = true
+            this.infoShow = true
+            // Bus.$emit(BusName.showToast, res.RES_MSG)
+          } else {
+            // 应该是返回空
+            // 正常支取 直接跳转
+            this.$router.push({name: PageName.Redeem})
           }
         })
-
       },
       toggleTabs(index) {
         // TODO
@@ -624,7 +629,7 @@
     }
 
     .btn {
-      margin-top: px2rem(20);
+      margin-top: px2rem(10);
       border-top: 1px solid #fafafa;
       display: flex;
     }

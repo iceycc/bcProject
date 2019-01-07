@@ -3,40 +3,44 @@ import {version} from '../package'
 
 const WEB_HOST = {
   /**
-   * api的域名
+   * 域名。可以自行添加测试域名
    */
-  finsuitdev: 'https://finsuitdev.bicai365.com', // dev开发环境
+  dev: 'https://finsuitdev.bicai365.com', // dev开发环境
   adv: 'https://adv.bicai365.com', // adv测试
-  finsuit: 'https://finsuit.bicai365.com', // 生产,
+  pro: 'https://finsuit.bicai365.com', // 生产,
   /**
-   * 图片的路径
+   * 图片的路径 勿动！
    */
   imgSrcHost_DEV: 'https://finsuit-test.oss-cn-beijing.aliyuncs.com/',
   imgSrcHost_PRO: 'https://finsuit.oss-cn-beijing.aliyuncs.com/'
 }
 
 /**
- * HOST配置 需要自己手动配置
+ * ⚠️ 打包只需要在此处进行配置Configs。图片地址已经处理好。
+ * HOST配置 需要自己手动配置 。WEB_HOST里预先配置好地址，该处进行选择
+ * 当前配置选项：
+ * dev 、 adv 、 pro
  */
 const Configs = {
   /**
    * npm run dev 开发
+   *
    */
-  DEV_HOST: WEB_HOST.finsuit,
+  DEV_HOST: WEB_HOST.dev,
 
   /**
    * build打包
    */
-  PRO_HOST: WEB_HOST.adv, // adv
+  PRO_HOST: WEB_HOST.adv, // 
 }
 /**
- * host根据生产和开发分别暴露
+ * 整个站点的HOST根据生产和开发分别暴露
  * @type {string}
  */
 export const HOST = process.env.NODE_ENV == 'development'
   ? Configs.DEV_HOST : Configs.PRO_HOST
 /**
- * api接口
+ * api接口 接口地址默认：HOST+/finsuit ，如单独对接某后端地址，自行调整
  * @type {string}
  */
 export const HOST_API = HOST + '/finsuit' // // api 接口地址
@@ -44,11 +48,11 @@ export const HOST_API = HOST + '/finsuit' // // api 接口地址
 
 
 /**
- * 图片地址
+ * 图片地址。区分生产环境和开发环境的图片地址
  */
 export const imgSrc = process.env.NODE_ENV == 'development' ?
-  (Configs.DEV_HOST === WEB_HOST.finsuit ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV) :
-  (Configs.PRO_HOST === WEB_HOST.finsuit ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV)
+  (Configs.DEV_HOST === WEB_HOST.pro ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV) :
+  (Configs.PRO_HOST === WEB_HOST.pro ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV)
 
 /**
  *  app下载地址
@@ -62,7 +66,7 @@ export const AppUrl = {
  * 项目前缀
  */
 export const PROJECT_PREFIX = 'YIDU' + version
-export const STORE_PREFIX = '_MX_' // 存储库的命名前缀
+export const STORE_PREFIX = '_MX_' // 存储库的命名前缀。勿动！与其他站点进行交互时注意该处
 
 
 /**
@@ -203,10 +207,10 @@ export const LsName = {
  */
 
 export const ORG_ID_NUM = {
-  JinShang: '70',
+  JinShang: '70', //  晋商银行
   ZhengZhou: '49',
-  ZhongBang: '227',
-  KeShang: '248'
+  // ZhongBang: '227', // 众邦银行（已经取消）
+  KeShang: '248', // 客商银行
 }
 /**
  *  外部参数默认设置
@@ -216,7 +220,12 @@ export const PRO_PARAMS = {
   CHANNEL_ID: '1', //  默认渠道id
   APP_FLAG: 'BC'
 }
-//
+/**
+ * 校验是否支持当前的银行。校验是否打通openAPI，防错！
+ * @param val
+ * @returns {boolean}
+ * @constructor
+ */
 export const CheckBank = function (val) {
   let arr = []
   Object.keys(ORG_ID_NUM).forEach(function (key) {

@@ -1,2 +1,0 @@
-webpackJsonp([104],{bUjq:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i={render:function(){var t=this.$createElement,e=this._self._c||t;return e("div",[e("app-bar",{attrs:{title:"提现"}}),this._v("\n    等2小时\n    "),e("button",{staticClass:"begain",on:{click:this.goNext}},[this._v("确定")])],1)},staticRenderFns:[]};var a=n("VU/8")({name:"WaitForWithdraw",methods:{goNext:function(){}}},i,!1,function(t){n("eZEd")},"data-v-21e5e670",null);e.default=a.exports},eZEd:function(t,e){}});
-//# sourceMappingURL=104.28481f4f91011270638c.js.map

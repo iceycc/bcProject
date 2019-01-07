@@ -155,8 +155,9 @@ export default {
         // 4:认证完成，
         // 5:身份证过期
         console.log(AUTH_STATUS);
-        let H5_URL = this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL')
-        let FLAG = this.$route.query.AUTH_URL_FLAG || '0'
+
+        let H5_URL = this.$route.query.H5_URL || window.sessionStorage.getItem('H5_URL') // FORM_1218活动页面 url参数或者本地存储获取h5活动页面跳转过来的
+        let FLAG = this.$route.query.AUTH_URL_FLAG || '0' // FORM_1218活动页面
         let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG = FLAG} = this.ProAndOrgType
         switch (Number(AUTH_STATUS)) {
           case 0:
@@ -174,7 +175,8 @@ export default {
             break;
           case 4:
             if (AUTH_URL_FLAG == 1) {
-              // h5活动页直接跳转来的 判断AUTH_URL_FLAG唯一 获取免登录地址
+              //  FORM_1218活动页面
+              // h5活动页直接跳转来的 判断AUTH_URL_FLAG==1  获取免登录地址
               API.bicai.getAuthUrl({}, res => {
                 if (res.STATUS == 1) {
                   Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
@@ -194,11 +196,9 @@ export default {
             } else if (IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
               // 直接跳转 银行h5链接
-              // 不是h5直联
-              // 直接跳转
               if (H5_URL) {
-                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
                 // h5活动页跳转进来时判断是否有链接
+                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
                 setTimeout(() => {
                   window.location.href = H5_URL
                 }, 2000)
@@ -211,7 +211,7 @@ export default {
                   window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
                 }, 2000)
               } else {
-                alert('跳转h5链接获取异常')
+                alert('请配置银行直联跳转链接')
               }
             } else {
               this.checkBankOpenAndLogin()
@@ -228,7 +228,8 @@ export default {
               if (H5_URL_ANDRIOD || H5_URL_IOS) {
                 window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
               } else {
-                alert('跳转h5链接获取异常')
+                //请配置银行直联跳转链接
+                alert('请配置银行直联跳转链接')
               }
               this.$router.push(PageName.BcOpening1)
             }, 2000)

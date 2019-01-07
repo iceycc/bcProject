@@ -148,7 +148,7 @@ export default {
                     window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
                   }, 2000)
                 } else {
-                  alert('跳转h5链接获取异常')
+                  alert('请配置银行直联跳转链接')
                 }
               }
             } else {

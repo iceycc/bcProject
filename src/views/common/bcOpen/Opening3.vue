@@ -143,12 +143,17 @@
               // 非打通openAPI的
               // 直接跳转 银行h5链接
               if (ProAndOrgType.AUTH_URL_FLAG == 1) {
+                // 判断是否免登录
                 API.bicai.getAuthUrl({}, res => {
                   if (res.STATUS == 1) {
                     Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
-                    setTimeout(() => {
-                      window.location.href = res.AUTH_URL
-                    }, 2000)
+                    if (res.AUTH_URL) {
+                      setTimeout(() => {
+                        window.location.href = res.AUTH_URL
+                      }, 2000)
+                    } else {
+                      alert('请配置银行直联跳转链接')
+                    }
                   } else {
                     Bus.$emit(BusName.showToast, res.MESSAGE)
                   }
@@ -161,7 +166,8 @@
                     window.location.href = href;
                   }, 2000)
                 } else {
-                  alert('跳转银行h5链接获取异常')
+                  // 请配置银行直联跳转链接
+                  alert('请配置银行直联跳转链接')
                 }
               }
             } else {

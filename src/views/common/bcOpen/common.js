@@ -150,7 +150,7 @@ export default {
                   window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
                 }, 2000)
               } else {
-                alert('跳转h5链接获取异常')
+                alert('请配置银行直联跳转链接')
               }
             } else {
               this.checkBankOpenAndLogin()
@@ -167,7 +167,7 @@ export default {
               if (H5_URL_ANDRIOD || H5_URL_IOS) {
                 window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
               } else {
-                alert('跳转h5链接获取异常')
+                alert('请配置银行直联跳转链接')
               }
               this.$router.push(PageName.BcOpening1)
             }, 2000)
