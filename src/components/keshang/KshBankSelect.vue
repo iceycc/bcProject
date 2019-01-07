@@ -2,9 +2,11 @@
   <div>
     <section style="text-align:center;display: inline-block;width: 100%"
              :class="{'infoText':true,'activeTitle':titleSelect}">
-      <span @click="showBankList">{{text}}</span>
+      <span class="bank-text" @click="showBankList">
+        <span>{{text}}</span>
+            <img class="downImg" @click.stop="showBankList" src="@/assets/images/GroupCopy14@2x.png" alt="">
+      </span>
       <span class="down" @click="bankShowHandle">
-                <img @click.stop="showBankList" src="@/assets/images/GroupCopy14@2x.png" alt="">
         <img src="@/assets/images/problom2@2x.png" alt="">
         <span class="xiane">银行限额</span>
             </span>
@@ -38,8 +40,8 @@
     <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
 
     <!--<div class="bank-xiane" v-if="backShow">-->
-      <!--<img @click="backShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">-->
-      <!--<img src="@/assets/images/bank@2x.png" alt="">-->
+    <!--<img @click="backShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">-->
+    <!--<img src="@/assets/images/bank@2x.png" alt="">-->
     <!--</div>-->
   </div>
 </template>
@@ -70,7 +72,7 @@
         default: true
       }
     },
-    components:{
+    components: {
       BankCardLimit
     },
     watch: {
@@ -164,10 +166,25 @@
   .infoText {
     position: relative;
     color: #dedede;
-    font-size: .4rem;
+    font-size: px2rem(14);
     padding-right: px2rem(125);
     vertical-align: top;
-
+    .bank-text{
+      position: relative;
+      span{
+        vertical-align: middle;
+        width: px2rem(170);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .downImg {
+        position: absolute;
+        right: px2rem(-20);
+        top: px2rem(13);
+        width: px2rem(20);
+      }
+    }
     .xiane {
       display: inline-block;
       padding-top: px2rem(3);

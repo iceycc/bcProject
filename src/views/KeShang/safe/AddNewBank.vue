@@ -10,7 +10,8 @@
                      title="银行列表"></Bank-select>
 
       </section>
-      <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20" @changeHandle="changeHandle"></active-input>
+      <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20"
+                    @changeHandle="changeHandle"></active-input>
       <active-input check-type="number" valuePlaceholder="手机号" v-model="bankTel" max="11"></active-input>
       <active-input check-type="number" valuePlaceholder="验证码" v-model="msgCode" max="6" onautocomplete="false">
         <template slot="btn">
@@ -18,7 +19,7 @@
         </template>
       </active-input>
       <section class="submit-box">
-        <err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>
+        <!--<err-msg :errMsg="errMsg" classStyle="err-msg"></err-msg>-->
         <button class="submit-btn" @click="goNext">下一步</button>
       </section>
       <!--<section class="foot-text">-->
@@ -54,14 +55,14 @@
         bankText: '请选择银行',
         bankList: [],
         AllBankListObj: {},
-        bankLimitShow:false,
+        bankLimitShow: false,
         errMsg: '',
         bankNo: '',
         msgCode: '',
         codeText: '获取验证码',
         disable: false,
-        bankTel:'',
-        MESAGE_TOKEN:'',
+        bankTel: '',
+        MESAGE_TOKEN: '',
         bankNameToNo: false,
         params: {},
         ifGet: false,
@@ -78,14 +79,17 @@
     },
     watch: {
       bankNo(n, o) {
+        if (n.length <= 8) return
         this.checkBankName(this.bankNo)
       },
-      bankText(n, o) {
-        this.checkBankName(this.bankNo)
-      }
+      // bankText(n, o) {
+      //   this.checkBankName(this.bankNo)
+      // }
     },
     methods: {
-      changeHandle(val){
+      changeHandle(val) {
+        console.log(val);
+        // if (val.length <= 8) return
         this.checkBankNo(val)
       },
       getMsgCode() {
@@ -110,6 +114,11 @@
       getBank(val) {
         this.bankText = val.name
       }, // bankNameToNo
+      /**
+       * 校验是否是支持的银行
+       * @param val
+       * @returns {boolean}
+       */
       checkBankName(val) {
         if (!val) {
           return false
@@ -129,12 +138,17 @@
         }
         if (!flag) {
           this.bankText = '请选择开户银行'
-          Bus.$emit(BusName.showToast, '暂不支持该银行')
-         this.showErrMsg('暂不支持该银行')
+          Bus.$emit(BusName.showToast, '不支持该银行或银行卡号错误')
+          this.showErrMsg('不支持该银行或银行卡号错误')
         }
         console.log(this.bankText);
         return flag
       },
+      /**
+       * 整体校验银行卡号和银行名 是否填写 银行的
+       * @param val
+       * @returns {boolean}
+       */
       checkBankNo(val) {
         val = val.toString()
         if (this.bankText == '请选择银行') {
@@ -144,18 +158,23 @@
         if (val == '') {
           this.showErrMsg('银行卡号不能为空')
           return true
-        } else if (val.length < 15 || val.length > 19) {
-          this.showErrMsg('银行卡号有误，请确认后再次输入')
-          return true
         } else {
           this.checkBankName(val)
           return false
         }
 
       },
+      /**
+       * 匹配支持的银行
+       * @param pin
+       * @returns {*}
+       */
       machBankName(pin) {
         return this.AllBankListObj[pin]
       },
+      /**
+       * 获取银行列表。全部银行列表和银行支持的银行列表
+       */
       getBankList() {
         API.common.apiGetBankCardList({}, res => {
           let obj = {}
@@ -165,7 +184,7 @@
           // console.log('bankObj>>>',obj);
           // 全部银行
           this.AllBankListObj = obj
-          console.log(this.AllBankListObj);
+          // console.log(this.AllBankListObj);
           // 支持的银行
           this.bankList = res.SUPPORT_BANK_LIST.map((item) => {
             return {
@@ -216,9 +235,9 @@
           CLEAR_BANK: '',// 清算银行
           CLEAR_BANK_NO: '',// 清算银行行号
         }
-        API.safe.apiChangeBingCard(data,res=>{
-          this.$router.push({name:PageName.BindingBank})
-        },err=>{
+        API.safe.apiChangeBingCard(data, res => {
+          this.$router.push({name: PageName.BindingBank})
+        }, err => {
         })
       },
 

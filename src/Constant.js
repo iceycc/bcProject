@@ -1,30 +1,33 @@
 // 静态值定义： 【应用配置】
 import {version} from '../package'
 
+const WEB_HOST = {
+  /**
+   * api的域名
+   */
+  finsuitdev: 'https://finsuitdev.bicai365.com', // dev开发环境
+  adv: 'https://adv.bicai365.com', // adv测试
+  finsuit: 'https://finsuit.bicai365.com', // 生产,
+  /**
+   * 图片的路径
+   */
+  imgSrcHost_DEV: 'https://finsuit-test.oss-cn-beijing.aliyuncs.com/',
+  imgSrcHost_PRO: 'https://finsuit.oss-cn-beijing.aliyuncs.com/'
+}
+
 /**
- *
+ * HOST配置 需要自己手动配置
  */
-let Configs = {
+const Configs = {
   /**
-   * dev开发
+   * npm run dev 开发
    */
-  // DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
-  // DEV_HOST: 'http://192.168.100.126:8080/', //
-  // DEV_HOST: 'https://finsuit.bicai365.com', // 生产
-  DEV_HOST: 'https://adv.bicai365.com', // adv测试
-  // DEV_HOST: 'https://demo1.bicai365.com', // adv1测试
-
-
-  // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
+  DEV_HOST: WEB_HOST.finsuit,
 
   /**
-   * build打包  现在阶段注意 static/lib/PassInputZhengzhou/pwd.js也要同步改
+   * build打包
    */
-  // PRO_HOST: 'https://demo1.bicai365.com', // demo1
-  PRO_HOST: 'https://adv.bicai365.com', // adv
-  // PRO_HOST: 'https://finsuit.bicai365.com',// 生产
-  // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
-
+  PRO_HOST: WEB_HOST.adv, // adv
 }
 /**
  * host根据生产和开发分别暴露
@@ -39,6 +42,14 @@ export const HOST = process.env.NODE_ENV == 'development'
 export const HOST_API = HOST + '/finsuit' // // api 接口地址
 // export const HOST_API = HOST  // // api 接口地址
 
+
+/**
+ * 图片地址
+ */
+export const imgSrc = process.env.NODE_ENV == 'development' ?
+  (Configs.DEV_HOST === WEB_HOST.finsuit ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV) :
+  (Configs.PRO_HOST === WEB_HOST.finsuit ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV)
+
 /**
  *  app下载地址
  */
@@ -52,17 +63,6 @@ export const AppUrl = {
  */
 export const PROJECT_PREFIX = 'YIDU' + version
 export const STORE_PREFIX = '_MX_' // 存储库的命名前缀
-
-/**
- * logo图片地址  图片地址/ 用于图片的拼接
- */
-let imgSrcHost = {
-  dev: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
-  // pro: "https://finsuit.oss-cn-beijing.aliyuncs.com/",
-  pro: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
-}
-
-export const imgSrc = process.env.NODE_ENV == 'development' ? imgSrcHost.dev : imgSrcHost.pro
 
 
 /**
