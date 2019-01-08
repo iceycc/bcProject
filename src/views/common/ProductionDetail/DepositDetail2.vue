@@ -20,7 +20,7 @@
           <span>累计购买笔数 {{productDetail.BUY_COUNT}}</span>
         </div>
       </div>
-      <!--<div class="banner">-->
+      <!--<div class="bcopening0">-->
       <!--<div class="bannercontent">-->
       <!--<div class="bannertop">-->
       <!--<div class="bannertopleft">-->

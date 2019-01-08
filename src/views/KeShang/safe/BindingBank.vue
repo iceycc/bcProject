@@ -34,9 +34,9 @@
           <span class="box box5">{{code[4]}}</span>
           <span class="box box6">{{code[5]}}</span>
         </label>
-        <input id="bc-msg" type="tel" class="msg-input" v-model="msgCode" autocomplete="off">
+        <input id="bc-msg" type="tel" class="msg-input" v-model="msgCode" autocomplete="off" :autofocus="onfocus">
 
-        <img src="@/assets/images/production/close@2x.png" alt="" class="close" @click="BC_PHONE=''">
+        <img src="@/assets/images/production/close@2x.png" alt="" class="close" @click="BC_PHONE='';msgCode = ''">
       </section>
     </section>
     <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
@@ -91,7 +91,11 @@
       }
     },
     watch: {
+      // sheetVisible(newVal){
+      //   this.onfocus = newVal
+      // },
       msgCode(newVal, oldVal) {
+        newVal = newVal + ''
         if (newVal.length > 6) {
           this.msgCode = newVal.substr(0, 6)
           return
@@ -119,10 +123,9 @@
       // 点击弹出银行卡管理
       managerCard(card) {
         console.log(card);
-        // Bus.$emit(BusName.showToast,'')
-        if (this.CARD_LIST.length == 0) {
-
-        }
+        setTimeout(() => {
+          this.onfocus = true
+        }, 100)
         if (card.DEFAULT_MARK == 1) {
           // 默认卡
           this.actions = [
@@ -148,6 +151,7 @@
       },
       getBankList() {
         let data = {}
+        this.onfocus = false
         API.bank.apiBandCard(data, res => {
           this.BANK_USER_ID = res.BANK_USER_ID
           this.BANK_ACCT_NO = res.BANK_USER_CODE
@@ -158,6 +162,7 @@
       },
       setDefaultCard() {
         console.log(1)
+        this.onfocus = false
         // 设置默认卡
         let data = {
           ACCOUNT_NO: this.clickBankCard.CARD_NUM
@@ -174,6 +179,8 @@
           BANK_USER_ID: this.BANK_USER_ID,// 银行用户ID
           BANK_ACCT_NO: this.BANK_ACCT_NO,// 电子账户
         }
+        // this.BC_PHONE = '11'
+        // return
         API.common.apiSendPhoneCode(data, res => {
           this.BC_PHONE = res.BC_PHONE
           this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
@@ -342,14 +349,14 @@
     }
 
     .msg-input {
-      position: absolute;
-      top: -2000;
-      left: 0;
+      position: fixed;
+      top: px2rem(-2000);
+      left: px2rem(-1000);
       width: 100%;
-      height: px2rem(38);
+      height: 0;
       z-index: 0;
       opacity: 0;
-      font-size: px2rem(13);
+      font-size: px2rem(1);
     }
 
     .input-box {

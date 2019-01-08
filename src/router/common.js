@@ -93,7 +93,7 @@ export default [
   // 开户过渡页 新增
   {
     path: '/' + PageName.BcOpening0,
-    name: PageName.BcOpening1,
+    name: PageName.BcOpening0,
     component: resolve => require(['views/common/bcOpen/Opening0.vue'], resolve),
     meta: {keepAlive: false, title: '实名认证', needLogin: false}
   },

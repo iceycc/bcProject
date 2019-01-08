@@ -99,7 +99,7 @@ export default {
           case 0:
           case 1:
             Bus.$emit(BusName.showToast, MsgText, 3000)
-            this.$router.push(PageName.BcOpening1)
+            this.$router.push(PageName.BcOpening0)
             break;
           case 2:
             Bus.$emit(BusName.showToast, MsgText, 3000)
@@ -166,10 +166,12 @@ export default {
               }
               if (H5_URL_ANDRIOD || H5_URL_IOS) {
                 window.location.href = H5_URL_ANDRIOD || H5_URL_IOS;
+                return
               } else {
                 alert('请配置银行直联跳转链接')
+                return
               }
-              this.$router.push(PageName.BcOpening1)
+              this.$router.push(PageName.BcOpening0)
             }, 2000)
             break;
         }
