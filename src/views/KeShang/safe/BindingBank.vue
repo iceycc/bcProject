@@ -120,6 +120,29 @@
       managerCard(card) {
         console.log(card);
         // Bus.$emit(BusName.showToast,'')
+        if (this.CARD_LIST.length == 0) {
+
+        }
+        if (card.DEFAULT_MARK == 1) {
+          // 默认卡
+          this.actions = [
+            {
+              name: '解绑银行卡',
+              method: this.unBindingCard
+            }
+          ]
+        } else {
+          this.actions = [
+            {
+              name: '设为默认卡',
+              method: this.setDefaultCard
+            },
+            {
+              name: '解绑银行卡',
+              method: this.unBindingCard
+            }
+          ]
+        }
         this.clickBankCard = card
         this.sheetVisible = true
       },
@@ -296,13 +319,15 @@
       border-radius: px2rem(6);
       background: #fff;
       text-align: center;
-      .close{
+
+      .close {
         position: absolute;
         top: px2rem(10);
         right: px2rem(10);
         width: px2rem(14);
         height: px2rem(14);
       }
+
       .line-1 {
         line-height: 3;
         color: #444;

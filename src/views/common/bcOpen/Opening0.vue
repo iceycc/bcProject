@@ -17,9 +17,7 @@
       IconFont
     },
     computed: {},
-    created() {
-
-    },
+    created() {},
     methods: {}
 
   }
