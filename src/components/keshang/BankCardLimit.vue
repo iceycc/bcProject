@@ -5,16 +5,16 @@
       <div class="limit-box">
         <ul class="inner-ul">
           <li class="top">
-            <span class="line1">银行名称</span>
+            <span class="line1" style="color:#858E9F;">银行名称</span>
             <span class="line2">每笔限额(元)</span>
             <span class="line3">每日限额(元)</span>
-            <span class="line4">支持直销<br>银行充值</span>
+            <!--<span class="line4">支持直销<br>银行充值</span>-->
           </li>
           <li v-for="bank in bankList">
             <span class="line1">{{bank.BANK_NAME}}</span>
-            <span class="line2">{{bank.DAY_QUOTA}}</span>
-            <span class="line3">{{bank.SINGLE_QUOTA}}</span>
-            <span class="line4">{{bank.CAN_RECHARGE==1?'是':'否'}}</span>
+            <span class="line2">{{bank.DAY_QUOTA | QUOTA_Filter}}</span>
+            <span class="line3">{{bank.SINGLE_QUOTA | QUOTA_Filter}}</span>
+            <!--<span class="line4">{{bank.CAN_RECHARGE==1?'是':'否'}}</span>-->
           </li>
         </ul>
         <p class="foot-dec">
@@ -37,11 +37,20 @@
         bankList: []
       }
     },
+    filters: {
+      QUOTA_Filter(val) {
+        if (val == '-1') {
+          return '无限额'
+        } else {
+          return val
+        }
+      }
+    },
     created() {
       this.getBankLimitList()
     },
     methods: {
-      clickHideHandle(){
+      clickHideHandle() {
         this.$emit('hideHandle')
       },
       getBankLimitList() {
@@ -118,6 +127,7 @@
         display: flex;
         border-bottom: 1px solid #E5E5E5;
         padding: px2rem(10) 0;
+
         span {
           flex: 1;
         }

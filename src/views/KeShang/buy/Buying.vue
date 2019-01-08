@@ -47,7 +47,7 @@
     <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">存入</button>
     <p @click="agree =!agree"
        :class="{'bang':true,'no':agree == false}">我已阅读并同意
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《客商产品服务协议》</a>
+      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《产品服务协议》</a>
     </p>
 
   </div>

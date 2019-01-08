@@ -694,8 +694,8 @@
     .option {
       border-bottom: 1px solid #dedede;
       font-size: 0;
-      line-height: px2rem(30);
-      height: px2rem(30);
+      line-height: px2rem(40);
+      height: px2rem(40);
 
       .text {
         font-size: .4rem;

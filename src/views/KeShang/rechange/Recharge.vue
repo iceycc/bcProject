@@ -51,6 +51,7 @@
        @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值委托代扣协议》</span></p>
 
     <up-select
+      title="选择银行卡"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBank"
@@ -72,7 +73,7 @@
   export default {
     data() {
       return {
-        timer:null,
+        timer: null,
         html: '协议',
         page: false,
         PIN: '',
@@ -102,7 +103,7 @@
         passCode: '',
         ACCT_NO: '', // TODO
         PHONE_NUM: '',
-        ORIGIN_PAGE:''// 来源页面
+        ORIGIN_PAGE: ''// 来源页面
       }
     },
     components: {
@@ -275,7 +276,8 @@
         color: #9199A1;
       }
     }
-    .detail{
+
+    .detail {
       right: px2rem(20);
       top: px2rem(15);
       color: #999999;

@@ -44,7 +44,7 @@
                 <!--BANLANCE  余额  Decimal(15,2)-->
                 <!--字符-->
                 <li v-for="(item,index) in pageList" :key="index"
-                @click="goDetail(item)"
+                    @click="goDetail(item)"
                 >
                   <h5 style="display: flex;color: #E62224">
                     <!--<span style="flex: 1">{{item.ABS_INFO}}</span>-->
@@ -113,8 +113,8 @@
 
     },
     methods: {
-      goDetail(item){
-        this.$router.push({name:PageName.PayOneDetail,query:{...item}})
+      goDetail(item) {
+        this.$router.push({name: PageName.PayOneDetail, query: {...item}})
       },
       setEleSize() {
         console.log(this.nowIndex);
@@ -173,7 +173,7 @@
         };
         API.bank.apiQryEleTransDetail(data, res => {
           this.pageList = this.pageList.concat(res.PAGE.retList);
-          if (res.PAGE.currentPage  == res.PAGE.totalPage) {
+          if (res.PAGE.currentPage == res.PAGE.totalPage) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
           }
@@ -431,17 +431,20 @@
     position: absolute;
     width: 100%;
     top: 0;
+
     .tabs {
       position: relative;
       display: flex;
       line-height: px2rem(44);
       background: #fff;
+
       li {
         flex: 1;
         text-align: center;
         font-size: px2rem(15);
         color: #b3b3b3;
       }
+
       li:last-child {
         position: relative;
         width: px2rem(60);
@@ -449,6 +452,7 @@
         flex: none;
         border-left: px2rem(1) solid #f6f6f9;
       }
+
       li:last-child:after {
         position: absolute;
         content: "";
@@ -463,6 +467,7 @@
         right: 0;
         margin: px2rem(12) auto 0;
       }
+
       li.active:last-child:after {
         position: absolute;
         content: "";
@@ -487,12 +492,15 @@
   .t-tab {
     position: absolute;
     width: 100%;
-    .no-data{
+
+    .no-data {
       width: 100%;
-      img{
+
+      img {
         width: 100%;
       }
-      .infos{
+
+      .infos {
         text-align: center;
         font-size: px2rem(16);
         color: #1badff;
@@ -508,11 +516,14 @@
           padding: px2rem(16) px2rem(15) px2rem(4);
           font-weight: normal;
         }
+
         div {
           margin-top: px2rem(5);
           overflow: hidden;
+
           ul {
             background: #fff;
+
             li {
               display: block;
               border-bottom: px2rem(1) solid #e7e7e7;
@@ -526,6 +537,7 @@
                 font-weight: normal;
                 padding-bottom: px2rem(4);
               }
+
               p {
                 span {
                   font-size: px2rem(12);
@@ -534,6 +546,7 @@
                   padding-right: px2rem(20);
                   color: #858e9f;
                 }
+
                 em {
                   font-size: px2rem(14);
                   float: right;
@@ -542,15 +555,18 @@
                 }
               }
             }
+
             li:last-child {
               border-bottom: none;
             }
           }
+
           ul:last-child {
             border-bottom: none;
           }
         }
       }
+
       // padding-bottom: px2rem(16);
     }
 
@@ -559,15 +575,18 @@
       background: #efefef;
       line-height: px2rem(44);
       position: relative;
+
       ul {
         margin-right: px2rem(60);
         display: flex;
+
         li {
           flex: 1;
           display: inline-block;
           font-size: px2rem(15);
           color: #666666;
           padding-left: px2rem(20);
+
           span {
             display: inline-block;
             height: 0;
@@ -579,6 +598,7 @@
           }
         }
       }
+
       .t-query {
         width: px2rem(60);
         height: px2rem(44);
@@ -590,6 +610,7 @@
         text-align: center;
       }
     }
+
     .t-text {
       padding: 0 px2rem(15);
       font-size: px2rem(12);

@@ -494,10 +494,18 @@ export default {
    * 赎回
    */
   redeem: {
-    // 支取校验 openapi/ksh/biz/apiRedemptionValid
+    // 支取校验
     apiRedemptionValid(params, success, error) {
       let options = {
         url: '/openapi/ksh/biz/apiRedemptionValid',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    //  支取校验 v2
+    apiRedemptionValid2(params, success, error) {
+      let options = {
+        url: '/openapi/ksh/biz/v2/apiRedemptionValid',
         params
       }
       return http.post(options, Config.config, success, error)

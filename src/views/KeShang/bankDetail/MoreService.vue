@@ -7,7 +7,7 @@
              <span class="more-left">
                         绑定银行卡管理</span>
         <span class="more-right">
-                    已绑定{{CARD_BANK_NAME}}
+                    <!--已绑定{{CARD_BANK_NAME}}-->
                 <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                     </span>
       </section>
@@ -110,7 +110,7 @@
       getInfos() {
 
         // this.getRiskGrade()
-        this.getBankInfo()
+        // this.getBankInfo()
       },
       //  获取风险测评结果
       getRiskGrade() {

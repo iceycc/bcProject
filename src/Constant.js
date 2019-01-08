@@ -8,6 +8,7 @@ const WEB_HOST = {
   dev: 'https://finsuitdev.bicai365.com', // dev开发环境
   adv: 'https://adv.bicai365.com', // adv测试
   pro: 'https://finsuit.bicai365.com', // 生产,
+  ceshi: 'http://192.168.100.157:8080/', // 生产,
   /**
    * 图片的路径 勿动！
    */
@@ -26,7 +27,7 @@ const Configs = {
    * npm run dev 开发
    *
    */
-  DEV_HOST: WEB_HOST.dev,
+  DEV_HOST: WEB_HOST.ceshi,
 
   /**
    * build打包
@@ -43,8 +44,8 @@ export const HOST = process.env.NODE_ENV == 'development'
  * api接口 接口地址默认：HOST+/finsuit ，如单独对接某后端地址，自行调整
  * @type {string}
  */
-export const HOST_API = HOST + '/finsuit' // // api 接口地址
-// export const HOST_API = HOST  // // api 接口地址
+// export const HOST_API = HOST + '/finsuit' // // api 接口地址
+export const HOST_API = HOST  // // api 接口地址
 
 
 /**

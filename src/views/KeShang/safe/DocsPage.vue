@@ -5,9 +5,9 @@
       <!--<h1 v-if="title">{{title}}</h1>-->
       <iframe :src="agreeMentSrc" class="indocs"></iframe>
     </div>
-    <div class="btn">
-      <button @click="getCode">确认</button>
-    </div>
+    <!--<div class="btn">-->
+      <!--<button @click="getCode">确认</button>-->
+    <!--</div>-->
   </div>
 </template>
 <script>
@@ -149,7 +149,7 @@
       box-sizing: border-box;
       padding: 0 px2rem(10);
       width: 100%;
-      height: 90%;
+      height: 100%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
 

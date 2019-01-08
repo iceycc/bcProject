@@ -51,7 +51,7 @@
       },
       goBalance() {
         this.$router.push({
-          name: PageName.BankBalance
+          name: PageName.BankDetail
         })
       }
 

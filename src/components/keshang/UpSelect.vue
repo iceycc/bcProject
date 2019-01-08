@@ -2,12 +2,13 @@
   <div v-if="typeShow">
     <div class="r-type-popup">
       <div class="title">
-        选择绑定银行卡
+        {{title}}
         <span @click="typeShow = false">&times;</span>
       </div>
-      <ul class="r-type-list" v-for="bank,index in BankList" :key="index">
+      <ul class="r-type-list">
         <li
-          :class="{gray:bank.IS_SUPPORT == 0,active:cur === index}"
+          v-for="bank,index in BankList" :key="index"
+          :class="{gray:bank.IS_SUPPORT == 0}"
           @click="chooseType(index,bank,$event)">
           <img :src="imgSrc + bank.CARD_BANK_URL" class="logo-img" alt="">
           <section v-if="type=='recharge'">
@@ -36,6 +37,10 @@
   export default {
     name: "UpSelect",
     props: {
+      title: {
+        type: null,
+        default: '选择绑定银行卡'
+      },
       show: {
         type: null,
         default: false
@@ -153,7 +158,8 @@
 
     .r-type-list {
       position: relative;
-
+      max-height: px2rem(288);
+      overflow-y: auto;
       li {
         display: flex;
         padding: px2rem(10) px2rem(22);
@@ -170,9 +176,11 @@
           font-size: px2rem(15);
           color: #121B32;
         }
-        .name1{
+
+        .name1 {
           margin-top: px2rem(10);
         }
+
         .money {
           line-height: px2rem(30);
           font-size: px2rem(12);
@@ -186,17 +194,17 @@
           color: #666
         }
       }
-
-      li.active:after {
-        content: '';
-        position: absolute;
-        top: px2rem(30);
-        right: px2rem(10);
-        z-index: 10;
-        width: px2rem(18);
-        height: px2rem(18);
-        background: url("../../assets/images/check.png") center center no-repeat;
-      }
+      /*!*不要对号了*!*/
+      /*li.active:after {*/
+        /*content: '';*/
+        /*position: absolute;*/
+        /*top: px2rem(30);*/
+        /*right: px2rem(10);*/
+        /*z-index: 10;*/
+        /*width: px2rem(18);*/
+        /*height: px2rem(18);*/
+        /*background: url("../../assets/images/check.png") center center no-repeat;*/
+      /*}*/
 
       .gray {
         .money {

@@ -24,7 +24,7 @@
           <div class="ratereturn">
             <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | rateFormat(2)}}%</p>
             <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">{{item.PRD_TYPE_ID |
-              typeFilter}}</p>
+              typeFilter(item.IS_XIAOYU_BANK,item.RATE_DESC)}}</p>
           </div>
         </li>
       </ul>
@@ -130,7 +130,7 @@
         }
         return s_x;
       },
-      typeFilter(val) {
+      typeFilter(val, IS_XIAOYU_BANK, RATE_DESC) {
         if (!val) return ''
         let str;
         // PRD_TYPE_ID
@@ -138,7 +138,11 @@
         switch (val - 0) {
           case 1:
             // 货币基金
-            str = '七日年化收益率'
+            if (IS_XIAOYU_BANK == 1) {
+              str = RATE_DESC
+            } else {
+              str = '七日年化收益率'
+            }
             break;
           case 2:
             // 理财产品
@@ -174,7 +178,9 @@
       getListDataByChannel() {
         let data = {}
         API.bicai.getProListByChannel(data, '88', res => {
+          console.log('prolist>>>', res);
           let num = res.length
+
           if (num < 6) {
             this.show = true
           } else {

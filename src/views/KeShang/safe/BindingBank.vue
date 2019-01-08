@@ -86,7 +86,7 @@
       BC_PHONE_Filter(val) {
         if (!val) return val
         let len = val.length
-        val = val.substr(len - 11, 3) + '***' + val.substr(len - 4)
+        val = val.substr(len - 11, 3) + '****' + val.substr(len - 4)
         return val
       }
     },

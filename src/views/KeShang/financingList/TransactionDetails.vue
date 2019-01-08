@@ -25,7 +25,7 @@
               <span></span>
             </li>
           </ul>
-          <div class="t-query" @click="query">查询</div>
+          <!--<div class="t-query" @click="query">查询</div>-->
         </div>
         <!-- <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p> -->
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
@@ -45,7 +45,7 @@
                   <p>
                     <span>{{item.OPERA_DATE}}</span>
                     <!--1:买入 2:卖出-->
-                    <em>{{item.TRANS_AMT_DESC | formatNum}}</em>
+                    <em>{{item.TRANS_AMT_DESC}}</em>
                   </p>
                 </li>
 
@@ -87,7 +87,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["近一个月", "近三个月", "近六个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近两个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
@@ -97,7 +97,7 @@
         },
         FUND_NO: '',
         PRD_INDEX_ID: '',
-        ORDER_NUM:''
+        ORDER_NUM: ''
       };
     },
     watch: {
@@ -167,7 +167,7 @@
           index = 0
         }
         this.endDate = this.getLastMonthYestdy(0);
-        this.startDate = this.getLastMonthYestdy(2 * index + 1);
+        this.startDate = this.getLastMonthYestdy(index + 1);
         this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
       },
       more: function () {
@@ -175,7 +175,7 @@
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
         let data = {
-          ORDER_NUM:this.ORDER_NUM,
+          ORDER_NUM: this.ORDER_NUM,
           TYPE: 'API_QRY_BUY_HIS',
           PRD_TYPE: '4',
           PRD_INDEX_ID: this.PRD_INDEX_ID + '',
@@ -215,7 +215,7 @@
       apiQryTradeHis(start, end) {
 
         let data = {
-          ORDER_NUM:this.ORDER_NUM,
+          ORDER_NUM: this.ORDER_NUM,
           TYPE: 'API_QRY_BUY_HIS',
           currentPage: "1",
           PRD_TYPE: '4',
@@ -274,6 +274,7 @@
           startTime: this.getLastYearYestdy(2), //开始时间
           onOk: data => {
             this.endDate = this.fomateDate(data);
+            this.query() // 查询
           }
         });
       },
@@ -285,6 +286,7 @@
           startTime: this.getLastYearYestdy(2), //开始时间
           onOk: e => {
             this.startDate = this.fomateDate(e);
+            this.query() // 查询
           }
         });
       },
@@ -623,7 +625,7 @@
       position: relative;
 
       ul {
-        margin-right: px2rem(60);
+        /*margin-right: px2rem(60);*/
         display: flex;
 
         li {
@@ -631,10 +633,11 @@
           display: inline-block;
           font-size: px2rem(15);
           color: #666666;
-          padding-left: px2rem(20);
+          text-align: center;
 
           span {
             display: inline-block;
+            vertical-align: middle;
             height: 0;
             width: 0;
             border-right: px2rem(5) solid transparent;

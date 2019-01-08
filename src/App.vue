@@ -139,7 +139,7 @@
         // if (val.length !== 11) return
         this.showMsgToast = true
         let len = val.length
-        let msg = '+86 ' + val.substr(len - 11, 3) + '***' + val.substr(len - 4)
+        let msg = '+86 ' + val.substr(len - 11, 3) + '****' + val.substr(len - 4)
         this.TEL = msg
         setTimeout(() => {
           this.showMsgToast = false

@@ -5,13 +5,14 @@
         选择绑定银行卡
         <span @click="typeShow = false">&times;</span>
       </div>
-      <ul class="r-type-list" v-for="bank,index in BankList" :key="index">
+      <ul class="r-type-list">
         <li
+          v-for="bank,index in BankList" :key="index"
           :class="{gray:bank.IS_SUPPORT == 0,active:cur === index}"
           @click="chooseType(index,bank,$event)">
           <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
           <section>
-            <p class="name">{{bank.OPEN_BANK}} {{bank.CARD_NO| noFilter}}</p>
+            <p class="name">{{bank.OPEN_BANK}}（{{bank.CARD_NO| noFilter}}）</p>
             <p class="money">{{bank.MSG_QUOTA}}</p>
           </section>
         </li>
@@ -20,7 +21,7 @@
         <div class="left">
           <span class="add">+</span>
         </div>
-        <span class="right">添加银行卡</span>
+        <span class="right">绑定其它银行卡</span>
       </div>
     </div>
     <div class="grey-mask"></div>
@@ -96,7 +97,7 @@
     line-height: px2rem(40);
 
     .left {
-      width: px2rem(130);
+      width: px2rem(110);
       padding-left: px2rem(30);
       height: px2rem(30);
 
@@ -146,7 +147,8 @@
 
     .r-type-list {
       position: relative;
-
+      max-height: px2rem(320);
+      overflow-y: auto;
       li {
         display: flex;
         padding: px2rem(22);
@@ -164,38 +166,39 @@
 
         .money {
           line-height: px2rem(40);
-          font-size: px2rem(14);
-          color: #000;
+          font-size: px2rem(12);
+          color: #858E9F;
         }
 
         section {
           padding-left: px2rem(30);
-          text-align: center;
+          text-align: left;
           font-size: px2rem(14);
           color: #666
         }
       }
 
-      li.active:after {
-        content: '';
-        position: absolute;
-        top: px2rem(30);
-        right: px2rem(10);
-        z-index: 10;
-        width: px2rem(18);
-        height: px2rem(18);
-        background: url("../../assets/images/check.png") center center no-repeat;
-      }
+      /*li.active:after {*/
+        /*content: '';*/
+        /*position: absolute;*/
+        /*top: px2rem(30);*/
+        /*right: px2rem(10);*/
+        /*z-index: 10;*/
+        /*width: px2rem(18);*/
+        /*height: px2rem(18);*/
+        /*background: url("../../assets/images/check.png") center center no-repeat;*/
+      /*}*/
 
-      .gray {
-        .money {
-          color: #ccc;
-        }
+      /*.gray {*/
+      /*.money {*/
+      /*color: #858E9F;*/
+      /*font-size: px2rem(12);*/
+      /*}*/
 
-        .name {
-          color: #ccc;
-        }
-      }
+      /*.name {*/
+      /*color: #ccc;*/
+      /*}*/
+      /*}*/
     }
   }
 

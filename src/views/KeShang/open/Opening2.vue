@@ -26,10 +26,10 @@
       <section class="input-box">
         <p class="left-p"> 选择银行</p>
         <!--@input="checkBankName(data.CARD_NO)"-->
-        <span class="input">
+        <span class="input" @click="showBindBankList">
           {{bankText}}
+                  <img src="@/assets/images/GroupCopy14@2x.png" alt="" class="img">
         </span>
-        <img @click="showBindBankList" src="@/assets/images/GroupCopy14@2x.png" alt="" class="img">
         <span class="xiane" @click="showXiane">
            <img src="@/assets/images/problom2@2x.png" alt="">
           银行限额</span>
@@ -64,12 +64,12 @@
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
     <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
 
-    <up-select
+    <com-up-select
       @clickBankList="addBankHandle"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBankHandle"
-    ></up-select>
+    ></com-up-select>
     <div class="jsSelect" v-show="show">
       <section class="select-box">
         <i class="close" @click="show=false"><img :src="closeImg" alt=""></i>
@@ -89,10 +89,10 @@
             </ul>
           </section>
         </section>
-        <section class="right-index">
-                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr"
-                          :key="index"> {{item}}</span>
-        </section>
+        <!--<section class="right-index">-->
+        <!--<span class="letter" @click="toBank(item)" v-for="item,index in indexArr"-->
+        <!--:key="index"> {{item}}</span>-->
+        <!--</section>-->
       </section>
     </div>
     <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
@@ -104,7 +104,7 @@
   import BankSelect from '@/components/commons/BankSelect'
   import Opening2Mixins from './Opening2'
   import util from "../../../libs/util";
-  import UpSelect from '@/components/commons/UpSelect'
+  import ComUpSelect from '@/components/commons/UpSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import BankCardLimit from '@/components/keshang/BankCardLimit'
 
@@ -113,7 +113,7 @@
   export default {
     data() {
       return {
-        backShow:false,// 限额显示
+        backShow: false,// 限额显示
         show: false,
         upseletShow: false,
         title: '选择银行卡',
@@ -163,7 +163,7 @@
     mixins: [Opening2Mixins],
     components: {
       BankSelect,
-      UpSelect,
+      ComUpSelect,
       PassWordZhengzhou,
       BankCardLimit
     },
@@ -218,7 +218,7 @@
         this.bankText = bank.OPEN_BANK
         this.data.CARD_NO = bank.CARD_NO
       },
-      showXiane(){
+      showXiane() {
         this.backShow = true
 
       },
@@ -362,14 +362,12 @@
 
     .xiane {
       padding-left: px2rem(10);
-      padding-top: px2rem(12);
-
+      padding-top: px2rem(15);
       img {
         vertical-align: top;
         width: px2rem(18);
         height: px2rem(18);
       }
-
       color: #0096FE;
       font-size: px2rem(14)
     }
@@ -384,17 +382,9 @@
         width: px2rem(80) !important;
         box-sizing: border-box;
         font-size: px2rem(14);
-        font-family: PingFangSC-Regular;
         color: #444;
         padding: px2rem(15) 0;
       }
-
-      .img {
-        padding-top: px2rem(15);
-        width: px2rem(20);
-        height: px2rem(15);
-      }
-
       input, .input {
         text-align: left;
         font-size: px2rem(14);
@@ -403,15 +393,20 @@
       }
 
       .img {
-        padding-top: px2rem(15);
+        position: absolute;
+        top: 50%;
+        transform:translateY(-60%);
+        right: 0;
         width: px2rem(20);
         height: px2rem(15);
+        vertical-align: middle;
       }
-
       .input {
         padding-top: px2rem(15);
+        padding-right: px2rem(20);
+        position: relative;
+        width: px2rem(100);
       }
-
       button {
         margin-top: px2rem(12);
       }
@@ -684,8 +679,8 @@
     .option {
       border-bottom: 1px solid #dedede;
       font-size: 0;
-      line-height: px2rem(30);
-      height: px2rem(30);
+      line-height: px2rem(40);
+      height: px2rem(40);
 
       .text {
         font-size: .4rem;
@@ -708,11 +703,11 @@
       position: absolute;
       top: -0.1rem;
       right: .3rem;
-      font-weight: bold;
+      /*font-weight: bold;*/
       color: #ccc;
       font-size: .6rem;
-      width: px2rem(20);
-      height: px2rem(20);
+      width: px2rem(15);
+      height: px2rem(15);
 
       img {
         width: 100%;

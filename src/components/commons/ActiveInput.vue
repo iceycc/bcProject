@@ -18,6 +18,7 @@
 
 <script>
   import util from "libs/util";
+
   /**
    * 几个校验：
    * 1- 银行卡和手机号：只能输入数字
@@ -78,7 +79,7 @@
 
     methods: {
       handleChange(val) {
-        this.$emit('changeHandle',val)
+        this.$emit('changeHandle', val)
       },
       isValueNumber(value) {
         let reg;
@@ -112,11 +113,15 @@
         this.throttle(this.handleInput, 1000, val)
       },
       handleInput(val) {
+        console.log(val);
+        if (this.checkType == 'code') {
+          return
+        }
         this.controlInputStyle(val)
         this.controlInputValue(val)
       },
       controlInputStyle(val) {
-        if (!val) { // 删除到 '' 是触发
+        if (val === '') { // 删除到 '' 是触发
           this.ifActive = true
           this.valueShow = false
           this.placeholderText = this.defaultPlaceholderText
@@ -144,7 +149,7 @@
           ;
         } else {
           // 如果输入的非数字，则保留之前的数据
-          if (val == '') {
+          if (val === '') {
             this.currentValue = '';
             event.target.value = ''
           } else {
@@ -202,6 +207,7 @@
 
   .active-input {
     height: px2rem(42);
+
     .input {
       font-size: px2rem(14);
     }

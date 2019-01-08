@@ -43,6 +43,7 @@
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
     <up-select
+      title="选择银行卡"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBank"

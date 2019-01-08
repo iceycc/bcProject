@@ -30,10 +30,10 @@
             </ul>
           </section>
         </section>
-        <section class="right-index">
-                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr"
-                          :key="index"> {{item}}</span>
-        </section>
+        <!--<section class="right-index">-->
+                    <!--<span class="letter" @click="toBank(item)" v-for="item,index in indexArr"-->
+                          <!--:key="index"> {{item}}</span>-->
+        <!--</section>-->
       </section>
     </div>
 

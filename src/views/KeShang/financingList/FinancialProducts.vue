@@ -168,6 +168,14 @@
           TOTAL_INCOME: '0.00',
         },
         total: '',
+        flags: [
+          // {RES_CODE: '3', RES_MSG: '333'},
+          // {RES_CODE: '4', RES_MSG: '4444'},
+          // {RES_CODE: '4', RES_MSG: '55555'}
+        ],
+        flagsLength: 1,
+        currentFlagIndex: 0,// 多次弹窗，判断当前第几个弹窗.该处为数组索引
+
         canRedeem: false,// 是否可以支取
       };
     },
@@ -200,43 +208,57 @@
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
       },
       sureRedeem() {
-        this.$router.push({name: PageName.Redeem})
+        // 需要判断flags的长度
+        console.log('currentFlagIndex>>', this.currentFlagIndex);
+        console.log('flagsLength>>', this.flagsLength);
+
+        if (this.currentFlagIndex == this.flagsLength) {
+          this.$router.push({name: PageName.Redeem})
+        } else {
+          this.flagPopup(this.currentFlagIndex)
+        }
       },
       goRedeem(item) {
+
         let params = {
           INVEST_TIME: item.TIME_END,
           PRD_INDEX_ID: item.PRD_INDEX_ID,
           EXPIRE_TIME: item.EXPIRE_TIME
         }
-        API.redeem.apiRedemptionValid(params, res => {
+        API.redeem.apiRedemptionValid2(params, res => {
           console.log(res)
           this.setComState({
             type: 'redeemData',
             value: item
           })
-          if (res.RES_CODE == 2) {
-            // 2.不可支取
-            this.waitingMsg = res.RES_MSG
-            this.canRedeem = false
-            this.infoShow = true
-          } else if (res.RES_CODE == 3) {
-            // 3：未满收益周期的天数将按照该行活期利率计算，收益周期请在产品详情查看，是否继续支取
-            this.waitingMsg = res.RES_MSG
-            this.canRedeem = true // 可支取
-            this.infoShow = true
-            // Bus.$emit(BusName.showToast, res.RES_MSG)
-          } else if (res.RES_CODE == 4) {
-            // 4：若现在支取，将无法享受活动额外奖励，仅可获得产品正常收益
-            this.waitingMsg = res.RES_MSG
-            this.canRedeem = true
-            this.infoShow = true
-            // Bus.$emit(BusName.showToast, res.RES_MSG)
-          } else {
-            // 应该是返回空
-            // 正常支取 直接跳转
-            this.$router.push({name: PageName.Redeem})
-          }
+          //
+          this.flags = res
+          this.flagsLength = this.flags.length
+          console.log('currentFlagIndex>>', this.currentFlagIndex);
+          console.log('flagsLength>>', this.flagsLength);
+          this.flagPopup()
+
         })
+      },
+      flagPopup(step = 0) {
+
+        this.currentFlagIndex = step + 1
+        let flag = this.flags[step]
+        if (flag.RES_CODE == 2) {
+          // 2.不可支取
+          this.waitingMsg = flag.RES_MSG
+          this.canRedeem = false
+          this.infoShow = true
+        } else {
+          // RES_CODE
+          // 3：未满收益周期的天数将按照该行活期利率计算，收益周期请在产品详情查看，是否继续支取
+          // 4：若现在支取，将无法享受活动额外奖励，仅可获得产品正常收益
+          // 文案后台
+          this.waitingMsg = flag.RES_MSG
+          this.canRedeem = true
+          this.infoShow = true
+          // this.$router.push({name: PageName.Redeem})
+        }
       },
       toggleTabs(index) {
         // TODO

@@ -4,7 +4,7 @@
     <section class="m-form">
       <section class="bank">
         <span class="n-left">选择银行</span>
-        <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
+        <!--<input type="text" name="back" placeholder=" 请选择开户银行" v-model="data.ORG_ID">-->
         <!-- <span  class="limit">银行限额</span>  -->
         <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
                      title="银行列表"></Bank-select>
@@ -12,8 +12,8 @@
       </section>
       <active-input check-type="number" valuePlaceholder="新绑定卡卡号" v-model="bankNo" max="20"
                     @changeHandle="changeHandle"></active-input>
-      <active-input check-type="number" valuePlaceholder="手机号" v-model="bankTel" max="11"></active-input>
-      <active-input check-type="number" valuePlaceholder="验证码" v-model="msgCode" max="6" onautocomplete="false">
+      <active-input check-type="number" valuePlaceholder="手机号码" v-model="bankTel" max="11"></active-input>
+      <active-input check-type="code" valuePlaceholder="验证码" v-model="msgCode" max="6" onautocomplete="false">
         <template slot="btn">
           <button class="slot" @click="getMsgCode" :disabled="disable">{{codeText}}</button>
         </template>
@@ -52,7 +52,7 @@
     },
     data() {
       return {
-        bankText: '请选择银行',
+        bankText: '请选择开户银行',
         bankList: [],
         AllBankListObj: {},
         bankLimitShow: false,
@@ -93,6 +93,18 @@
         this.checkBankNo(val)
       },
       getMsgCode() {
+        if(this.bankText =='请选择开户银行'){
+          Bus.$emit(BusName.showToast,'请选择开户银行')
+         return
+        }
+        if(!this.bankNo){
+          Bus.$emit(BusName.showToast,'请输入银行卡号')
+          return
+        }
+        if(!this.bankTel){
+          Bus.$emit(BusName.showToast,'请输入银行卡预留手机号')
+          return
+        }
         let sTime = this.time
         this.disable = true
         timer = setInterval(() => {
@@ -151,8 +163,8 @@
        */
       checkBankNo(val) {
         val = val.toString()
-        if (this.bankText == '请选择银行') {
-          this.showErrMsg('请选择银行')
+        if (this.bankText == '请选择开户银行') {
+          this.showErrMsg('请选择开户银行')
           return true
         }
         if (val == '') {
@@ -242,6 +254,18 @@
       },
 
       goNext() {
+        if(this.bankText =='请选择开户银行'){
+          Bus.$emit(BusName.showToast,'请选择开户银行')
+          return
+        }
+        if(!this.bankNo){
+          Bus.$emit(BusName.showToast,'请输入银行卡号')
+          return
+        }
+        if(!this.bankTel){
+          Bus.$emit(BusName.showToast,'请输入银行卡预留手机号')
+          return
+        }
         if (this.checkBankNo(this.bankNo)) return
         console.log('goNext>>', this.bankNameToNo);
         if (!this.bankNameToNo) {

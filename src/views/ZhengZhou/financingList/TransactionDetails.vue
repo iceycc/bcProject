@@ -92,7 +92,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["近一个月", "近二个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近两个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
