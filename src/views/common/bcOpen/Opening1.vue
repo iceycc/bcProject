@@ -1,6 +1,6 @@
 <template>
   <div class="warp">
-    <app-bar title="信息填写"></app-bar>
+    <app-bar title="实名认证"></app-bar>
     <section class="wrapicon">
       <section class="circle">
                 <span class="line1">

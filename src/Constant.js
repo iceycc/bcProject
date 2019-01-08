@@ -27,7 +27,7 @@ const Configs = {
    * npm run dev 开发
    *
    */
-  DEV_HOST: WEB_HOST.ceshi,
+  DEV_HOST: WEB_HOST.dev,
 
   /**
    * build打包
@@ -44,8 +44,8 @@ export const HOST = process.env.NODE_ENV == 'development'
  * api接口 接口地址默认：HOST+/finsuit ，如单独对接某后端地址，自行调整
  * @type {string}
  */
-// export const HOST_API = HOST + '/finsuit' // // api 接口地址
-export const HOST_API = HOST  // // api 接口地址
+export const HOST_API = HOST + '/finsuit' // // api 接口地址
+// export const HOST_API = HOST  // // api 接口地址
 
 
 /**
@@ -136,6 +136,7 @@ export const PageName = {
   BcOpening3: 'BcOpening3',
   BcOpening2: 'BcOpening2',
   BcOpening1: 'BcOpening1',
+  BcOpening0: 'BcOpening0',
   BicaiPageDocs: 'BicaiPageDocs',
   DepositDetail1: 'DepositDetail1', // 活期存款
   DepositDetail2: 'DepositDetail2', // 智能存款

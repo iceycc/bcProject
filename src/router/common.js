@@ -88,26 +88,39 @@ export default [
     meta: {keepAlive: false, title: '产品详情', needLogin: false}
   },
   /**
-   * 比财登陆
+   * 比财开户流程
    */
+  // 开户过渡页 新增
+  {
+    path: '/' + PageName.BcOpening0,
+    name: PageName.BcOpening1,
+    component: resolve => require(['views/common/bcOpen/Opening0.vue'], resolve),
+    meta: {keepAlive: false, title: '实名认证', needLogin: false}
+  },
+  // 实名认证
   {
     path: '/' + PageName.BcOpening1,
     name: PageName.BcOpening1,
     component: resolve => require(['views/common/bcOpen/Opening1.vue'], resolve),
     meta: {keepAlive: false, title: '实名认证', needLogin: false}
   },
+  // 绑卡
   {
     path: '/' + PageName.BcOpening2,
     name: PageName.BcOpening2,
     component: resolve => require(['views/common/bcOpen/Opening2.vue'], resolve),
     meta: {keepAlive: false, title: '绑卡', needLogin: false}
   },
+  // 注册成功
   {
     path: '/' + PageName.BcOpening3,
     name: PageName.BcOpening3,
     component: resolve => require(['views/common/bcOpen/Opening3.vue'], resolve),
     meta: {keepAlive: false, title: '注册成功', needLogin: false}
   },
+  /**
+   * 郑州面向app的密码页面
+   */
   {
     path: '/' + PageName.PasswordOneForZhengZhou,
     name: PageName.PasswordOneForZhengZhou,
