@@ -11,7 +11,7 @@ export default {
     return {
       ORG_ID: '',
       HAS_GRADE: '',// 是否风险测评
-      DEPICT:''
+      DEPICT: ''
     }
   },
   created() {
@@ -45,8 +45,23 @@ export default {
       this.setComState({type: 'loginType', value: '安全购买'})
       // let {LOGO_URL, ORG_NAME} = this.productDetail
       let {TOKEN} = this.$store.getters.GET_ACCOUNT_STATE
+      let {IS_SYNC_FLAG, IS_RZ_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG} = this.getComState.ProAndOrgType
+      let {LOGO_URL, ORG_NAME} = this.productDetail
       if (TOKEN) {
-        this.checkAuthStatus()
+        if (IS_SYNC_FLAG == 1 || (IS_SYNC_FLAG == 0 && IS_RZ_FLAG == 1) || AUTH_URL_FLAG == 1) {
+          // 打通open API 获取没打通openApi但是要实名
+          this.checkAuthStatus()
+        } else {
+          if (H5_URL_ANDRIOD || H5_URL_IOS) {
+            Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME}, 10000)
+            setTimeout(() => {
+              window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
+            }, 2000)
+          } else {
+            alert('请配置银行直联跳转链接')
+          }
+        }
+
       } else {
 
         // Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
@@ -99,10 +114,12 @@ export default {
     },
     // 判断该用户在比财的实名认证状态
     checkAuthStatus() {
-      this.setComState({type: 'ISLogin', value: false})
+      // this.setComState({type: 'ISLogin', value: false})
       let {LOGO_URL, ORG_NAME} = this.productDetail
       API.bicai.getAuthStatus({}, res => {
-        let {AUTH_STATUS, isOldMember} = res
+        let {AUTH_STATUS, isOldMember,idName} = res
+        this.setComState({type:'idName',value:idName})
+
         //  AUTH_STATUS 返回码：
         // 0:未认证，
         // 1:身份证认证，
@@ -123,19 +140,24 @@ export default {
             break;
           case 3:
           case 4:
+            // 已经完成实名的了
             let {IS_SYNC_FLAG, H5_URL_ANDRIOD, H5_URL_IOS, AUTH_URL_FLAG} = this.getComState.ProAndOrgType
-            console.log('this.getComState.ProAndOrgType', this.getComState.ProAndOrgType);
+            // console.log('this.getComState.ProAndOrgType', this.getComState.ProAndOrgType);
             if (IS_SYNC_FLAG == 0) {
               // 非打通openApi
               if (AUTH_URL_FLAG == 1) {
-                // 1：实名认证后，调用免登接口 返回H5直联的面登录路径
+                // 1：是否需要调取免登录：实名认证后，调用免登接口 返回H5直联的面登录路径
                 API.bicai.getAuthUrl({}, res => {
                   if (res.STATUS == 1) {
                     console.log(res.AUTH_URL);
-                    Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
-                    setTimeout(() => {
-                      window.location.href = res.AUTH_URL
-                    }, 2000)
+                    Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME}, 10000)
+                    if (res.AUTH_URL) {
+                      setTimeout(() => {
+                        window.location.href = res.AUTH_URL
+                      }, 2000)
+                    } else {
+                      alert('请配置银行直联跳转链接')
+                    }
                   } else {
                     Bus.$emit(BusName.showToast, res.MESSAGE)
                   }
@@ -143,7 +165,7 @@ export default {
               } else {
                 // 0：使用之前的逻辑
                 if (H5_URL_ANDRIOD || H5_URL_IOS) {
-                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME}, 10000)
                   setTimeout(() => {
                     window.location.href = H5_URL_ANDRIOD || H5_URL_IOS
                   }, 2000)
@@ -152,7 +174,7 @@ export default {
                 }
               }
             } else {
-              // 打通openApi
+              // 打通openApi 校验在本行的的校验
               this.checkBankOpenAndLogin()
             }
             break;

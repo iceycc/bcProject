@@ -115,7 +115,7 @@
         }, time)
       })
       Bus.$on(BusName.showBankLonding, ({LOGO_URL = '', ORG_NAME = ''}, time = 2000) => {
-        // todo
+        // 注意，提示后，跳转外链时，建议time=10000
         // return
         if (!LOGO_URL) return
         if (!ORG_NAME) return

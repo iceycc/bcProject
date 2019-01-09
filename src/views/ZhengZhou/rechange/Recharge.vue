@@ -101,7 +101,6 @@
   </div>
 </template>
 <script>
-  import API from "@/service";
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import {HOST_API, LsName} from '@/Constant'
   import UpSelect from '@/components/commons/UpSelect'
@@ -111,6 +110,7 @@
   // import {HandleMixin, UtilMixin, RechangeMixins, } from '@/mixins'
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
+  import API from "@/service"
 
   let time = 60
   let timer;
@@ -253,6 +253,10 @@
         }
       },
       doNext() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A016', // 点位
+          REMARK_DATA: '异业合作-购买页面-充值-确认充值按钮', // 中文备注
+        })
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
         // if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0) {

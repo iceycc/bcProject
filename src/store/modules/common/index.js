@@ -1,5 +1,6 @@
 export default {
   state: {
+    idName: '',//  用户名
     rechargeData: {},//  重置协议需要的参数
     hasCardList: [], //绑定的银行卡列表
     reload: false, // 用于强制刷新 密码控件暂时只能强制刷新重载 否则不行

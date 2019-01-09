@@ -150,8 +150,8 @@
         }
         if (!flag) {
           this.bankText = '请选择开户银行'
-          Bus.$emit(BusName.showToast, '不支持该银行或银行卡号错误')
-          this.showErrMsg('不支持该银行或银行卡号错误')
+          Bus.$emit(BusName.showToast, '不支持改银行或银行卡号错误')
+          this.showErrMsg('不支持改银行或银行卡号错误')
         }
         console.log(this.bankText);
         return flag
@@ -269,7 +269,7 @@
         if (this.checkBankNo(this.bankNo)) return
         console.log('goNext>>', this.bankNameToNo);
         if (!this.bankNameToNo) {
-          // this.showErrMsg('暂不支持该银行')
+          // this.showErrMsg('暂不支持改银行')
 
         } else {
           this.BindingCardAPI()

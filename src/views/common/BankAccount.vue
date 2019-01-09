@@ -238,7 +238,7 @@
       }) {
 
         if (!CheckBank(ORG_ID)) {
-          Bus.$emit(BusName.showToast, '暂不支持该银行，请下载比财App')
+          Bus.$emit(BusName.showToast, '暂不支持改银行，请下载比财App')
           return
         }
         API.watchApi({

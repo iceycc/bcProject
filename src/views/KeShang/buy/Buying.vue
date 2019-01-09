@@ -148,6 +148,10 @@
         this.APPLY_AMOUNT = ''
       },
       goReChang() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A015', // 点位
+          REMARK_DATA: '异业合作-购买页面-充值按钮', // 中文备注
+        })
         this.setComState({
           type: 'OriginPage',
           value: this.$route.fullPath
@@ -155,7 +159,7 @@
 
         this.$router.push({
           name: PageName.Recharge,
-          query:{
+          query: {
             ORIGIN_PAGE: 'buying' // 用于成功后 按钮的展示判断 .购买流程充值页面完成后只有继续购买按钮；
           }
         })
@@ -184,6 +188,11 @@
         }
       },
       goBuy() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A017', // 点位
+          REMARK_DATA: '异业合作-购买页面-存入', // 中文备注
+          FROM_ID: this.proDetail.ID + '',
+        })
         if (!this.agree) {
           Bus.$emit(BusName.showToast, '请同意相关协议')
           return
@@ -316,7 +325,7 @@
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
           PHONE_CODE: this.msgCode,
-          PRD_TYPE: this.proDetail.PRD_TYPE_ID + '',
+          PRD_TYPE: (this.proDetail.PRD_TYPE_ID || '4') + '', // todo 娶不到
           MESAGE_TOKEN: this.MESAGE_TOKEN,
 
 

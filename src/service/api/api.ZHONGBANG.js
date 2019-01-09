@@ -24,7 +24,7 @@ export default {
    */
   common: {
     // /openapi/comm/apiQryLoginStatus
-    // 查询是否该银行的登陆 开户 等状态
+    // 查询是否改银行的登陆 开户 等状态
     apiQryLoginStatus(params, success, error) {
       let options = {
         url: '/openapi/comm/apiQryLoginStatus',

@@ -149,7 +149,7 @@ export default {
         return
       }
       if (!this.checkBankName(this.data.CARD_NO)) {
-        Bus.$emit(BusName.showToast, '暂不支持该银行卡号')
+        Bus.$emit(BusName.showToast, '暂不支持改银行卡号')
         return
       }
       // if (this.checkBankName1) {

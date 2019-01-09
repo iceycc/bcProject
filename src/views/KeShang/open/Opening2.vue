@@ -24,7 +24,7 @@
         <!--title="银行列表" xiane="false"></Bank-select>-->
       </section>
       <section class="input-box">
-        <p class="left-p"> 选择银行</p>
+        <p class="left-p">选择银行</p>
         <!--@input="checkBankName(data.CARD_NO)"-->
         <span class="input" @click="showBindBankList">
           {{bankText}}
@@ -61,7 +61,7 @@
     </div>
     <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <!--<button class="tijiao" @click="goNext">下一步</button>-->
-    <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
+    <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">开户</button>
     <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
 
     <com-up-select
@@ -190,10 +190,14 @@
       this.callbackInfos = this.getComState.openingData
       console.log('callbackInfos>>>', this.callbackInfos);
       if (this.callbackInfos.hasCardList.length > 0) {
-        this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
-        this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
         this.mainBankList = this.callbackInfos.hasCardList
-        this.tel = this.callbackInfos.hasCardList[0].PHONE_NUM
+        if (this.callbackInfos.hasCardList[0].IS_SUPPORT == 0) {
+          // 不支持的银行。
+        } else {
+          this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
+          this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
+          this.tel = this.callbackInfos.hasCardList[0].PHONE_NUM
+        }
       }
     },
     computed: {
@@ -250,7 +254,7 @@
         if (!flag) {
           this.bankText = '请选择开户银行'
           this.data.CARD_NO = ''
-          Bus.$emit(BusName.showToast, '暂不支持该银行')
+          Bus.$emit(BusName.showToast, '暂不支持改银行')
         }
         console.log(this.bankText);
         return flag
@@ -363,11 +367,13 @@
     .xiane {
       padding-left: px2rem(10);
       padding-top: px2rem(15);
+
       img {
         vertical-align: top;
         width: px2rem(18);
         height: px2rem(18);
       }
+
       color: #0096FE;
       font-size: px2rem(14)
     }
@@ -385,6 +391,7 @@
         color: #444;
         padding: px2rem(15) 0;
       }
+
       input, .input {
         text-align: left;
         font-size: px2rem(14);
@@ -392,21 +399,24 @@
         color: #333
       }
 
+
       .img {
         position: absolute;
         top: 50%;
-        transform:translateY(-60%);
+        transform: translateY(-60%);
         right: 0;
         width: px2rem(20);
         height: px2rem(15);
         vertical-align: middle;
       }
+
       .input {
+        text-align: right;
         padding-top: px2rem(15);
-        padding-right: px2rem(20);
+        padding-right: px2rem(30);
         position: relative;
-        width: px2rem(100);
       }
+
       button {
         margin-top: px2rem(12);
       }

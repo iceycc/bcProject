@@ -6,7 +6,7 @@
       <iframe :src="agreeMentSrc" class="indocs"></iframe>
     </div>
     <!--<div class="btn">-->
-      <!--<button @click="getCode">确认</button>-->
+    <!--<button @click="getCode">确认</button>-->
     <!--</div>-->
   </div>
 </template>
@@ -84,11 +84,16 @@
         API.doc.fixedTimeDepositAgreement(data)
       },
       getBuyAgreementByAjax() {
-        let data = {}
-        API.doc.personalAccountServiceAgreement(data, res => {
-          this.title = res.AGREEMENT
-          this.agreeMentSrc = HOST_API + res.URL
-        })
+
+          let data = {
+            USER_NAME: this.getComState.idName
+          }
+          API.doc.personalAccountServiceAgreement(data, res => {
+            this.title = res.AGREEMENT
+            this.agreeMentSrc = HOST_API + res.URL
+          })
+
+
       },
       getOpenAgreementByAjax() {
         let data = {}

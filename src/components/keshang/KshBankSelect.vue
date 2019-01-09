@@ -31,8 +31,8 @@
           </section>
         </section>
         <!--<section class="right-index">-->
-                    <!--<span class="letter" @click="toBank(item)" v-for="item,index in indexArr"-->
-                          <!--:key="index"> {{item}}</span>-->
+        <!--<span class="letter" @click="toBank(item)" v-for="item,index in indexArr"-->
+        <!--:key="index"> {{item}}</span>-->
         <!--</section>-->
       </section>
     </div>
@@ -169,22 +169,27 @@
     font-size: px2rem(14);
     padding-right: px2rem(125);
     vertical-align: top;
-    .bank-text{
+
+    .bank-text {
       position: relative;
-      span{
+
+      span {
         vertical-align: middle;
-        width: px2rem(170);
+        text-align: right;
+        width: px2rem(150);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
       .downImg {
         position: absolute;
-        right: px2rem(-20);
+        right: px2rem(-40);
         top: px2rem(13);
         width: px2rem(20);
       }
     }
+
     .xiane {
       display: inline-block;
       padding-top: px2rem(3);

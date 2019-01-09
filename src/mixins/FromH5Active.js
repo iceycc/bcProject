@@ -54,7 +54,6 @@ const Check = {
             console.log('aaa', ORG_NAME);
             Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
             setTimeout(() => {
-
               this.checkBankOpenAndLogin()
             }, 1500)
             break;

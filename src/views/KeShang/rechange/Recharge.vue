@@ -67,6 +67,7 @@
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
   import IconFont from '@/components/commons/IconFont'
+  import API from "@/service"
 
 
   let time = 60
@@ -227,6 +228,10 @@
         }
       },
       doNext() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A016', // 点位
+          REMARK_DATA: '异业合作-购买页面-充值-确认充值按钮', // 中文备注
+        })
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
         if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {

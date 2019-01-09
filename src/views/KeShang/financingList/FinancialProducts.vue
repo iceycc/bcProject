@@ -39,7 +39,7 @@
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>隶属于{{item.ORG_NAME}}</p>
+                <p>{{item.ORG_NAME}}</p>
                 <p>持有金额（元）
                   <span>{{item.HOLD_AMOUNT}}</span>
                 </p>
@@ -50,7 +50,7 @@
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
                 <p>锁定期
-                  <span>{{item.LOCKUP_PERIOD}}天</span>
+                  <span>{{item.LOCKUP_PERIOD}}</span>
 
                 </p>
                 <p>存款利率
@@ -78,7 +78,7 @@
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
                 <p>{{item.ORG_NAME}}</p>
-                <p>本金金额（元）
+                <p>投资金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
                 <p>投资收益
@@ -200,6 +200,7 @@
         this.infoShow = false
       },
       goBuy(item) {
+        item.MIN_AMOUNT = item.MIN_AMOUNT || this.MIN_AMOUNT // todo 罪恶，已经支取没有返回最低购买，现在取的持有中列表的 。方案1：只传id，自己请求。方案2：后台添加参数
         this.setComState({type: 'goBuy', value: {...item, ID: item.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
@@ -231,19 +232,31 @@
             type: 'redeemData',
             value: item
           })
-          //
-          this.flags = res
-          this.flagsLength = this.flags.length
-          console.log('currentFlagIndex>>', this.currentFlagIndex);
-          console.log('flagsLength>>', this.flagsLength);
-          this.flagPopup()
-
+          // 4 -> 3
+          this.flags = []
+          this.flagsLength = res.length
+          for (let i = 0; i < res.length; i++) {
+            // 就是进行排序。。。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的 todo再优化
+            if (res[i].RES_CODE == 3) {
+              this.flags.push(res[i])
+            } else if (res[i].RES_CODE == 4) {
+              this.flags.unshift(res[i])
+            } else {
+              this.flags.push(res[i])
+            }
+          }
+          setTimeout(() => {
+            this.flagPopup()
+          }, 200)
         })
       },
-      flagPopup(step = 0) {
 
+      // 智能弹窗 从前往后以此进行弹窗提示。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的
+      flagPopup(step = 0) {
+        console.log(this.flags);
         this.currentFlagIndex = step + 1
         let flag = this.flags[step]
+        console.log(flag);
         if (flag.RES_CODE == 2) {
           // 2.不可支取
           this.waitingMsg = flag.RES_MSG
@@ -261,10 +274,6 @@
         }
       },
       toggleTabs(index) {
-        // TODO
-        // if(index==1){
-        //   return
-        // }
         this.pageList = []
         this.nowIndex = index;
         this.loadPageList();
@@ -309,6 +318,7 @@
           API.bank.getMyInvestOver(data, res => {
 
             this.pageList = res.PAGE.retList || [];
+
             if (this.pageList.length == 0) {
               // this.allLoaded = true;
             }
@@ -342,6 +352,8 @@
               this.allLoaded = true;
               // Bus.$emit(BusName.showToast, "暂无数据");
             }
+            this.MIN_AMOUNT = this.pageList[0].MIN_AMOUNT
+
             this.$nextTick(function () {
               // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
               // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，

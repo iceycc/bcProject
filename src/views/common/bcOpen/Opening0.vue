@@ -54,8 +54,7 @@
   </div>
 </template>
 <script>
-  import {PageName, BusName, HOST_API} from "@/Constant";
-  import IconFont from '@/components/commons/IconFont'
+  import {PageName} from "@/Constant";
   import API from "@/service";
   import Check from './common'
 
@@ -82,13 +81,11 @@
       }
     },
     mixins: [Check],
-    components: {
-      IconFont
-    },
     computed: {},
     created() {
       API.bicai.getAuthMemberText({}, (res) => {
         this.pageInfos = res
+        document.title = res.TOP_1
       })
     },
     methods: {

@@ -21,7 +21,7 @@
         <div class="left">
           <span class="add">+</span>
         </div>
-        <span class="right">绑定其它银行卡</span>
+        <span class="right">添加其它银行卡</span>
       </div>
     </div>
     <div class="grey-mask"></div>
@@ -149,6 +149,7 @@
       position: relative;
       max-height: px2rem(320);
       overflow-y: auto;
+
       li {
         display: flex;
         padding: px2rem(22);
@@ -179,26 +180,26 @@
       }
 
       /*li.active:after {*/
-        /*content: '';*/
-        /*position: absolute;*/
-        /*top: px2rem(30);*/
-        /*right: px2rem(10);*/
-        /*z-index: 10;*/
-        /*width: px2rem(18);*/
-        /*height: px2rem(18);*/
-        /*background: url("../../assets/images/check.png") center center no-repeat;*/
+      /*content: '';*/
+      /*position: absolute;*/
+      /*top: px2rem(30);*/
+      /*right: px2rem(10);*/
+      /*z-index: 10;*/
+      /*width: px2rem(18);*/
+      /*height: px2rem(18);*/
+      /*background: url("../../assets/images/check.png") center center no-repeat;*/
       /*}*/
 
-      /*.gray {*/
-      /*.money {*/
-      /*color: #858E9F;*/
-      /*font-size: px2rem(12);*/
-      /*}*/
+      .gray {
+        .money {
+          color: #B3B3B3;
+          font-size: px2rem(12);
+        }
 
-      /*.name {*/
-      /*color: #ccc;*/
-      /*}*/
-      /*}*/
+        .name {
+          color: #ccc;
+        }
+      }
     }
   }
 

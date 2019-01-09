@@ -61,14 +61,14 @@
     <section class="financing-list">
       <section class="top" @click="goPage(toPageName.FinancialProducts)">
                     <span class="top-left">
-                        存款产品</span>
+                        {{proList.PRD_TYPE_NAME}}</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
                         ¥{{proList.TOTAL_AMT | formatNum | preLcAssetFilter}}<i class="small-number">{{proList.TOTAL_AMT |formatNum| lastLcAssetFilter}}</i>
                     </span>
         <span class="top-right" v-if="!pass">
                     ****
                 </span>
-        <span class="ic-right" @click="goPage(toPageName.BankBalance)">
+        <span class="ic-right">
                     明细
                     <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
                 </span>
@@ -158,7 +158,9 @@
     computed: {
       TEL_HERF() {
         if (this.bankDetail.CUST_SERVICE_HOTLINE) {
-          return this.bankDetail.CUST_SERVICE_HOTLINE.substr(this.bankDetail.CUST_SERVICE_HOTLINE.length - 7)
+          let str = this.bankDetail.CUST_SERVICE_HOTLINE
+          str = str.replace(/[^0-9]/ig, "")
+          return str
         } else {
           return ''
         }
