@@ -39,6 +39,12 @@
         <img src="@/assets/images/production/close@2x.png" alt="" class="close" @click="BC_PHONE='';msgCode = ''">
       </section>
     </section>
+    <div class="show-toatal" v-if="showToatal">
+      <div class="msg">
+        <p>最少需要绑定一张一类户银行卡</p>
+        <button @click="showToatal=false">确定</button>
+      </div>
+    </div>
     <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
   </div>
 </template>
@@ -56,6 +62,7 @@
     name: "BindingBank",
     data() {
       return {
+        showToatal: false,
         onfocus: true,
         imgSrc,
         code: {},
@@ -122,6 +129,7 @@
       },
       // 点击弹出银行卡管理
       managerCard(card) {
+
         console.log(card);
         setTimeout(() => {
           this.onfocus = true
@@ -173,6 +181,14 @@
       },
       unBindingCard() {
         console.log(2)
+        let num = this.CARD_LIST.length
+        if (num == 1) {
+          setTimeout(() => {
+            this.showToatal = true
+          }, 400)
+          // Bus.$emit(BusName.showToast, '最少需要绑定一张一类户银行卡')
+          return
+        }
         // 先发生短信验证码
         let data = {
           BIZ_TYPE: '9', //	类型
@@ -377,6 +393,41 @@
       }
 
 
+    }
+  }
+
+  .show-toatal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+
+    .msg {
+      position: absolute;
+      box-sizing: border-box;
+      padding: px2rem(20);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: px2rem(304);
+      height: px2rem(106);
+      background: rgba(255, 255, 255, 1);
+      border-radius: px2rem(6);
+
+      p {
+        color: #333333;
+        font-size: px2rem(16);
+        margin-bottom: px2rem(20);
+      }
+
+      button {
+        /*width: ;*/
+        color: #508CEE;
+        font-size: px2rem(17);
+      }
     }
   }
 </style>

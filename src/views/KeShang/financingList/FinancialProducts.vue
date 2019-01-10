@@ -41,7 +41,7 @@
                 </h4>
                 <p>{{item.ORG_NAME}}</p>
                 <p>持有金额（元）
-                  <span>{{item.HOLD_AMOUNT}}</span>
+                  <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
                 <p>存入时间
                   <span>{{item.TIME_END}}</span>
