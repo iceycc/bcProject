@@ -8,8 +8,9 @@ const WEB_HOST = {
   dev: 'https://finsuitdev.bicai365.com', // dev开发环境
   adv: 'https://adv.bicai365.com', // adv测试
   pro: 'https://finsuit.bicai365.com', // 生产,
-  // pro: 'https://ytest.bicai365.com', // 生产,
-  ceshi: 'http://192.168.100.157:8080/', // 生产,
+  // pro: 'https://graytest.bicai365.com', //
+  // pro: 'https://ytest.bicai365.com', //
+  ceshi: 'http://192.168.100.157:8080/', //
   /**
    * 图片的路径 勿动！
    */
@@ -28,12 +29,12 @@ const Configs = {
    * npm run dev 开发
    *
    */
-  DEV_HOST: WEB_HOST.adv,
+  DEV_HOST: WEB_HOST.pro,
 
   /**
    * build打包
    */
-  PRO_HOST: WEB_HOST.adv, //
+  PRO_HOST: WEB_HOST.pro, //
 }
 /**
  * 整个站点的HOST根据生产和开发分别暴露

@@ -23,8 +23,8 @@
           <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
           <div class="ratereturn">
             <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | rateFormat(2)}}%</p>
-            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">{{item.PRD_TYPE_ID |
-              typeFilter(item.IS_XIAOYU_BANK,item.RATE_DESC)}}</p>
+            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">
+              {{item.PRD_TYPE_ID | typeFilter(item.IS_XIAOYU_BANK,item.RATE_DESC)}}</p>
           </div>
         </li>
       </ul>
@@ -37,8 +37,8 @@
         >
           <div class="ratereturn " style="text-align: center">
             <p style="color: #FFB400;font-size: 0.8rem;">{{item.RATE | fromatMoneyFilter}}%</p>
-            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">{{item.PRD_TYPE_ID |
-              typeFilter}}</p>
+            <p style="color: #B4BECC;font-size: 0.3rem;padding-top:0;padding-bottom:.4rem">
+              {{item.PRD_TYPE_ID | typeFilter(item.IS_XIAOYU_BANK,item.RATE_DESC)}}</p>
           </div>
           <div class="ratereturn ratereturnright">
             <p class="p-bank"><span><img :src="imgSrc+item.LOGO_URL"></span>{{item.ORG_NAME}}</p>
