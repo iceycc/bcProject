@@ -282,7 +282,8 @@
             }
           })
         }, err => {
-          this.$router.push({name: PageName.RedeemFailure, query: err})
+          Bus.$emit(BusName.showToast, err)
+          // this.$router.push({name: PageName.RedeemFailure, query: {err: err}})
         })
       },
 

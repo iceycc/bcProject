@@ -6,12 +6,12 @@ export default {
    */
   BankLimit(str) {
     if (!str) return '0.00'
+    str = str + ''
     str = str.trim()
     if (str == '-1') {
       // 约定 后台返回 -1 说明无限额 注意处理额度控制
       return '无限额'
     }
-    str = str + ''
     // if(str == '' || !str) return
     // if (!Number(str)) return str
     var newStr = "";
@@ -50,8 +50,8 @@ export default {
    */
   formatNum(str) {
     if (!str) return '0.00'
-    str = str.trim()
     str = str + ''
+    str = str.trim()
     // if(str == '' || !str) return
     // if (!Number(str)) return str
     var newStr = "";

@@ -239,8 +239,8 @@
         ALERT_TEXT
       }) {
         if (ALERT_CODE == 0) {
-          // 维护中银行
-          Bus.$emit(BusName.showToast, ALERT_TEXT)
+          // 维护中银行 提示银行维护中
+          Bus.$emit(BusName.showToast, ALERT_TEXT = `${ORG_NAME}系统升级中，暂时无法提供服务，敬请期待。`)
           return
         }
         // 晋商版本兼容。。
@@ -428,7 +428,9 @@
 
   .m-bank-box {
     width: 100%;
-
+    .m-bank-card{
+      margin-bottom: px2rem(6);
+    }
     .m-title {
       padding-left: px2rem(20);
       font-size: px2rem(12);
