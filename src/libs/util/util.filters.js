@@ -48,8 +48,15 @@ export default {
    * @param str  eg:30000
    * @returns {*} eg:3,000.00
    */
-  formatNum(str) {
-    if (!str) return '0.00'
+  formatNum(str, flag) {
+
+    if (!str) {
+      if (flag == 1) {
+        return '--'
+      } else {
+        return '0.00'
+      }
+    }
     str = str + ''
     str = str.trim()
     // if(str == '' || !str) return

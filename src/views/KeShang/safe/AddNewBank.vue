@@ -40,6 +40,8 @@
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import Mixins from "@/mixins";
+  import util from "libs/util";
+
   // import BankCardLimit from '@/components/keshang/BankCardLimit'
   let timer;
   export default {
@@ -105,6 +107,7 @@
           Bus.$emit(BusName.showToast,'请输入银行卡预留手机号')
           return
         }
+        if (util.Check.tel(this.bankTel, true)) return;
         let sTime = this.time
         this.disable = true
         timer = setInterval(() => {
@@ -150,8 +153,8 @@
         }
         if (!flag) {
           this.bankText = '请选择开户银行'
-          Bus.$emit(BusName.showToast, '不支持改银行或银行卡号错误')
-          this.showErrMsg('不支持改银行或银行卡号错误')
+          Bus.$emit(BusName.showToast, '不支持该银行或银行卡号错误')
+          this.showErrMsg('不支持该银行或银行卡号错误')
         }
         console.log(this.bankText);
         return flag
@@ -269,7 +272,7 @@
         if (this.checkBankNo(this.bankNo)) return
         console.log('goNext>>', this.bankNameToNo);
         if (!this.bankNameToNo) {
-          // this.showErrMsg('暂不支持改银行')
+          // this.showErrMsg('暂不支持该银行')
 
         } else {
           this.BindingCardAPI()

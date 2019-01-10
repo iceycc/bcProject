@@ -103,7 +103,7 @@ export default {
       this.data.PRE_PHONE_NUM = this.tel
       console.log(this.checkBankName(this.data.CARD_NO));
       if (!this.checkBankName(this.data.CARD_NO)) {
-        Bus.$emit(BusName.showToast, '暂不支持改银行卡号')
+        Bus.$emit(BusName.showToast, '暂不支持该银行卡号')
         return
       }
       if (this.bankText == '请选择银行') {
@@ -115,7 +115,7 @@ export default {
         return
       }
       if (!this.checkBankName(this.data.CARD_NO)) {
-        Bus.$emit(BusName.showToast, '暂不支持改银行卡号')
+        Bus.$emit(BusName.showToast, '暂不支持该银行卡号')
         return
       }
       if (this.data.PRE_PHONE_NUM == '') {

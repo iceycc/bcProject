@@ -7,8 +7,8 @@ const WEB_HOST = {
    */
   dev: 'https://finsuitdev.bicai365.com', // dev开发环境
   adv: 'https://adv.bicai365.com', // adv测试
-  // pro: 'https://finsuit.bicai365.com', // 生产,
-  pro: 'https://ytest.bicai365.com', // 生产,
+  pro: 'https://finsuit.bicai365.com', // 生产,
+  // pro: 'https://ytest.bicai365.com', // 生产,
   ceshi: 'http://192.168.100.157:8080/', // 生产,
   /**
    * 图片的路径 勿动！
@@ -118,7 +118,7 @@ export const PageName = {
   //wby二期新增
   BankDetail: 'BankDetail', // 银行详情
   BankBalance: 'BankBalance', // 可用余额
-  ChangeBank: 'ChangeBank', // 更改银行
+  ChangeBank: 'ChangeBank', // 更该银行
   AddNewBank: 'AddNewBank', // 添加新银行卡
   ResetPayPassword: 'ResetPayPassword', // 重制密码
   ResetPayPasswordApply: 'ResetPayPasswordApply', // 重制密码申请
@@ -212,7 +212,7 @@ export const LsName = {
 export const ORG_ID_NUM = {
   JinShang: '70', //  晋商银行
   ZhengZhou: '49',
-  // ZhongBang: '227', // 众邦银行（已经取消）
+  ZhongBang: '227', // 众邦银行（已经取消）
   KeShang: '248', // 客商银行
 }
 /**

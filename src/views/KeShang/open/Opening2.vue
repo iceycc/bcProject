@@ -215,7 +215,7 @@
       chooseBankHandle(bank) {
         console.log(bank);
         if (bank.IS_SUPPORT == 0) {
-          Bus.$emit(BusName.showToast, '暂不支持改银行')
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
           return
         }
         // to
@@ -254,7 +254,7 @@
         if (!flag) {
           this.bankText = '请选择开户银行'
           this.data.CARD_NO = ''
-          Bus.$emit(BusName.showToast, '暂不支持改银行')
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
         }
         console.log(this.bankText);
         return flag

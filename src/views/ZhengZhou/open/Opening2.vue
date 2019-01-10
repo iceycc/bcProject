@@ -263,7 +263,7 @@
         if (!flag) {
           this.bankText = '请选择开户银行'
           this.data.CARD_NO = ''
-          Bus.$emit(BusName.showToast, '暂不支持改银行')
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
         }
         return flag
       },
