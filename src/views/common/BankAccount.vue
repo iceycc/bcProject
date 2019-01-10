@@ -235,8 +235,19 @@
         IS_REALTIME_DATA_PRD,
         OPENAPI_STATUS,
         BANK_LOGO_URL,
+        ALERT_CODE,
+        ALERT_TEXT
       }) {
-
+        if (ALERT_CODE == 0) {
+          // 维护中银行
+          Bus.$emit(BusName.showToast, ALERT_TEXT)
+          return
+        }
+        // 晋商版本兼容。。
+        // if (ORG_ID == '70') {
+        //   Bus.$emit(BusName.showToast, '晋商银行系统升级中，暂时无法提供服务，敬请期待。')
+        //   return
+        // }
         if (!CheckBank(ORG_ID)) {
           Bus.$emit(BusName.showToast, '暂不支持改银行，请下载比财App')
           return
@@ -244,10 +255,10 @@
         API.watchApi({
           FUNCTION_ID: 'ptb0A011', // 点位
           REMARK_DATA: '异业合作-我的资产未登录状态-安全登录', // 中文备
-          FROM_PR1:ORG_ID
+          FROM_PR1: ORG_ID
         })
         let ProData = {
-          LOGO_URL:BANK_LOGO_URL,
+          LOGO_URL: BANK_LOGO_URL,
           ID: null,// 产品id
           ORG_NAME,//机构名称
           ORG_ID, // 机构id
@@ -288,7 +299,7 @@
           // })
         }
         if (page == 'BankDetail') {
-          Bus.$emit(BusName.showBankLonding, {LOGO_URL:BANK_LOGO_URL, ORG_NAME})
+          Bus.$emit(BusName.showBankLonding, {LOGO_URL: BANK_LOGO_URL, ORG_NAME})
           setTimeout(() => {
             util.storage.session.set('ORG_ID', ORG_ID)
             util.storage.session.set('flag', PageName.BankDetail)
@@ -417,6 +428,7 @@
 
   .m-bank-box {
     width: 100%;
+
     .m-title {
       padding-left: px2rem(20);
       font-size: px2rem(12);
@@ -424,6 +436,7 @@
       line-height: px2rem(30);
       color: #999;
     }
+
     .m-top {
       background: #fff;
       display: flex;
@@ -432,26 +445,32 @@
       box-sizing: border-box;
       padding: px2rem(15) px2rem(20);
       position: relative;
+
       .m-logo {
         box-sizing: border-box;
         width: px2rem(52);
+
         img {
           width: px2rem(36);
           height: px2rem(36);
         }
       }
+
       .m-name {
         width: px2rem(200);
+
         div {
           font-size: px2rem(18);
           color: #333;
           padding-bottom: px2rem(4);
         }
+
         p {
           color: #A8B4C4;
           font-size: px2rem(14);
         }
       }
+
       .m-btn {
         position: absolute;
         right: px2rem(20);
@@ -467,19 +486,23 @@
       }
 
     }
+
     .m-bottom {
       background: #fff;
       padding: px2rem(15) px2rem(20);
       font-size: px2rem(14);
       display: flex;
       justify-content: space-between;
+
       li {
         box-sizing: border-box;
         text-align: center;
+
         p:first-child {
           color: #666;
           line-height: 1.5;
         }
+
         p:last-child {
           color: #333;
         }
@@ -492,6 +515,7 @@
     width: 100%;
     bottom: px2rem(20);
     text-align: center;
+
     button {
       margin: 0 px2rem(30);
       width: px2rem(100);
@@ -516,6 +540,7 @@
   .w-tap {
     display: flex;
     margin-top: px2rem(3);
+
     li {
       flex: 1;
       height: px2rem(40);
@@ -523,6 +548,7 @@
       font-size: px2rem(18);
       text-align: center;
       background: #fff;
+
       &.actvie {
         color: #007aff;
       }

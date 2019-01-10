@@ -24,8 +24,9 @@
       <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="money">
-      <p>每日限额：{{DAY_QUOTA | formatNumKS}}</p>
-      <p>单笔限额：{{SINGLE_QUOTA | formatNumKS}}</p>
+      <p>每日限额：{{DAY_QUOTA | BankLimit}}</p>
+      <p>单笔限额：{{SINGLE_QUOTA | BankLimit}}</p>
+      <!--<p>单笔限额：{{SINGLE | formatNum}}</p>-->
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
@@ -104,7 +105,8 @@
         passCode: '',
         ACCT_NO: '', // TODO
         PHONE_NUM: '',
-        ORIGIN_PAGE: ''// 来源页面
+        ORIGIN_PAGE: '',// 来源页面
+        SINGLE: '1000000'
       }
     },
     components: {
@@ -115,16 +117,6 @@
     created() {
       this.getInfos()
       this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
-    },
-    filters: {
-      formatNumKS(str) {
-        str = str.trim()
-        if (str == '-1') {
-          return '无限额'
-        }else {
-          return str + '元'
-        }
-      },
     },
     computed: {
       ifCheckMoneyEmpty() {
@@ -155,6 +147,7 @@
       },
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
+        // this.DAY_QUOTA = -1 说明无限额
         if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
@@ -205,6 +198,7 @@
         API.watchApi({
           FUNCTION_ID: 'ptb0A016', // 点位
           REMARK_DATA: '异业合作-购买页面-充值-确认充值按钮', // 中文备注
+          FROM_ID: util.storage.session.get('ORG_ID') || ''
         })
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;

@@ -117,8 +117,8 @@ export default {
       // this.setComState({type: 'ISLogin', value: false})
       let {LOGO_URL, ORG_NAME} = this.productDetail
       API.bicai.getAuthStatus({}, res => {
-        let {AUTH_STATUS, isOldMember,idName} = res
-        this.setComState({type:'idName',value:idName})
+        let {AUTH_STATUS, isOldMember, idName} = res
+        this.setComState({type: 'idName', value: idName})
 
         //  AUTH_STATUS 返回码：
         // 0:未认证，

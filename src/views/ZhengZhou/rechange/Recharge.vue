@@ -256,6 +256,7 @@
         API.watchApi({
           FUNCTION_ID: 'ptb0A016', // 点位
           REMARK_DATA: '异业合作-购买页面-充值-确认充值按钮', // 中文备注
+          FROM_ID: util.storage.session.get('ORG_ID') || ''
         })
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;

@@ -151,6 +151,7 @@
         API.watchApi({
           FUNCTION_ID: 'ptb0A015', // 点位
           REMARK_DATA: '异业合作-购买页面-充值按钮', // 中文备注
+          FROM_ID: util.storage.session.get('ORG_ID') || ''
         })
         this.setComState({
           type: 'OriginPage',
