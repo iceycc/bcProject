@@ -352,7 +352,7 @@
               this.allLoaded = true;
               // Bus.$emit(BusName.showToast, "暂无数据");
             }
-            this.MIN_AMOUNT = this.pageList[0].MIN_AMOUNT
+            this.MIN_AMOUNT = this.pageList[0] && this.pageList[0].MIN_AMOUNT
 
             this.$nextTick(function () {
               // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，

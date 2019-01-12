@@ -20,7 +20,7 @@
         <transition name="fade">
           <p class="label" v-show="cmsShow">短信验证码</p>
         </transition>
-        <input class="input" type="input"
+        <input class="input" type="tel"
                name="text1" :placeholder="cmsholder" v-model="cms">
         <button class="get-msg" @click="clickMsgCodeHandle" :disabled="msgDisabled">{{codeText}}</button>
       </section>
