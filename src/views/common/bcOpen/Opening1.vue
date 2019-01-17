@@ -1,6 +1,6 @@
 <template>
   <div class="warp">
-    <app-bar title="信息填写"></app-bar>
+    <app-bar title="实名认证"></app-bar>
     <section class="wrapicon">
       <section class="circle">
                 <span class="line1">
@@ -108,7 +108,7 @@
   import Bus from "@/plugin/bus"
   import util from "../../../libs/util";
   import IconFont from '@/components/commons/IconFont'
-  import Check from './common'
+  // import Check from './common'
 
   export default {
     data() {
@@ -153,7 +153,7 @@
         idName: ''
       }
     },
-    mixins: [Check],
+    // mixins: [Check],
     components: {
       JsSelect,
       IconFont

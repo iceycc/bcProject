@@ -8,7 +8,7 @@
       <div class="detail">
         <div class="i-info">
           <span class="left">{{detailData.TYPE_NAME}}金额</span>
-          <span class="right">{{detailData.TRANS_AMT}}</span>
+          <span class="right">{{detailData.TRANS_AMT | formatNum}}</span>
         </div>
         <div class="i-info">
           <span class="left">交易日期</span>

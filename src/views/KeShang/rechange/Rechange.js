@@ -1,10 +1,11 @@
 import API from "@/service";
 import {PageName, BusName} from "@/Constant";
 import Bus from '@/plugin/bus'
-
 export default {
   data() {
-    return {}
+    return {
+      rechargeData:{}
+    }
   },
   created() {
     console.log('JinShang');
@@ -12,7 +13,6 @@ export default {
   methods: {
     getCode() { // 充值短信
       let data = {
-        PHONE_NUM: this.PHONE_NUM,
         BIZ_TYPE: '1', // 充值需要
         BANK_USER_ID: this.BANK_USER_ID,
         BANK_ACCT_NO: this.BANK_USER_CODE
@@ -20,7 +20,12 @@ export default {
       API.common.apiSendPhoneCode(data, res => {
         console.log(res)
         this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-        Bus.$emit(BusName.showSendMsg, this.PHONE_NUM)
+        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
+
+      },err=>{
+        this.codeText = '重新发送'
+        this.disable = false
+        clearInterval(this.timer)
       })
     },
     handleApiRecharge() {
@@ -65,6 +70,7 @@ export default {
               this.$router.push({
                 name: PageName.RechargeSuccess,
                 query: {
+                  ORIGIN_PAGE:this.ORIGIN_PAGE,
                   money: this.APPLY_AMOUNT,
                   ...res
                 }
@@ -102,13 +108,7 @@ export default {
           }
         })
       }, err => {
-        this.setComState({type: "reload", value: true}) // reload-001
-        this.$router.push({
-          name: PageName.RechargeFailure,
-          query: {
-            err: err.RES_MSG
-          }
-        })
+        Bus.$emit(BusName.showToast,err.RES_MSG)
       })
     },
     getInfos() {
@@ -118,41 +118,33 @@ export default {
         this.logo = res.BANK_BG_URL
         this.ORG_NAME = res.ORG_NAME
         this.PHONE_NUM = res.PHONE_NUM
-        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME;
-        this.BANK_USER_CODE = res.BANK_USER_CODE
+        this.BANK_USER_CODE = res.BANK_USER_CODE // 二类户卡号
+
+        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME;// 银行名称
         this.CARD_BANK_URL = res.CARD_LIST[0].CARD_BANK_URL
         this.DAY_QUOTA = res.CARD_LIST[0].DAY_QUOTA
         this.SINGLE_QUOTA = res.CARD_LIST[0].SINGLE_QUOTA
         this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
+
         this.BANK_USER_ID = res.BANK_USER_ID
-        let cardNum = res.CARD_LIST[0].CARD_NUM
-        this.mainBankList.push({
-          logo: res.CARD_BANK_URL,
-          name: res.CARD_BANK_NAME,
-          footNum: cardNum.substr(cardNum.length - 4),
-          money: '100',
-          id: this.mainBankList.length + 1
-        })
-      })
-    },
-    reChangeHandele() { // 查询用户是否已签约充值协议
-      let data = {}
-      API.reChange.apiRechargeProtoQuery(data, (res) => {
-        console.log(res);
-        if (res.SIGN_STATE == 'N') {
-          // 没写
-          this.write = false
-          this.page = false
-          this.agree1 = false
-        } else {
-          // 填写了
-          this.write = true
-          this.agree1 = true
+        this.mainBankList = res.CARD_LIST
+
+        let rechargeData = {
+          USER_NAME:res.USER_NAME,
+          USER_CARD_ID:res.USER_CARD_ID
         }
+        this.setComState({type:'rechargeData',value:rechargeData})
+        // this.mainBankList.push({
+        //   logo: res.CARD_BANK_URL,
+        //   name: res.CARD_BANK_NAME,
+        //   footNum: cardNum.substr(cardNum.length - 4),
+        //   money: '100',
+        //   id: this.mainBankList.length + 1
+        // })
       })
     },
     clickBank() {
-      // this.upseletShow = !this.upseletShow
+      this.upseletShow = !this.upseletShow
     },
   }
 }

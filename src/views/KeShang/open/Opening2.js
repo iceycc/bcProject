@@ -82,7 +82,7 @@ export default {
         ACCT_NO: this.data.CARD_NO
       }
       API.common.apiSendPhoneCode(data, res => {
-        Bus.$emit(BusName.showSendMsg, PHONE)
+        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
       }, err => {
         this.codeText = '重新发送'
@@ -127,7 +127,7 @@ export default {
         return
       }
       if (this.data.MESSAGE_TOKEN == '') {
-        Bus.$emit(BusName.showToast, '短信验证码异常')
+        Bus.$emit(BusName.showToast, '请先获取短信验证码')
         return
       }
       let delMsg = true

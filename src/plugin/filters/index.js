@@ -1,4 +1,4 @@
-import custom from '@/common/filters'
+import custom from '@/filters'
 
 export default {
   install(Vue,options){

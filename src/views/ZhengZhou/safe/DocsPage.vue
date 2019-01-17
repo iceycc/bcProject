@@ -4,9 +4,9 @@
     <div class="iframs-docs" v-if="agreeMentSrc">
       <iframe :src="agreeMentSrc" class="indocs"></iframe>
     </div>
-    <div class="btn">
-      <mt-button type="primary" @click="getCode">确认</mt-button>
-    </div>
+    <!--<div class="btn">-->
+      <!--<mt-button type="primary" @click="getCode">确认</mt-button>-->
+    <!--</div>-->
   </div>
 </template>
 <script>

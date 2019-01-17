@@ -17,7 +17,6 @@
               <p style="font-size: 0.9rem;text-align: left;padding-left: 0.2rem"> {{productDetail.LOCKUP_PERIOD_TEXT}}
               </p>
             </div>
-
           </div>
           <div class="bannerbottom">
             <ul>

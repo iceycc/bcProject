@@ -133,10 +133,7 @@
                     this.showErrMsg('银行卡号不能为空')
                     return true
                 }
-                else if (val.length < 15 || val.length > 19) {
-                    this.showErrMsg('银行卡号有误，请确认后再次输入')
-                    return true
-                }
+
                 else {
                     this.checkBankName(val)
                     return false

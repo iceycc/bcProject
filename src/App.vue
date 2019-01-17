@@ -115,7 +115,7 @@
         }, time)
       })
       Bus.$on(BusName.showBankLonding, ({LOGO_URL = '', ORG_NAME = ''}, time = 2000) => {
-        // todo
+        // 注意，提示后，跳转外链时，建议time=10000
         // return
         if (!LOGO_URL) return
         if (!ORG_NAME) return
@@ -132,14 +132,14 @@
       Bus.$on(BusName.showSendMsg, (val) => {
         console.log(val);
         if (!val) {
-          // let BANK_CARD_PHONE = this.getComState.TEL
-          let PHONE_NUM = this.getComState.Infos.PHONE_NUM || this.$store.getters.BICAI_USER.PHONE_NUM
+          let PHONE_NUM = this.$store.getters.GET_ACCOUNT_STATE.BICAI_USER.PHONE_NUM || this.getComState.Infos.PHONE_NUM
           val = PHONE_NUM
         }
         val = val + ''
-        if (val.length !== 11) return
+        // if (val.length !== 11) return
         this.showMsgToast = true
-        let msg = val.substr(0, 3) + '***' + val.substr(7)
+        let len = val.length
+        let msg = '+86 ' + val.substr(len - 11, 3) + '****' + val.substr(len - 4)
         this.TEL = msg
         setTimeout(() => {
           this.showMsgToast = false

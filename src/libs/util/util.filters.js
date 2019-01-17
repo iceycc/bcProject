@@ -1,12 +1,64 @@
 export default {
   /**
-   * 格式化金额
+   * 银行限额 -1 处理为无限额
+   * @param str
+   * @returns {string}
+   */
+  BankLimit(str) {
+    if (!str) return '0.00'
+    str = str + ''
+    str = str.trim()
+    if (str == '-1') {
+      // 约定 后台返回 -1 说明无限额 注意处理额度控制
+      return '无限额'
+    }
+    // if(str == '' || !str) return
+    // if (!Number(str)) return str
+    var newStr = "";
+    var count = 0;
+    if (str.indexOf(".") == -1) {
+      for (var i = str.length - 1; i >= 0; i--) {
+        if (count % 3 == 0 && count != 0) {
+          newStr = str.charAt(i) + "," + newStr;
+        } else {
+          newStr = str.charAt(i) + newStr;
+        }
+        count++;
+      }
+      // str = newStr + ".00"; //自动补小数点后两位
+      str = newStr //自动补小数点后两位
+      return str + '元'
+    } else {
+      for (var i = str.indexOf(".") - 1; i >= 0; i--) {
+        if (count % 3 == 0 && count != 0) {
+          newStr = str.charAt(i) + "," + newStr; //碰到3的倍数则加上“,”号
+        } else {
+          newStr = str.charAt(i) + newStr; //逐个字符相接起来
+        }
+        count++;
+      }
+      // str = newStr + (str + "00").substr((str + "00").indexOf("."), 3);
+      str = newStr + str;
+      return str + '元'
+    }
+
+  },
+  /**
+   * 格式化金额 千分位 加小数点
    * @param str  eg:30000
    * @returns {*} eg:3,000.00
    */
-  formatNum(str) {
-    if (!str) return '0.00'
+  formatNum(str, flag) {
+
+    if (!str) {
+      if (flag == 1) {
+        return '--'
+      } else {
+        return '0.00'
+      }
+    }
     str = str + ''
+    str = str.trim()
     // if(str == '' || !str) return
     // if (!Number(str)) return str
     var newStr = "";
@@ -92,7 +144,7 @@ export default {
   formatBankNo(no) {
     if (!no) return ''
     no = no + ''
-    return '**** **** **** **** ' + no.substr(no.length - 4)
+    return `****  ****  ****  ****  ` + no.substr(no.length - 4)
   },
   // 将 0 转换为 0.00
   fromatMoneyFilter(x) {

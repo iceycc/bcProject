@@ -18,6 +18,7 @@
 
 <script>
   import util from "libs/util";
+
   /**
    * 几个校验：
    * 1- 银行卡和手机号：只能输入数字
@@ -78,19 +79,24 @@
 
     methods: {
       handleChange(val) {
+        this.$emit('changeHandle', val)
       },
       isValueNumber(value) {
+        value = value - 0
         let reg;
         switch (this.checkType) {
           case 'number': // 只能输入数字 // 建议 同时 type传人 tel 在ios手机可以兼容
+            // 用于校验手机号。。首字母不是
             reg = /(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/
-            break;
+            return reg.test(value)
           case 'idCard': { // type设置text
             reg = /(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9,x,X]*$)|(^-?0{1}$)/
-            break
+            return reg.test(value)
+          }
+          case 'code': { // type设置text
+            return true
           }
         }
-        return reg.test(value)
       },
       throttle(cb, ms = 300, val) {
         console.log(val);
@@ -115,7 +121,7 @@
         this.controlInputValue(val)
       },
       controlInputStyle(val) {
-        if (!val) { // 删除到 '' 是触发
+        if (val === '') { // 删除到 '' 是触发
           this.ifActive = true
           this.valueShow = false
           this.placeholderText = this.defaultPlaceholderText
@@ -126,6 +132,7 @@
         }
       },
       controlInputValue(val) {
+        val = val + ''
         if (util.isEquipment().isIOS && this.checkType == 'idCard') {
           // ios限制字母输入有兼容问题  九宫格输入英文字母 不按套路
           this.currentValue = val
@@ -135,7 +142,6 @@
         val = val.toString().trim()
         if (this.isValueNumber(val)) {
           var max = this.max;
-          val = val + '';
           this.currentValue = val;
           if (val.length > max) {
             this.currentValue = val.toString().substr(0, max)
@@ -143,7 +149,7 @@
           ;
         } else {
           // 如果输入的非数字，则保留之前的数据
-          if (val == '') {
+          if (val === '') {
             this.currentValue = '';
             event.target.value = ''
           } else {
@@ -201,6 +207,7 @@
 
   .active-input {
     height: px2rem(42);
+
     .input {
       font-size: px2rem(14);
     }

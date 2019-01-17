@@ -1,4 +1,4 @@
-import util from '../../libs/util'
+import util from '@/libs/util'
 
 /**
  * 格式化金额
@@ -6,6 +6,12 @@ import util from '../../libs/util'
  * @returns {*} eg:3,000.00
  */
 export const formatNum = util.formatNum
+/**
+ * 银行限额转千分符不带小数点
+ * @param str  eg:30000
+ * @returns {*} eg:3,000.00
+ */
+export const BankLimit = util.BankLimit
 
 /**
  * 格式化时间

@@ -1,42 +1,62 @@
 // 静态值定义： 【应用配置】
 import {version} from '../package'
 
-/**
- *
- */
-let Configs = {
+const WEB_HOST = {
   /**
-   * dev开发
+   * 域名。可以自行添加测试域名
    */
-  // DEV_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
-  // DEV_HOST: 'http://192.168.100.126:8080/', // dev开发环境
-  // DEV_HOST: 'https://finsuit.bicai365.com', // 生产
-  DEV_HOST: 'https://adv.bicai365.com', // adv测试
-  // DEV_HOST: 'https://demo1.bicai365.com', // adv测试
-  // DEV_HOST:'https://graytest.bicai365.com' ,// 灰度测试
+  dev: 'https://finsuitdev.bicai365.com', // dev开发环境
+  adv: 'https://adv.bica4i365.com', // adv测试
+  pro: 'https://finsuit.bicai365.com', // 生产,
+  // pro: 'https://graytest.bicai365.com', //
+  // pro: 'https://ytest.bicai365.com', //
+  ceshi: 'http://192.168.100.157:8080/', //
+  /**
+   * 图片的路径 勿动！
+   */
+  imgSrcHost_DEV: 'https://finsuit-test.oss-cn-beijing.aliyuncs.com/',
+  imgSrcHost_PRO: 'https://finsuit.oss-cn-beijing.aliyuncs.com/'
+}
+
+/**
+ * ⚠️ 打包只需要在此处进行配置Configs。图片地址已经处理好。
+ * HOST配置 需要自己手动配置 。WEB_HOST里预先配置好地址，该处进行选择
+ * 当前配置选项：
+ * dev 、 adv 、 pro
+ */
+const Configs = {
+  /**
+   * npm run dev 开发
+   *
+   */
+  DEV_HOST: WEB_HOST.pro,
 
   /**
-   * build打包  现在阶段注意 static/lib/PassInputZhengzhou/pwd.js也要同步改
+   * build打包
    */
-  // PRO_HOST: 'https://demo1.bicai365.com', // demo1
-  // PRO_HOST: 'https://finsuitdev.bicai365.com', // dev开发环境
-  // PRO_HOST: 'https://adv.bicai365.com', // adv/**/
-  // PRO_HOST: 'https://finsuit.bicai365.com',// 生产
-  PRO_HOST: 'https://ytest.bicai365.com',// ytest
-  // // PRO_HOST:'https://graytest.bicai365.com' ,// 灰度生产
+
+  PRO_HOST: WEB_HOST.pro, //
 }
 /**
- * host根据生产和开发分别暴露
+ * 整个站点的HOST根据生产和开发分别暴露
  * @type {string}
  */
 export const HOST = process.env.NODE_ENV == 'development'
   ? Configs.DEV_HOST : Configs.PRO_HOST
 /**
- * api接口
+ * api接口 接口地址默认：HOST+/finsuit ，如单独对接某后端地址，自行调整
  * @type {string}
  */
 export const HOST_API = HOST + '/finsuit' // // api 接口地址
 // export const HOST_API = HOST  // // api 接口地址
+
+
+/**
+ * 图片地址。区分生产环境和开发环境的图片地址
+ */
+export const imgSrc = process.env.NODE_ENV == 'development' ?
+  (Configs.DEV_HOST === WEB_HOST.pro ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV) :
+  (Configs.PRO_HOST === WEB_HOST.pro ? WEB_HOST.imgSrcHost_PRO : WEB_HOST.imgSrcHost_DEV)
 
 /**
  *  app下载地址
@@ -50,18 +70,7 @@ export const AppUrl = {
  * 项目前缀
  */
 export const PROJECT_PREFIX = 'YIDU' + version
-export const STORE_PREFIX = '_MX_' // 存储库的命名前缀
-
-/**
- * logo图片地址  图片地址/ 用于图片的拼接
- */
-let imgSrcHost = {
-  dev: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
-  pro: "https://finsuit.oss-cn-beijing.aliyuncs.com/",
-  // pro: "https://finsuit-test.oss-cn-beijing.aliyuncs.com/",
-}
-
-export const imgSrc = process.env.NODE_ENV == 'development' ? imgSrcHost.dev : imgSrcHost.pro
+export const STORE_PREFIX = '_MX_' // 存储库的命名前缀。勿动！与其他站点进行交互时注意该处
 
 
 /**
@@ -111,7 +120,7 @@ export const PageName = {
   //wby二期新增
   BankDetail: 'BankDetail', // 银行详情
   BankBalance: 'BankBalance', // 可用余额
-  ChangeBank: 'ChangeBank', // 更改银行
+  ChangeBank: 'ChangeBank', // 更该银行
   AddNewBank: 'AddNewBank', // 添加新银行卡
   ResetPayPassword: 'ResetPayPassword', // 重制密码
   ResetPayPasswordApply: 'ResetPayPasswordApply', // 重制密码申请
@@ -130,6 +139,7 @@ export const PageName = {
   BcOpening3: 'BcOpening3',
   BcOpening2: 'BcOpening2',
   BcOpening1: 'BcOpening1',
+  BcOpening0: 'BcOpening0',
   BicaiPageDocs: 'BicaiPageDocs',
   DepositDetail1: 'DepositDetail1', // 活期存款
   DepositDetail2: 'DepositDetail2', // 智能存款
@@ -202,10 +212,10 @@ export const LsName = {
  */
 
 export const ORG_ID_NUM = {
-  JinShang: '70',
+  JinShang: '70', //  晋商银行
   ZhengZhou: '49',
-  ZhongBang: '227',
-  KeShang: '248'
+  ZhongBang: '227', // 众邦银行（已经取消）
+  KeShang: '248', // 客商银行
 }
 /**
  *  外部参数默认设置
@@ -215,7 +225,12 @@ export const PRO_PARAMS = {
   CHANNEL_ID: '1', //  默认渠道id
   APP_FLAG: 'BC'
 }
-//
+/**
+ * 校验是否支持当前的银行。校验是否打通openAPI，防错！
+ * @param val
+ * @returns {boolean}
+ * @constructor
+ */
 export const CheckBank = function (val) {
   let arr = []
   Object.keys(ORG_ID_NUM).forEach(function (key) {

@@ -21,10 +21,11 @@
               <span></span>
             </li>
           </ul>
-          <div class="t-query" @click="query">查询</div>
+          <!--<div class="t-query" @click="query">查询</div>-->
         </div>
         <!-- <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p> -->
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
+          <!--{{aaa|formatNum}}-->
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
             <p class="infos">对不起，目前没有数据</p>
@@ -49,7 +50,7 @@
                   </h5>
                   <p>
                     <span>{{item.OPERA_DATE}}</span>
-                    <em>{{item.TRANS_AMT_DESC | formatNum}}</em>
+                    <em>{{item.TRANS_AMT_DESC}}</em>
                   </p>
                 </li>
 
@@ -75,6 +76,7 @@
     mixins: [''],
     data() {
       return {
+        aaa:'1,100.00',
         // 1月分页
         searchCondition: {
           //分页属性
@@ -85,7 +87,7 @@
         allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
         scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
         pageList3: [],
-        tabsParam: ["近一个月", "近二个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
+        tabsParam: ["近一个月", "近两个月", "近三个月", " "], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         startDate: "",
         endDate: "",
@@ -108,8 +110,8 @@
 
     },
     methods: {
-      goDetail(item){
-        this.$router.push({name:PageName.PayOneDetail,query:{...item}})
+      goDetail(item) {
+        this.$router.push({name: PageName.PayOneDetail, query: {...item}})
       },
       setEleSize() {
         console.log(this.nowIndex);
@@ -226,6 +228,7 @@
           startTime: this.getLastYearYestdy(2), //开始时间
           onOk: data => {
             this.endDate = this.fomateDate(data);
+            this.query()
           }
         });
       },
@@ -237,6 +240,7 @@
           startTime: this.getLastYearYestdy(2), //开始时间
           onOk: e => {
             this.startDate = this.fomateDate(e);
+            this.query()
           }
         });
       },
@@ -574,7 +578,6 @@
       position: relative;
 
       ul {
-        margin-right: px2rem(60);
         display: flex;
 
         li {
@@ -582,7 +585,8 @@
           display: inline-block;
           font-size: px2rem(15);
           color: #666666;
-          padding-left: px2rem(20);
+          text-align: center;
+          /*padding-left: px2rem(35);*/
 
           span {
             display: inline-block;

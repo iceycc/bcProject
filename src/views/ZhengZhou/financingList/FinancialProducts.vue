@@ -79,7 +79,7 @@
                 <span class="detail" @click="geDetails(item)">明细</span>
                 <h4>
                   <strong>{{item.PRD_NAME}}</strong>
-                   <!--<router-link to="/TransactionDetails">明细</router-link>-->
+                  <!--<router-link to="/TransactionDetails">明细</router-link>-->
                 </h4>
                 <p>{{item.DESCRIPT}}</p>
                 <p>累计收益
@@ -161,8 +161,7 @@
       document.querySelector('.main-body').style.height = bottomHeight + 'px'
       document.querySelector('.tab-box').style.top = wTopHeight + 'px'
     },
-    watch: {
-    },
+    watch: {},
     computed: {
       pageList1() {
         if (this.TYPE == 1) {
@@ -187,7 +186,7 @@
     },
     methods: {
       goAdd(val) {
-        this.setComState({type: 'goBuy', value: {...val,ID:val.PRD_INDEX_ID}})
+        this.setComState({type: 'goBuy', value: {...val, ID: val.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {
@@ -328,16 +327,21 @@
     color: #ffffff;
     text-align: center;
     font-size: px2rem(14);
+
     .total-price {
       padding: px2rem(8) 0;
+
       p:last-child {
         font-size: px2rem(34);
       }
     }
+
     .profit {
       display: flex;
+
       div {
         flex: 1;
+
         p:last-child {
           font-weight: bold;
           padding-top: px2rem(6);
@@ -350,22 +354,27 @@
   .tab-box {
     position: absolute;
     width: 100%;
-    .no-data{
+
+    .no-data {
 
       width: 100%;
-      img{
+
+      img {
         width: 100%;
       }
-      .infos{
+
+      .infos {
         text-align: center;
         font-size: px2rem(16);
         color: #1badff;
       }
     }
+
     ul {
       background: #fff;
       display: flex;
       margin-bottom: px2rem(10);
+
       li {
         flex: 1;
         height: px2rem(50);
@@ -373,10 +382,12 @@
         line-height: px2rem(50);
         text-align: center;
       }
+
       li.active {
         color: #508cee;
         position: relative;
       }
+
       li.active:after {
         position: absolute;
         width: px2rem(20);
@@ -390,6 +401,7 @@
         margin: 0 auto;
       }
     }
+
     .divTab {
       background: #f4f4f8;
       padding-bottom: px2rem(10);
@@ -403,23 +415,28 @@
         border-radius: px2rem(12);
         box-sizing: border-box;
         padding: px2rem(15) px2rem(15) 0 px2rem(15);
+
         .detail {
           position: absolute;
           right: px2rem(15);
           top: px2rem(15);
           color: #508CEE;
         }
+
         &:last-child {
           margin-bottom: px2rem(50);
         }
+
         h4 {
           overflow: hidden;
         }
+
         h4 strong {
           color: #333333;
           font-size: px2rem(16);
           line-height: px2rem(12);
         }
+
         h4 a {
           font-size: px2rem(12);
           color: #508cee;
@@ -427,33 +444,39 @@
           float: right;
           font-weight: normal;
         }
+
         p {
           color: #666;
           font-size: px2rem(12);
           line-height: px2rem(17);
           padding-bottom: px2rem(8);
           overflow: hidden;
+
           span {
             float: right;
             color: #999999;
           }
         }
+
         p:first-of-type {
           padding: px2rem(4) 0 px2rem(10);
           border-bottom: px2rem(1) solid #f5f5f5;
           margin-bottom: px2rem(16);
         }
+
         // p:last-of-type{ padding-bottom: 0;}
         .bottom-btn {
           padding: px2rem(4) 0;
           text-align: center;
           display: flex;
           border-top: 1px solid #F5F5F5;
+
           div {
             flex: 1;
             font-size: px2rem(14);
             padding: px2rem(11) 0;
             color: #333333;
+
             &:first-child {
               border-right: 1px solid #F6F6F9;
             }

@@ -157,6 +157,11 @@
       },
       //
       goReChang() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A015', // 点位
+          REMARK_DATA: '异业合作-购买页面-充值按钮', // 中文备注
+          FROM_ID: util.storage.session.get('ORG_ID') || ''
+        })
         this.setComState({
           type: 'OriginPage',
           value: this.$route.fullPath
@@ -192,6 +197,11 @@
         }
       },
       goBuy() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A017', // 点位
+          REMARK_DATA: '异业合作-购买页面-存入', // 中文备注
+          FROM_ID: (this.proDetail.id || this.ProID) + '',
+        })
         if (!this.agree) {
           Bus.$emit(BusName.showToast, '请同意相关协议')
           return

@@ -25,7 +25,7 @@ export default {
           case 1:
             Bus.$emit(BusName.showToast,MsgText,3000)
 
-            this.$router.push(PageName.BcOpening1)
+            this.$router.push(PageName.BcOpening0)
             break;
           case 2:
             Bus.$emit(BusName.showToast,MsgText,3000)
@@ -40,8 +40,7 @@ export default {
           case 5:
             //
             Bus.$emit(BusName.showToast,MsgText,3000)
-
-            this.$router.push(PageName.BcOpening1)
+            this.$router.push(PageName.BcOpening0)
             break;
         }
       })

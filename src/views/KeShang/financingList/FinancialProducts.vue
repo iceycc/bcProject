@@ -39,22 +39,27 @@
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>隶属于{{item.ORG_NAME}}</p>
-                <p>持有金额
+                <p>{{item.ORG_NAME}}</p>
+                <p>持有金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
                 <p>存入时间
                   <span>{{item.TIME_END}}</span>
                 </p>
-                <p>到期时间
+                <p>最长期限
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
-                <p>预计收益
-                  <span>{{item.EXPECT_INCOME | formatNum}}</span>
+                <p>锁定期
+                  <span>{{item.LOCKUP_PERIOD}}</span>
+
                 </p>
                 <p>存款利率
                   <span>{{item.RATE}}%</span>
                 </p>
+                <p>预计收益
+                  <span>{{item.EXPECT_INCOME}}</span>
+                </p>
+
                 <!-- 新加赎回追加按钮 -->
                 <div class="bottom-btn">
                   <div>
@@ -67,21 +72,27 @@
               </div>
               <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList" :key="index">
                 <!-- 新加明细按钮 -->
-                <span class="detail">明细</span>
+                <span class="detail" @click="geDetails(item)">明细</span>
                 <h4>
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>隶属于{{item.ORG_NAME}}</p>
-                <p>本金金额（元）
+                <p>{{item.ORG_NAME}}</p>
+                <p>投资金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
-                <p>实际收益金额
+                <p>投资收益
                   <span>{{item.ADD_INCOME | formatNum}}</span>
                 </p>
-                <p>支取时间
-                  <span>{{item.OVER_DATE}}</span>
-                </p>
+                <!--<p>支取时间-->
+                <!--<span>{{item.OVER_DATE}}</span>-->
+                <!--</p>-->
+                <!-- 新加赎回追加按钮 -->
+                <div class="bottom-btn">
+                  <div>
+                    <span @click="goBuy(item)">再次存入</span>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -99,7 +110,13 @@
     </div>
     <section class="waiting" v-if="infoShow">
       <p>{{waitingMsg}}</p>
-      <button @click="close">确定</button>
+      <div class="btn" v-if="canRedeem">
+        <div @click="close" class="cancel">取消</div>
+        <div @click="sureRedeem" class="sure">继续支取</div>
+      </div>
+      <div class="btn" v-else>
+        <div @click="close" class="cancel">确定</div>
+      </div>
     </section>
   </div>
 </template>
@@ -150,7 +167,16 @@
           YSD_INCOME: '0.00',
           TOTAL_INCOME: '0.00',
         },
-        total: ''
+        total: '',
+        flags: [
+          // {RES_CODE: '3', RES_MSG: '333'},
+          // {RES_CODE: '4', RES_MSG: '4444'},
+          // {RES_CODE: '4', RES_MSG: '55555'}
+        ],
+        flagsLength: 1,
+        currentFlagIndex: 0,// 多次弹窗，判断当前第几个弹窗.该处为数组索引
+
+        canRedeem: false,// 是否可以支取
       };
     },
     components: {
@@ -174,50 +200,80 @@
         this.infoShow = false
       },
       goBuy(item) {
-        this.setComState({type: 'goBuy', value: {...item,ID:item.PRD_INDEX_ID}})
+        item.MIN_AMOUNT = item.MIN_AMOUNT || this.MIN_AMOUNT // todo 罪恶，已经支取没有返回最低购买，现在取的持有中列表的 。方案1：只传id，自己请求。方案2：后台添加参数
+        this.setComState({type: 'goBuy', value: {...item, ID: item.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
       },
+      sureRedeem() {
+        // 需要判断flags的长度
+        console.log('currentFlagIndex>>', this.currentFlagIndex);
+        console.log('flagsLength>>', this.flagsLength);
+
+        if (this.currentFlagIndex == this.flagsLength) {
+          this.$router.push({name: PageName.Redeem})
+        } else {
+          this.flagPopup(this.currentFlagIndex)
+        }
+      },
       goRedeem(item) {
-        // Bus.$emit(BusName.showToast,'此版本暂不支持提前支取，请等待新版本更新，程序猿正在加班加点赶工')
-        // this.setComState({
-        //   type: 'redeemData',
-        //   value: data
-        // })
+
         let params = {
           INVEST_TIME: item.TIME_END,
-          PRD_INDEX_ID: item.PRD_INDEX_ID
+          PRD_INDEX_ID: item.PRD_INDEX_ID,
+          EXPIRE_TIME: item.EXPIRE_TIME
         }
-        API.redeem.apiRedemptionValid(params, res => {
+        API.redeem.apiRedemptionValid2(params, res => {
           console.log(res)
-          if (res.RES_CODE == 0) {
-            this.setComState({
-              type: 'redeemData',
-              value: item
-            })
-            this.$router.push({name: PageName.Redeem})
+          this.setComState({
+            type: 'redeemData',
+            value: item
+          })
+          // 4 -> 3
+          this.flags = []
+          this.flagsLength = res.length
+          for (let i = 0; i < res.length; i++) {
+            // 就是进行排序。。。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的 todo再优化
+            if (res[i].RES_CODE == 3) {
+              this.flags.push(res[i])
+            } else if (res[i].RES_CODE == 4) {
+              this.flags.unshift(res[i])
+            } else {
+              this.flags.push(res[i])
+            }
           }
-          if (res.RES_CODE == 1) {
-            this.waitingMsg = res.RES_MSG
-            this.infoShow = true
-            // Bus.$emit(BusName.showToast, res.RES_MSG)
-          }
-          if (res.RES_CODE == 2) {
-            this.waitingMsg = res.RES_MSG
-            this.infoShow = true
-            // Bus.$emit(BusName.showToast, res.RES_MSG)
-          }
+          setTimeout(() => {
+            this.flagPopup()
+          }, 200)
         })
+      },
 
+      // 智能弹窗 从前往后以此进行弹窗提示。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的
+      flagPopup(step = 0) {
+        console.log(this.flags);
+        this.currentFlagIndex = step + 1
+        let flag = this.flags[step]
+        console.log(flag);
+        if (flag.RES_CODE == 2) {
+          // 2.不可支取
+          this.waitingMsg = flag.RES_MSG
+          this.canRedeem = false
+          this.infoShow = true
+        } else {
+          // RES_CODE
+          // 3：未满收益周期的天数将按照该行活期利率计算，收益周期请在产品详情查看，是否继续支取
+          // 4：若现在支取，将无法享受活动额外奖励，仅可获得产品正常收益
+          // 文案后台
+          this.waitingMsg = flag.RES_MSG
+          this.canRedeem = true
+          this.infoShow = true
+          // this.$router.push({name: PageName.Redeem})
+        }
       },
       toggleTabs(index) {
-        // TODO
-        // if(index==1){
-        //   return
-        // }
         this.pageList = []
         this.nowIndex = index;
         this.loadPageList();
@@ -262,6 +318,7 @@
           API.bank.getMyInvestOver(data, res => {
 
             this.pageList = res.PAGE.retList || [];
+
             if (this.pageList.length == 0) {
               // this.allLoaded = true;
             }
@@ -295,6 +352,8 @@
               this.allLoaded = true;
               // Bus.$emit(BusName.showToast, "暂无数据");
             }
+            this.MIN_AMOUNT = this.pageList[0] && this.pageList[0].MIN_AMOUNT
+
             this.$nextTick(function () {
               // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
               // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
@@ -592,21 +651,36 @@
     background: #fff;
     width: px2rem(270);
     z-index: 100;
-    text-align: center;
     border: 1px solid #e5e5e5;
     border-radius: px2rem(12);
     box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
 
     p {
+      text-align: center;
       padding-top: px2rem(20);
       font-size: px2rem(16);
       color: #333;
     }
 
-    button {
+    .btn {
+      margin-top: px2rem(10);
+      border-top: 1px solid #fafafa;
+      display: flex;
+    }
+
+    .cancel, .sure {
+      text-align: center;
+      flex: 1;
       padding: px2rem(10) 0 px2rem(10);
-      color: #508CEE;
       font-size: px2rem(17);
+    }
+
+    .cancel {
+      color: #508CEE;
+    }
+
+    .sure {
+      color: #000;
     }
   }
 

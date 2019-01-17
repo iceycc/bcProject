@@ -2,7 +2,7 @@
   <div class="app">
     <app-bar title="提现"></app-bar>
     <div class="rechargetitle">提现到{{CARD_BANK_NAME}}</div>
-    <div class="minshengbank">
+    <div class="minshengbank" @click="clickBank">
       <span class="minshengbankLogo">
         <img :src="imgSrc + logo" style="width:75%" alt="">
       </span>
@@ -10,6 +10,7 @@
         <p>{{CARD_BANK_NAME}}</p>
         <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
       </div>
+      <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="crow-line"></div>
     <section class="inputAmount">
@@ -19,7 +20,8 @@
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
-      <span class="span" style="color:#389CFF" @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
+      <span class="span" style="color:#389CFF"
+            @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
     </section>
     <section class="inputAmount">
             <span class="Amount">
@@ -40,7 +42,13 @@
       当前可提现金额{{WITH_DRAWABLE_CASH | formatNum}}元
     </p>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
-
+    <up-select
+      title="选择银行卡"
+      :show="upseletShow"
+      :BankList="mainBankList"
+      @chooseBank="chooseBank"
+      type="withdraw"
+    ></up-select>
   </div>
 </template>
 <script>
@@ -52,6 +60,8 @@
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from '@/mixins'
+  import IconFont from '@/components/commons/IconFont'
+  import UpSelect from '@/components/keshang/UpSelect'
 
   let time = 60
   let timer;
@@ -62,6 +72,9 @@
         msgdisable: false,
         msgCode: '',
 
+        // 银行选择卡
+        upseletShow: false,
+        mainBankList: [],
 
         html: '协议',
         page: false,
@@ -79,7 +92,7 @@
 
 
         ACC_REST: '0',
-        WITH_DRAWABLE_CASH:'0',
+        WITH_DRAWABLE_CASH: '0',
         DAY_REST: '0', // todo取每日限额
         CARD_NUM: '', //一类户卡号
         BANK_USER_CODE: '', //二类户卡号
@@ -88,7 +101,9 @@
     },
     components: {
       AppBar,
-      PassWordZhengzhou
+      PassWordZhengzhou,
+      IconFont,
+      UpSelect
     },
     watch: {
       APPLY_AMOUNT(n) {
@@ -101,7 +116,7 @@
     },
     computed: {
       canClick() {
-        if (Number(this.APPLY_AMOUNT) > 0&&Number(this.APPLY_AMOUNT)  <= Number(this.WITH_DRAWABLE_CASH)  && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
+        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.WITH_DRAWABLE_CASH) && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
           return true
         } else {
           return false
@@ -141,9 +156,7 @@
         this.getCode()
       },
       getCode() {
-        let TEL = this.getComState.TEL
         let data = {
-          PHONE_NUM: TEL,
           BIZ_TYPE: '2', // 提现
           BANK_USER_ID: this.BANK_USER_ID,
           BANK_ACCT_NO: this.BANK_USER_CODE
@@ -151,11 +164,16 @@
         API.common.apiSendPhoneCode(data, res => {
           this.MESAGE_TOKEN = res.MESSAGE_TOKEN
           //这里的提示信息没成功
-          Bus.$emit(BusName.showSendMsg, TEL)
+          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         })
       },
       checkMoney() {
 
+      },
+      chooseBank(bank) {
+        this.CARD_BANK_NAME = bank.CARD_BANK_NAME
+        this.CARD_NUM = bank.CARD_NUM
+        this.logo = bank.CARD_BANK_URL
       },
       getUserInfos() {
         API.safe.apiBandCard({}, (res) => {
@@ -165,6 +183,9 @@
           this.logo = res.CARD_LIST[0].CARD_BANK_URL
           this.BANK_USER_ID = res.BANK_USER_ID
           this.BANK_USER_CODE = res.BANK_USER_CODE
+
+          this.mainBankList = res.CARD_LIST
+
         })
       },
       doWithdraw() {
@@ -198,6 +219,7 @@
               fn: (result, timer, count) => {
                 this.setComState({type: "reload", value: true}) // reload-001
                 if ('1' == result.RES_CODE) {
+                  // 提现失败
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.$router.push({ // todo是否要跳转
@@ -207,6 +229,7 @@
                     }
                   })
                 } else if ('0' == result.RES_CODE) {
+                  // 提现成功
                   clearInterval(timer)
                   Bus.$emit(BusName.showToast, result.RES_MSG);
                   this.Londing.close()
@@ -214,16 +237,19 @@
                     name: PageName.WithdrawSuccess,
                     query: {
                       money: this.APPLY_AMOUNT,
+                      RES_MSG2:result.RES_MSG2,
                       ...res
                     }
                   })
                 } else if ('20000' == result.RES_CODE) {
+                  // 等待中
                   clearInterval(timer)
                   this.Londing.close()
                   this.$router.push({
                     name: PageName.WaitForWithdraw,
                     query: {
-                      err: result.RES_MSG
+                      err1: result.RES_MSG,
+                      err2: result.RES_MSG2
                     }
                   })
                 } else {
@@ -257,6 +283,9 @@
         this.doWithdraw()
 
       },
+      clickBank() {
+        this.upseletShow = !this.upseletShow
+      },
       clearNumHandle() {
         //
         this.APPLY_AMOUNT = ''
@@ -279,6 +308,7 @@
   }
 
   .minshengbank {
+    position: relative;
     padding-left: 0.5rem;
     height: px2rem(65);
     font-size: px2rem(16);
@@ -291,6 +321,13 @@
       p:last-child {
         color: #9199A1;
       }
+    }
+
+    .detail {
+      right: px2rem(20);
+      top: px2rem(15);
+      color: #999999;
+      position: absolute;
     }
   }
 

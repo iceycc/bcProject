@@ -207,7 +207,7 @@
         //
         //   this.normalShow = true
         // } else { // 快速赎回
-        if (this.money - 0 > 10000) {
+        if (this.money - 0 > 10000 && this.cur == '0') {
           Bus.$emit(BusName.showToast, '每天快速赎回额度为1万元，请调整赎回额度')
           return
         }

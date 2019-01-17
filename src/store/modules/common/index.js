@@ -1,6 +1,8 @@
 export default {
   state: {
-    hasCardList:[], //绑定的银行卡列表
+    idName: '',//  用户名
+    rechargeData: {},//  重置协议需要的参数
+    hasCardList: [], //绑定的银行卡列表
     reload: false, // 用于强制刷新 密码控件暂时只能强制刷新重载 否则不行
     HAS_GRADE: '0', // 是否评估 1 否  2 是
     LoginTarget: '', // 其他页面跳转登录页进行跳转的页面  主要跳转后情况
@@ -17,8 +19,9 @@ export default {
       id: '100', // 产品id
       logo: '', // 直销银行logo
     },
+    pollResult: {},// 交易完成后 轮询结构存储 用于成功页信息展示
     Infos: '', // 存储个人信息
-    userTel:'',
+    userTel: '',
     RechargeQuery: {}, // 充值页需要的参数
     PRD_TYPE: '', // 产品类型
     OriginPage: '', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
@@ -26,33 +29,31 @@ export default {
     loginInfo: '',// 登录刷新需要的信息
     buyNextData: '',
     buyData: { // 购买成功后跳转页面需要展示的参数
-      PRD_NAME: '民生xx基金',
-      ORG_NAME: '郑州银行',
-      money: '1000',
-      OPERA_DATE: '2011-10-1',
-      EXPECT_PROFIT_DATE: '2020-10-1',
-      BESHARP_BUY_SEQ: '2111211111211111'
+      PRD_NAME: '',
+      ORG_NAME: '',
+      money: '',
+      OPERA_DATE: '',
+      EXPECT_PROFIT_DATE: '',
+      BESHARP_BUY_SEQ: ''
     }, //
     availableBalance: '',// 可用余额
     redeemData: {},
-    redeemSuccessData: {},
     openingData: {},
-
     ISLogin: false,// 前端记录是否登录成功 ，包括实名成功
 
     ProAndOrgType: {
-      ID:'',// 产品id
-      ORG_NAME:'',//机构名称
-      PRD_NAME:'', // 产品名称
-      ORG_ID:'', // 机构id
-      IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
-      IS_REALTIME_DATA_PRD:'', // 'H5实时数据对接标识： 0不是  1是',
-      IS_RZ_FLAG:'', // '是否实名认证, 0：否, 1：是',
-      H5_URL_ANDRIOD:'',// 非打通openApi 跳转链接 安卓
-      H5_URL_IOS:'' // 非打通openApi 跳转链接 ios
+      ID: '',// 产品id
+      ORG_NAME: '',//机构名称
+      PRD_NAME: '', // 产品名称
+      ORG_ID: '', // 机构id
+      IS_SYNC_FLAG: '1', // '是否由openAPI同步产品, 0：否, 1：是',
+      IS_REALTIME_DATA_PRD: '', // 'H5实时数据对接标识： 0不是  1是',
+      IS_RZ_FLAG: '', // '是否实名认证, 0：否, 1：是',
+      H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
+      H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
     },
 
-    FromH5Active:false // h5活动页面来的
+    FromH5Active: false // h5活动页面来的
   },
   //
   actions: {},

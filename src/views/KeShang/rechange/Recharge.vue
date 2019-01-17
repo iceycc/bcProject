@@ -21,10 +21,12 @@
         <p>{{CARD_BANK_NAME}}</p>
         <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
       </div>
+      <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="money">
-      <p>每日限额：{{DAY_QUOTA | formatNumKS}}</p>
-      <p>单笔限额：{{SINGLE_QUOTA | formatNumKS}}</p>
+      <p>每日限额：{{DAY_QUOTA | BankLimit}}</p>
+      <p>单笔限额：{{SINGLE_QUOTA | BankLimit}}</p>
+      <!--<p>单笔限额：{{SINGLE | formatNum}}</p>-->
     </div>
     <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
       <span class="Amount">金额</span>
@@ -46,30 +48,34 @@
       </button>
     </section>
     <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认充值</button>
-    <!-- <p :class="{'bang':true,'no':agree == false}" v-if="!write"
-       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值协议》</span></p> -->
+    <p :class="{'bang':true,'no':agree == false}" v-if="!write"
+       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值委托代扣协议》</span></p>
 
     <up-select
+      title="选择银行卡"
       :show="upseletShow"
       :BankList="mainBankList"
+      @chooseBank="chooseBank"
     ></up-select>
   </div>
 </template>
 <script>
   import {HOST_API, LsName} from '@/Constant'
-  import UpSelect from '@/components/commons/UpSelect'
+  import UpSelect from '@/components/keshang/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
+  import IconFont from '@/components/commons/IconFont'
+  import API from "@/service"
 
 
   let time = 60
-  let timer;
   export default {
     data() {
       return {
+        timer: null,
         html: '协议',
         page: false,
         PIN: '',
@@ -98,52 +104,19 @@
         mainBankList: [],
         passCode: '',
         ACCT_NO: '', // TODO
-        PHONE_NUM: ''
+        PHONE_NUM: '',
+        ORIGIN_PAGE: '',// 来源页面
+        SINGLE: '1000000'
       }
     },
     components: {
       UpSelect,
+      IconFont
     },
     mixins: [Mixins.UtilMixin, RechangeMixins],
     created() {
       this.getInfos()
-      // this.reChangeHandele()
-    },
-    filters: {
-      formatNumKS(str) {
-        if (str == '-1') {
-          return '无限额'
-        }
-        if (!str) return '0.00'
-        str = str + ''
-        // if(str == '' || !str) return
-        // if (!Number(str)) return str
-        var newStr = "";
-        var count = 0;
-        if (str.indexOf(".") == -1) {
-          for (var i = str.length - 1; i >= 0; i--) {
-            if (count % 3 == 0 && count != 0) {
-              newStr = str.charAt(i) + "," + newStr;
-            } else {
-              newStr = str.charAt(i) + newStr;
-            }
-            count++;
-          }
-          str = newStr + ".00"; //自动补小数点后两位
-          return str + '元'
-        } else {
-          for (var i = str.indexOf(".") - 1; i >= 0; i--) {
-            if (count % 3 == 0 && count != 0) {
-              newStr = str.charAt(i) + "," + newStr; //碰到3的倍数则加上“,”号
-            } else {
-              newStr = str.charAt(i) + newStr; //逐个字符相接起来
-            }
-            count++;
-          }
-          str = newStr + (str + "00").substr((str + "00").indexOf("."), 3);
-          return str + '元'
-        }
-      },
+      this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
     },
     computed: {
       ifCheckMoneyEmpty() {
@@ -162,11 +135,19 @@
       }
     },
     methods: {
+      chooseBank(bank) {
+        this.CARD_BANK_NAME = bank.CARD_BANK_NAME;// 银行名称
+        this.CARD_BANK_URL = bank.CARD_BANK_URL
+        this.DAY_QUOTA = bank.DAY_QUOTA
+        this.SINGLE_QUOTA = bank.SINGLE_QUOTA
+        this.CARD_NUM = bank.CARD_NUM
+      },
       clearNumHandle() {
         this.APPLY_AMOUNT = ''
       },
       getMsg() {
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
+        // this.DAY_QUOTA = -1 说明无限额
         if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
@@ -181,11 +162,11 @@
         }
         let times = time
         this.disable = true
-        timer = setInterval(() => {
+        this.timer = setInterval(() => {
           if (times == 0) {
             this.codeText = '重新发送'
             this.disable = false
-            clearInterval(timer)
+            clearInterval(this.timer)
             return
           }
           times--
@@ -214,6 +195,11 @@
         }
       },
       doNext() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A016', // 点位
+          REMARK_DATA: '异业合作-购买页面-充值-确认充值按钮', // 中文备注
+          FROM_ID: util.storage.session.get('ORG_ID') || ''
+        })
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
         if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
@@ -249,6 +235,7 @@
   }
 
   .minshengbank {
+    position: relative;
     padding-left: 0.5rem;
     height: 1.8rem;
     font-size: 0.5rem;
@@ -261,6 +248,13 @@
       p:last-child {
         color: #9199A1;
       }
+    }
+
+    .detail {
+      right: px2rem(20);
+      top: px2rem(15);
+      color: #999999;
+      position: absolute;
     }
   }
 

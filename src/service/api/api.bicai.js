@@ -64,6 +64,23 @@ export default {
     return http.post(options, success, error)
   },
   /**
+   * 实名认证过渡页获取信息
+   * @param params
+   * @param success
+   * @param error
+   * @returns {*}
+   */
+  getAuthMemberText(params, success, error) {
+    let options = {
+      type: 'GET_AUTH_MEMBER_TEXT',
+      params: {
+        ...params,
+        NO_TOKEN: true
+      },
+    }
+    return http.post(options, success, error)
+  },
+  /**
    *  身份证正面上传
    * @param params
    * @param success

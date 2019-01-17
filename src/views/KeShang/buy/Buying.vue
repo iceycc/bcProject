@@ -47,7 +47,7 @@
     <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">存入</button>
     <p @click="agree =!agree"
        :class="{'bang':true,'no':agree == false}">我已阅读并同意
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《客商产品服务协议》</a>
+      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《产品服务协议》</a>
     </p>
 
   </div>
@@ -148,6 +148,11 @@
         this.APPLY_AMOUNT = ''
       },
       goReChang() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A015', // 点位
+          REMARK_DATA: '异业合作-购买页面-充值按钮', // 中文备注
+          FROM_ID: util.storage.session.get('ORG_ID') || ''
+        })
         this.setComState({
           type: 'OriginPage',
           value: this.$route.fullPath
@@ -155,6 +160,9 @@
 
         this.$router.push({
           name: PageName.Recharge,
+          query: {
+            ORIGIN_PAGE: 'buying' // 用于成功后 按钮的展示判断 .购买流程充值页面完成后只有继续购买按钮；
+          }
         })
       },
       getAgreement(type) {
@@ -181,6 +189,11 @@
         }
       },
       goBuy() {
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A017', // 点位
+          REMARK_DATA: '异业合作-购买页面-存入', // 中文备注
+          FROM_ID: this.proDetail.ID + '',
+        })
         if (!this.agree) {
           Bus.$emit(BusName.showToast, '请同意相关协议')
           return
@@ -210,9 +223,7 @@
       // 轮询查询交易状态！！
 
       getCode() { // 短信
-        let TEL = this.getComState.Infos.PHONE_NUM || this.$store.getters.GET_ACCOUNT_STATE.BICAI_USER.PHONE_NUM
         let data = {
-          PHONE_NUM: TEL,
           BIZ_TYPE: '4', // 购买众邦需要
           BANK_ACCT_NO: this.BANK_ACCT_NO,
           BANK_USER_ID: this.BANK_USER_ID
@@ -220,7 +231,7 @@
         API.common.apiSendPhoneCode(data, res => {
           this.getMsg()
           this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-          Bus.$emit(BusName.showSendMsg, TEL)
+          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         })
       },
       getMsg() {
@@ -267,7 +278,10 @@
               this.setComState({type: 'buyData', value: result})
               this.$router.push({
                 name: PageName.BuySuccess,
-                query: {TEAM_ID: this.TEAM_ID, INVEST_ID: this.INVEST_ID}
+                query: {
+                  TEAM_ID: this.TEAM_ID,
+                  INVEST_ID: this.INVEST_ID,
+                }
               })
               return
             } else {
@@ -312,7 +326,7 @@
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
           PHONE_CODE: this.msgCode,
-          PRD_TYPE: this.proDetail.PRD_TYPE_ID + '',
+          PRD_TYPE: (this.proDetail.PRD_TYPE_ID || '4') + '', // todo 娶不到
           MESAGE_TOKEN: this.MESAGE_TOKEN,
 
 

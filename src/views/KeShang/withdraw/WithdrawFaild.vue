@@ -20,7 +20,7 @@
             }
         },
         created() {
-            this.errMsg = this.$route.query.err
+            this.errMsg = this.$route.query.err2 || this.$route.query.err1
         },
         methods: {
           reWithdraw() {

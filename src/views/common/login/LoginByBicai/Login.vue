@@ -20,7 +20,7 @@
         <transition name="fade">
           <p class="label" v-show="cmsShow">短信验证码</p>
         </transition>
-        <input class="input" type="input"
+        <input class="input" type="tel"
                name="text1" :placeholder="cmsholder" v-model="cms">
         <button class="get-msg" @click="clickMsgCodeHandle" :disabled="msgDisabled">{{codeText}}</button>
       </section>
@@ -93,7 +93,6 @@
         href: '',
         ORG_ID: '',
         OPEN_H5_STATUS: '',
-        isfinancial: '',
         hasBank: false,
         APP_FLAG_TEXT: '比财'
       }
@@ -204,7 +203,6 @@
             window.location.href = HOST + '/nay/#/myInvestment?members_id=' + res.ID
             return
           }
-
           // 判断openApi
           if (this.ProAndOrgType.IS_SYNC_FLAG == 0) {
             // 不是 openApi
@@ -214,7 +212,7 @@
               // 不需要实名
               // let href = this.ProAndOrgType.H5_URL_ANDRIOD || this.ProAndOrgType.H5_URL_IOS
               if (this.href) {
-                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME}, 10000)
                 setTimeout(() => {
                   window.location.href = res.AUTH_URL
                 }, 2000)

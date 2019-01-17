@@ -19,7 +19,7 @@ export const CheckAccountMixin ={
         switch (Number(AUTH_STATUS)) {
           case 0:
           case 1:
-            this.$router.push(PageName.BcOpening1)
+            this.$router.push(PageName.BcOpening0)
             break;
           case 2:
             this.$router.push(PageName.BcOpening2)
@@ -32,7 +32,7 @@ export const CheckAccountMixin ={
             break;
           case 5:
             //
-            this.$router.push(PageName.BcOpening1)
+            this.$router.push(PageName.BcOpening0)
             break;
         }
       },err=>{

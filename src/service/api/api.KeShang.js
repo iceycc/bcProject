@@ -48,6 +48,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+
     // 账户属性查询 ifHave=y
     apiUserAccountProperties(params, success, error) {
       let options = {
@@ -81,6 +82,14 @@ export default {
       }
       return http.post(options, Config.config, success, error)
 
+    },
+    // 查询银行卡限额列表 /openapi/comm/apiGetBankCardLimit
+    apiGetBankCardLimit(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiGetBankCardLimit',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
     },
   },
   /**
@@ -285,31 +294,29 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换银行卡：openapi/comm/apiChangeBingCard todo 无需求
-    apiChangeBingCard(params, delMsg, success, error) {
+    // 设置默认卡 /openapi/comm/apiDefaultBankCard
+    apiDefaultBankCard(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiChangeBingCard',
+        url: '/openapi/comm/apiDefaultBankCard',
         params,
-        delMsg
       }
       return http.post(options, Config.config, success, error)
 
     },
+    // .	用户解绑卡 /openapi/comm/apiChangeBingCard
+    apiChangeBingCard(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiChangeBingCard',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+    },
+
     // 更换手机号
     // openapi/comm/apiChangePhoneNum todo 无需求
     apiChangePhoneNum(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiChangePhoneNum',
-        params,
-        delMsg
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-    // 更换支付密码：todo 无
-    apiUserResetPayPass(params, delMsg, success, error) {
-      let options = {
-        url: '/openapi/comm/apiUserResetPayPass',
         params,
         delMsg
       }
@@ -487,10 +494,18 @@ export default {
    * 赎回
    */
   redeem: {
-    // 支取校验 openapi/ksh/biz/apiRedemptionValid
+    // 支取校验
     apiRedemptionValid(params, success, error) {
       let options = {
         url: '/openapi/ksh/biz/apiRedemptionValid',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    //  支取校验 v2
+    apiRedemptionValid2(params, success, error) {
+      let options = {
+        url: '/openapi/ksh/biz/v2/apiRedemptionValid',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -529,6 +544,15 @@ export default {
     electronicAccountAgreement(params, success, error) {
       let options = {
         url: '/openapi/comm/openAnAccountAgreement',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+
+    // 充值代扣协议
+    rechargeAgreement(params, success, error) {
+      let options = {
+        url: '/openapi/comm/rechargeAgreement',
         params
       }
       return http.post(options, Config.config, success, error)

@@ -134,7 +134,7 @@
             REMARK_DATA: '异业合作-实名认证-设置密码完成', // 中文备注
           })
           Bus.$emit(BusName.showToast, res.message)
-          if (res.status == 1) {
+          if (res.status == 1) { // 成功
             // 判断产品类型 区分openAPI
             if (ProAndOrgType.IS_SYNC_FLAG == 1) {
               // 打通openAOPI的
@@ -145,34 +145,39 @@
               }, 2000)
             } else if (ProAndOrgType.IS_SYNC_FLAG == 0) {
               // 非打通openAPI的
-              // 直接跳转 银行h5链接
+
+              // 判断是否免登录
               if (ProAndOrgType.AUTH_URL_FLAG == 1) {
+                // 1 需要免登录
                 API.bicai.getAuthUrl({}, res => {
                   if (res.STATUS == 1) {
-                    Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
-                    setTimeout(() => {
-                      window.location.href = res.AUTH_URL
-                    }, 2000)
+                    Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME}, 10000)
+                    if (res.AUTH_URL) {
+                      setTimeout(() => {
+                        window.location.href = res.AUTH_URL
+                      }, 2000)
+                    } else {
+                      alert('请配置银行直联跳转链接')
+                    }
                   } else {
                     Bus.$emit(BusName.showToast, res.MESSAGE)
                   }
                 })
               } else {
+                // 2 不需要免登录 直接跳转 银行h5链接
                 let href = ProAndOrgType.H5_URL_ANDRIOD || ProAndOrgType.H5_URL_IOS
                 if (href) {
-                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
+                  Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME}, 10000)
                   setTimeout(() => {
                     window.location.href = href;
                   }, 2000)
                 } else {
-                  alert('跳转银行h5链接获取异常')
+                  // 请配置银行直联跳转链接
+                  alert('请配置银行直联跳转链接')
                 }
               }
             } else {
-              API.watchApi({
-                FUNCTION_ID: 'ptb0A014', // 点位
-                REMARK_DATA: '异业合作-实名认证-设置密码完成', // 中文备注
-              })
+              // 兼容老版本
               Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
               setTimeout(() => {
                 this.$router.push({name: PageName.Opening1})

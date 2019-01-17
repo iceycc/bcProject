@@ -2,9 +2,11 @@
   <div>
     <section style="text-align:center;display: inline-block;width: 100%"
              :class="{'infoText':true,'activeTitle':titleSelect}">
-      <span @click="showBankList">{{text}}</span>
+      <span class="bank-text" @click="showBankList">
+        <span>{{text}}</span>
+            <img class="downImg" @click.stop="showBankList" src="@/assets/images/GroupCopy14@2x.png" alt="">
+      </span>
       <span class="down" @click="bankShowHandle">
-                <img @click.stop="showBankList" src="@/assets/images/GroupCopy14@2x.png" alt="">
         <img src="@/assets/images/problom2@2x.png" alt="">
         <span class="xiane">银行限额</span>
             </span>
@@ -28,16 +30,19 @@
             </ul>
           </section>
         </section>
-        <section class="right-index">
-                    <span class="letter" @click="toBank(item)" v-for="item,index in indexArr"
-                          :key="index"> {{item}}</span>
-        </section>
+        <!--<section class="right-index">-->
+        <!--<span class="letter" @click="toBank(item)" v-for="item,index in indexArr"-->
+        <!--:key="index"> {{item}}</span>-->
+        <!--</section>-->
       </section>
     </div>
-    <div class="bank-xiane" v-if="backShow">
-      <img @click="backShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
-      <img src="@/assets/images/bank@2x.png" alt="">
-    </div>
+
+    <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
+
+    <!--<div class="bank-xiane" v-if="backShow">-->
+    <!--<img @click="backShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">-->
+    <!--<img src="@/assets/images/bank@2x.png" alt="">-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -45,6 +50,7 @@
   // const Letter = [A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
   import {BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
+  import BankCardLimit from '@/components/keshang/BankCardLimit'
 
   const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -65,6 +71,9 @@
         type: null,
         default: true
       }
+    },
+    components: {
+      BankCardLimit
     },
     watch: {
       // options(n,o){
@@ -157,9 +166,29 @@
   .infoText {
     position: relative;
     color: #dedede;
-    font-size: .4rem;
+    font-size: px2rem(14);
     padding-right: px2rem(125);
     vertical-align: top;
+
+    .bank-text {
+      position: relative;
+
+      span {
+        vertical-align: middle;
+        text-align: right;
+        width: px2rem(150);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .downImg {
+        position: absolute;
+        right: px2rem(-40);
+        top: px2rem(13);
+        width: px2rem(20);
+      }
+    }
 
     .xiane {
       display: inline-block;
