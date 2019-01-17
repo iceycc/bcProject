@@ -5,6 +5,7 @@ const WEB_HOST = {
   /**
    * 域名。可以自行添加测试域名
    */
+
   dev: 'https://finsuitdev.bicai365.com', // dev开发环境
   adv: 'https://adv.bica4i365.com', // adv测试
   pro: 'https://finsuit.bicai365.com', // 生产,
