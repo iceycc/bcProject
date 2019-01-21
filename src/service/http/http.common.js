@@ -1,4 +1,4 @@
-import axios from '../../plugin/request/_axios'
+import axios from '../request/_axios'
 import Bus from '../../plugin/bus/index'
 import {BusName, PageName, LsName} from "../../Constant";
 import util from "libs/util";

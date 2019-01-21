@@ -1,4 +1,4 @@
-import Http from "../http/http.bicai";
+import Http from "../../service/http/http.bicai";
 import util from 'libs/util'
 
 let http = new Http()

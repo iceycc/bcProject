@@ -1,4 +1,4 @@
-import {PageName} from "../Constant";
+import {PageName} from "../../Constant";
 
 export default [
   {

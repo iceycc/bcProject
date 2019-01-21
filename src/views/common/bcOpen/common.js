@@ -1,7 +1,6 @@
 import API from "@/service"
 import {LsName, BusName, PageName, PRO_PARAMS} from "@/Constant";
 import Mixins from '@/mixins'
-import util from "@/libs/util";
 import Bus from '@/plugin/bus'
 
 let timer;

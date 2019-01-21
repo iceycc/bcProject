@@ -1,4 +1,4 @@
-import http from '../http/http.ZHENGZHOU'
+import http from '@/service/http/http.bank'
 import {HOST_API} from "@/Constant";
 
 /**

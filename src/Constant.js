@@ -30,7 +30,7 @@ const Configs = {
    * npm run dev 开发
    *
    */
-  DEV_HOST: WEB_HOST.pro,
+  DEV_HOST: WEB_HOST.dev,
 
   /**
    * build打包
@@ -208,16 +208,7 @@ export const LsName = {
   // OriginPage: 'OriginPage', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
 }
 
-/**
- * ORG_ID 对应不同的机构
- */
 
-export const ORG_ID_NUM = {
-  JinShang: '70', //  晋商银行
-  ZhengZhou: '49',
-  ZhongBang: '227', // 众邦银行（已经取消）
-  KeShang: '248', // 客商银行
-}
 /**
  *  外部参数默认设置
  */

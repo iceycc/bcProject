@@ -1,5 +1,5 @@
-import http from '../http/http.common'
-import httpZZH from '../http/http.ZHENGZHOU'
+import http from '../../service/http/http.common'
+import httpZZH from '../../service/http/http.bank'
 import {HOST_API} from "@/Constant";
 import axios from 'axios'
 import store from "@/store";

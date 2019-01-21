@@ -1,4 +1,4 @@
-import http from '../http/http.ZHENGZHOU'
+import http from '@/service/http/http.bank'
 import {HOST_API} from "@/Constant";
 
 /**
@@ -48,6 +48,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+
     // 账户属性查询 ifHave=y
     apiUserAccountProperties(params, success, error) {
       let options = {
@@ -73,7 +74,7 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 24.	众邦充值提现处理中列表 /openapi/comm/apiQueryProcessing
+    // 24.	客商充值提现处理中列表 /openapi/comm/apiQueryProcessing
     apiQueryProcessing(params, success, error) {
       let options = {
         url: '/openapi/comm/apiQueryProcessing',
@@ -81,6 +82,14 @@ export default {
       }
       return http.post(options, Config.config, success, error)
 
+    },
+    // 查询银行卡限额列表 /openapi/comm/apiGetBankCardLimit
+    apiGetBankCardLimit(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiGetBankCardLimit',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
     },
   },
   /**
@@ -285,31 +294,29 @@ export default {
       return http.post(options, Config.config, success, error)
 
     },
-    // 更换银行卡：openapi/comm/apiChangeBingCard todo 无需求
-    apiChangeBingCard(params, delMsg, success, error) {
+    // 设置默认卡 /openapi/comm/apiDefaultBankCard
+    apiDefaultBankCard(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiChangeBingCard',
+        url: '/openapi/comm/apiDefaultBankCard',
         params,
-        delMsg
       }
       return http.post(options, Config.config, success, error)
 
     },
+    // .	用户解绑卡 /openapi/comm/apiChangeBingCard
+    apiChangeBingCard(params, success, error) {
+      let options = {
+        url: '/openapi/comm/apiChangeBingCard',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+    },
+
     // 更换手机号
     // openapi/comm/apiChangePhoneNum todo 无需求
     apiChangePhoneNum(params, delMsg, success, error) {
       let options = {
         url: '/openapi/comm/apiChangePhoneNum',
-        params,
-        delMsg
-      }
-      return http.post(options, Config.config, success, error)
-
-    },
-    // 更换支付密码：todo 无
-    apiUserResetPayPass(params, delMsg, success, error) {
-      let options = {
-        url: '/openapi/comm/apiUserResetPayPass',
         params,
         delMsg
       }
@@ -330,7 +337,7 @@ export default {
    * list相关
    */
   list: {
-    //   查询产品/机构支持的绑卡行
+    //   查询产品/机构支持的绑卡行/
     apiGetBankCardList(params, success, error) {
       let options = {
         url: '/openapi/comm/apiGetBankCardList',
@@ -406,7 +413,7 @@ export default {
     //  42.	获取我的投资持有中数据/openapi/zbh/biz/apiQryHoldInfo
     apiQryHoldInfo(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/apiQryHoldInfo',
+        url: '/openapi/bank/apiQryHoldInfo',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -416,7 +423,7 @@ export default {
     // /openapi/zbh/biz/apiQryAsset
     apiQryAsset(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/apiQryAsset',
+        url: '/openapi/bank/apiMyAssetByOrg',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -431,7 +438,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
-    // 14.	赎回众邦宝利息试算接口openapi/zbh/biz/apiInterestCalculation
+    // 14.	赎回客商宝利息试算接口openapi/zbh/biz/apiInterestCalculation
     apiInterestCalculation(params, success, error) {
       let options = {
         url: '/openapi/zbh/biz/apiInterestCalculation',
@@ -444,7 +451,7 @@ export default {
     // 理财产品已到期（分页）  /openapi/zbh/biz/getMyInvestOver无
     getMyInvestOver(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/getMyInvestOver',
+        url: '/openapi/bank/getMyInvestOver',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -487,7 +494,23 @@ export default {
    * 赎回
    */
   redeem: {
-    // 赎回 openapi/biz/apiRedemption
+    // 支取校验
+    apiRedemptionValid(params, success, error) {
+      let options = {
+        url: '/openapi/ksh/biz/apiRedemptionValid',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    //  支取校验 v2
+    apiRedemptionValid2(params, success, error) {
+      let options = {
+        url: '/openapi/ksh/biz/v2/apiRedemptionValid',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+    // 支取 openapi/biz/apiRedemption
     apiRedemption(params, success, error) {
       let options = {
         url: '/openapi/biz/apiRedemption',
@@ -508,19 +531,28 @@ export default {
       return http.post(options, Config.config, success, error)
     },
     // /openapi/zbh/biz/personalAccountServiceAgreement
-    // 购买协议： 众邦宝产品服务协议（个人活期版）
+    // 购买协议： 客商宝产品服务协议（个人活期版）
     personalAccountServiceAgreement(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/personalAccountServiceAgreement',
+        url: '/openapi/comm/personalAccountServiceAgreement',
         params
       }
       return http.post(options, Config.config, success, error)
     },
-    // 23.	 开户协议：众邦银行直销银行电子账户服务协议
+    // 23.	 开户协议：银行直销银行电子账户服务协议
     // /openapi/zbh/biz/electronicAccountAgreement
     electronicAccountAgreement(params, success, error) {
       let options = {
-        url: '/openapi/zbh/biz/electronicAccountAgreement',
+        url: '/openapi/comm/openAnAccountAgreement',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+
+    // 充值代扣协议
+    rechargeAgreement(params, success, error) {
+      let options = {
+        url: '/openapi/comm/rechargeAgreement',
         params
       }
       return http.post(options, Config.config, success, error)

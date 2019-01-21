@@ -1,10 +1,8 @@
-const jinshangBank = {
-  bankName:'晋商银行',
+/**
+ * ORG_ID 对应不同的机构
+ */
 
-}
-
-
-
-const bankConfig = {
-  name:'',
+export const ORG_ID_NUM = {
+  ZHENGZHOU: '49',
+  GSH: '248', // 客商银行
 }

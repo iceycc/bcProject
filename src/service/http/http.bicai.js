@@ -1,5 +1,4 @@
 // 有些地方需要调用比财接口呢
-// import axios from '@/plugin/request/_axios'
 import axios from 'axios'
 import store from '@/store/index'
 import {HOST_API} from "@/Constant";

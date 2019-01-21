@@ -1,9 +1,9 @@
-import axios from '../../plugin/request/_axios'
-import Bus from '../../plugin/bus/index'
-import {BusName, PageName, LsName} from "../../Constant";
+import axios from '../request/_axios'
+import Bus from '@/plugin/bus/index'
+import {BusName, PageName, LsName} from "@/Constant";
 import util from "libs/util";
-import Router from '../../router/index'
-import store from '../../store/index'
+// import Router from '@/router/index'
+import store from '@/store/index'
 
 export default {
   /*
@@ -11,7 +11,6 @@ export default {
    */
   post: function (option, config, success, error) {
     return this.request('POST', option, config, success, error).catch(err => {
-      console.log(err);
       return Promise.reject(err)
     });
   },
@@ -34,12 +33,11 @@ export default {
   request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     method = method || 'post'
     let ORG_ID = util.storage.session.get('ORG_ID') || ''
-    if(JSON.stringify(ORG_ID)=='{}'){
+    if (JSON.stringify(ORG_ID) == '{}') {
       ORG_ID = ''
     }
     ORG_ID = params.ORG_ID || ORG_ID
-
-    let {DEVICE_ID,APP_FLAG, CHANNEL_ID,TOKEN=token} = store.getters.GET_ACCOUNT_STATE
+    let {DEVICE_ID, APP_FLAG, CHANNEL_ID, TOKEN = token, SESSION_ID = ''} = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
@@ -47,21 +45,22 @@ export default {
           CHANNEL_TYPE: 'H5',
           VERSION: "",
           IMSI: "460026325010440",
-          SESSION_ID: "",
+          SESSION_ID: SESSION_ID,
           TYPE,
           TOKEN: TOKEN,
           DEVICE_ID: DEVICE_ID + '',
 
           SYSTEM_TYPE: "h5",
-          CHANNEL_ID: CHANNEL_ID + '',
-          APP_FLAG: APP_FLAG || 'BC'
+          CHANNEL_ID: CHANNEL_ID || '',
+          APP_FLAG: APP_FLAG || 'BC',
+          CLIENT_ID:"30"
         },
         param: {
-          ORG_ID:ORG_ID+'', // 70
+          ORG_ID: ORG_ID + '', // 70
           ...params
         },
       },
-      channel_id: CHANNEL_ID + ''
+      channel_id: CHANNEL_ID + '',
     }
     config.method = method;
     config.data = 'param_key=' + JSON.stringify(datas)
@@ -69,29 +68,28 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
-      console.log('jinshang - res>>>',result);
-      console.log('res >>>', result.data);
-      console.log('code >>>', result.head.CODE);
-      store.commit('REMOVE_COMMON_STATE','LAST_STEP_NUM')
-      store.commit('REMOVE_COMMON_STATE','REQ_SERIAL')
+      console.log('zhengzhou - res>>>',result);
+      // store.commit('REMOVE_COMMON_STATE', 'LAST_STEP_NUM')
+      // store.commit('REMOVE_COMMON_STATE', 'REQ_SERIAL')
       // util.storage.session.remove(LsName.LAST_STEP_NUM)
       // util.storage.session.remove(LsName.REQ_SERIAL)
-      if (result.head.TOKEN) { // 接口有返回token就更新token
+      if (!TOKEN && result.head.TOKEN) { //
         store.commit('SET_TOKEN', result.head.TOKEN)
       }
-      if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
-        // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
-        store.commit('SET_COMMON_STATE',{
-          type:'LAST_STEP_NUM',
-          value:result.data.LAST_STEP_NUM
-        })
-        store.commit('SET_COMMON_STATE',{
-          type:'REQ_SERIAL',
-          value:result.data.REQ_SERIAL
-        })
-        // util.storage.session.set(LsName.LAST_STEP_NUM, result.data.LAST_STEP_NUM) // 序列号
-        // util.storage.session.set(LsName.REQ_SERIAL, result.data.REQ_SERIAL) //
-      }
+      // if (result.head.TOKEN) { // 接口有返回token就更新token
+      //   store.commit('SET_TOKEN', result.head.TOKEN)
+      // }
+      // if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
+      //   // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
+      //   store.commit('SET_COMMON_STATE', {
+      //     type: 'LAST_STEP_NUM',
+      //     value: result.data.LAST_STEP_NUM
+      //   })
+      //   store.commit('SET_COMMON_STATE', {
+      //     type: 'REQ_SERIAL',
+      //     value: result.data.REQ_SERIAL
+      //   })
+      // }
       // 根据状态码 做业务状态校验 分流
       if (result.head.CODE == 0) {
         let msg = result.head.MSG || '成功'
@@ -100,48 +98,41 @@ export default {
         return Promise.resolve(result.data)
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
+        // 登录超时
         Bus.$emit(BusName.showToast, result.head.MSG)
-        // util.storage.session.remove(LsName.token)
         store.commit('SET_TOKEN', '')
-        Router.push({
-          name: PageName.Login,
-          query: {
-            target: Router.currentRoute.fullPath
-          }
-        })
+        goLogin()
       }
       else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
+        // 其他登录
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
-        // util.storage.session.remove(LsName.token)
-        Router.push({
-          name: PageName.Login,
-          query: {
-            target: Router.currentRoute.fullPath
-          }
-        })
+        goLogin()
       }
       else {
-        console.log('错误msg >>>', result.head.MSG);
         if (!delMsg) {
           Bus.$emit(BusName.showToast, result.head.MSG)
         }
         if (result.head.MSG == '未登陆银行') {
-          Router.push({
-            name: PageName.Login,
-            query: {
-              target: Router.currentRoute.fullPath
-            }
-          })
+          goLogin()
         }
         return Promise.reject(result.head.MSG)
       }
     }).catch(errors => {
       error && error(errors.toString());
-      console.log('http errors>>', errors);
+      console.log('错误msg>>', errors);
       return Promise.reject(errors.toString())
     })
 
   }
 
+}
+
+function goLogin() {
+  // Router.push({
+  //   name: PageName.Login,
+  //   query: {
+  //     target: Router.currentRoute.fullPath
+  //   }
+  // })
 }

@@ -1,4 +1,4 @@
-import watchHttp from '@/plugin/watchBuryingPoint/watchHttp'
+import watchHttp from '@/service/request/_watchAxios'
 import {HOST_API} from "@/Constant";
 const Config = {
   watchConfig:{
