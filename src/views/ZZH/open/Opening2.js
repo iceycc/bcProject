@@ -22,7 +22,7 @@ export default {
     }
   },
   created() {
-    console.log('ZhengZhou');
+    console.log('ZZH');
 
   },
   filters: {

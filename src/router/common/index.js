@@ -46,7 +46,7 @@ export default [
   // {
   //   path: '/' + PageName.ProductReservation,
   //   name: PageName.ProductReservation,
-  //   component: resolve => require(['views/ZhengZhou/product/ProductReservation.vue'], resolve),
+  //   component: resolve => require(['views/ZZH/product/ProductReservation.vue'], resolve),
   //   meta: {keepAlive: false, needLogin: false}
   // },
   /**

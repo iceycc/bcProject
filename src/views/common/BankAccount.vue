@@ -133,54 +133,18 @@
           // IS_RZ_FLAG, // '是否实名认证, 0：否, 1：是',
           // H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
           // H5_URL_IOS // 非打通openApi 跳转链接 ios
-          // {
-          //   ORG_ID: '49',
-          //   ORG_NAME: '郑州银行',
-          //   LOGO_URL: '',
-          //   DESCRIPT: '隶属于郑州银行',
-          //   BANK_NAME: '郑州银行',
-          //   IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
-          //   IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
-          //   IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
-          //   H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
-          //   H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
-          // },
-          // {
-          //   ORG_ID: '70',
-          //   ORG_NAME: '晋商银行',
-          //   LOGO_URL: '',
-          //   DESCRIPT: '隶属于晋商银行',
-          //   BANK_NAME: '晋商银行',
-          //   IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
-          //   IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
-          //   IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
-          //   H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
-          //   H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
-          // },
-          // {
-          //   ORG_ID: '227',
-          //   ORG_NAME: '众邦银行',
-          //   LOGO_URL: '',
-          //   DESCRIPT: '隶属于郑州银行',
-          //   BANK_NAME: '众邦银行',
-          //   IS_SYNC_FLAG:'0', // '是否由openAPI同步产品, 0：否, 1：是',
-          //   IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
-          //   IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
-          //   H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
-          //   H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
-          // },
-          // {
-          //   ORG_ID: '248',
-          //   ORG_NAME: '客商银行',
-          //   LOGO_URL: '',
-          //   DESCRIPT: '隶属于客商银行',
-          //   BANK_NAME: '客商银行',
-          //   IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
-          //   IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
-          //   IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
-          //   H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
-          //   H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
-          // },
+          {
+            ORG_ID: '241',
+            ORG_NAME: '工商银行',
+            LOGO_URL: '',
+            DESCRIPT: '隶属于工商银行',
+            BANK_NAME: '工商银行',
+            IS_SYNC_FLAG:'1', // '是否由openAPI同步产品, 0：否, 1：是',
+            IS_REALTIME_DATA_PRD:'1', // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
+            IS_RZ_FLAG:'1', // '是否实名认证, 0：否, 1：是',
+            H5_URL_ANDRIOD:'1',// 非打通openApi 跳转链接 安卓
+            H5_URL_IOS:'1' // 非打通openApi 跳转链接 ios
+          },
         ]
       }
     },
@@ -188,9 +152,6 @@
     // 1 已登陆
     // 2 未登陆
     created() {
-      // this.setComState({
-      //   type: 'ProAndOrgType', value: {}
-      // })
       this.reLoadToLogin()
     },
     methods: {
@@ -223,7 +184,7 @@
             }
           })
         } else {
-          this.getBankListByChannelId()
+          // this.getBankListByChannelId()
         }
       },
       goPage(page, {

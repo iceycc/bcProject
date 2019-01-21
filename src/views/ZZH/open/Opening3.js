@@ -17,7 +17,7 @@ export default {
   },
   mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
   created() {
-    console.log('ZhengZhou');
+    console.log('ZZH');
   },
   methods: {
     setPassWord() {

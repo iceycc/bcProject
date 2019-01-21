@@ -3,6 +3,7 @@
  */
 
 export const ORG_ID_NUM = {
-  ZHENGZHOU: '49',
-  GSH: '248', // 客商银行
+  ZZH: '49',
+  KSH: '248', // 客商银行
+  GSH: '241', // 工商
 }

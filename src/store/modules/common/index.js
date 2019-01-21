@@ -11,12 +11,12 @@ export default {
     REQ_SERIAL: '', // 开户流水
     loginType: '', //  用于测评完成后跳转功能（购买，预约，电子账户，更多服务）
     goBuy: { // 去购买需要的参数
-      PRD_NAME: ' 民生xx产品',
-      TXT_MIN_AMOUNT: '200', // 起购金额
-      REMAIN_AMT: '10000', // 可投金额
-      INCRE_AMOUNT: '10', // 最小递增
-      ORG_NAME: '民生银行', // 银行名称
-      id: '100', // 产品id
+      PRD_NAME: '',
+      TXT_MIN_AMOUNT: '', // 起购金额
+      REMAIN_AMT: '', // 可投金额
+      INCRE_AMOUNT: '', // 最小递增
+      ORG_NAME: '', // 银行名称
+      id: '', // 产品id
       logo: '', // 直销银行logo
     },
     pollResult: {},// 交易完成后 轮询结构存储 用于成功页信息展示

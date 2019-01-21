@@ -12,12 +12,12 @@ export default {
       DOMShow: {
         USER_NAME: true,
         USER_CARD_ID: true,// 身份证号码
-        USER_DUTY:false,// 职业
+        USER_DUTY: true, // 职业
         USER_EDUCATION: false, //学历
         ADDRESS: false, // 地址
         NATION: false, // 民族
-        PHONE: false, // 手机号
-        CARD_INDATE: true, //身份证有效期
+        PHONE: true, // 手机号
+        USER_CARD_ID_DATA: true, //身份证有效期
       },
       DOCS: 'ZZH',
       job: [
@@ -38,16 +38,12 @@ export default {
   },
   methods: {
     doOpeningFirstFactory() {
-      if(this.agree==false){
-        Bus.$emit(BusName.showToast,'您还未同意相关协议')
-        return
-      }
       API.watchApi({
         FUNCTION_ID: 'ptb0A003', // 点位
         REMARK_DATA: '异业合作-开户-开户信息验证', // 中文备注
       })
       this.$store.commit('SET_OPENING1_DATA', this.data)
-      this.ORG_ID = util.storage.session.get('ORG_ID')  || ''
+      this.ORG_ID = util.storage.session.get('ORG_ID') || ''
 
       // this.ORG_ID = this.$store.getters.GET_ORG_ID
       this.doOpengingFirst()
@@ -59,7 +55,8 @@ export default {
       this.imgStyle2 = 'width:100%;max-height:100%'
       util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
         this.preSrc2 = data
-        this.data.CARD_BACK_FILE = data.split(',')[1]
+        // this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\+/g, '%2B')
+        this.data.CARD_BACK_FILE = data.split(',')[1].replace(/\s/g, '%2B')
         this.idCardFanOcr(data)
       })
     },
@@ -69,7 +66,8 @@ export default {
       this.imgStyle1 = 'width:100%;max-height:100%'
       util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
         this.preSrc1 = data
-        this.data.CARD_FRONT_FILE = data.split(',')[1]
+        // this.data.CARD_FRONT_FILE = encodeURIComponent(data.split(',')[1])
+        this.data.CARD_FRONT_FILE = data.split(',')[1].replace(/\s/g, '%2B')
         this.idCardZhengOcr(data)
       })
     },
@@ -89,78 +87,66 @@ export default {
     /**
      * 身份证 ocr
      */
-
-
     idCardZhengOcr() {
       let params = {
-        PHONE_NUM:this.data.PHONE,
         TYPE: 'ID_CARD_FRONT_PHONE_OCR',
-        IDENT_PHOTO:encodeURIComponent(this.data.CARD_FRONT_FILE),
-        MARK: '1',
+        MEMBER_ID: this.data.MEMBER_ID || '',
+        ISFRONT: 'true',
+        // CARD_BASE: this.data.CARD_FRONT_FILE.replace(/\+/g, '%2B'),
+        CARD_BASE: encodeURIComponent(this.data.CARD_FRONT_FILE),
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
-        this.data.USER_NAME = res.ID_NAME
-        this.data.USER_CARD_ID = res.ID_NUMBER
-        this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
-        // this.data.ADDRESS = res.ADDRESS
-
+        this.data.USER_NAME = res.NAME
+        this.data.USER_CARD_ID = res.NUM
+        this.data.ADDRESS = res.ADDRESS
+        this.data.MEMBER_ID = res.MEMBER_ID
+        this.data.PHONE_NUM = res.PHONE_NUM
+        if (res.PERIOD) {
+          this.data.USER_CARD_ID_DATA = res.PERIOD
+        }
         // this.checkID()
         // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
       })
     },
-    // TYPE	请求类型
-    // ORG_ID	机构ID
-    // PHONE_NUM	手机号码
-    // IDENT_PHOTO // 身份证图片
-    // MARK // 身份证正反面标识
-
-
     idCardFanOcr() {
       let params = {
-        PHONE_NUM:this.data.PHONE,
         TYPE: 'ID_CARD_BACK_PHONE_OCR',
-        MARK: '2',
-        IDENT_PHOTO:encodeURIComponent(this.data.CARD_BACK_FILE) ,
-
+        MEMBER_ID: this.data.MEMBER_ID || '',
+        ISFRONT: 'false',
+        CARD_BASE: encodeURIComponent(this.data.CARD_BACK_FILE),
+        // CARD_BASE: this.data.CARD_BACK_FILE.replace(/\+/g, '%2B'),
       }
       API.open.IdCardFrontPhoneOcr(params, (res) => {
-        console.log(res.VALIDITY_PERIOD);
-        this.data.USER_CARD_ID_DATA = res.VALIDITY_PERIOD,
-        this.data.IDENT_VLD_DT = this.transformDATA(res.VALIDITY_PERIOD).END
-        this.data.IDENT_LSS_DT = this.transformDATA(res.VALIDITY_PERIOD).STA
-        this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
-
-        // IDENT_LSS_DT	证件签发日期
-        // IDENT_VLD_DT	证件有效期
-
+        this.data.USER_CARD_ID_DATA = res.PERIOD
+        this.data.MEMBER_ID = res.MEMBER_ID
+        this.data.PHONE_NUM = res.PHONE_NUM
       })
     },
-
     /**
      *注册
      */
     // 1 实名认证
     doOpengingFirst() {
       // todo 校验
-      // TYPE	请求类型
-      // ORG_ID	机构ID
-      // PHONE_NUM	注册手机号
-      // USER_CARD_ID// 身份证号
-      // USER_NAME// 姓名
-      // CARD_FRONT_FILE // 身份证正面图像
-      // CARD_BACK_FILE // 身份证反面图像
-
-      // IDENT_LSS_DT	证件签发日期
-      // PERIOD	证件有效期
+      if (!this.agree) {
+        Bus.$emit(BusName.showToast, '请同意相关协议')
+        return
+      }
+      if (!this.data.USER_DUTY) {
+        Bus.$emit(BusName.showToast, '请选择职业')
+        return
+      }
       let params = {
+        MEMBER_ID: this.data.MEMBER_ID,
         TYPE: 'API_REGISTER_VALI_USER',
         PHONE_NUM: this.data.PHONE + '',
+        PASSWORD: 'aaaaaa',
         USER_NAME: this.data.USER_NAME + '',
         USER_CARD_ID: this.data.USER_CARD_ID + '',
         CARD_FRONT_FILE: encodeURIComponent(this.data.CARD_FRONT_FILE),
         CARD_BACK_FILE: encodeURIComponent(this.data.CARD_BACK_FILE),
-        PERIOD: this.data.CARD_INDATE,
-        BUYER_CERT_TYPE: '0'
+        USER_DUTY: this.data.USER_DUTY + '',
+        CREDENTIAL_POV: this.data.USER_CARD_ID_DATA + ''
       }
       console.log('open1Params>>', params);
 
@@ -169,18 +155,23 @@ export default {
         // 保存第一步的数据
         this.setComState({
           type: 'openingData',
-          value: {...this.suerinfo, BESHARP_REGISTER_VALI_USER_SEQ: res.REQ_SERIAL}
+          value: {
+            ...this.suerinfo,
+            USER_DUTY: this.data.USER_DUTY + '',
+            ...res,
+            BESHARP_REGISTER_VALI_USER_SEQ: res.BESHARP_REGISTER_VALI_USER_SEQ,
+            COMMON_USER_ID: res.COMMON_USER_ID
+          }
         })
         // 回显是否实名成功
         // this.checkBankStatus() //
-        this.$router.push({name:PageName.Opening2})
-      },err=>{
-        // setTimeout(()=>{
-        //   this.checkBankStatus() //
-        // })
+        this.$router.push({name: PageName.Opening2})
+      }, err => {
+        setTimeout(() => {
+          this.checkBankStatus() //
+        }, 1000)
       })
     },
-
   }
 }
 

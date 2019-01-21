@@ -5,20 +5,20 @@ let ORG_ID = util.storage.session.get('ORG_ID') || ''
 /**
  * api
  */
-import api_ZHENGZHOU from '@/api/bank/api.ZHENGZHOU'
-import api_GSH from '@/api/bank/api.ZHENGZHOU'
+import api_ZZH from '@/api/bank/api.ZZH'
+import api_GSH from '@/api/bank/api.KSH'
 /**
  * router
  */
-import router_ZHENGZHOU from '@/router/bank/router.zhengzhou'
-import router_GSH from '@/router/bank/router.zhengzhou'
+import router_ZZH from '@/router/bank/router.ZZH'
+import router_GSH from '@/router/bank/router.KSH'
 
 let currentBank = {API: {}, ROUTER: {}};
 switch (ORG_ID + '') {
   case ORG_ID_NUM.ZHENGZHOU:
     currentBank = {
-      API: api_ZHENGZHOU,
-      ROUTER: router_ZHENGZHOU
+      API: api_ZZH,
+      ROUTER: router_ZZH
     }
     break;
 
