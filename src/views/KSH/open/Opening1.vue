@@ -1,20 +1,11 @@
 <template>
   <div class="warp">
-    <app-bar title="信息填写"></app-bar>
-    <section class="wrapicon">
-      <section class="circle left">
-                <span class="line1">
-                    <img :src='stepImg' alt="">
-                </span>
-        <span class="step-text">开户信息验证</span>
-      </section>
-      <section class="circle right">
-                 <span class="line2 hui">
-                    <img :src='stepImg2' alt="">
-                </span>
-        <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
-      </section>
-    </section>
+    <app-bar title="开户"></app-bar>
+    <open-head :options="[
+    {text: '开户信息验证', active: true},
+    {text: '绑定银行卡', active: false}
+    ]"></open-head>
+
     <div class="opening_box">
       <section class="photo">
         <div class="cameraphoto">
@@ -107,8 +98,8 @@
 <script>
   import {PageName, BusName, HOST_API} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
+  import OpenHead from '@/components/opening/OpenHead'
   import Opening1Mixins from './Opening1'
-  import util from "../../../libs/util"
 
 
   export default {
@@ -132,9 +123,6 @@
         showType: 0,
         imgStyle1: 'width:30%;vertical-align: middle',
         imgStyle2: 'width:30%;vertical-align: middle;',
-        stepImg: require('@/assets/images/account_icon_green2@2x.png'),
-        stepImg2: require('@/assets/images/step2@2x.png'),
-        stepImg3: require('@/assets/images/step3.png'),
         test1: '',
         test2: '',
         agreeMentSrc: HOST_API + '/static/finsuit/js/openapi/js/xieyi/cz.html',
@@ -165,7 +153,8 @@
       }
     },
     components: {
-      JsSelect
+      JsSelect,
+      OpenHead
     },
     mixins: [Opening1Mixins],
     created() {
@@ -223,7 +212,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   body {
     font-size: .3rem;

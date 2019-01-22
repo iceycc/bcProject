@@ -89,7 +89,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   .add_bank {
     display: flex;
@@ -179,16 +179,16 @@
         }
       }
 
-      /*li.active:after {*/
-      /*content: '';*/
-      /*position: absolute;*/
-      /*top: px2rem(30);*/
-      /*right: px2rem(10);*/
-      /*z-index: 10;*/
-      /*width: px2rem(18);*/
-      /*height: px2rem(18);*/
-      /*background: url("../../assets/images/check.png") center center no-repeat;*/
-      /*}*/
+      li.active:after {
+      content: '';
+      position: absolute;
+      top: px2rem(30);
+      right: px2rem(10);
+      z-index: 10;
+      width: px2rem(18);
+      height: px2rem(18);
+      background: url("../../assets/images/check.png") center center no-repeat;
+      }
 
       .gray {
         .money {

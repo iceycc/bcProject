@@ -9,7 +9,7 @@ import Mixins from '@/mixins'
 let time = 60
 let pollTimer;
 export default {
-  mixins: [commons,Mixins.HandleMixin,Mixins.UtilMixin],
+  mixins: [commons,Mixins.redirectByFromPage],
   data() {
     return {
       ACC_FLAG: '0',
@@ -19,7 +19,7 @@ export default {
     }
   },
   created() {
-    console.log('ZZH');
+
 
   },
   filters: {
@@ -163,7 +163,7 @@ export default {
           })
           // Bus.$emit(BusName.showToast, res.MSG)
           this.setComState({type:'ISLogin',value:true})
-          this.toPreProduct()
+          this.redirectByFromPage()
         },
         err => {
           this.errMsg = err

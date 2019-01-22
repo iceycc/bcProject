@@ -53,14 +53,14 @@
         type: null,
         default() {
           return [
-            {
-              logo: '',
-              name: '民生银行',
-              footNum: '0014',
-              money: '100',
-              id: 1,
-              bankno: '1111111'
-            }
+            // {
+            //   logo: '',
+            //   name: '民生银行',
+            //   footNum: '0014',
+            //   money: '100',
+            //   id: 1,
+            //   bankno: '1111111'
+            // }
           ]
         }
       }
@@ -100,7 +100,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   .add_bank {
     display: flex;

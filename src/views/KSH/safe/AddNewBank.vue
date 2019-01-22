@@ -34,7 +34,7 @@
 
 <script>
   import BankSelect from '@/components/KSH/KshBankSelect'
-  import ActiveInput from '@/components/commons/ActiveInput'
+  import ActiveInput from '@/components/form/ActiveInput'
   import ErrMsg from '@/components/commons/ErrMsg'
   import API from "@/service";
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
@@ -72,7 +72,7 @@
         time: 60
       }
     },
-    mixins: [Mixins.HandleMixin],
+    mixins: [Mixins.reloadByPassWordErr],
     created() {
       this.getBankList()
       this.getOldBankInfo()
@@ -285,7 +285,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .m-form {
     width: 100%;

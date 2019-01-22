@@ -35,7 +35,6 @@
         <!-- <span  class="limit">银行限额</span>  -->
         <Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"
                      title="银行列表"></Bank-select>
-
       </section>
       <section class="input-box">
         <p class="left-p">手机号码</p>
@@ -50,21 +49,11 @@
         <button class="msg-code" @click="clickMsgCodeHandle" :disabled="disable">{{codeText}}</button>
       </section>
     </div>
-    <!--errMsg-->
     <div class="msg-err" v-if="errMsg">
       <span>{{errMsg}}</span>
     </div>
-    <!-- <div class="tijiao Tips">请使用该预留手机号进行开户</div> -->
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
 
-
-    <!--<section class="safe-code" v-show="showSafeCode">-->
-    <!--<div>-->
-    <!--<img :src="safeCodeUrl+ SESSION_ID" alt="">-->
-    <!--<input type="text" placeholder="请输入图形验证码" v-model="safeCode">-->
-    <!--<button @click="getSafeCode">确定</button>-->
-    <!--</div>-->
-    <!--</section>-->
     <section class="safe-code" v-show="showSafeCode">
       <div>
         <p>请填写图形验证码</p>
@@ -404,7 +393,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .warp {
     height: 100%;

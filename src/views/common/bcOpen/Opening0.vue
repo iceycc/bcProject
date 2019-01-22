@@ -99,7 +99,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .main {
     position: relative;

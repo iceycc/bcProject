@@ -102,7 +102,7 @@
         }
       }
     },
-    mixins: [Mixins.StoreMixin, Mixins.ToBuying],
+    mixins: [Mixins.storeMixin, Mixins.ToBuying],
     created() {
       // let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
       // let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
@@ -354,7 +354,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   body {
     margin: 0;

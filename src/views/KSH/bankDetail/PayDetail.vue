@@ -304,7 +304,7 @@
 </style>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .icon {
     position: absolute;

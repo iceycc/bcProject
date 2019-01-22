@@ -1,12 +1,11 @@
 <template>
     <div>
+      <!--仅用于比财实名第二步绑卡 待优化-->
         <section style="text-align:center;display: inline-block;width: 100%"
                  :class="{'infoText':true,'activeTitle':titleSelect}">
             <span @click="showBankList">{{text}}</span>
             <span class="down" @click="bankShowHandle">
                 <img @click.stop="showBankList" src="@/assets/images/GroupCopy14@2x.png" alt="">
-                <!--<img src="@/assets/images/problom2@2x.png" alt="">-->
-               <!--<span class="xiane">银行限额</span>-->
             </span>
         </section>
         <div class="jsSelect" v-show="show">
@@ -138,7 +137,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/px2rem";
+
 
     .jsSelect {
         position: fixed;

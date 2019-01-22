@@ -72,7 +72,7 @@
         LOGO_URL: ''
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
+    mixins: [ Mixins.redirectByFromPage, LoginMixins],
     components: {
       PassInput
     },
@@ -148,7 +148,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .logo {
     width: px2rem(140);

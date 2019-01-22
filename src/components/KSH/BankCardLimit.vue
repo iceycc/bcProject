@@ -65,7 +65,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   .main {
     position: fixed;

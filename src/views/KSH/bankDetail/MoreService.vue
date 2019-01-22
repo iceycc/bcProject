@@ -122,7 +122,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .m-main {
     margin-top: px2rem(10);

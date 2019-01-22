@@ -1,95 +1,50 @@
 <template>
   <div class="warp">
     <app-bar title="信息填写"></app-bar>
-    <section class="wrapicon">
-      <section class="circle left">
-                <span class="line1">
-                    <img :src='stepImg' alt="">
-                </span>
-        <span class="step-text">开户信息验证</span>
-      </section>
-      <section class="circle right">
-                 <span class="line2 hui">
-                    <img :src='stepImg2' alt="">
-                </span>
-        <span class="step-text" style="color:#D3D3D3">绑定银行卡</span>
-      </section>
-    </section>
+    <open-head :options="[
+    {text: '开户信息验证', active: true},
+    {text: '绑定银行卡', active: false},
+    {text: '短信校验', active: false},
+    ]"></open-head>
     <div class="opening_box">
       <section class="photo">
         <div class="cameraphoto">
           <div class="words">身份证人像页照</div>
           <div class="cameraphotoimg">
             <img :src="preSrc1" :style="imgStyle1" alt="" class="vatal">
-            <input type="file" capture="camera" accept="image/*" class="inputBox"
-                   disabled
-                   @change="imgToBaseZheng($event)">
           </div>
         </div>
         <div class="cameraphoto">
           <div class="words">身份证国徽页照</div>
           <div class="cameraphotoimg">
             <img :src="preSrc2" :style="imgStyle2" alt="" class="vatal">
-            <input type="file" capture="camera" accept="image/*" class="inputBox"
-                   disabled
-                   @change="imgToBaseFan($event)">
           </div>
         </div>
       </section>
-      <img :src="test1" alt="">
-      <section v-if="DOMShow.USER_NAME">
-        <span>姓名</span>
-        <input class="inputBox2" type="text" placeholder="请输入您的姓名"
-               disabled
-               v-model="data.USER_NAME">
-      </section>
-      <section v-if="DOMShow.USER_CARD_ID">
-        <span>身份证号</span>
-        <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
-               disabled
-               v-model="data.USER_CARD_ID" @bulr="checkID">
-      </section>
-      <section v-if="DOMShow.CARD_INDATE">
-        <span>身份证有效期</span>
-        <input class="inputBox2" type="text" placeholder=""
-               disabled
-               v-model="data.CARD_INDATE">
-      </section>
-      <section v-if="DOMShow.PHONE">
-        <span>手机号码</span>
-        <input class="inputBox2" type="tel" placeholder="请输入手机号"
-               disabled
-               v-model="data.PHONE">
-      </section>
-      <section v-if="DOMShow.NATION">
-        <span>民族</span>
-        <input class="inputBox2" type="text" placeholder=""
-               disabled
-               v-model="data.NATION">
-      </section>
-      <section v-if="DOMShow.ADDRESS">
-        <span>地址</span>
-        <input class="inputBox2" type="text" placeholder=""
-               v-model="data.ADDRESS">
-      </section>
-      <section v-if="DOMShow.USER_DUTY">
-        <span>职业</span>
-        <js-select
-          title="职业列表"
-          class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
-      </section>
-      <section v-if="DOMShow.USER_EDUCATION">
-        <span>学历</span>
-        <js-select
-          title="学历列表"
-          class="selectStyle" :text="educationText" :options="education"
-          @getValue="getEduction"></js-select>
-      </section>
-
-    </div>
-    <div class="IDphoto">
-      <div class="IDphotoPositive"></div>
-      <div class="IDphotoback"></div>
+      <normal-input
+        class="grey"
+        type="tel"
+        v-model="data.USER_NAME"
+        text="姓名"
+        placeholder="请输入您的姓名"
+        disabled="true"
+      ></normal-input>
+      <normal-input
+        class="grey"
+        type="tel"
+        v-model="data.USER_CARD_ID"
+        text="身份证号"
+        placeholder="请输入15-18位身份证号"
+        disabled="true"
+      ></normal-input>
+      <normal-input
+        class="grey"
+        type="tel"
+        v-model="data.CARD_INDATE"
+        text="身份证有效期"
+        placeholder=""
+        disabled="true"
+      ></normal-input>
     </div>
     <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
     <button class="tijiao" @click="doOpeningFirstFactory">下一步</button>
@@ -99,16 +54,20 @@
       :class="{'bang':true,'no':agree == false}"
       @click="doAgree">
       <span>我已阅读并同意注册</span>
-      <a href="javascript:;" @click.stop="showPage('open')" style=" color:#0096FE;">《客商银行客户服务协议》</a> 、
+      <a href="javascript:;" @click.stop="showPage('open')" style=" color:#0096FE;">《工商银行客户服务协议》</a> 、
       <a href="javascript:;" @click.stop="showPage('privacy')" style=" color:#0096FE;">《隐私政策》</a>
     </p>
+    <call-to-bicai></call-to-bicai>
+
   </div>
 </template>
 <script>
   import {PageName, BusName, HOST_API} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
+  import OpenHead from '@/components/opening/OpenHead'
   import Opening1Mixins from './Opening1'
-  import util from "../../../libs/util"
+  import NormalInput from '@/components/form/NormalInput' // 常规的input组件
+  import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
 
 
   export default {
@@ -132,11 +91,6 @@
         showType: 0,
         imgStyle1: 'width:30%;vertical-align: middle',
         imgStyle2: 'width:30%;vertical-align: middle;',
-        stepImg: require('@/assets/images/account_icon_green2@2x.png'),
-        stepImg2: require('@/assets/images/step2@2x.png'),
-        stepImg3: require('@/assets/images/step3.png'),
-        test1: '',
-        test2: '',
         agreeMentSrc: HOST_API + '/static/finsuit/js/openapi/js/xieyi/cz.html',
 
         preSrc1: require('@/assets/images/cameracopy@2x.png'),
@@ -165,7 +119,10 @@
       }
     },
     components: {
-      JsSelect
+      JsSelect,
+      OpenHead,
+      NormalInput,
+      CallToBicai
     },
     mixins: [Opening1Mixins],
     created() {
@@ -223,94 +180,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
-
   body {
     font-size: .3rem;
-  }
-
-  .wrapicon {
-    display: flex;
-    position: relative;
-    margin-bottom: .3rem;
-    margin-top: px2rem(4);
-
-    .step-text {
-      padding-top: px2rem(7);
-    }
-
-    .circle {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-
-      &.left {
-        text-align: left;
-        padding-left: px2rem(30);
-      }
-
-      &.right {
-        text-align: right;
-        padding-right: px2rem(30);
-      }
-    }
-
-    .line1, .line2, .line3 {
-      position: relative;
-
-      img {
-        width: .5rem;
-      }
-
-      &:after {
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: 0;
-        transform: translateY(-100%);
-        content: '';
-        width: 90%;
-        background: #92d048;
-        height: .1rem;
-        overflow: hidden;
-
-      }
-    }
-
-    .hui {
-      &:after, &.line2:before {
-        background: #dee1e3 !important;
-      }
-
-    }
-
-    .line2 {
-      &:after {
-        left: 0;
-        right: auto;
-      }
-
-      &:before {
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: px2rem(10);
-        transform: translateY(-100%);
-        content: '';
-        width: 45%;
-        background: #92d048;
-        height: .1rem;
-        overflow: hidden;
-      }
-    }
-
-    .line3 {
-      &:after {
-        left: 0;
-        right: auto;
-      }
-    }
-
   }
 
   .warp {
@@ -318,51 +189,51 @@
     position: relative;
   }
 
-  .opening_box section {
-    display: flex;
-    margin-left: 0.6rem;
-    line-height: 1rem;
-    width: 90%;
-    border-bottom: 1px #E5E5E5 solid;
-  }
+  /*.opening_box section {*/
+  /*display: flex;*/
+  /*margin-left: px2rem(20);*/
+  /*line-height: 1rem;*/
+  /*width: 90%;*/
+  /*border-bottom: 1px #E5E5E5 solid;*/
+  /*}*/
 
-  .opening_box section {
-    input, select {
-      border: none;
-      box-sizing: border-box;
-      font-size: 14px; /*px*/
-      color: #333;
-      outline: none;
-      background: #fff;
-      height: 1rem;
-    }
+  /*.opening_box section {*/
+  /*input, select {*/
+  /*border: none;*/
+  /*box-sizing: border-box;*/
+  /*font-size: 14px; !*px*!*/
+  /*color: #333;*/
+  /*outline: none;*/
+  /*background: #fff;*/
+  /*height: 1rem;*/
+  /*}*/
 
-  }
+  /*}*/
 
-  .opening_box section span {
-    font-family: PingFangSC-Regular;
-    color: #444444;
-    font-size: .4rem;
-    display: inline-block;
-    width: px2rem(130);
-  }
+  /*.opening_box section span {*/
+  /*font-family: PingFangSC-Regular;*/
+  /*color: #444444;*/
+  /*font-size: .4rem;*/
+  /*display: inline-block;*/
+  /*width: px2rem(130);*/
+  /*}*/
 
-  .opening_box section .limit {
-    color: #0096FE;
-    font-family: PingFangSC-Regular;
-  }
+  /*.opening_box section .limit {*/
+  /*color: #0096FE;*/
+  /*font-family: PingFangSC-Regular;*/
+  /*}*/
 
-  .opening_box section .getpassword {
-    display: inline-block;
-    text-align: center;
-    line-height: 1.5rem;
-    font-size: 0.2rem;
-    width: 2rem;
-    height: 1rem;
-    border: 1px solid #2B74FE;
-    color: #2B74FE;
-    /* border-radius:6px; */
-  }
+  /*.opening_box section .getpassword {*/
+  /*display: inline-block;*/
+  /*text-align: center;*/
+  /*line-height: 1.5rem;*/
+  /*font-size: 0.2rem;*/
+  /*width: 2rem;*/
+  /*height: 1rem;*/
+  /*border: 1px solid #2B74FE;*/
+  /*color: #2B74FE;*/
+  /*!* border-radius:6px; *!*/
+  /*}*/
 
   .opening_box .photo {
     margin-left: 0.6rem;
@@ -372,7 +243,6 @@
     width: 90%;
     background-size: 0.7rem 0.7rem;
     background-position: .2rem .2rem;
-    border-bottom: 1px #E5E5E5 solid;
     display: flex;
 
     .words {
@@ -424,22 +294,22 @@
   }
 
   .bang {
-    margin-left: 0.5rem;
+    margin-left: px2rem(20);
     background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.4rem 0.4rem;
-    font-size: 0.35rem;
+    background-size: px2rem(16) px2rem(16);
+    font-size: px2rem(12);
     color: #808080;
-    padding: 0 0.5rem;
+    padding: 0 px2rem(20);
 
-  }
-
-  .no {
-    background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.4rem 0.4rem;
+    &.no {
+      background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
+      background-size: px2rem(16) px2rem(16);
+    }
   }
 
   .inputBox2 {
     padding-left: px2rem(12);
+    font-size: px2rem(14);
     text-align: right;
   }
 
@@ -529,5 +399,6 @@
     margin: px2rem(20) auto 0;
     text-align: center;
   }
+
 
 </style>

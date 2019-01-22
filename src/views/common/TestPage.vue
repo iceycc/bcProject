@@ -17,7 +17,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
   .msg{
     width: 100%;
     margin-top: px2rem(40);

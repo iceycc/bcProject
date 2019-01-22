@@ -178,7 +178,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   .top {
     padding: 0 px2rem(20) px2rem(20);

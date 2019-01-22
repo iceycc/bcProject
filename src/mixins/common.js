@@ -109,10 +109,10 @@ export const CheckAccountMixin ={
       }
       else if (type == 2) { // 评估过
         // 2的话
-        this.toPreProduct() // 评估过判断是否去哪里
+        this.redirectByFromPage() // 评估过判断是否去哪里
 
       } else {
-        this.toPreProduct() // 评估过判断是否去哪里
+        this.redirectByFromPage() // 评估过判断是否去哪里
       }
     },
   }

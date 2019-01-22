@@ -26,7 +26,7 @@ export default {
       isfinancial: '0' // h5活动页外链过来的 登录一下携带 members_id 跳走
     }
   },
-  mixins: [checkOpenApiAndH5, Mixins.HandleMixin],
+  mixins: [checkOpenApiAndH5, Mixins.redirectByFromPage],
   created() {
     // this.checkProductType()
   },
@@ -322,7 +322,7 @@ export default {
     loginSuccess(res) {
       this.setComState({type: 'ISLogin', value: true})
       this.setComState({type: 'Infos', value: res})
-      this.toPreProduct()
+      this.redirectByFromPage()
     }
   },
 

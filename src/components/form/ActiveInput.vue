@@ -165,7 +165,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .input-box {
     box-sizing: border-box;

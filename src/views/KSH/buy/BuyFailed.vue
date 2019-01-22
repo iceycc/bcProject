@@ -99,7 +99,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
   .app {
     width: 100%;
     margin: 0 auto;

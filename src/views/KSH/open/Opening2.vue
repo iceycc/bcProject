@@ -1,27 +1,12 @@
 <template>
   <div class="warp">
-    <app-bar title="信息填写"></app-bar>
-    <section class="wrapicon">
-      <section class="circle left">
-                <span class="line1">
-                    <img :src='stepImg' alt="">
-                </span>
-        <span class="step-text">开户信息验证</span>
-      </section>
-      <section class="circle right">
-                 <span class="line2 hui">
-                    <img :src='stepImg' alt="">
-                </span>
-        <span class="step-text">绑定银行卡</span>
-      </section>
-    </section>
+    <app-bar title="绑定银行卡"></app-bar>
+    <open-head :options="[
+    {text: '开户信息验证', active: true},
+    {text: '绑定银行卡', active: true}
+    ]"></open-head>
     <div class="opening_box">
       <section class="bank">
-        <!--<span style="padding-right: 0px" class="left-p">选择银行</span>-->
-        <!--<input type="text" name="back" placeholder=" 请选择银行" v-model="data.ORG_ID">-->
-        <!--<span  class="limit">银行限额</span>-->
-        <!--<Bank-select class="bank-box" :text="bankText" :options="bankList" @getValue="getBank"-->
-        <!--title="银行列表" xiane="false"></Bank-select>-->
       </section>
       <section class="input-box">
         <p class="left-p">选择银行</p>
@@ -101,9 +86,8 @@
 <script>
   import {PageName, BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
-  import BankSelect from '@/components/commons/BankSelect'
   import Opening2Mixins from './Opening2'
-  import util from "../../../libs/util";
+  import OpenHead from '@/components/opening/OpenHead'
   import ComUpSelect from '@/components/commons/UpSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import BankCardLimit from '@/components/KSH/BankCardLimit'
@@ -144,9 +128,7 @@
         bankList: [],
         bank: '-1',
         bankText: '请选择开户银行',
-        stepImg: require('@/assets/images/account_icon_green2@2x.png'),
-        stepImg2: require('@/assets/images/step2@2x.png'),
-        stepImg3: require('@/assets/images/step3.png'),
+
         AllBankListObj: {},
         errMsg: '',
         checkBankName1: false,
@@ -162,10 +144,10 @@
     },
     mixins: [Opening2Mixins],
     components: {
-      BankSelect,
       ComUpSelect,
       PassWordZhengzhou,
-      BankCardLimit
+      BankCardLimit,
+      OpenHead
     },
     watch: {
       tel(n, o) {
@@ -345,7 +327,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .warp {
     height: 100%;

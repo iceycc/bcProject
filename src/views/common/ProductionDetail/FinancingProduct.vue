@@ -218,7 +218,7 @@
         IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [Register,  Mixins.redirectByFromPage],
     computed: {
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
@@ -444,7 +444,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   html, body {
     width: 100%;

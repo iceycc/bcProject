@@ -66,7 +66,7 @@
   import API from "@/service";
 
   export default {
-    mixins: [Mixins.StoreMixin],
+    mixins: [Mixins.storeMixin],
     data() {
       return {
         datas: {},
@@ -146,7 +146,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .buytitle {
     width: 92%;

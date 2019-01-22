@@ -67,7 +67,7 @@
 </template>
 
 <script>
-    import ActiveInput from '@/components/commons/ActiveInput'
+    import ActiveInput from '@/components/form/ActiveInput'
     import ErrMsg from '@/components/commons/ErrMsg'
     import API from "@/service";
     import PassInput from '@/components/password/PassInput'
@@ -100,7 +100,7 @@
                 MESSAGE_TOKEN:''
             }
         },
-        mixins:[Mixins.HandleMixin],
+        mixins:[Mixins.reloadByPassWordErr],
         created() {
           this.getErrMsg((beforeInfo)=>{
                 this.IDCardNum = beforeInfo.USER_CARD_ID
@@ -213,7 +213,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/px2rem";
+
 
     .m-form {
         width: 100%;

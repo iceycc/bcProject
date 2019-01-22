@@ -46,7 +46,7 @@
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Bus from '@/plugin/bus'
   import util from "libs/util";
-  // import {HandleMixin, } from '@/mixins'
+  // import {reloadByPassWordErr, } from '@/mixins'
   import Mixins from "@/mixins";
 
 
@@ -69,7 +69,7 @@
         banck: '',
       }
     },
-    mixins: [Mixins.HandleMixin],
+    mixins: [Mixins.reloadByPassWordErr],
     components: {
       PassWordZhengzhou
     },

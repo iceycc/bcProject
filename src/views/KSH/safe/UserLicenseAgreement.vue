@@ -31,7 +31,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/px2rem";
+
     .box{
         box-sizing: border-box;
         width: 100%;

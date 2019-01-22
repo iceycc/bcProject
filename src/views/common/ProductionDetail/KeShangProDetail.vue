@@ -207,7 +207,7 @@
 
       };
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, Register],
+    mixins: [ Mixins.redirectByFromPage, Register],
     computed: {
       // swiper() {
       //   return this.$refs.mySwiper.swiper
@@ -449,7 +449,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
   /*@import "./swiper.scss";*/
   html, body {
     width: 100%;

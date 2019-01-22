@@ -203,7 +203,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .bgbox {
     width: 100%;

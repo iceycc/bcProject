@@ -48,7 +48,7 @@
   import {LsName, BusName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import PassInput from '@/components/password/PassInput'
-  // import {HandleMixin,} from '@/mixins'
+  // import {reloadByPassWordErr,} from '@/mixins'
   import Mixins from "@/mixins";
 
 
@@ -82,7 +82,7 @@
         }
       }
     },
-    mixins: [Mixins.HandleMixin,''],
+    mixins: [''],
     components: {
       PassInput
     },
@@ -204,7 +204,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .warp {
     width: 100%;

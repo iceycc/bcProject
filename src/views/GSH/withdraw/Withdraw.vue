@@ -123,7 +123,7 @@
         }
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [ Mixins.queryStatus],
     created() {
       this.getUserInfos()
       this.ACC_REST = this.$route.query.ACC_REST || '0'
@@ -296,7 +296,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .rechargetitle {
     padding-left: px2rem(20);

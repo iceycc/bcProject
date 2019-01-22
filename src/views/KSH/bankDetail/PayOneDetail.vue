@@ -56,7 +56,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   .app {
     width: 100%;

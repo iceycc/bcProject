@@ -238,7 +238,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   .card-list {
     padding-top: px2rem(30);

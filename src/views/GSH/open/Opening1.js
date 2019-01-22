@@ -9,16 +9,16 @@ export default {
   data() {
     return {
       // 配置不同标签的展示
-      DOMShow: {
-        USER_NAME: true,
-        USER_CARD_ID: true,// 身份证号码
-        USER_DUTY:false,// 职业
-        USER_EDUCATION: false, //学历
-        ADDRESS: false, // 地址
-        NATION: false, // 民族
-        PHONE: false, // 手机号
-        CARD_INDATE: true, //身份证有效期
-      },
+      // DOMShow: {
+      //   USER_NAME: true,
+      //   USER_CARD_ID: true,// 身份证号码
+      //   USER_DUTY:false,// 职业
+      //   USER_EDUCATION: false, //学历
+      //   ADDRESS: false, // 地址
+      //   NATION: false, // 民族
+      //   PHONE: false, // 手机号
+      //   CARD_INDATE: true, //身份证有效期
+      // },
       DOCS: 'ZZH',
       job: [
         {name: '党的机关、国家机关、群众团体和社会组织、企事业单位负责人', value: '10000'},
@@ -34,7 +34,7 @@ export default {
     }
   },
   created() {
-    console.log('ZZH');
+
   },
   methods: {
     doOpeningFirstFactory() {
@@ -53,89 +53,6 @@ export default {
       this.doOpengingFirst()
 
     },
-    imgToBaseFan(e) {
-      let newsrc = this.getObjectURL(e.target.files[0]);
-      console.log(e.target);
-      this.imgStyle2 = 'width:100%;max-height:100%'
-      util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
-        this.preSrc2 = data
-        this.data.CARD_BACK_FILE = data.split(',')[1]
-        this.idCardFanOcr(data)
-      })
-    },
-    imgToBaseZheng(e) {
-      let newsrc = this.getObjectURL(e.target.files[0]);
-      console.log(e.target);
-      this.imgStyle1 = 'width:100%;max-height:100%'
-      util.imgScale(newsrc, e.target.files[0], 4).then((data) => {
-        this.preSrc1 = data
-        this.data.CARD_FRONT_FILE = data.split(',')[1]
-        this.idCardZhengOcr(data)
-      })
-    },
-    //建立一個可存取到該file的url
-    getObjectURL(file) {
-      let url = null;
-      // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
-      if (window.createObjectURL != undefined) { // basic
-        url = window.createObjectURL(file);
-      } else if (window.URL != undefined) { // mozilla(firefox)
-        url = window.URL.createObjectURL(file);
-      } else if (window.webkitURL != undefined) { // webkit or chrome
-        url = window.webkitURL.createObjectURL(file);
-      }
-      return url;
-    },
-    /**
-     * 身份证 ocr
-     */
-
-
-    idCardZhengOcr() {
-      let params = {
-        PHONE_NUM:this.data.PHONE,
-        TYPE: 'ID_CARD_FRONT_PHONE_OCR',
-        IDENT_PHOTO:encodeURIComponent(this.data.CARD_FRONT_FILE),
-        MARK: '1',
-      }
-      API.open.IdCardFrontPhoneOcr(params, (res) => {
-        this.data.USER_NAME = res.ID_NAME
-        this.data.USER_CARD_ID = res.ID_NUMBER
-        this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
-        // this.data.ADDRESS = res.ADDRESS
-
-        // this.checkID()
-        // this.data.CREDENTIAL_AURL = res.SUN_ECM_CONTENT_ID
-      })
-    },
-    // TYPE	请求类型
-    // ORG_ID	机构ID
-    // PHONE_NUM	手机号码
-    // IDENT_PHOTO // 身份证图片
-    // MARK // 身份证正反面标识
-
-
-    idCardFanOcr() {
-      let params = {
-        PHONE_NUM:this.data.PHONE,
-        TYPE: 'ID_CARD_BACK_PHONE_OCR',
-        MARK: '2',
-        IDENT_PHOTO:encodeURIComponent(this.data.CARD_BACK_FILE) ,
-
-      }
-      API.open.IdCardFrontPhoneOcr(params, (res) => {
-        console.log(res.VALIDITY_PERIOD);
-        this.data.USER_CARD_ID_DATA = res.VALIDITY_PERIOD,
-        this.data.IDENT_VLD_DT = this.transformDATA(res.VALIDITY_PERIOD).END
-        this.data.IDENT_LSS_DT = this.transformDATA(res.VALIDITY_PERIOD).STA
-        this.data.PARTNER_ORDER_ID = res.PARTNER_ORDER_ID
-
-        // IDENT_LSS_DT	证件签发日期
-        // IDENT_VLD_DT	证件有效期
-
-      })
-    },
-
     /**
      *注册
      */

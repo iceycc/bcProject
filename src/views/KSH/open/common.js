@@ -12,7 +12,7 @@ export default {
   },
   created() {
   },
-  mixins: [Mixins.HandleMixin],
+  mixins: [Mixins.redirectByFromPage],
   methods: {
     transformDATA(data = "2016.10.14-2026.10.14") {
       data = '2016.10.14-2026.10.14'
@@ -53,7 +53,7 @@ export default {
           if (step == 3) {
             // todo登陆成功后判断拿来的去哪里
             this.setComState({type:'ISLogin',value:true})
-            this.toPreProduct()
+            this.redirectByFromPage()
             // this.$router.push({name:PageName.Login})
           }
         }

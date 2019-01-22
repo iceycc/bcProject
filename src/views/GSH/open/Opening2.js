@@ -6,21 +6,13 @@ import {ORG_ID_NUM} from '@/Constant'
 import {imgSrc} from "@/Constant";
 import commons from './common'
 import Mixins from '@/mixins'
-let time = 60
-let pollTimer;
+
 export default {
-  mixins: [commons,Mixins.HandleMixin,Mixins.UtilMixin],
+  mixins: [commons, Mixins.redirectByFromPage],
   data() {
     return {
       ACC_FLAG: '0',
-      pwd: '',
-      pwdLen: '',
-      pwCode: ''
     }
-  },
-  created() {
-    console.log('ZZH');
-
   },
   filters: {
     CARD_NO_Fliter(n) {
@@ -32,49 +24,17 @@ export default {
     }
   },
   methods: {
-    // msg倒计时
-    timeDown() {
-      let sTime = time
-      this.disable = true
-      let timer = setInterval(() => {
-        if (sTime == 0) {
-          this.codeText = '重新发送'
-          this.disable = false
-          clearInterval(timer)
-          return
-        }
-        sTime--
-        this.codeText = `${sTime}s`
-      }, 1000)
-    },
-    //
-
-
-    /**
-     * 银行账户属性查询
-     */
-    checkBankType() {
-      API.common.apiUserAccountProperties({
-        TYPE: 'API_USER_ACCOUNT_PROPERTIES',
-        BIND_AC_NO: this.data.CARD_NO + ''
-      }, res => {
-        this.ACC_FLAG = res.ACC_FLAG
-      })
-    },
-    // 校验身份证
-    checkID() {
-    },
     // 点击获取验证码
-    clickMsgCodeHandle() {
+    clickMsgCodeHandle(success, error) {
       let PHONE = this.tel
       PHONE = PHONE + ''
       console.log(PHONE);
       if (util.Check.tel(PHONE, true)) return;
-      this.timeDown()
-      this.getMsgCode(PHONE)
+      success()
+      this.getMsgCode(PHONE, error)
     },
     // 获取短信验证码
-    getMsgCode(PHONE) {
+    getMsgCode(PHONE, error) {
       let data = {
         TYPE: 'API_SEND_PHONE_CODE',
         PHONE_NUM: PHONE,
@@ -85,13 +45,7 @@ export default {
         Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
       }, err => {
-        this.codeText = '重新发送'
-        this.disable = false
-        try {
-          clearInterval(timer)
-        } catch (e) {
-
-        }
+        error()
         console.log(err);
       })
     },
@@ -162,8 +116,8 @@ export default {
             REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
           })
           // Bus.$emit(BusName.showToast, res.MSG)
-          this.setComState({type:'ISLogin',value:true})
-          this.toPreProduct()
+          this.setComState({type: 'ISLogin', value: true})
+          this.redirectByFromPage()
         },
         err => {
           this.errMsg = err
@@ -173,22 +127,6 @@ export default {
           console.log(err);
           this.disable = false
         })
-      // this.pollHandle()
-    },
-    // 注册第一次返回失败 需要轮询 查询 是否成功
-    pollHandle() {
-      let conut = 0
-      pollTimer = setInterval(() => {
-        conut++
-        console.log(conut);
-        if (conut == 6) {
-          this.Londing.close()
-          clearInterval(pollTimer)
-          return
-        }
-        this.Londing.open()
-        this.checkID()
-      }, 5000)
     },
     /**
      * 获取支持的银行列表
@@ -199,15 +137,8 @@ export default {
         res.BAND_CARD_LIST.forEach(item => {
           obj[item.BANK_CARD_BIN] = item.BANK_NAME
         })
-        this.AllBankListObj = obj
-        this.bankList = res.SUPPORT_BANK_LIST.map((item) => {
-          return {
-            name: item.BANK_NAME,
-            value: 0,
-            src: imgSrc + item.BANK_LOGO_URL,
-            Index: item.INITIAL
-          }
-        })
+        this.AllBankListObj = obj // 全部银行列表
+        this.supportBankList = res.SUPPORT_BANK_LIST // 支持的银行列表
       })
     },
   }

@@ -60,19 +60,19 @@ export default [
     path: '/' + PageName.Opening1,
     name: PageName.Opening1,
     component: resolve => require(['views/ZZH/open/Opening1.vue'], resolve),
-    meta: {keepAlive: false, title: '信息填写', needLogin: false}
+    meta: {keepAlive: false, title: '开户', needLogin: false}
   },
   {
     path: '/' + PageName.Opening2,
     name: PageName.Opening2,
     component: resolve => require(['views/ZZH/open/Opening2.vue'], resolve),
-    meta: {keepAlive: false, title: '信息填写', needLogin: false}
+    meta: {keepAlive: false, title: '绑定银行卡', needLogin: false}
   },
   {
     path: '/' + PageName.Opening3,
     name: PageName.Opening3,
     component: resolve => require(['views/ZZH/open/Opening3.vue'], resolve),
-    meta: {keepAlive: false, title: '信息填写', needLogin: false}
+    meta: {keepAlive: false, title: '设置密码', needLogin: false}
   },
   /**
    * rechange

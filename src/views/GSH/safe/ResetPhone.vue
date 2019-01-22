@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import ActiveInput from '@/components/commons/ActiveInput'
+  import ActiveInput from '@/components/form/ActiveInput'
   import ErrMsg from '@/components/commons/ErrMsg'
   import API from "@/service";
   import Bus from '@/plugin/bus'
@@ -143,7 +143,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .m-form {
     width: 100%;

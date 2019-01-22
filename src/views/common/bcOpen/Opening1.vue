@@ -96,7 +96,6 @@
       <div class="IDphotoPositive"></div>
       <div class="IDphotoback"></div>
     </div>
-    <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
     <button :class="{tijiao:true,active:canClick}" @click="doOpeningFirstFactory" :disabled="!canClick">下一步</button>
     <!--<button class="tijiao" @click="doOpeningFirstFactory">下一步</button>-->
   </div>
@@ -135,7 +134,6 @@
         picZheng: require('@/assets/images/id-zheng.jpg'),
         picFan: require('@/assets/images/id-fan.jpg'),
 
-        errMsg: '',
         // 配置不同标签的展示
         DOMShow: {
           USER_NAME: true,
@@ -360,11 +358,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
-
-  body {
-    font-size: .3rem;
-  }
 
   .infos {
     padding-left: px2rem(20);
@@ -375,7 +368,7 @@
     text-align: center;
     display: flex;
     position: relative;
-    margin-bottom: .3rem;
+    margin-bottom: px2rem(12);
     margin-top: px2rem(4);
 
     .step-text {
@@ -390,11 +383,9 @@
 
     .line1, .line2, .line3 {
       position: relative;
-
       img {
-        width: .5rem;
+        width: px2rem(16);
       }
-
       &:after {
         display: block;
         position: absolute;
@@ -404,7 +395,7 @@
         content: '';
         width: 45%;
         background: #92d048;
-        height: .1rem;
+        height: px2rem(4);
         overflow: hidden;
 
       }
@@ -432,7 +423,7 @@
         content: '';
         width: 45%;
         background: #92d048;
-        height: .1rem;
+        height: px2rem(4);
         overflow: hidden;
       }
     }
@@ -497,26 +488,21 @@
 
   .opening_box {
     .photo {
-      margin-left: 0.6rem;
+      margin-left: px2rem(20);
       background-repeat: no-repeat;
       background-color: #fff;
-      line-height: 1rem;
       width: 90%;
-      background-size: 0.7rem 0.7rem;
-      background-position: .2rem .2rem;
       display: flex;
-
       .words {
         padding-left: px2rem(20);
         font-size: px2rem(12);
         color: #A3DBFF;
       }
     }
-
     section {
       display: flex;
-      margin-left: 0.6rem;
-      line-height: 1rem;
+      margin-left: px2rem(20);
+      line-height: px2rem(44);
       width: 90%;
       border-bottom: 1px #E5E5E5 solid;
     }
@@ -524,17 +510,17 @@
     input, select {
       border: none;
       box-sizing: border-box;
-      font-size: 14px; /*px*/
+      font-size: px2rem(14); /*px*/
       color: #333;
       outline: none;
       background: #fff;
-      height: 1rem;
+      height: px2rem(44);
     }
 
     span {
       font-family: PingFangSC-Regular;
       color: #444444;
-      font-size: .4rem;
+      font-size:px2rem(14);
       display: inline-block;
       width: px2rem(130);
     }
@@ -543,23 +529,11 @@
       color: #0096FE;
       font-family: PingFangSC-Regular;
     }
-
-    .getpassword {
-      display: inline-block;
-      text-align: center;
-      line-height: 1.5rem;
-      font-size: 0.2rem;
-      width: 2rem;
-      height: 1rem;
-      border: 1px solid #2B74FE;
-      color: #2B74FE;
-      /* border-radius:6px; */
-    }
   }
 
   .cameraphoto {
     flex: 1;
-    padding-left: 6%;
+    padding-left: px2rem(20);
   }
 
   .cameraphotoimg {
@@ -584,38 +558,17 @@
     color: #fff;
     background: #ccc;
     border-radius: px2rem(6);
-    line-height: 1.2rem;
+    line-height: px2rem(44);
+    height: px2rem(44);
     width: px2rem(255);
     margin: px2rem(30) auto px2rem(10);
     text-align: center;
-    border: 0px;
+    border: none;
     outline: none;
     display: block;
-
     &.active {
       background: #508CEE;
     }
-  }
-
-  .Tips {
-    margin-top: 0.8rem;
-    background-color: #FF5B05;
-    width: 60%;
-  }
-
-  .bang {
-    margin-left: 0.5rem;
-    background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.4rem 0.4rem;
-    font-size: 0.35rem;
-    color: #808080;
-    padding: 0 0.5rem;
-
-  }
-
-  .no {
-    background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.4rem 0.4rem;
   }
 
   .inputBox2 {
@@ -632,82 +585,6 @@
     height: px2rem(80) !important;
     opacity: 0;
     vertical-align: middle;
-  }
-
-  .selectStyle {
-    width: px2rem(220);
-    font-size: .4rem;
-  }
-
-  .page {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 100;
-
-    .docs {
-      box-sizing: border-box;
-      border: none;
-      width: 100%;
-      height: 90%;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 .2rem;
-    }
-
-    .docsself {
-      box-sizing: border-box;
-      border: none;
-      width: 100%;
-      height: 90%;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 .3rem;
-      /*style="padding: 20px 20px 0;font-size: 12px" */
-      h2,
-      h5 {
-        font-size: px2rem(11) !important;
-        color: #000 !important;
-      }
-
-      p {
-        font-size: px2rem(9) !important;
-        color: #000 !important;
-        line-height: px2rem(15);
-      }
-
-    }
-
-    .indocs {
-      border: none;
-      width: 100%;
-      height: 100%;
-    }
-
-    .btn {
-      padding: 0 1rem;
-      text-align: center;
-
-      button {
-        width: 3.5rem;
-        margin-right: .4rem;
-      }
-    }
-  }
-
-  .msg-err {
-    font-size: px2rem(12);
-    color: #fff;
-    background-color: #FF5B05;
-    border-radius: px2rem(5);
-    width: px2rem(204);
-    height: px2rem(29);
-    line-height: px2rem(29);
-    margin: px2rem(20) auto 0;
-    text-align: center;
   }
 
 </style>

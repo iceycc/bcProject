@@ -17,7 +17,7 @@ export default {
   created() {
     this.ORG_ID = util.storage.session.get('ORG_ID')
   },
-  mixins: [Mixins.HandleMixin],
+  mixins: [Mixins.reloadByPassWordErr],
   methods: {
     goNext() {
       console.log(this.proID);

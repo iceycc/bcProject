@@ -113,7 +113,7 @@
       UpSelect,
       IconFont
     },
-    mixins: [Mixins.UtilMixin, RechangeMixins],
+    mixins: [Mixins.queryStatus, RechangeMixins],
     created() {
       this.getInfos()
       this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
@@ -223,7 +223,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .rechargetitle {
     padding-left: 0.5rem;

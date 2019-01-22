@@ -241,7 +241,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/px2rem";
+
 
   i {
     font-style: normal;

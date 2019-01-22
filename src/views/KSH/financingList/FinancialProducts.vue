@@ -419,7 +419,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   /*.pro .header .goBackImg {*/
   /*display: none !important;*/

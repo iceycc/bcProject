@@ -97,7 +97,7 @@
         APP_FLAG_TEXT: '比财'
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin, LoginMixins],
+    mixins: [Mixins.redirectByFromPage, LoginMixins],
     components: {
       PassWordZhengzhou
     },
@@ -343,7 +343,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .logo-box {
     font-size: 0;

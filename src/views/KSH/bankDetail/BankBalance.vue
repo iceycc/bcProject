@@ -43,7 +43,7 @@
         WITH_DRAWABLE_CASH:''
       }
     },
-    mixins: [Mixins.HandleMixin,BankBalanceMixins],
+    mixins: [BankBalanceMixins],
     filters: {
       preLcAssetFilter(val) {
         if (!val) return ''
@@ -78,7 +78,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   i {
     font-style: normal;

@@ -239,7 +239,7 @@
         IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Register, Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [Register,  Mixins.redirectByFromPage],
     computed: {
       swiper() {
         return this.$refs.mySwiper.swiper
@@ -478,7 +478,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
   /*@import "./swiper.scss";*/
   html, body {
     width: 100%;

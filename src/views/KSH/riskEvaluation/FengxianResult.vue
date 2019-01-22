@@ -31,7 +31,7 @@
         target: '',
       }
     },
-    mixins: [Mixins.UtilMixin],
+    mixins: [Mixins.redirectByFromPage],
     created() {
       let data = this.$route.query
       let RISK_LEVEL = data.RISK_LEVEL
@@ -62,7 +62,7 @@
       goNext() {
         // 跳转到购买
         try {
-          this.toPreProduct()
+          this.redirectByFromPage()
         } catch (e) {
           this.$router.push({
             name: PageName.ProductList
@@ -75,7 +75,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
 
   .app {
     width: 100%;

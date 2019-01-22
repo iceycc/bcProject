@@ -104,7 +104,7 @@
         return `最多可支取金额${util.formatNum(num)}元`
       }
     },
-    mixins: [Mixins.HandleMixin, Mixins.UtilMixin],
+    mixins: [ Mixins.queryStatus],
     watch: {},
     created() {
       this.redeemData = this.getComState.redeemData
@@ -291,7 +291,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
+
   /*@import "~@/assets/iconfont/iconfont.css";*/
 
   i {
