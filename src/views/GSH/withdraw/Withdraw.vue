@@ -23,17 +23,6 @@
       <span class="span" style="color:#389CFF"
             @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
     </section>
-    <section class="inputAmount">
-            <span class="Amount">
-                验证码
-            </span>
-      <input type="text" v-model="msgCode" placeholder="请输入验证码">
-      <button
-        :disabled="msgdisable"
-        @click="getMsg"
-        class="button">{{codeText}}
-      </button>
-    </section>
     <p class="info1">
       本卡当前余额{{ACC_REST | formatNum}}元
       <!-- 全部提现UI图变位置了 -->
@@ -41,7 +30,12 @@
     <p class="info1">
       当前可提现金额{{WITH_DRAWABLE_CASH | formatNum}}元
     </p>
-    <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认提现</button>
+    <submit-button
+      class="submit-btn"
+      text="确认提现"
+      :canSubmit="canClick"
+      @submit="doNext"
+    ></submit-button>
     <up-select
       title="选择银行卡"
       :show="upseletShow"
@@ -62,6 +56,7 @@
   import Mixins from '@/mixins'
   import IconFont from '@/components/commons/IconFont'
   import UpSelect from '@/components/KSH/UpSelect'
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
 
   let time = 60
   let timer;
@@ -103,6 +98,7 @@
       AppBar,
       PassWordZhengzhou,
       IconFont,
+      SubmitButton,
       UpSelect
     },
     watch: {
@@ -123,7 +119,7 @@
         }
       }
     },
-    mixins: [ Mixins.queryStatus],
+    mixins: [Mixins.queryStatus],
     created() {
       this.getUserInfos()
       this.ACC_REST = this.$route.query.ACC_REST || '0'
@@ -237,7 +233,7 @@
                     name: PageName.WithdrawSuccess,
                     query: {
                       money: this.APPLY_AMOUNT,
-                      RES_MSG2:result.RES_MSG2,
+                      RES_MSG2: result.RES_MSG2,
                       ...res
                     }
                   })
@@ -343,6 +339,7 @@
     line-height: px2rem(50);
     font-size: px2rem(14);
     border-bottom: 1px solid #EEEEF0;
+    margin-bottom: px2rem(10);
 
     .button {
       vertical-align: middle;
@@ -387,23 +384,6 @@
     }
   }
 
-  .tijiao {
-    font-size: px2rem(18);
-    color: #fff;
-    background: #ccc;
-    border-radius: px2rem(6);
-    line-height: 1.2rem;
-    width: px2rem(255);
-    margin: px2rem(40) auto 0;
-    text-align: center;
-    border: 0px;
-    outline: none;
-    display: block;
-
-    &.active {
-      background-color: #508CEE;
-    }
-  }
 
   .minshengbankLogo {
     width: px2rem(50);
@@ -418,5 +398,9 @@
     span {
       color: #389CFF
     }
+  }
+
+  .submit-btn {
+    margin-top: px2rem(160);
   }
 </style>

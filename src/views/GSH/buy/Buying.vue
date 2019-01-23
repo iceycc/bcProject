@@ -26,30 +26,24 @@
     <div class="buydetails">
       <p style="margin-top: 0.3rem">存入金额</p>
       <span class="buydetailsmoney">￥</span>
-      <!--<input type="number" :placeholder="proDetail.MIN_AMOUNT" v-model="APPLY_AMOUNT">-->
       <input type="number" :placeholder="placeholder" v-model="APPLY_AMOUNT">
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
     </div>
-    <!--<p class="canpay">可投金额 {{proDetail.REMAIN_AMT | formatNum}}元</p>-->
-    <section class="inputAmount">
-            <span class="Amount">
-                验证码
-            </span>
-      <input type="tel" v-model="msgCode" placeholder="输入验证码">
-      <button
-        :disabled="msgdisable"
-        @click="getCode"
-        class="button">{{codeText}}
-      </button>
-    </section>
-    <button :class="{tijiao:true,active:canClick}" @click="goBuy" :disabled="!canClick">存入</button>
-    <p @click="agree =!agree"
-       :class="{'bang':true,'no':agree == false}">我已阅读并同意
-      <a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement('buy')">《产品服务协议》</a>
-    </p>
-
+    <submit-button
+      class="btn"
+      text="存入"
+      :canSubmit="canClick"
+      @submit="goBuy"
+    ></submit-button>
+    <sign-areement
+      :agree="agree"
+      @sign="agree =!agree"
+      :options="[
+          {name:'《节节高产品服务协议（个人活期版）》',type:'buy'}
+        ]"
+    ></sign-areement>
   </div>
 </template>
 <script>
@@ -58,11 +52,15 @@
   import API from "@/service"
   import Mixins from "@/mixins";
   import util from "libs/util";
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
+  import SignAreement from '@/components/commons/SignAreement' // 常规的input组件
+
   let time = 60
   let timer;
   export default {
     data() {
       return {
+
         proDetail: {},
         APPLY_AMOUNT: null,
         payNum: '0',
@@ -79,7 +77,10 @@
         TEAM_ID: ''
       }
     },
-
+    components: {
+      SubmitButton,
+      SignAreement
+    },
     computed: {
       placeholder() {
         let num = this.proDetail.MIN_AMOUNT || '0'
@@ -93,7 +94,7 @@
         }
       },
       canClick() {
-        if (Number(this.APPLY_AMOUNT) <= Number(this.payNum) && Number(this.APPLY_AMOUNT) >= this.proDetail.MIN_AMOUNT && this.msgCode && this.agree) {
+        if (Number(this.APPLY_AMOUNT) <= Number(this.payNum) && Number(this.APPLY_AMOUNT) >= this.proDetail.MIN_AMOUNT && this.agree) {
           return true
         } else {
           return false
@@ -163,15 +164,7 @@
           }
         })
       },
-      getAgreement(type) {
-        this.agree = true
-        this.$router.push({
-          name: PageName.DocsPage,
-          query: {
-            type,
-          }
-        })
-      },
+
       checkAPPLY_AMOUNT(num) {
         let a = this.proDetail.INCRE_AMOUNT
         if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
@@ -382,8 +375,8 @@
         vertical-align: middle;
         padding-top: -0.5rem;
         display: inline-block;
-        padding-left: 0.4rem;
-        font-size: 0.35rem;
+        padding-left: px2rem(20);
+        font-size: px2rem(14);
       }
     }
 
@@ -398,11 +391,6 @@
     }
   }
 
-  .canpay {
-    font-size: 0.3rem;
-    padding: px2rem(20);
-    color: #666
-  }
 
   .buysuccessdetails {
     padding: 0 px2rem(20);
@@ -425,7 +413,7 @@
     position: relative;
     padding: 0 px2rem(20);
     height: 2.2rem;
-    font-size: 0.4rem;
+    font-size: px2rem(20);
 
     .close-icon {
       position: absolute;
@@ -440,100 +428,46 @@
 
     .buydetailsmoney {
       width: 1rem;
-      margin-top: 0.5rem;
-      font-size: 0.6rem;
+      margin-top: px2rem(20);
+      font-size: px2rem(24);
     }
 
     input {
       width: 50%;
       border: none;
       box-sizing: border-box;
-      font-size: 14px; /*px*/
+      font-size: px2rem(24);
       color: #333;
-      line-height: 40px;
+      line-height: px2rem(44);
+      height: px2rem(44);
       outline: none;
     }
 
     ::-webkit-input-placeholder {
-      font-size: 0.6rem
+      font-size: px2rem(24)
     }
 
     /* 使用webkit内核的浏览器 */
     :-moz-placeholder {
-      font-size: 0.6rem
+      font-size: px2rem(24)
+
     }
 
     /* Firefox版本4-18 */
     ::-moz-placeholder {
-      font-size: 0.6rem
+      font-size: px2rem(24)
+
     }
 
     /* Firefox版本19+ */
     :-ms-input-placeholder {
-      font-size: 0.6rem
+      font-size: px2rem(24)
+
     }
   }
 
-  .tijiao {
-    font-size: px2rem(18);
-    color: #fff;
-    background: #ccc;
-    border-radius: px2rem(6);
-    line-height: 1.2rem;
-    width: px2rem(255);
-    margin: px2rem(30) auto px2rem(10);
-    text-align: center;
-    border: 0px;
-    outline: none;
-    display: block;
-
-    &.active {
-      background: #508CEE;
-    }
+  .btn {
+    margin-top: px2rem(200) !important;
   }
 
-  .bang {
-    margin-left: 0.5rem;
-    background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.3rem 0.3rem;
-    font-size: px2rem(12);
-    color: #808080;
-    padding: 0 0.5rem;
-
-  }
-
-  .no {
-    background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.3rem 0.3rem;
-  }
-
-  .inputAmount {
-    padding-left: px2rem(20);
-    height: px2rem(40);
-    line-height: px2rem(40);
-    font-size: px2rem(14);
-    border-bottom: 1px solid #EEEEF0;
-
-    .button {
-      vertical-align: middle;
-      font-size: px2rem(14);
-      width: px2rem(84);
-      height: px2rem(28);
-      line-height: px2rem(28);
-      display: inline-block;
-      border: 1px solid #508CEE;
-      border-radius: px2rem(6);
-      color: #508CEE
-    }
-
-    input {
-      padding-left: px2rem(10);
-      width: px2rem(200);
-      border: none;
-      box-sizing: border-box;
-      font-size: px2rem(14);
-      color: #333;
-      outline: none;
-    }
-  }
 </style>

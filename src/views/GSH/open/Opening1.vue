@@ -47,8 +47,12 @@
       ></normal-input>
     </div>
     <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
-    <button class="tijiao" @click="doOpeningFirstFactory">下一步</button>
-
+    <submit-button
+      class="submit-btn"
+      text="下一步"
+      :canSubmit="true"
+      @submit="doOpeningFirstFactory"
+    ></submit-button>
     <!--todo 抽离开户页面的文档组件-->
     <p
       :class="{'bang':true,'no':agree == false}"
@@ -68,6 +72,7 @@
   import Opening1Mixins from './Opening1'
   import NormalInput from '@/components/form/NormalInput' // 常规的input组件
   import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
 
 
   export default {
@@ -122,7 +127,8 @@
       JsSelect,
       OpenHead,
       NormalInput,
-      CallToBicai
+      CallToBicai,
+      SubmitButton
     },
     mixins: [Opening1Mixins],
     created() {
@@ -189,52 +195,6 @@
     position: relative;
   }
 
-  /*.opening_box section {*/
-  /*display: flex;*/
-  /*margin-left: px2rem(20);*/
-  /*line-height: 1rem;*/
-  /*width: 90%;*/
-  /*border-bottom: 1px #E5E5E5 solid;*/
-  /*}*/
-
-  /*.opening_box section {*/
-  /*input, select {*/
-  /*border: none;*/
-  /*box-sizing: border-box;*/
-  /*font-size: 14px; !*px*!*/
-  /*color: #333;*/
-  /*outline: none;*/
-  /*background: #fff;*/
-  /*height: 1rem;*/
-  /*}*/
-
-  /*}*/
-
-  /*.opening_box section span {*/
-  /*font-family: PingFangSC-Regular;*/
-  /*color: #444444;*/
-  /*font-size: .4rem;*/
-  /*display: inline-block;*/
-  /*width: px2rem(130);*/
-  /*}*/
-
-  /*.opening_box section .limit {*/
-  /*color: #0096FE;*/
-  /*font-family: PingFangSC-Regular;*/
-  /*}*/
-
-  /*.opening_box section .getpassword {*/
-  /*display: inline-block;*/
-  /*text-align: center;*/
-  /*line-height: 1.5rem;*/
-  /*font-size: 0.2rem;*/
-  /*width: 2rem;*/
-  /*height: 1rem;*/
-  /*border: 1px solid #2B74FE;*/
-  /*color: #2B74FE;*/
-  /*!* border-radius:6px; *!*/
-  /*}*/
-
   .opening_box .photo {
     margin-left: 0.6rem;
     background-repeat: no-repeat;
@@ -272,20 +232,7 @@
     }
   }
 
-  .tijiao {
-    display: block;
-    font-size: px2rem(16);
-    color: #fff;
-    background-color: #508CEE;
-    border-radius: px2rem(4);
-    line-height: 1rem;
-    width: px2rem(255);
-    height: px2rem(44);
-    margin: px2rem(75) auto px2rem(20);
-    text-align: center;
-    border: none;
-    outline: none;
-  }
+
 
   .Tips {
     margin-top: 0.8rem;
@@ -399,6 +346,9 @@
     margin: px2rem(20) auto 0;
     text-align: center;
   }
-
+  .submit-btn{
+    margin-top: px2rem(88);
+    margin-bottom: px2rem(10);
+  }
 
 </style>

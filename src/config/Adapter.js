@@ -43,6 +43,5 @@ switch (ORG_ID + '') {
     }
     break;
 }
-console.log('currentBank', currentBank);
 
 export default currentBank;

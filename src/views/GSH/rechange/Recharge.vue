@@ -36,21 +36,17 @@
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
     </section>
-    <section class="inputAmount" v-if="!write">
-            <span class="Amount">
-                验证码
-            </span>
-      <input type="text" v-model="msgCode" placeholder="输入验证码">
-      <button
-        :disabled="disable"
-        @click="getMsg"
-        class="button">{{codeText}}
-      </button>
-    </section>
-    <button :class="{tijiao:true,active:canClick}" @click="doNext" :disabled="!canClick">确认充值</button>
-    <p :class="{'bang':true,'no':agree == false}" v-if="!write"
-       @click="doAgree">我已阅读并同意<span @click.stop="showPage" style=" color:#0096FE;">《充值委托代扣协议》</span></p>
-
+    <submit-button
+      class="btn"
+      text="确认充值"
+      :canSubmit="canClick"
+      @submit="doNext"
+    ></submit-button>
+    <sign-areement
+      :agree="agree"
+      @sign="agree =!agree"
+      :options="[{name:'《充值委托代扣协议》',type:'recharge'}]"
+    ></sign-areement>
     <up-select
       title="选择银行卡"
       :show="upseletShow"
@@ -69,6 +65,8 @@
   import RechangeMixins from "./Rechange";
   import IconFont from '@/components/commons/IconFont'
   import API from "@/service"
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
+  import SignAreement from '@/components/commons/SignAreement' // 常规的input组件
 
 
   let time = 60
@@ -111,7 +109,9 @@
     },
     components: {
       UpSelect,
-      IconFont
+      IconFont,
+      SubmitButton,
+      SignAreement
     },
     mixins: [Mixins.queryStatus, RechangeMixins],
     created() {
@@ -127,7 +127,7 @@
         }
       },
       canClick() {
-        if (Number(this.APPLY_AMOUNT) && this.msgCode && this.agree) {
+        if (Number(this.APPLY_AMOUNT) && this.agree) {
           return true
         } else {
           return false
@@ -173,9 +173,6 @@
           this.codeText = `${times}s`
         }, 1000)
         this.getCode()
-      },
-      showPage() {
-        this.$router.push({name: PageName.DocsPage, query: {type: 'recharge'}})
       },
       doAgreeHandle() {
         this.agree = true
@@ -327,60 +324,15 @@
     }
   }
 
-  .bang {
-    margin-left: 0.5rem;
-    margin-top: 0.5rem;
-    background: url(~@/assets/images/agree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.4rem 0.4rem;
-    font-size: 0.4rem;
-    color: #808080;
-    padding: 0 0.5rem;
-
-  }
-
-  .no {
-    background: url(~@/assets/images/onagree@3x.png) no-repeat 0 0.05rem;
-    background-size: 0.4rem 0.4rem;
-  }
 
   .minshengbankLogo {
     width: px2rem(50);
   }
-
-  .page {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 100;
-
-    .docs {
-      border: none;
-      width: 100%;
-      height: 90%;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 .2rem;
-    }
-
-    .indocs {
-      border: none;
-      width: 100%;
-      height: 100%;
-    }
-
-    .btn {
-      padding: 0 1rem;
-      text-align: center;
-
-      button {
-        width: 3.5rem;
-        margin-right: .4rem;
-      }
-    }
+  .btn{
+    margin-top: px2rem(160) !important;
   }
+
+
 
 
 </style>

@@ -7,12 +7,12 @@
         <div class="profit">
           <div>
             <p>{{financialData.TOTAL_ASSET - financialData.ACC_REST | formatNum}}</p>
-            <p>总资产</p>
+            <p>存款总资产（元）</p>
           </div>
           <span class="line"></span>
           <div>
             <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
-            <p> 累计到账收益</p>
+            <p>预计最大收益</p>
           </div>
         </div>
       </div>
@@ -39,24 +39,20 @@
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>{{item.ORG_NAME}}</p>
+                <p class="org-name">{{item.ORG_NAME}}</p>
                 <p>持有金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
-                <p>存入时间
+                <p>购买时间
                   <span>{{item.TIME_END}}</span>
                 </p>
-                <p>最长期限
+                <p>到期日期
                   <span>{{item.EXPIRE_TIME}}</span>
                 </p>
-                <p>锁定期
-                  <span>{{item.LOCKUP_PERIOD}}</span>
-
-                </p>
-                <p>存款利率
+                <p>最大存款利率<img class="info" src="@/assets/images/problom2@2x.png" alt="">
                   <span>{{item.RATE}}%</span>
                 </p>
-                <p>预计收益
+                <p>预计最大收益<img class="info" src="@/assets/images/problom2@2x.png" alt="">
                   <span>{{item.EXPECT_INCOME}}</span>
                 </p>
 
@@ -77,7 +73,7 @@
                   <strong>{{item.PRD_NAME}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p>{{item.ORG_NAME}}</p>
+                <p class="org-name">{{item.ORG_NAME}}</p>
                 <p>投资金额（元）
                   <span>{{item.HOLD_AMOUNT | formatNum}}</span>
                 </p>
@@ -372,7 +368,8 @@
             currentPage: this.searchCondition1.pageNo + '',
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
-          };
+          }
+;
           API.bank.getMyInvestOver(data, res => {
 
             let pageList = res.PAGE.retList || [];
@@ -566,6 +563,9 @@
         box-sizing: border-box;
         padding: px2rem(15) px2rem(15) 0 px2rem(15);
 
+        .org-name{
+          color: #999;
+        }
         .detail {
           position: absolute;
           right: px2rem(15);
@@ -584,27 +584,32 @@
         h4 strong {
           color: #333333;
           font-size: px2rem(16);
-          line-height: px2rem(12);
         }
 
         h4 a {
           font-size: px2rem(12);
           color: #508cee;
-          line-height: px2rem(17);
           float: right;
           font-weight: normal;
         }
 
         p {
           color: #666;
-          font-size: px2rem(12);
-          line-height: px2rem(17);
+          font-size: px2rem(14);
+          line-height: px2rem(22);
+          height: px2rem(22);
           padding-bottom: px2rem(8);
           overflow: hidden;
+          vertical-align: middle;
 
           span {
             float: right;
             color: #999999;
+          }
+          .info{
+            margin-left: px2rem(6);
+            width: px2rem(14);
+            height: px2rem(14);
           }
         }
 

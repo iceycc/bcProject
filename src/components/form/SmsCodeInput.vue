@@ -115,7 +115,7 @@
     }
 
     input {
-      text-align: right;
+      text-align: center;
       padding-left: px2rem(10);
       width: px2rem(200);
       border: none;

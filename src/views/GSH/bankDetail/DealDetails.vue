@@ -2,6 +2,10 @@
   <div class="wrap">
     <div class="wrap-top">
       <app-bar title="交易明细"></app-bar>
+      <ul class="w-tap">
+        <li :class="{actvie:cur==1}" @click="tap(1)">交易明细</li>
+        <li :class="{actvie:cur==2}" @click="tap(2)">处理中</li>
+      </ul>
       <ul class="tabs">
         <li class="li-tab" v-for="(item,index) in tabsParam" @click="toggleTabs(index)"
             :class="{active:index==nowIndex}">{{item}}
@@ -49,8 +53,10 @@
                     <span style="flex: 1;color:#E62224;">{{item.TYPE_NAME}}{{item.COMM_TRANS_STATUS_DESC}}</span>
                   </h5>
                   <p>
+                    <!--时间-->
                     <span>{{item.OPERA_DATE}}</span>
-                    <em>{{item.TRANS_AMT_DESC}}</em>
+                    <!--金额-->
+                    <em :class="{'add':item.type}">{{item.TRANS_AMT_DESC}}</em>
                   </p>
                 </li>
 
@@ -76,7 +82,8 @@
     mixins: [''],
     data() {
       return {
-        aaa:'1,100.00',
+        cur: '1',
+        aaa: '1,100.00',
         // 1月分页
         searchCondition: {
           //分页属性
@@ -110,6 +117,11 @@
 
     },
     methods: {
+      tap(index) {
+        if(index==2){
+          this.$router.push({name:PageName.InHanding})
+        }
+      },
       goDetail(item) {
         this.$router.push({name: PageName.PayOneDetail, query: {...item}})
       },
@@ -117,7 +129,7 @@
         console.log(this.nowIndex);
         let winheight = util.getWinSize().winHeight
         let topheight = util.getDivSize('.wrap-top').height
-        let toptabsheight = util.getDivSize('.tabs').height
+        let toptabsheight = util.getDivSize('.tabs').height + util.getDivSize('.w-tap').height
         let tDateheight = this.nowIndex == 3 ? toptabsheight : 0
         let maiheight = winheight - topheight - tDateheight
         console.log(topheight, maiheight, tDateheight)
@@ -519,7 +531,7 @@
         }
 
         div {
-          margin-top: px2rem(5);
+          border-top: 1px solid #f4f4f4;
           overflow: hidden;
 
           ul {
@@ -625,5 +637,23 @@
     overflow: auto;
     box-sizing: border-box;
     padding-bottom: px2rem(50);
+  }
+
+  .w-tap {
+    display: flex;
+    margin-top: px2rem(3);
+    margin-bottom: px2rem(4);
+    li {
+      flex: 1;
+      height: px2rem(40);
+      line-height: px2rem(40);
+      font-size: px2rem(18);
+      text-align: center;
+      background: #fff;
+
+      &.actvie {
+        color: #007aff;
+      }
+    }
   }
 </style>

@@ -29,15 +29,17 @@
         text="手机号码"
         placeholder="银行预留手机号"
       ></normal-input>
-      <sms-code-input
-        @sendTelCode="clickMsgCodeHandle"
-        v-model="data.PHONE_CODE"
-      ></sms-code-input>
     </div>
     <div class="msg-err" v-if="errMsg">
       <span>{{errMsg}}</span>
     </div>
-    <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">开户</button>
+    <submit-button
+      class="submit-btn"
+      text="下一步"
+      :canSubmit="cantNext"
+      @submit="goNext"
+    ></submit-button>
+    <!--<button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>-->
     <call-to-bicai></call-to-bicai>
     <com-up-select
       @clickBankList="addBankHandle"
@@ -63,8 +65,8 @@
   import ComUpSelect from '@/components/commons/UpSelect' //
   import SupportBankList from '@/components/commons/SupportBankList'
   import BankCardLimit from '@/components/KSH/BankCardLimit' // 银行限额组件
-  import SmsCodeInput from '@/components/form/SmsCodeInput' // 发送短信验证码的input组件
   import NormalInput from '@/components/form/NormalInput' // 常规的input组件
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
   import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
 
   export default {
@@ -107,11 +109,10 @@
       ComUpSelect,
       BankCardLimit,
       OpenHead,
-      SmsCodeInput,
       NormalInput,
+      SubmitButton,
       SupportBankList,
       CallToBicai
-
     },
     watch: {
       tel(n, o) {
@@ -145,10 +146,10 @@
     },
     computed: {
       cantNext() {
-        if (this.tel.length == 11 && this.data.CARD_NO && this.data.PHONE_CODE) {
-          return false
-        } else {
+        if (this.tel.length >= 11 && this.data.CARD_NO) {
           return true
+        } else {
+          return false
         }
       }
     },
@@ -168,7 +169,6 @@
       },
       showXiane() {
         this.backShow = true
-
       },
       showBindBankList() {
         this.upseletShow = !this.upseletShow
@@ -180,6 +180,7 @@
       },
       checkBankName(val) {
         console.log('checkBankName', val);
+        return
         if (!val) {
           return false
         }
@@ -229,6 +230,8 @@
 
       // 下一步
       goNext() {
+        console.log('goNext');
+        return
         this.doOpengingSecond()
       },
 
@@ -289,6 +292,7 @@
 
   .opening_box {
     padding-top: px2rem(20);
+
     .input-box {
       height: px2rem(44);
       line-height: px2rem(44);
@@ -297,12 +301,14 @@
       border-bottom: 1px #E5E5E5 solid;
       display: flex;
       font-size: px2rem(14);
+
       .xiane {
         margin-top: px2rem(15);
         margin-left: px2rem(5);
         width: px2rem(14);
         height: px2rem(14);
       }
+
       .left-p {
         box-sizing: border-box;
         color: #444;
@@ -329,6 +335,7 @@
         text-align: right;
         padding-right: px2rem(30);
         position: relative;
+        color: #508CEE;
       }
 
       button {
@@ -337,25 +344,6 @@
     }
   }
 
-  .tijiao {
-    display: block;
-    font-size: px2rem(16);
-    color: #fff;
-    background-color: #508CEE;
-    border-radius: px2rem(4);
-    line-height: 1rem;
-    width: px2rem(335);
-    height: px2rem(44);
-    margin: px2rem(55) auto px2rem(20);
-    text-align: center;
-    border: none;
-    outline: none;
-
-    &.cantNext {
-      background: #ccc;
-      color: #fff;
-    }
-  }
 
   .bank-box {
     display: inline-block;
@@ -526,6 +514,11 @@
         flex: 1;
       }
     }
+  }
+
+  .submit-btn{
+    margin-top: px2rem(88);
+    margin-bottom: px2rem(10);
   }
 
 

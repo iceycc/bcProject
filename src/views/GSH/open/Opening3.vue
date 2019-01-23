@@ -7,16 +7,22 @@
     {text: '短信校验', active: false},
     ]"></open-head>
     <sms-code-input
-    @sendTelCode="sendTelCodeHandle"
-    v-model="smsCode"
+      @sendTelCode="sendTelCodeHandle"
+      v-model="smsCode"
     ></sms-code-input>
-    <div class="Tips" v-if="errMsg">
-      <span>{{errMsg}}</span>
-    </div>
-    <button
-      :class="{'tijiao':true, 'agree':!disabled}"
-      :disabled="disabled">开户
-    </button>
+    <submit-button
+      class="submit-btn"
+      text="开户"
+      :canSubmit="canSubmit"
+      @submit="submit"
+    ></submit-button>
+    <alert-box
+      v-if="alertShow"
+      message="开户失败"
+      @submit="sure"
+      @cancel="close"
+    ></alert-box>
+    <call-to-bicai></call-to-bicai>
   </div>
 </template>
 <script>
@@ -24,38 +30,66 @@
   import {BusName, LsName, PageName} from "@/Constant";
   import OpenHead from '@/components/opening/OpenHead'
   import SmsCodeInput from '@/components/form/SmsCodeInput'
-  import Mixins from "@/mixins";
   import Opening3Mixins from './Opening3'
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
+  import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
+  import AlertBox from '@/components/alert/AlertBox' // 常规的input组件
 
 
   export default {
     data() {
       return {
-        disabled: true,
         errMsg: '',
-        smsCode:''
+        smsCode: '',
+        alertShow:true
       }
     },
     components: {
       OpenHead,
-      SmsCodeInput
+      SmsCodeInput,
+      SubmitButton,
+      CallToBicai,
+      AlertBox,
     },
-    mixins: [ Opening3Mixins],
+    computed: {
+      canSubmit() {
+        if (this.smsCode) {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
+    mixins: [Opening3Mixins],
     created() {
 
     },
     methods: {
+      sure(){
+        this.alertShow = false
+      },
+      close(){
+        this.alertShow = false
+
+      },
       /**
+       * 确定开户成功
        *
+       */
+      submit() {
+        console.log('submit');
+      },
+
+      /**
        * @param success 发送短信验证吗 倒计时
        * @param error 错误是初始化按钮
        */
-      sendTelCodeHandle(success,error){
+      sendTelCodeHandle(success, error) {
         console.log('sendTelCodeHandle');
         success() //
-        setTimeout(()=>{
+        setTimeout(() => {
           error()
-        },3000)
+        }, 3000)
       },
 
     }
@@ -189,42 +223,12 @@
     outline: none;
   }
 
-  .tijiao {
-    background: #e4e4e4;
-    color: #fff;
-    font-size: px2rem(18);
-    border-radius: px2rem(5);
-    width: px2rem(261);
-    height: px2rem(44);
-    line-height: px2rem(44);
-    margin: px2rem(50) auto 0;
-    text-align: center;
-    display: block;
 
-    &.agree {
-      background: #0072ff;
-    }
+
+  .submit-btn{
+    margin-top: px2rem(88);
+    margin-bottom: px2rem(10);
   }
-
-  .Tips {
-    margin: px2rem(17) auto 0;
-    text-align: center;
-
-    span {
-      box-sizing: border-box;
-      display: inline-block;
-      background-color: #FF5B05;
-      color: #fff;
-      min-width: px2rem(261);
-      height: px2rem(29);
-      line-height: px2rem(29);
-      padding: 0 px2rem(6);
-      border-radius: px2rem(4);
-
-    }
-  }
-
-
 
 
 </style>

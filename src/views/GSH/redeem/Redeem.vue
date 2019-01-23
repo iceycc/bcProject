@@ -37,7 +37,13 @@
       </button>
     </section>
     <p class="msg-infomation">不支持部分支取,当日存入的需第二日才能支取</p>
-    <button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">立即支取</button>
+    <!--<button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">立即支取</button>-->
+    <submit-button
+      class="btn"
+      text="立即支取"
+      :canSubmit="availBtn"
+      @submit="showPass"
+    ></submit-button>
     <!--<p @click="agree =!agree"-->
     <!--:class="{'bang':true,'no':agree == false}">立即赎回代表您已阅读并同意-->
     <!--<a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《“周周利”产品业务服务协议》</a>-->
@@ -49,6 +55,8 @@
   import util from "libs/util";
   import {PageName, BusName, LsName, imgSrc} from "@/Constant";
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
+  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
+
   import Mixins from '@/mixins'
   import Bus from '@/plugin/bus'
 
@@ -111,7 +119,8 @@
       this.getInfo();
     },
     components: {
-      PassWordZhengzhou
+      PassWordZhengzhou,
+      SubmitButton
     },
     methods: {
       getInfo() {
