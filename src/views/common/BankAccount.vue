@@ -134,7 +134,7 @@
           // H5_URL_ANDRIOD,// 非打通openApi 跳转链接 安卓
           // H5_URL_IOS // 非打通openApi 跳转链接 ios
           {
-            ORG_ID: '241',
+            ORG_ID: '66',
             ORG_NAME: '工商银行',
             LOGO_URL: '',
             DESCRIPT: '隶属于工商银行',
@@ -184,7 +184,7 @@
             }
           })
         } else {
-          // this.getBankListByChannelId()
+          this.getBankListByChannelId()
         }
       },
       goPage(page, {

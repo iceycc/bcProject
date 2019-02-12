@@ -68,7 +68,7 @@ export default {
       let SOURCE_URL = store.getters.GET_COMMON_STATE.loginType
       // util.storage.session.remove(LsName.token)
       this.$store.commit('SET_TOKEN', null)
-
+a     // todo该方法现在阶段只有晋商行有 晋商行废弃
       API.login.apiLoginBank(data, (res) => {
         API.watchApi({
           FUNCTION_ID: 'ptb0A007', // 点位

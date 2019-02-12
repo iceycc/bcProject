@@ -129,18 +129,16 @@
 
       },
       // 查询账户余额
-      getInfo() {
+      async getInfo() {
         // 查询账户余额
-        API.bank.apiQryEleAccount({}, res => {
-          this.payNum = res.ACC_REST // 账户余额(可用余额)
-          // this.payNum = 1000// 账户余额(可用余额)
-        }, err => {
-          // this.payNum =1000
-        })
-        API.safe.apiBandCard({}, res => {
-          this.BANK_ACCT_NO = res.CARD_LIST[0].CARD_NUM
-          this.BANK_USER_ID = res.BANK_USER_ID
-        })
+        let res1 = await API.bank.apiQryEleAccount({})
+        this.payNum = res1.ACC_REST // 账户余额(可用余额)
+        // this.payNum = 1000// 账户余额(可用余额)
+
+        // 获取银行卡信息
+        let res2 = await API.safe.apiBandCard({})
+        this.BANK_ACCT_NO = res2.CARD_LIST[0].CARD_NUM
+        this.BANK_USER_ID = res2.BANK_USER_ID
       },
 
       clearNumHandle() {
@@ -213,17 +211,16 @@
       },
       // 轮询查询交易状态！！
 
-      getCode() { // 短信
+      async getCode() { // 短信
         let data = {
           BIZ_TYPE: '4', // 购买众邦需要
           BANK_ACCT_NO: this.BANK_ACCT_NO,
           BANK_USER_ID: this.BANK_USER_ID
         }
-        API.common.apiSendPhoneCode(data, res => {
-          this.getMsg()
-          this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-        })
+        let res = await API.common.apiSendPhoneCode(data)
+        this.getMsg()
+        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
+        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
       },
       getMsg() {
         let times = time
@@ -302,7 +299,7 @@
       // APPLY_AMOUNT	购买金额
       // PHONE_CODE	短信验证码
       // ACCEPT_RISK	超出客户风险承受力时必填，需要确认  0 或空 表示未确认 1 表示已确认
-      doPay() {
+      async doPay() {
 
         let {
           COUPON_ID = '',
@@ -327,18 +324,8 @@
           INVEST_ID: INVEST_ID + '' // 	投资ID
         }
         console.log(data);
-        API.buy.apiBuy(data, (res) => {
-          this.polling(res)
-        }, err => {
-          // this.Londing.close()
-          // this.setComState({type: "reload", value: true}) // reload-001
-          // this.$router.push({
-          //   name: PageName.BuyFailed,
-          //   query: {
-          //     err: err
-          //   }
-          // })
-        })
+        let res = await API.buy.apiBuy(data)
+        this.polling(res)
       }
     }
   }

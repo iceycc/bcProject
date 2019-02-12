@@ -1,9 +1,9 @@
-import http from '../../service/http/http.common'
-import httpZZH from '../../service/http/http.bank'
+import httpZZH from '@/service/http/http.bank'
 import {HOST_API} from "@/Constant";
 import axios from 'axios'
 import store from "@/store";
 
+// 单独用于图形验证码 无参数 格式api的格式请求的
 let Ajax = axios.create({
   baseURL: HOST_API,
 })
@@ -38,7 +38,7 @@ export default {
   },
 
   /**
-   * 公共的获取单个银行的收益
+   * 公共的获取单个银行的收益  电子账户需要单独请求单独的银行api获取相应的资产
    */
   getBankBalance: {
     ZZH(params, success, error) {
@@ -71,51 +71,6 @@ export default {
     },
 
 
-  },
-
-  /**
-   * Product 产品列表相关
-   */
-  // 列表
-  apiGetChannelPrdList(params, success, error) {
-    let options = {
-      url: '/openapi/comm/apiGetChannelPrdList',
-      params,
-      NO_ORG_ID: true
-    }
-    return http.post(options, Config.config, success, error)
-
-  },
-  // 产品详情
-  apiGetChannelPrdInfo(params, success, error) {
-    let options = {
-      url: '/openapi/comm/apiGetChannelPrdInfo',
-      params,
-    }
-    return http.post(options, Config.config, success, error)
-  },
-
-  // 预约/
-  apiSaveSubscribeInfo(params, success, error) {
-    let options = {
-      url: '/openapi/comm/apiSaveSubscribeInfo',
-      params,
-    }
-    return http.post(options, Config.config, success, error)
-
-  },
-  /**
-   * 账户相关
-   */
-  // 电子列表
-  apiBankList(params, success, error) {
-    let options = {
-      url: 'openapi/bank/apiBankList',
-      params,
-      TYPE: 'API_BANK_LIST',
-      NO_ORG_ID: true
-    }
-    return http.post(options, Config.config, success, error)
   },
 }
 

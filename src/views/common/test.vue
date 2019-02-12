@@ -4,8 +4,7 @@
   </div>
 </template>
 <script>
-  import util from '../../libs/util'
-  import {PageName} from "../../Constant";
+  import API from "@/service"
   export default {
     name: "testPage",
     data(){
@@ -14,8 +13,13 @@
       }
     },
     created() {
-
+      this.initData()
     },
+    methods:{
+      async initData(){
+        let res = await API.test({})
+      }
+    }
 
   }
 </script>

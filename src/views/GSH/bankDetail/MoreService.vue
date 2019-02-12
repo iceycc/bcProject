@@ -82,11 +82,10 @@
       close() {
         this.infoShow = false
       },
-      getBankInfo() {
-        API.safe.apiBandCard({}, res => {
-          let OldBankInfo = res.CARD_LIST[0]
-          this.CARD_BANK_NAME = OldBankInfo.CARD_BANK_NAME
-        })
+      async getBankInfo() {
+        let res = await API.safe.apiBandCard({})
+        let OldBankInfo = res.CARD_LIST[0]
+        this.CARD_BANK_NAME = OldBankInfo.CARD_BANK_NAME
         // let OldBankInfo = this.getComState.Infos.hasCardList[0]
         // this.CARD_BANK_NAME = OldBankInfo.BANK_NAME
       },
@@ -107,15 +106,7 @@
           query: data
         })
       },
-      getInfos() {
 
-        // this.getRiskGrade()
-        // this.getBankInfo()
-      },
-      //  获取风险测评结果
-      getRiskGrade() {
-        // API.risk.apiRiskGrade({},res=>{})
-      },
     }
 
   }

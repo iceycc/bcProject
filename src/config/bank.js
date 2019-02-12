@@ -4,6 +4,6 @@
 
 export const ORG_ID_NUM = {
   ZZH: '49',
-  KSH: '249', // 客商银行
-  GSH: '248', // 工商
+  KSH: '248', // 客商银行
+  GSH: '66', // 工商
 }

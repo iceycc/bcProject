@@ -118,8 +118,8 @@
     },
     methods: {
       tap(index) {
-        if(index==2){
-          this.$router.push({name:PageName.InHanding})
+        if (index == 2) {
+          this.$router.push({name: PageName.InHanding})
         }
       },
       goDetail(item) {
@@ -162,7 +162,7 @@
         this.apiQryTradeHis(); //交易数据
 
       },
-      more: function () {
+      async more() {
         // 分页查询
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
@@ -180,17 +180,15 @@
           // pageflag: '4'
 
         };
-        API.bank.apiQryEleTransDetail(data, res => {
-          this.pageList = this.pageList.concat(res.PAGE.retList);
-          if (res.PAGE.retList.length < this.searchCondition.pageSize) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
-          }
-        });
-
+        let res = await API.bank.apiQryEleTransDetail(data)
+        this.pageList = this.pageList.concat(res.PAGE.retList);
+        if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+          this.allLoaded = true;
+          Bus.$emit(BusName.showToast, "数据全部加载完成");
+        }
       },
 
-      apiQryTradeHis() {
+      async apiQryTradeHis() {
         // TYPE	请求类型
         // currentPage	当前页
         // QRY_TYPE	查询类型
@@ -210,7 +208,7 @@
           // pagenum: '10',
           // pageflag: '4'
         };
-        API.bank.apiQryEleTransDetail(data, res => {
+        let res = await API.bank.apiQryEleTransDetail(data)
           this.pageList = res.PAGE.retList;
           if (this.pageList.length < this.searchCondition.pageSize) {
             this.allLoaded = true;
@@ -225,8 +223,6 @@
             // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
             this.scrollMode = "touch";
           });
-
-        });
       },
       toggleTabs(index) {
         this.nowIndex = index;
@@ -643,6 +639,7 @@
     display: flex;
     margin-top: px2rem(3);
     margin-bottom: px2rem(4);
+
     li {
       flex: 1;
       height: px2rem(40);

@@ -133,9 +133,6 @@
 
         preSrc1: require('@/assets/images/cameracopy@2x.png'),
         preSrc2: require('@/assets/images/cameracopy@2x.png'),
-        picZheng: require('@/assets/images/id-zheng.jpg'),
-        picFan: require('@/assets/images/id-fan.jpg'),
-
         education: [
           {name: '研究生', value: '0'},
           {name: '大学本科', value: '20'},

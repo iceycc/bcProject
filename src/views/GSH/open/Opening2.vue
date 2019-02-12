@@ -1,33 +1,29 @@
 <template>
   <div class="warp">
-    <app-bar title="信息填写"></app-bar>
+    <app-bar title="绑定银行卡"></app-bar>
     <open-head :options="[
     {text: '开户信息验证', active: true},
     {text: '绑定银行卡', active: true},
     {text: '短信校验', active: false},
     ]"></open-head>
     <div class="opening_box">
-      <section class="input-box">
-        <p class="left-p">选择银行
-        </p>
-        <img @click="showXiane" class="xiane" src="@/assets/images/problom2@2x.png" alt="">
-        <span class="input" @click="showBindBankList">
-          {{bankText}}
-                  <img src="@/assets/images/GroupCopy14@2x.png" alt="" class="img">
-        </span>
-      </section>
+      <select-bank
+        :bankText="bankText"
+        @showInfo="showXiane"
+        @showUpBox="showBindBankList"
+      ></select-bank>
       <normal-input
         type="tel"
         v-model="data.CARD_NO"
         text="绑定卡卡号"
-        placeholder="请输入储蓄卡卡号"
+        placeholder="请输入银行卡号"
         @blur="checkBankName"
       ></normal-input>
       <normal-input
         type="tel"
         v-model="tel"
         text="手机号码"
-        placeholder="银行预留手机号"
+        placeholder="请输入手机号码"
       ></normal-input>
     </div>
     <div class="msg-err" v-if="errMsg">
@@ -36,11 +32,12 @@
     <submit-button
       class="submit-btn"
       text="下一步"
+      bgColor="lightBlue"
       :canSubmit="cantNext"
       @submit="goNext"
     ></submit-button>
     <!--<button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>-->
-    <call-to-bicai></call-to-bicai>
+    <call-to-bicai info="有疑问，请联系公众号: bicaikef"></call-to-bicai>
     <com-up-select
       @clickBankList="addBankHandle"
       :show="upseletShow"
@@ -66,8 +63,9 @@
   import SupportBankList from '@/components/commons/SupportBankList'
   import BankCardLimit from '@/components/KSH/BankCardLimit' // 银行限额组件
   import NormalInput from '@/components/form/NormalInput' // 常规的input组件
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-  import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
+  import SubmitButton from '@/components/form/SubmitButton' // 提交表单
+  import CallToBicai from '@/components/commons/CallToBicai' //联系比财客服
+  import SelectBank from '@/components/form/SelectBank' // 选择银行表单
 
   export default {
     data() {
@@ -112,7 +110,8 @@
       NormalInput,
       SubmitButton,
       SupportBankList,
-      CallToBicai
+      CallToBicai,
+      SelectBank
     },
     watch: {
       tel(n, o) {
@@ -293,55 +292,7 @@
   .opening_box {
     padding-top: px2rem(20);
 
-    .input-box {
-      height: px2rem(44);
-      line-height: px2rem(44);
-      margin: 0 auto;
-      padding: 0 px2rem(20);
-      border-bottom: 1px #E5E5E5 solid;
-      display: flex;
-      font-size: px2rem(14);
 
-      .xiane {
-        margin-top: px2rem(15);
-        margin-left: px2rem(5);
-        width: px2rem(14);
-        height: px2rem(14);
-      }
-
-      .left-p {
-        box-sizing: border-box;
-        color: #444;
-      }
-
-      input, .input {
-        text-align: left;
-        flex: 1;
-        color: #333
-      }
-
-
-      .img {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-60%);
-        right: 0;
-        width: px2rem(20);
-        height: px2rem(15);
-        vertical-align: middle;
-      }
-
-      .input {
-        text-align: right;
-        padding-right: px2rem(30);
-        position: relative;
-        color: #508CEE;
-      }
-
-      button {
-        margin-top: px2rem(12);
-      }
-    }
   }
 
 
@@ -517,8 +468,7 @@
   }
 
   .submit-btn{
-    margin-top: px2rem(88);
-    margin-bottom: px2rem(10);
+    margin-top: px2rem(66);
   }
 
 

@@ -34,11 +34,9 @@ instance.interceptors.response.use(
     }, 1000)
     if (error.toString().indexOf("timeout") != -1) {
       return Promise.reject('网络请求超时')
-    }
-    else if (error.toString().indexOf("Network Error") != -1) {
+    } else if (error.toString().indexOf("Network Error") != -1) {
       return Promise.reject('网络错误')
-    }
-    else {
+    } else {
       return Promise.reject(error)
     }
 
@@ -81,7 +79,13 @@ export default class Http {
         token,
         channel_id
       }, success, error) {
-    let {APP_FLAG, DEVICE_ID, CHANNEL_ID, TOKEN = token, SESSION_ID = ''} = store.getters.GET_ACCOUNT_STATE
+    let {
+      APP_FLAG,
+      DEVICE_ID,
+      CHANNEL_ID,
+      TOKEN = token,
+      SESSION_ID = ''
+    } = store.getters.GET_ACCOUNT_STATE
 
     let data = {
       head: {
@@ -94,7 +98,6 @@ export default class Http {
 
         SYSTEM_TYPE: "h5",
         CHANNEL_ID: CHANNEL_ID + '',
-        // CHANNEL_ID: channel_id || '1',
         APP_FLAG: APP_FLAG
       },
       param: {
@@ -107,25 +110,22 @@ export default class Http {
       url,
       method
     }).then(res => {
-      console.log('bicai - res>>>',res);
+      console.log('bicai - res>>>', res);
       if (res.head.CODE == 0) {
         // let SESSION_ID = res.head.SESSION_ID
         // store.commit('SET_SESSION_ID', SESSION_ID)
         success && success(res.data)
         return Promise.resolve(res.data)
-      }
-      else if(res.head.CODE=='-2'){
+      } else if (res.head.CODE == '-2') {
         // store.commit('SET_SESSION_ID', '')
         store.commit('SET_TOKEN', '')
         return Promise.reject(res.head.MSG)
-      }
-      else if (res.head.CODE == '-3') {
+      } else if (res.head.CODE == '-3') {
         // 其他设备登录
         store.commit('SET_TOKEN', '')
         // store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
-      }
-      else {
+      } else {
         // store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
       }

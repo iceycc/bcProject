@@ -1,6 +1,6 @@
 <template>
   <div class="warp">
-    <app-bar title="信息填写"></app-bar>
+    <app-bar title="开户"></app-bar>
     <open-head :options="[
     {text: '开户信息验证', active: true},
     {text: '绑定银行卡', active: false},
@@ -61,8 +61,7 @@
       <a href="javascript:;" @click.stop="showPage('open')" style=" color:#0096FE;">《工商银行客户服务协议》</a> 、
       <a href="javascript:;" @click.stop="showPage('privacy')" style=" color:#0096FE;">《隐私政策》</a>
     </p>
-    <call-to-bicai></call-to-bicai>
-
+    <call-to-bicai info="有疑问，请联系公众号: bicaikef"></call-to-bicai>
   </div>
 </template>
 <script>
@@ -81,16 +80,8 @@
         data: {// 姓名 身份证 职业 学历 身份证正反面
           USER_NAME: '',
           USER_CARD_ID: '',// 身份证号码  612601198509174013
-          USER_DUTY: '', // 职业
-          USER_EDUCATION: '', // 学历
           CARD_FRONT_FILE: '',
           CARD_BACK_FILE: '',
-          IDENT_VLD_DT: '', //身份证有效期
-          ADDRESS: '', // 地址
-          NATION: '', // 民族
-          PHONE: '',
-          PARTNER_ORDER_ID: '' // 众邦的实名流水信息
-
         },
 
         showType: 0,
@@ -100,23 +91,6 @@
 
         preSrc1: require('@/assets/images/cameracopy@2x.png'),
         preSrc2: require('@/assets/images/cameracopy@2x.png'),
-        picZheng: require('@/assets/images/id-zheng.jpg'),
-        picFan: require('@/assets/images/id-fan.jpg'),
-
-        education: [
-          {name: '研究生', value: '0'},
-          {name: '大学本科', value: '20'},
-          {name: '大学专科或专科学校', value: '30'},
-          {name: '中等专业学校或中等技术学校', value: '40'},
-          {name: '技术学校', value: '50'},
-          {name: '高中', value: '60'},
-          {name: '初中', value: '70'},
-          {name: '小学', value: '80'},
-          {name: '文盲或半文盲', value: '90'},
-          {name: '未知', value: '99'},
-        ],
-        educationText: '请选择学历',
-        work: '请选择职业',
         agree: true,
         page: false,
         errMsg: '',
@@ -140,38 +114,18 @@
         let suerinfo = data
         this.suerinfo = suerinfo
         console.log("suerinfo>>", suerinfo);
-        if (suerinfo && suerinfo.CARD_FRONT_URL) {
-          this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
-          this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
+        if (suerinfo && suerinfo.cardFrontUrl) {
+          this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.cardFrontUrl.replace(/\s/g, '+')
+          this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.cardBackUrl.replace(/\s/g, '+')
           this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'
-          this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle;'
+          this.imgStyle2 = 'width:100%;height:100%;vertical-align: middle'
           //新增
-          this.data.USER_NAME = suerinfo.USER_NAME
-          this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-          this.data.CARD_INDATE = suerinfo.CARD_INDATE
-          // this.data.USER_NAME = suerinfo.USER_NAME
-          // this.data.USER_CARD_ID = suerinfo.USER_CARD_ID
-          this.data.PHONE = suerinfo.PHONE_NUM || suerinfo.BANK_CARD_PHONE
-          // this.data.PHONE = ''
-          this.data.CARD_BACK_FILE = suerinfo.CARD_BACK_URL.replace(/\s/g, '+')
-          this.data.CARD_FRONT_FILE = suerinfo.CARD_FRONT_URL.replace(/\s/g, '+')
-          // if (this.data.CARD_BACK_FILE) {
-          //   this.idCardFanOcr()
-          // }
-          // if (this.data.CARD_FRONT_FILE) {
-          //   this.idCardZhengOcr()
-          // }
+          this.data.USER_NAME = suerinfo.userName // 用户名
+          this.data.USER_CARD_ID = suerinfo.userCardId // 身份证号
+
+          this.data.CARD_FRONT_FILE = suerinfo.cardFrontUrl.replace(/\s/g, '+')
+          this.data.CARD_BACK_FILE = suerinfo.cardBackUrl.replace(/\s/g, '+')
         }
-      },
-      //获取学历
-      getEduction(val) {
-        this.educationText = val.name
-        this.data.USER_EDUCATION = val.value
-      },
-      // 获取工作
-      getWork(val) {
-        this.work = val.name
-        this.data.USER_DUTY = val.value
       },
       // 切换同意按钮
       doAgree() {
@@ -181,7 +135,6 @@
         this.$router.push({name: PageName.DocsPage, query: {type: type}})
       },
     }
-
   }
 </script>
 
@@ -347,8 +300,8 @@
     text-align: center;
   }
   .submit-btn{
-    margin-top: px2rem(88);
-    margin-bottom: px2rem(10);
+    margin-top: px2rem(60);
+    margin-bottom: px2rem(20);
   }
 
 </style>

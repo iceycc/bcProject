@@ -1,9 +1,9 @@
 import axios from 'axios'
-var axiosOld = axios.create(null);
+var axiosNew = axios.create(null);
 import {Indicator} from 'mint-ui';
 import {throwErr} from "@/libs/throwErr";
 // http request 拦截器  第一层拦截
-axiosOld.interceptors.request.use(
+axiosNew.interceptors.request.use(
   config => {
     Indicator.open({
       spinnerType: 'triple-bounce'
@@ -20,7 +20,7 @@ axiosOld.interceptors.request.use(
 );
 
 // http response 拦截器
-axiosOld.interceptors.response.use(
+axiosNew.interceptors.response.use(
   response => {
     let data = response.data
     if (typeof data == 'string') {
@@ -44,4 +44,4 @@ axiosOld.interceptors.response.use(
 
   }
 )
-export default axiosOld;
+export default axiosNew;

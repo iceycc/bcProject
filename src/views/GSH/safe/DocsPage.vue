@@ -50,7 +50,7 @@
           this.getPrivacyAgreementByAjax()
         }
       },
-      getRechargeAgreementByAjax() {
+      async getRechargeAgreementByAjax() {
         // TYPE
         // ORG_ID
         // USER_NAME
@@ -61,46 +61,26 @@
           USER_NAME: rechargeData.USER_NAME,
           USER_CARD_ID: rechargeData.USER_CARD_ID,
         }
-        API.doc.rechargeAgreement(data, res => {
-          this.title = res.AGREEMENT
-          this.agreeMentSrc = HOST_API + res.URL
-        })
+        let res = await API.doc.rechargeAgreement(data)
+        this.title = res.AGREEMENT
+        this.agreeMentSrc = HOST_API + res.URL
       },
       getRedeemAgreementByAjax() {
-        // TODO
-        let redeem = this.getComState.redeemData
+
+      },
+      async getBuyAgreementByAjax() {
         let data = {
-          // USER_NAME	身份证姓名
-          // ACCOUNT	账号众邦二类户
-          // TRADE_DATE	交易日期
-          // DATE_VALUE	每笔交易起息日期
-          // AMOUNT_PURCHASE	每笔购买金额
-          USER_NAME: this.redeem.USER_NAME,
-          ACCOUNT: this.redeem.BANK_USER_CODE,
-          TRADE_DATE: '',
-          DATE_VALUE: '',
-          AMOUNT_PURCHASE: ''
+          USER_NAME: this.getComState.idName
         }
-        API.doc.fixedTimeDepositAgreement(data)
+        let res = await API.doc.personalAccountServiceAgreement(data)
+        this.title = res.AGREEMENT
+        this.agreeMentSrc = HOST_API + res.URL
       },
-      getBuyAgreementByAjax() {
-
-          let data = {
-            USER_NAME: this.getComState.idName
-          }
-          API.doc.personalAccountServiceAgreement(data, res => {
-            this.title = res.AGREEMENT
-            this.agreeMentSrc = HOST_API + res.URL
-          })
-
-
-      },
-      getOpenAgreementByAjax() {
+      async getOpenAgreementByAjax() {
         let data = {}
-        API.doc.electronicAccountAgreement(data, res => {
-          this.title = res.AGREEMENT
-          this.agreeMentSrc = HOST_API + res.URL
-        })
+        let res = await API.doc.electronicAccountAgreement(data)
+        this.title = res.AGREEMENT
+        this.agreeMentSrc = HOST_API + res.URL
       },
       getPrivacyAgreementByAjax() {
         let data = {

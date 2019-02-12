@@ -55,7 +55,6 @@
   import {imgSrc} from "@/Constant";
   import {Actionsheet} from 'mint-ui';
   import {BusName, PageName} from "@/Constant";
-  import Bus from '@/plugin/bus'
 
   Vue.component(Actionsheet.name, Actionsheet);
   export default {
@@ -157,29 +156,27 @@
         this.clickBankCard = card
         this.sheetVisible = true
       },
-      getBankList() {
-        let data = {}
+      async getBankList() {
         this.onfocus = false
-        API.bank.apiBandCard(data, res => {
-          this.BANK_USER_ID = res.BANK_USER_ID
-          this.BANK_ACCT_NO = res.BANK_USER_CODE
-          this.CARD_LIST = res.CARD_LIST
-          // 保存绑定的银行卡列表
-          this.setComState({type: 'hasCardList', value: res.CARD_LIST})
-        })
+        let res = await API.safe.apiBandCard({})
+        this.BANK_USER_ID = res.BANK_USER_ID
+        this.BANK_ACCT_NO = res.BANK_USER_CODE
+        this.CARD_LIST = res.CARD_LIST
+        // 保存绑定的银行卡列表
+        this.setComState({type: 'hasCardList', value: res.CARD_LIST})
       },
-      setDefaultCard() {
+      async setDefaultCard() {
         console.log(1)
         this.onfocus = false
         // 设置默认卡
         let data = {
           ACCOUNT_NO: this.clickBankCard.CARD_NUM
         }
-        API.safe.apiDefaultBankCard(data, res => {
-          this.getBankList()
-        })
+        await API.safe.apiDefaultBankCard(data)
+        this.getBankList()
+
       },
-      unBindingCard() {
+      async unBindingCard() {
         console.log(2)
         let num = this.CARD_LIST.length
         if (num == 1) {
@@ -195,16 +192,12 @@
           BANK_USER_ID: this.BANK_USER_ID,// 银行用户ID
           BANK_ACCT_NO: this.BANK_ACCT_NO,// 电子账户
         }
-        // this.BC_PHONE = '11'
-        // return
-        API.common.apiSendPhoneCode(data, res => {
-          this.BC_PHONE = res.BC_PHONE
-          this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
-          // Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-        })
 
+        let res = await API.common.apiSendPhoneCode(data)
+        this.BC_PHONE = res.BC_PHONE
+        this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
       },
-      unBindingCardAPI() {
+      async unBindingCardAPI() {
         // 解绑银行卡
         let card = this.clickBankCard
         let data = {
@@ -223,15 +216,17 @@
           CLEAR_BANK: '',// 清算银行
           CLEAR_BANK_NO: '',// 清算银行行号
         }
-        API.safe.apiChangeBingCard(data, res => {
+        try {
+          await API.safe.apiChangeBingCard(data)
           this.BC_PHONE = ''
           this.msgCode = ''
           this.getBankList()
-        }, err => {
+
+        } catch (e) {
           this.BC_PHONE = ''
           this.msgCode = ''
+        }
 
-        })
       }
     }
   }

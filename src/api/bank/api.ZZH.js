@@ -140,19 +140,7 @@ export default {
     },
 
   },
-  /**
-   * login 登录相关
-   */
-  login: {
-    apiLoginBank(params, success, error) {
-      let options = {
-        url: '/openapi/comm/apiLoginBank',
-        params,
-        login: true
-      }
-      return http.post(options, Config.config, success, error)
-    },
-  },
+
   /**
    *  buying
    */
@@ -370,16 +358,6 @@ export default {
    * 账户相关
    */
   account: {
-    // 电子列表 todo 提取
-    apiBankList(params, success, error) {
-      let options = {
-        url: 'openapi/bank/apiBankList',
-        params,
-        TYPE: 'API_BANK_LIST'
-      }
-      return http.post(options, Config.config, success, error)
-    },
-
     // 银行账户查询：/openapi/comm/apiQueryAccRest  todo 无
     apiQueryAccRest(params, success, error) { // 下面的代替了
       let options = {

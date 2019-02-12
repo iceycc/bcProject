@@ -170,7 +170,7 @@
         this.startDate = this.getLastMonthYestdy(index + 1);
         this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
       },
-      more: function () {
+      async more() {
         // 分页查询
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
@@ -191,28 +191,25 @@
         // ORG_ID	机构ID
         // START_DATE	开始日期
         // END_DATE	结束日期
-
+        let res = await API.bank.apiQryBuyHis(data)
+        // todo
         if (this.cur == 1) {
-          API.bank.apiQryBuyHis(data, res => {
-            this.pageList = this.pageList.concat(res.PAGE.retList);
-            if (res.PAGE.retList.length < this.searchCondition.pageSize) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
-          });
+          this.pageList = this.pageList.concat(res.PAGE.retList);
+          if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }
         }
         if (this.cur == 2) {
-          API.bank.apiQryBuyHis(data, res => {
-            this.pageList = this.pageList.concat(res.PAGE.retList);
-            if (res.PAGE.retList.length < this.searchCondition.pageSize) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
-          });
+          this.pageList = this.pageList.concat(res.PAGE.retList);
+          if (res.PAGE.retList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }
         }
       },
 
-      apiQryTradeHis(start, end) {
+      async apiQryTradeHis(start, end) {
 
         let data = {
           ORDER_NUM: this.ORDER_NUM,
@@ -223,41 +220,35 @@
           START_DATE: start,
           END_DATE: end
         };
-
+        let res = await API.bank.apiQryBuyHis(data)
         if (this.cur == 1) {
-          API.bank.apiQryBuyHis(data, res => {
-            this.pageList = res.PAGE.retList;
-            if (this.pageList.length < this.searchCondition.pageSize) {
-              this.allLoaded = true;
-            }
-            if (this.pageList.length <= 0) {
-              Bus.$emit(BusName.showToast, "暂无数据");
-            }
-            this.$nextTick(function () {
-              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-              this.scrollMode = "touch";
-            });
-
+          this.pageList = res.PAGE.retList;
+          if (this.pageList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+          }
+          if (this.pageList.length <= 0) {
+            Bus.$emit(BusName.showToast, "暂无数据");
+          }
+          this.$nextTick(function () {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
           });
         }
         if (this.cur == 2) {
-          API.bank.apiQryBuyHis(data, res => {
-            this.pageList = res.PAGE.retList;
-            if (this.pageList.length < this.searchCondition.pageSize) {
-              this.allLoaded = true;
-            }
-            if (this.pageList.length <= 0) {
-              Bus.$emit(BusName.showToast, "暂无数据");
-            }
-            this.$nextTick(function () {
-              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-              this.scrollMode = "touch";
-            });
-
+          this.pageList = res.PAGE.retList;
+          if (this.pageList.length < this.searchCondition.pageSize) {
+            this.allLoaded = true;
+          }
+          if (this.pageList.length <= 0) {
+            Bus.$emit(BusName.showToast, "暂无数据");
+          }
+          this.$nextTick(function () {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
           });
         }
       },

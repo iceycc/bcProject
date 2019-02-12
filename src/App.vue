@@ -167,16 +167,19 @@
 
 
   .toast {
-    color: #fff;
-    bottom: 0;
     position: fixed;
-    width: 100%;
-    box-sizing: border-box;
-    padding: px2rem(5);
-    background: rgba(0, 0, 0, 0.9);
+    width: px2rem(274);
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: px2rem(3);
+    color: #fff;
+    background: rgba(51, 51, 51, 0.8);
     z-index: 9999;
     text-align: center;
-    font-size: 0.4rem;
+    font-size: px2rem(12);
+    box-sizing: border-box;
+    padding: px2rem(5);
   }
 
   .banklonding {

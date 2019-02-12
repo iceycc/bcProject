@@ -70,7 +70,7 @@
       "v-loadmore": Loadmore // 为组件起别名，vue转换template标签时不会区分大小写，例如：loadMore这种标签转换完就会变成loadmore，容易出现一些匹配问题
       // 推荐应用组件时用a-b形式起名
     },
-    mixins:[],
+    mixins: [],
     created() {
       this.endDate = this.getLastMonthYestdy(0);
       this.startDate = this.getLastMonthYestdy(1);
@@ -107,25 +107,22 @@
         this.currentPage++
         this.getDataList(this.currentPage)
       },
-      getDataList(page = 1) {
+      async getDataList(page = 1) {
         let params = {
           currentPage: page + '',
           QRY_TYPE: '0',
           START_DATE: this.startDate,
           END_DATE: this.endDate
         }
-        API.account.apiQryRechCashHis(params, res => {
-          if (res.PAGE.retList.length == 0) {
-            this.allLoaded = true
-            return
-          }
-          else if (page > 1) {
-            this.listdata = this.listdata.concat(res.PAGE.retList)
-          }
-          else {
-            this.listdata = res.PAGE.retList
-          }
-        })
+        let res = await API.account.apiQryRechCashHis(params)
+        if (res.PAGE.retList.length == 0) {
+          this.allLoaded = true
+          return
+        } else if (page > 1) {
+          this.listdata = this.listdata.concat(res.PAGE.retList)
+        } else {
+          this.listdata = res.PAGE.retList
+        }
       },
       toggleTabs(index) {
         this.nowIndex = index
@@ -182,8 +179,7 @@
         {
           strYear -= 1;
           strMonth = 12;
-        }
-        else {
+        } else {
           strMonth -= n;
         }
         // strDay = daysInMonth[strMonth] >= strDay ? strDay : daysInMonth[strMonth];
@@ -330,18 +326,21 @@
 
   .t-tab {
     position: relative;
+
     ul.tabs {
       position: relative;
       display: flex;
       height: px2rem(44);
       line-height: px2rem(44);
       background: #fff;
+
       li {
         flex: 1;
         text-align: center;
         font-size: px2rem(15);
         color: #B3B3B3;
       }
+
       li:last-child {
         position: relative;
         width: px2rem(60);
@@ -349,6 +348,7 @@
         flex: none;
         border-left: px2rem(1) solid #F6F6F9;
       }
+
       li:last-child:after {
         position: absolute;
         content: "";
@@ -363,6 +363,7 @@
         right: 0;
         margin: px2rem(12) auto 0;
       }
+
       li.active:last-child:after {
         position: absolute;
         content: "";
@@ -393,10 +394,12 @@
           padding: px2rem(16) px2rem(15) px2rem(4);
           font-weight: normal;
         }
+
         div {
 
           background: #fff;
           overflow: hidden;
+
           ul {
 
             li {
@@ -412,13 +415,16 @@
                 color: #121B32;
                 font-weight: normal;
                 padding-bottom: px2rem(4);
+
                 span:first-child {
                   flex: 1;
                 }
 
               }
+
               p {
                 padding-top: px2rem(3);
+
                 span {
                   font-size: px2rem(12);
                   line-height: px2rem(17);
@@ -426,6 +432,7 @@
                   padding-right: px2rem(20);
                   color: #858E9F;
                 }
+
                 em {
                   font-size: px2rem(18);
                   float: right;
@@ -436,15 +443,18 @@
                 }
               }
             }
+
             li:last-child {
               border-bottom: none;
             }
           }
+
           ul:last-child {
             border-bottom: none;
           }
         }
       }
+
       padding-bottom: px2rem(16);
 
     }
@@ -454,16 +464,19 @@
       background: #EFEFEF;
       line-height: px2rem(44);
       position: relative;
+
       ul {
 
         margin-right: px2rem(60);
         display: flex;
+
         li {
           flex: 1;
           display: inline-block;
           font-size: px2rem(15);
           color: #666666;
           padding-left: px2rem(20);
+
           span {
             display: inline-block;
             height: 0;
@@ -476,6 +489,7 @@
         }
 
       }
+
       .t-query {
         width: px2rem(60);
         height: px2rem(44);
@@ -487,6 +501,7 @@
         text-align: center;
       }
     }
+
     .t-text {
       padding: 0 px2rem(15);
       font-size: px2rem(12);

@@ -29,12 +29,7 @@ export default [
     meta: {keepAlive: false, title: '存入', needLogin: false}
 
   },
-  {
-    path: '/' + PageName.SureBuy,
-    name: PageName.SureBuy,
-    component: resolve => require(['views/GSH/buy/SureBuy.vue'], resolve),
-    meta: {keepAlive: true, title: '存入', needLogin: false}
-  },
+
   {
     path: '/' + PageName.Buying,
     name: PageName.Buying,
@@ -42,17 +37,6 @@ export default [
     meta: {keepAlive: false, title: '存入', needLogin: false}
   },
 
-
-  /**
-   * login
-   */
-  // {
-  //   path: '/' + PageName.Login,
-  //   name: PageName.Login,
-  //   component: resolve => require(['views/common/login/LoginByBicai/Login.vue'], resolve),
-  //   // component: resolve => require(['views/GSH/login/Login.vue'], resolve),
-  //   meta: {keepAlive: false, title: '安全登录', needLogin: false}
-  // },
   /**
    * open 开户
    */
@@ -60,13 +44,13 @@ export default [
     path: '/' + PageName.Opening1,
     name: PageName.Opening1,
     component: resolve => require(['views/GSH/open/Opening1.vue'], resolve),
-    meta: {keepAlive: false, title: '信息填写', needLogin: false}
+    meta: {keepAlive: false, title: '开户', needLogin: false}
   },
   {
     path: '/' + PageName.Opening2,
     name: PageName.Opening2,
     component: resolve => require(['views/GSH/open/Opening2.vue'], resolve),
-    meta: {keepAlive: false, title: '信息填写', needLogin: false}
+    meta: {keepAlive: false, title: '绑定银行卡', needLogin: false}
   },
   {
     path: '/' + PageName.Opening3,
@@ -102,35 +86,9 @@ export default [
     meta: {keepAlive: false, title: '充值', needLogin: false}
   },
   /**
-   * riskEvaluation 风险评估
-   */
-  {
-    path: '/' + PageName.VerificationSuccess,
-    name: PageName.VerificationSuccess,
-    component: resolve => require(['views/GSH/riskEvaluation/VerificationSuccess.vue'], resolve),
-    meta: {keepAlive: false, title: '风险测评', needLogin: false}
-  },
-  {
-    path: '/' + PageName.Riskproblom,
-    name: PageName.Riskproblom,
-    component: resolve => require(['views/GSH/riskEvaluation/Riskproblom.vue'], resolve),
-    meta: {keepAlive: false, title: '风险测评', needLogin: false}
-  },
-  {
-    path: '/' + PageName.FengxianResult,
-    name: PageName.FengxianResult,
-    component: resolve => require(['views/GSH/riskEvaluation/FengxianResult.vue'], resolve),
-    meta: {keepAlive: false, title: '风险测评', needLogin: false}
-  },
-  /**
    * safe
    */
-  {
-    path: '/' + PageName.ResetPassword,
-    name: PageName.ResetPassword,
-    component: resolve => require(['views/GSH/safe/ResetPassword.vue'], resolve),
-    meta: {keepAlive: false, title: '重置密码', needLogin: false}
-  },
+
   {
     path: '/' + PageName.DocsPage,
     name: PageName.DocsPage,
@@ -149,18 +107,8 @@ export default [
     component: resolve => require(['views/GSH/safe/AddNewBank.vue'], resolve),
     meta: {keepAlive: false, title: '添加新银行卡', needLogin: false}
   },
-  {
-    path: '/' + PageName.ResetPayPassword,
-    name: PageName.ResetPayPassword,
-    component: resolve => require(['views/GSH/safe/ResetPayPassword.vue'], resolve),
-    meta: {keepAlive: false, title: '更换支付密码', needLogin: false}
-  },
-  {
-    path: '/' + PageName.ResetPhone,
-    name: PageName.ResetPhone,
-    component: resolve => require(['views/GSH/safe/ResetPhone.vue'], resolve),
-    meta: {keepAlive: false, title: '修改手机号', needLogin: false}
-  },
+
+
 
   /**
    * financingDetail

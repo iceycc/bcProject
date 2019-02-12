@@ -37,23 +37,31 @@ export default {
       ORG_ID = ''
     }
     ORG_ID = params.ORG_ID || ORG_ID
-    let {DEVICE_ID, APP_FLAG, CHANNEL_ID, TOKEN = token, SESSION_ID = ''} = store.getters.GET_ACCOUNT_STATE
+    let {
+      DEVICE_ID,
+      APP_FLAG,
+      CHANNEL_ID,
+      TOKEN = token,
+      SESSION_ID = '',
+      USER_CHANNEL = ''
+    } = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
         head: {
           CHANNEL: "Umeng",
           CHANNEL_TYPE: 'H5',
           VERSION: "",
-          IMSI: "460026325010440",
+          IMSI: "",
           SESSION_ID: SESSION_ID,
           TYPE,
           TOKEN: TOKEN,
           DEVICE_ID: DEVICE_ID + '',
-
           SYSTEM_TYPE: "h5",
           CHANNEL_ID: CHANNEL_ID || '',
+          USER_CHANNEL: USER_CHANNEL + '', // 新增 USER_CHANNEL
+
           APP_FLAG: APP_FLAG || 'BC',
-          CLIENT_ID:"30"
+          CLIENT_ID: "30"
         },
         param: {
           ORG_ID: ORG_ID + '', // 70
@@ -68,7 +76,7 @@ export default {
     // HTTP请求
     return axios.request(config).then(result => {
       result = result.biz_data
-      console.log('zhengzhou - res>>>',result);
+      console.log('zhengzhou - res>>>', result);
       // store.commit('REMOVE_COMMON_STATE', 'LAST_STEP_NUM')
       // store.commit('REMOVE_COMMON_STATE', 'REQ_SERIAL')
       // util.storage.session.remove(LsName.LAST_STEP_NUM)
@@ -96,20 +104,17 @@ export default {
         success && success(result.data);
         console.log('成功msg >>>', msg);
         return Promise.resolve(result.data)
-      }
-      else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
+      } else if (result.head.CODE == 1 && result.head.ERROR_CODE == -2) {
         // 登录超时
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
         goLogin()
-      }
-      else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
+      } else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         // 其他登录
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
         goLogin()
-      }
-      else {
+      } else {
         if (!delMsg) {
           Bus.$emit(BusName.showToast, result.head.MSG)
         }

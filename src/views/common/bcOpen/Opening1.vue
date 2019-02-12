@@ -101,7 +101,7 @@
   </div>
 </template>
 <script>
-  import {PageName, BusName, HOST_API} from "@/Constant";
+  import {PageName, BusName} from "@/Constant";
   import JsSelect from '@/components/commons/JsSelect'
   import API from "@/service";
   import Bus from "@/plugin/bus"
@@ -131,9 +131,6 @@
         test2: '',
         preSrc1: require('@/assets/images/common/fan@2x.png'),
         preSrc2: require('@/assets/images/common/zheng@2x.png'),
-        picZheng: require('@/assets/images/id-zheng.jpg'),
-        picFan: require('@/assets/images/id-fan.jpg'),
-
         // 配置不同标签的展示
         DOMShow: {
           USER_NAME: true,

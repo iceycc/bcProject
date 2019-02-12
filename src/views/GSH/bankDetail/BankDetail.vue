@@ -14,7 +14,7 @@
         <p class="money" v-if="!pass">****</p>
         <section class="income">
           <section class="left">
-            <p>昨日到账收益</p>
+            <p>预计最大收益</p>
             <span class="left-text" v-if="pass">
                              <i>{{bankDetail.YSD_INCOME>=0?'+':''}}</i>
                             {{bankDetail.YSD_INCOME}}</span>
@@ -23,7 +23,7 @@
                         </span>
           </section>
           <section class="right" style="text-align: right">
-            <p>累计收益</p>
+            <p>累计到账收益</p>
             <span class="right-text" v-if="pass">
                              <i>{{bankDetail.TOTAL_INCOME>=0?'+':''}}</i>
                             {{bankDetail.TOTAL_INCOME}}</span>
@@ -194,9 +194,7 @@
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
         this.$router.push({name: PageName.TransactionDetails, query: {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM}})
       },
-      // getMyInvesthandle(){
-      //     API.common.getMyInvest({})
-      // }
+
 
       scroll() {
         let _this = this

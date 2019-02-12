@@ -215,36 +215,35 @@
           this.flagPopup(this.currentFlagIndex)
         }
       },
-      goRedeem(item) {
+      async goRedeem(item) {
 
         let params = {
           INVEST_TIME: item.TIME_END,
           PRD_INDEX_ID: item.PRD_INDEX_ID,
           EXPIRE_TIME: item.EXPIRE_TIME
         }
-        API.redeem.apiRedemptionValid2(params, res => {
-          console.log(res)
-          this.setComState({
-            type: 'redeemData',
-            value: item
-          })
-          // 4 -> 3
-          this.flags = []
-          this.flagsLength = res.length
-          for (let i = 0; i < res.length; i++) {
-            // 就是进行排序。。。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的 todo再优化
-            if (res[i].RES_CODE == 3) {
-              this.flags.push(res[i])
-            } else if (res[i].RES_CODE == 4) {
-              this.flags.unshift(res[i])
-            } else {
-              this.flags.push(res[i])
-            }
-          }
-          setTimeout(() => {
-            this.flagPopup()
-          }, 200)
+        let res = await API.redeem.apiRedemptionValid2(params)
+        console.log(res)
+        this.setComState({
+          type: 'redeemData',
+          value: item
         })
+        // 4 -> 3
+        this.flags = []
+        this.flagsLength = res.length
+        for (let i = 0; i < res.length; i++) {
+          // 就是进行排序。。。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的 todo再优化
+          if (res[i].RES_CODE == 3) {
+            this.flags.push(res[i])
+          } else if (res[i].RES_CODE == 4) {
+            this.flags.unshift(res[i])
+          } else {
+            this.flags.push(res[i])
+          }
+        }
+        setTimeout(() => {
+          this.flagPopup()
+        }, 200)
       },
 
       // 智能弹窗 从前往后以此进行弹窗提示。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的
@@ -274,14 +273,14 @@
         this.nowIndex = index;
         this.loadPageList();
       },
-      getData() {
+      async getData() {
         let data = {
           type: 'API_QRY_ASSET',
         };
         //
-        API.bank.apiQryAsset(data, res => {
-          this.financialData = res;
-        });
+        let res = await API.bank.apiQryAsset(data)
+        this.financialData = res;
+
       },
       loadTop: function () {
         //组件提供的下拉触发方法
@@ -296,7 +295,7 @@
         this.more(); // 上拉触发的分页查询
         this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
-      loadPageList: function () {
+      async loadPageList() {
         // 初始化
         this.searchCondition.pageNo = "1";
         this.searchCondition1.pageNo = "1";
@@ -311,27 +310,24 @@
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
-          API.bank.getMyInvestOver(data, res => {
-
-            this.pageList = res.PAGE.retList || [];
-
-            if (this.pageList.length == 0) {
-              // this.allLoaded = true;
-            }
-            if (!res.PAGE) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-              return
-            }
-            //    if (this.pageList.length <= 0) {
-            //     Bus.$emit(BusName.showToast, "暂无数据");
-            //    }
-            this.$nextTick(function () {
-              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-              this.scrollMode = "touch";
-            });
+          let res = await API.bank.getMyInvestOver(data)
+          this.pageList = res.PAGE.retList || [];
+          if (this.pageList.length == 0) {
+            // this.allLoaded = true;
+          }
+          if (!res.PAGE) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+            return
+          }
+          //    if (this.pageList.length <= 0) {
+          //     Bus.$emit(BusName.showToast, "暂无数据");
+          //    }
+          this.$nextTick(function () {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
           });
         } else {
           // //持有数据
@@ -341,49 +337,46 @@
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
-          API.bank.apiQryHoldInfo(data, res => {
-            console.log(res)
-            this.pageList = res.PAGE.retList;
-            if (this.pageList.length <= 0) {
-              this.allLoaded = true;
-              // Bus.$emit(BusName.showToast, "暂无数据");
-            }
-            this.MIN_AMOUNT = this.pageList[0] && this.pageList[0].MIN_AMOUNT
+          let res = await API.bank.apiQryHoldInfo(data)
+          console.log(res)
+          this.pageList = res.PAGE.retList;
+          if (this.pageList.length <= 0) {
+            this.allLoaded = true;
+            // Bus.$emit(BusName.showToast, "暂无数据");
+          }
+          this.MIN_AMOUNT = this.pageList[0] && this.pageList[0].MIN_AMOUNT
 
-            this.$nextTick(function () {
-              // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-              // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-              // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-              this.scrollMode = "touch";
-            });
+          this.$nextTick(function () {
+            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+            this.scrollMode = "touch";
           });
         }
       },
-      more: function () {
+      async more() {
         if (this.nowIndex == 1) {
           // 到期分页查询
           this.searchCondition1.pageNo =
             "" + (parseInt(this.searchCondition1.pageNo) + 1);
           let data = {
-            currentPage: this.searchCondition1.pageNo + '',
-            PRD_TYPE: "4",
-            DEPOSIT_TYPE_ID: "4"
+              currentPage: this.searchCondition1.pageNo + '',
+              PRD_TYPE: "4",
+              DEPOSIT_TYPE_ID: "4"
+            }
+          ;
+          let res = await API.bank.getMyInvestOver(data)
+          let pageList = res.PAGE.retList || [];
+          this.pageList = this.pageList.concat(pageList);
+          if (this.pageList.length < this.searchCondition1.pageSize) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
           }
-;
-          API.bank.getMyInvestOver(data, res => {
-
-            let pageList = res.PAGE.retList || [];
-            this.pageList = this.pageList.concat(pageList);
-            if (this.pageList.length < this.searchCondition1.pageSize) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
-            if (!res.PAGE) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-              return
-            }
-          });
+          if (!res.PAGE) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+            return
+          }
         } else {
           // 持有分页查询
           this.searchCondition.pageNo =
@@ -393,23 +386,22 @@
             PRD_TYPE: "4",
             DEPOSIT_TYPE_ID: "4"
           };
-          API.bank.apiQryHoldInfo(data, res => {
-            // if (!res.PAGE) {
-            //   this.allLoaded = true;
-            //   Bus.$emit(BusName.showToast, "数据全部加载完成");
-            //   return
-            // }
-            let pageList = res.PAGE.retList || [];
-            this.pageList = this.pageList.concat(pageList);
-            if (res.PAGE.currentPage == res.PAGE.totalPage) {
-              this.allLoaded = true;
-              Bus.$emit(BusName.showToast, "数据全部加载完成");
-            }
-            // if (this.pageList.length < this.searchCondition.pageSize) {
-            //   this.allLoaded = true;
-            //   Bus.$emit(BusName.showToast, "数据全部加载完成");
-            // }
-          });
+          let res = await API.bank.apiQryHoldInfo(data)
+          // if (!res.PAGE) {
+          //   this.allLoaded = true;
+          //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+          //   return
+          // }
+          let pageList = res.PAGE.retList || [];
+          this.pageList = this.pageList.concat(pageList);
+          if (res.PAGE.currentPage == res.PAGE.totalPage) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }
+          // if (this.pageList.length < this.searchCondition.pageSize) {
+          //   this.allLoaded = true;
+          //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+          // }
         }
       }
     }
@@ -563,9 +555,10 @@
         box-sizing: border-box;
         padding: px2rem(15) px2rem(15) 0 px2rem(15);
 
-        .org-name{
+        .org-name {
           color: #999;
         }
+
         .detail {
           position: absolute;
           right: px2rem(15);
@@ -606,7 +599,8 @@
             float: right;
             color: #999999;
           }
-          .info{
+
+          .info {
             margin-left: px2rem(6);
             width: px2rem(14);
             height: px2rem(14);

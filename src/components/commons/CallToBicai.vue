@@ -1,10 +1,16 @@
 <template>
-  <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
+  <p class="msg-infos">{{info}}</p>
 </template>
 
 <script>
   export default {
-    name: "CallToBicai"
+    name: "CallToBicai",
+    props:{
+      info:{
+        type:String,
+        default:'有疑问，请联系比财客服微信号: bicaikefu'
+      }
+    }
   }
 </script>
 

@@ -22,7 +22,7 @@
       @submit="sure"
       @cancel="close"
     ></alert-box>
-    <call-to-bicai></call-to-bicai>
+    <call-to-bicai info="有疑问，请联系公众号: bicaikef"></call-to-bicai>
   </div>
 </template>
 <script>

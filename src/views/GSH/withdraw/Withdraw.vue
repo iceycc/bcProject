@@ -36,13 +36,13 @@
       :canSubmit="canClick"
       @submit="doNext"
     ></submit-button>
-    <up-select
+    <banding-bank-select
       title="选择银行卡"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBank"
       type="withdraw"
-    ></up-select>
+    ></banding-bank-select>
   </div>
 </template>
 <script>
@@ -55,8 +55,8 @@
   import util from "libs/util";
   import Mixins from '@/mixins'
   import IconFont from '@/components/commons/IconFont'
-  import UpSelect from '@/components/KSH/UpSelect'
   import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
+  import BandingBankSelect from '@/components/upSelect/BandingBankSelect' // 常规的input组件
 
   let time = 60
   let timer;
@@ -99,7 +99,7 @@
       PassWordZhengzhou,
       IconFont,
       SubmitButton,
-      UpSelect
+      BandingBankSelect
     },
     watch: {
       APPLY_AMOUNT(n) {
@@ -112,7 +112,7 @@
     },
     computed: {
       canClick() {
-        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.WITH_DRAWABLE_CASH) && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST) && this.msgCode) {
+        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.WITH_DRAWABLE_CASH) && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST)) {
           return true
         } else {
           return false
@@ -151,17 +151,16 @@
         }, 1000)
         this.getCode()
       },
-      getCode() {
+      async getCode() {
         let data = {
           BIZ_TYPE: '2', // 提现
           BANK_USER_ID: this.BANK_USER_ID,
           BANK_ACCT_NO: this.BANK_USER_CODE
         }
-        API.common.apiSendPhoneCode(data, res => {
-          this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-          //这里的提示信息没成功
-          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-        })
+        let res = await API.common.apiSendPhoneCode(data)
+        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
+        //这里的提示信息没成功
+        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
       },
       checkMoney() {
 
@@ -171,20 +170,17 @@
         this.CARD_NUM = bank.CARD_NUM
         this.logo = bank.CARD_BANK_URL
       },
-      getUserInfos() {
-        API.safe.apiBandCard({}, (res) => {
-          console.log(res)
-          this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME
-          this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
-          this.logo = res.CARD_LIST[0].CARD_BANK_URL
-          this.BANK_USER_ID = res.BANK_USER_ID
-          this.BANK_USER_CODE = res.BANK_USER_CODE
-
-          this.mainBankList = res.CARD_LIST
-
-        })
+      async getUserInfos() {
+        let res = await API.safe.apiBandCard({})
+        console.log(res)
+        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME
+        this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
+        this.logo = res.CARD_LIST[0].CARD_BANK_URL
+        this.BANK_USER_ID = res.BANK_USER_ID
+        this.BANK_USER_CODE = res.BANK_USER_CODE
+        this.mainBankList = res.CARD_LIST
       },
-      doWithdraw() {
+      async doWithdraw() {
         // TYPE	请求类型
         // ORG_ID	机构ID
         // APPLY_AMOUNT	提现金额
@@ -201,15 +197,14 @@
           BANK_NAME: this.CARD_BANK_NAME
         }
         this.show = false
-        API.withdraw.apiCash(data, res => {
+        try {
+          let res = await API.withdraw.apiCash(data)
           let params = {
             BIZ_TYPE: '4', // 提现
             BESHARP_SEQ: res.BESHARP_CASH_SEQ
           }
-          // 轮询还没弄
           // 轮询 查寻交易状态
-          this.queryStatus(
-            {
+          this.queryStatus({
               text: '提现中',
               data: params,
               fn: (result, timer, count) => {
@@ -263,9 +258,10 @@
               }
             }
           )
-        }, err => {
+        } catch (err) {
           Bus.$emit(BusName.showToast, err);
-        })
+        }
+
       },
       doNext() {
         if (util.Check.trim(this.APPLY_AMOUNT, '提现金额', true)) {

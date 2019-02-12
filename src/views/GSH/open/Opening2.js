@@ -34,26 +34,28 @@ export default {
       this.getMsgCode(PHONE, error)
     },
     // 获取短信验证码
-    getMsgCode(PHONE, error) {
+    async getMsgCode(PHONE, error) {
       let data = {
         TYPE: 'API_SEND_PHONE_CODE',
         PHONE_NUM: PHONE,
         BIZ_TYPE: '3',// 开户第二步
         ACCT_NO: this.data.CARD_NO
       }
-      API.common.apiSendPhoneCode(data, res => {
+      try {
+        let res = await API.common.apiSendPhoneCode(data)
         Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
         this.data.MESSAGE_TOKEN = res.MESSAGE_TOKEN
-      }, err => {
+      } catch (e) {
         error()
         console.log(err);
-      })
+      }
+
     },
     // 注册
     doOpengingSecond() {
       this.doApiOpenging2()
     },
-    doApiOpenging2() {
+    async doApiOpenging2() {
       this.data.PRE_PHONE_NUM = this.tel
       console.log(this.checkBankName(this.data.CARD_NO));
       if (!this.checkBankName(this.data.CARD_NO)) {
@@ -84,7 +86,6 @@ export default {
         Bus.$emit(BusName.showToast, '请先获取短信验证码')
         return
       }
-      let delMsg = true
       let params = {
         PHONE_NUM: this.tel, // 银行预留手机号(绑卡行)
         REQ_SERIAL: this.callbackInfos.BESHARP_REGISTER_VALI_USER_SEQ || '', //比财开户请求ID
@@ -100,46 +101,39 @@ export default {
         OPEN_BANK: this.bankText, //// 银行卡所属银行名
         TYPE: 'API_REGISTER_BAND_CARD',
       }
-      let OTHER = true  // 用于特殊处理，code ==1 且 REQ_SERIAL和LAST_STEP_NUM有值说明 第一步成功第二步未成功
-      console.log('params');
-      console.log(params);
-      API.open.apiRegisterBandCard(params, delMsg, OTHER,
-        res => {
-          // clearInterval(timer)
-          this.Londing.close()
-          // this.errMsg = res.MSG
-          // setTimeout(() => {
-          //   this.errMsg = ''
-          // }, 2000)
-          API.watchApi({
-            FUNCTION_ID: 'ptb0A004', // 点位
-            REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
-          })
-          // Bus.$emit(BusName.showToast, res.MSG)
-          this.setComState({type: 'ISLogin', value: true})
-          this.redirectByFromPage()
-        },
-        err => {
-          this.errMsg = err
-          setTimeout(() => {
-            this.errMsg = ''
-          }, 2000)
-          console.log(err);
-          this.disable = false
+      console.log('params', params);
+      try {
+        await API.open.apiRegisterBandCard(params)
+        this.Londing.close()
+        API.watchApi({
+          FUNCTION_ID: 'ptb0A004', // 点位
+          REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
         })
+        this.setComState({type: 'ISLogin', value: true})
+        this.redirectByFromPage()
+
+      } catch (err) {
+        this.errMsg = err
+        setTimeout(() => {
+          this.errMsg = ''
+        }, 2000)
+        console.log(err);
+        this.disable = false
+      }
+
+
     },
     /**
      * 获取支持的银行列表
      */
-    getBankList() {
-      API.common.apiGetBankCardList({}, res => {
-        let obj = {}
-        res.BAND_CARD_LIST.forEach(item => {
-          obj[item.BANK_CARD_BIN] = item.BANK_NAME
-        })
-        this.AllBankListObj = obj // 全部银行列表
-        this.supportBankList = res.SUPPORT_BANK_LIST // 支持的银行列表
+    async getBankList() {
+      let res = await API.common.apiGetBankCardList({})
+      let obj = {}
+      res.BAND_CARD_LIST.forEach(item => {
+        obj[item.BANK_CARD_BIN] = item.BANK_NAME
       })
+      this.AllBankListObj = obj // 全部银行列表
+      this.supportBankList = res.SUPPORT_BANK_LIST // 支持的银行列表
     },
   }
 }

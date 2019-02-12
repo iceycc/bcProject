@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <app-bar title="支取"></app-bar>
+  <div class="main">
+    <app-bar title="提前支取"></app-bar>
     <div class="r-top">
       <img :src="imgSrc + redeemData.LOGO_URL" alt="">
       <div>
@@ -14,40 +14,17 @@
       <div class="title">支取金额</div>
       <div class="money">
         <div class="number">
-          <!--<i v-show="isFocus">￥</i>-->
-          <span class="money">{{redeemData.INVEST_AMOUNT | formatNum}}元</span>
-          <!--<input type="number" @focus="focus" @blur="blur" :placeholder="placeholder" v-model="money">-->
-          <!--<img-->
-          <!--v-show="!ifCheckMoneyEmpty"-->
-          <!--src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">-->
+          <span class="money">¥{{redeemData.INVEST_AMOUNT | formatNum}}</span>
         </div>
-        <!--<div class="all" @click="selectAll">全部支取</div>-->
       </div>
     </div>
     <p v-if="EFFCT_INTEREST_RATE>0" class="cal">收益{{EFFCT_INTEREST_RATE}}</p>
-    <section class="inputAmount">
-            <span class="Amount">
-                验证码
-            </span>
-      <input type="tel" v-model="PHONE_CODE" placeholder="请输入验证码">
-      <button
-        :disabled="msgdisable"
-        @click="getMsg"
-        class="button">{{codeText}}
-      </button>
-    </section>
-    <p class="msg-infomation">不支持部分支取,当日存入的需第二日才能支取</p>
-    <!--<button :class="['r-btn',{active:availBtn}]" :disabled="!availBtn" @click="showPass">立即支取</button>-->
     <submit-button
-      class="btn"
-      text="立即支取"
-      :canSubmit="availBtn"
+      class="submit-btn"
+      text="提前支取"
+      :canSubmit="true"
       @submit="showPass"
     ></submit-button>
-    <!--<p @click="agree =!agree"-->
-    <!--:class="{'bang':true,'no':agree == false}">立即赎回代表您已阅读并同意-->
-    <!--<a style=" color:#0096FE;" href="javascript:;" @click.stop="getAgreement()">《“周周利”产品业务服务协议》</a>-->
-    <!--</p>-->
   </div>
 </template>
 <script>
@@ -99,20 +76,13 @@
           return true
         }
       },
-      availBtn() {
-        if (this.agree && this.redeemData.INVEST_AMOUNT && this.PHONE_CODE) {
-          return true
-        } else {
-          return false
-        }
-      },
       // placeholder:'
       placeholder() {
         let num = this.redeemData.INVEST_AMOUNT
         return `最多可支取金额${util.formatNum(num)}元`
       }
     },
-    mixins: [ Mixins.queryStatus],
+    mixins: [Mixins.queryStatus],
     watch: {},
     created() {
       this.redeemData = this.getComState.redeemData
@@ -123,11 +93,10 @@
       SubmitButton
     },
     methods: {
-      getInfo() {
-        API.safe.apiBandCard({}, res => {
-          this.BANK_ACCT_NO = res.CARD_LIST[0].CARD_NUM
-          this.BANK_USER_ID = res.BANK_USER_ID
-        })
+      async getInfo() {
+        let res = await API.safe.apiBandCard({})
+        this.BANK_ACCT_NO = res.CARD_LIST[0].CARD_NUM
+        this.BANK_USER_ID = res.BANK_USER_ID
       },
       clearNumHandle() {
         this.money = ''
@@ -186,16 +155,15 @@
         }, 1000)
         this.getCode()
       },
-      getCode() { // 短信
+      async getCode() { // 短信
         let data = {
           BIZ_TYPE: '6', // 需要
           BANK_ACCT_NO: this.BANK_ACCT_NO,
           BANK_USER_ID: this.BANK_USER_ID
         }
-        API.common.apiSendPhoneCode(data, res => {
-          this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
-          Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-        })
+        let res = await API.common.apiSendPhoneCode(data)
+        this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
+        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
       },
       focus() {
         this.isFocus = true;
@@ -223,7 +191,7 @@
         this.$router.push({name: PageName.DocsPage, query: {type: 'buy'}})
 
       },
-      showPass() {
+      async showPass() {
         // if (!this.money) {
         //   Bus.$emit(BusName.showToast, '支取金额不能为空')
         //   return
@@ -244,7 +212,8 @@
           ORDER_NUM: this.redeemData.ORDER_NUM, // 订单编号
           MESSAGE_TOKEN: this.MESSAGE_TOKEN
         }
-        API.redeem.apiRedemption(data, res => {
+        try {
+          let res = await API.redeem.apiRedemption(data)
           let params = {
             BIZ_TYPE: '7',
             BESHARP_SEQ: res.REQ_SERIAL
@@ -290,10 +259,12 @@
               }
             }
           })
-        }, err => {
+
+        } catch (err) {
           Bus.$emit(BusName.showToast, err)
-          // this.$router.push({name: PageName.RedeemFailure, query: {err: err}})
-        })
+
+        }
+
       },
 
     }
@@ -307,12 +278,20 @@
     font-style: normal;
   }
 
+  .main {
+    width: 100%;
+    height: 100%;
+    background: #F5F5F9;
+  }
+
   .r-top {
-    border-top: px2rem(10) solid #F6F6F9;
-    border-bottom: px2rem(10) solid #F6F6F9;
+    height: px2rem(72);
+    box-sizing: border-box;
+    margin: px2rem(10) 0;
     display: flex;
     align-items: center;
     padding: px2rem(15) px2rem(20);
+    background: #fff;
 
     img {
       width: px2rem(32);
@@ -335,12 +314,15 @@
   }
 
   .r-cash {
+    height: px2rem(89);
+    box-sizing: border-box;
     padding: px2rem(15) px2rem(20);
-    border-bottom: 1px solid #EEEEF0;
+    background: #fff;
 
     .title {
       padding-bottom: px2rem(10);
       font-size: px2rem(14);
+      color: #A4A9B0;
     }
 
     .money {
@@ -354,8 +336,7 @@
         font-size: px2rem(24);
 
         .money {
-          color: #121B32;
-          font-size: px2rem(15);
+          color: #333;
         }
 
         .close-icon {
@@ -482,6 +463,10 @@
     padding-left: px2rem(20);
     color: #B3B3B3;
     font-size: px2rem(12)
+  }
+
+  .submit-btn {
+    margin-top: px2rem(253)
   }
 </style>
 
