@@ -51,13 +51,10 @@
 </template>
 <script>
   import API from "@/service";
-  import {BusName} from "@/Constant";
+  import {BusName,PageName} from "@/Constant";
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
   import util from "libs/util";
-  import {PageName} from "../../../Constant";
-
-
   export default {
     mixins: [''],
     data() {

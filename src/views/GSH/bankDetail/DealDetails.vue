@@ -29,7 +29,6 @@
         </div>
         <!-- <p class="t-text" v-show="nowIndex===3">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p> -->
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-          <!--{{aaa|formatNum}}-->
           <div class="no-data" v-if="pageList.length == 0">
             <img src="~@/assets/images/icon_open_zhengzhou_no_data.png" alt="">
             <p class="infos">对不起，目前没有数据</p>
@@ -71,11 +70,10 @@
 </template>
 <script>
   import API from "@/service";
-  import {BusName} from "@/Constant";
+  import {BusName, PageName} from "@/Constant";
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
-  import util from "libs/util";
-  import {PageName} from "../../../Constant";
+  import util from "@/libs/util";
 
 
   export default {
@@ -83,7 +81,6 @@
     data() {
       return {
         cur: '1',
-        aaa: '1,100.00',
         // 1月分页
         searchCondition: {
           //分页属性
@@ -167,7 +164,6 @@
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
         let data = {
-
           // PRD_INDEX_ID:'',
           currentPage: this.searchCondition.pageNo,
           // currentPage: "0",
@@ -178,7 +174,6 @@
           TYPE: 'API_QRY_ELE_TRANS_DETAIL',
           // pagenum: '10',
           // pageflag: '4'
-
         };
         let res = await API.bank.apiQryEleTransDetail(data)
         this.pageList = this.pageList.concat(res.PAGE.retList);
@@ -209,20 +204,20 @@
           // pageflag: '4'
         };
         let res = await API.bank.apiQryEleTransDetail(data)
-          this.pageList = res.PAGE.retList;
-          if (this.pageList.length < this.searchCondition.pageSize) {
-            this.allLoaded = true;
-          }
-          if (this.pageList.length <= 0) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "暂无数据");
-          }
-          this.$nextTick(function () {
-            // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
-            // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
-            // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
-            this.scrollMode = "touch";
-          });
+        this.pageList = res.PAGE.retList;
+        if (this.pageList.length < this.searchCondition.pageSize) {
+          this.allLoaded = true;
+        }
+        if (this.pageList.length <= 0) {
+          this.allLoaded = true;
+          Bus.$emit(BusName.showToast, "暂无数据");
+        }
+        this.$nextTick(function () {
+          // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
+          // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
+          // 花了好久才解决这个问题，就是用这个函数，意思就是先设置属性为auto，正常滑动，加载完数据后改成弹性滑动，安卓没有这个问题，移动端弹性滑动体验会更好
+          this.scrollMode = "touch";
+        });
       },
       toggleTabs(index) {
         this.nowIndex = index;

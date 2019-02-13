@@ -42,7 +42,7 @@
   import Mixins from "@/mixins";
   import util from "libs/util";
 
-  // import BankCardLimit from '@/components/KSH/BankCardLimit'
+  // import BankCardLimit from '@/components/KSH/KshBankCardLimit'
   let timer;
   export default {
     name: "changeBank",

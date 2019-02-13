@@ -5,6 +5,7 @@ import {HOST_API} from "@/Constant";
 import Bus from '@/plugin/bus/index'
 import {BusName, PageName, LsName} from "@/Constant";
 import {Indicator} from 'mint-ui';
+import {throwErr} from "@/libs/throwErr";
 
 // let HOST_API = 'https://finsuitdev.udomedia.com.cn/finsuit/'
 // let HOST_API = 'http://192.168.100.173:8080/finsuit/'
@@ -32,9 +33,13 @@ instance.interceptors.response.use(
     setTimeout(() => {
       Indicator.close();
     }, 1000)
-    if (error.toString().indexOf("timeout") != -1) {
+    if (error && error.response) {
+      let msg = throwErr(error.response.status, error.response) //throwErr 捕捉服务端的http状态码 定义在utils工具类的方法
+      return Promise.reject(error.response.status + msg)
+    }
+    if (error.toString().indexOf("timeout") !== -1) {
       return Promise.reject('网络请求超时')
-    } else if (error.toString().indexOf("Network Error") != -1) {
+    } else if (error.toString().indexOf("Network Error") !== -1) {
       return Promise.reject('网络错误')
     } else {
       return Promise.reject(error)

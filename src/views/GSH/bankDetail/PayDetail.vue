@@ -22,7 +22,7 @@
           </ul>
           <div class="t-query" @click="query">查询</div>
         </div>
-        <p class="t-text" v-show="3==nowIndex">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
+        <p class="t-text" v-show="3===nowIndex">根据银行要求，只能查询最近两年记录，每次查询最大范围三个月</p>
 
         <div class="t-content main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
           <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
@@ -300,8 +300,6 @@
 </style>
 
 <style lang="scss" scoped>
-
-
   .icon {
     position: absolute;
   }

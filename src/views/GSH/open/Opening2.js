@@ -129,11 +129,13 @@ export default {
     async getBankList() {
       let res = await API.common.apiGetBankCardList({})
       let obj = {}
-      res.BAND_CARD_LIST.forEach(item => {
-        obj[item.BANK_CARD_BIN] = item.BANK_NAME
+      // 1 过滤全部银行列表
+      res.supportCardList.forEach(item => {
+        obj[item.bankCardBin] = item.bankName
       })
       this.AllBankListObj = obj // 全部银行列表
-      this.supportBankList = res.SUPPORT_BANK_LIST // 支持的银行列表
+      // 2 支持的银行列表
+      this.supportBankList = res.supportBankList
     },
   }
 }

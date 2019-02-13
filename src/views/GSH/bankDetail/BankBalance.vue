@@ -19,19 +19,14 @@
         <span>明细查询</span>
         <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
       </section>
-      <!--<section class="m-li" @click="goPage('InHanding')">-->
-        <!--<span>处理中记录查询</span>-->
-        <!--<icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>-->
-      <!--</section>-->
     </section>
   </div>
 </template>
 
 <script>
-  import IconFont from '@/components/commons/IconFont'
   import {LsName, PageName} from "@/Constant";
-  import Mixins from "@/mixins";
   import BankBalanceMixins from "./BankBalance";
+  import {IconFont} from '@/components'
   export default {
     name: "bankBalance",
     components: {
@@ -78,8 +73,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-
   i {
     font-style: normal;
   }

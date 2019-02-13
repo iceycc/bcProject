@@ -57,11 +57,12 @@
     computed: {
       IndexObj() {
         let bankList = this.supportBankList.map((item) => {
+          // 新接口参数采用了驼峰命名
           return {
-            name: item.BANK_NAME,
+            name: item.BANK_NAME || item.bankName,
             value: 0,
-            src: imgSrc + item.BANK_LOGO_URL,
-            Index: item.INITIAL
+            src: imgSrc + (item.BANK_LOGO_URL || item.bankLogoUrl),
+            Index: item.INITIAL || ''
           }
         })
         return this.filterOptions(bankList)

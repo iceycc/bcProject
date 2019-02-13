@@ -28,20 +28,21 @@
 <script>
 
   import {BusName, LsName, PageName} from "@/Constant";
-  import OpenHead from '@/components/opening/OpenHead'
-  import SmsCodeInput from '@/components/form/SmsCodeInput'
   import Opening3Mixins from './Opening3'
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-  import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
-  import AlertBox from '@/components/alert/AlertBox' // 常规的input组件
-
+  import {
+    OpenHead,
+    SmsCodeInput,
+    SubmitButton,
+    CallToBicai,
+    AlertBox
+  } from '@/components'
 
   export default {
     data() {
       return {
         errMsg: '',
         smsCode: '',
-        alertShow:true
+        alertShow: true
       }
     },
     components: {
@@ -65,10 +66,10 @@
 
     },
     methods: {
-      sure(){
+      sure() {
         this.alertShow = false
       },
-      close(){
+      close() {
         this.alertShow = false
 
       },
@@ -224,8 +225,7 @@
   }
 
 
-
-  .submit-btn{
+  .submit-btn {
     margin-top: px2rem(88);
     margin-bottom: px2rem(10);
   }

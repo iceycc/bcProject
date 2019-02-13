@@ -6,14 +6,14 @@
     <router-view v-if="!$route.meta.keepAlive && isRouterAlive"></router-view>
     <!--自己的提示-->
     <transition name="fade">
-      <div class="toast" v-if="showToast">
+      <div class="toast" v-if="showToast && msg">
         <p>{{msg}}</p>
       </div>
     </transition>
 
     <!--自己的提示-->
     <transition name="fade">
-      <div class="msg-toast" v-if="showMsgToast">
+      <div class="msg-toast" v-if="showMsgToast && TEL">
         <p>短信已发送至{{TEL}}请注意查收</p>
       </div>
     </transition>
@@ -164,14 +164,12 @@
 </script>
 
 <style lang="scss" scoped>
-
-
   .toast {
     position: fixed;
     width: px2rem(274);
-    top: 50%;
+    bottom: 40%;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%);
     border-radius: px2rem(3);
     color: #fff;
     background: rgba(51, 51, 51, 0.8);

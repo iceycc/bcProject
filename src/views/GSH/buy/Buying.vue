@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app">
+  <div class="main">
     <app-bar title="存入"></app-bar>
     <div class="buytitle">
       <div class="buytitleleft">
@@ -7,8 +7,7 @@
           <img :src="imgSrc+proDetail.LOGO_URL" style="width:100%" alt="">
         </div>
         <div class="buytitleleftcontent">
-          <!--<p>{{proDetail.ORG_NAME}}</p>-->
-          <!--<p style="color:#666">{{proDetail.PRD_NAME}}</p>    -->
+
           <p>{{proDetail.PRD_NAME}}</p>
           <p style="color:#666">{{proDetail.DEPOSIT_CATEGORY}}</p>
         </div>
@@ -23,19 +22,20 @@
       <div class="buysuccessdetailleft">可用金额 <strong>{{payNum | formatNum}}元</strong></div>
       <div class="buysuccessdetailright" @click="goReChang">充值</div>
     </div>
-    <div class="buydetails">
-      <p style="margin-top: 0.3rem">存入金额</p>
-      <span class="buydetailsmoney">￥</span>
+    <div class="input-box">
+      <p class="title">存入金额</p>
+      <span class="left">￥</span>
       <input type="number" :placeholder="placeholder" v-model="APPLY_AMOUNT">
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
     </div>
     <submit-button
-      class="btn"
+      class="submit-btn"
       text="存入"
       :canSubmit="canClick"
       @submit="goBuy"
+      bgColor="lightBlue"
     ></submit-button>
     <sign-areement
       :agree="agree"
@@ -52,25 +52,20 @@
   import API from "@/service"
   import Mixins from "@/mixins";
   import util from "libs/util";
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-  import SignAreement from '@/components/commons/SignAreement' // 常规的input组件
+  import {
+    SubmitButton,
+    SignAreement
+  } from '@/components'
 
-  let time = 60
-  let timer;
   export default {
     data() {
       return {
-
         proDetail: {},
         APPLY_AMOUNT: null,
         payNum: '0',
         agree: true,
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
-        msgCode: '',
-        msgdisable: false,
-        codeText: '获取验证码',
-        MESAGE_TOKEN: '',
         BANK_ACCT_NO: '', //电子账户
         BANK_USER_ID: '', //银行用户ID
         INVEST_ID: '',
@@ -103,25 +98,19 @@
     },
     mixins: [Mixins.storeMixin, Mixins.ToBuying],
     created() {
-      // let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
-      // let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
-      // util.storage.session.set('moneyNum', moneyNum)
-      // this.getInfo()
-      // todo测试用
-      // this.getProData(17897)
-      // this.proDetail = this.getComState.goBuy // 数据
-      // console.log(this.proDetail);
+      // 注意src/mixins/FromH5Active.js 文件中ToBuying为统一处理方法
     },
     methods: {
       initData(proData) {
         this.getInfo() // 用于查询账户余额 19801
         this.proDetail = proData
+        // 可能是从活动页来，发现没有登录/注册，然后登录/注册，来购买
         let AMOUNT = this.getComState.ProAndOrgType.AMOUNT
         // 判断是否有外链钱的数据 登录流程来的
         if (AMOUNT) {
           this.APPLY_AMOUNT = AMOUNT
         }
-        // 链接流程来的
+        // 可能是从活动页来，登录/注册了，直接来购买。。
         let moneyNum = this.$route.query.moneyNum || util.storage.session.get('moneyNum')
         if (moneyNum) {
           this.APPLY_AMOUNT = moneyNum
@@ -210,32 +199,6 @@
         this.doPay()
       },
       // 轮询查询交易状态！！
-
-      async getCode() { // 短信
-        let data = {
-          BIZ_TYPE: '4', // 购买众邦需要
-          BANK_ACCT_NO: this.BANK_ACCT_NO,
-          BANK_USER_ID: this.BANK_USER_ID
-        }
-        let res = await API.common.apiSendPhoneCode(data)
-        this.getMsg()
-        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-      },
-      getMsg() {
-        let times = time
-        this.msgdisable = true
-        timer = setInterval(() => {
-          if (times == 0) {
-            this.codeText = '重新发送'
-            this.msgdisable = false
-            clearInterval(timer)
-            return
-          }
-          times--
-          this.codeText = `${times}s`
-        }, 1000)
-      },
       polling(res) {
         let data = {
           BIZ_TYPE: '6', // 购买
@@ -313,9 +276,7 @@
           PRD_ID: this.proDetail.ID + '',
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
-          PHONE_CODE: this.msgCode,
           PRD_TYPE: (this.proDetail.PRD_TYPE_ID || '4') + '', // todo 娶不到
-          MESAGE_TOKEN: this.MESAGE_TOKEN,
 
 
           COUPON_ID: COUPON_ID + '', // 优惠券ID	非必填  字符型
@@ -332,12 +293,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-
-  body {
-    margin: 0;
-    padding: 0;
-  }
 
   .buytitle {
     width: 92%;
@@ -396,12 +351,15 @@
     }
   }
 
-  .buydetails {
+  .input-box {
     position: relative;
-    padding: 0 px2rem(20);
-    height: 2.2rem;
-    font-size: px2rem(20);
-
+    padding: px2rem(12) px2rem(20);
+    border-bottom: 1px solid #EEEEF0;
+    .title{
+      color:#A4A9B0;
+      font-size: px2rem(14);
+      margin-bottom: px2rem(9);
+    }
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -410,23 +368,16 @@
       top: 50%;
       right: px2rem(30);
     }
-
-    border-bottom: 1px solid #EEEEF0;
-
-    .buydetailsmoney {
-      width: 1rem;
-      margin-top: px2rem(20);
+    .left {
+      width: px2rem(30);
       font-size: px2rem(24);
     }
-
     input {
       width: 50%;
       border: none;
       box-sizing: border-box;
       font-size: px2rem(24);
       color: #333;
-      line-height: px2rem(44);
-      height: px2rem(44);
       outline: none;
     }
 
@@ -453,8 +404,10 @@
     }
   }
 
-  .btn {
-    margin-top: px2rem(200) !important;
+
+  .submit-btn{
+    margin-top: px2rem(60) !important;
+    margin-bottom: px2rem(20) !important;
   }
 
 </style>

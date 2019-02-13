@@ -150,13 +150,16 @@ export const ToBuying = {
   },
   created() {
     // ProID=19758&moneyNum=100&INVEST_ID=10001&TEAM_ID=333
-    let ProID = util.storage.session.get('ProID') || this.$route.query.ProID // H5活动页外链过来的
-    let query = this.$route.query // H5活动页外链过来的
+    let query = this.$route.query //
+    let ProID = util.storage.session.get('ProID') || query.ProID //
     let moneyNum = this.$route.query.moneyNum // H5活动页外链过来的
-    let ProAndOrgType = this.getComState.ProAndOrgType
+    let ProAndOrgType = this.getComState.ProAndOrgType //
+
+    // 后期优化改参数
     this.setComState({type: 'ProAndOrgType', value: {...ProAndOrgType, ...query}})
-    // ProID=xxx&TEAM_ID=xxx&
+    // 忘记有没有用到了
     util.storage.session.set('moneyNum', moneyNum)
+
     if (ProID) {
       this.ProID = ProID
       this.getData(ProID) // 通过产品id获取产品详情

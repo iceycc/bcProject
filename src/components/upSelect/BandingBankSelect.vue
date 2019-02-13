@@ -86,7 +86,7 @@
     methods: {
       addBankList() {
         this.typeShow = false
-        this.$emit('clickBankList', name)
+        this.$emit('addBank', name)
       },
       chooseType(index, bank, e) {
         console.log(index);

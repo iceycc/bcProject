@@ -22,8 +22,6 @@
 <script>
   import IconFont from '@/components/commons/IconFont'
   import {LsName, PageName} from "@/Constant";
-  import {BusName} from "../../../Constant";
-  import Bus from '@/plugin/bus'
   import API from "@/service";
 
 
@@ -32,7 +30,6 @@
     components: {
       IconFont
     },
-    mixins: [],
     data() {
       return {
         infoShow: false,
@@ -51,33 +48,8 @@
       }
     },
     created() {
-      this.getInfos()
     },
-    filters: {
-      RISK_TOLERANCE_LEVEL_Filter(val) {
-        switch (val) {
-          case '1':
-            return '保守型'
-            break;
 
-          case '2':
-            return '谨慎型'
-            break;
-
-          case '3':
-            return '稳健型'
-            break;
-
-          case '4':
-            return '积极型'
-            break;
-
-          case '5':
-            return '激进型'
-            break;
-        }
-      }
-    },
     methods: {
       close() {
         this.infoShow = false
@@ -90,13 +62,10 @@
         // this.CARD_BANK_NAME = OldBankInfo.BANK_NAME
       },
       goPage(pageName) {
-        // this.infoShow = true
-        // return
         let data = {}
         console.log(pageName);
         if (pageName == PageName.FengxianResult) {
           this.setComState({type: "loginType", value: PageName.MoreService})
-          // util.storage.session.set(LsName.loginType,PageName.MoreService) // 用于跳转风险测评返回判断
           data = this.fenxianQuery
         } else {
           data = {}

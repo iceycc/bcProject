@@ -22,7 +22,7 @@
                             ****
                         </span>
           </section>
-          <section class="right" style="text-align: right">
+          <section class="right">
             <p>累计到账收益</p>
             <span class="right-text" v-if="pass">
                              <i>{{bankDetail.TOTAL_INCOME>=0?'+':''}}</i>
@@ -110,9 +110,9 @@
 </template>
 
 <script>
-  import IconFont from '@/components/commons/IconFont'
   import {PageName, imgSrc} from "@/Constant";
   import BankDetailMixins from "./BankDetail";
+  import {IconFont} from '@/components'
 
   export default {
     name: "bankDetail",
@@ -167,19 +167,13 @@
       }
     },
     created() {
-      this.getBankDetail()
-      this.scroll()
-      this.getProList()
-      this.getBankList()
+      this.getBankDetail()  // 获取产品列表
+      // this.scroll() // 这个暂时注释 忘记干啥的了
+      this.getProList() // 获取持有中的产品列表
+      this.getBankList() // 获取二类户信息
     }
     ,
     methods: {
-      // tapList() {
-      //   if (!this.proList.PAGE.retList || this.proList.PAGE.retList.length == 0) {
-      //     return
-      //   }
-      //   this.licaiShow = !this.licaiShow
-      // },
       goPage(pageName) {
         this.$router.push({
           name: pageName,

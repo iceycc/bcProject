@@ -50,7 +50,7 @@
     <p class="msg-infos">有疑问，请联系比财客服微信号: bicaikefu</p>
 
     <com-up-select
-      @clickBankList="addBankHandle"
+      @addBank="addBankHandle"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBankHandle"
@@ -90,7 +90,7 @@
   import OpenHead from '@/components/opening/OpenHead'
   import ComUpSelect from '@/components/commons/UpSelect'
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
-  import BankCardLimit from '@/components/KSH/BankCardLimit'
+  import BankCardLimit from '@/components/KSH/KshBankCardLimit'
 
   const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

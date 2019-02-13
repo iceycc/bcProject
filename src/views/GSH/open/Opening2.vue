@@ -39,7 +39,7 @@
     <!--<button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>-->
     <call-to-bicai info="有疑问，请联系公众号: bicaikef"></call-to-bicai>
     <com-up-select
-      @clickBankList="addBankHandle"
+      @addBank="addBankHandle"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBankHandle"
@@ -57,15 +57,17 @@
 <script>
   import {PageName, BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
-  import OpenHead from '@/components/opening/OpenHead'
   import Opening2Mixins from './Opening2'
-  import ComUpSelect from '@/components/commons/UpSelect' //
-  import SupportBankList from '@/components/commons/SupportBankList'
-  import BankCardLimit from '@/components/KSH/BankCardLimit' // 银行限额组件
-  import NormalInput from '@/components/form/NormalInput' // 常规的input组件
-  import SubmitButton from '@/components/form/SubmitButton' // 提交表单
-  import CallToBicai from '@/components/commons/CallToBicai' //联系比财客服
-  import SelectBank from '@/components/form/SelectBank' // 选择银行表单
+  import {
+    OpenHead,
+    UpSelect as ComUpSelect, //
+    SupportBankList,
+    KshBankCardLimit as BankCardLimit,
+    NormalInput,
+    SubmitButton,
+    CallToBicai,
+    SelectBank
+  } from '@/components'
 
   export default {
     data() {
@@ -134,7 +136,7 @@
       console.log('callbackInfos>>>', this.callbackInfos);
       if (this.callbackInfos.hasCardList.length > 0) {
         this.mainBankList = this.callbackInfos.hasCardList
-        if (this.callbackInfos.hasCardList[0].IS_SUPPORT == 0) {
+        if (this.callbackInfos.hasCardList[0].isSupport == 0) {
           // 不支持的银行。
         } else {
           this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
@@ -163,8 +165,8 @@
           return
         }
         // to
-        this.bankText = bank.OPEN_BANK
-        this.data.CARD_NO = bank.CARD_NO
+        this.bankText = bank.openBank
+        this.data.CARD_NO = bank.cardNo
       },
       showXiane() {
         this.backShow = true

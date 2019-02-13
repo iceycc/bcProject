@@ -66,13 +66,14 @@
 </template>
 <script>
   import {PageName, BusName, HOST_API} from "@/Constant";
-  import JsSelect from '@/components/commons/JsSelect'
-  import OpenHead from '@/components/opening/OpenHead'
   import Opening1Mixins from './Opening1'
-  import NormalInput from '@/components/form/NormalInput' // 常规的input组件
-  import CallToBicai from '@/components/commons/CallToBicai' // 常规的input组件
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-
+  import {
+    NormalInput,
+    JsSelect,
+    OpenHead,
+    CallToBicai,
+    SubmitButton
+  }  from '@/components'
 
   export default {
     data() {

@@ -50,7 +50,7 @@
   // const Letter = [A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
   import {BusName, LsName} from "@/Constant";
   import Bus from '@/plugin/bus'
-  import BankCardLimit from '@/components/KSH/BankCardLimit'
+  import BankCardLimit from '@/components/KSH/KshBankCardLimit'
 
   const Letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

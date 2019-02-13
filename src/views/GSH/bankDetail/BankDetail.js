@@ -10,7 +10,6 @@ export default {
   },
   methods: {
     async getProList() {
-
       let data = {
         TYPE: 'API_QRY_HOLD_INFO',
         currentPage: '1',

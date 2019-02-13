@@ -54,7 +54,7 @@
     <!--<button class="tijiao" @click="goNext">下一步</button>-->
     <button :class="{cantNext:cantNext}" :disabled="cantNext" class="tijiao" @click="goNext">下一步</button>
     <up-select
-      @clickBankList="addBankHandle"
+      @addBank="addBankHandle"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBankHandle"

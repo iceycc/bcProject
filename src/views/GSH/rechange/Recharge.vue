@@ -1,35 +1,35 @@
 <template>
   <div class="app">
     <app-bar title="充值"></app-bar>
-    <div class="rechargetitle">充值到{{ORG_NAME}}</div>
-    <div class="minshengbank">
-      <span class="minshengbankLogo">
+    <div class="s-title">充值到{{ORG_NAME}}</div>
+    <div class="bank-card">
+      <span class="logo">
         <img :src="imgSrc + logo" style="width:75%" alt="">
       </span>
-      <div class="new-add">
+      <div class="card-info">
         <p>{{ORG_NAME}}</p>
         <p>**** **** **** {{BANK_USER_CODE.substr(BANK_USER_CODE.length - 4)}}</p>
       </div>
 
     </div>
-    <div class="rechargetitle">银行卡</div>
-    <div class="minshengbank" @click="clickBank" style="border-bottom:1px solid #EEEEF0">
-      <span class="minshengbankLogo">
+    <div class="s-title">银行卡</div>
+    <div class="bank-card" @click="clickBank" style="border-bottom:1px solid #EEEEF0">
+      <span class="logo">
         <img :src="imgSrc + CARD_BANK_URL" style="width:75%" alt="">
       </span>
-      <div class="new-add">
+      <div class="card-info">
         <p>{{CARD_BANK_NAME}}</p>
         <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
       </div>
       <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="money">
-      <p>每日限额：{{DAY_QUOTA | BankLimit}}</p>
-      <p>单笔限额：{{SINGLE_QUOTA | BankLimit}}</p>
+      <p>每日限额：{{DAY_QUOTA | BankLimit}}，单笔限额：{{SINGLE_QUOTA | BankLimit}}</p>
+      <!--<p></p>-->
       <!--<p>单笔限额：{{SINGLE | formatNum}}</p>-->
     </div>
-    <section class="inputAmount" style="border-top: .4rem solid #f6f6f6">
-      <span class="Amount">金额</span>
+    <section class="money-box">
+      <span class="left">金额</span>
       <input @change="checkMoney"
              v-model="APPLY_AMOUNT" type="number" placeholder="请输入金额">
       <img
@@ -37,7 +37,8 @@
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
     </section>
     <submit-button
-      class="btn"
+      bgColor="lightBlue"
+      class="submit-btn"
       text="确认充值"
       :canSubmit="canClick"
       @submit="doNext"
@@ -52,31 +53,29 @@
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBank"
+      @addBank="addBankHandle"
     ></up-select>
   </div>
 </template>
 <script>
   import {HOST_API, LsName} from '@/Constant'
-  import UpSelect from '@/components/KSH/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
-  import IconFont from '@/components/commons/IconFont'
   import API from "@/service"
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-  import SignAreement from '@/components/commons/SignAreement' // 常规的input组件
+  import {
+    SubmitButton,
+    SignAreement,
+    IconFont,
+    UpSelect
+  } from '@/components'
 
-
-  let time = 60
   export default {
     data() {
       return {
-        timer: null,
-        html: '协议',
         page: false,
-        PIN: '',
         APPLY_AMOUNT: '',
         toUrl: '',
         ifGet: false,
@@ -95,9 +94,6 @@
         CARD_BANK_URL: '',
         DAY_QUOTA: '-1', // 单日限额
         SINGLE_QUOTA: '-1',
-        msgCode: '',
-        codeText: '获取验证码',
-        disable: false,
         upseletShow: false,
         mainBankList: [],
         passCode: '',
@@ -142,37 +138,12 @@
         this.SINGLE_QUOTA = bank.SINGLE_QUOTA
         this.CARD_NUM = bank.CARD_NUM
       },
+      addBankHandle(){
+        // todo 添加完成后跳回
+        this.$router.push({name:PageName.AddNewBank})
+      },
       clearNumHandle() {
         this.APPLY_AMOUNT = ''
-      },
-      getMsg() {
-        if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        // this.DAY_QUOTA = -1 说明无限额
-        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
-          return
-        }
-        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0 && this.SINGLE_QUOTA != '-1') {
-          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
-          return
-        }
-        if (!this.agree) {
-          Bus.$emit(BusName.showToast, '请先同意充值协议')
-          return
-        }
-        let times = time
-        this.disable = true
-        this.timer = setInterval(() => {
-          if (times == 0) {
-            this.codeText = '重新发送'
-            this.disable = false
-            clearInterval(this.timer)
-            return
-          }
-          times--
-          this.codeText = `${times}s`
-        }, 1000)
-        this.getCode()
       },
       doAgreeHandle() {
         this.agree = true
@@ -222,7 +193,7 @@
 <style lang="scss" scoped>
 
 
-  .rechargetitle {
+  .s-title {
     padding-left: 0.5rem;
     height: 0.8rem;
     background: #F6F6F9;
@@ -231,15 +202,17 @@
     font-size: 0.4rem;
   }
 
-  .minshengbank {
+  .bank-card {
     position: relative;
     padding-left: 0.5rem;
     height: 1.8rem;
     font-size: 0.5rem;
     display: flex;
     align-items: center;
-
-    .new-add {
+    .logo {
+      width: px2rem(50);
+    }
+    .card-info {
       font-size: px2rem(16);
 
       p:last-child {
@@ -261,14 +234,15 @@
     font-size: 0.4rem;
   }
 
-  .inputAmount {
+  .money-box {
     position: relative;
-    padding-left: 0.5rem;
-    height: 1.2rem;
-    line-height: 1rem;
-    font-size: 0.4rem;
+    padding:0 px2rem(20);
+    font-size: px2rem(16);
+    height:px2rem(44);
+    line-height: px2rem(44);
     border-bottom: 1px solid #EEEEF0;
-
+    border-top: px2rem(20) solid #f6f6f6;
+    display: flex;
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -278,61 +252,25 @@
       transform: translateY(-50%);
       right: px2rem(30);
     }
-
-    .button {
-      vertical-align: middle;
-      width: 2.5rem;
-      display: inline-block;
-      padding: .1rem;
-      border: 1px solid #508CEE;
-      color: #508CEE
-    }
-
     input {
-      width: 50%;
+      flex: 1;
       border: none;
-      box-sizing: border-box;
-      font-size: 0.4rem;
-      color: #333;
-      /* line-height: 0.5rem; */
       outline: none;
-
+      padding-right: px2rem(30);
+      box-sizing: border-box;
+      font-size: px2rem(20);
+      color: #333;
+    }
+    .left{
+      display: inline-block;
+      color: #444;
+      width: px2rem(60);
     }
   }
 
-  .Amount {
-    display: inline-block;
-    height: 100%;
-    width: 1.8rem;
+  .submit-btn{
+    margin-top: px2rem(60);
+    margin-bottom: px2rem(20);
   }
-
-  .tijiao {
-    font-size: px2rem(18);
-    color: #fff;
-    background: #ccc;
-    border-radius: px2rem(6);
-    line-height: 1.2rem;
-    width: px2rem(255);
-    margin: px2rem(30) auto px2rem(10);
-    text-align: center;
-    border: 0px;
-    outline: none;
-    display: block;
-
-    &.active {
-      background: #508CEE;
-    }
-  }
-
-
-  .minshengbankLogo {
-    width: px2rem(50);
-  }
-  .btn{
-    margin-top: px2rem(160) !important;
-  }
-
-
-
 
 </style>

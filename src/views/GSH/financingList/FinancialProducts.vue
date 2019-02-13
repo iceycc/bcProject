@@ -122,7 +122,6 @@
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui";
   import util from "libs/util";
-  import Mixins from "@/mixins";
   import {PageName} from "../../../Constant";
 
 

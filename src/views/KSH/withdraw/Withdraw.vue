@@ -61,7 +61,7 @@
   import util from "libs/util";
   import Mixins from '@/mixins'
   import IconFont from '@/components/commons/IconFont'
-  import UpSelect from '@/components/KSH/UpSelect'
+  import UpSelect from '@/components/KSH/KshUpSelect'
 
   let time = 60
   let timer;

@@ -58,7 +58,7 @@ export default {
           DEVICE_ID: DEVICE_ID + '',
           SYSTEM_TYPE: "h5",
           CHANNEL_ID: CHANNEL_ID || '',
-          USER_CHANNEL: USER_CHANNEL + '', // 新增 USER_CHANNEL
+          // USER_CHANNEL: USER_CHANNEL + '', // 新增 USER_CHANNEL
 
           APP_FLAG: APP_FLAG || 'BC',
           CLIENT_ID: "30"

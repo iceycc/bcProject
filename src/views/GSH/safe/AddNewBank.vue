@@ -53,7 +53,7 @@
   import Mixins from "@/mixins";
   import util from "libs/util";
   import SelectBank from '@/components/form/SelectBank' // 常规的input组件
-  import BankCardLimit from '@/components/KSH/BankCardLimit' // 银行限额组件
+  import BankCardLimit from '@/components/KSH/KshBankCardLimit' // 银行限额组件
   import SupportBankList from '@/components/commons/SupportBankList'
   import NormalInput from '@/components/form/NormalInput' // 常规的input组件
   import SmsCodeInput from '@/components/form/SmsCodeInput'

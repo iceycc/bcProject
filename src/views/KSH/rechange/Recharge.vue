@@ -61,7 +61,7 @@
 </template>
 <script>
   import {HOST_API, LsName} from '@/Constant'
-  import UpSelect from '@/components/KSH/UpSelect'
+  import UpSelect from '@/components/KSH/KshUpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
   import util from "libs/util";

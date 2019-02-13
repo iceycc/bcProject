@@ -40,7 +40,13 @@ axiosNew.interceptors.response.use(
       res.msg = throwErr(error.response.status, error.response) //throwErr 捕捉服务端的http状态码 定义在utils工具类的方法
       return Promise.reject(res)
     }
-    return Promise.reject(error)
+    if (error.toString().indexOf("timeout") !== -1) {
+      return Promise.reject('网络请求超时')
+    } else if (error.toString().indexOf("Network Error") !== -1) {
+      return Promise.reject('网络错误')
+    } else {
+      return Promise.reject(error)
+    }
 
   }
 )

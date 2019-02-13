@@ -118,7 +118,7 @@ export default {
     async getInfos() {
       // 获取机构名称  机构logo 用于充值提现
       let res = await API.safe.apiBandCard({})
-      console.log(res)
+      if('{}' === JSON.stringify(res)) return
       this.logo = res.BANK_BG_URL
       this.ORG_NAME = res.ORG_NAME
       this.PHONE_NUM = res.PHONE_NUM
