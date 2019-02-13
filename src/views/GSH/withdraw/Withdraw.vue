@@ -1,26 +1,26 @@
 <template>
-  <div class="app">
+  <div class="main">
     <app-bar title="提现"></app-bar>
-    <div class="rechargetitle">提现到{{CARD_BANK_NAME}}</div>
-    <div class="minshengbank" @click="clickBank">
-      <span class="minshengbankLogo">
+    <div class="s-title">提现到{{CARD_BANK_NAME}}</div>
+    <div class="bank-card" @click="clickBank">
+      <span class="logo">
         <img :src="imgSrc + logo" style="width:75%" alt="">
       </span>
-      <div class="new-add">
+      <div class="card-info">
         <p>{{CARD_BANK_NAME}}</p>
         <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
       </div>
       <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="crow-line"></div>
-    <section class="inputAmount">
-      <span class="Amount">金额</span>
+    <section class="money-box">
+      <span class="left">金额</span>
       <input @change="checkMoney"
              v-model="APPLY_AMOUNT" type="number" placeholder="请输入提现金额">
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
-      <span class="span" style="color:#389CFF"
+      <span class="all"
             @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
     </section>
     <p class="info1">
@@ -35,6 +35,7 @@
       text="确认提现"
       :canSubmit="canClick"
       @submit="doNext"
+      bgColor="lightBlue"
     ></submit-button>
     <banding-bank-select
       title="选择银行卡"
@@ -47,45 +48,32 @@
 </template>
 <script>
   import API from "@/service";
-  import AppBar from '@/components/header/AppBar'
-  import {LsName} from '@/Constant'
-  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Bus from '@/plugin/bus'
-  import {PageName, imgSrc, BusName} from "@/Constant";
-  import util from "libs/util";
+  import {PageName, imgSrc, BusName,LsName} from "@/Constant";
+  import util from "@/libs/util";
   import Mixins from '@/mixins'
-  import IconFont from '@/components/commons/IconFont'
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-  import BandingBankSelect from '@/components/upSelect/BandingBankSelect' // 常规的input组件
+  import {
+    BandingBankSelect,
+    SubmitButton,
+    IconFont,
+    AppBar
+  } from '@/components'
 
-  let time = 60
-  let timer;
   export default {
     data() {
       return {
-        codeText: '获取验证码',
         msgdisable: false,
-        msgCode: '',
-
         // 银行选择卡
         upseletShow: false,
         mainBankList: [],
-
         html: '协议',
         page: false,
         APPLY_AMOUNT: '',
         toUrl: '',
-        CARD_BANK_NAME: '',
+        CARD_BANK_NAME: '某某银行',
         imgSrc: imgSrc,
-
-        pass: '',
-        len: null,
-        passCode: '',
-
         logo: '',
         ifCheckMoneyEmpty: true,
-
-
         ACC_REST: '0',
         WITH_DRAWABLE_CASH: '0',
         DAY_REST: '0', // todo取每日限额
@@ -96,7 +84,6 @@
     },
     components: {
       AppBar,
-      PassWordZhengzhou,
       IconFont,
       SubmitButton,
       BandingBankSelect
@@ -127,41 +114,6 @@
       // this.WITH_DRAWABLE_CASH = '111'
     },
     methods: {
-
-      getMsg() {
-        if (util.Check.trim(this.APPLY_AMOUNT, '提现金额', true)) {
-          return
-        }
-        //
-        if (this.APPLY_AMOUNT - 0 > this.ACC_REST - 0) {
-          Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
-          return
-        }
-        let times = time
-        this.msgdisable = true
-        timer = setInterval(() => {
-          if (times == 0) {
-            this.codeText = '重新发送'
-            this.msgdisable = false
-            clearInterval(timer)
-            return
-          }
-          times--
-          this.codeText = `${times}s`
-        }, 1000)
-        this.getCode()
-      },
-      async getCode() {
-        let data = {
-          BIZ_TYPE: '2', // 提现
-          BANK_USER_ID: this.BANK_USER_ID,
-          BANK_ACCT_NO: this.BANK_USER_CODE
-        }
-        let res = await API.common.apiSendPhoneCode(data)
-        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-        //这里的提示信息没成功
-        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-      },
       checkMoney() {
 
       },
@@ -189,7 +141,6 @@
         // EITH_DRAW_ALL	全部提取标志
 
         let data = {
-          PHONE_CODE: this.msgCode,
           APPLY_AMOUNT: this.APPLY_AMOUNT, //
           EITH_DRAW_ALL: '0',
           MESAGE_TOKEN: this.MESAGE_TOKEN,
@@ -288,26 +239,31 @@
 </script>
 
 <style lang="scss" scoped>
+  .main{
+    width: 100%;
+    height: 100%;
+    background: #f6f6f9;
+  }
 
-
-  .rechargetitle {
+  .s-title {
     padding-left: px2rem(20);
     height: px2rem(30);
-    background: #F6F6F9;
     line-height: px2rem(30);
     color: #444444;
     font-size: px2rem(14);
   }
-
-  .minshengbank {
+  .bank-card {
     position: relative;
-    padding-left: 0.5rem;
-    height: px2rem(65);
-    font-size: px2rem(16);
+    padding-left: px2rem(20);
+    height: px2rem(72);
+    font-size: px2rem(20);
     display: flex;
     align-items: center;
-
-    .new-add {
+    background: #fff;
+    .logo {
+      width: px2rem(50);
+    }
+    .card-info {
       font-size: px2rem(16);
 
       p:last-child {
@@ -328,62 +284,53 @@
     background: #f9f9f6;
   }
 
-  .inputAmount {
+  .money-box {
     position: relative;
-    padding-left: px2rem(20);
-    height: px2rem(50);
-    line-height: px2rem(50);
+    padding-left: px2rem(12);
+    height: px2rem(44);
+    line-height: px2rem(44);
     font-size: px2rem(14);
     border-bottom: 1px solid #EEEEF0;
     margin-bottom: px2rem(10);
-
-    .button {
-      vertical-align: middle;
-      width: px2rem(80);
+    background: #fff;
+    display: flex;
+    .left {
+      width: px2rem(60);
       display: inline-block;
-      padding: px2rem(3);
-      border: 1px solid #508CEE;
-      color: #508CEE
+      height: 100%;
+      font-size: px2rem(14);
     }
-
     .close-icon {
       position: absolute;
       display: inline-block;
       width: px2rem(15);
       height: px2rem(15);
       top: 50%;
-      right: px2rem(100);
+      right: px2rem(80);
       margin-top: px2rem(-15/2);
 
     }
-
+    .all {
+      display: inline-block;
+      text-align: center;
+      width: px2rem(80);
+      color: #389CFF;
+    }
     input {
-      width: px2rem(180);
+      flex: 1;
       border: none;
       box-sizing: border-box;
-      font-size: 0.4rem;
+      font-size: px2rem(16);
+      padding-right: px2rem(30);
       color: #333;
       outline: none;
     }
 
-    .span {
-      display: inline-block;
-      text-align: center;
-      width: px2rem(80);
-    }
 
-    .Amount {
-      width: px2rem(80);
-      display: inline-block;
-      height: 100%;
-      font-size: px2rem(14);
-    }
   }
 
 
-  .minshengbankLogo {
-    width: px2rem(50);
-  }
+
 
   .info1 {
     padding-left: px2rem(20);
@@ -397,6 +344,6 @@
   }
 
   .submit-btn {
-    margin-top: px2rem(160);
+    margin-top: px2rem(60);
   }
 </style>

@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {BusName, LsName, PageName} from '@/Constant'
-import util from "libs/util";
+import util from "@/libs/util";
 import Bus from '@/plugin/bus/index'
 import routes from "./routes"
 import store from "@/store";

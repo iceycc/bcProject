@@ -1,4 +1,4 @@
-import util from "libs/util";
+import util from "@/libs/util";
 import {LsName, PageName, BusName} from "@/Constant";
 import API from "@/service";
 import Bus from '@/plugin/bus'

@@ -50,14 +50,10 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import API from '@/service'
   import {imgSrc} from "@/Constant";
   import {Actionsheet} from 'mint-ui';
   import {BusName, PageName} from "@/Constant";
-  import Bus from '@/plugin/bus'
-
-  Vue.component(Actionsheet.name, Actionsheet);
   export default {
     name: "BindingBank",
     data() {
@@ -85,6 +81,9 @@
           }
         ]
       }
+    },
+    components:{
+      [Actionsheet.name]:Actionsheet
     },
     created() {
       this.getBankList()

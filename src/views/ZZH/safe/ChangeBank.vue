@@ -58,7 +58,7 @@
     import API from "@/service";
     import {imgSrc, BusName, LsName,PageName} from "@/Constant";
     import Bus from '@/plugin/bus'
-    import util from "libs/util";
+    import util from "@/libs/util";
     import PassInput from '@/components/password/PassInput'
     // import {reloadByPassWordErr,} from '@/mixins'
     import Mixins from "@/mixins";

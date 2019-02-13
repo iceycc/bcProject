@@ -47,7 +47,7 @@
   import IconFont from '@/components/commons/IconFont'
   import API from "@/service";
   import {LsName, PageName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
 
 
   export default {

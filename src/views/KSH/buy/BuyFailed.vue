@@ -39,7 +39,7 @@
   import Clipboard from 'clipboard'
   import Bus from '@/plugin/bus'
   import {BusName, PageName} from "@/Constant";
-  // import util from "libs/util";
+  // import util from "@/libs/util";
   import API from "@/service";
 
 

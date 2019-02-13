@@ -106,7 +106,7 @@
   import UpSelect from '@/components/commons/UpSelect'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
   import API from "@/service"

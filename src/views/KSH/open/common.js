@@ -1,7 +1,7 @@
 import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName} from "@/Constant";
-import util from "libs/util";
+import util from "@/libs/util";
 import Mixins from "@/mixins";
 let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 

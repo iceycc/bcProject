@@ -9,7 +9,6 @@
         {{errMsg}}</p>
     </div>
     <span @click="reWithdraw" class="btn">重新支取</span>
-    <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
   </div>
 </template>
 <script>

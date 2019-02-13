@@ -123,6 +123,7 @@
           //新增
           this.data.USER_NAME = suerinfo.userName // 用户名
           this.data.USER_CARD_ID = suerinfo.userCardId // 身份证号
+          this.data.CARD_INDATE = suerinfo.cardIndate // 身份证有效期
 
           this.data.CARD_FRONT_FILE = suerinfo.cardFrontUrl.replace(/\s/g, '+')
           this.data.CARD_BACK_FILE = suerinfo.cardBackUrl.replace(/\s/g, '+')

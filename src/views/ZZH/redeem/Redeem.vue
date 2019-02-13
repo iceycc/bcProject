@@ -97,7 +97,7 @@
 </template>
 <script>
   import API from '@/service'
-  import util from "libs/util";
+  import util from "@/libs/util";
   import {PageName, BusName, LsName, imgSrc} from "@/Constant";
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Mixins from '@/mixins'

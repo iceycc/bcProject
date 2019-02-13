@@ -1,7 +1,7 @@
 import axiosNew from '../request/_axios.new'
 import Bus from '@/plugin/bus/index'
 import {BusName, PageName, LsName} from "@/Constant";
-import util from "libs/util";
+import util from "@/libs/util";
 import store from '@/store/index'
 
 export default {

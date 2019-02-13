@@ -8,7 +8,6 @@
     <section class="m-card">
       <p><span>支取金额</span><span class="flex1">{{money | formatNum}}</span></p>
       <p><span>收款账户</span><span class="flex1">{{BANK_USER_CODE}}</span></p>
-      <!--<p><span>资金预计到账日期</span><span class="flex1">{{date}}</span></p>-->
     </section>
     <button class="begain" @click="goNext">完成</button>
   </div>

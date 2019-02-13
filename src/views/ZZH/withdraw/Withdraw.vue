@@ -63,7 +63,7 @@
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import Mixins from '@/mixins'
 
   let time = 60

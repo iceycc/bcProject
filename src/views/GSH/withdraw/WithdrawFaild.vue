@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-    import {PageName} from "../../../Constant";
+    import {PageName} from "@/Constant";
 
     export default {
         data() {

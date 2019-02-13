@@ -54,7 +54,7 @@
   import {BusName,PageName} from "@/Constant";
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui"
-  import util from "libs/util";
+  import util from "@/libs/util";
   export default {
     mixins: [''],
     data() {

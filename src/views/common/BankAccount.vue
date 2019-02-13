@@ -107,7 +107,7 @@
 <script>
   import API from "@/service";
   import {PageName, LsName, imgSrc} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import {BusName, CheckBank} from "../../Constant";
   import Bus from '@/plugin/bus/index'
 

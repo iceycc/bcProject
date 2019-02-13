@@ -43,20 +43,22 @@
 </template>
 
 <script>
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-  import BankSelect from '@/components/KSH/KshBankSelect'
-  import ActiveInput from '@/components/form/ActiveInput'
-  import ErrMsg from '@/components/commons/ErrMsg'
   import API from "@/service";
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import Mixins from "@/mixins";
-  import util from "libs/util";
-  import SelectBank from '@/components/form/SelectBank' // 常规的input组件
-  import BankCardLimit from '@/components/KSH/KshBankCardLimit' // 银行限额组件
-  import SupportBankList from '@/components/commons/SupportBankList'
-  import NormalInput from '@/components/form/NormalInput' // 常规的input组件
-  import SmsCodeInput from '@/components/form/SmsCodeInput'
+  import util from "@/libs/util";
+  import {
+    SmsCodeInput,
+    NormalInput,
+    SupportBankList,
+    KshBankCardLimit as BankCardLimit,
+    ErrMsg,
+    SelectBank,
+    SubmitButton,
+    KshBankSelect as BankSelect,
+    ActiveInput
+  } from '@/components'
 
   let timer;
   export default {

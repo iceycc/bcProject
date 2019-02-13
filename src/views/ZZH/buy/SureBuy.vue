@@ -56,7 +56,7 @@
   import {PageName, BusName, LsName, imgSrc} from "@/Constant";
   import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
   import Bus from '@/plugin/bus'
-  import util from "libs/util";
+  import util from "@/libs/util";
   // import {reloadByPassWordErr, } from '@/mixins'
   import Mixins from "@/mixins";
 

@@ -1,6 +1,6 @@
 import http from '@/service/http/http.bank.new'
-import {HOST_API} from "@/Constant";
-
+// import {HOST_API} from "@/Constant";
+let HOST_API = 'http://47.94.110.156:9000'
 /**
  * axios 配置
  */
@@ -89,7 +89,7 @@ export default {
     // (实名认证) async
     apiRegisterValiUser(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiRegisterValiUser',
+        url: '/openapi/account/apiRegisterValiUser',
         params,
       }
       return http.post(options, Config.config, success, error)

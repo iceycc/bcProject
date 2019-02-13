@@ -182,7 +182,7 @@
   import API from "@/service";
   import Bus from "@/plugin/bus";
   import {PageName, imgSrc, LsName, BusName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import Mixins from "@/mixins";
   import Register from './commom'
 

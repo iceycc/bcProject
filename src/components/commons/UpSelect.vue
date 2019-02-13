@@ -8,12 +8,12 @@
       <ul class="r-type-list">
         <li
           v-for="bank,index in BankList" :key="index"
-          :class="{gray:bank.IS_SUPPORT == 0,active:cur === index}"
+          :class="{gray:bank.IS_SUPPORT == 0||bank.isSupport==0,active:cur === index}"
           @click="chooseType(index,bank,$event)">
-          <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
+          <img :src="imgSrc + (bank.BANK_LOGO_URL||bank.bankLogoUrl)" class="logo-img" alt="">
           <section>
-            <p class="name">{{bank.OPEN_BANK}}（{{bank.CARD_NO| noFilter}}）</p>
-            <p class="money">{{bank.MSG_QUOTA}}</p>
+            <p class="name">{{bank.OPEN_BANK||bank.openBank}}（{{(bank.CARD_NO||bank.cardNo)| noFilter}}）</p>
+            <p class="money">{{bank.MSG_QUOTA||bank.msgQuota}}</p>
           </section>
         </li>
       </ul>
@@ -180,14 +180,14 @@
       }
 
       li.active:after {
-      content: '';
-      position: absolute;
-      top: px2rem(30);
-      right: px2rem(10);
-      z-index: 10;
-      width: px2rem(18);
-      height: px2rem(18);
-      background: url("../../assets/images/check.png") center center no-repeat;
+        content: '';
+        position: absolute;
+        top: px2rem(30);
+        right: px2rem(10);
+        z-index: 10;
+        width: px2rem(18);
+        height: px2rem(18);
+        background: url("../../assets/images/check.png") center center no-repeat;
       }
 
       .gray {

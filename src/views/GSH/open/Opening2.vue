@@ -60,7 +60,7 @@
   import Opening2Mixins from './Opening2'
   import {
     OpenHead,
-    UpSelect as ComUpSelect, //
+    UpSelect as ComUpSelect, // 
     SupportBankList,
     KshBankCardLimit as BankCardLimit,
     NormalInput,
@@ -139,9 +139,9 @@
         if (this.callbackInfos.hasCardList[0].isSupport == 0) {
           // 不支持的银行。
         } else {
-          this.data.CARD_NO = this.callbackInfos.hasCardList[0].CARD_NO
-          this.bankText = this.callbackInfos.hasCardList[0].OPEN_BANK
-          this.tel = this.callbackInfos.hasCardList[0].PHONE_NUM
+          this.data.CARD_NO = this.callbackInfos.hasCardList[0].cardNo
+          this.bankText = this.callbackInfos.hasCardList[0].openBank
+          this.tel = this.callbackInfos.hasCardList[0].phoneNum
         }
       }
     },

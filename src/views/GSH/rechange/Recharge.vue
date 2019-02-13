@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="main">
     <app-bar title="充值"></app-bar>
     <div class="s-title">充值到{{ORG_NAME}}</div>
     <div class="bank-card">
@@ -23,7 +23,7 @@
       </div>
       <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
-    <div class="money">
+    <div class="money-limit">
       <p>每日限额：{{DAY_QUOTA | BankLimit}}，单笔限额：{{SINGLE_QUOTA | BankLimit}}</p>
       <!--<p></p>-->
       <!--<p>单笔限额：{{SINGLE | formatNum}}</p>-->
@@ -61,7 +61,7 @@
   import {HOST_API, LsName} from '@/Constant'
   import Bus from '@/plugin/bus'
   import {PageName, imgSrc, BusName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import Mixins from "@/mixins";
   import RechangeMixins from "./Rechange";
   import API from "@/service"
@@ -83,14 +83,14 @@
         agree: true, // 是否阅读
         agree1: true, // 是否获取短信
         agreeMentSrc: HOST_API + '/static/finsuit/js/openapi/js/xieyi/cz.html',
-        ORG_NAME: '',
+        ORG_NAME: '工商银行',
         CARD_NUM: '', //一类户卡号
         BANK_USER_CODE: '', //二类户卡号
         BANK_USER_ID: '', //银行用户ID
         MESAGE_TOKEN: '', //短信验证码标识
         imgSrc: imgSrc,
         logo: '',
-        CARD_BANK_NAME: '',
+        CARD_BANK_NAME: '某某银行卡',
         CARD_BANK_URL: '',
         DAY_QUOTA: '-1', // 单日限额
         SINGLE_QUOTA: '-1',
@@ -191,30 +191,33 @@
 </script>
 
 <style lang="scss" scoped>
-
-
+  .main{
+    width: 100%;
+    height:100%;
+    background: #f6f6f9;
+  }
   .s-title {
-    padding-left: 0.5rem;
-    height: 0.8rem;
+    padding-left: px2rem(20);
+    height: px2rem(30);
+    line-height: px2rem(30);
     background: #F6F6F9;
-    line-height: 0.8rem;
     color: #444444;
-    font-size: 0.4rem;
+    font-size: px2rem(12);
   }
 
   .bank-card {
     position: relative;
-    padding-left: 0.5rem;
-    height: 1.8rem;
-    font-size: 0.5rem;
+    padding-left: px2rem(20);
+    height: px2rem(72);
+    font-size: px2rem(20);
     display: flex;
     align-items: center;
+    background: #fff;
     .logo {
       width: px2rem(50);
     }
     .card-info {
       font-size: px2rem(16);
-
       p:last-child {
         color: #9199A1;
       }
@@ -228,10 +231,13 @@
     }
   }
 
-  .money {
-    padding: .2rem 0 .2rem 0.5rem;
-    color: #9199A1;
-    font-size: 0.4rem;
+  .money-limit {
+    padding-left: px2rem(20);
+    height: px2rem(45);
+    line-height: px2rem(45);
+    color: #999;
+    font-size:px2rem(14);
+    background: #fff;
   }
 
   .money-box {
@@ -241,8 +247,9 @@
     height:px2rem(44);
     line-height: px2rem(44);
     border-bottom: 1px solid #EEEEF0;
-    border-top: px2rem(20) solid #f6f6f6;
+    background: #fff;
     display: flex;
+    margin-top: px2rem(12);
     .close-icon {
       position: absolute;
       display: inline-block;

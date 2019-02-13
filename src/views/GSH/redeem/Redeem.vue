@@ -29,14 +29,11 @@
 </template>
 <script>
   import API from '@/service'
-  import util from "libs/util";
+  import util from "@/libs/util";
   import {PageName, BusName, LsName, imgSrc} from "@/Constant";
-  import PassWordZhengzhou from '@/components/password/PassInputZhengzhou'
-  import SubmitButton from '@/components/form/SubmitButton' // 常规的input组件
-
   import Mixins from '@/mixins'
   import Bus from '@/plugin/bus'
-
+  import {SubmitButton} from '@/components'
   let time = 60
   let timer;
   export default {
@@ -58,6 +55,8 @@
           INVEST_AMOUNT: '',
           FUND_NO: '',
           PRD_TYPE: '4',
+          ORG_NAME:'某某银行',
+          PRD_NAME:'某某产品'
         },
         EFFCT_INTEREST_RATE: '',
         passCode: '',
@@ -85,11 +84,10 @@
     mixins: [Mixins.queryStatus],
     watch: {},
     created() {
-      this.redeemData = this.getComState.redeemData
+      // this.redeemData = this.getComState.redeemData // 暂时注释掉
       this.getInfo();
     },
     components: {
-      PassWordZhengzhou,
       SubmitButton
     },
     methods: {
@@ -130,40 +128,6 @@
           timeStamp = now;
 
         }
-      },
-      getMsg() {
-        // if (!this.money) {
-        //   Bus.$emit(BusName.showToast, '支取金额不能为空')
-        //   return
-        // }
-        // let num = this.redeemData.INVEST_AMOUNT || 0
-        // if (this.money - 0 > num - 0) {
-        //   Bus.$emit(BusName.showToast, '支取金额大于可支取金额，请调整支取金额')
-        //   return
-        // }
-        let times = time
-        this.msgdisable = true
-        timer = setInterval(() => {
-          if (times == 0) {
-            this.codeText = '重新发送'
-            this.msgdisable = false
-            clearInterval(timer)
-            return
-          }
-          times--
-          this.codeText = `${times}s`
-        }, 1000)
-        this.getCode()
-      },
-      async getCode() { // 短信
-        let data = {
-          BIZ_TYPE: '6', // 需要
-          BANK_ACCT_NO: this.BANK_ACCT_NO,
-          BANK_USER_ID: this.BANK_USER_ID
-        }
-        let res = await API.common.apiSendPhoneCode(data)
-        this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
-        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
       },
       focus() {
         this.isFocus = true;
@@ -271,9 +235,6 @@
   }
 </script>
 <style lang="scss" scoped>
-
-  /*@import "~@/assets/iconfont/iconfont.css";*/
-
   i {
     font-style: normal;
   }
@@ -466,7 +427,7 @@
   }
 
   .submit-btn {
-    margin-top: px2rem(253)
+    margin-top: px2rem(60)
   }
 </style>
 

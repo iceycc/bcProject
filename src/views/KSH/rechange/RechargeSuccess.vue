@@ -21,7 +21,7 @@
   import {LsName} from "@/Constant";
   //
   import Mixins from "@/mixins";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import {PageName} from "../../../Constant";
 
   export default {

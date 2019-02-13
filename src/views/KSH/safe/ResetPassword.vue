@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-  import util from "libs/util";
+  import util from "@/libs/util";
   import API from "@/service"
   import {LsName, BusName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'

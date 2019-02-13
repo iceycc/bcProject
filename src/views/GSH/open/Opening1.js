@@ -1,7 +1,7 @@
 import API from "@/service";
 import Bus from "@/plugin/bus"
 import {PageName, BusName} from "@/Constant";
-import util from "libs/util";
+import util from "@/libs/util";
 import commons from './common'
 
 export default {
@@ -70,7 +70,7 @@ export default {
       // 保存第一步的数据
       this.setComState({
         type: 'openingData',
-        value: {...this.suerinfo, BESHARP_REGISTER_VALI_USER_SEQ: res.REQ_SERIAL}
+        value: {...this.suerinfo}
       })
       // 回显是否实名成功
       // this.checkBankStatus() //

@@ -69,7 +69,7 @@
   import Bus from '@/plugin/bus'
   import API from "@/service"
   import Mixins from "@/mixins";
-  import util from "libs/util";
+  import util from "@/libs/util";
 
   export default {
     data() {

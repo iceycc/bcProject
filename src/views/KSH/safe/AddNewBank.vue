@@ -40,7 +40,7 @@
   import {imgSrc, BusName, LsName, PageName} from "@/Constant";
   import Bus from '@/plugin/bus'
   import Mixins from "@/mixins";
-  import util from "libs/util";
+  import util from "@/libs/util";
 
   // import BankCardLimit from '@/components/KSH/KshBankCardLimit'
   let timer;

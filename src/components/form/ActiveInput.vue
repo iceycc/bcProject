@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import util from "libs/util";
+  import util from "@/libs/util";
 
   /**
    * 几个校验：

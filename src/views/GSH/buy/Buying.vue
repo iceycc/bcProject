@@ -1,26 +1,26 @@
 <template>
   <div class="main">
     <app-bar title="存入"></app-bar>
-    <div class="buytitle">
-      <div class="buytitleleft">
-        <div class="buytitleleftimg">
-          <img :src="imgSrc+proDetail.LOGO_URL" style="width:100%" alt="">
+    <div class="pro-info">
+      <div class="left">
+        <div class="logo">
+          <img :src="imgSrc+proDetail.LOGO_URL" alt="">
         </div>
-        <div class="buytitleleftcontent">
+        <div class="info">
 
-          <p>{{proDetail.PRD_NAME}}</p>
-          <p style="color:#666">{{proDetail.DEPOSIT_CATEGORY}}</p>
+          <p class="info-1">{{proDetail.PRD_NAME}}</p>
+          <p class="info-2">{{proDetail.DEPOSIT_CATEGORY}}</p>
         </div>
       </div>
-      <div class="buytitleright">
+      <div class="right">
         <p>起购金额{{proDetail.MIN_AMOUNT }}元</p>
         <p>最小递增{{proDetail.INCRE_AMOUNT }}元</p>
       </div>
     </div>
 
-    <div class="buysuccessdetails">
-      <div class="buysuccessdetailleft">可用金额 <strong>{{payNum | formatNum}}元</strong></div>
-      <div class="buysuccessdetailright" @click="goReChang">充值</div>
+    <div class="money">
+      <div class="left">可用金额 <strong>{{payNum | formatNum}}元</strong></div>
+      <div class="right" @click="goReChang">充值</div>
     </div>
     <div class="input-box">
       <p class="title">存入金额</p>
@@ -51,7 +51,7 @@
   import Bus from '@/plugin/bus'
   import API from "@/service"
   import Mixins from "@/mixins";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import {
     SubmitButton,
     SignAreement
@@ -60,7 +60,10 @@
   export default {
     data() {
       return {
-        proDetail: {},
+        proDetail: {
+          PRD_NAME:'产品名称',
+          DEPOSIT_CATEGORY:'隶属于某某银行'
+        },
         APPLY_AMOUNT: null,
         payNum: '0',
         agree: true,
@@ -103,6 +106,8 @@
     methods: {
       initData(proData) {
         this.getInfo() // 用于查询账户余额 19801
+        console.log(proData);
+        if(!proData.PRD_NAME) return // 未正常获取数据
         this.proDetail = proData
         // 可能是从活动页来，发现没有登录/注册，然后登录/注册，来购买
         let AMOUNT = this.getComState.ProAndOrgType.AMOUNT
@@ -293,59 +298,70 @@
 </script>
 
 <style lang="scss" scoped>
-
-  .buytitle {
-    width: 92%;
-    padding: 0.4rem 0.4rem;
-    border-top: 10px solid #F6F6F9;
-    border-bottom: 0.5rem solid #F6F6F9;
+  .main{
+    width: 100%;
+    height: 100%;
+    background: #f6f6f9;
+  }
+  .pro-info {
+    margin: px2rem(10) 0;
+    height: px2rem(72);
     display: flex;
-
-    .buytitleleft {
+    background: #fff;
+    .left {
       display: inline-block;
       flex: 1;
-
-      .buytitleleftimg {
-        vertical-align: middle;
-        padding-top: 0.2rem;
-        width: 1rem;
+      box-sizing: border-box;
+      padding-left: px2rem(20);
+      padding-top: px2rem(12);
+      .logo {
+        width: px2rem(40);
+        height: px2rem(40);
         display: inline-block;
-
+        img{
+          width:100%;
+          height: 100%;
+        }
       }
-
-      .buytitleleftcontent {
-        vertical-align: middle;
-        padding-top: -0.5rem;
+      .info {
         display: inline-block;
-        padding-left: px2rem(20);
-        font-size: px2rem(14);
+        padding-left: px2rem(12);
+        .info-1{
+          font-size: px2rem(15);
+          color: #333;
+        }
+        .info-2{
+          font-size: px2rem(12);
+          color: #999;
+        }
       }
     }
 
-    .buytitleright {
+    .right {
       float: right;
       text-align: right;
       display: flex;
+      padding-right: px2rem(20);
       flex-direction: column;
       justify-content: center;
-      font-size: 0.35rem;
+      font-size: px2rem(12);
       color: #666;
     }
   }
 
 
-  .buysuccessdetails {
+  .money {
     padding: 0 px2rem(20);
     line-height: 1.5rem;
     height: 1.5rem;
     font-size: 0.4rem;
-    border-bottom: 1px solid #EEEEF0;
-
-    .buysuccessdetailleft {
+    margin-bottom: px2rem(1);
+    background: #fff;
+    .left {
       float: left;
     }
 
-    .buysuccessdetailright {
+    .right {
       color: #468EE5;
       float: right;
     }
@@ -354,7 +370,7 @@
   .input-box {
     position: relative;
     padding: px2rem(12) px2rem(20);
-    border-bottom: 1px solid #EEEEF0;
+    background: #fff;
     .title{
       color:#A4A9B0;
       font-size: px2rem(14);
@@ -406,8 +422,8 @@
 
 
   .submit-btn{
-    margin-top: px2rem(60) !important;
-    margin-bottom: px2rem(20) !important;
+    margin-top: px2rem(60);
+    margin-bottom: px2rem(20);
   }
 
 </style>

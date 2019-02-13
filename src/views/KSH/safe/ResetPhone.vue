@@ -35,7 +35,7 @@
   import API from "@/service";
   import Bus from '@/plugin/bus'
   import {PageName, BusName, LsName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
   import Mixins from "@/mixins";
 
   export default {

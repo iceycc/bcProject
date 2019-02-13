@@ -1,7 +1,7 @@
 import API from "@/service";
 import {PageName, BusName} from "@/Constant";
 import Bus from '@/plugin/bus'
-import util from "libs/util";
+import util from "@/libs/util";
 
 
 export default {

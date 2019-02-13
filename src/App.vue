@@ -34,7 +34,7 @@
 <script>
   import Bus from './plugin/bus'
   import {BusName, imgSrc} from './Constant'
-  import util from "libs/util";
+  import util from "@/libs/util";
 
   export default {
     provide() {

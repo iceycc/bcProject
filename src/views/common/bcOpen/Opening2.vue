@@ -77,7 +77,7 @@
   import API from "@/service";
   import {imgSrc} from "@/Constant";
   import {PageName, BusName, LsName} from "@/Constant";
-  import util from "libs/util";
+  import util from "@/libs/util";
 
   const safeCodeUrl = HOST_API + '/finsuitSafeCode?SESSION_ID='
   let time = 60

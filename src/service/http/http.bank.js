@@ -1,7 +1,7 @@
 import axios from '../request/_axios'
 import Bus from '@/plugin/bus/index'
 import {BusName, PageName, LsName} from "@/Constant";
-import util from "libs/util";
+import util from "@/libs/util";
 // import Router from '@/router/index'
 import store from '@/store/index'
 
