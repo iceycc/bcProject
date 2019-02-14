@@ -26,9 +26,9 @@
   </div>
 </template>
 <script>
-
+  import API from "@/service";
   import {BusName, LsName, PageName} from "@/Constant";
-  import Opening3Mixins from './Opening3'
+  import Mixins from '@/mixins'
   import {
     OpenHead,
     SmsCodeInput,
@@ -42,7 +42,8 @@
       return {
         errMsg: '',
         smsCode: '',
-        alertShow: true
+        alertShow: false,
+        needData: {}
       }
     },
     components: {
@@ -52,6 +53,7 @@
       CallToBicai,
       AlertBox,
     },
+    mixins: [ Mixins.redirectByFromPage],
     computed: {
       canSubmit() {
         if (this.smsCode) {
@@ -61,9 +63,8 @@
         }
       }
     },
-    mixins: [Opening3Mixins],
     created() {
-
+      this.needData = this.$route.query
     },
     methods: {
       sure() {
@@ -78,9 +79,21 @@
        *
        */
       submit() {
+        this.CheckMsg()
         console.log('submit');
       },
-
+      async CheckMsg() {
+        let data = {
+          sernoOriginal: this.needData.reqSerial,
+          sendNo: this.needData.smsSendNo, // 短信验证码编号
+          shortCode: this.smsCode, // 短信验证码
+          bizType: '1'
+        }
+        let res = await API.open.apiRigesisterShortCodeVerify(data)
+        console.log(res);
+        this.setComState({type: 'ISLogin', value: true})
+        this.redirectByFromPage()
+      },
       /**
        * @param success 发送短信验证吗 倒计时
        * @param error 错误是初始化按钮

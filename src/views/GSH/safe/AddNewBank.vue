@@ -224,20 +224,20 @@
       async getBankList() {
         let res = await API.common.apiGetBankCardList({})
         let obj = {}
-        res.BAND_CARD_LIST.forEach(item => {
-          obj[item.BANK_CARD_BIN] = item.BANK_NAME
+        res.supportCardList.forEach(item => {
+          obj[item.bankCardBin] = item.bankName
         })
         // console.log('bankObj>>>',obj);
         // 全部银行
         this.AllBankListObj = obj
         // console.log(this.AllBankListObj);
-        this.supportBankList = res.SUPPORT_BANK_LIST // 支持的银行列表
+        this.supportBankList = res.supportBankList // 支持的银行列表
         // 支持的银行
-        this.bankList = res.SUPPORT_BANK_LIST.map((item) => {
+        this.bankList = res.supportBankList.map((item) => {
           return {
-            name: item.BANK_NAME,
+            name: item.bankName,
             value: 0,
-            src: imgSrc + item.BANK_LOGO_URL,
+            src: imgSrc + item.bankLogoUrl,
             Index: item.INITIAL
           }
         })

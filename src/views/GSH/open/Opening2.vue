@@ -160,7 +160,7 @@
       },
       chooseBankHandle(bank) {
         console.log(bank);
-        if (bank.IS_SUPPORT == 0) {
+        if (bank.isSupport == 0) {
           Bus.$emit(BusName.showToast, '暂不支持该银行')
           return
         }
@@ -181,7 +181,6 @@
       },
       checkBankName(val) {
         console.log('checkBankName', val);
-        return
         if (!val) {
           return false
         }
@@ -232,7 +231,6 @@
       // 下一步
       goNext() {
         console.log('goNext');
-        return
         this.doOpengingSecond()
       },
 

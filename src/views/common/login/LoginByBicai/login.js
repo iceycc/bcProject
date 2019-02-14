@@ -252,7 +252,8 @@ export default {
       let {LOGO_URL, ORG_NAME} = this.ProAndOrgType
       Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
       let data = {
-        IS_RET_GRADE: '1'
+        IS_RET_GRADE: '1',
+        isRetGrade:'1'
       }
       API.common.apiQryLoginStatus(data, res => {
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK
@@ -275,7 +276,7 @@ export default {
         PHONE_NUM: this.tel
       }
       API.common.apiRegisterBackShow(data, res => {
-        let step = res.LAST_STEP_NUM
+        let step = res.LAST_STEP_NUM || res.lastStepNum
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         this.setComState({type: 'TEL', value: this.tel})
         if (step == 0) {

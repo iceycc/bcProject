@@ -34,11 +34,14 @@ axiosNew.interceptors.response.use(
     setTimeout(() => {
       Indicator.close();
     }, 1000)
+    console.log('error>>>>>>>>',error);
     if (error && error.response) {
-      let res = {}
-      res.code = error.response.status
-      res.msg = throwErr(error.response.status, error.response) //throwErr 捕捉服务端的http状态码 定义在utils工具类的方法
-      return Promise.reject(res)
+      console.log('error.response>>>>>>>>',error.response);
+      // let res = {}
+      // res.code = error.response.status
+      // res.msg = throwErr(error.response.status, error.response) //throwErr 捕捉服务端的http状态码 定义在utils工具类的方法
+      let msg = error.response.data.message
+      return Promise.reject(msg)
     }
     if (error.toString().indexOf("timeout") !== -1) {
       return Promise.reject('网络请求超时')

@@ -97,16 +97,16 @@ export default {
     // (绑卡) async
     apiRegisterBandCard(params, delMsg, success, error) {
       let options = {
-        url: '/openapi/comm/apiRegisterBandCard',
+        url: '/openapi/account/apiRegisterBandCard',
         params,
         delMsg
       }
       return http.post(options, Config.config, success, error)
     },
-    // （设置密码）
-    apiRegisterSetPsw(params, success, error) {
+    // （	结算账户开户短信验证码校验（开户第三步）/ 绑卡短信校验）async
+    apiRigesisterShortCodeVerify(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiRegisterSetPsw',
+        url: '/openapi/account/apiRigesisterShortCodeVerify',
         params,
       }
       return http.post(options, Config.config, success, error)

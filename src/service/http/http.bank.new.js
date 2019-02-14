@@ -23,7 +23,7 @@ export default {
     if (JSON.stringify(ORG_ID) == '{}') {
       ORG_ID = ''
     }
-    ORG_ID = params.ORG_ID || ORG_ID
+    ORG_ID = params.orgId || ORG_ID
     let {
       DEVICE_ID,
       APP_FLAG,
@@ -79,6 +79,7 @@ export default {
     } catch (err) {
       error && error(errors.toString());
       console.log('错误msg>>', err);
+      Bus.$emit(BusName.showToast, err)
       return Promise.reject(err.toString())
     }
   }

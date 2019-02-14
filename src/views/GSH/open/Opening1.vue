@@ -115,7 +115,7 @@
         let suerinfo = data
         this.suerinfo = suerinfo
         console.log("suerinfo>>", suerinfo);
-        if (suerinfo && suerinfo.cardFrontUrl) {
+        if (suerinfo && suerinfo.userCardId) {
           this.preSrc1 = 'data:image/jpeg;base64,' + suerinfo.cardFrontUrl.replace(/\s/g, '+')
           this.preSrc2 = 'data:image/jpeg;base64,' + suerinfo.cardBackUrl.replace(/\s/g, '+')
           this.imgStyle1 = 'width:100%;height:100%;vertical-align: middle'

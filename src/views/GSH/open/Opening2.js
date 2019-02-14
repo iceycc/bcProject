@@ -78,40 +78,27 @@ export default {
         Bus.$emit(BusName.showToast, '手机号不能为空')
         return
       }
-      if (this.data.PHONE_CODE == '') {
-        Bus.$emit(BusName.showToast, '短信验证码不能为空')
-        return
-      }
-      if (this.data.MESSAGE_TOKEN == '') {
-        Bus.$emit(BusName.showToast, '请先获取短信验证码')
-        return
-      }
+
       let params = {
-        PHONE_NUM: this.tel, // 银行预留手机号(绑卡行)
-        REQ_SERIAL: this.callbackInfos.BESHARP_REGISTER_VALI_USER_SEQ || '', //比财开户请求ID
-        PERIOD: this.transformDATA(this.callbackInfos.CARD_INDATE).END,	// 证件有效期
-        BANK_NUM: this.data.CARD_NO, // 绑定银行卡卡号
-        MESSAGE_TOKEN: this.data.MESSAGE_TOKEN, //短信验证码Token
-        SHORT_CODE: this.data.PHONE_CODE, // 短信验证码
-        USER_CARD_ID: this.callbackInfos.USER_CARD_ID, //证件号码
-        CARD_FRONT_FILE: encodeURIComponent(this.callbackInfos.CARD_FRONT_URL), //身份证正面信息
-        CARD_BACK_FILE: encodeURIComponent(this.callbackInfos.CARD_BACK_URL), //身份证反面信息
-        USER_NAME: this.callbackInfos.USER_NAME, //姓名
-        HAS_BAND: this.callbackInfos.hasCardList.length > 0 ? '0' : '1', //是否已经绑定过卡 0:已在比财绑卡；1:未在比财绑过卡
-        OPEN_BANK: this.bankText, //// 银行卡所属银行名
-        TYPE: 'API_REGISTER_BAND_CARD',
+        openBank: this.bankText, //// 银行卡所属银行名
+        accountNo:this.data.CARD_NO,
+        bankCardPhone:this.tel
       }
       console.log('params', params);
       try {
-        await API.open.apiRegisterBandCard(params)
+        let res = await API.open.apiRegisterBandCard(params)
         this.Londing.close()
         API.watchApi({
           FUNCTION_ID: 'ptb0A004', // 点位
           REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
         })
-        this.setComState({type: 'ISLogin', value: true})
-        this.redirectByFromPage()
-
+        // this.setComState({type: 'ISLogin', value: true})
+        // this.redirectByFromPage()
+        this.$router.push({name:PageName.Opening3,query:{...res}})
+        // apiPackSeq: "502019021413570833650408"
+        // msgId: "65D860AF91C923886CD7267FC86295A5"
+        // reqSerial: "2019021413570838155150"
+        // smsSendNo: "123456"
       } catch (err) {
         this.errMsg = err
         setTimeout(() => {
