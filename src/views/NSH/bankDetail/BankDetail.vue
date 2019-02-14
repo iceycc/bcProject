@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!--<app-bar :title="bankObj.ORG_NAME"></app-bar>-->
-    <app-bar title="工商银行321321"></app-bar>
+    <app-bar title="工商银行"></app-bar>
     <section class="container" style="padding-top: 7px">
       <section class="banner">
         <section>

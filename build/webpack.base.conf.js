@@ -4,6 +4,21 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
+
+// 用于开发暂时忽略无用目录用的
+let excludeBankDir = /none\//
+let argv = JSON.parse(process.env.npm_config_argv)
+let cooked = argv.cooked
+if(cooked[2] && cooked[2]==='--exc'){
+  let dirArr = cooked[3].slice(2).split('-')
+  let str = ''
+  dirArr.forEach(item=>{
+    str +=item + '|'
+  })
+  str = str.slice(0,str.length-1)
+  excludeBankDir =new RegExp(`src/views/(${str})/`)
+}
+
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -29,8 +44,8 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-        ? config.build.assetsPublicPath
-        : config.dev.assetsPublicPath
+      ? config.build.assetsPublicPath
+      : config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -48,12 +63,14 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: vueLoaderConfig,
+        exclude: [excludeBankDir]
       },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')],
+        exclude: [excludeBankDir]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
