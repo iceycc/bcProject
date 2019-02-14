@@ -256,9 +256,9 @@ export default {
         isRetGrade:'1'
       }
       API.common.apiQryLoginStatus(data, res => {
-        let HAS_OPEN_BANK = res.HAS_OPEN_BANK
-        let HAS_LOGIN = res.HAS_LOGIN
-        let HAS_GRADE = res.HAS_GRADE
+        let HAS_OPEN_BANK = res.HAS_OPEN_BANK || res.hasOpenBank
+        let HAS_LOGIN = res.HAS_LOGIN || res.hasLogin
+        let HAS_GRADE = res.HAS_GRADE || res.hasGrade
         this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
