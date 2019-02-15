@@ -233,7 +233,6 @@
                 CHANNEL_ID,
               }
             })
-
           }
           if (ORG_ID == '66') {
             this.$router.push({
@@ -244,11 +243,10 @@
                 APP_FLAG,
                 PRO_ID: id,
                 CHANNEL_ID,
+
               }
             })
-
           }
-
         } else {
           // this.getListData()
           this.getListDataByChannel()
@@ -387,7 +385,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
 
   .wrap {
     width: 100%;

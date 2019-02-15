@@ -19,7 +19,7 @@
     </div>
 
     <div class="money">
-      <div class="left">可用金额 <strong>{{payNum | formatNum}}元</strong></div>
+      <div class="left">可用金额 <strong>{{accRestDesc}}元</strong></div>
       <div class="right" @click="goReChang">充值</div>
     </div>
     <div class="input-box">
@@ -65,7 +65,7 @@
           DEPOSIT_CATEGORY:'隶属于某某银行'
         },
         APPLY_AMOUNT: null,
-        payNum: '0',
+        accRest: '0',
         agree: true,
         imgSrc: imgSrc,
         INCRE_AMOUNT: '',
@@ -92,7 +92,7 @@
         }
       },
       canClick() {
-        if (Number(this.APPLY_AMOUNT) <= Number(this.payNum) && Number(this.APPLY_AMOUNT) >= this.proDetail.MIN_AMOUNT && this.agree) {
+        if (Number(this.APPLY_AMOUNT) <= Number(this.accRest) && Number(this.APPLY_AMOUNT) >= this.proDetail.MIN_AMOUNT && this.agree) {
           return true
         } else {
           return false
@@ -126,8 +126,9 @@
       async getInfo() {
         // 查询账户余额
         let res1 = await API.bank.apiQryEleAccount({})
-        this.payNum = res1.ACC_REST // 账户余额(可用余额)
-        // this.payNum = 1000// 账户余额(可用余额)
+        this.accRest = res1.accRest // 账户余额(可用余额)
+        this.accRestDesc = res1.accRestDesc // 账户余额(可用余额)
+        // this.accRest = 1000// 账户余额(可用余额)
 
         // 获取银行卡信息
         let res2 = await API.safe.apiBandCard({})
@@ -190,7 +191,7 @@
           return
         }
 
-        if (this.APPLY_AMOUNT - 0 > this.payNum) {
+        if (this.APPLY_AMOUNT - 0 > this.accRest) {
           Bus.$emit(BusName.showToast, '余额不足，请充值')
           return
         }
@@ -327,6 +328,7 @@
         display: inline-block;
         padding-left: px2rem(12);
         .info-1{
+          width: px2rem(180);
           font-size: px2rem(15);
           color: #333;
         }

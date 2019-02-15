@@ -16,6 +16,9 @@ export default {
   },
   created() {
     this.ORG_ID = util.storage.session.get('ORG_ID')
+    if(this.$route.query.title){
+      document.title = this.$route.query.title
+    }
   },
   mixins: [Mixins.reloadByPassWordErr],
   methods: {
@@ -185,7 +188,7 @@ export default {
         }
       })
     },
-    // 判断该用户在本行的状态
+    // 判断该用户在本行的状态 银行的了
     checkBankOpenAndLogin() {
       let {LOGO_URL, ORG_NAME} = this.productDetail
       Bus.$emit(BusName.showBankLonding, {LOGO_URL, ORG_NAME})
@@ -193,8 +196,8 @@ export default {
         IS_RET_GRADE: '1'
       }
       API.common.apiQryLoginStatus(data, res => {
-        let HAS_OPEN_BANK = res.HAS_OPEN_BANK
-        let HAS_LOGIN = res.HAS_LOGIN
+        let HAS_OPEN_BANK = res.HAS_OPEN_BANK || res.hasOpenBank
+        let HAS_LOGIN = res.HAS_LOGIN || res.hasLogin
         let HAS_GRADE = res.HAS_GRADE
         this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
@@ -211,7 +214,7 @@ export default {
       // 登陆比财成功 且在比财实名成功 然后 检查在本行状态
       let data = {}
       API.common.apiRegisterBackShow(data, res => {
-        let step = res.LAST_STEP_NUM
+        let step = res.LAST_STEP_NUM || res.lastStepNum
         this.setComState({type: 'TEL', value: this.tel})
         // （0未提交，1提交第一步，2提交第二步，3提交第三步）
         // util.storage.session.set('USERINFO', res)
