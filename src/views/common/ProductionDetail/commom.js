@@ -16,6 +16,9 @@ export default {
   },
   created() {
     this.ORG_ID = util.storage.session.get('ORG_ID')
+    if(this.$route.query.title){
+      document.title = this.$route.query.title
+    }
   },
   mixins: [Mixins.HandleMixin],
   methods: {
