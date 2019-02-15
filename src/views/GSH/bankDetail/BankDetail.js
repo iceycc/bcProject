@@ -11,10 +11,9 @@ export default {
   methods: {
     async getProList() {
       let data = {
-        TYPE: 'API_QRY_HOLD_INFO',
         currentPage: '1',
-        PRD_TYPE: '4',
-        DEPOSIT_TYPE_ID: '4',
+        prdType: '4',
+        depositTypeId: '4',
       };
       //
       let res = await API.bank.apiQryHoldInfo(data);
