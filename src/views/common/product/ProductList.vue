@@ -206,6 +206,7 @@
           let id = util.storage.session.get('id')
           let ORG_ID = util.storage.session.get('ORG_ID')
           let title = util.storage.session.get('title')
+          let {APP_FLAG, CHANNEL_ID} = this.$store.getters.GET_ACCOUNT_STATE
           util.storage.session.remove('id')
           util.storage.session.remove('title')
           util.storage.session.set('reload', null)
@@ -213,7 +214,11 @@
             this.$router.push({
               name: PageName.MoneyFundDetail,
               query: {
-                PRO_ID: id, title
+                title,
+                ORG_ID,
+                APP_FLAG,
+                PRO_ID: id,
+                CHANNEL_ID,
               }
             })
           }
@@ -221,7 +226,11 @@
             this.$router.push({
               name: PageName.KeShangProDetail,
               query: {
-                PRO_ID: id, title
+                title,
+                ORG_ID,
+                APP_FLAG,
+                PRO_ID: id,
+                CHANNEL_ID,
               }
             })
 
@@ -251,6 +260,8 @@
           FROM_ID: ID
         })
         util.storage.session.set('ORG_ID', ORG_ID)
+        let {APP_FLAG, CHANNEL_ID} = this.$store.getters.GET_ACCOUNT_STATE
+
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
         // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
@@ -264,7 +275,11 @@
             this.$router.push({
               name: PageName.MoneyFundDetail,
               query: {
-                PRO_ID: ID, title: PRD_NAME
+                title: PRD_NAME,
+                PRO_ID: ID,
+                ORG_ID,
+                APP_FLAG,
+                CHANNEL_ID
               }
             })
           }
@@ -272,7 +287,11 @@
             this.$router.push({
               name: PageName.FinancingProduct,
               query: {
-                PRO_ID: ID, title: PRD_NAME
+                title: PRD_NAME,
+                PRO_ID: ID,
+                ORG_ID,
+                APP_FLAG,
+                CHANNEL_ID
               }
             })
           }
@@ -280,7 +299,11 @@
             this.$router.push({
               name: PageName.DepositDetail1,
               query: {
-                PRO_ID: ID, title: PRD_NAME
+                title: PRD_NAME,
+                PRO_ID: ID,
+                ORG_ID,
+                APP_FLAG,
+                CHANNEL_ID
               }
             })
           }
@@ -289,7 +312,11 @@
               this.$router.push({
                 name: PageName.DepositDetail1,
                 query: {
-                  PRO_ID: ID, title: PRD_NAME
+                  title: PRD_NAME,
+                  PRO_ID: ID,
+                  ORG_ID,
+                  APP_FLAG,
+                  CHANNEL_ID
                 }
               })
             }
@@ -298,7 +325,10 @@
               this.$router.push({
                 name: PageName.DepositDetail2,
                 query: {
-                  PRO_ID: ID, title: PRD_NAME, RATE
+                  PRO_ID: ID, title: PRD_NAME, RATE,
+                  ORG_ID,
+                  APP_FLAG,
+                  CHANNEL_ID
                 }
               })
             }
@@ -306,7 +336,10 @@
               this.$router.push({
                 name: PageName.DepositDetail1,
                 query: {
-                  PRO_ID: ID, title: PRD_NAME
+                  PRO_ID: ID, title: PRD_NAME, RATE,
+                  ORG_ID,
+                  APP_FLAG,
+                  CHANNEL_ID
                 }
               })
             }
@@ -314,7 +347,10 @@
               this.$router.push({
                 name: PageName.DepositDetail1,
                 query: {
-                  PRO_ID: ID, title: PRD_NAME
+                  PRO_ID: ID, title: PRD_NAME, RATE,
+                  ORG_ID,
+                  APP_FLAG,
+                  CHANNEL_ID
                 }
               })
             }
@@ -348,7 +384,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  @import "~@/assets/px2rem";
 
   .wrap {
     width: 100%;

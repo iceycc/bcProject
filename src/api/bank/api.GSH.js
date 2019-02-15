@@ -165,6 +165,7 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+
     // async 设置默认卡
     apiDefaultBankCard(params, success, error) {
       let options = {
@@ -202,7 +203,14 @@ export default {
    * 银行产品相关的
    */
   bank: {
-
+    // async  查询登录用户某机构绑定卡信息
+    apiQryEleInProcessing(params, success, error) {
+      let options = {
+        url: '/openapi/bank/apiQryEleInProcessing',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
     //  async 获取我的投资持有中数据
     apiQryHoldInfo(params, success, error) {
       let options = {
@@ -214,7 +222,7 @@ export default {
     // async 获取单个银行资产数据(汇总) 未到期
     apiQryAsset(params, success, error) {
       let options = {
-        url: '/openapi/bank/apiMyAssetByOrg',
+        url: '/openapi/bank/apiQryAsset',
         params
       }
       return http.post(options, Config.config, success, error)

@@ -10,14 +10,14 @@
           <icon-font :iconClass="pass?'icon-eye':'icon-icon-eye-close'" iconStyle="eye"
                      @doClick="pass =!pass"></icon-font>
         </section>
-        <p class="money" v-if="pass">{{bankDetail.TOTAL_ASSET | formatNum}}</p>
+        <p class="money" v-if="pass">{{bankDetail.totalAssetDesc}}</p>
         <p class="money" v-if="!pass">****</p>
         <section class="income">
           <section class="left">
             <p>预计最大收益</p>
             <span class="left-text" v-if="pass">
-                             <i>{{bankDetail.YSD_INCOME>=0?'+':''}}</i>
-                            {{bankDetail.YSD_INCOME}}</span>
+                             <i>{{bankDetail.ysdIncomeDesc>=0?'+':''}}</i>
+                            {{bankDetail.ysdIncomeDesc}}</span>
             <span class="left-text" v-if="!pass">
                             ****
                         </span>
@@ -25,8 +25,8 @@
           <section class="right">
             <p>累计到账收益</p>
             <span class="right-text" v-if="pass">
-                             <i>{{bankDetail.TOTAL_INCOME>=0?'+':''}}</i>
-                            {{bankDetail.TOTAL_INCOME}}</span>
+                             <i>{{bankDetail.totalIncomeDesc>=0?'+':''}}</i>
+                            {{bankDetail.totalIncomeDesc}}</span>
             <span class="right-text" v-if="!pass">
                             ****
                         </span>
@@ -38,7 +38,7 @@
       <section class="info-card">
         <div class="ic-left">
           <span class="bk-text1">可用余额</span><span class="bk-text2">（元）</span>
-          <p class="money" v-if="pass">{{bankDetail.ACC_REST | formatNum}}</p>
+          <p class="money" v-if="pass">{{bankDetail.accRestDesc}}</p>
           <p class="money" v-else>****</p>
         </div>
         <span class="ic-right" @click="goPage(toPageName.BankBalance)">
@@ -101,9 +101,9 @@
     </section>
 
     <p class="foot-text">
-      银行热线 <a :href="'tel:'+TEL_HERF">{{bankDetail.CUST_SERVICE_HOTLINE}}</a>
+      银行热线 <a :href="'tel:'+TEL_HERF">{{bankDetail.custServiceHotLine}}</a>
       <br>
-      {{bankDetail.CUST_SERVICE_TIME}}
+      {{bankDetail.custServiceHotLine}}
 
     </p>
   </div>
@@ -157,8 +157,8 @@
     },
     computed: {
       TEL_HERF() {
-        if (this.bankDetail.CUST_SERVICE_HOTLINE) {
-          let str = this.bankDetail.CUST_SERVICE_HOTLINE
+        if (this.bankDetail.custServiceHotLine) {
+          let str = this.bankDetail.custServiceHotLine
           str = str.replace(/[^0-9]/ig, "")
           return str
         } else {

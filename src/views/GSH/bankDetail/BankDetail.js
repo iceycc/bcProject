@@ -30,9 +30,7 @@ export default {
       }
     },
     async getBankDetail() { // 获取产品列表
-      let data = {
-        TYPE: 'API_MY_ASSET_BY_ORG'
-      }
+      let data = {}
       let res = await API.bank.apiQryAsset(data)
       this.bankDetail = res
 
