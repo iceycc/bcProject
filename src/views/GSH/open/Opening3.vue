@@ -124,7 +124,7 @@
           }
           success && success() //
         }catch (e) {
-          
+
           error && error()
         }
       },

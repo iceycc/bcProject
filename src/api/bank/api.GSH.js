@@ -64,7 +64,7 @@ export default {
     // 轮询查询状态
     apiQueryBizStatus(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiQueryBizStatus',
+        url: '/openapi/biz/apiQueryBizStatus',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -169,7 +169,7 @@ export default {
     // async 设置默认卡
     apiDefaultBankCard(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiDefaultBankCard',
+        url: '/openapi/account/apiDefaultBankCard',
         params,
       }
       return http.post(options, Config.config, success, error)
@@ -178,7 +178,7 @@ export default {
     // async 用户解绑卡
     apiChangeBingCard(params, success, error) {
       let options = {
-        url: '/openapi/comm/apiChangeBingCard',
+        url: '/openapi/account/apiChangeBingCard',
         params,
       }
       return http.post(options, Config.config, success, error)

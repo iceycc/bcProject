@@ -26,7 +26,7 @@
       ></sms-code-input>
       <submit-button
         class="submit-btn"
-        text="开户"
+        text="下一步"
         :canSubmit="true"
         @submit="goNext"
       ></submit-button>
@@ -86,14 +86,13 @@
         bankNo: '',
         msgCode: '',
         codeText: '获取验证码',
-        disable: false,
         bankTel: '',
         MESAGE_TOKEN: '',
         bankNameToNo: false,
         params: {},
         ifGet: false,
         OldBankInfo: {},
-        time: 60
+        needData:null
       }
     },
     mixins: [Mixins.reloadByPassWordErr],
@@ -124,7 +123,7 @@
         // if (val.length <= 8) return
         this.checkBankNo(val)
       },
-      getMsgCode() {
+      getMsgCode(success,error) {
         if (this.bankText == '请选择开户银行') {
           Bus.$emit(BusName.showToast, '请选择开户银行')
           return
@@ -138,19 +137,8 @@
           return
         }
         if (util.Check.tel(this.bankTel, true)) return;
-        let sTime = this.time
-        this.disable = true
-        timer = setInterval(() => {
-          if (sTime == 0) {
-            this.codeText = '重新发送'
-            this.disable = false
-            clearInterval(timer)
-            return
-          }
-          sTime--
-          this.codeText = `${sTime}s`
-        }, 1000)
-        this.getCode()
+        // 需要直接调用绑卡 发送短信验证码
+        this.BindingCardAPI(success)
       },
       getOldBankInfo() {
         this.OldBankInfo = this.getComState.hasCardList[0]
@@ -251,39 +239,30 @@
       checkBankType() {
 
       },
-      async getCode() { //
-        let query = this.$route.query
-        let data = {
-          BIZ_TYPE: '8', // 绑卡需要
-          BANK_USER_ID: query.BANK_USER_ID,// 银行用户ID
-          BANK_ACCT_NO: query.BANK_ACCT_NO,// 电子账户
-        }
-        let res = await API.common.apiSendPhoneCode(data)
-        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-      },
-      async BindingCardAPI() {
-        // 解绑银行卡
-        let data = {
-          BANK_NAME: this.bankText,//银行名称
-          BANK_ACCOUNT_NO: this.bankNo,//银行账号
-          BANK_INNER: '0',// 行内外标识 暂时默认全传他行
-          DEFAULT_MARK: '1',//是否默认卡
-          PHONE_NUM: this.bankTel,//银行卡开户行手机号
-          BIND_FLG: '1',// 绑定标志 1-绑定，2-解绑
-          MESSAGE_TOKEN: this.MESAGE_TOKEN,
-          VALIDATE_CODE: this.msgCode,// 短信验证码
 
-          BANK_CARD_TYPE: '',//
-          BANK_NO: '',  //银行行号
-          CARD_BIN: '', //卡Bin
-          CLEAR_BANK: '',// 清算银行
-          CLEAR_BANK_NO: '',// 清算银行行号
+      async BindingCardAPI(success) {
+        // 绑ding银行卡
+        let data = {
+          bankName: this.bankText,//银行名称
+          accountNo: this.bankNo,//银行账号
+          bankCardPhone: this.bankTel,//银行卡开户行手机号
+          bindFlg: '1',// 绑定标志 1-绑定，2-解绑
         }
-        await API.safe.apiChangeBingCard(data)
-        this.$router.push({name: PageName.BindingBank})
+        let res =   await API.safe.apiChangeBingCard(data)
+        this.needData = res
+        success && success()
       },
-
+      async CheckMsg() {
+        let data = {
+          sernoOriginal: this.needData.reqSerial,
+          sendNo: this.needData.apiPackSeq, // 短信验证码编号
+          shortCode: this.msgCode, // 短信验证码
+          bizType: '2' // 绑卡：2
+        }
+        let res = await API.open.apiRigesisterShortCodeVerify(data)
+        console.log(res);
+        this.$router.push({name:PageName.BindingBank})
+      },
       goNext() {
         if (this.bankText == '请选择开户银行') {
           Bus.$emit(BusName.showToast, '请选择开户银行')
@@ -303,7 +282,9 @@
           // this.showErrMsg('暂不支持该银行')
 
         } else {
-          this.BindingCardAPI()
+          // / 绑卡短信校验
+          this.CheckMsg()
+
         }
 
       }

@@ -61,8 +61,8 @@
     data() {
       return {
         proDetail: {
-          PRD_NAME:'产品名称',
-          DEPOSIT_CATEGORY:'隶属于某某银行'
+          PRD_NAME: '产品名称',
+          DEPOSIT_CATEGORY: '隶属于某某银行'
         },
         amount: null,
         accRest: '0',
@@ -73,7 +73,7 @@
         BANK_USER_ID: '', //银行用户ID
         INVEST_ID: '',
         TEAM_ID: '',
-        accRestDesc:''
+        accRestDesc: ''
       }
     },
     components: {
@@ -93,7 +93,7 @@
         }
       },
       canClick() {
-        if (Number(this.amount) <= Number(this.accRest) && Number(this.amount) >= this.proDetail.MIN_AMOUNT && this.agree) {
+        if (Number(this.amount) <= Number(this.accRest) && Number(this.amount) >= this.proDetail.minAmount && this.agree) {
           return true
         } else {
           return false
@@ -130,11 +130,7 @@
         this.accRest = res1.accRest // 账户余额(可用余额)
         this.accRestDesc = res1.accRestDesc // 账户余额(可用余额)
         // this.accRest = 1000// 账户余额(可用余额)
-
         // 获取银行卡信息
-        let res2 = await API.safe.apiBandCard({})
-        this.BANK_ACCT_NO = res2.CARD_LIST[0].CARD_NUM
-        this.BANK_USER_ID = res2.BANK_USER_ID
       },
 
       clearNumHandle() {
@@ -164,12 +160,7 @@
         if (num < parseInt(this.proDetail.minAmount)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
-        }
-        // else if (a != 0 || (num - parseInt(this.proDetail.MIN_AMOUNT)) % a != 0) {
-        //   Bus.$emit(BusName.showToast, '请输入递增金额的整数倍')
-        //   return true
-        // }
-        else {
+        } else {
           return false
         }
       },
@@ -206,62 +197,40 @@
         this.doPay()
       },
       // 轮询查询交易状态！！
-      polling(res,proId) {
+      async polling(res, proId) {
         let data = {
-          BIZ_TYPE: '6', // 购买
-          BESHARP_SEQ: res.BESHARP_BUY_SEQ
+          bizType: '6', // 购买
+          reqSerial: res.reqSerial,
+          apiPackSeq: res.apiPackSeq
         }
         // 交易轮询
         this.Londing.open({
           text: '正在存入中'
         })
-        let i = 1
-        let timer = setInterval(() => {
-          i++
-          API.common.apiQueryBizStatus(data, result => {
-            if ('1' == result.RES_CODE || i == 5) {
-              this.Londing.close()
-              clearInterval(timer)
-              Bus.$emit(BusName.showToast, result.RES_MSG);
-              this.$router.push({
-                name: PageName.BuyFailed,
-                query: {
-                  err: result.RES_MSG,
-                  proId
-                }
-              })
-            } else if ('0' == result.RES_CODE) { // 成功
-              clearInterval(timer)
-              Bus.$emit(BusName.showToast, result.RES_MSG);
-              this.Londing.close()
-              this.setComState({type: 'buyData', value: result})
-              this.$router.push({
-                name: PageName.BuySuccess,
-                query: {
-                  TEAM_ID: this.TEAM_ID,
-                  INVEST_ID: this.INVEST_ID,
-                  proId
-                }
-              })
-            } else {
-              if (i > 5) {
-                clearInterval(timer)
-                Bus.$emit(BusName.showToast, result.RES_MSG);
-                this.$router.push({
-                  name: PageName.BuyFailed,
-                  query: {
-                    err: result.RES_MSG,
-                    proId
-                  }
-                })
-              }
+        try {
+          let result = await API.common.apiQueryBizStatus(data)
+          Bus.$emit(BusName.showToast, result.RES_MSG);
+          this.Londing.close()
+          this.setComState({type: 'buyData', value: result})
+          this.$router.push({
+            name: PageName.BuySuccess,
+            query: {
+              TEAM_ID: this.TEAM_ID,
+              INVEST_ID: this.INVEST_ID,
+              proId
             }
-          }, err => {
-            clearInterval(timer)
-            Bus.$emit(BusName.showToast, err);
-
           })
-        }, 2000)
+        } catch (e) {
+          this.Londing.close()
+          Bus.$emit(BusName.showToast, e);
+          this.$router.push({
+            name: PageName.BuyFailed,
+            query: {
+              err: e,
+              proId
+            }
+          })
+        }
       },
       async doPay() {
         let {
@@ -275,9 +244,10 @@
         let data = {
           prdIndexId: this.proDetail.proId + '',
           amount: this.amount + '',
-          cashFlag:'1', // 钞汇标志
-          ccy:'001', // 币种 默认人民币
-          term:'', // 产品存期
+          cashFlag: '0', // 钞汇标志
+          ccy: '001', // 币种 默认人民币
+          term: '003', // 产品存期 todo 暂时写死
+
           couponId: COUPON_ID + '', // 优惠券ID	非必填  字符型
           couponDetailId: COUPON_DETAIL_ID + '', // 会员领券记录ID
           teamId: TEAM_ID + '', //活动ID
@@ -285,47 +255,54 @@
         }
         console.log(data);
         let res = await API.buy.apiBuy(data)
-        this.polling(res,this.proDetail.proId)
+        this.polling(res, this.proDetail.proId)
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .main{
+  .main {
     width: 100%;
     height: 100%;
     background: #f6f6f9;
   }
+
   .pro-info {
     margin: px2rem(10) 0;
     height: px2rem(72);
     display: flex;
     background: #fff;
+
     .left {
       display: inline-block;
       flex: 1;
       box-sizing: border-box;
       padding-left: px2rem(20);
       padding-top: px2rem(12);
+
       .logo {
         width: px2rem(40);
         height: px2rem(40);
         display: inline-block;
-        img{
-          width:100%;
+
+        img {
+          width: 100%;
           height: 100%;
         }
       }
+
       .info {
         display: inline-block;
         padding-left: px2rem(12);
-        .info-1{
+
+        .info-1 {
           width: px2rem(170);
           font-size: px2rem(15);
           color: #333;
         }
-        .info-2{
+
+        .info-2 {
           font-size: px2rem(12);
           color: #999;
         }
@@ -352,6 +329,7 @@
     font-size: 0.4rem;
     margin-bottom: px2rem(1);
     background: #fff;
+
     .left {
       float: left;
     }
@@ -366,11 +344,13 @@
     position: relative;
     padding: px2rem(12) px2rem(20);
     background: #fff;
-    .title{
-      color:#A4A9B0;
+
+    .title {
+      color: #A4A9B0;
       font-size: px2rem(14);
       margin-bottom: px2rem(9);
     }
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -379,10 +359,12 @@
       top: 50%;
       right: px2rem(30);
     }
+
     .left {
       width: px2rem(30);
       font-size: px2rem(24);
     }
+
     input {
       width: 50%;
       border: none;
@@ -416,7 +398,7 @@
   }
 
 
-  .submit-btn{
+  .submit-btn {
     margin-top: px2rem(60);
     margin-bottom: px2rem(20);
   }
