@@ -57,8 +57,14 @@ import PassInputZhengZhouForMore from './password/PassInputZhengZhouForMore'
  */
 import BandingBankSelect from './upSelect/BandingBankSelect'
 
+/**
+ *工商行弹窗提示
+ */ 
+import PopTip from './GSH/PopTip'
+
 
 export  {
+  PopTip,
   AlertBox,
 
   AgreeMent,
