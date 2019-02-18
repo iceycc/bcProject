@@ -274,7 +274,7 @@ export default {
     //  async 支取校验 v2
     apiRedemptionValid2(params, success, error) {
       let options = {
-        url: '/openapi/ksh/biz/v2/apiRedemptionValid',
+        url: '/openapi/bank/apiRedemptionValid',
         params
       }
       return http.post(options, Config.config, success, error)
