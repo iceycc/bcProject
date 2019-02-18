@@ -96,24 +96,6 @@ export default [
     meta: {keepAlive: false, title: '添加新银行卡', needLogin: false}
   },
 
-
-
-  /**
-   * financingDetail
-   */
-  {
-    path: '/' + PageName.InvestmentDetails,
-    name: PageName.InvestmentDetails,
-    component: resolve => require(['views/GSH/financingDetail/InvestmentDetails.vue'], resolve),
-    meta: {keepAlive: false, title: '银行理财', needLogin: false}
-  },
-  {
-    path: '/' + PageName.IncomeProgress,
-    name: PageName.IncomeProgress,
-    component: resolve => require(['views/GSH/financingDetail/IncomeProgress.vue'], resolve),
-    meta: {keepAlive: false, title: '货币基金', needLogin: false}
-  },
-
   /**
    * bankDetail
    */

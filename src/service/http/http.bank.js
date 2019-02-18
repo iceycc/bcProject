@@ -43,7 +43,7 @@ export default {
       CHANNEL_ID,
       TOKEN = token,
       SESSION_ID = '',
-      USER_CHANNEL = ''
+      OPEN_API_CHANNEL_ID = ''
     } = store.getters.GET_ACCOUNT_STATE
     let datas = {
       biz_data: {
@@ -58,7 +58,7 @@ export default {
           DEVICE_ID: DEVICE_ID + '',
           SYSTEM_TYPE: "h5",
           CHANNEL_ID: CHANNEL_ID || '',
-          // USER_CHANNEL: USER_CHANNEL + '', // 新增 USER_CHANNEL
+          USER_CHANNEL: OPEN_API_CHANNEL_ID + '', // 新增 USER_CHANNEL
 
           APP_FLAG: APP_FLAG || 'BC',
           CLIENT_ID: "30"
@@ -77,27 +77,10 @@ export default {
     return axios.request(config).then(result => {
       result = result.biz_data
       console.log('zhengzhou - res>>>', result);
-      // store.commit('REMOVE_COMMON_STATE', 'LAST_STEP_NUM')
-      // store.commit('REMOVE_COMMON_STATE', 'REQ_SERIAL')
-      // util.storage.session.remove(LsName.LAST_STEP_NUM)
-      // util.storage.session.remove(LsName.REQ_SERIAL)
       if (!TOKEN && result.head.TOKEN) { //
         store.commit('SET_TOKEN', result.head.TOKEN)
       }
-      // if (result.head.TOKEN) { // 接口有返回token就更新token
-      //   store.commit('SET_TOKEN', result.head.TOKEN)
-      // }
-      // if (OTHER && JSON.stringify(result.data.REQ_SERIAL) != '{}' && result.data.REQ_SERIAL && result.data.LAST_STEP_NUM) {
-      //   // 开户时 银行卡已经绑定 要保存下这俩参数 用于下次绑定
-      //   store.commit('SET_COMMON_STATE', {
-      //     type: 'LAST_STEP_NUM',
-      //     value: result.data.LAST_STEP_NUM
-      //   })
-      //   store.commit('SET_COMMON_STATE', {
-      //     type: 'REQ_SERIAL',
-      //     value: result.data.REQ_SERIAL
-      //   })
-      // }
+
       // 根据状态码 做业务状态校验 分流
       if (result.head.CODE == 0) {
         let msg = result.head.MSG || '成功'

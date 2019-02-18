@@ -10,7 +10,7 @@
       ref="smsInput"
       @sendTelCode="sendTelCodeHandle"
       v-model="smsCode"
-      clickText="60s"
+      clickText="获取验证码"
     ></sms-code-input>
     <submit-button
       class="submit-btn"
@@ -21,9 +21,11 @@
     ></submit-button>
     <alert-box
       v-if="alertShow"
-      message="开户失败"
+      :message="errMsg"
       @submit="sure"
       @cancel="close"
+      left="取消开户"
+      right="重新开户"
     ></alert-box>
     <call-to-bicai info="有疑问，请联系公众号: bicaikef"></call-to-bicai>
   </div>
@@ -43,7 +45,7 @@
   export default {
     data() {
       return {
-        errMsg: '',
+        errMsg: '开户失效，重新开始',
         smsCode: '',
         alertShow: false,
         needData: {}
@@ -70,15 +72,20 @@
       this.needData = this.$route.query
     },
     mounted(){
-      this.$refs.smsInput.doCountdown()
+      // 怎么判断是从
+      console.log();
+      if(this.$route.params.flag){
+        this.$refs.smsInput.doCountdown()
+      }
+      // if(this.$route)
     },
     methods: {
       sure() {
         this.alertShow = false
+        this.$router.push({name:PageName.Opening2})
       },
       close() {
         this.alertShow = false
-
       },
       /**
        * 确定开户成功
@@ -104,12 +111,22 @@
        * @param success 发送短信验证吗 倒计时
        * @param error 错误是初始化按钮
        */
-      sendTelCodeHandle(success, error) {
+      async sendTelCodeHandle(success, error) {
         console.log('sendTelCodeHandle');
-        success && success() //
-        // setTimeout(() => {
-        //   error()
-        // }, 3000)
+        let data = {
+          sernoOriginal: this.needData.reqSerial,
+        }
+        try {
+          let res = await API.common.apiSendPhoneCode(data)
+          console.log(res);
+          if(res.code=='98001600'){
+            this.alertShow = true
+          }
+          success && success() //
+        }catch (e) {
+          
+          error && error()
+        }
       },
 
     }

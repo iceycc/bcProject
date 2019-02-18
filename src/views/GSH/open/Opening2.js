@@ -92,13 +92,7 @@ export default {
           FUNCTION_ID: 'ptb0A004', // 点位
           REMARK_DATA: '异业合作-开户-绑定银行卡', // 中文备注
         })
-        // this.setComState({type: 'ISLogin', value: true})
-        // this.redirectByFromPage()
-        this.$router.push({name:PageName.Opening3,query:{...res}})
-        // apiPackSeq: "502019021413570833650408"
-        // msgId: "65D860AF91C923886CD7267FC86295A5"
-        // reqSerial: "2019021413570838155150"
-        // smsSendNo: "123456"
+        this.$router.push({name:PageName.Opening3,query:{...res},params:{flag:'opening2'}})
       } catch (err) {
         this.errMsg = err
         setTimeout(() => {
