@@ -6,12 +6,12 @@
       <div class="f-box">
         <div class="profit">
           <div>
-            <p>{{financialData.TOTAL_ASSET - financialData.ACC_REST | formatNum}}</p>
+            <p>{{financialData.totalAmtDesc}}</p>
             <p>存款总资产（元）</p>
           </div>
           <span class="line"></span>
           <div>
-            <p>{{financialData.TOTAL_INCOME | formatNum}}</p>
+            <p>{{financialData.totalIncomeDesc}}</p>
             <p>预计最大收益</p>
           </div>
         </div>
@@ -34,26 +34,26 @@
             <div style="padding-bottom: 20px">
               <div v-if="nowIndex===0" class="divTab-1" v-for="(item,index) in pageList" :key="index">
                 <!-- 新加明细按钮 -->
-                <span class="detail" @click="geDetails(item)">明细</span>
+                <!-- <span class="detail" @click="geDetails(item)">明细</span> -->
                 <h4>
-                  <strong>{{item.PRD_NAME}}</strong>
+                  <strong>{{item.prdName}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p class="org-name">{{item.ORG_NAME}}</p>
+                <p class="org-name">{{item.orgName}}</p>
                 <p>持有金额（元）
-                  <span>{{item.HOLD_AMOUNT | formatNum}}</span>
+                  <span>{{item.holdAmtDesc}}</span>
                 </p>
                 <p>购买时间
-                  <span>{{item.TIME_END}}</span>
+                  <span>{{item.buyTime}}</span>
                 </p>
                 <p>到期日期
-                  <span>{{item.EXPIRE_TIME}}</span>
+                  <span>{{item.expireDate}}</span>
                 </p>
                 <p>最大存款利率<img class="info" src="@/assets/images/problom2@2x.png" alt="">
-                  <span>{{item.RATE}}%</span>
+                  <span>{{item.rate}}%</span>
                 </p>
                 <p>预计最大收益<img class="info" src="@/assets/images/problom2@2x.png" alt="">
-                  <span>{{item.EXPECT_INCOME}}</span>
+                  <span>{{item.expectIncome}}</span>
                 </p>
 
                 <!-- 新加赎回追加按钮 -->
@@ -68,17 +68,17 @@
               </div>
               <div v-if="nowIndex===1" class="divTab-1" v-for="(item,index) in pageList" :key="index">
                 <!-- 新加明细按钮 -->
-                <span class="detail" @click="geDetails(item)">明细</span>
+                <!-- <span class="detail" @click="geDetails(item)">明细</span> -->
                 <h4>
-                  <strong>{{item.PRD_NAME}}</strong>
+                  <strong>{{item.prdName}}</strong>
                   <!-- <router-link to="/TransactionDetails">明细</router-link> -->
                 </h4>
-                <p class="org-name">{{item.ORG_NAME}}</p>
+                <p class="org-name">{{item.orgName}}</p>
                 <p>投资金额（元）
-                  <span>{{item.HOLD_AMOUNT | formatNum}}</span>
+                  <span>{{item.investAmtDesc}}</span>
                 </p>
                 <p>投资收益
-                  <span>{{item.ADD_INCOME | formatNum}}</span>
+                  <span>{{item.addIncome}}</span>
                 </p>
                 <!--<p>支取时间-->
                 <!--<span>{{item.OVER_DATE}}</span>-->
@@ -104,7 +104,9 @@
 
       <!--</div>-->
     </div>
-    <section class="waiting" v-if="infoShow">
+    <div v-if="infoShow">
+      <div class='popContainer'></div>
+    <section class="waiting" >
       <p>{{waitingMsg}}</p>
       <div class="btn" v-if="canRedeem">
         <div @click="close" class="cancel">取消</div>
@@ -113,8 +115,30 @@
       <div class="btn" v-else>
         <div @click="close" class="cancel">确定</div>
       </div>
+
     </section>
+    
+    </div>
+
+  <section class="pop"> 
+		 	<div class="pop-mask" :class="{none:!tipVis}"></div> 
+		     <div class="pop-main" :class="{show1:tipVis}"> 
+         <div class="pop-tpw-title"> 
+		       <ins>
+		        利息计算方式
+		       </ins> 
+		       <a href="javascript:void(0)" class="v4-pop-close" @click="tipVis=!tipVis"></a> 
+		      </div> 
+		      <div class="select-coupons"> 
+		       <div class="pop-tpw-box">
+             eeeee
+		       </div> 
+		      </div> 
+		     </div> 
+  </section>
+
   </div>
+
 </template>
 <script>
   import API from "@/service";
@@ -129,6 +153,8 @@
     mixins: [''],
     data() {
       return {
+        tipVis:true, //提示是否显示
+        holdParame:"",//持有参数
         waitingMsg: '暂不支持',
         infoShow: false,
         searchCondition: {
@@ -158,9 +184,6 @@
         tabsParam: ["持有中", "已支取"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
         financialData: {
-          ACC_REST: '0.00',
-          YSD_INCOME: '0.00',
-          TOTAL_INCOME: '0.00',
         },
         total: '',
         flags: [
@@ -178,7 +201,7 @@
       "v-loadmore": Loadmore
     },
     created() {
-      this.getData(); //理财产品列表
+    //  this.getData(); //理财产品列表
       // this.total = this.$route.query.total
     },
     mounted() {
@@ -217,9 +240,9 @@
       async goRedeem(item) {
 
         let params = {
-          INVEST_TIME: item.TIME_END,
-          PRD_INDEX_ID: item.PRD_INDEX_ID,
-          EXPIRE_TIME: item.EXPIRE_TIME
+          // INVEST_TIME: item.TIME_END,
+          prdIndexId: item.prdIndexId,
+          expireDate: item.expireDate
         }
         let res = await API.redeem.apiRedemptionValid2(params)
         console.log(res)
@@ -232,9 +255,9 @@
         this.flagsLength = res.length
         for (let i = 0; i < res.length; i++) {
           // 就是进行排序。。。可恶的是产品需求不明，现在得按RES_CODE的值 先弹RES_CODE=4的再弹RES_CODE=3的 todo再优化
-          if (res[i].RES_CODE == 3) {
+          if (res[i].resCode == 3) {
             this.flags.push(res[i])
-          } else if (res[i].RES_CODE == 4) {
+          } else if (res[i].resCode == 4) {
             this.flags.unshift(res[i])
           } else {
             this.flags.push(res[i])
@@ -251,9 +274,9 @@
         this.currentFlagIndex = step + 1
         let flag = this.flags[step]
         console.log(flag);
-        if (flag.RES_CODE == 2) {
+        if (flag.resCode == -1) {
           // 2.不可支取
-          this.waitingMsg = flag.RES_MSG
+          this.waitingMsg = flag.resMsg
           this.canRedeem = false
           this.infoShow = true
         } else {
@@ -261,7 +284,7 @@
           // 3：未满收益周期的天数将按照该行活期利率计算，收益周期请在产品详情查看，是否继续支取
           // 4：若现在支取，将无法享受活动额外奖励，仅可获得产品正常收益
           // 文案后台
-          this.waitingMsg = flag.RES_MSG
+          this.waitingMsg = flag.resMsg
           this.canRedeem = true
           this.infoShow = true
           // this.$router.push({name: PageName.Redeem})
@@ -272,15 +295,13 @@
         this.nowIndex = index;
         this.loadPageList();
       },
-      async getData() {
-        let data = {
-          type: 'API_QRY_ASSET',
-        };
-        //
-        let res = await API.bank.apiQryAsset(data)
-        this.financialData = res;
+      // async getData() {
+      //   let data = {};
+      //   //
+      //   let res = await API.bank.apiQryAsset(data)
+      //   this.financialData = res;
 
-      },
+      // },
       loadTop: function () {
         //组件提供的下拉触发方法
         //下拉加载
@@ -306,19 +327,24 @@
           let data = {
             // currentPage: this.searchCondition1.pageNo - 1 + '',
             currentPage: '1',
-            PRD_TYPE: "4",
-            DEPOSIT_TYPE_ID: "4"
+            prdType: "4",
+            depositTypeId: "4"
           };
           let res = await API.bank.getMyInvestOver(data)
           this.pageList = res.PAGE.retList || [];
-          if (this.pageList.length == 0) {
-            // this.allLoaded = true;
+        
+          if(res.PAGE.currentPage==res.PAGE.totalPage){
+             this.allLoaded = true;
+             Bus.$emit(BusName.showToast, "数据全部加载完成");
+             return
           }
-          if (!res.PAGE) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
-            return
-          }
+          
+          // if (!res.PAGE) {
+          //   this.allLoaded = true;
+          //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+          //   return
+          // }
+
           //    if (this.pageList.length <= 0) {
           //     Bus.$emit(BusName.showToast, "暂无数据");
           //    }
@@ -333,17 +359,29 @@
           let data = {
             // currentPage: this.searchCondition.pageNo - 1 + '',
             currentPage: '1',
-            PRD_TYPE: "4",
-            DEPOSIT_TYPE_ID: "4"
+            prdType: "4",
+            depositTypeId: "4"
           };
           let res = await API.bank.apiQryHoldInfo(data)
-          console.log(res)
+          //console.log(res)
+          this.financialData=res; // 存款总资产  预计最大收益
           this.pageList = res.PAGE.retList;
           if (this.pageList.length <= 0) {
             this.allLoaded = true;
             // Bus.$emit(BusName.showToast, "暂无数据");
           }
           this.MIN_AMOUNT = this.pageList[0] && this.pageList[0].MIN_AMOUNT
+
+           //是否是最后一页
+          if (res.PAGE.nextPageFlag == 0) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }else{
+          //为翻页传递参数
+          this.holdParame=this.pageList[this.pageList.length - 1];
+         
+         }
+
 
           this.$nextTick(function () {
             // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
@@ -360,30 +398,44 @@
             "" + (parseInt(this.searchCondition1.pageNo) + 1);
           let data = {
               currentPage: this.searchCondition1.pageNo + '',
-              PRD_TYPE: "4",
-              DEPOSIT_TYPE_ID: "4"
+              prdType: "4",
+              depositTypeId: "4"
             }
           ;
           let res = await API.bank.getMyInvestOver(data)
           let pageList = res.PAGE.retList || [];
           this.pageList = this.pageList.concat(pageList);
-          if (this.pageList.length < this.searchCondition1.pageSize) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          // if (this.pageList.length < this.searchCondition1.pageSize) {
+          //   this.allLoaded = true;
+          //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+          // }
+
+          if(res.PAGE.currentPage==res.PAGE.totalPage){
+             this.allLoaded = true;
+             Bus.$emit(BusName.showToast, "数据全部加载完成");
+             return
           }
-          if (!res.PAGE) {
-            this.allLoaded = true;
-            Bus.$emit(BusName.showToast, "数据全部加载完成");
-            return
-          }
+
+
+          // if (!res.PAGE) {
+          //   this.allLoaded = true;
+          //   Bus.$emit(BusName.showToast, "数据全部加载完成");
+          //   return
+          // }
         } else {
           // 持有分页查询
           this.searchCondition.pageNo =
             "" + (parseInt(this.searchCondition.pageNo) + 1);
           let data = {
             currentPage: this.searchCondition.pageNo + '',
-            PRD_TYPE: "4",
-            DEPOSIT_TYPE_ID: "4"
+            prdType: "4",
+            depositTypeId: "4",
+            accNo:this.holdParame.accNo, //账号
+            accCode:this.holdParame.accCode,  //账户代码
+            prodCode:this.holdParame.prodCode,  //产品代码
+            fxSeqNo:this.holdParame.fxSeqNo,   //存单序号
+            cashExFlag:this.holdParame.cashExFlag,   //钞汇标志
+            ccy:this.holdParame.ccy,   //币种
           };
           let res = await API.bank.apiQryHoldInfo(data)
           // if (!res.PAGE) {
@@ -392,10 +444,16 @@
           //   return
           // }
           let pageList = res.PAGE.retList || [];
+
+          
           this.pageList = this.pageList.concat(pageList);
-          if (res.PAGE.currentPage == res.PAGE.totalPage) {
+          //是否是最后一页
+          if (res.PAGE.nextPageFlag == 0) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
+          }else{
+            //为翻页传递参数
+            this.holdParame=pageList[pageList.length - 1];
           }
           // if (this.pageList.length < this.searchCondition.pageSize) {
           //   this.allLoaded = true;
@@ -550,9 +608,10 @@
         position: relative;
         font-size: px2rem(12);
         margin: px2rem(10) px2rem(15) 0;
-        border-radius: px2rem(12);
+        // border-radius: px2rem(12);
         box-sizing: border-box;
-        padding: px2rem(15) px2rem(15) 0 px2rem(15);
+        // padding: px2rem(15) px2rem(15) 0 px2rem(15);
+        padding-top: px2rem(15);
 
         .org-name {
           color: #999;
@@ -568,9 +627,14 @@
         &:last-child {
           margin-bottom: px2rem(50);
         }
+        h4,p{
+          padding:0 px2rem(15);
+        }
 
         h4 {
           overflow: hidden;
+         
+
         }
 
         h4 strong {
@@ -607,16 +671,17 @@
         }
 
         p:first-of-type {
-          padding: px2rem(4) 0 px2rem(10);
+          padding: px2rem(4) px2rem(15) px2rem(10);
           border-bottom: px2rem(1) solid #f5f5f5;
           margin-bottom: px2rem(16);
         }
 
         // p:last-of-type{ padding-bottom: 0;}
         .bottom-btn {
-          padding: px2rem(4) 0;
+          // padding: px2rem(4) 0;
           text-align: center;
           display: flex;
+          height: px2rem(45);
           border-top: 1px solid #F5F5F5;
 
           div {
@@ -639,6 +704,15 @@
     box-sizing: border-box;
     /*padding-bottom: px2rem(50);*/
   }
+   .popContainer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 99;
+   }
 
   .waiting {
     position: absolute;
@@ -650,27 +724,36 @@
     width: px2rem(270);
     z-index: 100;
     border: 1px solid #e5e5e5;
-    border-radius: px2rem(12);
-    box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
-
+    border-radius: px2rem(6);
+    // box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
     p {
       text-align: center;
-      padding-top: px2rem(20);
-      font-size: px2rem(16);
+      padding: px2rem(35) px2rem(15) ;
+      font-size: px2rem(14);
       color: #333;
     }
 
     .btn {
-      margin-top: px2rem(10);
-      border-top: 1px solid #fafafa;
+     
+      border-top: 1px solid #F5F5F5;
       display: flex;
     }
 
     .cancel, .sure {
+      position: relative;
       text-align: center;
       flex: 1;
       padding: px2rem(10) 0 px2rem(10);
       font-size: px2rem(17);
+    }
+    .cancel::after{
+      position: absolute;
+      content: "";
+      width: 1px;
+      height:px2rem(20);
+      right: 0;
+      top: px2rem(12);
+      background: #F5F5F5;
     }
 
     .cancel {
@@ -681,5 +764,17 @@
       color: #000;
     }
   }
+
+
+.pop-mask{position: fixed; background-color: rgba(0,0,0,.4); left: 0; right: 0; top: 0; bottom: 0; z-index: 99;}
+.pop .pop-main{position:fixed;left:0;right: 0;top:inherit;bottom:px2rem(409);border-radius: 0;-webkit-transition: all 0.35s;-moz-transition: all 0.35s;-o-transition: all 0.35s;transition: all 0.35s; z-index:999;}
+.pop .pop-tpw-box{padding:px2rem(11) px2rem(15); overflow: hidden;}
+.pop-coupons .pop-main.show1{bottom: 0;}
+.pop-coupons .bonus-box{border:1px solid #eee;box-sizing: border-box;}
+.select-coupons{height:12.8rem;padding-bottom:0.427rem;overflow-y:auto;}
+.pop-close{ display:block; position:absolute; top:px2rem(12); right:px2rem(13); width:px2rem(13); height:px2rem(13);background: url("/static/weixin/images/wap4/confirm/v4-close.png") no-repeat 0 0 ; background-size: 0.555rem;}
+.pop-tpw-title{ position: relative; line-height:px2rem(48);text-align: center;  border-bottom: 1px solid #C5C5C5; background: #F6F6F6;}
+.pop-tpw-title ins{font-size:px2rem(18); color:#333333; text-decoration: none;}
+
 
 </style>
