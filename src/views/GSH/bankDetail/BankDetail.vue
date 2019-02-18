@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!--<app-bar :title="bankObj.ORG_NAME"></app-bar>-->
-    <app-bar title="工商银行321321"></app-bar>
+    <app-bar title="工商银行"></app-bar>
     <section class="container" style="padding-top: 7px">
       <section class="banner">
         <section>
@@ -61,9 +61,9 @@
     <section class="financing-list">
       <section class="top" @click="goPage(toPageName.FinancialProducts)">
                     <span class="top-left">
-                        {{proList.PRD_TYPE_NAME}}</span>
+                        {{proList.prdTypeName}}</span>
         <span :class="{'top-right':true,select:licaiShow}" v-if="pass">
-                        ¥{{proList.TOTAL_AMT | formatNum | preLcAssetFilter}}<i class="small-number">{{proList.TOTAL_AMT |formatNum| lastLcAssetFilter}}</i>
+                        ¥{{proList.totalAmtDesc  | preLcAssetFilter}}<i class="small-number">{{proList.totalAmtDesc | lastLcAssetFilter}}</i>
                     </span>
         <span class="top-right" v-if="!pass">
                     ****
@@ -80,9 +80,9 @@
         >
           <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
           <span class="li-left">
-                        {{item.PRD_NAME}}</span>
+                        {{item.prdName}}</span>
           <span v-if="pass">
-                        ¥{{item.HOLD_AMOUNT | formatNum | preLcAssetFilter}}<i class="small-number2">{{item.HOLD_AMOUNT |formatNum| lastLcAssetFilter}}</i>
+                        ¥{{item.holdAmtDesc  | preLcAssetFilter}}<i class="small-number2">{{item.holdAmtDesc| lastLcAssetFilter}}</i>
                     </span>
           <span v-if="!pass">
                         ****
@@ -102,9 +102,6 @@
 
     <p class="foot-text">
       银行热线 <a :href="'tel:'+TEL_HERF">{{bankDetail.custServiceHotLine}}</a>
-      <br>
-      {{bankDetail.custServiceHotLine}}
-
     </p>
   </div>
 </template>

@@ -12,25 +12,7 @@ export default {
     console.log('JinShang');
   },
   methods: {
-    async getCode() { // 充值短信
-      let data = {
-        BIZ_TYPE: '1', // 充值需要
-        BANK_USER_ID: this.BANK_USER_ID,
-        BANK_ACCT_NO: this.BANK_USER_CODE
-      }
-      try {
-        let res = await API.common.apiSendPhoneCode(data)
-        console.log(res)
-        this.MESAGE_TOKEN = res.MESSAGE_TOKEN
-        Bus.$emit(BusName.showSendMsg, res.BC_PHONE)
-      } catch (e) {
-        this.codeText = '重新发送'
-        this.disable = false
-        clearInterval(this.timer)
-      }
 
-
-    },
     async handleApiRecharge() {
       // TYPE	请求类型
       // ORG_ID	机构ID

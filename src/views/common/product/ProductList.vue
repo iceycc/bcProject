@@ -233,9 +233,20 @@
                 CHANNEL_ID,
               }
             })
-
           }
+          if (ORG_ID == '66') {
+            this.$router.push({
+              name: PageName.KeShangProDetail,
+              query: {
+                title,
+                ORG_ID,
+                APP_FLAG,
+                PRO_ID: id,
+                CHANNEL_ID,
 
+              }
+            })
+          }
         } else {
           // this.getListData()
           this.getListDataByChannel()
@@ -365,17 +376,7 @@
           util.storage.session.set('reload', true)
           window.location.reload()
         } else {
-          // 异常情况 暂支持49 和 248 产品
-          if (ORG_ID == 49 || ORG_ID == 248) {
-            ORG_ID = ORG_ID + ''
-            util.storage.session.set('ORG_ID', ORG_ID)
-            util.storage.session.set('id', ID)
-            util.storage.session.set('title', PRD_NAME)
-            util.storage.session.set('reload', true)
-            window.location.reload()
-          } else {
-            Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
-          }
+
         }
       }
       ,
@@ -384,7 +385,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/px2rem";
 
   .wrap {
     width: 100%;

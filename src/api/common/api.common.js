@@ -1,4 +1,5 @@
 import httpZZH from '@/service/http/http.bank'
+import httpNew from '@/service/http/http.bank.new'
 import {HOST_API} from "@/Constant";
 import axios from 'axios'
 import store from "@/store";
@@ -17,7 +18,15 @@ const Config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     timeout: 30000,
   },
+  configNew: {
+    method: 'post',
+    baseURL: 'http://47.94.110.156:9000', // todo
+    headers: {'Content-Type': 'application/json'},
+    timeout: 30000,
+  },
+
 }
+
 
 /**
  * 业务api
@@ -68,6 +77,14 @@ export default {
         NO_ORG_ID: true
       }
       return httpZZH.post(options, Config.config, success, error)
+    },
+    GSH(params, success, error) {
+      let options = {
+        url: '/openapi/bank/apiQryAsset',
+        params,
+        NO_ORG_ID: true
+      }
+      return httpNew.post(options, Config.configNew, success, error)
     },
 
 
