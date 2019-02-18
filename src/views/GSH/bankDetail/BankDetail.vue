@@ -80,7 +80,7 @@
         >
           <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
           <span class="li-left">
-                        {{item.PRD_NAME}}</span>
+                        {{item.prdName}}</span>
           <span v-if="pass">
                         ¥{{item.holdAmtDesc  | preLcAssetFilter}}<i class="small-number2">{{item.holdAmtDesc| lastLcAssetFilter}}</i>
                     </span>

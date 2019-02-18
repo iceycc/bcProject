@@ -4,17 +4,17 @@
     <div class="pro-info">
       <div class="left">
         <div class="logo">
-          <img :src="imgSrc+proDetail.LOGO_URL" alt="">
+          <img :src="imgSrc+proDetail.logoUrl" alt="">
         </div>
         <div class="info">
 
-          <p class="info-1">{{proDetail.PRD_NAME}}</p>
-          <p class="info-2">{{proDetail.DEPOSIT_CATEGORY}}</p>
+          <p class="info-1">{{proDetail.prdName}}</p>
+          <p class="info-2">{{proDetail.depositCategory}}</p>
         </div>
       </div>
       <div class="right">
-        <p>起购金额{{proDetail.MIN_AMOUNT }}元</p>
-        <p>最小递增{{proDetail.INCRE_AMOUNT }}元</p>
+        <p>起购金额{{proDetail.minAmount }}元</p>
+        <p>最小递增{{proDetail.increAmount }}元</p>
       </div>
     </div>
 
@@ -81,7 +81,7 @@
     },
     computed: {
       placeholder() {
-        let num = this.proDetail.MIN_AMOUNT || '0'
+        let num = this.proDetail.minAmount || '0'
         return num + '元起购'
       },
       ifCheckMoneyEmpty() {
@@ -99,7 +99,7 @@
         }
       }
     },
-    mixins: [Mixins.storeMixin, Mixins.ToBuying],
+    mixins: [Mixins.storeMixin, Mixins.ToBuyingNew],
     created() {
       // 注意src/mixins/FromH5Active.js 文件中ToBuying为统一处理方法
     },
@@ -107,7 +107,7 @@
       initData(proData) {
         this.getInfo() // 用于查询账户余额 19801
         console.log(proData);
-        if(!proData.PRD_NAME) return // 未正常获取数据
+        // if(!proData.prdName) return // 未正常获取数据
         this.proDetail = proData
         // 可能是从活动页来，发现没有登录/注册，然后登录/注册，来购买
         let AMOUNT = this.getComState.ProAndOrgType.AMOUNT
@@ -159,8 +159,8 @@
       },
 
       checkAPPLY_AMOUNT(num) {
-        let a = this.proDetail.INCRE_AMOUNT
-        if (num < parseInt(this.proDetail.MIN_AMOUNT)) {
+        let a = this.proDetail.increAmount
+        if (num < parseInt(this.proDetail.minAmount)) {
           Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
           return true
         }
@@ -176,7 +176,7 @@
         API.watchApi({
           FUNCTION_ID: 'ptb0A017', // 点位
           REMARK_DATA: '异业合作-购买页面-存入', // 中文备注
-          FROM_ID: this.proDetail.ID + '',
+          FROM_ID: this.proDetail.proId + '',
         })
         if (!this.agree) {
           Bus.$emit(BusName.showToast, '请同意相关协议')
@@ -205,7 +205,7 @@
         this.doPay()
       },
       // 轮询查询交易状态！！
-      polling(res) {
+      polling(res,proId) {
         let data = {
           BIZ_TYPE: '6', // 购买
           BESHARP_SEQ: res.BESHARP_BUY_SEQ
@@ -225,7 +225,8 @@
               this.$router.push({
                 name: PageName.BuyFailed,
                 query: {
-                  err: result.RES_MSG
+                  err: result.RES_MSG,
+                  proId
                 }
               })
             } else if ('0' == result.RES_CODE) { // 成功
@@ -238,9 +239,9 @@
                 query: {
                   TEAM_ID: this.TEAM_ID,
                   INVEST_ID: this.INVEST_ID,
+                  proId
                 }
               })
-              return
             } else {
               if (i > 5) {
                 clearInterval(timer)
@@ -248,10 +249,10 @@
                 this.$router.push({
                   name: PageName.BuyFailed,
                   query: {
-                    err: result.RES_MSG
+                    err: result.RES_MSG,
+                    proId
                   }
                 })
-                return
               }
             }
           }, err => {
@@ -279,10 +280,10 @@
         this.TEAM_ID = TEAM_ID
         this.INVEST_ID = INVEST_ID
         let data = {
-          PRD_ID: this.proDetail.ID + '',
+          PRD_ID: this.proDetail.proId + '',
           TYPE: 'API_BUY',
           APPLY_AMOUNT: this.APPLY_AMOUNT + '',
-          PRD_TYPE: (this.proDetail.PRD_TYPE_ID || '4') + '', // todo 娶不到
+          PRD_TYPE: '4', // todo 娶不到
 
 
           COUPON_ID: COUPON_ID + '', // 优惠券ID	非必填  字符型
@@ -292,7 +293,7 @@
         }
         console.log(data);
         let res = await API.buy.apiBuy(data)
-        this.polling(res)
+        this.polling(res,this.proDetail.proId)
       }
     }
   }
@@ -328,7 +329,7 @@
         display: inline-block;
         padding-left: px2rem(12);
         .info-1{
-          width: px2rem(180);
+          width: px2rem(170);
           font-size: px2rem(15);
           color: #333;
         }

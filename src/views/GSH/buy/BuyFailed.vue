@@ -58,7 +58,7 @@
     },
     methods: {
       copyHandle() {
-        let porId = this.getComState.goBuy.ID
+        let porId = this.$route.query.proId
         API.watchApi({
           FUNCTION_ID: 'ACB0G019', // 点位
           REMARK_DATA: '产品包装页-参与拼团-安全购买-购买成功-活动不错，分享给好友吧', // 中文备

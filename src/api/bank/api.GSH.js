@@ -53,7 +53,7 @@ export default {
       return http.post(options, Config.config, success, error)
     },
 
-    // 用户注册信息回显
+    // 用户注册信息回显  ..
     apiRegisterBackShow(params, success, error) {
       let options = {
         url: '/openapi/account/apiRegisterBackShow',
@@ -197,6 +197,14 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+    //	用户解卡、绑卡async
+    apiChangeBingCard(params, success, error) {
+      let options = {
+        url: '/openapi/account/apiChangeBingCard',
+        params,
+      }
+      return http.post(options, Config.config, success, error)
+    },
 
   },
   /**
@@ -301,7 +309,7 @@ export default {
     // async 开户协议：银行直销银行电子账户服务协议
     electronicAccountAgreement(params, success, error) {
       let options = {
-        url: '/openapi/comm/openAnAccountAgreement',
+        url: '/openapi/account/openAnAccountAgreement',
         params
       }
       return http.post(options, Config.config, success, error)

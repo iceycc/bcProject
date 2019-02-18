@@ -31,16 +31,23 @@
       placeholderText: {
         type: null,
         default: '请输入短信验证码'
+      },
+      clickText:{
+        type:String,
+        default:'获取验证码'
       }
     },
     data() {
       return {
         msgCode: '',
-        codeText: '获取验证码',
+        codeText: '',
         msgdisable: false,
         totalTime: 60,
         timer: null,// setInterval实例
       }
+    },
+    created(){
+      this.codeText = this.clickText
     },
     methods: {
       handleInput(value) {

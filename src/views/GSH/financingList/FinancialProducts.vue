@@ -196,7 +196,7 @@
       },
       goBuy(item) {
         item.MIN_AMOUNT = item.MIN_AMOUNT || this.MIN_AMOUNT // todo 罪恶，已经支取没有返回最低购买，现在取的持有中列表的 。方案1：只传id，自己请求。方案2：后台添加参数
-        this.setComState({type: 'goBuy', value: {...item, ID: item.PRD_INDEX_ID}})
+        this.setComState({type: 'goBuy', value: {...item, proId: item.PRD_INDEX_ID}})
         this.$router.push({name: PageName.Buying})
       },
       geDetails(item) {

@@ -198,26 +198,20 @@
         this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
       },
       async unBindingCardAPI() {
-        // 解绑银行卡
+        // 解绑 银行卡
         let card = this.clickBankCard
         let data = {
-          BANK_NAME: card.CARD_BANK_NAME,//银行名称
-          BANK_ACCOUNT_NO: card.CARD_NUM,//银行账号
-          BANK_INNER: '0',// 行内外标识 暂时默认全传他行
-          DEFAULT_MARK: card.DEFAULT_MARK,//是否默认卡
-          PHONE_NUM: card.BANK_CARD_PHONE,//银行卡开户行手机号
-          BIND_FLG: '2',// 绑定标志 1-绑定，2-解绑
-          MESSAGE_TOKEN: this.MESSAGE_TOKEN,
+          bankName: card.CARD_BANK_NAME,//银行名称
+          accountNo: card.CARD_NUM,//银行账号
+          bindFlg:'2', // 接触
+          bankCardPhone: card.BANK_CARD_PHONE,//银行卡开户行手机号
+          apiPackSeq: '', // 比财请求流水号
           VALIDATE_CODE: this.msgCode,// 短信验证码
-
-          BANK_CARD_TYPE: '',//
-          BANK_NO: '',  //银行行号
-          CARD_BIN: '', //卡Bin
-          CLEAR_BANK: '',// 清算银行
-          CLEAR_BANK_NO: '',// 清算银行行号
+          sendNo: this.sendNo,// 短信验证码编号
+          reqSerial:''
         }
         try {
-          await API.safe.apiChangeBingCard(data)
+          await API.account.apiChangeBingCard(data)
           this.BC_PHONE = ''
           this.msgCode = ''
           this.getBankList()

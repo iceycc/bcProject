@@ -7,14 +7,17 @@
     {text: '短信校验', active: false},
     ]"></open-head>
     <sms-code-input
+      ref="smsInput"
       @sendTelCode="sendTelCodeHandle"
       v-model="smsCode"
+      clickText="60s"
     ></sms-code-input>
     <submit-button
       class="submit-btn"
       text="开户"
       :canSubmit="canSubmit"
       @submit="submit"
+      bgColor="lightBlue"
     ></submit-button>
     <alert-box
       v-if="alertShow"
@@ -66,6 +69,9 @@
     created() {
       this.needData = this.$route.query
     },
+    mounted(){
+      this.$refs.smsInput.doCountdown()
+    },
     methods: {
       sure() {
         this.alertShow = false
@@ -100,10 +106,10 @@
        */
       sendTelCodeHandle(success, error) {
         console.log('sendTelCodeHandle');
-        success() //
-        setTimeout(() => {
-          error()
-        }, 3000)
+        success && success() //
+        // setTimeout(() => {
+        //   error()
+        // }, 3000)
       },
 
     }
