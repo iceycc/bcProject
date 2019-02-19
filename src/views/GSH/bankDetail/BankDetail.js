@@ -30,9 +30,9 @@ export default {
       // 获取机构名称  机构logo 用于充值提现
       let res = await API.safe.apiBandCard({})
       this.bankObj = {
-        logo: res.BANK_BG_URL,
-        ORG_NAME: res.ORG_NAME,
-        ACCT_NO: res.BANK_USER_CODE
+        bankBgUrl: res.bankBgUrl,
+        orgName: res.orgName,
+        bankUserCode: res.bankUserCode
       }
     },
     async getBankDetail() { // 获取产品列表

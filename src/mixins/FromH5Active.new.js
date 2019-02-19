@@ -172,7 +172,9 @@ export const ToBuyingNew = {
         prdName:proData.PRD_NAME,
         depositCategory:proData.DEPOSIT_CATEGORY,
         minAmount:proData.MIN_AMOUNT,
-        increAmount:proData.INCRE_AMOUNT
+        increAmount:proData.INCRE_AMOUNT,
+        term:proData.PERIOD_CODE,
+        orgName:proData.ORG_NAME
       }
       this.initData(data) // 初始化数据
     }
@@ -191,7 +193,10 @@ export const ToBuyingNew = {
           prdName:res.PRD_NAME,
           depositCategory:res.DEPOSIT_CATEGORY,
           minAmount:res.MIN_AMOUNT,
-          increAmount:res.INCRE_AMOUNT
+          increAmount:res.INCRE_AMOUNT,
+          term:res.PERIOD_CODE,
+          orgName:res.ORG_NAME
+
         };
         this.initData(goBuyData) // 同时初始化数据
         this.setComState({type: 'PRD_TYPE', value: res.PRD_TYPE})

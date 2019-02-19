@@ -100,7 +100,7 @@
         }
       }
     },
-    mixins: [Mixins.storeMixin, Mixins.ToBuyingNew],
+    mixins: [Mixins.storeMixin, Mixins.ToBuyingNew,Mixins.queryStatus],
     created() {
       // 注意src/mixins/FromH5Active.js 文件中ToBuying为统一处理方法
     },
@@ -196,42 +196,7 @@
         }
         this.doPay()
       },
-      // 轮询查询交易状态！！
-      async polling(res, proId) {
-        let data = {
-          bizType: '6', // 购买
-          reqSerial: res.reqSerial,
-          apiPackSeq: res.apiPackSeq
-        }
-        // 交易轮询
-        this.Londing.open({
-          text: '正在存入中'
-        })
-        try {
-          let result = await API.common.apiQueryBizStatus(data)
-          Bus.$emit(BusName.showToast, result.RES_MSG);
-          this.Londing.close()
-          this.setComState({type: 'buyData', value: result})
-          this.$router.push({
-            name: PageName.BuySuccess,
-            query: {
-              TEAM_ID: this.TEAM_ID,
-              INVEST_ID: this.INVEST_ID,
-              proId
-            }
-          })
-        } catch (e) {
-          this.Londing.close()
-          Bus.$emit(BusName.showToast, e);
-          this.$router.push({
-            name: PageName.BuyFailed,
-            query: {
-              err: e,
-              proId
-            }
-          })
-        }
-      },
+
       async doPay() {
         let {
           COUPON_ID = '',
@@ -246,16 +211,46 @@
           amount: this.amount + '',
           cashFlag: '0', // 钞汇标志
           ccy: '001', // 币种 默认人民币
-          term: '003', // 产品存期 todo 暂时写死
+          term: this.proDetail.term, // 产品存期 todo 暂时写死
 
           couponId: COUPON_ID + '', // 优惠券ID	非必填  字符型
           couponDetailId: COUPON_DETAIL_ID + '', // 会员领券记录ID
           teamId: TEAM_ID + '', //活动ID
           investId: INVEST_ID + '' // 	投资ID
         }
-        console.log(data);
         let res = await API.buy.apiBuy(data)
-        this.polling(res, this.proDetail.proId)
+        // let res = null
+        let params = {
+          bizType: '6', // 购买
+          reqSerial: res.reqSerial,
+          apiPackSeq: res.apiPackSeq,
+          besharpOrderNo:res.besharpOrderNo
+        }
+        try {
+          // 轮询查询交易状态！！
+          let qureyRes = await this.queryBizStatus(params, '正在购买中')
+          console.log(qureyRes);
+          this.$router.push({
+            name: PageName.BuySuccess,
+            query: {
+              TEAM_ID: this.TEAM_ID,
+              INVEST_ID: this.INVEST_ID,
+              proId:this.proDetail.proId,
+              orgName:this.proDetail.orgName,
+              prdName:this.proDetail.prdName,
+              ...qureyRes
+            }
+          })
+        }catch (e) {
+          console.log(e);
+          this.$router.push({
+            name: PageName.BuyFailed,
+            query: {
+              err: e,
+              proId:this.proDetail.proId,
+            }
+          })
+        }
       }
     }
   }

@@ -1,5 +1,26 @@
 export default {
   state: {
+    /**
+     * 公共的
+     */
+    FromH5Active: false, // h5活动页面来的
+
+    /**
+     * 老数据  郑州，客商有用 。新项目不用
+     */
+    buyData: { // 购买成功后跳转页面需要展示的参数
+      PRD_NAME: '',
+      ORG_NAME: '',
+      money: '',
+      OPERA_DATE: '',
+      EXPECT_PROFIT_DATE: '',
+      BESHARP_BUY_SEQ: ''
+    }, //
+    /**
+     * 新的
+     */
+
+
     idName: '',//  用户名
     rechargeData: {},//  重置协议需要的参数
     hasCardList: [], //绑定的银行卡列表
@@ -11,14 +32,6 @@ export default {
     REQ_SERIAL: '', // 开户流水
     loginType: '', //  用于测评完成后跳转功能（购买，预约，电子账户，更多服务）
     goBuy: {},// 去购买需要的参数
-    buyData: { // 购买成功后跳转页面需要展示的参数
-      PRD_NAME: '',
-      ORG_NAME: '',
-      money: '',
-      OPERA_DATE: '',
-      EXPECT_PROFIT_DATE: '',
-      BESHARP_BUY_SEQ: ''
-    }, //
     pollResult: {},// 交易完成后 轮询结构存储 用于成功页信息展示
     Infos: '', // 存储个人信息
     userTel: '',
@@ -27,12 +40,10 @@ export default {
     OriginPage: '', // 用于存储来源页。比如进入充值页会有多个入口，充值成功后要返回该入口
     ErrMsg: '', // 用于保存返回的错误信息 刷新时可以展示
     loginInfo: '',// 登录刷新需要的信息
-
     availableBalance: '',// 可用余额
     redeemData: null,
     openingData: {},
     ISLogin: false,// 前端记录是否登录成功 ，包括实名成功
-
     ProAndOrgType: {
       ID: '',// 产品id
       ORG_NAME: '',//机构名称
@@ -44,8 +55,6 @@ export default {
       H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
       H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
     },
-
-    FromH5Active: false // h5活动页面来的
   },
   //
   actions: {},

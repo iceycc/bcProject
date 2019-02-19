@@ -8,8 +8,8 @@
       <ul class="r-type-list">
         <li
           v-for="bank,index in newBankList" :key="index"
-          :class="{gray:bank && bank.IS_SUPPORT == 0,active:cur == index}"
-          @click="chooseType(index)">
+          :class="{gray:bank.IS_SUPPORT == 0,active:cur === index}"
+          @click="chooseType(index,bank,$event)">
           <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
           <section>
             <p class="name">{{bank.OPEN_BANK}}（{{bank.CARD_NO| noFilter}}）</p>
@@ -64,7 +64,7 @@
     },
     data() {
       return {
-        cur: '0',
+        cur: '',
         typeShow: false,
         imgSrc: imgSrc
       }
@@ -89,8 +89,6 @@
       chooseType(index) {
         this.$emit('chooseBank', this.BankList[index])
         this.cur = index;
-        console.log(index);
-        console.log(this.cur);
         this.typeShow = false;
         // this.typeText = e.target.innerText;
       }
@@ -154,19 +152,22 @@
         color: #858E9F;
       }
     }
+
     .r-type-list {
       position: relative;
       max-height: px2rem(320);
       overflow-y: auto;
+
       li {
-        position: relative;
         display: flex;
         padding: px2rem(22);
         border-bottom: 1px solid #EEEEF0;
+
         .logo-img {
           width: px2rem(40);
           height: px2rem(40);
         }
+
         .name {
           text-align: left;
           color: #000;
@@ -194,7 +195,7 @@
         z-index: 10;
         width: px2rem(18);
         height: px2rem(18);
-        background: url("~@/assets/images/check.png") center center no-repeat;
+        background: url("../../assets/images/check.png") center center no-repeat;
       }
 
       .gray {

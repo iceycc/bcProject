@@ -11,7 +11,7 @@ import reloadByPassWordErr from './reloadByPassWordErr'
 
 export default {
   redirectByFromPage,
-  queryStatus,
+  queryStatus, // 有新老两套
   storeMixin,
   reloadByPassWordErr,
   ...FromH5ActiveNew,

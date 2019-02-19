@@ -60,7 +60,7 @@
   import Opening2Mixins from './Opening2'
   import {
     OpenHead,
-    UpSelect as ComUpSelect, // 
+    UpSelect as ComUpSelect, // commons/UpSelect
     SupportBankList,
     KshBankCardLimit as BankCardLimit,
     NormalInput,

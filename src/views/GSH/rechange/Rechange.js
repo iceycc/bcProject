@@ -14,18 +14,18 @@ export default {
   methods: {
 
     async handleApiRecharge() {
-      // TYPE	请求类型
-      // ORG_ID	机构ID
-      // APPLY_AMOUNT	充值金额
-      // VRFY_FLAG	校验标志
-      // PHONE_CODE	短信验证码
+
       let data = {
-        TYPE: 'API_RECHARGE',
-        APPLY_AMOUNT: this.APPLY_AMOUNT,
+        amount: this.APPLY_AMOUNT,
+        bindMedium:this.cardNum,
         PHONE_CODE: this.msgCode,
-        MESAGE_TOKEN: this.MESAGE_TOKEN,
-        BANK_ACCOUNT_NO: this.CARD_NUM,
-        BANK_NAME: this.CARD_BANK_NAME
+        bankName: this.cardBankName,
+        ccy:'1',
+        cashExFlag:'0',
+        summary:'',
+
+
+        BANK_ACCOUNT_NO: this.cardNum,
       }
 
       try {
@@ -101,20 +101,21 @@ export default {
       // 获取机构名称  机构logo 用于充值提现
       let res = await API.safe.apiBandCard({})
       if('{}' === JSON.stringify(res)) return
-      this.logo = res.BANK_BG_URL
-      this.ORG_NAME = res.ORG_NAME
-      this.PHONE_NUM = res.PHONE_NUM
-      this.BANK_USER_CODE = res.BANK_USER_CODE // 二类户卡号
-      this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME;// 银行名称
-      this.CARD_BANK_URL = res.CARD_LIST[0].CARD_BANK_URL
-      this.DAY_QUOTA = res.CARD_LIST[0].DAY_QUOTA
-      this.SINGLE_QUOTA = res.CARD_LIST[0].SINGLE_QUOTA
-      this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
-      this.BANK_USER_ID = res.BANK_USER_ID
-      this.mainBankList = res.CARD_LIST
+      this.logo = res.bankBgUrl
+      this.orgName = res.orgName
+      this.phoneNum = res.phoneNum
+      this.bankUserCode = res.bankUserCode // 二类户卡号
+      this.cardBankName = res.cardList[0].cardBankName;// 银行名称
+      this.cardBankUrl = res.cardList[0].cardBankUrl
+      this.dayQuota = res.cardList[0].dayQuota
+      this.singleQuota = res.cardList[0].singleQuota
+      this.cardNum = res.cardList[0].cardNum
+
+      this.userCardId = res.userCardId
+      this.mainBankList = res.cardList
       let rechargeData = {
-        USER_NAME: res.USER_NAME,
-        USER_CARD_ID: res.USER_CARD_ID
+        USER_NAME: res.userName,
+        USER_CARD_ID: res.userCardId
       }
       this.setComState({type: 'rechargeData', value: rechargeData})
 

@@ -1,30 +1,30 @@
 <template>
   <div class="main">
     <app-bar title="充值"></app-bar>
-    <div class="s-title">充值到{{ORG_NAME}}</div>
+    <div class="s-title">充值到{{orgName}}</div>
     <div class="bank-card">
       <span class="logo">
         <img :src="imgSrc + logo" style="width:75%" alt="">
       </span>
       <div class="card-info">
-        <p>{{ORG_NAME}}</p>
-        <p>**** **** **** {{BANK_USER_CODE.substr(BANK_USER_CODE.length - 4)}}</p>
+        <p>{{orgName}}</p>
+        <p>**** **** **** {{bankUserCode.substr(bankUserCode.length - 4)}}</p>
       </div>
 
     </div>
     <div class="s-title">银行卡</div>
     <div class="bank-card" @click="clickBank" style="border-bottom:1px solid #EEEEF0">
       <span class="logo">
-        <img :src="imgSrc + CARD_BANK_URL" style="width:75%" alt="">
+        <img :src="imgSrc + cardBankUrl" style="width:75%" alt="">
       </span>
       <div class="card-info">
-        <p>{{CARD_BANK_NAME}}</p>
-        <p>**** **** **** {{CARD_NUM.substr(CARD_NUM.length - 4)}}</p>
+        <p>{{cardBankName}}</p>
+        <p>**** **** **** {{cardNum.substr(cardNum.length - 4)}}</p>
       </div>
       <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="money-limit">
-      <p>每日限额：{{DAY_QUOTA | BankLimit}}，单笔限额：{{SINGLE_QUOTA | BankLimit}}</p>
+      <p>每日限额：{{DAY_QUOTA | BankLimit}}，单笔限额：{{singleQuota | BankLimit}}</p>
       <!--<p></p>-->
       <!--<p>单笔限额：{{SINGLE | formatNum}}</p>-->
     </div>
@@ -82,23 +82,23 @@
         write: false, // 是否签约
         agree: true, // 是否阅读
         agree1: true, // 是否获取短信
-        agreeMentSrc: HOST_API + '/static/finsuit/js/openapi/js/xieyi/cz.html',
-        ORG_NAME: '工商银行',
-        CARD_NUM: '', //一类户卡号
-        BANK_USER_CODE: '', //二类户卡号
-        BANK_USER_ID: '', //银行用户ID
+        
+        orgName: '工商银行',
+        cardNum: '', //一类户卡号
+        bankUserCode: '', //二类户卡号
+        userCardId: '', //银行用户ID
         MESAGE_TOKEN: '', //短信验证码标识
         imgSrc: imgSrc,
         logo: '',
-        CARD_BANK_NAME: '某某银行卡',
-        CARD_BANK_URL: '',
+        cardBankName: '某某银行卡',
+        cardBankUrl: '',
         DAY_QUOTA: '-1', // 单日限额
-        SINGLE_QUOTA: '-1',
+        singleQuota: '-1', // 单比限额
         upseletShow: false,
         mainBankList: [],
         passCode: '',
-        ACCT_NO: '', // TODO
-        PHONE_NUM: '',
+        phoneNum: '',
+        
         ORIGIN_PAGE: '',// 来源页面
         SINGLE: '1000000'
       }
@@ -132,11 +132,12 @@
     },
     methods: {
       chooseBank(bank) {
-        this.CARD_BANK_NAME = bank.CARD_BANK_NAME;// 银行名称
-        this.CARD_BANK_URL = bank.CARD_BANK_URL
+        console.log(bank);
+        this.cardBankName = bank.cardBankName;// 银行名称
+        this.cardBankUrl = bank.cardBankUrl
         this.DAY_QUOTA = bank.DAY_QUOTA
-        this.SINGLE_QUOTA = bank.SINGLE_QUOTA
-        this.CARD_NUM = bank.CARD_NUM
+        this.singleQuota = bank.singleQuota
+        this.cardNum = bank.cardNum
       },
       addBankHandle(){
         // todo 添加完成后跳回
@@ -157,7 +158,7 @@
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }
-        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0 && this.SINGLE_QUOTA != '-1') {
+        if (this.APPLY_AMOUNT - 0 > this.singleQuota - 0 && this.singleQuota != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }
@@ -174,17 +175,14 @@
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }
-        if (this.APPLY_AMOUNT - 0 > this.SINGLE_QUOTA - 0 && this.SINGLE_QUOTA != '-1') {
+        if (this.APPLY_AMOUNT - 0 > this.singleQuota - 0 && this.singleQuota != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }
-        this.doReCange()
+        this.handleApiRecharge()
       },
       doAgree() {
         this.agree = !this.agree
-      },
-      doReCange() {
-        this.handleApiRecharge()
       },
     }
   }

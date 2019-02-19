@@ -53,14 +53,6 @@
         type: null,
         default() {
           return [
-            // {
-            //   logo: '',
-            //   name: '民生银行',
-            //   footNum: '0014',
-            //   money: '100',
-            //   id: 1,
-            //   bankno: '1111111'
-            // }
           ]
         }
       }

@@ -50,11 +50,11 @@
     </section>
     <section class="bank-card container">
       <div class="bank-logo">
-        <img :src="imgSrc + bankObj.logo" alt="">
+        <img :src="imgSrc + bankObj.bankBgUrl" alt="">
       </div>
       <div class="bank-test">
-        <p class="">{{bankObj.ORG_NAME}}银行卡</p>
-        <p class="card-no">{{bankObj.ACCT_NO | BankNo_Filter}}</p>
+        <p class="">{{bankObj.orgName}}银行卡</p>
+        <p class="card-no">{{bankObj.bankUserCode | BankNo_Filter}}</p>
       </div>
     </section>
     <!--银行存款-->
@@ -74,9 +74,9 @@
                 </span>
       </section>
       <ul v-if="licaiShow">
-        <!-- @click="geDetails(item)"-->
+        <!--@click="geDetails(item)"-->
         <li class="financing-li" v-for="item,index in proList.PAGE.retList"
-            @click="geDetails(item)" v-if="index<3"
+            v-if="index<3"
         >
           <icon-font iconClass="icon-yuan" iconStyle="li-yuan"></icon-font>
           <span class="li-left">

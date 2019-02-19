@@ -11,27 +11,27 @@
     <div class="buysuccessdetail">
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">存款产品名称</div>
-        <div class="buysuccessdetailright">{{datas.PRD_NAME}}</div>
+        <div class="buysuccessdetailright">{{datas.prdName}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易银行</div>
-        <div class="buysuccessdetailright">{{datas.ORG_NAME}}</div>
+        <div class="buysuccessdetailright">{{datas.orgName}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">存入金额</div>
-        <div class="buysuccessdetailright">{{datas.PAY_AMOUT | formatNum}}元</div>
+        <div class="buysuccessdetailright">{{datas.payAmount | formatNum}}元</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易申请日期</div>
-        <div class="buysuccessdetailright">{{datas.PAY_DATE}}</div>
+        <div class="buysuccessdetailright">{{datas.payDate}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">预期开始收益日期</div>
-        <div class="buysuccessdetailright">{{datas.INC_DATE}}</div>
+        <div class="buysuccessdetailright">{{datas.incDate}}</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易流水号</div>
-        <div class="buysuccessdetailright">{{datas.BESHARP_SEQ}}</div>
+        <div class="buysuccessdetailright">{{datas.besharpOrderNo}}</div>
       </div>
 
     </div>
@@ -73,12 +73,12 @@
         downUrl: 'http://www.baidu.com',
         copyShow: false,
         shareHref: '',
-        TEAM_ID:'',
-        INVEST_ID:''
+        TEAM_ID: '',
+        INVEST_ID: ''
       }
     },
     created() {
-      this.datas = this.getComState.buyData || {}
+      this.datas = {...this.$route.query}
       this.shareHref = window.sessionStorage.getItem('h5_href') || ''
       this.INVEST_ID = this.$route.query.INVEST_ID
       this.TEAM_ID = this.$route.query.TEAM_ID
@@ -114,14 +114,14 @@
         this.copyShow = true
       },
       goMyAssets(type) {
-        if(type==0){
+        if (type == 0) {
           // 正常购买
           API.watchApi({
             FUNCTION_ID: 'ptb0A008', // 点位
             REMARK_DATA: '异业合作-购买成功-查看我的资产',
           })
         }
-        if(type==1){
+        if (type == 1) {
           // 活动购买
           API.watchApi({
             FUNCTION_ID: 'ACB0G018', // 点位
@@ -264,9 +264,11 @@
     text-align: center;
     font-size: px2rem(13);
     color: #508CEE;
-    p{
+
+    p {
       display: inline-block;
     }
+
     img {
       margin-left: px2rem(5);
       display: inline-block;

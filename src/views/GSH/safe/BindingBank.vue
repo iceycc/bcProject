@@ -3,7 +3,7 @@
     <app-bar title="绑定银行卡"></app-bar>
     <section class="card-list">
       <section class="bank-card" v-for="card,index in cardList" :key="index" @click="managerCard(card)">
-        <img :src="imgSrc + card.CARD_BANK_IMAGE_URL" alt="" class="bgimg">
+        <img :src="imgSrc + card.cardBankImageUrl" alt="" class="bgimg">
         <!--<img  alt="" class="bgimg">-->
         <section class="top">
           <!--logo-->
