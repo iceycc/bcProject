@@ -53,7 +53,7 @@
   import util from "@/libs/util";
   import Mixins from '@/mixins'
   import {
-    BandingBankSelect,
+    UpSelect as BandingBankSelect,
     SubmitButton,
     IconFont,
     AppBar
@@ -118,19 +118,19 @@
 
       },
       chooseBank(bank) {
-        this.CARD_BANK_NAME = bank.CARD_BANK_NAME
-        this.CARD_NUM = bank.CARD_NUM
-        this.logo = bank.CARD_BANK_URL
+        this.CARD_BANK_NAME = bank.cardBankName
+        this.CARD_NUM = bank.cardNum
+        this.logo = bank.cardBankUrl
       },
       async getUserInfos() {
         let res = await API.safe.apiBandCard({})
         console.log(res)
-        this.CARD_BANK_NAME = res.CARD_LIST[0].CARD_BANK_NAME
-        this.CARD_NUM = res.CARD_LIST[0].CARD_NUM
-        this.logo = res.CARD_LIST[0].CARD_BANK_URL
-        this.BANK_USER_ID = res.BANK_USER_ID
-        this.BANK_USER_CODE = res.BANK_USER_CODE
-        this.mainBankList = res.CARD_LIST
+        this.CARD_BANK_NAME = res.cardList[0].cardBankName
+        this.CARD_NUM = res.cardList[0].cardNum
+        this.logo = res.cardList[0].cardBankUrl
+        this.BANK_USER_ID = res.userCardId
+        this.BANK_USER_CODE = res.bankUserCode
+        this.mainBankList = res.cardList
       },
       async doWithdraw() {
         // TYPE	请求类型

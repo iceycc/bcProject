@@ -24,7 +24,7 @@
       <icon-font iconClass="icon-xiangyou" iconStyle="detail"></icon-font>
     </div>
     <div class="money-limit">
-      <p>每日限额：{{DAY_QUOTA | BankLimit}}，单笔限额：{{singleQuota | BankLimit}}</p>
+      <p>每日限额：{{dayQuota | BankLimit}}，单笔限额：{{singleQuota | BankLimit}}</p>
       <!--<p></p>-->
       <!--<p>单笔限额：{{SINGLE | formatNum}}</p>-->
     </div>
@@ -92,7 +92,7 @@
         logo: '',
         cardBankName: '某某银行卡',
         cardBankUrl: '',
-        DAY_QUOTA: '-1', // 单日限额
+        dayQuota: '-1', // 单日限额
         singleQuota: '-1', // 单比限额
         upseletShow: false,
         mainBankList: [],
@@ -135,7 +135,7 @@
         console.log(bank);
         this.cardBankName = bank.cardBankName;// 银行名称
         this.cardBankUrl = bank.cardBankUrl
-        this.DAY_QUOTA = bank.DAY_QUOTA
+        this.dayQuota = bank.dayQuota
         this.singleQuota = bank.singleQuota
         this.cardNum = bank.cardNum
       },
@@ -154,7 +154,7 @@
         this.page = false
       },
       checkMoney() {
-        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
+        if (this.APPLY_AMOUNT - 0 > this.dayQuota - 0 && this.dayQuota != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }
@@ -171,7 +171,7 @@
         })
         console.log(this.write);
         if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        if (this.APPLY_AMOUNT - 0 > this.DAY_QUOTA - 0 && this.DAY_QUOTA != '-1') {
+        if (this.APPLY_AMOUNT - 0 > this.dayQuota - 0 && this.dayQuota != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }

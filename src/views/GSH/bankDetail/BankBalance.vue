@@ -3,7 +3,7 @@
     <app-bar title="可用余额" class="m-header"></app-bar>
     <section class="m-top">
       <p class="u-title">可用余额（元）</p>
-      <p class="u-content">￥{{ACC_REST |formatNum | preLcAssetFilter}}<i>{{ACC_REST | formatNum |
+      <p class="u-content">￥{{ACC_REST  | preLcAssetFilter}}<i>{{ACC_REST | formatNum |
         lastLcAssetFilter}}</i></p>
     </section>
     <section class="m-list">
@@ -59,7 +59,6 @@
         if (page == 'Withdraw') {
           query = {
             ACC_REST: this.ACC_REST,// 可用余额
-            WITH_DRAWABLE_CASH: this.WITH_DRAWABLE_CASH,// 可用余额
           }
         }
         console.log(page);

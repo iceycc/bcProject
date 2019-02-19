@@ -6,8 +6,8 @@
       <h2>充值成功</h2>
     </div>
     <section class="m-card">
-      <p><span>充值金额</span>{{data.money | formatNum}}</p>
-      <p><span>交易流水号</span>{{data.BESHARP_RECHARGE_SEQ}}</p>
+      <p><span>充值金额</span>{{data.amount | formatNum}}</p>
+      <p><span>交易流水号</span>{{data.apiPackSeq}}</p>
     </section>
     <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
     <!--<div class="begain">下载比财app</div>-->
@@ -19,25 +19,18 @@
 </template>
 <script>
   import {LsName} from "@/Constant";
-  //
-  import Mixins from "@/mixins";
-  import util from "@/libs/util";
-  import {PageName} from "../../../Constant";
+  import {PageName} from "@/Constant";
 
   export default {
     data() {
       return {
-        data: {
-          money: '',
-          BESHARP_RECHARGE_SEQ: '',
-          ORIGIN_PAGE:''
-        }
+        data: null,
+        ORIGIN_PAGE:''
       }
     },
     created() {
       this.data = this.$route.query
-      this.ORIGIN_PAGE = this.data.ORIGIN_PAGE
-      // this.ORIGIN_PAGE = ''
+      this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
     },
     methods: {
       goBuyNext(){

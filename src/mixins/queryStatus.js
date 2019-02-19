@@ -52,7 +52,7 @@ export default {
         return Promise.resolve(result)
       } catch (e) {
         this.Londing.close()
-        Bus.$emit(BusName.showToast, e);
+        // Bus.$emit(BusName.showToast, e);
         return Promise.reject(e)
       }
     },

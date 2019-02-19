@@ -188,8 +188,6 @@
             fn: (result, timer, count) => {
               this.setComState({type: "reload", value: true}) // reload-001
               if ('1' == result.RES_CODE) {
-                clearInterval(timer)
-                Bus.$emit(BusName.showToast, result.RES_MSG);
                 this.$router.push({ // todo是否要跳转
                   name: PageName.RedeemFailure,
                   query: {
@@ -197,9 +195,6 @@
                   }
                 })
               } else if ('0' == result.RES_CODE) {
-                clearInterval(timer)
-                Bus.$emit(BusName.showToast, result.RES_MSG);
-                this.Londing.close()
                 this.setComState({
                   type: 'pollResult', value: {
                     ...result,
@@ -210,16 +205,7 @@
                   name: PageName.RedeemSuccess,
                 })
               } else {
-                if (count == 5) {
-                  clearInterval(timer)
-                  Bus.$emit(BusName.showToast, result.RES_MSG);
-                  this.$router.push({ // todo是否要跳转
-                    name: PageName.RedeemFailure,
-                    query: {
-                      err: result.RES_MSG
-                    }
-                  })
-                }
+
               }
             }
           })
