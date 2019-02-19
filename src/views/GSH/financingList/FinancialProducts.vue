@@ -243,8 +243,7 @@
       async goRedeem(item) {
 
         let params = {
-          // INVEST_TIME: item.TIME_END,
-          prdIndexId: item.prdIndexId,
+          prdIndexId: item.prdIndexId, //调接口先注释 产品id
           expireDate: item.expireDate
         }
         let res = await API.redeem.apiRedemptionValid2(params)

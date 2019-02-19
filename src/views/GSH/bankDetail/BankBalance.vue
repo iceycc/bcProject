@@ -3,7 +3,7 @@
     <app-bar title="可用余额" class="m-header"></app-bar>
     <section class="m-top">
       <p class="u-title">可用余额（元）</p>
-      <p class="u-content">￥{{ACC_REST  | preLcAssetFilter}}<i>{{ACC_REST | formatNum |
+      <p class="u-content">￥{{ACC_REST | preLcAssetFilter}}<i>{{ACC_REST  |
         lastLcAssetFilter}}</i></p>
     </section>
     <section class="m-list">

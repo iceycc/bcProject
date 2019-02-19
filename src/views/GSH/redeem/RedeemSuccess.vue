@@ -6,7 +6,8 @@
       <h2>恭喜你，支取成功</h2>
     </div>
     <section class="m-card">
-      <p><span>支取金额</span><span class="flex1">{{money | formatNum}}</span></p>
+      <p><span>支取金额</span><span class="flex1">{{money}}元</span></p>
+      <p><span>收益金额</span><span class="flex1">{{income | formatNum}}元</span></p>
       <p><span>收款账户</span><span class="flex1">{{BANK_USER_CODE}}</span></p>
     </section>
     <button class="begain" @click="goNext">完成</button>
@@ -17,6 +18,7 @@
     data() {
       return {
         money: '',
+        income:'',
         num: '',
         BESHARP_SEQ: '',
         date: '',
@@ -24,10 +26,14 @@
       }
     },
     created() {
-      let preData = this.getComState.pollResult
-      this.BESHARP_SEQ = preData.BESHARP_SEQ
-      this.BANK_USER_CODE = preData.BANK_USER_CODE
-      this.money = preData.PAY_AMOUT || preData.money
+      let preData ={...this.$route.query}
+      this.money=this.$route.query.amount;
+      this.income=preData.income
+      //this.BESHARP_SEQ = preData.BESHARP_SEQ
+      // let preData = this.getComState.pollResult
+      // this.BESHARP_SEQ = preData.BESHARP_SEQ
+      // this.BANK_USER_CODE = preData.BANK_USER_CODE
+      // this.money = preData.PAY_AMOUT || preData.money
       // this.date = preData.OPERA_DATE
     },
     methods: {
