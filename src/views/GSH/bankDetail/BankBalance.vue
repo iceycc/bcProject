@@ -3,7 +3,7 @@
     <app-bar title="可用余额" class="m-header"></app-bar>
     <section class="m-top">
       <p class="u-title">可用余额（元）</p>
-      <p class="u-content">￥{{ACC_REST | preLcAssetFilter}}<i>{{ACC_REST  |
+      <p class="u-content">￥{{accRestDesc | preLcAssetFilter}}<i>{{accRestDesc  |
         lastLcAssetFilter}}</i></p>
     </section>
     <section class="m-list">
@@ -25,8 +25,9 @@
 
 <script>
   import {LsName, PageName} from "@/Constant";
-  import BankBalanceMixins from "./BankBalance";
   import {IconFont} from '@/components'
+  import API from "@/service";
+
   export default {
     name: "bankBalance",
     components: {
@@ -34,11 +35,10 @@
     },
     data() {
       return {
-        ACC_REST: '0.00',
-        WITH_DRAWABLE_CASH:''
+        accRestDesc: '0.00',
+        accRest:''
       }
     },
-    mixins: [BankBalanceMixins],
     filters: {
       preLcAssetFilter(val) {
         if (!val) return ''
@@ -58,7 +58,8 @@
         this.setComState({type: 'OriginPage', value: this.$route.fullPath})
         if (page == 'Withdraw') {
           query = {
-            ACC_REST: this.ACC_REST,// 可用余额
+            accRestDesc: this.accRestDesc,// 可用余额
+            accRest: this.accRest,// 可用余额
           }
         }
         console.log(page);
@@ -66,7 +67,12 @@
           name: page,
           query
         })
-      }
+      },
+      async getBankDetail() {
+        let res = await API.bank.apiQryEleAccount({ccy: '1'})
+        this.accRestDesc = res.accRestDesc
+        this.accRest = res.accRest // todo
+      },
     }
   }
 </script>

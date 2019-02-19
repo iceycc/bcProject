@@ -21,10 +21,10 @@
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
       <span class="all"
-            @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<ACC_REST?WITH_DRAWABLE_CASH:ACC_REST)">全部提现</span>
+            @click="APPLY_AMOUNT = (WITH_DRAWABLE_CASH<accRest?WITH_DRAWABLE_CASH:accRest)">全部提现</span>
     </section>
     <p class="info1">
-      本卡当前余额{{ACC_REST | formatNum}}元
+      本卡当前余额{{accRest | formatNum}}元
       <!-- 全部提现UI图变位置了 -->
     </p>
     <p class="info1">
@@ -49,7 +49,7 @@
 <script>
   import API from "@/service";
   import Bus from '@/plugin/bus'
-  import {PageName, imgSrc, BusName,LsName} from "@/Constant";
+  import {PageName, imgSrc, BusName, LsName} from "@/Constant";
   import util from "@/libs/util";
   import Mixins from '@/mixins'
   import {
@@ -74,7 +74,7 @@
         imgSrc: imgSrc,
         logo: '',
         ifCheckMoneyEmpty: true,
-        ACC_REST: '0',
+        accRest: '0',
         WITH_DRAWABLE_CASH: '0',
         DAY_REST: '0', // todo取每日限额
         CARD_NUM: '', //一类户卡号
@@ -99,7 +99,7 @@
     },
     computed: {
       canClick() {
-        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.WITH_DRAWABLE_CASH) && Number(this.APPLY_AMOUNT) <= Number(this.ACC_REST)) {
+        if (Number(this.APPLY_AMOUNT) > 0 && Number(this.APPLY_AMOUNT) <= Number(this.WITH_DRAWABLE_CASH) && Number(this.APPLY_AMOUNT) <= Number(this.accRest)) {
           return true
         } else {
           return false
@@ -109,8 +109,8 @@
     mixins: [Mixins.queryStatus],
     created() {
       this.getUserInfos()
-      this.ACC_REST = this.$route.query.ACC_REST || '0'
-      this.WITH_DRAWABLE_CASH = this.$route.query.WITH_DRAWABLE_CASH || '0'
+      this.accRest = this.$route.query.accRest || '0'
+      this.WITH_DRAWABLE_CASH = this.$route.query.accRest || '0'
       // this.WITH_DRAWABLE_CASH = '111'
     },
     methods: {
@@ -133,82 +133,69 @@
         this.mainBankList = res.cardList
       },
       async doWithdraw() {
-        // TYPE	请求类型
-        // ORG_ID	机构ID
-        // APPLY_AMOUNT	提现金额
-        // VRFY_FLAG	校验标志
-        // PHONE_CODE	短信验证码
-        // EITH_DRAW_ALL	全部提取标志
-
         let data = {
-          APPLY_AMOUNT: this.APPLY_AMOUNT, //
-          EITH_DRAW_ALL: '0',
-          MESAGE_TOKEN: this.MESAGE_TOKEN,
-          BANK_ACCOUNT_NO: this.CARD_NUM,
-          BANK_NAME: this.CARD_BANK_NAME
+          amount: this.APPLY_AMOUNT, //
+          eithdrawAll: '1', // 全部提取标志
+          bindMedium: this.CARD_NUM,
+          bankName: this.CARD_BANK_NAME,
+          summary: '提现',
+          remarks: '提现',
+          cashExFlag: '0',
+          ccy: '1'
         }
         this.show = false
         try {
           let res = await API.withdraw.apiCash(data)
+          // let res = null
           let params = {
-            BIZ_TYPE: '4', // 提现
-            BESHARP_SEQ: res.BESHARP_CASH_SEQ
+            bizType: '4', // 购买
+            reqSerial: res.reqSerial,
+            apiPackSeq: res.apiPackSeq,
           }
-          // 轮询 查寻交易状态
-          this.queryStatus({
-              text: '提现中',
-              data: params,
-              fn: (result, timer, count) => {
-                this.setComState({type: "reload", value: true}) // reload-001
-                if ('1' == result.RES_CODE) {
-                  // 提现失败
-                  clearInterval(timer)
-                  Bus.$emit(BusName.showToast, result.RES_MSG);
-                  this.$router.push({ // todo是否要跳转
-                    name: PageName.WithdrawFaild,
-                    query: {
-                      err: result.RES_MSG
-                    }
-                  })
-                } else if ('0' == result.RES_CODE) {
-                  // 提现成功
-                  clearInterval(timer)
-                  Bus.$emit(BusName.showToast, result.RES_MSG);
-                  this.Londing.close()
-                  this.$router.push({
-                    name: PageName.WithdrawSuccess,
-                    query: {
-                      money: this.APPLY_AMOUNT,
-                      RES_MSG2: result.RES_MSG2,
-                      ...res
-                    }
-                  })
-                } else if ('20000' == result.RES_CODE) {
-                  // 等待中
-                  clearInterval(timer)
-                  this.Londing.close()
-                  this.$router.push({
-                    name: PageName.WaitForWithdraw,
-                    query: {
-                      err1: result.RES_MSG,
-                      err2: result.RES_MSG2
-                    }
-                  })
-                } else {
-                  if (count == 5) {
-                    let msg = result.RES_CODE + ':' + result.RES_MSG
-                    Bus.$emit(BusName.showToast, msg);
-                    this.$router.push({ // todo是否要跳转
-                      name: PageName.WithdrawFaild,
-                      query: {
-                        err: msg
-                      }
-                    })
-                  }
+          try {
+            // 轮询查询交易状态！！
+            let qureyRes = await this.queryBizStatus(params, '提现中')
+            console.log(qureyRes);
+            if ('1' == qureyRes.resCode) {
+              // 提现失败
+              this.$router.push({ // todo是否要跳转
+                name: PageName.WithdrawFaild,
+                query: {
+                  err: qureyRes.resMsg
                 }
-              }
+              })
+            } else if ('0' == qureyRes.resCode) {
+              // 提现成功
+              this.$router.push({
+                name: PageName.WithdrawSuccess,
+                query: {
+                  amount: this.APPLY_AMOUNT, //
+                  ...qureyRes
+                }
+              })
+            } else if ('20000' == qureyRes.RES_CODE) {
+              // 等待中
+              this.$router.push({
+                name: PageName.WaitForWithdraw,
+                query: {
+                  err1: qureyRes.RES_MSG,
+                  err2: qureyRes.RES_MSG2
+                }
+              })
+            } else {
+
             }
-          )
+
+          } catch (e) {
+            console.log(e);
+            // 提现失败
+            this.$router.push({ // todo是否要跳转
+              name: PageName.WithdrawFaild,
+              query: {
+                err: e
+              }
+            })
+          }
         } catch (err) {
           Bus.$emit(BusName.showToast, err);
         }
@@ -219,7 +206,7 @@
           return
         }
         //
-        if (this.APPLY_AMOUNT - 0 > this.ACC_REST - 0) {
+        if (this.APPLY_AMOUNT - 0 > this.accRest - 0) {
           Bus.$emit(BusName.showToast, '提现金额大于卡内余额，请调整提现金额')
           return
         }
@@ -239,7 +226,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .main{
+  .main {
     width: 100%;
     height: 100%;
     background: #f6f6f9;
@@ -252,6 +239,7 @@
     color: #444444;
     font-size: px2rem(14);
   }
+
   .bank-card {
     position: relative;
     padding-left: px2rem(20);
@@ -260,9 +248,11 @@
     display: flex;
     align-items: center;
     background: #fff;
+
     .logo {
       width: px2rem(50);
     }
+
     .card-info {
       font-size: px2rem(16);
 
@@ -294,12 +284,14 @@
     margin-bottom: px2rem(10);
     background: #fff;
     display: flex;
+
     .left {
       width: px2rem(60);
       display: inline-block;
       height: 100%;
       font-size: px2rem(14);
     }
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -310,12 +302,14 @@
       margin-top: px2rem(-15/2);
 
     }
+
     .all {
       display: inline-block;
       text-align: center;
       width: px2rem(80);
       color: #389CFF;
     }
+
     input {
       flex: 1;
       border: none;
@@ -328,8 +322,6 @@
 
 
   }
-
-
 
 
   .info1 {

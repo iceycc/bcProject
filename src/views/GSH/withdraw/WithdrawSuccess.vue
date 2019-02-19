@@ -24,9 +24,9 @@
     },
     created() {
       let preData = this.$route.query
-      this.BESHARP_CASH_SEQ = preData.BESHARP_CASH_SEQ
-      this.RES_MSG2 = this.$route.query.RES_MSG2
-      this.money = preData.money
+      this.BESHARP_CASH_SEQ = preData.reqSerial
+      this.RES_MSG2 = preData.resMsg2
+      this.money = preData.amount
     },
     methods: {
       goNext() {
