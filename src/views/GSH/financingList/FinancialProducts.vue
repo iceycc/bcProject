@@ -203,8 +203,8 @@
         this.isShow=true;
       },
       //关闭工商行提示
-      popClose(val){
-         this.isShow=!val;
+      popClose(){
+         this.isShow=!this.isShow;
       },
       close() {
         this.infoShow = false

@@ -1,7 +1,7 @@
 <template>
   <section class="pop"> 
-		 	<div class="pop-mask" :class="{none:!show}"></div> 
-		     <div class="pop-main"  :class="{show1:show}"> 
+		 	<div class="pop-mask"></div> 
+		     <div class="pop-main" > 
          <div class="pop-title"> 
 		       <ins>
 		        利息计算方式
@@ -31,14 +31,13 @@
     data (){
     return {
       // 可以根据实际情况写更复杂的弹层，根据情况扩充tips即可
-        show:true
     }
   },
   created () {
   },
   methods:{
       cancelHandle(){
-         this.$emit('closePop', this.show)
+         this.$emit('closePop')
       }
     }
   }
@@ -48,7 +47,7 @@
 .pop{
   .pop-mask{position: fixed; background-color: rgba(0,0,0,.4); left: 0; right: 0; top: 0; bottom: 0; z-index: 99;}
   .pop-main{
-    position:fixed;left:0;right: 0; height: px2rem(409); top:inherit;bottom:px2rem(-409);border-radius: 0;-webkit-transition: all 0.35s;-moz-transition: all 0.35s;-o-transition: all 0.35s;transition: all 0.35s; z-index:999;
+    position:fixed;left:0;right: 0; min-height: px2rem(409); bottom:0;border-radius: 0;-webkit-transition: all 0.35s;-moz-transition: all 0.35s;-o-transition: all 0.35s;transition: all 0.35s; z-index:999;
     .pop-title{
       position: relative; line-height:px2rem(48);text-align: center;  border-bottom: 1px solid #C5C5C5; background: #F6F6F6;
       .pop-close{ display:block; position:absolute; top:px2rem(20); right:px2rem(13); width:px2rem(13); height:px2rem(13);background: url(~@/assets/images/control_close@2x.png) 0 0 ; background-size:px2rem(13);}
@@ -64,6 +63,5 @@
     }
   
   }
-  .pop-main.show1{bottom: 0;}
 }
 </style>
