@@ -2,8 +2,8 @@
   <section class="alert-box">
     <p>{{message}}</p>
     <div class="btn">
-      <div @click="cancelHandle" class="cancel">取消</div>
-      <div @click="submitHandle" class="sure">确定</div>
+      <div @click="cancelHandle" class="cancel">{{left}}</div>
+      <div @click="submitHandle" class="sure">{{right}}</div>
     </div>
   </section>
 </template>
@@ -12,10 +12,18 @@
   export default {
     name: "AlertBox",
     props:{
+      left:{
+        type:String,
+        default:'取消'
+      },
+      right:{
+        type:String,
+        default:'确定'
+      },
       message:{
         type:String,
         default:'是否继续'
-      }
+      },
     },
     methods:{
       submitHandle(){

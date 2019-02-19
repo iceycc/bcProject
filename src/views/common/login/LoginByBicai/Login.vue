@@ -194,9 +194,10 @@
           })
           // 优先级第一 如果是 活动页投资来的 登录后直接携带members_id 跳到来源页
 
-
+          // this.
           this.$store.commit('SET_BICAI_USER', res)
           this.$store.commit('SET_TOKEN', res.PHONE_TOKEN)
+          this.$store.commit('SET_OPEN_API_CHANNEL_ID', res.OPEN_API_CHANNEL_ID)
           util.storage.session.set("BICAI_TOKEN", res.PHONE_TOKEN) //
           util.storage.session.set("BICAI_MEBER_ID", res.ID) //
           if (this.isfinancial == '1') {

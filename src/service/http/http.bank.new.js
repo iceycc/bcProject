@@ -29,11 +29,11 @@ export default {
       APP_FLAG,
       CHANNEL_ID,
       TOKEN = token,
-      USER_CHANNEL = ''
+      OPEN_API_CHANNEL_ID = '1'
     } = store.getters.GET_ACCOUNT_STATE
     let newData = {
       head: {
-        userChannel: USER_CHANNEL = '',
+        userChannel: OPEN_API_CHANNEL_ID +'',
         appFlag: APP_FLAG || 'BC',
         channel: "",
         channelId: CHANNEL_ID || '',
@@ -46,6 +46,7 @@ export default {
         version: ""
       },
       param: {
+        orgId: ORG_ID + '', // 70
         ...params
       }
     }

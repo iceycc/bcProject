@@ -14,6 +14,13 @@ export default {
         currentPage: '1',
         prdType: '4',
         depositTypeId: '4',
+        accNo:'123456',
+        accCode:'',
+        prodCode:'',
+        fxSeqNo:'0',
+        cashExFlag:'0',
+        ccy:'001'
+
       };
       //
       let res = await API.bank.apiQryHoldInfo(data);

@@ -2,21 +2,22 @@
   <div>
     <app-bar title="绑定银行卡"></app-bar>
     <section class="card-list">
-      <section class="bank-card" v-for="card,index in CARD_LIST" :key="index" @click="managerCard(card)">
+      <section class="bank-card" v-for="card,index in cardList" :key="index" @click="managerCard(card)">
         <img :src="imgSrc + card.CARD_BANK_IMAGE_URL" alt="" class="bgimg">
         <!--<img  alt="" class="bgimg">-->
         <section class="top">
-          <img :src="imgSrc + card.CARD_BANK_URL" alt="" class="logo">
+          <!--logo-->
+          <img :src="imgSrc + card.cardBankUrl" alt="" class="logo">
           <section class="bank">
-            <p class="bank-name">{{card.CARD_BANK_NAME}}</p>
+            <p class="bank-name">{{card.cardBankName}}</p>
             <!--<p class="bank-info">隶属于{{card.CARD_BANK_NAME}}</p>-->
           </section>
-          <section v-if="card.DEFAULT_MARK=='1'">
+          <section v-if="card.defaultMark=='1'">
             默认卡
           </section>
         </section>
         <section class="card-no">
-          <p>{{card.CARD_NUM |formatBankNo}}</p>
+          <p>{{card.cardNum |formatBankNo}}</p>
         </section>
       </section>
     </section>
@@ -63,7 +64,7 @@
         imgSrc,
         code: {},
         sheetVisible: false,
-        CARD_LIST: [],
+        cardList: [],
         BANK_USER_ID: '',
         BANK_ACCT_NO: '',
         MESSAGE_TOKEN: '',
@@ -161,16 +162,16 @@
         let res = await API.safe.apiBandCard({})
         this.BANK_USER_ID = res.BANK_USER_ID
         this.BANK_ACCT_NO = res.BANK_USER_CODE
-        this.CARD_LIST = res.CARD_LIST
+        this.cardList = res.cardList
         // 保存绑定的银行卡列表
-        this.setComState({type: 'hasCardList', value: res.CARD_LIST})
+        this.setComState({type: 'hasCardList', value: res.cardList})
       },
       async setDefaultCard() {
         console.log(1)
         this.onfocus = false
         // 设置默认卡
         let data = {
-          ACCOUNT_NO: this.clickBankCard.CARD_NUM
+          accountNo: this.clickBankCard.cardNum
         }
         await API.safe.apiDefaultBankCard(data)
         this.getBankList()
@@ -178,7 +179,7 @@
       },
       async unBindingCard() {
         console.log(2)
-        let num = this.CARD_LIST.length
+        let num = this.cardList.length
         if (num == 1) {
           setTimeout(() => {
             this.showToatal = true

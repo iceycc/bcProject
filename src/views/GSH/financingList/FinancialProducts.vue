@@ -52,7 +52,7 @@
                 <p>最大存款利率<img class="info" src="@/assets/images/problom2@2x.png" alt="" @click="showTip">
                   <span>{{item.rate}}%</span>
                 </p>
-                <p>预计最大收益<img class="info" src="@/assets/images/problom2@2x.png" alt=""  @click="showTip">
+                <p>预计最大收益<img class="info" src="@/assets/images/problom2@2x.png" alt="" @click="showTip">
                   <span>{{item.expectIncome}}</span>
                 </p>
 
@@ -106,18 +106,18 @@
     </div>
     <div v-if="infoShow">
       <div class='popContainer'></div>
-    <section class="waiting" >
-      <p>{{waitingMsg}}</p>
-      <div class="btn" v-if="canRedeem">
-        <div @click="close" class="cancel">取消</div>
-        <div @click="sureRedeem" class="sure">继续支取</div>
-      </div>
-      <div class="btn" v-else>
-        <div @click="close" class="cancel">确定</div>
-      </div>
+      <section class="waiting">
+        <p>{{waitingMsg}}</p>
+        <div class="btn" v-if="canRedeem">
+          <div @click="close" class="cancel">取消</div>
+          <div @click="sureRedeem" class="sure">继续支取</div>
+        </div>
+        <div class="btn" v-else>
+          <div @click="close" class="cancel">确定</div>
+        </div>
 
-    </section>
-    
+      </section>
+
     </div>
     <PopTip v-show="isShow" @closePop='popClose'></PopTip>
   </div>
@@ -136,8 +136,8 @@
     mixins: [''],
     data() {
       return {
-        isShow:false,//工商行弹窗
-        holdParame:"",//持有参数
+        isShow: false,//工商行弹窗
+        holdParame: "",//持有参数
         waitingMsg: '暂不支持',
         infoShow: false,
         searchCondition: {
@@ -166,8 +166,7 @@
         },
         tabsParam: ["持有中", "已支取"], //（这个也可以用对象key，value来实现）
         nowIndex: 0, //默认第一个tab为激活状态
-        financialData: {
-        },
+        financialData: {},
         total: '',
         flags: [
           // {RES_CODE: '3', RES_MSG: '333'},
@@ -185,7 +184,7 @@
       PopTip
     },
     created() {
-    //  this.getData(); //理财产品列表
+      //  this.getData(); //理财产品列表
       // this.total = this.$route.query.total
     },
     mounted() {
@@ -199,20 +198,32 @@
     },
     methods: {
       //显示工商行提示
-      showTip(){
-        this.isShow=true;
+      showTip() {
+        this.isShow = true;
       },
       //关闭工商行提示
       popClose(){
          this.isShow=!this.isShow;
+
       },
       close() {
         this.infoShow = false
       },
       goBuy(item) {
-        item.MIN_AMOUNT = item.MIN_AMOUNT || this.MIN_AMOUNT // todo 罪恶，已经支取没有返回最低购买，现在取的持有中列表的 。方案1：只传id，自己请求。方案2：后台添加参数
-        this.setComState({type: 'goBuy', value: {...item, proId: item.PRD_INDEX_ID}})
-        this.$router.push({name: PageName.Buying})
+        let ORG_ID = util.storage.session.get('ORG_ID') || ''
+        let {
+          APP_FLAG,
+          CHANNEL_ID,
+        } = this.$store.getters.GET_ACCOUNT_STATE
+        this.$router.push({
+          name: PageName.KeShangProDetail, query: {
+            ORG_ID:item.orgId || ORG_ID,
+            title:item.prdName,
+            APP_FLAG,
+            CHANNEL_ID,
+            PRO_ID:item.prdIndexId,
+          }
+        })
       },
       geDetails(item) {
         let {FUND_NO, PRD_INDEX_ID, PRD_NAME, ORDER_NUM} = item
@@ -324,13 +335,13 @@
           };
           let res = await API.bank.getMyInvestOver(data)
           this.pageList = res.PAGE.retList || [];
-        
-          if(res.PAGE.currentPage==res.PAGE.totalPage){
-             this.allLoaded = true;
-             Bus.$emit(BusName.showToast, "数据全部加载完成");
-             return
+
+          if (res.PAGE.currentPage == res.PAGE.totalPage) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+            return
           }
-          
+
           // if (!res.PAGE) {
           //   this.allLoaded = true;
           //   Bus.$emit(BusName.showToast, "数据全部加载完成");
@@ -356,7 +367,7 @@
           };
           let res = await API.bank.apiQryHoldInfo(data)
           //console.log(res)
-          this.financialData=res; // 存款总资产  预计最大收益
+          this.financialData = res; // 存款总资产  预计最大收益
           this.pageList = res.PAGE.retList;
           if (this.pageList.length <= 0) {
             this.allLoaded = true;
@@ -364,15 +375,15 @@
           }
           this.MIN_AMOUNT = this.pageList[0] && this.pageList[0].MIN_AMOUNT
 
-           //是否是最后一页
+          //是否是最后一页
           if (res.PAGE.nextPageFlag == 0) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
-          }else{
-          //为翻页传递参数
-          this.holdParame=this.pageList[this.pageList.length - 1];
-         
-         }
+          } else {
+            //为翻页传递参数
+            this.holdParame = this.pageList[this.pageList.length - 1];
+
+          }
 
 
           this.$nextTick(function () {
@@ -402,10 +413,10 @@
           //   Bus.$emit(BusName.showToast, "数据全部加载完成");
           // }
 
-          if(res.PAGE.currentPage==res.PAGE.totalPage){
-             this.allLoaded = true;
-             Bus.$emit(BusName.showToast, "数据全部加载完成");
-             return
+          if (res.PAGE.currentPage == res.PAGE.totalPage) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+            return
           }
 
 
@@ -422,12 +433,12 @@
             currentPage: this.searchCondition.pageNo + '',
             prdType: "4",
             depositTypeId: "4",
-            accNo:this.holdParame.accNo, //账号
-            accCode:this.holdParame.accCode,  //账户代码
-            prodCode:this.holdParame.prodCode,  //产品代码
-            fxSeqNo:this.holdParame.fxSeqNo,   //存单序号
-            cashExFlag:this.holdParame.cashExFlag,   //钞汇标志
-            ccy:this.holdParame.ccy,   //币种
+            accNo: this.holdParame.accNo, //账号
+            accCode: this.holdParame.accCode,  //账户代码
+            prodCode: this.holdParame.prodCode,  //产品代码
+            fxSeqNo: this.holdParame.fxSeqNo,   //存单序号
+            cashExFlag: this.holdParame.cashExFlag,   //钞汇标志
+            ccy: this.holdParame.ccy,   //币种
           };
           let res = await API.bank.apiQryHoldInfo(data)
           // if (!res.PAGE) {
@@ -437,15 +448,15 @@
           // }
           let pageList = res.PAGE.retList || [];
 
-          
+
           this.pageList = this.pageList.concat(pageList);
           //是否是最后一页
           if (res.PAGE.nextPageFlag == 0) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
-          }else{
+          } else {
             //为翻页传递参数
-            this.holdParame=pageList[pageList.length - 1];
+            this.holdParame = pageList[pageList.length - 1];
           }
           // if (this.pageList.length < this.searchCondition.pageSize) {
           //   this.allLoaded = true;
@@ -619,13 +630,14 @@
         &:last-child {
           margin-bottom: px2rem(50);
         }
-        h4,p{
-          padding:0 px2rem(15);
+
+        h4, p {
+          padding: 0 px2rem(15);
         }
 
         h4 {
           overflow: hidden;
-         
+
 
         }
 
@@ -696,15 +708,16 @@
     box-sizing: border-box;
     /*padding-bottom: px2rem(50);*/
   }
-   .popContainer{
+
+  .popContainer {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 99;
-   }
+  }
 
   .waiting {
     position: absolute;
@@ -720,13 +733,13 @@
     // box-shadow: px2rem(3) px2rem(3) px2rem(3) #e5e5e5;
     p {
       text-align: center;
-      padding: px2rem(35) px2rem(15) ;
+      padding: px2rem(35) px2rem(15);
       font-size: px2rem(14);
       color: #333;
     }
 
     .btn {
-     
+
       border-top: 1px solid #F5F5F5;
       display: flex;
     }
@@ -738,11 +751,12 @@
       padding: px2rem(10) 0 px2rem(10);
       font-size: px2rem(17);
     }
-    .cancel::after{
+
+    .cancel::after {
       position: absolute;
       content: "";
       width: 1px;
-      height:px2rem(20);
+      height: px2rem(20);
       right: 0;
       top: px2rem(12);
       background: #F5F5F5;
@@ -758,17 +772,86 @@
   }
 
 
-.pop-mask{position: fixed; background-color: rgba(0,0,0,.4); left: 0; right: 0; top: 0; bottom: 0; z-index: 99;}
-.pop .pop-main{position:fixed;left:0;right: 0; height: px2rem(409); top:inherit;bottom:px2rem(-409);border-radius: 0;-webkit-transition: all 0.35s;-moz-transition: all 0.35s;-o-transition: all 0.35s;transition: all 0.35s; z-index:999;}
-.pop .pop-box{padding:px2rem(11) px2rem(15); overflow: hidden;height:px2rem(338); background: #fff; font-size: px2rem(14);overflow-y:auto;}
-.pop .pop-main.show1{bottom: 0;}
-.pop .none{display:none;}
-.pop .pop-box p{ color:#333333; line-height: px2rem(24);}
-.pop .pop-box p.yel{ color:#FF5B05; }
-.pop .pop-box ul{color: #666666; line-height: px2rem(24);}
-.pop-close{ display:block; position:absolute; top:px2rem(20); right:px2rem(13); width:px2rem(13); height:px2rem(13);background: url(~@/assets/images/control_close@2x.png) 0 0 ; background-size:px2rem(13);}
-.pop-title{ position: relative; line-height:px2rem(48);text-align: center;  border-bottom: 1px solid #C5C5C5; background: #F6F6F6;}
-.pop-title ins{font-size:px2rem(18); color:#333333; text-decoration: none;}
+  .pop-mask {
+    position: fixed;
+    background-color: rgba(0, 0, 0, .4);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+  }
+
+  .pop .pop-main {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: px2rem(409);
+    top: inherit;
+    bottom: px2rem(-409);
+    border-radius: 0;
+    -webkit-transition: all 0.35s;
+    -moz-transition: all 0.35s;
+    -o-transition: all 0.35s;
+    transition: all 0.35s;
+    z-index: 999;
+  }
+
+  .pop .pop-box {
+    padding: px2rem(11) px2rem(15);
+    overflow: hidden;
+    height: px2rem(338);
+    background: #fff;
+    font-size: px2rem(14);
+    overflow-y: auto;
+  }
+
+  .pop .pop-main.show1 {
+    bottom: 0;
+  }
+
+  .pop .none {
+    display: none;
+  }
+
+  .pop .pop-box p {
+    color: #333333;
+    line-height: px2rem(24);
+  }
+
+  .pop .pop-box p.yel {
+    color: #FF5B05;
+  }
+
+  .pop .pop-box ul {
+    color: #666666;
+    line-height: px2rem(24);
+  }
+
+  .pop-close {
+    display: block;
+    position: absolute;
+    top: px2rem(20);
+    right: px2rem(13);
+    width: px2rem(13);
+    height: px2rem(13);
+    background: url(~@/assets/images/control_close@2x.png) 0 0;
+    background-size: px2rem(13);
+  }
+
+  .pop-title {
+    position: relative;
+    line-height: px2rem(48);
+    text-align: center;
+    border-bottom: 1px solid #C5C5C5;
+    background: #F6F6F6;
+  }
+
+  .pop-title ins {
+    font-size: px2rem(18);
+    color: #333333;
+    text-decoration: none;
+  }
 
 
 </style>

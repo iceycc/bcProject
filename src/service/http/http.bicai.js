@@ -89,7 +89,8 @@ export default class Http {
       DEVICE_ID,
       CHANNEL_ID,
       TOKEN = token,
-      SESSION_ID = ''
+      SESSION_ID = '',
+      OPEN_API_CHANNEL_ID = '1'
     } = store.getters.GET_ACCOUNT_STATE
 
     let data = {
@@ -103,7 +104,8 @@ export default class Http {
 
         SYSTEM_TYPE: "h5",
         CHANNEL_ID: CHANNEL_ID + '',
-        APP_FLAG: APP_FLAG
+        APP_FLAG: APP_FLAG,
+        USER_CHANNEL: OPEN_API_CHANNEL_ID + '', // 新增 USER_CHANNEL
       },
       param: {
         ...params
