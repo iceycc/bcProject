@@ -1,9 +1,31 @@
 import API from "@/service";
 import {LsName, PageName} from "@/Constant";
 
+/**
+ * 交易时查询接口：涉及到充值/提现/购买/赎回
+ */
 export default {
   methods: {
-
+    /**
+     * 新的交易查询接口
+     * @param data
+     * @param text
+     * @returns {Promise<void>}
+     */
+    async queryBizStatus(data,text='正在交易中') {
+      // 交易轮询
+      this.Londing.open({
+        text: text
+      })
+      try {
+        let result = await API.common.apiQueryBizStatus(data)
+        this.Londing.close()
+        return Promise.resolve(result)
+      } catch (e) {
+        this.Londing.close()
+        return Promise.reject(e)
+      }
+    },
     /**
      * 用于处理 交易时的轮询 老版本
      * @param text
@@ -35,26 +57,5 @@ export default {
         }
       }, 2000)
     },
-    /**
-     * 新的交易查询接口
-     * @param data
-     * @param text
-     * @returns {Promise<void>}
-     */
-    async queryBizStatus(data,text='正在交易中') {
-      // 交易轮询
-      this.Londing.open({
-        text: text
-      })
-      try {
-        let result = await API.common.apiQueryBizStatus(data)
-        this.Londing.close()
-        return Promise.resolve(result)
-      } catch (e) {
-        this.Londing.close()
-        return Promise.reject(e)
-      }
-    },
   },
-
 }

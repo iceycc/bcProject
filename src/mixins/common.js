@@ -50,14 +50,21 @@ export const CheckAccountMixin ={
         let HAS_LOGIN = res.HAS_LOGIN // 是否已经登陆 0：不需要登录 1：已登录 2：未登陆
         let HAS_OPEN_BANK = res.HAS_OPEN_BANK  //  1：已开户 2：未开户
         let HAS_GRADE = res.HAS_GRADE
+        let HAS_OPEN_ACCOUNT_TEXT = res.HAS_OPEN_ACCOUNT_TEXT || res.hasOpenAccountText
+
         this.setComState({type: 'HAS_GRADE', value:HAS_GRADE})
         if(HAS_OPEN_BANK==1){
            // 已经开户
           this.$router.push({name: Page})
-        }else {
+        }else if(res.HAS_OPEN_BANK==2){
           // 未开户 去
           Bus.$emit(BusName.showToast,'您在本行还未开户，请先开户')
           this.$router.push({name:PageName.Opening1})
+        }else if(HAS_OPEN_BANK==3){
+          Bus.$emit(BusName.showToast, HAS_OPEN_ACCOUNT_TEXT, 3000)
+
+        }else if(HAS_OPEN_BANK==4){
+          Bus.$emit(BusName.showToast, HAS_OPEN_ACCOUNT_TEXT, 3000)
         }
 
       })

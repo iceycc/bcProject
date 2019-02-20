@@ -71,9 +71,11 @@ const Check = {
         IS_RET_GRADE: '2'
       }
       API.common.apiQryLoginStatus(data, res => {
-        let HAS_OPEN_BANK = res.HAS_OPEN_BANK
-        let HAS_LOGIN = res.HAS_LOGIN
-        let HAS_GRADE = res.HAS_GRADE
+
+        let HAS_OPEN_BANK = res.HAS_OPEN_BANK || res.hasOpenBank
+        let HAS_LOGIN = res.HAS_LOGIN || res.hasLogin
+        let HAS_GRADE = res.HAS_GRADE || res.hasGrade
+        let HAS_OPEN_ACCOUNT_TEXT = res.HAS_OPEN_ACCOUNT_TEXT || res.hasOpenAccountText
         this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
@@ -81,6 +83,12 @@ const Check = {
           // this.checkBankStatus()
         } else if (HAS_OPEN_BANK == 2) {
           this.checkBankStatus()
+        } else if(HAS_OPEN_BANK == 3){
+          Bus.$emit(BusName.showToast, HAS_OPEN_ACCOUNT_TEXT, 3000)
+
+        }else if(HAS_OPEN_BANK==4){
+          Bus.$emit(BusName.showToast, HAS_OPEN_ACCOUNT_TEXT, 3000)
+
         }
       })
     },

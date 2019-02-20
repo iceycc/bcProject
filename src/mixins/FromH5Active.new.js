@@ -71,9 +71,11 @@ const Check = {
         IS_RET_GRADE: '2'
       }
       API.common.apiQryLoginStatus(data, res => {
-        let HAS_OPEN_BANK = res.HAS_OPEN_BANK
-        let HAS_LOGIN = res.HAS_LOGIN
-        let HAS_GRADE = res.HAS_GRADE
+        let HAS_OPEN_BANK = res.HAS_OPEN_BANK || res.hasOpenBank
+        let HAS_LOGIN = res.HAS_LOGIN || res.hasLogin
+        let HAS_GRADE = res.HAS_GRADE || res.hasGrade
+        let HAS_OPEN_ACCOUNT_TEXT = res.HAS_OPEN_ACCOUNT_TEXT || res.hasOpenAccountText
+
         this.setComState({type: 'HAS_GRADE', value: HAS_GRADE})
         if (HAS_OPEN_BANK == 1) {
           // 开户成功
@@ -81,6 +83,10 @@ const Check = {
           // this.checkBankStatus()
         } else if (HAS_OPEN_BANK == 2) {
           this.checkBankStatus()
+        } else if (HAS_OPEN_BANK == 3) {
+          Bus.$emit(BusName.showToast, HAS_OPEN_ACCOUNT_TEXT, 3000)
+        } else if (HAS_OPEN_BANK == 4) {
+          Bus.$emit(BusName.showToast, HAS_OPEN_ACCOUNT_TEXT, 3000)
         }
       })
     },
@@ -167,14 +173,14 @@ export const ToBuyingNew = {
       // this.getInfo() // 用于查询账户余额
       let proData = this.getComState.goBuy
       let data = {
-        proId:proData.ID + '',
-        logoUrl:proData.LOGO_URL,
-        prdName:proData.PRD_NAME,
-        depositCategory:proData.DEPOSIT_CATEGORY,
-        minAmount:proData.MIN_AMOUNT,
-        increAmount:proData.INCRE_AMOUNT,
-        term:proData.PERIOD_CODE,
-        orgName:proData.ORG_NAME
+        proId: proData.ID + '',
+        logoUrl: proData.LOGO_URL,
+        prdName: proData.PRD_NAME,
+        depositCategory: proData.DEPOSIT_CATEGORY,
+        minAmount: proData.MIN_AMOUNT,
+        increAmount: proData.INCRE_AMOUNT,
+        term: proData.PERIOD_CODE,
+        orgName: proData.ORG_NAME
       }
       this.initData(data) // 初始化数据
     }
@@ -189,13 +195,13 @@ export const ToBuyingNew = {
         this.checkAuthStatus() // 用于判断是否开户成功
         let goBuyData = {
           proId: id,
-          logoUrl:res.LOGO_URL,
-          prdName:res.PRD_NAME,
-          depositCategory:res.DEPOSIT_CATEGORY,
-          minAmount:res.MIN_AMOUNT,
-          increAmount:res.INCRE_AMOUNT,
-          term:res.PERIOD_CODE,
-          orgName:res.ORG_NAME
+          logoUrl: res.LOGO_URL,
+          prdName: res.PRD_NAME,
+          depositCategory: res.DEPOSIT_CATEGORY,
+          minAmount: res.MIN_AMOUNT,
+          increAmount: res.INCRE_AMOUNT,
+          term: res.PERIOD_CODE,
+          orgName: res.ORG_NAME
 
         };
         this.initData(goBuyData) // 同时初始化数据
