@@ -9,7 +9,7 @@ import {
 } from 'mint-ui'
 
 import 'mint-ui/lib/style.css'
-import Calendar from 'vue2-datepick';
+import Calendar from 'vue2-datepick';  //来自 https://www.npmjs.com/package/vue2-datepick
 /**
  * 自定义组件全局引入
  */
