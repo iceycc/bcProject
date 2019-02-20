@@ -268,6 +268,19 @@ export default {
       }
       return http.post(options, Config.config, success, error)
     },
+
+     // async 电子账户交易明细查询处理中
+     apiQryEleProcessDetail(params, success, error) {
+      let options = {
+        url: 'openapi/bank/apiQryEleInProcessing',
+        params
+      }
+      return http.post(options, Config.config, success, error)
+    },
+
+
+
+
   },
 
   /**

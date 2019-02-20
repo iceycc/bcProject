@@ -62,7 +62,6 @@ export default {
     font-size: px2rem(18);
     margin: px2rem(20) 0;
     color: #508cee !important;
-
   }
 }
 

@@ -88,6 +88,8 @@
     mixins: [''],
     data() {
       return {
+        operaDate:"",//翻页必传
+        pnRowRecord:"",//翻页必传
         cur: '1',
         // 1月分页
         searchCondition: {
@@ -109,11 +111,7 @@
         }
       };
     },
-    created() {
-      // console.log(this.getLastMonthYestdy(0));
-      // console.log(this.getLastMonthYestdy(1));
-
-    },
+    created() {},
     components: {
       "v-loadmore": Loadmore // 为组件起别名，vue转换template标签时不会区分大小写，例如：loadMore这种标签转换完就会变成loadmore，容易出现一些匹配问题
       // 推荐应用组件时用a-b形式起名
@@ -134,13 +132,13 @@
         this.$router.push({name: PageName.PayOneDetail, query: {...item}})
       },
       setEleSize() {
-        console.log(this.nowIndex);
+       // console.log(this.nowIndex);
         let winheight = util.getWinSize().winHeight
         let topheight = util.getDivSize('.wrap-top').height
         let toptabsheight = util.getDivSize('.tabs').height + util.getDivSize('.w-tap').height
         let tDateheight = this.nowIndex == 3 ? toptabsheight : 0
         let maiheight = winheight - topheight - tDateheight
-        console.log(topheight, maiheight, tDateheight)
+       // console.log(topheight, maiheight, tDateheight)
         document.querySelector('.t-tab').style.top = topheight + 'px'
         document.querySelector('.main-body').style.height = maiheight + 'px'
       },
@@ -149,13 +147,11 @@
         //下拉加载
         this.loadPageList();
         this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-
       },
       loadBottom: function () {
         // 上拉加载
         this.more(); // 上拉触发的分页查询
         this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
-
       },
       loadPageList: function () {
         this.searchCondition.pageNo = "1";
@@ -167,59 +163,44 @@
         }
         this.endDate = this.getLastMonthYestdy(0);
         this.startDate = this.getLastMonthYestdy(index + 1);
-        this.apiQryTradeHis(); //交易数据
-
+       // this.apiQryTradeHis(); //交易数据
+        this.apiQryTradeHis(this.startDate, this.endDate); //交易数据
       },
       async more() {
         // 分页查询
         this.searchCondition.pageNo =
           "" + (parseInt(this.searchCondition.pageNo) + 1);
         let data = {
-          // PRD_INDEX_ID:'',
           currentPage: this.searchCondition.pageNo,
-          // currentPage: "0",
-          // START_DATE: '2020-08-26',
-          // END_DATE: '2020-08-27',
-          // START_DATE: this.startDate,
-          // END_DATE: this.endDate,
-          TYPE: 'API_QRY_ELE_TRANS_DETAIL',
-          // pagenum: '10',
-          // pageflag: '4'
+          operaDate:this.operaDate,
+          pnRowRecord:this.pnRowRecord,
+          // startDate:"2018-06-01",
+          // endDate:"2019-06-01",
+          startDate:this.startDate,
+          endDate:this.endDate,
+          ccy:"1",//币种
         };
         let res = await API.bank.apiQryEleTransDetail(data)
-        this.pageList = this.pageList.concat(res.PAGE.retList);
-        if (res.PAGE.retList.length < this.searchCondition.pageSize) {
-          this.allLoaded = true;
-          Bus.$emit(BusName.showToast, "数据全部加载完成");
-        }
+        let pageList = res.PAGE.retList || [];
+        this.pageList = this.pageList.concat(pageList);
+         //是否是最后一页
+          if (res.PAGE.nextPageFlag == 0) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          } else {
+            //为翻页传递参数
+              this.operaDate = this.pageList[this.pageList.length - 1].operaDate;
+              this.pnRowRecord = this.pageList[this.pageList.length - 1].pnRowRecord;
+          }
       },
-
-      async apiQryTradeHis() {
-        // TYPE	请求类型
-        // currentPage	当前页
-        // QRY_TYPE	查询类型
-        // PRD_TYPE	产品类型
-        // PRD_INDEX_ID	产品ID
-        // FUND_NO	基金代码
-        // ORG_ID	机构ID
-        // START_DATE	开始日期
-        // END_DATE	结束日期
+      async apiQryTradeHis(startDate,endDate) {
         let data = {
           currentPage: "1",
-          // TYPE: 'API_QRY_ELE_TRANS_DETAIL',
-          // START_DATE: '2020-08-26',
-          // END_DATE: '2020-08-27',
-          // START_DATE: start,
-          // END_DATE: end,
-          // pagenum: '10',
-          // pageflag: '4'
-          // startDate:this.getLastMonthYestdy(1),
-          // endDate:this.getLastMonthYestdy(0),
-          startDate:'2018-06-01',
-          endDate:'2019-06-01',
+          // startDate:"2018-06-01",
+          // endDate:"2019-06-01",
+          startDate:startDate,
+          endDate:endDate,
           ccy:"1",//币种
-
-
         };
         let res = await API.bank.apiQryEleTransDetail(data)
         this.pageList = res.PAGE.retList;
@@ -229,7 +210,18 @@
         if (this.pageList.length <= 0) {
           this.allLoaded = true;
           Bus.$emit(BusName.showToast, "暂无数据");
+          return;
         }
+         //是否是最后一页
+          if (res.PAGE.nextPageFlag == 0) {
+            this.allLoaded = true;
+            Bus.$emit(BusName.showToast, "数据全部加载完成");
+          } else {
+            //为翻页传递参数
+            this.operaDate = this.pageList[this.pageList.length - 1].operaDate;
+            this.pnRowRecord = this.pageList[this.pageList.length - 1].pnRowRecord;
+          }
+
         this.$nextTick(function () {
           // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
           // 这里之所以加是因为有个坑，iphone在使用-webkit-overflow-scrolling属性，就是移动端弹性滚动效果时会屏蔽loadmore的上拉加载效果，
@@ -302,10 +294,14 @@
         if (strMonth - n <= 0) {
           //二、解决跨年问题
           strYear -= 1;
-          strMonth = 12;
+         // strMonth = 12;
+          strMonth = 12 - (n-strMonth);
         } else {
           strMonth -= n;
         }
+       // alert(strMonth);
+      //console.log(strMonth)
+       // alert(strMonth);
         //        strDay = daysInMonth[strMonth] >= strDay ? strDay : daysInMonth[strMonth];
         strDay = Math.min(strDay, daysInMonth[strMonth]); //三、前一个月日期不一定和今天同一号，例如3.31的前一个月日期是2.28；9.30前一个月日期是8.30
 
@@ -504,9 +500,20 @@
         right: 0;
         margin: px2rem(12) auto 0;
       }
-
       li.active {
-        color: #508cee;
+        color: #508CEE;
+        position: relative;
+      }
+      li.active:after {
+        position: absolute;
+        content:"";
+        height: px2rem(2);
+        width: px2rem(20);
+        bottom:0;
+        background:#508CEE;
+        left: 0;
+        right: 0;
+        margin:0 auto;
       }
     }
   }
@@ -545,6 +552,8 @@
 
           ul {
             background: #fff;
+             margin-top: px2rem(12);
+
 
             li {
               display: block;
@@ -654,8 +663,8 @@
 
   .w-tap {
     display: flex;
-    margin-top: px2rem(3);
-    margin-bottom: px2rem(4);
+    margin-top: px2rem(1);
+    margin-bottom: px2rem(1);
 
     li {
       flex: 1;
@@ -666,7 +675,19 @@
       background: #fff;
 
       &.actvie {
-        color: #007aff;
+        color: #508CEE;
+        position: relative;
+      }
+      &.actvie:after {
+        position: absolute;
+        content:"";
+        height: px2rem(2);
+        width: px2rem(20);
+        bottom:0;
+        background:#508CEE;
+        left: 0;
+        right: 0;
+        margin:0 auto;
       }
     }
   }
