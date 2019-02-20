@@ -7,11 +7,8 @@ import {BusName, PageName, LsName} from "@/Constant";
 import {Indicator} from 'mint-ui';
 import {throwErr} from "@/libs/throwErr";
 
-// let HOST_API = 'https://finsuitdev.udomedia.com.cn/finsuit/'
-// let HOST_API = 'http://192.168.100.173:8080/finsuit/'
 const config = {
   method: 'post',
-  // baseURL: '/api/finsuit/PHONE/deal',
   baseURL: HOST_API + '/finsuitPhone/deal',
   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   timeout: 100000,
@@ -64,19 +61,7 @@ instance.interceptors.request.use(
   }
 );
 export default class Http {
-  post({url = '', params, type, channel_id}, success, error) {
-    return this.API({
-      method: 'post',
-      url,
-      params,
-      type,
-      channel_id
-    }, success, error).catch((err) => {
-      console.log(err)
-    })
-  }
-
-  API({
+  async post({
         method,
         url,
         params,
@@ -112,38 +97,31 @@ export default class Http {
       },
     }
     data = 'param_key=' + JSON.stringify(data)
-    return instance.request({
-      data,
-      url,
-      method
-    }).then(res => {
+    try {
+      let res = await instance.request({data, url, method:'post'})
       console.log('bicai - res>>>', res);
       if (res.head.CODE == 0) {
-        // let SESSION_ID = res.head.SESSION_ID
-        // store.commit('SET_SESSION_ID', SESSION_ID)
+
         success && success(res.data)
         return Promise.resolve(res.data)
       } else if (res.head.CODE == '-2') {
-        // store.commit('SET_SESSION_ID', '')
         store.commit('SET_TOKEN', '')
         return Promise.reject(res.head.MSG)
       } else if (res.head.CODE == '-3') {
         // 其他设备登录
         store.commit('SET_TOKEN', '')
-        // store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
       } else {
-        // store.commit('SET_SESSION_ID', '')
         return Promise.reject(res.head.MSG)
       }
-    }, err => {
-      console.log(err);
-      return Promise.reject(err)
-    }).catch(err => {
-      Bus.$emit(BusName.showToast, err)
+    }catch (e) {
+      Bus.$emit(BusName.showToast, e)
       error && error()
-      console.log('err>>', err)
-      return Promise.reject(err)
-    })
+      console.log('err>>', e)
+      return Promise.reject(e)
+    }
   }
 }
+
+
+

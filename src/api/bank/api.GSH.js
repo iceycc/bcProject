@@ -307,7 +307,7 @@ export default {
       return http.post(options, Config.config, success, error)
     },
     // async 开户协议：银行直销银行电子账户服务协议
-    electronicAccountAgreement(params, success, error) {
+    openAnAccountAgreement(params, success, error) {
       let options = {
         url: '/openapi/account/openAnAccountAgreement',
         params
