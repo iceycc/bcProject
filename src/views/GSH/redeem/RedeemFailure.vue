@@ -8,7 +8,7 @@
         <img class="err-img" src="@/assets/images/error_tips.png" alt=""> {{errMsg}}
       </p>
     </div>
-    <span @click="reWithdraw" class="btn">重新支取</span>
+    <span @click="reWithdraw" class="btn">再次支取</span>
   </div>
 </template>
 <script>
