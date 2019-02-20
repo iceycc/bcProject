@@ -7,17 +7,10 @@ import store from '@/store/index'
 
 export default {
   /*
-  晋商银行默认所有接口走post请求
+  银行默认所有接口走post请求
    */
-  post: function (option, config, success, error) {
-    return this.request('POST', option, config, success, error).catch(err => {
-      return Promise.reject(err)
-    });
-  },
-  // REQUEST
   /**
    *
-   * @param method 方法
    * @param url 请求地址
    * @param params 个例参数
    * @param TYPE 请求类型 默认
@@ -30,8 +23,8 @@ export default {
    * @param error 错误的回调
    * @returns {Promise<AxiosResponse<any>>}
    */
-  request: function (method, {url, params, TYPE = 'GENERALIZE_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
-    method = method || 'post'
+
+  async post( {url, params, TYPE = 'OLD_INFO', token = '', login = false, delMsg = false, OTHER = false}, config, success, error) {
     let ORG_ID = util.storage.session.get('ORG_ID') || ''
     if (JSON.stringify(ORG_ID) == '{}') {
       ORG_ID = ''
@@ -70,13 +63,14 @@ export default {
       },
       channel_id: CHANNEL_ID + '',
     }
-    config.method = method;
+    config.method = 'POST';
     config.data = 'param_key=' + JSON.stringify(datas)
     config.url = url
     // HTTP请求
-    return axios.request(config).then(result => {
+    try {
+      let result =await axios.request(config)
       result = result.biz_data
-      console.log('zhengzhou - res>>>', result);
+      console.log('OldBank - res>>>', result);
       if (!TOKEN && result.head.TOKEN) { //
         store.commit('SET_TOKEN', result.head.TOKEN)
       }
@@ -91,36 +85,25 @@ export default {
         // 登录超时
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
-        goLogin()
       } else if (result.head.CODE == 1 && result.head.ERROR_CODE == -3) {
         // 其他登录
         Bus.$emit(BusName.showToast, result.head.MSG)
         store.commit('SET_TOKEN', '')
-        goLogin()
       } else {
         if (!delMsg) {
           Bus.$emit(BusName.showToast, result.head.MSG)
         }
         if (result.head.MSG == '未登陆银行') {
-          goLogin()
         }
         return Promise.reject(result.head.MSG)
       }
-    }).catch(errors => {
-      error && error(errors.toString());
-      console.log('错误msg>>', errors);
-      return Promise.reject(errors.toString())
-    })
-
+    }catch (e) {
+      error && error(e.toString());
+      console.log('错误msg>>', e);
+      return Promise.reject(e.toString())
+    }
   }
 
 }
 
-function goLogin() {
-  // Router.push({
-  //   name: PageName.Login,
-  //   query: {
-  //     target: Router.currentRoute.fullPath
-  //   }
-  // })
-}
+

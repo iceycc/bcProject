@@ -12,8 +12,8 @@
 </template>
 <script>
   import API from "@/service";
-  import {HOST_API} from "@/Constant";
-
+  // import {HOST_API} from "@/Constant";
+  let HOST_API = ' http://47.94.110.156:9000/'
   export default {
     name: "DocsPage",
     data() {
@@ -35,26 +35,20 @@
           window.document.title = '产品服务协议'
           this.getBuyAgreementByAjax()
         }
+        // 
         if (type == 'recharge') {
           this.getRechargeAgreementByAjax()
-
-          // this.agreeMentSrc = HOST_API + '/static/finsuit/bank/zzh/cz.html'
         }
+        // 银行的开户协议
         if (type == 'open') {
-          this.getOpenAgreementByAjax()
+          this.openAnAccountAgreement()
         }
-        if (type == 'redeem') {
-          this.getRedeemAgreementByAjax()
-        }
+        // 开户的隐私协议 通用比财的
         if (type == 'privacy') {
           this.getPrivacyAgreementByAjax()
         }
       },
       async getRechargeAgreementByAjax() {
-        // TYPE
-        // ORG_ID
-        // USER_NAME
-        // USER_CARD_ID
         let rechargeData = this.getComState.rechargeData
         console.log(rechargeData);
         let data = {
@@ -65,32 +59,27 @@
         this.title = res.AGREEMENT
         this.agreeMentSrc = HOST_API + res.URL
       },
-      getRedeemAgreementByAjax() {
 
-      },
       async getBuyAgreementByAjax() {
         let data = {
           USER_NAME: this.getComState.idName
         }
         let res = await API.doc.personalAccountServiceAgreement(data)
-        this.title = res.AGREEMENT
-        this.agreeMentSrc = HOST_API + res.URL
+        this.title = res.agreement
+        this.agreeMentSrc = HOST_API + res.url
       },
-      async getOpenAgreementByAjax() {
+      async openAnAccountAgreement() {
         let data = {}
-        let res = await API.doc.electronicAccountAgreement(data)
-        this.title = res.AGREEMENT
-        this.agreeMentSrc = HOST_API + res.URL
+        let res = await API.doc.openAnAccountAgreement(data)
+        this.title = res.agreement
+        this.agreeMentSrc = HOST_API + res.url
       },
-      getPrivacyAgreementByAjax() {
+      async getPrivacyAgreementByAjax() {
         let data = {
           InterfaceType: "1"
         }
-        API.bicai.privacyAgreement(data, res => {
-          this.docs = res[0].HTML_TEXT;
-        }, err => {
-          console.log(err)
-        })
+        let res = await API.bicai.privacyAgreement(data)
+        this.docs = res[0].HTML_TEXT;
       },
       // getReCha
       cancel() {

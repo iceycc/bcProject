@@ -56,7 +56,7 @@ export default {
     // HTTP请求
     try {
       let result = await axiosNew.request(config)
-      console.log(' - res>>>', result);
+      console.log('NewBank - res>>>', result);
       if (!TOKEN && result.head.token) { //
         store.commit('SET_TOKEN', result.head.token)
       }
