@@ -22,24 +22,7 @@
       </section>
     </section>
     <div class="add-card" @click="addBank">添加新银行卡</div>
-    <section class="msg-code" v-if="BC_PHONE">
-      <section class="inner-box">
-        <p class="line-1">输入验证码</p>
-        <p class="line-2">已发送6位数验证码至</p>
-        <p class="line-3">{{BC_PHONE | BC_PHONE_Filter}}，请注意查收</p>
-        <label class="input-box" for="bc-msg" @click="clickLabel">
-          <span class="box box1">{{code[0]}}</span>
-          <span class="box box2">{{code[1]}}</span>
-          <span class="box box3">{{code[2]}}</span>
-          <span class="box box4">{{code[3]}}</span>
-          <span class="box box5">{{code[4]}}</span>
-          <span class="box box6">{{code[5]}}</span>
-        </label>
-        <input id="bc-msg" type="tel" class="msg-input" v-model="msgCode" autocomplete="off" :autofocus="onfocus">
 
-        <img src="@/assets/images/production/close@2x.png" alt="" class="close" @click="BC_PHONE='';msgCode = ''">
-      </section>
-    </section>
     <div class="show-toatal" v-if="showToatal">
       <div class="msg">
         <p>最少需要绑定一张一类户银行卡</p>
@@ -111,7 +94,7 @@
           this.code[i] = newVal[i]
         }
         if (newVal.length == 6) {
-          this.unBindingCardAPI()
+          this.unBindingCard()
         }
       }
     },
@@ -187,42 +170,22 @@
           // Bus.$emit(BusName.showToast, '最少需要绑定一张一类户银行卡')
           return
         }
-        // 先发生短信验证码
-        let data = {
-          BIZ_TYPE: '9', //	类型
-          BANK_USER_ID: this.BANK_USER_ID,// 银行用户ID
-          BANK_ACCT_NO: this.BANK_ACCT_NO,// 电子账户
-        }
-
-        let res = await API.common.apiSendPhoneCode(data)
-        this.BC_PHONE = res.BC_PHONE
-        this.MESSAGE_TOKEN = res.MESSAGE_TOKEN
-      },
-      async unBindingCardAPI() {
         // 解绑 银行卡
         let card = this.clickBankCard
+        console.log(card);
         let data = {
-          bankName: card.CARD_BANK_NAME,//银行名称
-          accountNo: card.CARD_NUM,//银行账号
-          bindFlg:'2', // 接触
-          bankCardPhone: card.BANK_CARD_PHONE,//银行卡开户行手机号
-          apiPackSeq: '', // 比财请求流水号
-          VALIDATE_CODE: this.msgCode,// 短信验证码
-          sendNo: this.sendNo,// 短信验证码编号
-          reqSerial:''
+          bankName: card.cardBankName,//银行名称
+          accountNo: card.cardNum,//银行账号
+          bindFlg:'2', //
+          bankCardPhone: card.bankCardPhone,//银行卡开户行手机号
         }
         try {
           await API.account.apiChangeBingCard(data)
-          this.BC_PHONE = ''
-          this.msgCode = ''
           this.getBankList()
-
         } catch (e) {
-          this.BC_PHONE = ''
-          this.msgCode = ''
         }
+      },
 
-      }
     }
   }
 </script>
@@ -313,79 +276,6 @@
     border-radius: px2rem(6);
     margin: px2rem(60) auto 0;
   }
-
-  .msg-code {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-
-    .inner-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: px2rem(304);
-      height: px2rem(176);
-      border-radius: px2rem(6);
-      background: #fff;
-      text-align: center;
-
-      .close {
-        position: absolute;
-        top: px2rem(10);
-        right: px2rem(10);
-        width: px2rem(14);
-        height: px2rem(14);
-      }
-
-      .line-1 {
-        line-height: 3;
-        color: #444;
-        font-size: px2rem(16);
-      }
-
-      .line-2, .line-3 {
-        line-height: 1.6;
-        font-size: px2rem(14);
-        color: #858E9F
-      }
-    }
-
-    .msg-input {
-      position: fixed;
-      top: px2rem(-2000);
-      left: px2rem(-1000);
-      width: 100%;
-      height: 0;
-      z-index: 0;
-      opacity: 0;
-      font-size: px2rem(1);
-    }
-
-    .input-box {
-      position: relative;
-      font-size: 0;
-      display: block;
-      padding-top: px2rem(20);
-
-      .box {
-        margin-right: px2rem(5);
-        vertical-align: top;
-        width: px2rem(36);
-        height: px2rem(36);
-        border: 1px solid rgba(221, 221, 221, 1);
-        font-size: px2rem(13);
-        text-align: center;
-        line-height: px2rem(36);
-      }
-
-
-    }
-  }
-
   .show-toatal {
     position: fixed;
     width: 100%;

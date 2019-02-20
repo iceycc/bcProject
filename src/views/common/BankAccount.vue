@@ -116,6 +116,7 @@
     name: "SafeLogin",
     data() {
       return {
+        // TITLE_TEPY: ['已开户', '未开户'],
         TITLE_TEPY: ['已登录', '未登录'],
         title: '我的资产',
         cur: '2',
@@ -292,6 +293,7 @@
           this.getOpenBankList()
           // this.getNoOpenBankList()
         } else {
+          // this.TITLE_TEPY = ['已开户', '未开户']
           this.TITLE_TEPY = ['已登录', '未登录']
           this.getNoOpenBankList()
         }

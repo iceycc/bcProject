@@ -381,6 +381,7 @@
       padding-top: px2rem(20);
 
       .box {
+        display: inline-block;
         margin-right: px2rem(5);
         vertical-align: top;
         width: px2rem(36);
