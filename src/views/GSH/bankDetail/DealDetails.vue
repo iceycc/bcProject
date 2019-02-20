@@ -49,13 +49,21 @@
                 <!--字符-->
                 <li v-for="(item,index) in pageList" :key="index" @click="goDetail(item)">
                   <h5 style="display: flex">
-                    <span style="flex: 1;color:#E62224;">{{item.TYPE_NAME}}{{item.COMM_TRANS_STATUS_DESC}}</span>
+                    <span style="flex: 1;">
+                      {{item.transTypeName}}
+                      <!-- {{item.transType}}
+                      {{item.TYPE_NAME}}{{item.COMM_TRANS_STATUS_DESC}} -->
+                    </span>
                   </h5>
                   <p>
                     <!--时间-->
-                    <span>{{item.OPERA_DATE}}</span>
+                    <span>{{item.operaTime}} 
+                       <!-- {{item.OPERA_DATE}}   -->
+                        </span>
                     <!--金额-->
-                    <em :class="{'add':item.type}">{{item.TRANS_AMT_DESC}}</em>
+                    <!-- <em :class="{'add':item.transType}">{{item.transAmtDesc}}</em> -->
+                    <em v-if="item.transType=='1'" style="color:#29AB91;">+{{item.transAmtDesc}}</em>
+                    <em v-if="item.transType=='2'" style="color:#F4333C;">-{{item.transAmtDesc}}</em>
                   </p>
                 </li>
 
@@ -102,6 +110,9 @@
       };
     },
     created() {
+      // console.log(this.getLastMonthYestdy(0));
+      // console.log(this.getLastMonthYestdy(1));
+
     },
     components: {
       "v-loadmore": Loadmore // 为组件起别名，vue转换template标签时不会区分大小写，例如：loadMore这种标签转换完就会变成loadmore，容易出现一些匹配问题
@@ -195,13 +206,20 @@
         // END_DATE	结束日期
         let data = {
           currentPage: "1",
-          TYPE: 'API_QRY_ELE_TRANS_DETAIL',
+          // TYPE: 'API_QRY_ELE_TRANS_DETAIL',
           // START_DATE: '2020-08-26',
           // END_DATE: '2020-08-27',
           // START_DATE: start,
           // END_DATE: end,
           // pagenum: '10',
           // pageflag: '4'
+          // startDate:this.getLastMonthYestdy(1),
+          // endDate:this.getLastMonthYestdy(0),
+          startDate:'2018-06-01',
+          endDate:'2019-06-01',
+          ccy:"1",//币种
+
+
         };
         let res = await API.bank.apiQryEleTransDetail(data)
         this.pageList = res.PAGE.retList;
@@ -530,32 +548,36 @@
 
             li {
               display: block;
-              border-bottom: px2rem(1) solid #e7e7e7;
-              padding: px2rem(10) 0;
-              margin: 0 px2rem(15);
+              border-bottom: px2rem(1) solid #DDDDDD;
+              padding: px2rem(12) px2rem(15);
+              // margin: 0 px2rem(15);
 
               h5 {
-                font-size: px2rem(14);
-                line-height: px2rem(20);
-                color: #121b32;
+                font-size: px2rem(16);
+                line-height: px2rem(22);
+                color: #333333;
                 font-weight: normal;
-                padding-bottom: px2rem(4);
+                padding-bottom: px2rem(8);
+                
               }
 
               p {
                 span {
-                  font-size: px2rem(12);
-                  line-height: px2rem(17);
+                  font-size: px2rem(14);
+                  line-height: px2rem(19);
                   display: inline-block;
                   padding-right: px2rem(20);
-                  color: #858e9f;
+                  color: #999;
+                  font-size: px2rem(14);
                 }
 
                 em {
-                  font-size: px2rem(14);
+                  font-size: px2rem(16);
                   float: right;
-                  line-height: px2rem(25);
+                  line-height: px2rem(26);
                   color: #333333;
+                  position: relative;
+                  top:px2rem(-3);
                 }
               }
             }

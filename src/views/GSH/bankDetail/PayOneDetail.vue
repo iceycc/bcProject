@@ -7,20 +7,20 @@
     <div class="i-main">
       <div class="detail">
         <div class="i-info">
-          <span class="left">{{detailData.TYPE_NAME}}金额</span>
-          <span class="right">{{detailData.TRANS_AMT | formatNum}}</span>
+          <span class="left">{{detailData.transTypeName}}金额</span>
+          <span class="right">{{detailData.transAmtDesc}}</span>
         </div>
         <div class="i-info">
           <span class="left">交易时间</span>
-          <span class="right">{{detailData.OPERA_TIME}}</span>
+          <span class="right">{{detailData.operaTime}}</span>
         </div>
         <div class="i-info">
           <span class="left">余额</span>
-          <span class="right">{{detailData.BANLANCE}}</span>
+          <span class="right">{{detailData.banlance}}</span>
         </div>
         <div class="i-info">
           <span class="left">摘要</span>
-          <span class="right">{{detailData.COMM_TRANS_STATUS_DESC}}</span>
+          <span class="right">{{detailData.absInfo}}</span>
         </div>
       </div>
     </div>

@@ -48,19 +48,19 @@ export default {
       typeText: "快速支取",
       normalShow: false,
       redeemData: {
-        INVEST_AMOUNT: "",
-        FUND_NO: "",
-        PRD_TYPE: "4",
+        holdAmt: "", //金额
+        // FUND_NO: "",
+        // PRD_TYPE: "4",
         orgName: "某某银行",
         prdName: "某某产品"
       },
       EFFCT_INTEREST_RATE: "",
-      passCode: "",
-      len: "",
-      pass: "",
-      MESSAGE_TOKEN: "",
-      BANK_ACCT_NO: "", //电子账户
-      BANK_USER_ID: "" //银行用户ID
+      // passCode: "",
+      // len: "",
+      // pass: "",
+      // MESSAGE_TOKEN: "",
+      // BANK_ACCT_NO: "", //电子账户
+      // BANK_USER_ID: "" //银行用户ID
     };
   },
   computed: {

@@ -503,7 +503,7 @@
   .header {
     background-color: #518bee;
     color: #fff;
-    border-bottom: 1px solid #518bee;
+    // border-bottom: 1px solid #518bee;
     position: relative;
   }
 
