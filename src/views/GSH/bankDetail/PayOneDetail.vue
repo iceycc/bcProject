@@ -16,7 +16,7 @@
         </div>
         <div class="i-info">
           <span class="left">余额</span>
-          <span class="right">{{detailData.banlance}}</span>
+          <span class="right">{{detailData.banlanceDesc}}</span>
         </div>
         <div class="i-info">
           <span class="left">摘要</span>
