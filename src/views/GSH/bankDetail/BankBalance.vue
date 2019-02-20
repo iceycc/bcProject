@@ -62,7 +62,7 @@
             accRest: this.accRest,// 可用余额
           }
         }
-        console.log(page);
+        //console.log(page); 
         this.$router.push({
           name: page,
           query
