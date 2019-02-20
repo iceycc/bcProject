@@ -3,7 +3,7 @@
     <app-bar title="支取"></app-bar>
     <div class="chattuimg">
       <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>恭喜你，支取成功</h2>
+      <h2>支取成功</h2>
     </div>
     <section class="m-card">
       <p>
