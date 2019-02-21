@@ -21,19 +21,21 @@
   @import "~@/assets/px2rem";
 
   .pro-name {
-    padding: 0 px2rem(20);
+    padding: 0 0.5rem;
 
     .pro-title {
-      color: #333;
-      font-size: px2rem(16);
+      color: #000;
+      font-size: 0.4rem;
       height: px2rem(48);
       line-height: px2rem(48);
-      box-shadow: 0px 1px 0px 0px rgba(220, 220, 220, 0.5);
+      border-bottom: 1px solid #DCDCDC;
     }
 
     .pro-content {
-      height: px2rem(48);
-      line-height: px2rem(48);
+      /*height: px2rem(48);*/
+      /*line-height: px2rem(48);*/
+      font-size: 0.4rem;
+      padding: px2rem(14) 0;
       color: #666;
     }
 

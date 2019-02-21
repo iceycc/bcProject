@@ -259,7 +259,7 @@ img, span, input {
   *display: inline;
   *zoom: 1;
 }
-.sp-span img, span, input{
+.sp-span span{
   display: inline;
 }
 

@@ -30,7 +30,7 @@ const Configs = {
    * npm run dev 开发
    *
    */
-  DEV_HOST: WEB_HOST.pro,
+  DEV_HOST: WEB_HOST.adv,
 
   /**
    * build打包

@@ -44,28 +44,33 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "~@/assets/px2rem";
   .header {
-    height: 1.3rem;
-    line-height: 1.3rem;
-    font-size: 0.4rem;
+    height: px2rem(40);
+    line-height: px2rem(40);
+    font-size: px2rem(18);
     background-color: #fff;
+    padding: 0 px2rem(30);
   }
 
   .header p {
     text-align: center;
-    font-size: 0.5rem;
+    width: 100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
   }
 
   .goBack {
     display: block;
     position: absolute;
-    left: 0.4rem;
-    top: 0.2rem;
-    width: 1rem;
-    height: 0.9rem;
+    left: px2rem(20);
+    top: px2rem(3);
+    width: px2rem(17);
+    height: px2rem(17);
     z-index: 2;
     img {
-      width: 0.3rem;
+      width: px2rem(12);
     }
   }
 </style>
