@@ -155,22 +155,31 @@
         </section>
         <ul class="b-bottom">
           <li class="b-li">
-            <img src="~@/assets/images/icon_dunpai@2x.png" alt="">
+            <img src="~@/assets/images/icon_dunpai@2x.png" alt="" @click="showSafeDocs">
             <span>受存款保险保护 ></span>
           </li>
           <li class="b-li">累计申购笔数 {{productDetail.BUY_COUNT}}</li>
         </ul>
       </section>
     </template>
+    <safe-docs v-if="safeShow" @closeHandle="closeSafe"></safe-docs>
+
   </section>
 </template>
 <script>
   import ProSwiper from './ProSwiper'
+  import SafeDocs from '@/components/commons/SafeDocs.vue'
 
   export default {
     name: "ProBanner",
     components: {
-      ProSwiper
+      ProSwiper,
+      SafeDocs
+    },
+    data() {
+      return {
+        safeShow: false
+      }
     },
     props: {
       bgColor: {
@@ -203,6 +212,14 @@
           }
         }
       }
+    },
+    methods: {
+      showSafeDocs() {
+        this.safeShow = true
+      },
+      closeSafe() {
+        this.safeShow = false
+      },
     },
     created() {
       console.log(this.proType);
