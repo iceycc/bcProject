@@ -48,6 +48,7 @@
     height: 1.3rem;
     line-height: 1.3rem;
     font-size: 0.4rem;
+    background-color: #fff;
   }
 
   .header p {

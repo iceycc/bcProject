@@ -51,6 +51,7 @@
       <!--<p>参考收益根据当前产品公开市场披露信息进行推算</p>-->
       <!--</div>-->
       <!--</div>-->
+      <pro-title :proName="title"></pro-title>
       <div class="contenttop">
         <p>交易规则</p>
         <div class="bannercontent">
@@ -121,7 +122,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div class="bc-content" v-html="DEPICT">
+          <div class="bc-content sp-span" v-html="DEPICT">
           </div>
         </div>
       </div>
@@ -171,7 +172,7 @@
   import Mixins from "@/mixins";
   import SafeDocs from '@/components/commons/SafeDocs.vue'
   import Register from './commom'
-
+  import ProTitle from './components/ProTitle'
 
   export default {
     data() {
@@ -225,7 +226,8 @@
       }
     },
     components: {
-      SafeDocs
+      SafeDocs,
+      ProTitle
     },
     created() {
       this.title = this.$route.query.title;
@@ -451,6 +453,7 @@
 <style lang="scss" scoped>
   @import "~@/assets/px2rem";
   /*@import "./swiper.scss";*/
+
   html, body {
     width: 100%;
   }
@@ -977,10 +980,9 @@
   .bc-content {
     padding-top: px2rem(20);
     color: #666;
-    span {
-      display: inline !important;
-    }
+
   }
+
 
 </style>
 

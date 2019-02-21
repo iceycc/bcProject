@@ -24,8 +24,10 @@ import globalValue from '@/plugin/setGlobalValue'
 /**
  * 自定义样式引入
  */
+import '@/assets/css/main.css'
 import '@/assets/css/my-mint.css';
 import '@/assets/css/common.css'
+
 
 export default {
   async install(Vue, option) {
