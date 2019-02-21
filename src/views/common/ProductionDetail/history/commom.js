@@ -71,8 +71,6 @@ export default {
         this.$router.push({name: PageName.Login})
       }
     },
-
-
     setProType(data) {
       API.bicai.getPrdFootInfo(data, res => {
         // 新增 平安银行 这种登录授权的 0：使用之前的逻辑 1：实名认证后，调用免登接口

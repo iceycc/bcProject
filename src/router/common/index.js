@@ -43,12 +43,9 @@ export default [
     component: resolve => require(['views/common/product/ProductList.vue'], resolve),
     meta: {keepAlive: false, title: '产品列表', needLogin: false}
   },
-  // {
-  //   path: '/' + PageName.ProductReservation,
-  //   name: PageName.ProductReservation,
-  //   component: resolve => require(['views/ZZH/product/ProductReservation.vue'], resolve),
-  //   meta: {keepAlive: false, needLogin: false}
-  // },
+  /**
+   * 产品详情
+   */
   {
     path: '/' + PageName.ProdctionDetail,
     name: PageName.ProdctionDetail,
@@ -56,44 +53,7 @@ export default [
     meta: {keepAlive: false, title: '产品详情', needLogin: false}
   },
 
-  /**
-   * 货币基金
-   */
-  {
-    path: '/' + PageName.MoneyFundDetail,
-    name: PageName.MoneyFundDetail,
-    component: resolve => require(['views/common/ProductionDetail/MoneyFundDetail.vue'], resolve),
-    meta: {keepAlive: false, title: '产品详情', needLogin: false}
-  },
-  /**
-   * 存款类型
-   */
-  {
-    path: '/' + PageName.DepositDetail1,
-    name: PageName.DepositDetail1,
-    component: resolve => require(['views/common/ProductionDetail/DepositDetail1.vue'], resolve),
-    meta: {keepAlive: false, title: '产品详情', needLogin: false}
-  },
-  {
-    path: '/' + PageName.DepositDetail2,
-    name: PageName.DepositDetail2,
-    component: resolve => require(['views/common/ProductionDetail/DepositDetail2.vue'], resolve),
-    meta: {keepAlive: false, title: '产品详情', needLogin: false}
-  },
-  // 客商
-  {
-    path: '/' + PageName.KeShangProDetail,
-    name: PageName.KeShangProDetail,
-    component: resolve => require(['views/common/ProductionDetail/KeShangProDetail.vue'], resolve),
-    meta: {keepAlive: false, title: '产品详情', needLogin: false}
-  },
-  //
-  {
-    path: '/' + PageName.FinancingProduct,
-    name: PageName.FinancingProduct,
-    component: resolve => require(['views/common/ProductionDetail/FinancingProduct.vue'], resolve),
-    meta: {keepAlive: false, title: '产品详情', needLogin: false}
-  },
+
   /**
    * 比财开户流程
    */

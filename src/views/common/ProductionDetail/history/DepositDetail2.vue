@@ -432,7 +432,7 @@
           let invest = str.substring(0, str.length - 1);
           this.setComState({type: 'PRD_TYPE', value: this.productDetail.PRD_TYPE})
           let index = 0;
-          if (res.NAV_List.length > 0) {
+          if (res.NAV_List && res.NAV_List.length > 0) {
             this.NAV_List = res.NAV_List
             this.current = this.NAV_List.length
             this.NAV_List.forEach((item, i) => {

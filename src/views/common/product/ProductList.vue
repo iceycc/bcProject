@@ -97,7 +97,8 @@
           IS_RZ_FLAG: '0', // '是否实名认证, 0：否, 1：是',
           H5_URL_ANDRIOD: '',// 非打通openApi 跳转链接 安卓
           H5_URL_IOS: '' // 非打通openApi 跳转链接 ios
-        }
+        },
+
       }
     },
     created() {
@@ -105,6 +106,7 @@
         REMARK_DATA: '异业合作-落地页',
         FUNCTION_ID: 'ptp0A000'
       })
+
       this.setComState({
         type: 'ProAndOrgType', value: {}
       })
@@ -159,7 +161,7 @@
             //  1：活期
             //  2：智能
             //  3：结构性
-            //  4：
+            //  4：定期
             break;
         }
         return str
@@ -199,57 +201,29 @@
         let reload = util.storage.session.get('reload') || null
         console.log(reload);
         if (reload && JSON.stringify(reload) != "{}") {
+          util.storage.session.set('reload', null)
           this.Bshow = false
           setTimeout(() => {
             this.Bshow = true
           }, 1000)
-          let id = util.storage.session.get('id')
           let ORG_ID = util.storage.session.get('ORG_ID')
-          let title = util.storage.session.get('title')
+          let ProListToDetail = util.storage.session.get('ProListToDetail')
           let {APP_FLAG, CHANNEL_ID} = this.$store.getters.GET_ACCOUNT_STATE
-          util.storage.session.remove('id')
-          util.storage.session.remove('title')
-          util.storage.session.set('reload', null)
-          if (ORG_ID == 49) {
-            this.$router.push({
-              name: PageName.MoneyFundDetail,
-              query: {
-                title,
-                ORG_ID,
-                APP_FLAG,
-                PRO_ID: id,
-                CHANNEL_ID,
-              }
-            })
-          } else if (ORG_ID == '248') {
-            this.$router.push({
-              name: PageName.KeShangProDetail,
-              query: {
-                title,
-                ORG_ID,
-                APP_FLAG,
-                PRO_ID: id,
-                CHANNEL_ID,
-              }
-            })
-          } else {
-            Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
-          }
-          if (ORG_ID == '66') {
-            this.$router.push({
-              name: PageName.KeShangProDetail,
-              query: {
-                title,
-                ORG_ID,
-                APP_FLAG,
-                PRO_ID: id,
-                CHANNEL_ID,
 
-              }
-            })
-          }
+          this.$router.push({
+            name: PageName.ProdctionDetail,
+            query: {
+              PRD_TYPE_ID: ProListToDetail.PRD_TYPE_ID, //  产品类型判断
+              DEPOSIT_TYPE_ID: ProListToDetail.DEPOSIT_TYPE_ID, // 存款类型判断
+              PRD_NAME: ProListToDetail.PRD_NAME, // 兼容标题
+              PRO_ID: ProListToDetail.PRO_ID, // 产品名称
+              ORG_ID, // 机构名称
+              APP_FLAG, //
+              CHANNEL_ID, // 渠道标志
+            }
+          })
+          // Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
         } else {
-          // this.getListData()
           this.getListDataByChannel()
         }
       }
@@ -271,9 +245,7 @@
           REMARK_DATA: '异业合作-落地页产品列表', // 中文备
           FROM_ID: ID
         })
-        util.storage.session.set('ORG_ID', ORG_ID)
-        let {APP_FLAG, CHANNEL_ID} = this.$store.getters.GET_ACCOUNT_STATE
-
+        util.storage.session.set('ORG_ID', ORG_ID + '')
         // `IS_SYNC_FLAG`  '是否由openAPI同步产品, 0：否, 1：是',
         // `IS_REALTIME_DATA_PRD` 'H5实时数据对接标识： 0不是  1是',
         // `IS_RZ_FLAG` '是否实名认证, 0：否, 1：是',
@@ -281,103 +253,32 @@
         if (IS_SYNC_FLAG == '0') {
           //  未打通openApi
           // 判断产品类型
-          //  PRD_TYPE_ID 1 货币基金 2 理财产品 3 纯债 4 存款
-          //  PRD_DOCKING_TYPE  DEPOSIT_TYPE_ID // 1活期，2智能存款 3.结构性 4
-          if (PRD_TYPE_ID == 1) { // 货币基金
-            this.$router.push({
-              name: PageName.MoneyFundDetail,
-              query: {
-                title: PRD_NAME,
-                PRO_ID: ID,
-                ORG_ID,
-                APP_FLAG,
-                CHANNEL_ID
-              }
-            })
-          }
-          if (PRD_TYPE_ID == 2) { // 理财产品
-            this.$router.push({
-              name: PageName.FinancingProduct,
-              query: {
-                title: PRD_NAME,
-                PRO_ID: ID,
-                ORG_ID,
-                APP_FLAG,
-                CHANNEL_ID
-              }
-            })
-          }
-          if (PRD_TYPE_ID == 3) { // 纯债
-            this.$router.push({
-              name: PageName.DepositDetail1,
-              query: {
-                title: PRD_NAME,
-                PRO_ID: ID,
-                ORG_ID,
-                APP_FLAG,
-                CHANNEL_ID
-              }
-            })
-          }
-          if (PRD_TYPE_ID == 4) {
-            if (DEPOSIT_TYPE_ID == 1) {
-              this.$router.push({
-                name: PageName.DepositDetail1,
-                query: {
-                  title: PRD_NAME,
-                  PRO_ID: ID,
-                  ORG_ID,
-                  APP_FLAG,
-                  CHANNEL_ID
-                }
-              })
+          let {APP_FLAG, CHANNEL_ID} = this.$store.getters.GET_ACCOUNT_STATE
+          this.$router.push({
+            name: PageName.ProdctionDetail,
+            query: {
+              PRD_TYPE_ID, //  产品类型判断
+              DEPOSIT_TYPE_ID, // 存款类型判断
+              PRD_NAME: PRD_NAME, // 兼容标题
+              PRO_ID: ID,
+              ORG_ID,
+              APP_FLAG,
+              CHANNEL_ID,
             }
-            if (DEPOSIT_TYPE_ID == 2) {
-              // 智能存款
-              this.$router.push({
-                name: PageName.DepositDetail2,
-                query: {
-                  PRO_ID: ID, title: PRD_NAME, RATE,
-                  ORG_ID,
-                  APP_FLAG,
-                  CHANNEL_ID
-                }
-              })
-            }
-            if (DEPOSIT_TYPE_ID == 3) {
-              this.$router.push({
-                name: PageName.DepositDetail1,
-                query: {
-                  PRO_ID: ID, title: PRD_NAME, RATE,
-                  ORG_ID,
-                  APP_FLAG,
-                  CHANNEL_ID
-                }
-              })
-            }
-            if (DEPOSIT_TYPE_ID == 4) {
-              this.$router.push({
-                name: PageName.DepositDetail1,
-                query: {
-                  PRO_ID: ID, title: PRD_NAME, RATE,
-                  ORG_ID,
-                  APP_FLAG,
-                  CHANNEL_ID
-                }
-              })
-            }
-          }
-
+          })
         } else if (IS_SYNC_FLAG == '1') {
           // 打通openAPI 刷新重置 ORG_ID 跳转产品详情页
-          ORG_ID = ORG_ID + ''
-          util.storage.session.set('ORG_ID', ORG_ID)
-          util.storage.session.set('id', ID)
-          util.storage.session.set('title', PRD_NAME)
           if (ORG_ID != 49 && ORG_ID != 248 && ORG_ID != 66) {
             Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
             return
           }
+          let ProListToDetail = {
+            PRO_ID: ID,
+            PRD_NAME: PRD_NAME,
+            DEPOSIT_TYPE_ID,
+            PRD_TYPE_ID
+          }
+          util.storage.session.set('ProListToDetail', ProListToDetail)
           util.storage.session.set('reload', true)
           window.location.reload()
         } else {

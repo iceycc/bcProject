@@ -37,7 +37,8 @@ pre,
 td,
 textarea,
 th,
-ul {
+ul,
+section{
   margin: 0;
   padding: 0;
 }

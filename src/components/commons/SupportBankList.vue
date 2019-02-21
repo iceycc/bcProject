@@ -62,7 +62,7 @@
             name: item.BANK_NAME || item.bankName,
             value: 0,
             src: imgSrc + (item.BANK_LOGO_URL || item.bankLogoUrl),
-            Index: item.INITIAL || ''
+            Index: item.INITIAL || item.initial
           }
         })
         return this.filterOptions(bankList)

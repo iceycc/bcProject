@@ -73,14 +73,6 @@
           <span
             class="bannercontenttitlecontent">{{productDetail.PERIOD}}天</span>
         </div>
-        <!--<div class="bannercontent" v-if="productDetail.INCRE_AMOUNT>0">-->
-        <!--<span class="bannercontenttitle">递增金额</span>-->
-        <!--<span class="bannercontenttitlecontent">{{productDetail.INCRE_AMOUNT}} 元</span>-->
-        <!--</div>-->
-        <!--<div class="bannercontent">-->
-        <!--<span class="bannercontenttitle">产品类型</span>-->
-        <!--<span class="bannercontenttitlecontent">{{productDetail.PRD_TYPE_ID | PRD_TYPE_ID_FILTER}}</span>-->
-        <!--</div>-->
       </div>
       <div class="wrapicon">
         <p>交易步骤</p>
