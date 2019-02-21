@@ -52,7 +52,7 @@ export default {
     // if(this.redeemData.prdType=="4"){
 
     // }
-    //console.log(this.redeemData);
+    console.log(this.redeemData);
     // this.getInfo();
   },
   components: {
@@ -66,7 +66,8 @@ export default {
         acCode: this.redeemData.orderNum, // 订单编号流水号
         ccy: this.redeemData.ccy, //币种
         cashFlag: this.redeemData.cashExFlag, //钞汇标志,
-        eithdrawAll: "1" //1全部0部分支取
+        eithdrawAll: "1", //1全部0部分支取
+        accNo:this.redeemData.accNo //账户
       };
       try {
         let res = await API.redeem.apiRedemption(data);
