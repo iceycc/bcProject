@@ -26,7 +26,7 @@
       'ifShow': {
         type: null,
         default:true
-      }
+      },
     },
     created() {
       let isE = util.isEquipment()

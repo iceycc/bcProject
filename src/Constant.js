@@ -143,6 +143,9 @@ export const PageName = {
   BcOpening1: 'BcOpening1',
   BcOpening0: 'BcOpening0',
   BicaiPageDocs: 'BicaiPageDocs',
+
+
+  ProdctionDetail:'ProdctionDetail', // 产品详情
   DepositDetail1: 'DepositDetail1', // 活期存款
   DepositDetail2: 'DepositDetail2', // 智能存款
   DepositDetail3: 'DepositDetail3', // 结构性存款 todo

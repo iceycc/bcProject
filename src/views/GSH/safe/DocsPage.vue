@@ -35,7 +35,7 @@
           window.document.title = '产品服务协议'
           this.getBuyAgreementByAjax()
         }
-        // 
+        //
         if (type == 'recharge') {
           this.getRechargeAgreementByAjax()
         }

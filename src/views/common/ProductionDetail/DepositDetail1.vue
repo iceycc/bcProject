@@ -2,28 +2,6 @@
   <div id="app">
     <div class="wrap">
       <app-bar :title="title"></app-bar>
-      <!--<div class="m-swiper">-->
-      <!--<swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">-->
-      <!--&lt;!&ndash; slides &ndash;&gt;-->
-
-      <!--<swiper-slide v-for="item,index in NAV_List" :key="index">-->
-      <!--<div class="card">-->
-      <!--<div class="top"><img src="~@/assets/images/production/rili.png"-->
-      <!--alt=""><span>{{item.PERIOD_DAY_TXT}}</span></div>-->
-      <!--<section class="center">{{item.RATE | formatNum}}%</section>-->
-      <!--<section class="m-bottom">-->
-      <!--<span>随时支取</span>-->
-      <!--<span>{{item.MIN_AMOUNT}}元起存</span>-->
-      <!--<span>保本</span>-->
-      <!--</section>-->
-      <!--</div>-->
-      <!--</swiper-slide>-->
-
-      <!--</swiper>-->
-      <!--<div class="m-bannerbottom">-->
-      <!--<span>累计购买笔数 {{productDetail.BUY_COUNT}}</span>-->
-      <!--</div>-->
-      <!--</div>-->
       <div class="banner">
         <div class="bannercontent">
           <div class="bannertop">
@@ -245,7 +223,7 @@
         IS_REALTIME_DATA_PRD: ''
       };
     },
-    mixins: [Register,  Mixins.redirectByFromPage],
+    mixins: [Register, Mixins.redirectByFromPage],
     computed: {
       // swiper() {
       //   return this.$refs.mySwiper.swiper

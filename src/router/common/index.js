@@ -49,6 +49,13 @@ export default [
   //   component: resolve => require(['views/ZZH/product/ProductReservation.vue'], resolve),
   //   meta: {keepAlive: false, needLogin: false}
   // },
+  {
+    path: '/' + PageName.ProdctionDetail,
+    name: PageName.ProdctionDetail,
+    component: resolve => require(['views/common/ProductionDetail/ProdctionDetail.vue'], resolve),
+    meta: {keepAlive: false, title: '产品详情', needLogin: false}
+  },
+
   /**
    * 货币基金
    */
