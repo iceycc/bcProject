@@ -60,6 +60,8 @@
       <!--<p>参考收益根据当前产品公开市场披露信息进行推算</p>-->
       <!--</div>-->
       <!--</div>-->
+      <pro-title :proName="title"></pro-title>
+
       <div class="contenttop">
         <p>交易规则</p>
         <div class="bannercontent">
@@ -124,8 +126,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
-            <!--<div style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="DEPICT">-->
+          <div class="sp-span" style="font-size: 0.4rem;padding-top:.5rem;color:#666" v-html="productDetail.CONTENT">
           </div>
         </div>
       </div>
@@ -174,6 +175,7 @@
   import util from "@/libs/util";
   import Mixins from "@/mixins";
   import Register from './commom'
+  import ProTitle from './components/ProTitle'
 
   export default {
     data() {
@@ -221,7 +223,9 @@
 
       }
     },
-
+    components: {
+      ProTitle
+    },
     created() {
       this.title = this.$route.query.title;
       this.proID = this.$route.query.PRO_ID;

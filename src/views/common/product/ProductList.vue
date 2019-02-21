@@ -221,8 +221,7 @@
                 CHANNEL_ID,
               }
             })
-          }
-          if (ORG_ID == '248') {
+          } else if (ORG_ID == '248') {
             this.$router.push({
               name: PageName.KeShangProDetail,
               query: {
@@ -233,6 +232,8 @@
                 CHANNEL_ID,
               }
             })
+          } else {
+            Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
           }
           if (ORG_ID == '66') {
             this.$router.push({
@@ -373,10 +374,15 @@
           util.storage.session.set('ORG_ID', ORG_ID)
           util.storage.session.set('id', ID)
           util.storage.session.set('title', PRD_NAME)
+          if (ORG_ID != 49 && ORG_ID != 248 && ORG_ID != 66) {
+            Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
+            return
+          }
           util.storage.session.set('reload', true)
           window.location.reload()
         } else {
-
+          // 异常情况 暂支持49 和 248 66 产品
+          Bus.$emit(BusName.showToast, '暂不支持该产品，请下载比财APP')
         }
       }
       ,

@@ -185,7 +185,7 @@
       .downImg {
         position: absolute;
         right: px2rem(-40);
-        top: px2rem(13);
+        top: px2rem(3);
         width: px2rem(20);
       }
     }

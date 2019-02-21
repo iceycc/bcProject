@@ -5,7 +5,6 @@ const WEB_HOST = {
   /**
    * 域名。可以自行添加测试域名
    */
-
   dev: 'https://finsuitdev.bicai365.com', // dev开发环境/**/
   // dev: 'http://47.94.110.156:9000', // dev开发环境
   adv: 'https://adv.bicai365.com', // adv测试
@@ -32,7 +31,6 @@ const Configs = {
    *
    */
   DEV_HOST: WEB_HOST.dev,
-
   /**
    * build打包
    */

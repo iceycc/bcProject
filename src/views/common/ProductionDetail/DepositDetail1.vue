@@ -25,40 +25,13 @@
           <div class="bannerbottom">
             <ul>
 
-              <!--<li class="bannerbottomfirst clearfix"-->
-              <!--v-if="productDetail.RISK_LEVEL == 1 || productDetail.RISK_LEVEL == '-1'">低风险-->
-              <!--</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 2">中低风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 3">中风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 4">中高风险</li>-->
-              <!--<li class="bannerbottomfirst clearfix" v-if="productDetail.RISK_LEVEL == 5">高风险</li>-->
               <li class="bannerbottomtwo clearfix">{{productDetail.TXT_MIN_AMOUNT}}</li>
               <li class="bannerbottomthree clearfix">累计购买笔数 {{productDetail.BUY_COUNT}}</li>
             </ul>
           </div>
         </div>
       </div>
-      <!--<div class="calculation">-->
-      <!--<div class="calculation-1">-->
-      <!--<span class="label">我要投资(元)</span>-->
-      <!--<label class="input" v-show="!canEdit" @click="getFocus">{{investForm}}</label>-->
-      <!--<input id="input-1" v-model="invest"-->
-      <!--placeholder="0.00"-->
-      <!--v-if="canEdit"-->
-      <!--@blur="canEdit=false"-->
-      <!--v-focus-->
-      <!--type="tel"-->
-      <!--@change="formatNumHandle(invest)"-->
-      <!--&gt;-->
-
-      <!--<img src="@/assets/images/p-invest@2x.png" @click="getFocus">-->
-      <!--</div>-->
-      <!--<div class="calculation-2">-->
-      <!--<label class="label">参考收益(元)</label>-->
-      <!--<span>{{this.interest}}</span>-->
-      <!--<p>参考收益根据当前产品公开市场披露信息进行推算</p>-->
-      <!--</div>-->
-      <!--</div>-->
+      <pro-title :proName="title"></pro-title>
       <div class="contenttop">
         <p>产品详情</p>
         <div class="bannercontent">
@@ -124,7 +97,7 @@
           <p
             style="width: 100%;height: 1rem; padding-bottom: 0.2rem;border-bottom: 1px solid #DCDCDC; padding-top: 0.2rem;">
             产品描述</p>
-          <div style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="DEPICT">
+          <div class="sp-span" style="font-size: 0.35rem;padding-top:.5rem;color:#666" v-html="DEPICT">
           </div>
         </div>
       </div>
@@ -172,29 +145,13 @@
   import util from "@/libs/util";
   import Mixins from "@/mixins";
   import Register from './commom'
-  import 'swiper/dist/css/swiper.css'
-  import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  // require styles
-  import 'swiper/dist/css/swiper.css'
+  import ProTitle from './components/ProTitle'
 
   export default {
     data() {
       return {
         NAV_List: [{}, {}],
-        swiperOption: {
-          slidesPerView: "auto",
-          centeredSlides: 0,
-          watchSlidesProgress: 0,
-          pagination: ".swiper-pagination",
-          paginationClickable: 0,
-          onProgress: function (a) {
-            var b, c, d;
-            for (b = 0; b < a.slides.length; b++) c = a.slides[b], d = c.progress, scale = 1 - Math.min(Math.abs(.2 * d), 1), es = c.style, es.opacity = 1 - Math.min(Math.abs(d / 2), 1), es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = "translate3d(0px,0," + -Math.abs(150 * d) + "px)"
-          },
-          onSetTransition: function (a, b) {
-            for (var c = 0; c < a.slides.length; c++) es = a.slides[c].style, es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = b + "ms"
-          }
-        },
+
         productDetail: {
           RATE: "",
           PERIOD: "",
@@ -225,9 +182,7 @@
     },
     mixins: [Register, Mixins.redirectByFromPage],
     computed: {
-      // swiper() {
-      //   return this.$refs.mySwiper.swiper
-      // },
+
       investForm() {
         return '¥' + util.formatNum(this.invest + '')
       },
@@ -241,14 +196,10 @@
       }
     },
     mounted() {
-      // current swiper instance
-      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-      // console.log('this is current swiper instance object', this.swiper)
-      // this.swiper.slideTo(1, 1000, false)
+
     },
     components: {
-      // swiper,
-      // swiperSlide
+      ProTitle
     },
     created() {
       this.title = this.$route.query.title;
@@ -466,8 +417,6 @@
   };
 </script>
 <style lang="scss" scoped>
-
-  /*@import "./swiper.scss";*/
   html, body {
     width: 100%;
   }
@@ -919,78 +868,6 @@
     top: px2rem(6);
     margin-right: px2rem(4)
   }
-
-  .m-swiper {
-    .m-bannerbottom {
-      text-align: center;
-      font-size: px2rem(13);
-      color: #508CEE;
-    }
-
-    .swiper-container {
-      width: 100%;
-      perspective: 1200px
-    }
-
-    .swiper-slide {
-      width: 80%;
-      transform-style: preserve-3d;
-      margin: 0 auto;
-      height: px2rem(170);
-      background: url("~@/assets/images/production/Bankcopy@2x.png") no-repeat center center;
-      background-size: contain;
-    }
-
-    .swiper-slide-next, .swiper-slide-prev {
-      width: 70%;
-    }
-
-    .card {
-      width: 100%;
-      margin: 0 auto;
-      display: block;
-      box-sizing: border-box;
-      padding: px2rem(30) px2rem(30) 0;
-      color: #fff;
-
-      .center {
-        font-size: px2rem(51);
-        height: px2rem(51);
-        text-align: center;
-      }
-
-      .m-bottom {
-        display: flex;
-        padding-top: px2rem(15);
-        height: px2rem(30);
-        font-size: px2rem(11);
-        text-align: center;
-
-        span {
-          flex: 1;
-
-        }
-      }
-
-      .top {
-        vertical-align: top;
-        font-size: 0;
-
-        span {
-          padding-left: px2rem(10);
-          font-size: px2rem(15);
-          line-height: px2rem(15);
-        }
-
-        img {
-          display: inline-block;
-          width: px2rem(17);
-        }
-      }
-
-    }
-  }
-
 
 </style>
 
