@@ -38,6 +38,7 @@
       bgColor="lightBlue"
     ></submit-button>
     <sign-areement
+      v-if="ifHasArgreement"
       :agree="agree"
       @sign="agree =!agree"
       :options="[
@@ -73,7 +74,8 @@
         BANK_USER_ID: '', //银行用户ID
         INVEST_ID: '',
         TEAM_ID: '',
-        accRestDesc: ''
+        accRestDesc: '',
+        ifHasArgreement: false
       }
     },
     components: {
@@ -100,8 +102,10 @@
         }
       }
     },
-    mixins: [Mixins.storeMixin, Mixins.ToBuyingNew,Mixins.queryStatus],
+    mixins: [Mixins.storeMixin, Mixins.ToBuyingNew, Mixins.queryStatus],
     created() {
+      this.getBuyAgreementByAjax() // 判断
+
       // 注意src/mixins/FromH5Active.js 文件中ToBuying为统一处理方法
     },
     methods: {
@@ -154,7 +158,20 @@
           }
         })
       },
-
+      // 获取购买协议 现阶段是为了判断是否有协议返回，动态配置是否有协议
+      async getBuyAgreementByAjax() {
+        let data = {}
+        try {
+          let res = await API.doc.personalAccountServiceAgreement(data)
+          if (res && res.url) {
+            this.ifHasArgreement = true
+          }else {
+            this.ifHasArgreement = false
+          }
+        }catch (e) {
+          this.ifHasArgreement = false
+        }
+      },
       checkamount(num) {
         let a = this.proDetail.increAmount
         if (num < parseInt(this.proDetail.minAmount)) {
@@ -224,7 +241,7 @@
           bizType: '6', // 购买
           reqSerial: res.reqSerial,
           apiPackSeq: res.apiPackSeq,
-          besharpOrderNo:res.besharpOrderNo
+          besharpOrderNo: res.besharpOrderNo
         }
         try {
           // 轮询查询交易状态！！
@@ -235,19 +252,19 @@
             query: {
               TEAM_ID: this.TEAM_ID,
               INVEST_ID: this.INVEST_ID,
-              proId:this.proDetail.proId,
-              orgName:this.proDetail.orgName,
-              prdName:this.proDetail.prdName,
+              proId: this.proDetail.proId,
+              orgName: this.proDetail.orgName,
+              prdName: this.proDetail.prdName,
               ...qureyRes
             }
           })
-        }catch (e) {
+        } catch (e) {
           console.log(e);
           this.$router.push({
             name: PageName.BuyFailed,
             query: {
               err: e,
-              proId:this.proDetail.proId,
+              proId: this.proDetail.proId,
             }
           })
         }
