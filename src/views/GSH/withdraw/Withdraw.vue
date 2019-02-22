@@ -37,13 +37,15 @@
       @submit="doNext"
       bgColor="lightBlue"
     ></submit-button>
-    <banding-bank-select
+    <up-select
       title="选择银行卡"
       :show="upseletShow"
       :BankList="mainBankList"
       @chooseBank="chooseBank"
       type="withdraw"
-    ></banding-bank-select>
+      bottomText="绑定其它银行卡"
+      :hasQuota=false
+    ></up-select>
   </div>
 </template>
 <script>
@@ -53,7 +55,7 @@
   import util from "@/libs/util";
   import Mixins from '@/mixins'
   import {
-    UpSelect as BandingBankSelect,
+    UpSelect,
     SubmitButton,
     IconFont,
     AppBar
@@ -86,7 +88,7 @@
       AppBar,
       IconFont,
       SubmitButton,
-      BandingBankSelect
+      UpSelect
     },
     watch: {
       APPLY_AMOUNT(n) {
@@ -173,13 +175,12 @@
                   ...qureyRes
                 }
               })
-            } else if ('20000' == qureyRes.RES_CODE) {
+            } else if ('20000' == qureyRes.resCode) {
               // 等待中
               this.$router.push({
                 name: PageName.WaitForWithdraw,
                 query: {
-                  err1: qureyRes.RES_MSG,
-                  err2: qureyRes.RES_MSG2
+                  ...qureyRes
                 }
               })
             } else {

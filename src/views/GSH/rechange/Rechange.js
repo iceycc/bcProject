@@ -52,8 +52,13 @@ export default {
               err: qureyRes.resMsg,
             }
           })
-        } else {
-
+        } else if ('20000' == qureyRes.resCode) {
+          this.$router.push({
+            name: PageName.RechargeWait,
+            query: {
+              ...qureyRes
+            }
+          })
         }
       } catch (err) {
         console.log(err);

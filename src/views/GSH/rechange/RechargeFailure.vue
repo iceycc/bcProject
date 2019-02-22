@@ -51,8 +51,8 @@
     margin-top: 2rem;
     text-align: center;
     img {
-      width: px2rem(70);
-      height: px2rem(70);
+      width: px2rem(64);
+      height: px2rem(64);
     }
   }
 

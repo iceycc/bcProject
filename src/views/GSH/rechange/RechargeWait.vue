@@ -2,10 +2,10 @@
   <div class="app">
     <app-bar title="充值"></app-bar>
     <div class="chattuimg">
-      <img src="@/assets/images/applying@2x.png" alt="">
-      <h2>银行已经受理，预计两小时到账。</h2>
-      <p class="msg">处理时间以客商银行时间为准。</p>
-      <p class="msg second">处理结果可在充值处理中页面查询。</p>
+      <img src="@/assets/images/deal_notice_wait.png" alt="">
+      <!--<h2>银行已经受理，预计两小时到账。</h2>-->
+      <!--<p class="msg">处理时间以客商银行时间为准。</p>-->
+      <!--<p class="msg second">处理结果可在充值处理中页面查询。</p>-->
     </div>
     <span @click="reWithdraw" class="btn">确定</span>
     <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
@@ -46,8 +46,8 @@
     margin-top: px2rem(60);
     text-align: center;
     img{
-      width: px2rem(70);
-      height: px2rem(70);
+      width: px2rem(64);
+      height: px2rem(64);
     }
     h2 {
       font-size: px2rem(18);

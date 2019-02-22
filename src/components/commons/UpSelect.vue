@@ -8,12 +8,17 @@
       <ul class="r-type-list">
         <li
           v-for="bank,index in newBankList" :key="index"
-          :class="{gray:bank && bank.IS_SUPPORT == 0,active:cur == index}"
+          :class="{gray:bank && bank.isSupport == 0,active:cur == index}"
           @click="chooseType(index)">
-          <img :src="imgSrc + bank.BANK_LOGO_URL" class="logo-img" alt="">
-          <section>
-            <p class="name">{{bank.OPEN_BANK}}（{{bank.CARD_NO| noFilter}}）</p>
-            <p class="money">{{bank.MSG_QUOTA}}</p>
+          <img :src="imgSrc + bank.bankLogoUrl" class="logo-img" alt="">
+          <section v-if="hasQuota" class="has-quota">
+            <p class="name">{{bank.openBank}}（{{bank.cardNo| noFilter}}）</p>
+            <p v-if="bank.msgQuota" class="money">{{bank.msgQuota}}</p>
+            <p v-else class="money">单笔充值上限{{bank.singleQuota}}，单日充值上限{{bank.dayQuota}}</p>
+          </section>
+          <!--不需要限额的-->
+          <section v-if="!hasQuota" class="no-quota">
+            <p class="name">{{bank.openBank}}（{{bank.cardNo| noFilter}}）</p>
           </section>
         </li>
       </ul>
@@ -21,7 +26,7 @@
         <div class="left">
           <span class="add">+</span>
         </div>
-        <span class="right">添加其它银行卡</span>
+        <span class="right">{{bottomText}}</span>
       </div>
     </div>
     <div class="grey-mask"></div>
@@ -43,6 +48,14 @@
         default() {
           return []
         }
+      },
+      hasQuota: {
+        type: Boolean,
+        default: true
+      },
+      bottomText: {
+        type: String,
+        default: '添加其它银行卡'
       }
     },
     filters: {
@@ -73,11 +86,13 @@
       adapterBankList(bankList) {
         return bankList.map(bank => {
           return {
-            IS_SUPPORT: bank.IS_SUPPORT || bank.isSupport,
-            BANK_LOGO_URL: bank.BANK_LOGO_URL || bank.bankLogoUrl || bank.cardBankUrl,
-            OPEN_BANK: bank.OPEN_BANK || bank.openBank || bank.cardBankName,
-            CARD_NO: bank.CARD_NO || bank.cardNo || bank.cardNum,
-            MSG_QUOTA: bank.MSG_QUOTA || bank.msgQuota,
+            isSupport: bank.IS_SUPPORT || bank.isSupport,
+            bankLogoUrl: bank.BANK_LOGO_URL || bank.bankLogoUrl || bank.cardBankUrl,
+            openBank: bank.OPEN_BANK || bank.openBank || bank.cardBankName,
+            cardNo: bank.CARD_NO || bank.cardNo || bank.cardNum,
+            msgQuota: bank.MSG_QUOTA || bank.msgQuota,
+            dayQuota: bank.DAY_QUOTA || bank.dayQuota,
+            singleQuota: bank.SINGLE_QUOTA || bank.singleQuota,
           }
         })
       },
@@ -154,19 +169,23 @@
         color: #858E9F;
       }
     }
+
     .r-type-list {
       position: relative;
       max-height: px2rem(320);
       overflow-y: auto;
+
       li {
         position: relative;
         display: flex;
         padding: px2rem(22);
         border-bottom: 1px solid #EEEEF0;
+
         .logo-img {
           width: px2rem(40);
           height: px2rem(40);
         }
+
         .name {
           text-align: left;
           color: #000;
@@ -183,6 +202,12 @@
           text-align: left;
           font-size: px2rem(14);
           color: #666
+        }
+
+        .no-quota {
+          .name {
+            margin-top: px2rem(7);
+          }
         }
       }
 

@@ -55,6 +55,7 @@
       :BankList="mainBankList"
       @chooseBank="chooseBank"
       @addBank="addBankHandle"
+      bottomText="绑定其它银行卡"
     ></up-select>
   </div>
 </template>

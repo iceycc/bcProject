@@ -63,7 +63,7 @@
       height: px2rem(11);
       width: px2rem(11);
       left: px2rem(18);
-      top: px2rem(11);
+      top: px2rem(12);
       -webkit-transform: rotate(228deg);
       border-left: px2rem(2) solid transparent;
       border-bottom: px2rem(2) solid transparent;

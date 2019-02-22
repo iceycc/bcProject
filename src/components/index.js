@@ -59,11 +59,15 @@ import BandingBankSelect from './upSelect/BandingBankSelect'
 
 /**
  *工商行弹窗提示
- */ 
+ */
 import PopTip from './GSH/PopTip'
+/**
+ * 公共交易结果组件
+ */
+import ComDealResult from './commonPages/ComDealResult'
 
 
-export  {
+export {
   PopTip,
   AlertBox,
 
@@ -96,5 +100,7 @@ export  {
   PassInputZhengzhou,
   PassInputZhengZhouForMore,
 
-  BandingBankSelect
+  BandingBankSelect,
+
+  ComDealResult
 }

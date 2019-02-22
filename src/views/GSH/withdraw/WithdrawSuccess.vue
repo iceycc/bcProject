@@ -1,19 +1,26 @@
 <template>
   <div class="app">
     <app-bar title="提现"></app-bar>
-    <div class="chattuimg">
-      <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>提现成功</h2>
-      <p class="result">{{RES_MSG2}}</p>
-    </div>
-    <section class="m-card">
-      <p><span>提现金额</span>{{money | formatNum}}</p>
-      <p><span>交易流水号</span>{{BESHARP_CASH_SEQ}}</p>
-    </section>
-    <button class="begain" @click="goNext">完成</button>
+    <com-deal-result>
+      <section slot="resImg">
+        <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
+      </section>
+      <section slot="resMsg">
+        <h2 class="msg">{{RES_MSG2}}</h2>
+        <section class="m-card">
+          <p><span class="r-left">提现金额</span><span class="r-right">{{money | formatNum}}</span></p>
+          <p><span class="r-left">交易流水号</span><span class="r-right">{{BESHARP_CASH_SEQ}}</span></p>
+        </section>
+      </section>
+      <section slot="resBtn">
+        <button class="begain" @click="goNext">完成</button>
+      </section>
+    </com-deal-result>
   </div>
 </template>
 <script>
+  import {ComDealResult} from '@/components'
+
   export default {
     data() {
       return {
@@ -21,6 +28,9 @@
         num: '',
         BESHARP_CASH_SEQ: '',
       }
+    },
+    components: {
+      ComDealResult
     },
     created() {
       let preData = this.$route.query
@@ -38,47 +48,33 @@
 
 <style lang="scss" scoped>
 
-
-  .app {
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .chattuimg {
-    .img {
-        width: px2rem(70);
-    }
-    margin-top: px2rem(70);
-    color: #2B74FE;
+  .msg {
     text-align: center;
-    h2 {
-      font-size: px2rem(18);
-      margin: px2rem(20) 0 px2rem(10);
-    }
-    .result{
-      color: #444444;
-      font-size: px2rem(14);
-      margin-bottom: px2rem(20);
-    }
+    color: #508CEE;
   }
 
   .m-card {
-    padding: px2rem(20);
     font-size: px2rem(14);
     color: #9199A1;
     border-top: 1px solid #eeeef0;
-    border-bottom: 1px solid #eeeef0;
-    span {
-      display: inline-block;
+    margin-top: px2rem(20);
+
+    p {
+      display: flex;
+      border-bottom: 1px solid #eeeef0;
+      height: px2rem(44);
+      line-height: px2rem(44);
+      padding: 0 px2rem(20);
+    }
+
+    .r-left {
       width: px2rem(100);
     }
-  }
 
-  .fenxiangcontent {
-    font-size: 0.4rem;
-    color: #F22C17;
-    margin-top: 1.5rem;
-    padding: 0 0.9rem;
+    .r-right {
+      text-align: right;
+      flex: 1;
+    }
   }
 
   .begain {
@@ -90,6 +86,6 @@
     height: px2rem(44);
     color: #fff;
     text-align: center;
-    margin: px2rem(30) auto;
+    margin: 0 auto;
   }
 </style>
