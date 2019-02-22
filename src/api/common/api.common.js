@@ -62,14 +62,6 @@ export default {
       return httpZZH.post(options, Config.config, success, error)
 
     },
-    ZBH(params, success, error) {
-      let options = {
-        url: '/openapi/zbh/biz/apiQryAsset',
-        params,
-        NO_ORG_ID: true
-      }
-      return httpZZH.post(options, Config.config, success, error)
-    },
     KSH(params, success, error) {
       let options = {
         url: '/openapi/bank/apiMyAssetByOrg',
@@ -89,6 +81,19 @@ export default {
 
 
   },
+
+  /**
+   * 查询银行的开户状态
+   */
+  checkBankOpenStatusByOrgId(params, success, error) {
+    let options = {
+      url: '/openapi/comm/apiQryLoginStatus',
+      params: {
+        ...params,
+      },
+    }
+    return httpZZH.post(options, Config.config, success, error)
+  }
 }
 
 

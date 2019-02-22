@@ -19,7 +19,7 @@
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">存入金额</div>
-        <div class="buysuccessdetailright">{{datas.payAmount | formatNum}}元</div>
+        <div class="buysuccessdetailright">{{datas.payAmount}}元</div>
       </div>
       <div class="buysuccessdetails">
         <div class="buysuccessdetailleft">交易申请日期</div>

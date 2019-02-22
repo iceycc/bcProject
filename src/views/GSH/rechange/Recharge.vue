@@ -84,14 +84,14 @@
         write: false, // 是否签约
         agree: true, // 是否阅读
 
-        orgName: '工商银行',
+        orgName: '',
         cardNum: '', //一类户卡号
         bankUserCode: '', //二类户卡号
         userCardId: '', //银行用户ID
         MESAGE_TOKEN: '', //短信验证码标识
         imgSrc: imgSrc,
         logo: '',
-        cardBankName: '某某银行卡',
+        cardBankName: '',
         cardBankUrl: '',
         dayQuota: '-1', // 单日限额
         singleQuota: '-1', // 单比限额
@@ -101,7 +101,7 @@
         phoneNum: '',
 
         ORIGIN_PAGE: '',// 来源页面
-        SINGLE: '1000000',
+        SINGLE: '',
 
         ifHasArgreement: false, // 是否有协议
       }

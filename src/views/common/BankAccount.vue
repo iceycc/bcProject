@@ -98,10 +98,6 @@
         </ul>
       </section>
     </section>
-    <!--<div class="footer-btn">-->
-    <!--<button>产品列表</button>-->
-    <!--<button>我的资产</button>-->
-    <!--</div>-->
   </div>
 </template>
 
@@ -109,7 +105,7 @@
   import API from "@/service";
   import {PageName, LsName, imgSrc} from "@/Constant";
   import util from "@/libs/util";
-  import {BusName, CheckBank} from "../../Constant";
+  import {BusName} from "../../Constant";
   import Bus from '@/plugin/bus/index'
 
   export default {
@@ -189,7 +185,7 @@
           this.getBankListByChannelId()
         }
       },
-      goPage(page, {
+      async goPage(page, {
         ORG_ID,
         H5_URL_IOS,
         H5_URL_ANDRIOD,
@@ -245,6 +241,7 @@
           type: 'ORG_NAME',
           value: ORG_NAME
         })
+        // await this.checkBankOpenAndLogin(ORG_ID)
         if (page == 'Login') {
           this.setComState(
             {
@@ -262,24 +259,45 @@
           // })
         }
         if (page == 'BankDetail') {
+
           Bus.$emit(BusName.showBankLonding, {LOGO_URL: BANK_LOGO_URL, ORG_NAME})
+          // 判断银行开户状态
           setTimeout(() => {
             util.storage.session.set('ORG_ID', ORG_ID)
             util.storage.session.set('flag', PageName.BankDetail)
             util.storage.session.set('reload', true)
             window.location.reload()
           }, 1800)
-
-
-          // this.$router.push({
-          //   name: PageName.TestPage,
-          //   query: {
-          //     NAME: bank.ORG_NAME
-          //   }
-          // })
         }
       },
-      //
+      // 判断该用户在本行的状态
+      async checkBankOpenAndLogin(ORG_ID) {
+        let data = {
+          ORG_ID,
+          IS_RET_GRADE: '2'
+        }
+        try {
+          let res = await API.commonApi.checkBankOpenStatusByOrgId(data)
+          let hasOpenBank = res.hasOpenBank || res.HAS_OPEN_BANK
+          let hasOpenAccountText = res.hasOpenAccountText || res.HAS_OPEN_ACCOUNT_TEXT
+          if (hasOpenBank == 1) {
+            return Promise.resolve(hasOpenAccountText)
+          } else if (hasOpenBank == 2) {
+            Bus.$emit(BusName.showToast, hasOpenAccountText)
+            return Promise.reject()
+          } else if (hasOpenBank == 3) {
+            Bus.$emit(BusName.showToast, hasOpenAccountText)
+            return Promise.reject()
+          } else if (hasOpenBank == 4) {
+            Bus.$emit(BusName.showToast, hasOpenAccountText)
+            return Promise.reject()
+          }
+        } catch (e) {
+          Bus.$emit(BusName.showToast, e)
+          return Promise.reject()
+        }
+
+      },
       // get
       getBankListByChannelId() {
         let token = this.$store.getters.GET_ACCOUNT_STATE.TOKEN
