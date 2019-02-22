@@ -47,8 +47,7 @@
     }
     .pop-box{
       padding:px2rem(5) px2rem(5); overflow: hidden;height:px2rem(350); background: #fff; font-size: px2rem(14);
-    }
-  
+      }
   }
 }
 </style>
