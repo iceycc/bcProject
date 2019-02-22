@@ -52,7 +52,7 @@ export default {
     // if(this.redeemData.prdType=="4"){
 
     // }
-    console.log(this.redeemData);
+    //console.log(this.redeemData);
     // this.getInfo();
   },
   components: {
@@ -64,8 +64,8 @@ export default {
         prdIndexId: this.redeemData.prdIndexId, //	产品ID
         amount: this.redeemData.holdAmt, //	金额
         acCode: this.redeemData.orderNum, // 订单编号流水号
-        ccy: this.redeemData.ccy, //币种
-        cashFlag: this.redeemData.cashExFlag, //钞汇标志,
+        ccy: this.redeemData.ccy ||'', //币种
+        cashFlag: this.redeemData.cashExFlag||'', //钞汇标志,
         eithdrawAll: "1", //1全部0部分支取
         accNo:this.redeemData.accNo //账户
       };

@@ -119,13 +119,17 @@
       </section>
 
     </div>
-    <PopTip v-show="isShow" @closePop='popClose'></PopTip>
+    <PopTip v-show="isShow" @closePop='popClose'>
+        <iframe ref="iframe" :src="HOST+'/'+financialData.interestCalModeUrl" style="width:100%; height:100%;border:none;"></iframe>
+    </PopTip>
+
+
   </div>
 
 </template>
 <script>
   import API from "@/service";
-  import {BusName} from "@/Constant";
+  import {BusName,HOST} from "@/Constant";
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui";
   import util from "@/libs/util";
@@ -136,8 +140,9 @@
     mixins: [""],
     data() {
       return {
+        HOST:'http://47.94.110.156:9000',
         isShow: false, //工商行弹窗
-        holdParame: "", //持有参数
+       // holdParame: "", //持有参数
         waitingMsg: "暂不支持",
         infoShow: false,
         searchCondition: {
@@ -232,8 +237,8 @@
       },
       sureRedeem() {
         // 需要判断flags的长度
-        console.log("currentFlagIndex>>", this.currentFlagIndex);
-        console.log("flagsLength>>", this.flagsLength);
+        //console.log("currentFlagIndex>>", this.currentFlagIndex);
+        //console.log("flagsLength>>", this.flagsLength);
 
         if (this.currentFlagIndex == this.flagsLength) {
           this.$router.push({name: PageName.Redeem});
@@ -247,7 +252,7 @@
           expireDate: item.expireDate
         };
         let res = await API.redeem.apiRedemptionValid2(params);
-        console.log(res);
+        //console.log(res);
         this.setComState({
           type: "redeemData",
           value: item
@@ -266,7 +271,7 @@
         //console.log(this.flags);
         this.currentFlagIndex = step + 1;
         let flag = this.flags[step];
-        console.log(flag);
+        //console.log(flag);
         if (flag.resCode == -1) {
           // 2.不可支取
           this.waitingMsg = flag.resMsg;
@@ -298,13 +303,13 @@
       loadTop: function () {
         //组件提供的下拉触发方法
         //下拉加载
-        console.log("下拉加载");
+        //console.log("下拉加载");
         this.loadPageList();
         this.$refs.loadmore.onTopLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
       loadBottom: function () {
         // 上拉加载
-        console.log("上拉加载");
+        //console.log("上拉加载");
         this.more(); // 上拉触发的分页查询
         this.$refs.loadmore.onBottomLoaded(); // 固定方法，查询完要调用一次，用于重新定位
       },
@@ -370,10 +375,12 @@
           if (res.PAGE.nextPageFlag == 0) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
-          } else {
-            //为翻页传递参数
-            this.holdParame = this.pageList[this.pageList.length - 1];
-          }
+            return;
+          } 
+          // else {
+          //   //为翻页传递参数
+          //   this.holdParame = this.pageList[this.pageList.length - 1];
+          // }
 
           this.$nextTick(function () {
             // 原意是DOM更新循环结束时调用延迟回调函数，大意就是DOM元素在因为某些原因要进行修改就在这里写，要在修改某些数据后才能写，
@@ -420,12 +427,12 @@
             currentPage: this.searchCondition.pageNo + "",
             prdType: "4",
             depositTypeId: "4",
-            accNo: this.holdParame.accNo, //账号
-            accCode: this.holdParame.accCode, //账户代码
-            prodCode: this.holdParame.prodCode, //产品代码
-            fxSeqNo: this.holdParame.fxSeqNo, //存单序号
-            cashExFlag: this.holdParame.cashExFlag, //钞汇标志
-            ccy: this.holdParame.ccy //币种
+            // accNo: this.holdParame.accNo, //账号
+            // accCode: this.holdParame.accCode, //账户代码
+            // prodCode: this.holdParame.prodCode, //产品代码
+            // fxSeqNo: this.holdParame.fxSeqNo, //存单序号
+            // cashExFlag: this.holdParame.cashExFlag, //钞汇标志
+            // ccy: this.holdParame.ccy //币种
           };
           let res = await API.bank.apiQryHoldInfo(data);
           // if (!res.PAGE) {
@@ -440,10 +447,12 @@
           if (res.PAGE.nextPageFlag == 0) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
-          } else {
+            return;
+          } 
+          //else {
             //为翻页传递参数
-            this.holdParame = pageList[pageList.length - 1];
-          }
+          //  this.holdParame = pageList[pageList.length - 1];
+         // }
           // if (this.pageList.length < this.searchCondition.pageSize) {
           //   this.allLoaded = true;
           //   Bus.$emit(BusName.showToast, "数据全部加载完成");
@@ -454,27 +463,9 @@
   };
 </script>
 <style lang="scss" scoped>
-  /*.pro .header .goBackImg {*/
-  /*display: none !important;*/
-  /*}*/
-
   i {
     font-style: normal;
   }
-
-  /*.pro .header:after {*/
-  /*position: absolute;*/
-  /*content: "";*/
-  /*border-right: px2rem(2) solid #fff;*/
-  /*border-top: px2rem(2) solid #fff;*/
-  /*height: px2rem(11);*/
-  /*width: px2rem(11);*/
-  /*left: px2rem(18);*/
-  /*top: 0.6rem;*/
-  /*-webkit-transform: rotate(228deg);*/
-  /*border-left: px2rem(2) solid transparent;*/
-  /*border-bottom: px2rem(2) solid transparent;*/
-  /*}*/
 
   .wrap {
     width: 100%;
@@ -486,7 +477,7 @@
   }
 
   .header {
-    background-color: #518bee;
+    background-color: #518bee !important;
     color: #fff;
     // border-bottom: 1px solid #518bee;
     position: relative;
