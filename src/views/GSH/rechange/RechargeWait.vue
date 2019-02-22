@@ -1,33 +1,41 @@
 <template>
   <div class="app">
     <app-bar title="充值"></app-bar>
-    <div class="chattuimg">
-      <img src="@/assets/images/deal_notice_wait.png" alt="">
-      <!--<h2>银行已经受理，预计两小时到账。</h2>-->
-      <!--<p class="msg">处理时间以客商银行时间为准。</p>-->
-      <!--<p class="msg second">处理结果可在充值处理中页面查询。</p>-->
-    </div>
-    <span @click="reWithdraw" class="btn">确定</span>
-    <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
+    <com-deal-result>
+      <section slot="resImg">
+        <img src="@/assets/images/deal_notice_wait.png" alt="">
+      </section>
+      <section slot="resMsg">
+        <p class="msg">{{resMsg2}}</p>
+        <p class="msg2">处理结果可在“明细-处理中”页面查询</p>
+      </section>
+      <section slot="resBtn">
+        <span @click="reWithdraw" class="btn">确定</span>
+      </section>
+    </com-deal-result>
+
   </div>
 </template>
 <script>
+  import {ComDealResult} from '@/components'
+
   export default {
     data() {
       return {
-        errMsg:''
+        errMsg: ''
       }
     },
     created() {
-      this.errMsg = this.$route.query.err
+      this.resMsg2 = this.$route.query.resMsg2
     },
+    components: {ComDealResult},
     methods: {
       reWithdraw() {
         this.$router.go(-1)
       },
-      goBank(){
+      goBank() {
         this.$router.push({
-          name:''
+          name: ''
         })
       }
     }
@@ -35,32 +43,17 @@
 </script>
 
 <style lang="scss" scoped>
-
-
-  .app {
-    width: 100%;
-    margin: 0 auto;
+  .msg {
+    text-align: center;
+    margin-bottom: px2rem(20);
+    font-size: px2rem(18);
+    color: #29AB91
   }
 
-  .chattuimg {
-    margin-top: px2rem(60);
+  .msg2 {
     text-align: center;
-    img{
-      width: px2rem(64);
-      height: px2rem(64);
-    }
-    h2 {
-      font-size: px2rem(18);
-      margin: px2rem(20) 0;
-    }
-    .msg{
-      font-size: px2rem(14);
-      text-align: center;
-      &.second{
-        margin-top: px2rem(70);
-      }
-    }
-
+    font-size: px2rem(12);
+    color: #999;
   }
 
   .btn {
@@ -71,12 +64,13 @@
     height: px2rem(44);
     line-height: px2rem(44);
     width: px2rem(255);
-    margin:px2rem(30) auto 0;
+    margin: px2rem(30) auto 0;
     text-align: center;
     border: 0;
     outline: none;
     display: block;
-    &.btn-back{
+
+    &.btn-back {
       color: #0096FE;
       background-color: #fff;
       border: 1px solid #0096FE;

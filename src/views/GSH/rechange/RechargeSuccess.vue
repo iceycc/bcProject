@@ -1,46 +1,52 @@
 <template>
-  <div class="app">
+  <div>
     <app-bar title="充值"></app-bar>
-    <div class="chattuimg">
-      <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
-      <h2>充值成功</h2>
-    </div>
-    <section class="m-card">
-      <p><span>充值金额</span>{{data.amount | formatNum}}</p>
-      <p><span>交易流水号</span>{{data.apiPackSeq}}</p>
-    </section>
-    <!--<div class="fenxiangcontent">成功预约xx产品，请下载比财APP关注下期</div>-->
-    <!--<div class="begain">下载比财app</div>-->
-    <!--<button class="begain" @click="goBalance">查看余额</button>-->
-    <button v-if="ORIGIN_PAGE=='buying'" class="begain" @click="goBuyNext">继续购买</button>
-    <button v-if="!ORIGIN_PAGE  " class="begain" @click="goProList">购买产品</button>
-    <button v-if="!ORIGIN_PAGE" class="begain write" @click="goBalance">查看余额</button>
+    <com-deal-result>
+      <section slot="resImg">
+        <img src="@/assets/images/Verificationsuccess@2x.png" class="img" alt="">
+      </section>
+      <section slot="resMsg">
+        <p class="msg1">充值成功</p>
+        <section class="m-card">
+          <p><span class="r-left">提现金额</span><span class="r-right">{{data.amount  | formatNum}}</span></p>
+          <p><span class="r-left">交易流水号</span><span class="r-right">{{data.apiPackSeq}}</span></p>
+        </section>
+      </section>
+      <section slot="resBtn">
+        <button v-if="ORIGIN_PAGE=='buying'" class="begain" @click="goBuyNext">继续购买</button>
+        <button v-if="!ORIGIN_PAGE  " class="begain" @click="goProList">购买产品</button>
+        <button v-if="!ORIGIN_PAGE" class="begain write" @click="goBalance">查看余额</button>
+      </section>
+    </com-deal-result>
+
   </div>
 </template>
 <script>
   import {LsName} from "@/Constant";
   import {PageName} from "@/Constant";
+  import {ComDealResult} from '@/components'
 
   export default {
     data() {
       return {
         data: null,
-        ORIGIN_PAGE:''
+        ORIGIN_PAGE: ''
       }
     },
+    components: {ComDealResult},
     created() {
       this.data = this.$route.query
       this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
     },
     methods: {
-      goBuyNext(){
+      goBuyNext() {
         this.$router.go(-2)
       },
-      goBank(){
+      goBank() {
         this.$router.go(-2)
       },
-      goProList(){
-        this.$router.push({name:PageName.ProductList})
+      goProList() {
+        this.$router.push({name: PageName.ProductList})
       },
       goBalance() {
         this.$router.push({
@@ -55,32 +61,33 @@
 <style lang="scss" scoped>
 
 
-  .app {
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .chattuimg {
-    margin-top: px2rem(80);
-    color: #2B74FE;
+  .msg1 {
     text-align: center;
-    h2 {
-      margin: px2rem(20) 0;
-    }
-    .img {
-      width: px2rem(70);
-    }
+    color: #508CEE;
+    font-size: px2rem(18);
   }
 
   .m-card {
-    padding: px2rem(20);
     font-size: px2rem(14);
     color: #9199A1;
     border-top: 1px solid #eeeef0;
-    border-bottom: 1px solid #eeeef0;
-    span {
-      display: inline-block;
+    margin-top: px2rem(20);
+
+    p {
+      display: flex;
+      border-bottom: 1px solid #eeeef0;
+      height: px2rem(44);
+      line-height: px2rem(44);
+      padding: 0 px2rem(20);
+    }
+
+    .r-left {
       width: px2rem(100);
+    }
+
+    .r-right {
+      text-align: right;
+      flex: 1;
     }
   }
 
@@ -101,7 +108,8 @@
     color: #fff;
     text-align: center;
     margin: px2rem(30) auto;
-    &.write{
+
+    &.write {
       border: 1px solid #518BEE;
       background: #fff;
       color: #518BEE;

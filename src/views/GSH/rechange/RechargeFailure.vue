@@ -1,25 +1,31 @@
 <template>
   <div class="app">
     <app-bar title="充值"></app-bar>
-    <div class="chattuimg">
-      <img src="@/assets/images/buyfail@2x.png" alt="">
-    </div>
-    <div class="fenxiangcontent">
-      <h2>很抱歉，充值失败!</h2>
-      <div>
-        <img src="@/assets/images/error_tips.png" alt="">
-        <span style="margin-top:0.6rem; color:#F22C17;">{{errMsg}}</span>
-      </div>
-    </div>
-    <span @click="reCharge" class="btn">重新充值</span>
-    <!--<span @click="goBank" class="btn btn-back">返回银行页</span>-->
+    <com-deal-result>
+      <section slot="resImg">
+        <img src="@/assets/images/buyfail@2x.png" alt="">
+      </section>
+      <section slot="resMsg" class="res-msg">
+        <p class="msg1">很抱歉，充值失败!</p>
+        <p class="msg2">
+          <img src="@/assets/images/error_tips.png" alt="">
+          <span>{{errMsg}}</span>
+        </p>
+      </section>
+      <section slot="resBtn">
+        <span @click="reCharge" class="btn">重新充值</span>
+      </section>
+    </com-deal-result>
   </div>
 </template>
 <script>
-
+  import {ComDealResult} from '@/components'
   export default {
     created() {
       this.errMsg = this.$route.query.err || ''
+    },
+    components: {
+      ComDealResult
     },
     data() {
       return {
@@ -41,27 +47,30 @@
 
 <style lang="scss" scoped>
 
-
-  .app {
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .chattuimg {
-    margin-top: 2rem;
+  .res-msg {
     text-align: center;
-    img {
-      width: px2rem(64);
-      height: px2rem(64);
+
+    .msg1 {
+      font-size: px2rem(18);
+      color: #000000;
+      margin-bottom: px2rem(20);
     }
-  }
 
-  .fenxiangcontent {
-    text-align: center;
-    padding: 0 .4rem;
-    font-size: 0.4rem;
-    color: #333;
-    margin-top: 1rem;
+    .msg2 {
+      color: #F4333C;
+
+      img {
+        width: px2rem(14);
+        height: px2rem(14);
+        vertical-align: middle;
+      }
+
+      span {
+        font-size: px2rem(12);
+        vertical-align: middle;
+
+      }
+    }
   }
 
   .btn {
