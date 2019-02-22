@@ -101,7 +101,7 @@
     </section>
 
     <p class="foot-text">
-      银行热线 <a :href="'tel:'+TEL_HERF">{{bankDetail.custServiceHotLine}}</a>
+      银行热线：<a :href="'tel:'+TEL_HERF">{{bankDetail.custServiceHotLine}}</a>
     </p>
   </div>
 </template>

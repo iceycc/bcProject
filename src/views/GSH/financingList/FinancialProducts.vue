@@ -122,8 +122,6 @@
     <PopTip v-show="isShow" @closePop='popClose'>
         <iframe ref="iframe" :src="HOST+'/'+financialData.interestCalModeUrl" style="width:100%; height:100%;border:none;"></iframe>
     </PopTip>
-
-
   </div>
 
 </template>
