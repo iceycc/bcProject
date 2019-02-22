@@ -1,7 +1,7 @@
 <template>
   <div class="wrap pro">
     <div class="w-top">
-      <app-bar title="存款产品" :ifShow="false"></app-bar>
+      <app-bar title="存款产品" bgColor="blue"></app-bar>
       <div></div>
       <div class="f-box">
         <div class="profit">
@@ -462,19 +462,19 @@
     font-style: normal;
   }
 
-  .pro .header:after {
-    position: absolute;
-    content: "";
-    border-right: 2px solid #fff;
-    border-top: 2px solid #fff;
-    height: px2rem(11);
-    width: px2rem(11);
-    left: px2rem(18);
-    top: 0.6rem;
-    -webkit-transform: rotate(228deg);
-    border-left: px2rem(2) solid transparent;
-    border-bottom: px2rem(2) solid transparent;
-  }
+  /*.pro .header:after {*/
+  /*position: absolute;*/
+  /*content: "";*/
+  /*border-right: px2rem(2) solid #fff;*/
+  /*border-top: px2rem(2) solid #fff;*/
+  /*height: px2rem(11);*/
+  /*width: px2rem(11);*/
+  /*left: px2rem(18);*/
+  /*top: 0.6rem;*/
+  /*-webkit-transform: rotate(228deg);*/
+  /*border-left: px2rem(2) solid transparent;*/
+  /*border-bottom: px2rem(2) solid transparent;*/
+  /*}*/
 
   .wrap {
     width: 100%;

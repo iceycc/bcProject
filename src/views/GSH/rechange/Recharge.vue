@@ -44,6 +44,7 @@
       @submit="doNext"
     ></submit-button>
     <sign-areement
+      v-if="ifHasArgreement"
       :agree="agree"
       @sign="agree =!agree"
       :options="[{name:'《充值委托代扣协议》',type:'recharge'}]"
@@ -81,8 +82,7 @@
         ifGet: false,
         write: false, // 是否签约
         agree: true, // 是否阅读
-        agree1: true, // 是否获取短信
-        
+
         orgName: '工商银行',
         cardNum: '', //一类户卡号
         bankUserCode: '', //二类户卡号
@@ -98,9 +98,11 @@
         mainBankList: [],
         passCode: '',
         phoneNum: '',
-        
+
         ORIGIN_PAGE: '',// 来源页面
-        SINGLE: '1000000'
+        SINGLE: '1000000',
+
+        ifHasArgreement: false, // 是否有协议
       }
     },
     components: {
@@ -111,6 +113,7 @@
     },
     mixins: [Mixins.queryStatus, RechangeMixins],
     created() {
+      this.getRechargeAgreementByAjax()
       this.getInfos()
       this.ORIGIN_PAGE = this.$route.query.ORIGIN_PAGE || ''
     },
@@ -139,9 +142,9 @@
         this.singleQuota = bank.singleQuota
         this.cardNum = bank.cardNum
       },
-      addBankHandle(){
+      addBankHandle() {
         // todo 添加完成后跳回
-        this.$router.push({name:PageName.AddNewBank})
+        this.$router.push({name: PageName.AddNewBank})
       },
       clearNumHandle() {
         this.APPLY_AMOUNT = ''
@@ -152,6 +155,20 @@
       },
       cancel() {
         this.page = false
+      },
+      // 获取充值协议 现阶段是为了判断是否有协议返回，动态配置是否有协议
+      async getRechargeAgreementByAjax() {
+        let data = {}
+        try {
+          let res = await API.doc.rechargeAgreement(data)
+          if (res && res.url) {
+            this.ifHasArgreement = true
+          } else {
+            this.ifHasArgreement = false
+          }
+        } catch (e) {
+          this.ifHasArgreement = false
+        }
       },
       checkMoney() {
         if (this.APPLY_AMOUNT - 0 > this.dayQuota - 0 && this.dayQuota != '-1') {
@@ -189,11 +206,12 @@
 </script>
 
 <style lang="scss" scoped>
-  .main{
+  .main {
     width: 100%;
-    height:100%;
+    height: 100%;
     background: #f6f6f9;
   }
+
   .s-title {
     padding-left: px2rem(20);
     height: px2rem(30);
@@ -211,11 +229,14 @@
     display: flex;
     align-items: center;
     background: #fff;
+
     .logo {
       width: px2rem(50);
     }
+
     .card-info {
       font-size: px2rem(16);
+
       p:last-child {
         color: #9199A1;
       }
@@ -234,20 +255,21 @@
     height: px2rem(45);
     line-height: px2rem(45);
     color: #999;
-    font-size:px2rem(14);
+    font-size: px2rem(14);
     background: #fff;
   }
 
   .money-box {
     position: relative;
-    padding:0 px2rem(20);
+    padding: 0 px2rem(20);
     font-size: px2rem(16);
-    height:px2rem(44);
+    height: px2rem(44);
     line-height: px2rem(44);
     border-bottom: 1px solid #EEEEF0;
     background: #fff;
     display: flex;
     margin-top: px2rem(12);
+
     .close-icon {
       position: absolute;
       display: inline-block;
@@ -257,6 +279,7 @@
       transform: translateY(-50%);
       right: px2rem(30);
     }
+
     input {
       flex: 1;
       border: none;
@@ -266,14 +289,15 @@
       font-size: px2rem(20);
       color: #333;
     }
-    .left{
+
+    .left {
       display: inline-block;
       color: #444;
       width: px2rem(60);
     }
   }
 
-  .submit-btn{
+  .submit-btn {
     margin-top: px2rem(60);
     margin-bottom: px2rem(20);
   }

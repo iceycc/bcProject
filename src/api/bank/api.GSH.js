@@ -314,7 +314,7 @@ export default {
     // async 购买协议： 客商宝产品服务协议（个人活期版）
     personalAccountServiceAgreement(params, success, error) {
       let options = {
-        url: '/openapi/comm/personalAccountServiceAgreement',
+        url: '/openapi/biz/personalAccountServiceAgreement',
         params
       }
       return http.post(options, Config.config, success, error)
@@ -331,7 +331,7 @@ export default {
     // async充值代扣协议
     rechargeAgreement(params, success, error) {
       let options = {
-        url: '/openapi/comm/rechargeAgreement',
+        url: '/openapi/biz/rechargeAgreement',
         params
       }
       return http.post(options, Config.config, success, error)
