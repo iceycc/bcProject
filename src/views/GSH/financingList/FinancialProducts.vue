@@ -119,13 +119,18 @@
       </section>
 
     </div>
-    <PopTip v-show="isShow" @closePop='popClose'></PopTip>
+    <PopTip v-show="isShow" @closePop='popClose'>
+        <iframe ref="iframe" :src="'http://47.94.110.156:9000/protocol/gsh/lxjsfs.html'" style="width:100%; height:100%;border:none;"></iframe>
+    </PopTip>
+
+
   </div>
 
 </template>
 <script>
   import API from "@/service";
-  import {BusName} from "@/Constant";
+  import {BusName,imgSrc} from "@/Constant";
+  // import {PageName, imgSrc, BusName} from "@/Constant";
   import Bus from "@/plugin/bus";
   import {Loadmore} from "mint-ui";
   import util from "@/libs/util";
@@ -136,8 +141,8 @@
     mixins: [""],
     data() {
       return {
-        isShow: false, //工商行弹窗
-        holdParame: "", //持有参数
+        isShow: true, //工商行弹窗
+       // holdParame: "", //持有参数
         waitingMsg: "暂不支持",
         infoShow: false,
         searchCondition: {
@@ -372,7 +377,7 @@
             Bus.$emit(BusName.showToast, "数据全部加载完成");
           } else {
             //为翻页传递参数
-            this.holdParame = this.pageList[this.pageList.length - 1];
+            //this.holdParame = this.pageList[this.pageList.length - 1];
           }
 
           this.$nextTick(function () {
@@ -420,12 +425,12 @@
             currentPage: this.searchCondition.pageNo + "",
             prdType: "4",
             depositTypeId: "4",
-            accNo: this.holdParame.accNo, //账号
-            accCode: this.holdParame.accCode, //账户代码
-            prodCode: this.holdParame.prodCode, //产品代码
-            fxSeqNo: this.holdParame.fxSeqNo, //存单序号
-            cashExFlag: this.holdParame.cashExFlag, //钞汇标志
-            ccy: this.holdParame.ccy //币种
+            // accNo: this.holdParame.accNo, //账号
+            // accCode: this.holdParame.accCode, //账户代码
+            // prodCode: this.holdParame.prodCode, //产品代码
+            // fxSeqNo: this.holdParame.fxSeqNo, //存单序号
+            // cashExFlag: this.holdParame.cashExFlag, //钞汇标志
+            // ccy: this.holdParame.ccy //币种
           };
           let res = await API.bank.apiQryHoldInfo(data);
           // if (!res.PAGE) {
@@ -442,7 +447,7 @@
             Bus.$emit(BusName.showToast, "数据全部加载完成");
           } else {
             //为翻页传递参数
-            this.holdParame = pageList[pageList.length - 1];
+          //  this.holdParame = pageList[pageList.length - 1];
           }
           // if (this.pageList.length < this.searchCondition.pageSize) {
           //   this.allLoaded = true;
@@ -486,7 +491,7 @@
   }
 
   .header {
-    background-color: #518bee;
+    background-color: #518bee !important;
     color: #fff;
     // border-bottom: 1px solid #518bee;
     position: relative;
