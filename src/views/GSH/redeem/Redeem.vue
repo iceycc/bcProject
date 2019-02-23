@@ -93,7 +93,6 @@ export default {
             this.$router.push({
               name: PageName.RedeemSuccess,
               query: {
-                amount: this.redeemData.holdAmtDesc, //	金额
                 ...qureyRes
               }
             });

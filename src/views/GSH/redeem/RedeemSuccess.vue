@@ -8,11 +8,11 @@
     <section class="m-card">
       <p>
         <span>支取金额</span>
-        <span class="flex1">{{money}}元</span>
+        <span class="flex1">{{redeemAmountDesc}}元</span>
       </p>
       <p>
         <span>收益金额</span>
-        <span class="flex1">{{income | formatNum}}元</span>
+        <span class="flex1">{{incomeDesc}}元</span>
       </p>
       <p>
         <span>收款账户</span>
@@ -26,15 +26,15 @@
 export default {
   data() {
     return {
-      money: "",
-      income: "",
+      redeemAmountDesc: "",
+      incomeDesc: "",
       bankUserCode: ""
     };
   },
   created() {
     let preData = { ...this.$route.query };
-    this.money = this.$route.query.amount;
-    this.income = preData.income;
+    this.redeemAmountDesc = preData.redeemAmountDesc;
+    this.incomeDesc = preData.incomeDesc;
     this.bankUserCode = preData.bankUserCode;
     //this.BESHARP_SEQ = preData.BESHARP_SEQ
   },
