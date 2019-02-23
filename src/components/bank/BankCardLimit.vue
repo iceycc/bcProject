@@ -16,6 +16,12 @@
             <span class="line3">{{bank.singleQuota | QUOTA_Filter}}</span>
             <!--<span class="line4">{{bank.CAN_RECHARGE==1?'是':'否'}}</span>-->
           </li>
+          <li v-for="bank in bankList">
+            <span class="line1">{{bank.bankName}}</span>
+            <span class="line2">{{bank.dayQuota | QUOTA_Filter}}</span>
+            <span class="line3">{{bank.singleQuota | QUOTA_Filter}}</span>
+            <!--<span class="line4">{{bank.CAN_RECHARGE==1?'是':'否'}}</span>-->
+          </li>
         </ul>
         <p class="foot-dec">
           *实际转账限额如遇到临时调整，以发卡行最总设定为准
@@ -97,7 +103,6 @@
       width: px2rem(335);
       background: #fff;
       border-radius: px2rem(10);
-
       .close-icon {
         position: absolute;
         top: px2rem(10);
@@ -109,7 +114,7 @@
 
       .limit-box {
         width: 100%;
-        height: px2rem(547);
+        height: px2rem(457);
         overflow-y: scroll;
       }
     }

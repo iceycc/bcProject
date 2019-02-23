@@ -21,6 +21,7 @@ import UpSelect from './commons/UpSelect'
  *
  */
 import ActiveInput from './form/ActiveInput'
+import ActiveInputNew from './form/ActiveInputNew'
 import NormalInput from './form/NormalInput'
 import SelectBank from './form/SelectBank'
 import SmsCodeInput from './form/SmsCodeInput'
@@ -87,6 +88,7 @@ export {
   UpSelect,
 
   ActiveInput,
+  ActiveInputNew,
   NormalInput,
   SelectBank,
   SmsCodeInput,

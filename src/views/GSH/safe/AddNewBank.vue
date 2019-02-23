@@ -7,19 +7,15 @@
         @showInfo="showXiane"
         @showUpBox="showBindBankList"
       ></select-bank>
-      <normal-input
-        type="tel"
-        v-model="bankNo"
-        text="新绑定卡卡号"
-        placeholder="请输入绑定卡卡号"
-        @change="changeHandle"
-      ></normal-input>
-      <normal-input
-        type="tel"
-        v-model="bankTel"
-        text="手机号码"
-        placeholder="请输入手机号"
-      ></normal-input>
+      <active-input inputId="bankNo" @change="changeHandle" text="新绑定卡卡号" valuePlaceholder="新绑定卡卡号"
+                    v-model="bankNo"></active-input>
+      <active-input inputId="bankTel" text="手机号码" valuePlaceholder="请输入手机号" v-model="bankTel"></active-input>
+      <!--<normal-input-->
+      <!--type="tel"-->
+      <!--v-model="bankTel"-->
+      <!--text="手机号码"-->
+      <!--placeholder="请输入手机号"-->
+      <!--&gt;</normal-input>-->
       <sms-code-input
         @sendTelCode="getMsgCode"
         v-model="msgCode"
@@ -31,7 +27,7 @@
         @submit="goNext"
       ></submit-button>
     </section>
-    <bank-card-limit :bankList="bankCardLimit" v-show="backShow" @hideHandle="backShow=false"></bank-card-limit>
+    <bank-card-limit :bankList="supportBankList" v-show="backShow" @hideHandle="backShow=false"></bank-card-limit>
     <support-bank-list
       v-if="show"
       @getValue="getBank"
@@ -57,7 +53,7 @@
     SelectBank,
     SubmitButton,
     KshBankSelect as BankSelect,
-    ActiveInput
+    ActiveInputNew as ActiveInput
   } from '@/components'
 
   let timer;
@@ -103,7 +99,7 @@
       this.getOldBankInfo()
       this.params = this.$store.getters.GET_COMMON_STATE.Infos
       this.fromPage = this.$route.query.fromPage
-      this.getBankLimitList()
+      // this.getBankLimitList()
     },
     watch: {
       bankNo(n, o) {

@@ -51,7 +51,7 @@
       :selectValue="bankText"
       :supportBankList="supportBankList"
     ></support-bank-list>
-    <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
+    <bank-card-limit :bankList="supportBankList" v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
   </div>
 </template>
 <script>
@@ -62,7 +62,7 @@
     OpenHead,
     UpSelect as ComUpSelect, // commons/UpSelect
     SupportBankList,
-    KshBankCardLimit as BankCardLimit,
+    BankCardLimit,
     NormalInput,
     SubmitButton,
     CallToBicai,
@@ -467,7 +467,7 @@
     }
   }
 
-  .submit-btn{
+  .submit-btn {
     margin-top: px2rem(66);
   }
 

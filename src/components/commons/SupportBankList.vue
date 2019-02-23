@@ -149,7 +149,7 @@
         text-align: center;
         font-size: .5rem;
         margin: 0 px2rem(20);
-        border-bottom: 1px solid #dedede;
+        /*border-bottom: 1px solid #dedede;*/
       }
 
       .scroll-view {

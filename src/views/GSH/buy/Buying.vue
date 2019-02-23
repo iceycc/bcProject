@@ -18,7 +18,7 @@
     </div>
 
     <div class="money">
-      <div class="left">可用金额 <strong>{{accRestDesc}}元</strong></div>
+      <div class="left">可用余额<strong>{{accRestDesc}}元</strong></div>
       <div class="right" @click="goReChang">充值</div>
     </div>
     <div class="input-box">
