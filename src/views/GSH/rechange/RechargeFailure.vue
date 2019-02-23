@@ -72,11 +72,10 @@
       }
     }
   }
-
   .btn {
     font-size: px2rem(18);
     color: #fff;
-    background: #0096FE;
+    background: #508CEE;
     border-radius: px2rem(6);
     height: px2rem(44);
     line-height: px2rem(44);
@@ -86,10 +85,5 @@
     border: 0;
     outline: none;
     display: block;
-    &.btn-back{
-      color: #0096FE;
-      background-color: #fff;
-      border: 1px solid #0096FE;
-    }
   }
 </style>

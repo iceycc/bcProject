@@ -31,7 +31,7 @@
         @submit="goNext"
       ></submit-button>
     </section>
-    <bank-card-limit v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
+    <bank-card-limit :bankList="bankCardLimit" v-show="backShow" @hideHandle="backShow=false"></bank-card-limit>
     <support-bank-list
       v-if="show"
       @getValue="getBank"
@@ -52,7 +52,7 @@
     SmsCodeInput,
     NormalInput,
     SupportBankList,
-    KshBankCardLimit as BankCardLimit,
+    BankCardLimit,
     ErrMsg,
     SelectBank,
     SubmitButton,
@@ -80,6 +80,7 @@
         backShow: false,
         show: false,
         bankList: [],
+        bankCardLimit: [],
         AllBankListObj: {},
         bankLimitShow: false,
         errMsg: '',
@@ -92,8 +93,8 @@
         params: {},
         ifGet: false,
         OldBankInfo: {},
-        needData:null,
-        fromPage:'' //  来源页
+        needData: null,
+        fromPage: '' //  来源页
       }
     },
     mixins: [Mixins.reloadByPassWordErr],
@@ -102,6 +103,7 @@
       this.getOldBankInfo()
       this.params = this.$store.getters.GET_COMMON_STATE.Infos
       this.fromPage = this.$route.query.fromPage
+      this.getBankLimitList()
     },
     watch: {
       bankNo(n, o) {
@@ -122,7 +124,12 @@
         // if (val.length <= 8) return
         this.checkBankNo(val)
       },
-      getMsgCode(success,error) {
+      async getBankLimitList() {
+        let data = {}
+        let res = await API.common.apiGetBankCardLimit(data)
+        this.bankCardLimit = res.bankCardLimit
+      },
+      getMsgCode(success, error) {
         if (this.bankText == '请选择开户银行') {
           Bus.$emit(BusName.showToast, '请选择开户银行')
           return
@@ -247,7 +254,7 @@
           bankCardPhone: this.bankTel,//银行卡开户行手机号
           bindFlg: '1',// 绑定标志 1-绑定，2-解绑
         }
-        let res =   await API.safe.apiChangeBingCard(data)
+        let res = await API.safe.apiChangeBingCard(data)
         this.needData = res
         success && success()
       },
@@ -260,7 +267,7 @@
         }
         let res = await API.open.apiRigesisterShortCodeVerify(data)
         console.log(res);
-        this.$router.push({path:this.fromPage})
+        this.$router.push({path: this.fromPage})
       },
       goNext() {
         if (this.bankText == '请选择开户银行') {

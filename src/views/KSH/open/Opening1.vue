@@ -27,63 +27,41 @@
           </div>
         </div>
       </section>
-      <img :src="test1" alt="">
-      <section v-if="DOMShow.USER_NAME">
-        <span>姓名</span>
-        <input class="inputBox2" type="text" placeholder="请输入您的姓名"
-               disabled
-               v-model="data.USER_NAME">
-      </section>
-      <section v-if="DOMShow.USER_CARD_ID">
-        <span>身份证号</span>
-        <input class="inputBox2" type="text" placeholder="请输入15-18位身份证号"
-               disabled
-               v-model="data.USER_CARD_ID" @bulr="checkID">
-      </section>
-      <section v-if="DOMShow.CARD_INDATE">
-        <span>身份证有效期</span>
-        <input class="inputBox2" type="text" placeholder=""
-               disabled
-               v-model="data.CARD_INDATE">
-      </section>
-      <section v-if="DOMShow.PHONE">
-        <span>手机号码</span>
-        <input class="inputBox2" type="tel" placeholder="请输入手机号"
-               disabled
-               v-model="data.PHONE">
-      </section>
-      <section v-if="DOMShow.NATION">
-        <span>民族</span>
-        <input class="inputBox2" type="text" placeholder=""
-               disabled
-               v-model="data.NATION">
-      </section>
-      <section v-if="DOMShow.ADDRESS">
-        <span>地址</span>
-        <input class="inputBox2" type="text" placeholder=""
-               v-model="data.ADDRESS">
-      </section>
-      <section v-if="DOMShow.USER_DUTY">
-        <span>职业</span>
-        <js-select
-          title="职业列表"
-          class="selectStyle" :text="work" :options="job" @getValue="getWork"></js-select>
-      </section>
-      <section v-if="DOMShow.USER_EDUCATION">
-        <span>学历</span>
-        <js-select
-          title="学历列表"
-          class="selectStyle" :text="educationText" :options="education"
-          @getValue="getEduction"></js-select>
-      </section>
-
     </div>
-    <div class="IDphoto">
-      <div class="IDphotoPositive"></div>
-      <div class="IDphotoback"></div>
-    </div>
-    <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
-    <button class="tijiao" @click="doOpeningFirstFactory">下一步</button>
+    <section class="input-box2">
+      <normal-input
+        class="grey"
+        type="tel"
+        v-model="data.USER_NAME"
+        text="姓名"
+        placeholder="请输入您的姓名"
+        disabled="true"
+      ></normal-input>
+      <normal-input
+        class="grey"
+        type="tel"
+        v-model="data.USER_CARD_ID"
+        text="身份证号"
+        placeholder="请输入15-18位身份证号"
+        disabled="true"
+      ></normal-input>
+      <normal-input
+        class="grey"
+        type="tel"
+        v-model="data.CARD_INDATE"
+        text="身份证号"
+        placeholder="请输入15-18位身份证号"
+        disabled="true"
+      ></normal-input>
+      <div class="msg-err" v-if="errMsg">{{errMsg}}</div>
+      <submit-button
+        class="submit-btn"
+        text="下一步"
+        :canSubmit="true"
+        @submit="doOpeningFirstFactory"
+      ></submit-button>
+    </section>
+    <!--<button class="tijiao" @click="doOpeningFirstFactory">下一步</button>-->
 
     <!--todo 抽离开户页面的文档组件-->
     <p
@@ -97,10 +75,13 @@
 </template>
 <script>
   import {PageName, BusName, HOST_API} from "@/Constant";
-  import JsSelect from '@/components/commons/JsSelect'
-  import OpenHead from '@/components/opening/OpenHead'
   import Opening1Mixins from './Opening1'
-
+  import {
+    NormalInput,
+    JsSelect,
+    OpenHead,
+    SubmitButton
+  } from '@/components'
 
   export default {
     data() {
@@ -150,8 +131,10 @@
       }
     },
     components: {
+      NormalInput,
       JsSelect,
-      OpenHead
+      OpenHead,
+      SubmitButton
     },
     mixins: [Opening1Mixins],
     created() {
@@ -187,15 +170,15 @@
         }
       },
       //获取学历
-      getEduction(val) {
-        this.educationText = val.name
-        this.data.USER_EDUCATION = val.value
-      },
+      // getEduction(val) {
+      //   this.educationText = val.name
+      //   this.data.USER_EDUCATION = val.value
+      // },
       // 获取工作
-      getWork(val) {
-        this.work = val.name
-        this.data.USER_DUTY = val.value
-      },
+      // getWork(val) {
+      //   this.work = val.name
+      //   this.data.USER_DUTY = val.value
+      // },
       // 切换同意按钮
       doAgree() {
         this.agree = !this.agree
@@ -309,7 +292,7 @@
     margin-left: 0.6rem;
     line-height: 1rem;
     width: 90%;
-    border-bottom: 1px #E5E5E5 solid;
+    /*border-bottom: 1px #E5E5E5 solid;*/
   }
 
   .opening_box section {
@@ -326,29 +309,12 @@
   }
 
   .opening_box section span {
-    font-family: PingFangSC-Regular;
     color: #444444;
     font-size: .4rem;
     display: inline-block;
     width: px2rem(130);
   }
 
-  .opening_box section .limit {
-    color: #0096FE;
-    font-family: PingFangSC-Regular;
-  }
-
-  .opening_box section .getpassword {
-    display: inline-block;
-    text-align: center;
-    line-height: 1.5rem;
-    font-size: 0.2rem;
-    width: 2rem;
-    height: 1rem;
-    border: 1px solid #2B74FE;
-    color: #2B74FE;
-    /* border-radius:6px; */
-  }
 
   .opening_box .photo {
     margin-left: 0.6rem;
@@ -358,7 +324,7 @@
     width: 90%;
     background-size: 0.7rem 0.7rem;
     background-position: .2rem .2rem;
-    border-bottom: 1px #E5E5E5 solid;
+    /*border-bottom: 1px #E5E5E5 solid;*/
     display: flex;
 
     .words {
@@ -388,20 +354,11 @@
     }
   }
 
-  .tijiao {
-    display: block;
-    font-size: px2rem(16);
-    color: #fff;
-    background-color: #508CEE;
-    border-radius: px2rem(4);
-    line-height: 1rem;
-    width: px2rem(255);
-    height: px2rem(44);
-    margin: px2rem(75) auto px2rem(20);
-    text-align: center;
-    border: none;
-    outline: none;
+  .submit-btn {
+    margin-top: px2rem(60);
+    margin-bottom: px2rem(20);
   }
+
 
   .Tips {
     margin-top: 0.8rem;
@@ -425,8 +382,12 @@
   }
 
   .inputBox2 {
-    padding-left: px2rem(12);
+    padding-left: px2rem(14);
     text-align: right;
+    color: #858E9F;
+  }
+  .input-box2{
+    padding: 0 px2rem(20);
   }
 
   .inputBox {

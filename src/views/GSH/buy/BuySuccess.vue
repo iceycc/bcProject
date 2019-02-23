@@ -10,7 +10,7 @@
         <section class="m-card">
           <p><span class="r-left">存款产品名称</span><span class="r-right">{{datas.prdName}}</span></p>
           <p><span class="r-left">交易银行</span><span class="r-right">{{datas.orgName}}</span></p>
-          <p><span class="r-left">存入金额</span><span class="r-right">{{datas.payAmount}}</span></p>
+          <p><span class="r-left">存入金额</span><span class="r-right">{{datas.payAmount}}元</span></p>
           <p><span class="r-left">交易申请日期</span><span class="r-right">{{datas.payDate}}</span></p>
           <p><span class="r-left">预期开始收益日期</span><span class="r-right">{{datas.incDate}}</span></p>
           <p><span class="r-left">交易流水号</span><span class="r-right">{{datas.besharpOrderNo}}</span></p>

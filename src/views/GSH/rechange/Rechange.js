@@ -15,7 +15,7 @@ export default {
     async handleApiRecharge() {
 
       let data = {
-        amount: this.APPLY_AMOUNT,
+        amount: this.amount,
         bindMedium: this.cardNum,
         bankName: this.cardBankName,
         ccy: '1',
@@ -41,7 +41,7 @@ export default {
             name: PageName.RechargeSuccess,
             query: {
               ORIGIN_PAGE: this.ORIGIN_PAGE,
-              amount: this.APPLY_AMOUNT,
+              amount: this.amount,
               ...qureyRes
             }
           })
