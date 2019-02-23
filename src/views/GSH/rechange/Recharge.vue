@@ -30,8 +30,9 @@
     </div>
     <section class="money-box">
       <span class="left">金额</span>
-      <input @change="checkMoney"
-             v-model="APPLY_AMOUNT" type="number" placeholder="请输入金额">
+      <input
+        @input="inputHandle"
+        v-model="amount" type="number" placeholder="请输入金额">
       <img
         v-show="!ifCheckMoneyEmpty"
         src="@/assets/images/icon_clear@2x.png" alt="" class="close-icon" @click="clearNumHandle">
@@ -78,7 +79,7 @@
     data() {
       return {
         page: false,
-        APPLY_AMOUNT: '',
+        amount: '',
         toUrl: '',
         ifGet: false,
         write: false, // 是否签约
@@ -120,14 +121,14 @@
     },
     computed: {
       ifCheckMoneyEmpty() {
-        if (this.APPLY_AMOUNT) {
+        if (this.amount) {
           return false
         } else {
           return true
         }
       },
       canClick() {
-        if (Number(this.APPLY_AMOUNT) && this.APPLY_AMOUNT - 0 <= this.singleQuota - 0 && this.agree) {
+        if (Number(this.amount - 0) && this.agree) {
           return true
         } else {
           return false
@@ -135,6 +136,9 @@
       }
     },
     methods: {
+      inputHandle(e) {
+        console.log(Number('' + this.amount));
+      },
       chooseBank(bank) {
         console.log(bank);
         this.cardBankName = bank.cardBankName;// 银行名称
@@ -145,10 +149,10 @@
       },
       addBankHandle() {
         // todo 添加完成后跳回
-        this.$router.push({name: PageName.AddNewBank,query:{fromPage:this.$route.fullPath}})
+        this.$router.push({name: PageName.AddNewBank, query: {fromPage: this.$route.fullPath}})
       },
       clearNumHandle() {
-        this.APPLY_AMOUNT = ''
+        this.amount = ''
       },
       doAgreeHandle() {
         this.agree = true
@@ -171,16 +175,6 @@
           this.ifHasArgreement = false
         }
       },
-      checkMoney() {
-        if (this.APPLY_AMOUNT - 0 > this.dayQuota - 0 && this.dayQuota != '-1') {
-          Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
-          return
-        }
-        if (this.APPLY_AMOUNT - 0 > this.singleQuota - 0 && this.singleQuota != '-1') {
-          Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
-          return
-        }
-      },
       doNext() {
         API.watchApi({
           FUNCTION_ID: 'ptb0A016', // 点位
@@ -188,12 +182,13 @@
           FROM_ID: util.storage.session.get('ORG_ID') || ''
         })
         console.log(this.write);
-        if (util.Check.trim(this.APPLY_AMOUNT, '充值金额', true)) return;
-        if (this.APPLY_AMOUNT - 0 > this.dayQuota - 0 && this.dayQuota != '-1') {
+        // 校验
+        // // 空值 通过按钮置灰提前校验
+        if (this.amount - 0 > this.dayQuota - 0 && this.dayQuota != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行每日限额规定，请调整充值金额')
           return
         }
-        if (this.APPLY_AMOUNT - 0 > this.singleQuota - 0 && this.singleQuota != '-1') {
+        if (this.amount - 0 > this.singleQuota - 0 && this.singleQuota != '-1') {
           Bus.$emit(BusName.showToast, '充值金额大于银行单笔限额规定，请调整充值金额')
           return
         }

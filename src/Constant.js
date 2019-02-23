@@ -142,7 +142,7 @@ export const PageName = {
   BcOpening0: 'BcOpening0',
   BicaiPageDocs: 'BicaiPageDocs',
 
-  ProdctionDetail:'ProdctionDetail', // 产品详情
+  ProdctionDetail: 'ProdctionDetail', // 产品详情
   /**
    * 郑州新增
    */

@@ -94,7 +94,12 @@
         }
       },
       canClick() {
-        if (Number(this.amount) <= Number(this.accRest) && Number(this.amount) >= this.proDetail.minAmount && this.agree) {
+        if (
+          Number(this.amount) &&
+          // Number(this.amount) <= Number(this.accRest) &&
+          // Number(this.amount) >= this.proDetail.minAmount &&
+          this.agree
+        ) {
           return true
         } else {
           return false
@@ -162,20 +167,11 @@
           let res = await API.doc.personalAccountServiceAgreement(data)
           if (res && res.url) {
             this.ifHasArgreement = true
-          }else {
+          } else {
             this.ifHasArgreement = false
           }
-        }catch (e) {
+        } catch (e) {
           this.ifHasArgreement = false
-        }
-      },
-      checkamount(num) {
-        let a = this.proDetail.increAmount
-        if (num < parseInt(this.proDetail.minAmount)) {
-          Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
-          return true
-        } else {
-          return false
         }
       },
       goBuy() {
@@ -184,30 +180,31 @@
           REMARK_DATA: '异业合作-购买页面-存入', // 中文备注
           FROM_ID: this.proDetail.proId + '',
         })
-        if (!this.agree) {
+        if (!this.agree) { // 按钮置灰其实已经校验
           Bus.$emit(BusName.showToast, '请同意相关协议')
           return
         }
-        if (!this.amount) {
+        if (!this.amount) { // 按钮置灰其实已经校验
           Bus.$emit(BusName.showToast, '请输入存入金额')
           return
         }
-        if (typeof (this.amount - 0) != 'number' || isNaN(this.amount - 0)) {
+        if (!Number(this.amount)) { // // 按钮置灰其实已经校验
           Bus.$emit(BusName.showToast, '请填写正确的金额')
           return
         }
-
+        if (this.amount - 0 < parseInt(this.proDetail.minAmount)) {
+          Bus.$emit(BusName.showToast, '投资金额小于起投金额，请调整投资金额')
+          return
+        }
+        if ((this.amount - this.proDetail.minAmount) % this.proDetail.increAmount !== 0) {
+          Bus.$emit(BusName.showToast, '请输入递增金额的整数倍。')
+          return
+        }
         if (this.amount - 0 > this.accRest) {
           Bus.$emit(BusName.showToast, '余额不足，请充值')
           return
         }
-        if (this.checkamount(this.amount)) {
-          return
-        }
-        if (this.amount - 0 > this.REMAIN_AMT) {
-          Bus.$emit(BusName.showToast, '可投额度不足')
-          return
-        }
+
         this.doPay()
       },
 
@@ -294,7 +291,7 @@
         width: px2rem(40);
         height: px2rem(40);
         display: inline-block;
-
+        vertical-align: top;
         img {
           width: 100%;
           height: 100%;
@@ -304,6 +301,7 @@
       .info {
         display: inline-block;
         padding-left: px2rem(12);
+        vertical-align: top;
 
         .info-1 {
           width: px2rem(170);

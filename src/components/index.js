@@ -65,6 +65,10 @@ import PopTip from './GSH/PopTip'
  * 公共交易结果组件
  */
 import ComDealResult from './commonPages/ComDealResult'
+/**
+ *
+ */
+import BankCardLimit from './bank/BankCardLimit'
 
 
 export {
@@ -102,5 +106,7 @@ export {
 
   BandingBankSelect,
 
-  ComDealResult
+  ComDealResult,
+
+  BankCardLimit
 }
