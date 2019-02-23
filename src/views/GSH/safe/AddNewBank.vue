@@ -92,24 +92,23 @@
         params: {},
         ifGet: false,
         OldBankInfo: {},
-        needData:null
+        needData:null,
+        fromPage:'' //  来源页
       }
     },
     mixins: [Mixins.reloadByPassWordErr],
     created() {
       this.getBankList()
       this.getOldBankInfo()
-      // this.params = util.storage.session.get(LsName.Infos)
       this.params = this.$store.getters.GET_COMMON_STATE.Infos
+      this.fromPage = this.$route.query.fromPage
     },
     watch: {
       bankNo(n, o) {
         if (n.length <= 8) return
         this.checkBankName(this.bankNo)
       },
-      // bankText(n, o) {
-      //   this.checkBankName(this.bankNo)
-      // }
+
     },
     methods: {
       showBindBankList() {
@@ -261,7 +260,7 @@
         }
         let res = await API.open.apiRigesisterShortCodeVerify(data)
         console.log(res);
-        this.$router.push({name:PageName.BindingBank})
+        this.$router.push({path:this.fromPage})
       },
       goNext() {
         if (this.bankText == '请选择开户银行') {
@@ -280,7 +279,7 @@
         console.log('goNext>>', this.bankNameToNo);
         if (!this.bankNameToNo) {
           // this.showErrMsg('暂不支持该银行')
-
+          Bus.$emit(BusName.showToast, '暂不支持该银行')
         } else {
           // / 绑卡短信校验
           this.CheckMsg()

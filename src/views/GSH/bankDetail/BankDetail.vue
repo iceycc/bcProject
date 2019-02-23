@@ -278,9 +278,9 @@
     }
 
     .income {
-      margin-top: px2rem(8);
+      margin-top: px2rem(4);
       display: flex;
-      font-size: px2rem(12);
+      font-size: px2rem(14);
       color: rgba(255, 255, 255, .7);
 
       .left {
@@ -289,7 +289,7 @@
 
       .right {
         flex: 1;
-        text-align: right;
+        text-align: left;
       }
     }
 
@@ -350,8 +350,8 @@
     padding: px2rem(10);
 
     .bank-logo {
-      width: px2rem(48);
-      height: px2rem(48);
+      width: px2rem(40);
+      height: px2rem(40);
 
       img {
         width: 100%;
@@ -359,13 +359,16 @@
       }
     }
 
-    .card-no {
-      color: #999
-    }
 
     .bank-test {
+      height: px2rem(40);
       padding-left: px2rem(10);
       font-size: px2rem(16);
+    }
+
+    .card-no {
+      color: #999;
+      font-size: px2rem(12);
     }
 
     margin-bottom: px2rem(10);
@@ -416,10 +419,6 @@
       .top-right {
         font-size: px2rem(18);
         color: #333;
-
-        &.select {
-          color: #999;
-        }
       }
 
       .small-number {

@@ -38,6 +38,7 @@
   import {imgSrc} from "@/Constant";
   import {Actionsheet} from 'mint-ui';
   import {BusName, PageName} from "@/Constant";
+
   export default {
     name: "BindingBank",
     data() {
@@ -66,8 +67,8 @@
         ]
       }
     },
-    components:{
-      [Actionsheet.name]:Actionsheet
+    components: {
+      [Actionsheet.name]: Actionsheet
     },
     created() {
       this.getBankList()
@@ -104,10 +105,7 @@
       },
       addBank() {
         this.$router.push({
-          name: PageName.AddNewBank, query: {
-            BANK_USER_ID: this.BANK_USER_ID,// 银行用户ID
-            BANK_ACCT_NO: this.BANK_ACCT_NO,// 电子账户
-          }
+          name: PageName.AddNewBank, query: {fromPage: this.$route.fullPath}
         })
       },
       // 点击弹出银行卡管理
@@ -176,7 +174,7 @@
         let data = {
           bankName: card.cardBankName,//银行名称
           accountNo: card.cardNum,//银行账号
-          bindFlg:'2', //
+          bindFlg: '2', //
           bankCardPhone: card.bankCardPhone,//银行卡开户行手机号
         }
         try {
@@ -276,6 +274,7 @@
     border-radius: px2rem(6);
     margin: px2rem(60) auto 0;
   }
+
   .show-toatal {
     position: fixed;
     width: 100%;

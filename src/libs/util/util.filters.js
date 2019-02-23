@@ -57,6 +57,9 @@ export default {
         return '0.00'
       }
     }
+    if(str.indexOf(",") != -1){
+      return str
+    }
     str = str + ''
     str = str.trim()
     // if(str == '' || !str) return

@@ -127,7 +127,7 @@
         }
       },
       canClick() {
-        if (Number(this.APPLY_AMOUNT) && this.agree) {
+        if (Number(this.APPLY_AMOUNT) && this.APPLY_AMOUNT - 0 <= this.singleQuota - 0 && this.agree) {
           return true
         } else {
           return false
@@ -145,7 +145,7 @@
       },
       addBankHandle() {
         // todo 添加完成后跳回
-        this.$router.push({name: PageName.AddNewBank})
+        this.$router.push({name: PageName.AddNewBank,query:{fromPage:this.$route.fullPath}})
       },
       clearNumHandle() {
         this.APPLY_AMOUNT = ''

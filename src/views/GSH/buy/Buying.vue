@@ -7,7 +7,6 @@
           <img :src="imgSrc+proDetail.logoUrl" alt="">
         </div>
         <div class="info">
-
           <p class="info-1">{{proDetail.prdName}}</p>
           <p class="info-2">{{proDetail.depositCategory}}</p>
         </div>
@@ -105,8 +104,6 @@
     mixins: [Mixins.storeMixin, Mixins.ToBuyingNew, Mixins.queryStatus],
     created() {
       this.getBuyAgreementByAjax() // 判断
-
-      // 注意src/mixins/FromH5Active.js 文件中ToBuying为统一处理方法
     },
     methods: {
       initData(proData) {

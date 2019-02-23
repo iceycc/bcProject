@@ -1,51 +1,34 @@
 <template>
   <div>
     <app-bar title="存入"></app-bar>
-    <div class="buysuccessimg">
-      <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
-      <p class="p-first">存入成功</p>
-      <!--todo-->
-      <!--<p v-if="TEAM_ID" class="p-second">拼团成功，持有30天，享受额外+2%收益</p>-->
-      <!--<p v-if="INVEST_ID" class="p-second">持有30天，返现1%现金红包</p>-->
-    </div>
-    <div class="buysuccessdetail">
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">存款产品名称</div>
-        <div class="buysuccessdetailright">{{datas.prdName}}</div>
-      </div>
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">交易银行</div>
-        <div class="buysuccessdetailright">{{datas.orgName}}</div>
-      </div>
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">存入金额</div>
-        <div class="buysuccessdetailright">{{datas.payAmount}}元</div>
-      </div>
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">交易申请日期</div>
-        <div class="buysuccessdetailright">{{datas.payDate}}</div>
-      </div>
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">预期开始收益日期</div>
-        <div class="buysuccessdetailright">{{datas.incDate}}</div>
-      </div>
-      <div class="buysuccessdetails">
-        <div class="buysuccessdetailleft">交易流水号</div>
-        <div class="buysuccessdetailright">{{datas.besharpOrderNo}}</div>
-      </div>
-
-    </div>
-    <div class="btn" v-if="!shareHref">
-      <span @click="goMyAssets('0')" class="begain">查看我的资产</span>
-      <span @click="goBuyOther" class="begain">购买其他产品</span>
-    </div>
-    <div class="btn" v-if="shareHref">
-      <span @click="goMyAssets('1')" class="begain">查看我的资产</span>
-    </div>
+    <com-deal-result>
+      <section slot="resImg">
+        <img src="@/assets/images/Verificationsuccess@2x.png" alt="">
+      </section>
+      <section slot="resMsg">
+        <p class="p-first">存入成功</p>
+        <section class="m-card">
+          <p><span class="r-left">存款产品名称</span><span class="r-right">{{datas.prdName}}</span></p>
+          <p><span class="r-left">交易银行</span><span class="r-right">{{datas.orgName}}</span></p>
+          <p><span class="r-left">存入金额</span><span class="r-right">{{datas.payAmount}}</span></p>
+          <p><span class="r-left">交易申请日期</span><span class="r-right">{{datas.payDate}}</span></p>
+          <p><span class="r-left">预期开始收益日期</span><span class="r-right">{{datas.incDate}}</span></p>
+          <p><span class="r-left">交易流水号</span><span class="r-right">{{datas.besharpOrderNo}}</span></p>
+        </section>
+      </section>
+      <section slot="resBtn">
+        <div class="btn" v-if="!shareHref">
+          <span @click="goMyAssets('0')" class="begain">查看我的资产</span>
+          <span @click="goBuyOther" class="begain">购买其他产品</span>
+        </div>
+        <div class="btn" v-if="shareHref">
+          <span @click="goMyAssets('1')" class="begain">查看我的资产</span>
+        </div>
+      </section>
+    </com-deal-result>
     <div v-if="shareHref" class="share">
       <p @click="share">活动不错，分享好友吧<img src="@/assets/images/share.png" alt=""></p>
     </div>
-
     <div class="copy-box" v-if="copyShow">
       <img @click="copyShow = false" class="close" src="@/assets/images/icon_ask_close.svg" alt="">
       <input type="text" class="content" v-model="shareHref" id="codeText">
@@ -53,7 +36,6 @@
               data-clipboard-target="#codeText"
               @click="copyHandle">点击复制链接
       </button>
-      <!--<img src="@/assets/images/close.png" alt="">-->
     </div>
   </div>
 </template>
@@ -64,6 +46,7 @@
   import Clipboard from 'clipboard'
   import Bus from '@/plugin/bus'
   import API from "@/service";
+  import {ComDealResult} from '@/components'
 
   export default {
     mixins: [Mixins.storeMixin],
@@ -77,6 +60,7 @@
         INVEST_ID: ''
       }
     },
+    components: {ComDealResult},
     created() {
       this.datas = {...this.$route.query}
       this.shareHref = window.sessionStorage.getItem('h5_href') || ''
@@ -147,98 +131,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-
-  .buytitle {
-    width: 92%;
-    height: 1.7rem;
-    border-top: 10px solid #F6F6F9;
-    border-bottom: 0.5rem solid #F6F6F9;
-  }
-
-  .buytitleleft {
-    display: inline-block;
-    width: 50%;
-    height: 100%;
-  }
-
-  .buytitleright {
-    float: right;
-    width: 50%;
-    height: 100%;
-  }
-
-  .header {
-
-    height: 1.3rem;
-    line-height: 1.3rem;
-    font-size: 0.4rem;
-  }
-
-  .header p {
-    text-align: center;
-    font-size: 0.5rem;
-  }
-
-  .buysuccessimg {
-    text-align: center;
-    margin-top: .6rem;
-
-    img {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-
-    p.p-first {
-      margin: px2rem(18) 0;
-      font-size: px2rem(18);
-      color: #2B74FE;
-    }
-
-    p.p-second {
-      margin: 0.5rem 0;
-      padding-bottom: 0.5rem;
-      font-size: px2rem(13);
-      color: #9199A1;
-      border-bottom: 1px solid #EEEEF0;
-    }
-  }
-
-  .buysuccessdetail {
-    margin-top: -0.5rem;
-    padding: 0 0.3rem;
-  }
-
-  .buysuccessdetails {
-    line-height: px2rem(44);
-    height: px2rem(44);
-    font-size: px2rem(14);
-    border-bottom: 1px solid #EEEEF0;
-  }
-
-  .buysuccessdetailleft {
-    float: left;
-    color: #9199A1
-  }
-
-  .buysuccessdetailright {
-    float: right;
-  }
-
-  .xiazai {
-    font-size: 0.4rem;
-    color: #fff;
-    background-color: #518BEE;
-    border-radius: 0.2rem;
-    line-height: 1.2rem;
-    width: 80%;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 1rem;
-    border: 0px;
-    outline: none;
-  }
-
   .btn {
     margin-top: px2rem(20);
     text-align: center;
@@ -279,6 +171,12 @@
     }
   }
 
+  .p-first {
+    text-align: center;
+    font-size: px2rem(18);
+    color: #508CEE;
+  }
+
   .copy-box {
     position: absolute;
     bottom: 40%;
@@ -311,6 +209,32 @@
     input {
       height: px2rem(40);
       overflow-x: scroll;
+    }
+  }
+
+
+  .m-card {
+    font-size: px2rem(14);
+    color: #9199A1;
+    border-top: 1px solid #eeeef0;
+    margin-top: px2rem(20);
+
+    p {
+      display: flex;
+      border-bottom: 1px solid #eeeef0;
+      height: px2rem(44);
+      line-height: px2rem(44);
+      padding: 0 px2rem(20);
+    }
+
+    .r-left {
+      text-align: left;
+      flex: 1;
+    }
+
+    .r-right {
+      text-align: right;
+      flex: 1;
     }
   }
 </style>
