@@ -10,10 +10,12 @@
             <p>存款总资产（元）</p>
           </div>
           <span class="line"></span>
+          
           <div>
             <p>{{financialData.totalIncomeDesc}}</p>
-            <p>预计最大收益</p>
+            <p>{{this.nowIndex==0?'预计最大收益':'累计到账收益'}}</p>
           </div>
+
         </div>
       </div>
     </div>
@@ -328,7 +330,8 @@
           };
           let res = await API.bank.getMyInvestOver(data);
           this.pageList = res.PAGE.retList || [];
-
+         // console.log(res.totalIncomeDesc);
+          this.financialData.totalIncomeDesc = res.totalIncomeDesc; 
           if (res.PAGE.currentPage == res.PAGE.totalPage) {
             this.allLoaded = true;
             Bus.$emit(BusName.showToast, "数据全部加载完成");
