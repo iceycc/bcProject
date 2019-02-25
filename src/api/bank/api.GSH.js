@@ -1,6 +1,6 @@
 import http from '@/service/http/http.bank.new'
 // import {HOST_API} from "@/Constant";
-let HOST_API = 'http://47.94.110.156:9000'
+let HOST_API = 'http://101.200.34.100:9000'
 /**
  * axios 配置
  */

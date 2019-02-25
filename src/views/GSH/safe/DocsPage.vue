@@ -13,7 +13,7 @@
 <script>
   import API from "@/service";
   // import {HOST_API} from "@/Constant";
-  let HOST_API = ' http://47.94.110.156:9000/'
+  let HOST_API = ' http://101.200.34.100:9000/'
   export default {
     name: "DocsPage",
     data() {
@@ -124,7 +124,6 @@
       padding: 0 px2rem(10);
       width: 100%;
       height: 100%;
-      overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
 
       .indocs {

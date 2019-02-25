@@ -70,6 +70,7 @@ import ComDealResult from './commonPages/ComDealResult'
  *
  */
 import BankCardLimit from './bank/BankCardLimit'
+import BcSupportBankList from './bank/BcSupportBankList'
 
 
 export {
@@ -110,5 +111,6 @@ export {
 
   ComDealResult,
 
-  BankCardLimit
+  BankCardLimit,
+  BcSupportBankList
 }

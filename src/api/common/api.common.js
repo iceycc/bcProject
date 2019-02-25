@@ -20,7 +20,7 @@ const Config = {
   },
   configNew: {
     method: 'post',
-    baseURL: 'http://47.94.110.156:9000', // todo
+    baseURL: 'http://101.200.34.100:9000', // todo
     headers: {'Content-Type': 'application/json'},
     timeout: 30000,
   },

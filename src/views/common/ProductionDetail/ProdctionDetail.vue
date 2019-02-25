@@ -95,6 +95,7 @@
   import ContentBox from "./components/ContentBox"
   import ProBanner from "./components/ProBanner"
   import ProDetail from "./components/ProDetail"
+  let MsgText = '应银行监管要求，需先开通银行二类户，通过二类户与银行直接进行交易，资金安全有保障'
 
   export default {
     components: {

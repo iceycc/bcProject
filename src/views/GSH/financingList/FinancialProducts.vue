@@ -140,7 +140,7 @@
     mixins: [""],
     data() {
       return {
-        HOST:'http://47.94.110.156:9000',
+        HOST:'http://101.200.34.100:9000',
         isShow: false, //工商行弹窗
        // holdParame: "", //持有参数
         waitingMsg: "暂不支持",

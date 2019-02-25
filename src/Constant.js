@@ -6,12 +6,13 @@ const WEB_HOST = {
    * 域名。可以自行添加测试域名
    */
   dev: 'https://finsuitdev.bicai365.com', // dev开发环境/**/
-  // dev: 'http://47.94.110.156:9000', // dev开发环境
+  // dev: 'http://101.200.34.100:9000', // dev开发环境
   adv: 'https://adv.bicai365.com', // adv测试
   pro: 'https://finsuit.bicai365.com', // 生产,
   // pro: 'https://graytest.bicai365.com', //
   // pro: 'https://ytest.bicai365.com', //
   ceshi: 'http://192.168.100.157:8080', //
+  ytest: 'https://ytest.bicai365.com', //
   /**
    * 图片的路径 勿动！
    */
@@ -35,7 +36,7 @@ const Configs = {
    * build打包
    */
 
-  PRO_HOST: WEB_HOST.pro, //
+  PRO_HOST: WEB_HOST.ytest, //
 }
 /**
  * 整个站点的HOST根据生产和开发分别暴露

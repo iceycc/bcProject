@@ -44,13 +44,13 @@
       :BankList="mainBankList"
       @chooseBank="chooseBankHandle"
     ></com-up-select>
-    <support-bank-list
+    <bc-support-bank-list
       v-if="show"
       @getValue="getBank"
       @close="closeHandle"
       :selectValue="bankText"
       :supportBankList="supportBankList"
-    ></support-bank-list>
+    ></bc-support-bank-list>
     <bank-card-limit :bankList="supportBankList" v-if="backShow" @hideHandle="backShow=false"></bank-card-limit>
   </div>
 </template>
@@ -61,7 +61,7 @@
   import {
     OpenHead,
     UpSelect as ComUpSelect, // commons/UpSelect
-    SupportBankList,
+    BcSupportBankList,
     BankCardLimit,
     NormalInput,
     SubmitButton,
@@ -111,7 +111,7 @@
       OpenHead,
       NormalInput,
       SubmitButton,
-      SupportBankList,
+      BcSupportBankList,
       CallToBicai,
       SelectBank
     },
@@ -226,6 +226,9 @@
       getBank(val) {
         this.show = false
         this.bankText = val.name
+        this.data.CARD_NO = ''
+        this.tel = ''
+
       },
 
       // 下一步
